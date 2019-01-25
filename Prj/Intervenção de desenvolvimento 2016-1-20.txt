@@ -1,0 +1,50 @@
+Alterações implementadas no GBNFe Base de Dados
+
+tabela nfe
+----------
+
+	indFinal	char(1) null
+	indPres		char(1) null
+	indIEDest	char(1) null
+
+
+Descrição de cada campo:
+
+	indFinal  = 0 - Normal
+		  = 1 - Consumidor final
+
+	indPres   = 0 - Normal (Não se aplica - por exemplo, para a Nota Fiscal comprementar e de ajuste)
+		  = 1 - Operação presencial
+		  = 2 - Operação não presencial, pela Internet
+		  = 3 - Operação não presencial, Teleentrega
+		  = 4 - NFC-e em operação com entrega em domicílio
+		  = 9 - Operação não presencial, outros.
+
+		  Obs: Para NFC-e, somente são aceitas as opções 1 e 4
+
+	indIEDest = 1 - Contribuinte ICMS (informar a IE do destinatário)
+		  = 2 - Contribuinte isento de Inscrição no cadastro de Contribuintes do ICMS
+		  = 9 - Não Contribuinte, que pode ou não possuir Inscrição Estadual no Cadastro de Contribuintes do ICMS;
+
+		  Nota 1: No caso de NFC-e informar indIEDest=9 e não informar a tag IE do destinatário;
+		  Nota 2: No caso de operação com o Exterior informar indIEDest=9 e não informar a tag IE do destinatário;
+		  Nota 3: No caso de Contribuinte Isento de Inscrição (indIEDest=2), não informar a tag IE do destinatário.
+
+
+--------------------------------------------------------------------------------------------
+
+nfe_itens
+---------
+
+	CEST	  char(7) null
+
+
+		  CEST - Código Especificador da Substituição Tributária,
+		  que estabelece a sistemática de uniformização e identificação
+		  das mercadorias e bens passíveis de sujeição aos regimes
+		  de substituição tributária e de antecipação de recolhimento
+ 		  do ICMS com o encerramento de tributação, relativos às operações
+ 		  subsequentes, conforme definições do Convênio ICMS 92, de
+		  20 de agosto de 2015.
+
+

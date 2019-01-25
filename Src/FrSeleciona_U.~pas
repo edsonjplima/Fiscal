@@ -1,0 +1,239 @@
+unit FrSeleciona_U;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Buttons, ExtCtrls, Db, DBTables, Grids, DBGrids, ActnList;
+
+type
+  TFrSeleciona = class(TForm)
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    Bevel1: TBevel;
+    Panel1: TPanel;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    DBGrid1: TDBGrid;
+    Edit1: TEdit;
+    CheckBox1: TCheckBox;
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure Panel1Resize(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure DBGrid1KeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure Edit1Change(Sender: TObject);
+    procedure Edit1Exit(Sender: TObject);
+    procedure CheckBox1Click(Sender: TObject);
+    procedure CheckBox1Exit(Sender: TObject);
+    procedure DBGrid1Enter(Sender: TObject);
+    procedure DBGrid1Exit(Sender: TObject);
+  private
+  public
+   Empresa1: Boolean;
+   Focu    : Integer;
+   spDspCmp: TStrings;
+  end;
+
+var
+  FrSeleciona : TFrSeleciona;
+  slCampoPesquisa : String;
+
+implementation
+
+uses GBNFe_U, DMNFe_U; 
+
+{$R *.DFM}
+
+procedure TFrSeleciona.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+ if Key = Vk_Return then
+  perform( Wm_NextDlgCtl, 0 , 0 );
+ if Key = Vk_Escape then
+  SpeedButton2.Click;
+end;
+
+procedure TFrSeleciona.SpeedButton1Click(Sender: TObject);
+Var
+ I : Integer;
+begin
+
+ if gSelField then
+  begin
+   if DMNFe.ZQuery1.Active then
+    if Not DMNFe.ZQuery1.IsEmpty then
+     begin
+      for I := 0 to DMNFe.ZQuery1.FieldCount - 1 do
+       spResult[I] := DbGrid1.SelectedField.Value;
+      Close;
+     end;
+  end
+ else
+  Close;
+
+end;
+
+procedure TFrSeleciona.SpeedButton2Click(Sender: TObject);
+begin
+ gSelField := false;
+ Close
+end;
+
+procedure TFrSeleciona.FormActivate(Sender: TObject);
+begin
+
+ // Redesenhando DBGrid
+ DBGrid1.Visible := False;
+ DBGrid1.Visible := True;
+ //DBGrid1.SetFocus;
+
+end;
+
+procedure TFrSeleciona.CheckBox1Click(Sender: TObject);
+begin
+
+ edit1.SetFocus;
+
+end;
+
+procedure TFrSeleciona.DBGrid1DblClick(Sender: TObject);
+begin
+ gSelField := true;
+end;
+
+procedure TFrSeleciona.DBGrid1KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+ if ( Key = Vk_Return ) or ( ( Key = Vk_Left ) and ( DBGrid1.SelectedField.Index = 0 ) ) then
+  SpeedButton1.Click
+ else if ( key = Vk_Home ) and ( DbGrid1.SelectedField.Index = 0 ) then
+  Edit1.SetFocus;
+end;
+
+procedure TFrSeleciona.Edit1Change(Sender: TObject);
+begin
+
+ if CheckBox1.Checked then
+  DMNFe.ZQuery1.Locate(slCampoPesquisa, Edit1.Text, [loPartialKey]);
+
+end;
+
+procedure TFrSeleciona.Edit1Exit(Sender: TObject);
+Var
+ I, Aux : Integer;
+
+begin
+
+ gSelField := false;
+
+ if CheckBox1.Checked = False then begin
+
+   //-- Limpando Query de Pesquisa
+   DMNFe.ZQuery1.Close;
+   DMNFe.ZQuery1.SQL.Clear;
+   DMNFe.ZQuery1.SQL.Add( ' Select '+spCampos+' ' );
+   DMNFe.ZQuery1.SQL.Add( '  From  '+tpTabPsq+' ' );
+
+   //-- Atribuindo Condição de Seleção
+   if Trim( spCond ) <> '' then
+    if Empresa1 then
+     DMNFe.ZQuery1.SQL.Add( ' Where '+spCond+' and CodEmp = :ilCodEmp ' )
+    else
+     DMNFe.ZQuery1.SQL.Add( ' Where ' + spCond );
+
+   Aux := 0;
+
+   //-- Atribuindo Parametros de Seleção
+   if Empresa1 then begin
+     for I := Aux to ipQtdPsq do Begin
+       DMNFe.ZQuery1.Params[I].Value := '%' + Edit1.Text + '%';
+     End;
+     DMNFe.ZQuery1.Params[ipQtdPsq].AsInteger := ilCodEmp;
+   end else begin
+     for I := Aux to ipQtdPsq do begin
+      DMNFe.ZQuery1.Params[I].Value := '%' + Edit1.Text + '%';
+     end;
+   end;
+
+   //-- Consistindo Ordenação
+   if spOrdem <> '' then
+    DMNFe.ZQuery1.SQL.Add( 'ORDER BY ' + spOrdem + ' ' );
+
+   //DMNFe.ZQuery1.SQL.SaveToFile('c:\sql.txt');
+   DMNFe.ZQuery1.ExecSQL;
+   DMNFe.ZQuery1.Open;
+
+   //-- Adicionando Nome dos Campos
+   for I := 0 to DMNFe.ZQuery1.FieldCount - 1 do begin
+    DMNFe.ZQuery1.Fields[I].DisplayLabel := spDspCmp[I];
+    DBGrid1.Columns[I].FieldName         := DMNFe.ZQuery1.Fields[I].FieldName;
+    DBGrid1.Columns[I].Title.Caption     := DMNFe.ZQuery1.Fields[I].DisplayLabel;
+
+    // Esse campo será atualizado principalmente qdo a tabela é a TabPro.
+    // pq os campos são denominado com uma letra e ponto antes do nome do campo ex.: P.Descricao
+    if (spOrdem = DMNFe.ZQuery1.Fields[I].FieldName) or ('Descricao' = DMNFe.ZQuery1.Fields[I].FieldName) then begin
+     slCampoPesquisa   := DMNFe.ZQuery1.Fields[I].FieldName;
+     GroupBox1.Caption := ' Pesquisar por: ' + DMNFe.ZQuery1.Fields[I].DisplayLabel;
+    end;
+
+   end;
+
+   DMNFe.DataSource12.DataSet.Close;
+   DMNFe.DataSource12.DataSet.Open;
+
+   if Not DMNFe.ZQuery1.IsEmpty then begin
+     DBGrid1.SetFocus;
+     if DMNFe.ZQuery1.FieldCount > 0 then
+       //DBgrid1.SelectedIndex := 1; // By Renildo ; 25/02/2009 ; 18:02
+   end else begin
+    Edit1.SetFocus;
+   end;
+ end;
+
+end;
+
+procedure TFrSeleciona.Panel1Resize(Sender: TObject);
+begin
+ // Redimensionando os Botões do Panel
+
+ SpeedButton1.Left := ( ClientWidth  - 90 ) div 2 - 50;
+ SpeedButton2.Left := ( ClientWidth  - 90 ) div 2 + 50;
+end;
+
+procedure TFrSeleciona.FormShow(Sender: TObject);
+begin
+
+ // Redimensionando os Botões do Panel
+ SpeedButton1.Left := ( ClientWidth  - 90 ) div 2 - 50;
+ SpeedButton2.Left := ( ClientWidth  - 90 ) div 2 + 50;
+
+ Edit1Exit(self);
+
+ Edit1.SetFocus;
+
+ gSelField := false;
+
+end;
+
+procedure TFrSeleciona.CheckBox1Exit(Sender: TObject);
+begin
+ gSelField := false;
+end;
+
+procedure TFrSeleciona.DBGrid1Enter(Sender: TObject);
+begin
+ DBGrid1DblClick(Sender);
+end;
+
+procedure TFrSeleciona.DBGrid1Exit(Sender: TObject);
+begin
+ DBGrid1DblClick(Sender);
+end;
+
+end.

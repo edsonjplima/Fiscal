@@ -1,0 +1,602 @@
+unit DmConexao_U;
+
+interface
+
+uses
+
+  SysUtils, Windows,  Messages,  Classes,  Graphics, Controls,   Forms,
+  DBTables, DB, Math, Funcoes_U, DbCtrls,  ExtCtrls,
+  StdCtrls, Dialogs,  Buttons,   Consts,   IniFiles,
+  Printers, IdBaseComponent, IdComponent, IdTCPServer, IdCustomHTTPServer,
+  IdHTTPServer, DbiProcs, comctrls;
+
+
+type
+  TDmConexao = class(TDataModule)
+    dbConexaoSrv: TDatabase;
+    BatSincronizar_S_W: TBatchMove;
+    TabDestinoW: TTable;
+    qryOrigemS: TQuery;
+    dbConexaoWst: TDatabase;
+    BatSincronizar_SemPk: TBatchMove;
+    TabDestino_SemPk: TTable;
+    qryOrigem_SemPk: TQuery;
+    BatSincronizar_W_S: TBatchMove;
+    TabDestinoS: TTable;
+    qryOrigemW: TQuery;
+
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
+
+    procedure SincronizaTabAux;
+    procedure SincronizaTabPAFECF;
+
+    function TabelaOrigemS(Tabela : String) : Boolean;
+    function TabelaDestinoW(Tabela : String) : Boolean;
+
+    function TabelaOrigemW(Tabela : String) : Boolean;
+    function TabelaDestinoS(Tabela : String) : Boolean;
+
+    procedure dbConexaoSrvAfterConnect(Sender: TObject);
+    procedure dbConexaoSrvAfterDisconnect(Sender: TObject);
+    procedure dbConexaoSrvBeforeDisconnect(Sender: TObject);
+    procedure dbConexaoSrvBeforeConnect(Sender: TObject);
+    procedure dbConexaoSrvLogin(Database: TDatabase; LoginParams: TStrings);
+
+  private
+    { Private declarations }
+
+  public
+    { Public declarations }
+  end;
+
+  procedure ExecForm( FormClass: TFormClass; Var Reference; blMdi : Boolean = False; slCaption : String = '' );
+
+var
+  DmConexao: TDmConexao;
+
+  ipCodMotCh, ipCodHanCDD,
+  ipCodHanCDC,ipCodHanJP,
+  ipCodHanDR, ipCodHanJR, ipCodHanDC      : Integer;    // Destinado a Geracao Automatica de Codigo de Tabela
+  F                                       : TextFile;
+
+  // Configuracao do Sistema e Usuario do Sistema
+
+  ipCodMenB1,     ipCodMenB2,   ipCodEmp,
+  ipCodSubCai,    ipTlrVct,     ipEmpCjg           : Integer;
+
+  spNomEmp,       spNomFunUsu,  spNomFan,
+  spCidade,       spPrtImp,     spEstado,
+  spUsuario,      spSenha,      spPosUsu,
+  tpTabPsq,       spTipJur,
+  spCodBan,       spCodCnt,
+  spCnpj,         spEndereco,   spSetor,
+  spCep,          spFone,
+  spFax,          spInsEst,     spInsMnc,
+  spDirApp,       spCheBnc,     spNomFun,
+  spCstPro,       spTstUsu,     spTlrSemJur,
+  spEdtJurDsc                                      : String;
+  fpTaxJur,       fpTaxDsc,
+  fpDscJur,       fpDscArd                         : Double;
+
+  ipCodFunUsu,    ipQtdPsq                         : Integer;
+  dpDatHorLog                                      : TDateTime;
+  lpUsuMst,       bpGerLog,     bpOk,
+  blGerMast                                        : Boolean;
+
+  GBPAFIni                                         : TIniFile;
+
+  spCampos,       spCond,       spOrdem            : String;
+  spResult                                         : Array of Variant;
+
+  spPathLogo                                       : String;
+
+  //bpButtons                                        : TButtonSet;               // Armazena Botões do Navigator
+
+  tpResMsg                                         : TModalResult;
+  spMensagem                                       : String;
+  ipPorWeb                                         : Integer;
+  ilCntFec                                         : Integer = 0;
+  strlMulEmp,     strlEmps                         : TStringList;
+  spMulEmp                                         : String;
+
+  clCorFun                                         : TColor;
+
+  // Variaveis para Função Posição, Observação e Inseri na Tabela Diversa
+
+  spTabela, spPosReg, spObsReg                     : String;
+  vpChave1, vpChave2                               : Variant;
+  bpAux                                            : Boolean;
+
+  spCampo1, spCampo2, spCampo3, spNome             : String;
+
+  // Variavel para Habilitar/Desabilitando Consistência de Desconto Sobre Juros, FrBaxRec
+
+  lpLbDscJ                                         : Boolean; // Para Controle Provisorio, resolver via Acesso do Usuário
+  lpBxPgMn                                         : Boolean; // By Renildo ; 28/04/2009 ; 08:47
+
+implementation
+
+//uses FRTelSpl_U, FrTelPdv_U, DmCadastro_U, FrTabPes_U, FrTabPro_U,
+//  FrTabEmp_U, FrTabPcs_U, FrTabPdv_U, FrTabUsu_U, FrTabDiv_U;
+
+{$R *.dfm}
+
+procedure TDmConexao.DataModuleCreate(Sender: TObject);
+begin
+
+ Try
+
+  dbConexaoSrv.Connected := False;
+  dbConexaoSrv.AliasName := 'GBPAF_SRV';
+  dbConexaoSrv.Connected := True;
+
+  Try
+   //-- Se a conexão com servidor for habilitada e
+   //-- a conexão com a estação acontecer então o sincronismo ocorrerá para
+   //-- atualizar os registros que estão no banco de dados local.
+   //-- As tabelas a serem atualizadas para a WST serão apenas as tabelas de
+   //-- cadastro
+   dbConexaoWst.Connected := False;
+   dbConexaoWst.AliasName := 'GBPAF_WST';
+   dbConexaoWst.Connected := True;
+
+   //-- atribui databasename
+   SincronizaTabAux; // São todas as tabelas auxiliares ex: tabela de produtos, cidades, etc...
+
+   //-- atribui databasename
+   SincronizaTabPAFECF; // São todas as tabelas referente a venda e menu fiscal - PAF ECF
+
+  Except
+   dbConexaoWst.Connected := False;
+  End;
+
+ Except
+  //-- Se o servidor estiver fora da rede, a estação será configurada para abrir
+  //-- as tabelas e o banco de dados local.
+  //-- Se não existir um banco de dados local, o sistema será finalizado.
+  dbConexaoSrv.Connected := False;
+
+  Application.MessageBox('Não foi possível estabelecer uma conexão com o Servidor'   + #13 +
+                         'A conexão será com o banco de dados local e algumas telas' + #13 +
+                         'do sistema estarão disponíveis apenas para consulta','GBPAF');
+
+  Try
+   dbConexaoSrv.Connected := False;
+   dbConexaoSrv.AliasName := 'GBPAF_WST';
+   dbConexaoSrv.Connected := True;
+  Except
+   Application.MessageBox('O Banco de Dados LOCAL não foi inicializado ou não existe.' + #13 +
+                          'Entre em contato com o administrador do sistema.' ,'GBPAF');
+
+   raise;
+  end;
+ end;
+
+end;
+
+procedure TDmConexao.SincronizaTabAux;
+var
+ I : Integer;
+ slTabela : String;
+begin
+
+ for I := 1 to 21 do begin
+  case I of
+   // apenas as tabelas que possuem pk serao sincronizadas
+   1  : slTabela := 'TabCrg';
+   2  : slTabela := 'TabUsu';
+   3  : slTabela := 'TabUnd';
+   4  : slTabela := 'TabCid';
+   5  : slTabela := 'TabEmp';
+   6  : slTabela := 'TabCfg'; // Essa tabela nao possui pk, nao sendo possivel fazer o sincronismo
+   7  : slTabela := 'TabCfo';
+   8  : slTabela := 'TabCnt'; // Essa tabela nao possui pk, nao sendo possivel fazer o sincronismo
+   9  : slTabela := 'TabEmb';
+   10 : slTabela := 'TabFpg';
+   11 : slTabela := 'TabStb';
+   12 : slTabela := 'TabTrb';
+   13 : slTabela := 'TabGru';
+   14 : slTabela := 'TabMot';
+   15 : slTabela := 'TabPcs';
+   16 : slTabela := 'TabPdv';
+   17 : slTabela := 'TabPes';
+   18 : slTabela := 'TabPro';
+   19 : slTabela := 'MovNot';
+   20 : slTabela := 'IteNot';
+   21 : slTabela := 'FatNot';
+
+  end;
+
+  if FrTelSpl <> nil then begin
+   FrTelSpl.Label2.Caption := 'Aguarde... ' + ' Sincronizando Tabela: ' + slTabela + ' ' + inttostr(I) + '/21';
+   FrTelSpl.Label2.Refresh;
+   //Sleep(50);
+  end;
+
+  if FrTelPdv <> nil then begin
+   //FrTelPdv.StatusBar1.Panels[12].Text := 'Sincronizando Tabela: ' + slTabela + ' ' + inttostr(I) + '/21';
+   //FrTelPdv.Refresh;
+   //Sleep(50);
+  end;
+
+  // tabelas com pk
+  if (slTabela <> 'TabCfg') and (slTabela <> 'TabCnt') then begin
+   if TabelaOrigemS(slTabela) then
+    if TabelaDestinoW(slTabela) then
+     try
+      BatSincronizar_S_W.Execute;
+     Except
+      //-- Criar neste ponto o arquivo de log de erro
+      //-- Titulo do erro: Erro ao fazer sincronismo ao inciar o sistema.
+      //-- data/hora, tabela e a descrição do erro
+      on E: Exception do begin
+       ShowMessage('..: ATENÇÃO :.. ' + #13 + #10 + '' + #13 + #10 + E.Message);
+      end;
+     end;
+  end else begin
+  // tabelas sem pk
+   if TabelaOrigemS(slTabela) then
+    if TabelaDestinoW(slTabela) then
+     try
+      BatSincronizar_SemPk.Execute;
+     Except
+      //-- Criar neste ponto o arquivo de log de erro
+      //-- Titulo do erro: Erro ao fazer sincronismo ao inciar o sistema.
+      //-- data/hora, tabela e a descrição do erro
+     end;
+  end;
+
+
+ end;
+
+ if FrTelPdv <> nil then begin
+  //FrTelPdv.StatusBar1.Panels[12].Text := '';
+ end;
+
+end;
+
+procedure TDmConexao.SincronizaTabPAFECF;
+var
+ I : Integer;
+ slTabela : String;
+begin
+
+ for I := 1 to 11 do begin
+  case I of
+   1  : slTabela := 'MovRdz';
+   2  : slTabela := 'IteRdzIcms';
+   3  : slTabela := 'IteRdzIssqn';
+   4  : slTabela := 'IteRdzMpag';
+   5  : slTabela := 'IteRdzRlgr';
+   6  : slTabela := 'IteRdzTnfs';
+   7  : slTabela := 'MovCNF';
+   8  : slTabela := 'IteCNF';
+   09 : slTabela := 'PagCNF';
+   10 : slTabela := 'TabPcx';
+   11 : slTabela := 'MovPcx'; // sangria - suprimentos - recebimentos e outros para cada "pdv caixa"
+  end;
+
+  if FrTelSpl <> nil then begin
+   FrTelSpl.Label2.Caption := 'Aguarde... ' + ' Sincronizando Tabela PAF: ' + slTabela + ' ' + inttostr(I) + '/11';
+   FrTelSpl.Label2.Refresh;
+   //Sleep(50);
+  end;
+
+  if FrTelPdv <> nil then begin
+   //FrTelPdv.StatusBar1.Panels[12].Text := 'Sincronizando Tabela PAF: ' + slTabela + ' ' + inttostr(I) + '/11';
+   //FrTelPdv.Refresh;
+   //Sleep(50);
+  end;
+
+  if TabelaOrigemW(slTabela) then
+   if TabelaDestinoS(slTabela) then
+    try
+     BatSincronizar_W_S.Execute;
+    Except
+     //-- Criar neste ponto o arquivo de log de erro
+     //-- Titulo do erro: Erro ao fazer sincronismo ao inciar o sistema.
+     //-- data/hora, tabela e a descrição do erro
+    end;
+ end;
+
+ if FrTelPdv <> nil then begin
+  //FrTelPdv.StatusBar1.Panels[12].Text := '';
+ end;
+
+end;
+
+Function TDmConexao.TabelaOrigemS(Tabela : String) : Boolean;
+begin
+ Result := False;
+ Try
+   // joao batista 02-12-2011
+   // a sincronização das tabelas: Tabpro e TabPes está sendo realizada
+   // apenas no momento de abertura do sistema: tela de splash
+   if (Tabela <> 'TabCfg') and (Tabela <> 'TabCnt') then begin
+    if (Tabela <> 'TabPro') and (Tabela <> 'TabPes') then begin
+      qryOrigemS.Close;
+      qryOrigemS.SQL.Clear;
+      qryOrigemS.SQL.Add('Select * from ' + Tabela );
+    end else begin
+      if FrTelSpl <> nil then begin
+        qryOrigemS.Close;
+        qryOrigemS.SQL.Clear;
+        qryOrigemS.SQL.Add('Select * from ' + Tabela );
+      end else begin
+        qryOrigemS.Close;
+        qryOrigemS.SQL.Clear;
+        qryOrigemS.SQL.Add('Select * from ' + Tabela + '  Where 1 < 0' );
+      end;
+    end;
+   end else begin
+    qryOrigem_SemPk.Close;
+    qryOrigem_SemPk.SQL.Clear;
+    qryOrigem_SemPk.SQL.Add('Select * from ' + Tabela );
+   end;
+   Result := True;
+ Except
+ End;
+end;
+
+Function TDmConexao.TabelaDestinoW(Tabela : String) : Boolean;
+begin
+ Result := False;
+ Try
+   if (Tabela <> 'TabCfg') and (Tabela <> 'TabCnt') then begin
+    TabDestinoW.Active := False;
+    TabDestinoW.TableName := 'dbo.' + Tabela;
+   end else begin
+    TabDestino_SemPk.Active := False;
+    TabDestino_SemPk.TableName := 'dbo.' + Tabela;
+   end;
+   Result := True;
+ Except
+ End;
+end;
+
+
+Function TDmConexao.TabelaOrigemW(Tabela : String) : Boolean;
+begin
+ Result := False;
+ Try
+   if (Tabela <> 'TabCfg') and (Tabela <> 'TabCnt') then begin
+    qryOrigemW.Close;
+    qryOrigemW.SQL.Clear;
+    qryOrigemW.SQL.Add('Select * from ' + Tabela );
+   end else begin
+    qryOrigem_SemPk.Close;
+    qryOrigem_SemPk.SQL.Clear;
+    qryOrigem_SemPk.SQL.Add('Select * from ' + Tabela );
+   end;
+   Result := True;
+ Except
+ End;
+
+end;
+
+Function TDmConexao.TabelaDestinoS(Tabela : String) : Boolean;
+begin
+ Result := False;
+ Try
+   if (Tabela <> 'TabCfg') and (Tabela <> 'TabCnt') then begin
+    TabDestinoS.Active := False;
+    TabDestinoS.TableName := 'dbo.' + Tabela;
+   end else begin
+    TabDestino_SemPk.Active := False;
+    TabDestino_SemPk.TableName := 'dbo.' + Tabela;
+   end;
+   Result := True;
+ Except
+ End;
+end;
+
+
+procedure TDmConexao.DataModuleDestroy(Sender: TObject);
+begin
+ dbConexaoSrv.Connected := False;
+ dbConexaoWst.Connected := False;
+end;
+
+procedure TDmConexao.dbConexaoSrvAfterConnect(Sender: TObject);
+begin
+
+  if DmConexao.dbConexaoSrv.AliasName = 'GBPAF_WST' then begin
+
+    if FrTabPes <> Nil then begin
+      DmCadastro.qryCnsPes.Active := True;
+      Erro('A rede está OFF-LINE. As opções de manutenção serão possíveis apenas no Servidor.' + #13 + #10 + #13 + #10 +
+           'Será possível fazer apenas consultas até que a rede seja normalizada.');
+    end;
+
+    if FrTabPro <> Nil then begin
+      DmCadastro.qryCnsPro.Active := True;
+      Erro('A rede está OFF-LINE. As opções de manutenção serão possíveis apenas no Servidor.' + #13 + #10 + #13 + #10 +
+           'Será possível fazer apenas consultas até que a rede seja normalizada.');
+    end;
+
+    if FrTabPcs <> Nil then begin
+      DmCadastro.qryCnsPcs.Active := True;
+      Erro('A rede está OFF-LINE. As opções de manutenção serão possíveis apenas no Servidor.' + #13 + #10 + #13 + #10 +
+           'Será possível fazer apenas consultas até que a rede seja normalizada.');
+    end;
+
+    if FrTabPdv <> Nil then begin
+      DmCadastro.qryCnsPdv.Active := True;
+      Erro('A rede está OFF-LINE. As opções de manutenção serão possíveis apenas no Servidor.' + #13 + #10 + #13 + #10 +
+           'Será possível fazer apenas consultas até que a rede seja normalizada.');
+    end;
+
+    if FrTabEmp <> Nil then begin
+      DmCadastro.qryCnsEmp.Active := True;
+      Erro('A rede está OFF-LINE. As opções de manutenção serão possíveis apenas no Servidor.' + #13 + #10 + #13 + #10 +
+           'Será possível fazer apenas consultas até que a rede seja normalizada.');
+    end;
+
+    if FrTabUsu <> Nil then begin
+      DmCadastro.qryCnsUsu.Active := True;
+      Erro('A rede está OFF-LINE. As opções de manutenção serão possíveis apenas no Servidor.' + #13 + #10 + #13 + #10 +
+           'Será possível fazer apenas consultas até que a rede seja normalizada.');
+    end;
+
+    if FrTabDiv <> Nil then begin
+
+      Case FrTabDiv.RadioGroup1.ItemIndex Of
+       00: DmCadastro.TbTabCrg.Active := True ;  // Cargos
+       01: DmCadastro.TbTabCFO.Active := True ;  // CFOP
+       02: DmCadastro.TbTabCid.Active := True ;  // Cidades
+       03: DmCadastro.TbTabEmb.Active := True ;  // Embalagens
+       04: DmCadastro.TbTabFpg.Active := True ;  // Forma de Pagamento
+       05: DmCadastro.TbTabGru.Active := True ;  // Grupos de Produtos
+       06: DmCadastro.TbTabMot.Active := True ;  // Motivos
+       07: DmCadastro.TbTabStb.Active := True ;  // Situação Tributária
+       08: DmCadastro.TbTabTrb.Active := True ;  // Tributações
+       09: DmCadastro.TbTabUnd.Active := True ;  // Unidades
+      end;
+
+      Erro('A rede está OFF-LINE. As opções de manutenção serão possíveis apenas no Servidor.' + #13 + #10 + #13 + #10 +
+           'Será possível fazer apenas consultas até que a rede seja normalizada.');
+    end;
+
+
+  end;
+
+  if DmConexao.dbConexaoSrv.AliasName = 'GBPAF_SRV' then begin
+
+    if FrTabPes <> Nil then begin
+      DmCadastro.qryCnsPes.Active := True;
+      Showmessage('A rede está ON-LINE novamente.');
+    end;
+
+    if FrTabPro <> Nil then begin
+      DmCadastro.qryCnsPes.Active := True;
+      Showmessage('A rede está ON-LINE novamente.');
+    end;
+
+    if FrTabPcs <> Nil then begin
+      DmCadastro.qryCnsPcs.Active := True;
+      Showmessage('A rede está ON-LINE novamente.');
+    end;
+
+    if FrTabPdv <> Nil then begin
+      DmCadastro.qryCnsPdv.Active := True;
+      Showmessage('A rede está ON-LINE novamente.');
+    end;
+
+    if FrTabEmp <> Nil then begin
+      DmCadastro.qryCnsEmp.Active := True;
+      Showmessage('A rede está ON-LINE novamente.');
+    end;
+
+    if FrTabUsu <> Nil then begin
+      DmCadastro.qryCnsUsu.Active := True;
+      Showmessage('A rede está ON-LINE novamente.');
+    end;
+
+    if FrTabDiv <> Nil then begin
+
+      Case FrTabDiv.RadioGroup1.ItemIndex Of
+       00: DmCadastro.TbTabCrg.Active := True ;  // Cargos
+       01: DmCadastro.TbTabCFO.Active := True ;  // CFOP
+       02: DmCadastro.TbTabCid.Active := True ;  // Cidades
+       03: DmCadastro.TbTabEmb.Active := True ;  // Embalagens
+       04: DmCadastro.TbTabFpg.Active := True ;  // Forma de Pagamento
+       05: DmCadastro.TbTabGru.Active := True ;  // Grupos de Produtos
+       06: DmCadastro.TbTabMot.Active := True ;  // Motivos
+       07: DmCadastro.TbTabStb.Active := True ;  // Situação Tributária
+       08: DmCadastro.TbTabTrb.Active := True ;  // Tributações
+       19: DmCadastro.TbTabUnd.Active := True ;  // Unidades
+      end;
+
+      Showmessage('A rede está ON-LINE novamente.');
+    end;
+
+  end;
+
+end;
+
+procedure TDmConexao.dbConexaoSrvAfterDisconnect(Sender: TObject);
+begin
+ Try
+ Except
+ End;
+end;
+
+procedure TDmConexao.dbConexaoSrvBeforeConnect(Sender: TObject);
+begin
+ Try
+ Except
+ End;
+end;
+
+procedure TDmConexao.dbConexaoSrvBeforeDisconnect(Sender: TObject);
+begin
+ Try
+ Except
+ End;
+end;
+
+procedure TDmConexao.dbConexaoSrvLogin(Database: TDatabase;
+  LoginParams: TStrings);
+begin
+ Try
+ Except
+ End;
+end;
+
+
+procedure ExecForm( FormClass: TFormClass; Var Reference; blMdi : Boolean = False; slCaption : String = '' );
+Var
+ I : Integer;
+
+begin
+ if TForm( Reference ) = NIL then
+  Application.CreateForm( FormClass, Reference );
+
+ with TForm( Reference ) do
+  begin
+   if slCaption <> '' then
+    Caption := slCaption;
+
+   // Restaura janela
+
+   if blMdi then
+    if ( BorderStyle <> bsSizeable  ) or
+       ( WindowState  = wsMinimized ) then
+     WindowState := wsNormal;
+
+   // Propriedades da janela
+
+   Case FormStyle of
+    fsMDIChild :
+     if BorderStyle <> bsSizeable then
+      BorderIcons := [biSystemMenu,biMinimize]
+     else
+      BorderIcons := [biSystemMenu,biMinimize,biMaximize];
+    fsNormal :
+     if BorderStyle <> bsSizeable then
+      BorderIcons := [biSystemMenu]
+     else
+      BorderIcons := [biSystemMenu,biMaximize];
+   end;
+
+   ShowHint   := True;
+   KeyPreview := True;
+
+   // Exibe a janela
+
+   if blMdi then
+    Show
+   else
+    ShowModal;
+
+   // Procura por PageControls e ativa a primeira Tab
+
+   if blMdi then
+    for I := 0 to ( ComponentCount - 1 ) do
+     if Components[I].ClassType = TPageControl then
+      TPageControl( Components[I] ).ActivePageIndex := 0;
+ end;
+end;
+
+end.

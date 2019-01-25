@@ -1,0 +1,182 @@
+object DmConexao: TDmConexao
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  Left = 980
+  Top = 182
+  Height = 226
+  Width = 357
+  object dbConexaoSrv: TDatabase
+    AliasName = 'GBPAF_SRV'
+    DatabaseName = 'GBPAF_SRV'
+    LoginPrompt = False
+    Params.Strings = (
+      'USER NAME=sa')
+    SessionName = 'Default'
+    AfterConnect = dbConexaoSrvAfterConnect
+    AfterDisconnect = dbConexaoSrvAfterDisconnect
+    BeforeConnect = dbConexaoSrvBeforeConnect
+    BeforeDisconnect = dbConexaoSrvBeforeDisconnect
+    OnLogin = dbConexaoSrvLogin
+    Left = 16
+    Top = 16
+  end
+  object BatSincronizar_S_W: TBatchMove
+    CommitCount = 100
+    Destination = TabDestinoW
+    Mode = batAppendUpdate
+    Source = qryOrigemS
+    Left = 200
+    Top = 16
+  end
+  object TabDestinoW: TTable
+    DatabaseName = 'GBPAF_WST'
+    TableName = 'dbo.TabSTb'
+    Left = 280
+    Top = 16
+  end
+  object qryOrigemS: TQuery
+    DatabaseName = 'GBPAF_SRV'
+    SQL.Strings = (
+      'select * from tabstb')
+    Left = 240
+    Top = 16
+  end
+  object dbConexaoWst: TDatabase
+    AliasName = 'GBPAF_WST'
+    DatabaseName = 'GBPAF_WST'
+    LoginPrompt = False
+    Params.Strings = (
+      'USER NAME=sa')
+    SessionName = 'Default'
+    Left = 88
+    Top = 16
+  end
+  object BatSincronizar_SemPk: TBatchMove
+    Destination = TabDestino_SemPk
+    Mode = batCopy
+    Source = qryOrigem_SemPk
+    Left = 200
+    Top = 128
+  end
+  object TabDestino_SemPk: TTable
+    DatabaseName = 'GBPAF_WST'
+    FieldDefs = <
+      item
+        Name = 'IdTabCid'
+        DataType = ftInteger
+      end
+      item
+        Name = 'IdTabCrg'
+        DataType = ftInteger
+      end
+      item
+        Name = 'IdTabDocFis'
+        DataType = ftInteger
+      end
+      item
+        Name = 'IdTabEmb'
+        DataType = ftInteger
+      end
+      item
+        Name = 'IdTabEmp'
+        DataType = ftInteger
+      end
+      item
+        Name = 'IdTabFpg'
+        DataType = ftInteger
+      end
+      item
+        Name = 'IdTabGru'
+        DataType = ftInteger
+      end
+      item
+        Name = 'IdTabMot'
+        DataType = ftInteger
+      end
+      item
+        Name = 'IdTabPro'
+        DataType = ftInteger
+      end
+      item
+        Name = 'IdTabPes'
+        DataType = ftInteger
+      end
+      item
+        Name = 'IdTabSitDoc'
+        DataType = ftInteger
+      end
+      item
+        Name = 'IdTabStb'
+        DataType = ftInteger
+      end
+      item
+        Name = 'IdTabcai'
+        DataType = ftInteger
+      end
+      item
+        Name = 'IdtabPdv'
+        DataType = ftInteger
+      end
+      item
+        Name = 'IdTabPcs'
+        DataType = ftInteger
+      end
+      item
+        Name = 'IdTabUsu'
+        DataType = ftInteger
+      end
+      item
+        Name = 'IdTabEcf'
+        DataType = ftInteger
+      end
+      item
+        Name = 'IdTabTrb'
+        DataType = ftInteger
+      end
+      item
+        Name = 'IdTabDcF'
+        DataType = ftInteger
+      end
+      item
+        Name = 'IDTabSDc'
+        DataType = ftInteger
+      end
+      item
+        Name = 'IDTabPcx'
+        DataType = ftInteger
+      end>
+    StoreDefs = True
+    TableName = 'dbo.TabCfg'
+    Left = 280
+    Top = 128
+  end
+  object qryOrigem_SemPk: TQuery
+    DatabaseName = 'GBPAF_SRV'
+    SQL.Strings = (
+      'select * from TabCfg')
+    Left = 240
+    Top = 128
+  end
+  object BatSincronizar_W_S: TBatchMove
+    CommitCount = 100
+    Destination = TabDestinoS
+    Mode = batAppendUpdate
+    Source = qryOrigemW
+    Left = 200
+    Top = 56
+  end
+  object TabDestinoS: TTable
+    DatabaseName = 'GBPAF_SRV'
+    TableName = 'dbo.TabSTb'
+    Left = 280
+    Top = 56
+  end
+  object qryOrigemW: TQuery
+    DatabaseName = 'GBPAF_WST'
+    SQL.Strings = (
+      'select * from tabstb')
+    Left = 240
+    Top = 56
+  end
+end

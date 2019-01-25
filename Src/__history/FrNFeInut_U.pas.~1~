@@ -1,0 +1,46 @@
+unit FrNFeInut_U;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ComCtrls, StdCtrls, Buttons, ExtCtrls, dxExEdtr, dxCntner, dxTL,
+  dxDBCtrl, dxDBGrid;
+
+type
+  TFrNFeInut = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    StatusBar1: TStatusBar;
+    Panel3: TPanel;
+    BitBtn1: TBitBtn;
+    dxDBGrid1: TdxDBGrid;
+    procedure BitBtn1Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrNFeInut: TFrNFeInut;
+
+implementation
+
+uses GBNFe_U;
+
+{$R *.dfm}
+
+procedure TFrNFeInut.BitBtn1Click(Sender: TObject);
+begin
+ Close;
+end;
+
+procedure TFrNFeInut.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+ FrGBNFe.pAtuNFe;
+end;
+
+end.
+ 

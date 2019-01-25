@@ -1,0 +1,327 @@
+unit FrInut_U;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ComCtrls, StdCtrls, Buttons, ExtCtrls, DBGrids;
+
+type
+  TFrInut = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    Panel9: TPanel;
+    BitBtn12: TBitBtn;
+    GroupBox1: TGroupBox;
+    Edit1: TEdit;
+    GroupBox2: TGroupBox;
+    Edit2: TEdit;
+    GroupBox3: TGroupBox;
+    Edit3: TEdit;
+    GroupBox4: TGroupBox;
+    Edit4: TEdit;
+    BitBtn1: TBitBtn;
+    GroupBox5: TGroupBox;
+    Edit5: TEdit;
+    StatusBar1: TStatusBar;
+    SpeedButton1: TSpeedButton;
+    rg1: TRadioGroup;
+    procedure BitBtn1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure Edit1KeyPress(Sender: TObject; var Key: Char);
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure FormShow(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure Edit5KeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure BitBtn12Click(Sender: TObject);
+    procedure rg1Click(Sender: TObject);
+    procedure GroupBox4Exit(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrInut: TFrInut;
+
+  // Variáveis Globais
+  vMens, xAux                                                          : String;
+
+implementation
+
+uses GBNFe_U, DMNFe_U, Funcoes_U, FrSeleciona_U;
+
+{$R *.dfm}
+
+procedure TFrInut.BitBtn1Click(Sender: TObject);
+var
+ Modelo, Serie, Ano, NumeroInicial, NumeroFinal, Justificativa, aux : String;
+ vCanPed                                                            : Boolean;
+
+begin
+
+ if ( Trim(Edit1.Text) = '' ) then
+  begin
+   Application.Messagebox('Ano não definido!' + Chr(13) + 'Defina o ano da nota pra continuar!','Atenção!', mb_iconstop+mb_ok);
+   Edit1.SetFocus;
+   exit;
+  end;
+
+ if ( Trim(Edit3.Text) = '' ) then
+  begin
+   Application.Messagebox('Série não definida!' + Chr(13) + 'Defina a série da nota pra continuar!','Atenção!', mb_iconstop+mb_ok);
+   Edit3.SetFocus;
+   exit;
+  end;
+
+ if ( Trim(Edit4.Text) = '' ) then
+  begin
+   Application.Messagebox('Número da nota não definido!' + Chr(13) + 'Defina o número da nota pra continuar!','Atenção!', mb_iconstop+mb_ok);
+   Edit4.SetFocus;
+   exit;
+  end;
+
+ if ( Trim(Edit2.Text) = '' ) then
+  begin
+   Application.Messagebox('Modelo não definido!' + Chr(13) + 'Defina o modelo da nota pra continuar!','Atenção!', mb_iconstop+mb_ok);
+   rg1.SetFocus;
+   exit;
+  end;
+
+ if ( Trim(Edit5.Text) = '' ) then
+  begin
+   Application.Messagebox('Justificativa não definido!' + Chr(13) + 'Defina a justificativa da inutilização pra continuar!','Atenção!', mb_iconstop+mb_ok);
+   Edit5.SetFocus;
+   exit;
+  end;
+
+ Ano           := Edit1.Text;
+ Modelo        := Edit2.Text;
+ Serie         := Edit3.Text;
+ NumeroInicial := Edit4.Text;
+ NumeroFinal   := Edit4.Text;
+ Justificativa := Edit5.Text;
+
+ if Ano         = '' then begin Edit1.SetFocus; exit; end;
+ if Modelo      = '' then begin Edit2.SetFocus; exit; end;
+ if Serie       = '' then begin Edit3.SetFocus; exit; end;
+ if NumeroFinal = '' then begin Edit4.SetFocus; exit; end;
+ if length(trim(justificativa)) < 15 then begin Edit5.SetFocus; exit; end;
+
+ // by Edson Lima ; 4-4-2012 ; 10:30 ; - Não tem mais necessidade de mostrar os dados
+ xAux := '';
+
+ //-----------------------------------------------------------------------------
+ // by Edson Lima ; 2017-1-16T1030 ; Verifica se existe pedido
+ //-----------------------------------------------------------------------------
+ if not ( FrGBNFe.fVrfInuNot( FrGBNFe.dxSpinEdit1.IntValue, StrToInt(NumeroInicial), StrToInt(modelo), StrToInt(serie) ) ) then
+  Exit;
+
+ if ( gCodPed > 0 ) then
+  vCanPed := true
+ else
+  vCanPed := false;
+
+ if vCanPed then
+  begin
+   //---------------------------------------------------------------------------
+   // by Edson Lima ; 2017-1-16T1130 ; Verifica a precisão adm do gerpa para
+   //                                  cancelamento
+   //---------------------------------------------------------------------------
+   if not ( FrGBNFe.fVerPAG(StrToInt(NumeroInicial), FrGBNFe.dxSpinEdit1.IntValue, gCodPed) ) then
+    Exit;
+   //---------------------------------------------------------------------------
+  end;
+
+ // by Edson Lima ; 2015-5-19T0904 ; Verifica se a nota que foi inutilizada e a que dever ser excluída
+ DMNFe.ZqryGeral.Close;
+ DMNFe.ZqryGeral.SQL.Clear;
+ DMNFe.ZqryGeral.SQL.Add( 'Select * from nfe                              ' );
+ DMNFe.ZqryGeral.SQL.Add( 'where codigo_loja = :gCodEmp                   ' );
+ DMNFe.ZqryGeral.SQL.Add( 'and   serie       = :ser                       ' );
+ DMNFe.ZqryGeral.SQL.Add( 'and   nnf         = :nnf                       ' );
+ DMNFe.ZqryGeral.SQL.Add( 'and   Modelo      = :Modelo                    ' );
+ DMNFe.ZqryGeral.ParamByName('gCodEmp'   ).Value        := StrToInt(gCodEmp);
+ DMNFe.ZqryGeral.ParamByName('ser'       ).Value        := Serie;
+ DMNFe.ZqryGeral.ParamByName('nNF'       ).Value        := StrToInt(NumeroFinal);
+ DMNFe.ZqryGeral.ParamByName('Modelo'    ).Value        := Modelo;
+ DMNFe.ZqryGeral.Open;
+
+ if not DMNFe.ZqryGeral.IsEmpty then
+  begin
+   if ( (DMNFe.ZqryGeral['situacao'] = null) or (trim(DMNFe.ZqryGeral['situacao']) = '') or
+                                                (trim(DMNFe.ZqryGeral['situacao']) = 'ENVI') ) then
+    xAux := IntToStr(DMNFe.ZqryGeral['nNF'])
+   else
+    begin
+     Application.Messagebox('Esta nota não pode ser inutilizada, contate o suporte GB!','Atenção!', mb_iconstop+mb_ok);
+     exit;
+    end;
+  end
+ else
+  xAux := NumeroFinal;
+
+ if MessageDlg('Confirma a inutilização da nota nº: ' + xAux , mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+  begin
+   try
+    FrGBNFe.ACBrNFe1.WebServices.Inutiliza(vartostr(DMNFe.ZQuery4['cnpj']), Justificativa, StrToInt(Ano), StrToInt(Modelo), StrToInt(Serie), StrToInt(NumeroInicial), StrToInt(NumeroFinal));
+    FrGBNFe.MemoResp.Lines.Text :=  UTF8Encode(FrGBNFe.ACBrNFe1.WebServices.Inutilizacao.RetWS);
+    FrGBNFe.LoadXML(FrGBNFe.MemoResp, FrGBNFe.WBResposta);
+   except
+    Application.Messagebox('Número não inutilizado!','Atenção!',mb_iconstop+mb_ok);
+    exit;
+   end;
+
+   aux := '';
+   aux := FrGBNFe.dxSpinEdit1.text + ',' + NumeroInicial + ',' + ano + ',' + Modelo + ',' + serie + ',' + '''' + justificativa + '''';
+
+   //grava notas inutilizadas
+   try
+    DMNFe.ZQuery1.DisableControls;
+    DMNFe.ZQuery1.Close;
+    DMNFe.ZQuery1.SQL.Clear;
+    DMNFe.ZQuery1.SQL.Add( 'exec sp_insere_notas_inutilizadas ' + aux );
+    try
+     DMNFe.ZConnection1.StartTransaction;
+     DMNFe.ZQuery1.ExecSQL;
+    except
+     DMNFe.ZConnection1.Rollback;
+     Application.Messagebox('Erro na inserção do registro!','Atenção!',mb_iconstop+mb_ok);
+     exit;
+    end;
+   finally
+    DMNFe.ZQuery1.EnableControls;
+   end;
+
+   try
+    // by Edson Lima ; 2015-5-19T0904 ; Verifica se a nota que foi inutilizada e a exclui
+    if not ( DMNFe.ZqryGeral.IsEmpty ) then
+     begin
+      DMNFe.ZqryGeral.SQL.Add( 'Delete from nfe                                 ' );
+      DMNFe.ZqryGeral.SQL.Add( 'where codigo_loja   = :gCodEmp                  ' );
+      DMNFe.ZqryGeral.SQL.Add( '  and   serie       = :ser                      ' );
+      DMNFe.ZqryGeral.SQL.Add( '  and   nnf         = :nNF                      ' );
+      DMNFe.ZqryGeral.SQL.Add( '  and   Modelo      = :Modelo                   ' );
+      DMNFe.ZqryGeral.ParamByName('gCodEmp'   ).Value        := StrToInt(gCodEmp);
+      DMNFe.ZqryGeral.ParamByName('ser'       ).Value        := StrToInt(Serie);
+      DMNFe.ZqryGeral.ParamByName('nNF'       ).Value        := StrToInt(NumeroFinal);
+      DMNFe.ZqryGeral.ParamByName('Modelo'    ).Value        := Modelo;
+      DMNFe.ZqryGeral.Open;
+
+      Application.Messagebox(pChar('A NFe nº ' + NumeroFinal + ', foi excluida da base NFe!'),'Atenção!',mb_iconstop+mb_ok);
+
+     end;
+   except
+    Application.Messagebox('Ocorreu um erro na exclusão da nota!','Atenção!',mb_iconstop+mb_ok);
+    exit;
+   end;
+
+   if vCanPed then
+    begin
+     //-------------------------------------------------------------------------
+     // by Edson Lima ; 2017-1-16T1549
+     // Efetua o Cancelamento Administrativo do PEDIDO
+     //-------------------------------------------------------------------------
+     if not ( FrGBNFe.fCanCAP(StrToInt(NumeroInicial), FrGBNFe.dxSpinEdit1.IntValue, gCodPed, gCodMtI) ) then
+      Application.MessageBox(PChar('Nota nº ' + NumeroInicial + 'cancelada, mas o pedido nº ' + IntToStr(gCodPed) + ' não foi cancelado!'), 'Atenção', MB_ICONINFORMATION );
+     //-------------------------------------------------------------------------
+    end;
+
+   MessageDlg('A inutilização foi efetuado com sucesso!',mtInformation,[mbOK],0);
+
+  end;
+
+end;
+
+procedure TFrInut.FormCreate(Sender: TObject);
+begin
+ { By EL 9.2.2012 - Iniciação dos edit padrão de inicializaçao }
+ Edit1.Text := FormatDateTime('yyyy', Date);
+end;
+
+procedure TFrInut.Edit1KeyPress(Sender: TObject; var Key: Char);
+begin
+ if not (key in['0'..'9',chr(8)]) then Abort;
+end;
+
+procedure TFrInut.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+var
+ Direction : Integer;
+begin
+ // Altere a propriedade do KeypPeview do Form pra true
+ if not (ActiveControl is  TDbGrid) then
+  begin
+   Direction := -1;
+   Case Key of
+    VK_NEXT, VK_RETURN : Direction := 0;
+    VK_PRIOR	 : Direction := 1;
+    VK_ESCAPE : Close;
+   end;
+   if Direction <> -1 then
+    begin
+    Perform(WM_NEXTDLGCTL, Direction, 0);
+    key := 0;
+    end;
+  end;
+end;
+
+procedure TFrInut.FormShow(Sender: TObject);
+begin
+ Edit2.Text    := '';
+ Edit3.Text    := '';
+ Edit4.Text    := '';
+ Edit5.Text    := gNomMtI;
+ rg1.ItemIndex := -1;
+ FrInut.Edit1.SetFocus;
+end;
+
+procedure TFrInut.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+ FrGBNFe.pAtuNFe;
+end;
+
+procedure TFrInut.Edit5KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+ if key = VK_F8 then
+  if Seleciona( 'notas_inutilizadas', 'Justificativas', ['Distinct justificativa'], ['JUSTIFICATIVAS '], '(justificativa like :spjustificativa)', [400], 1, 'justificativa' ) then
+   Edit5.Text := spResult[0];
+end;
+
+procedure TFrInut.SpeedButton1Click(Sender: TObject);
+begin
+ if Seleciona( 'notas_inutilizadas', 'Justificativas', ['Distinct justificativa'], ['JUSTIFICATIVAS '], '(justificativa like :spjustificativa)', [400], 1, 'justificativa' ) then
+  Edit5.Text := spResult[0];
+end;
+
+procedure TFrInut.BitBtn12Click(Sender: TObject);
+begin
+ Close;
+end;
+
+procedure TFrInut.rg1Click(Sender: TObject);
+begin
+
+ if ( rg1.ItemIndex = 0 ) then
+  Edit2.Text := '55'
+ else if ( rg1.ItemIndex = 1 ) then
+  Edit2.Text := '65'
+ else
+  Edit2.Text := '';
+
+end;
+
+procedure TFrInut.GroupBox4Exit(Sender: TObject);
+begin
+
+ rg1.SetFocus;
+
+end;
+
+end.

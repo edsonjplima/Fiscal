@@ -1,0 +1,294 @@
+unit FrConsManif_U;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Buttons, Gauges, StdCtrls, ComCtrls, ExtCtrls, OleCtrls, SHDocVw;
+
+type
+  TFrConsManif = class(TForm)
+    Panel2: TPanel;
+    StatusBar1: TStatusBar;
+    Panel3: TPanel;
+    Panel1: TPanel;
+    GroupBox3: TGroupBox;
+    ComboBox1: TComboBox;
+    GroupBox5: TGroupBox;
+    ComboBox2: TComboBox;
+    GroupBox1: TGroupBox;
+    Edit_NSU_nfe: TEdit;
+    GroupBox16: TGroupBox;
+    Gauge1: TGauge;
+    SpeedButton4: TSpeedButton;
+    SpeedButton1: TSpeedButton;
+    GroupBox4: TGroupBox;
+    Edit1: TEdit;
+    GroupBox6: TGroupBox;
+    Edit2: TEdit;
+    GroupBox7: TGroupBox;
+    Edit3: TEdit;
+    GroupBox9: TGroupBox;
+    Edit4: TEdit;
+    SpeedButton2: TSpeedButton;
+    CheckBox1: TCheckBox;
+    SpeedButton3: TSpeedButton;
+    CheckBox2: TCheckBox;
+    procedure SpeedButton4MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure SpeedButton1MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure GroupBox16MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure GroupBox1MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure GroupBox5MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure GroupBox3MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure GroupBox9MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure GroupBox7MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure GroupBox6MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure GroupBox4MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure Edit_NSU_nfeKeyPress(Sender: TObject; var Key: Char);
+    procedure SpeedButton4Click(Sender: TObject);
+    procedure SpeedButton2MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure CheckBox1Click(Sender: TObject);
+    procedure SpeedButton3Click(Sender: TObject);
+    procedure SpeedButton3MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure CheckBox1MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure CheckBox2Click(Sender: TObject);
+    procedure CheckBox2MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrConsManif: TFrConsManif;
+
+implementation
+
+uses FrBuscaChave_U, GBNFe_U;
+
+{$R *.dfm}
+
+procedure TFrConsManif.SpeedButton4MouseMove(Sender: TObject; Shift: TShiftState;
+  X, Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := SpeedButton4.Hint;
+end;
+
+procedure TFrConsManif.SpeedButton1MouseMove(Sender: TObject;
+  Shift: TShiftState; X, Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := SpeedButton1.Hint;
+end;
+
+procedure TFrConsManif.GroupBox16MouseMove(Sender: TObject;
+  Shift: TShiftState; X, Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := GroupBox16.Hint;
+end;
+
+procedure TFrConsManif.GroupBox1MouseMove(Sender: TObject;
+  Shift: TShiftState; X, Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := GroupBox1.Hint;
+end;
+
+procedure TFrConsManif.GroupBox5MouseMove(Sender: TObject;
+  Shift: TShiftState; X, Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := GroupBox5.Hint;
+end;
+
+procedure TFrConsManif.GroupBox3MouseMove(Sender: TObject;
+  Shift: TShiftState; X, Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := GroupBox3.Hint;
+end;
+
+procedure TFrConsManif.GroupBox9MouseMove(Sender: TObject;
+  Shift: TShiftState; X, Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := GroupBox9.Hint;
+end;
+
+procedure TFrConsManif.GroupBox7MouseMove(Sender: TObject;
+  Shift: TShiftState; X, Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := GroupBox7.Hint;
+end;
+
+procedure TFrConsManif.GroupBox6MouseMove(Sender: TObject;
+  Shift: TShiftState; X, Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := GroupBox6.Hint;
+end;
+
+procedure TFrConsManif.GroupBox4MouseMove(Sender: TObject;
+  Shift: TShiftState; X, Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := GroupBox4.Hint;
+end;
+
+procedure TFrConsManif.SpeedButton1Click(Sender: TObject);
+var
+ vRep : boolean;
+begin
+
+if Application.Messagebox('Gostaria de proseguir com o processo de' + Chr(13) +
+                           'Consolidação do manifesto ?','Confirme', mb_YesNo+mb_ICONQUESTION+mb_DefButton2) = IdNo then exit;
+
+ vRep := False;
+ FrConsManif.SpeedButton1.Enabled := False;
+ FrConsManif.SpeedButton4.Enabled := False;
+ FrConsManif.SpeedButton2.Enabled := True;
+
+ while true do
+  begin
+
+   if ( (not FrBuscaChave.Atualiza(vRep)) and ( not gAbortar) ) then            // Se atualização não der problemas....
+    begin
+     FrConsManif.SpeedButton1.Enabled := True;
+     FrConsManif.SpeedButton4.Enabled := True;
+     FrConsManif.SpeedButton2.Enabled := False;
+     FrBuscaChave.HaDe(True);                                                   // Habilita ou Desabilita componentes dutante a consulta
+     exit;
+    end
+
+   else
+    begin
+
+     if gAbortar then
+      begin
+       FrConsManif.SpeedButton1.Enabled := True;
+       FrConsManif.SpeedButton4.Enabled := True;
+       FrConsManif.SpeedButton2.Enabled := False;
+       FrBuscaChave.HaDe(True);                                                 // Habilita ou Desabilita componentes dutante a consulta
+       FrGBNFe.gravarNSU();
+       FrGBNFe.LerNSU();
+       gAbortar := False;
+       exit;
+      end;
+
+     vRep := True;
+
+    end;
+  end;
+
+end;
+
+procedure TFrConsManif.Edit_NSU_nfeKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+ if not (key in['0'..'9', chr(8)]) then Abort;
+end;
+
+procedure TFrConsManif.SpeedButton4Click(Sender: TObject);
+begin
+ close;
+end;
+
+procedure TFrConsManif.SpeedButton2MouseMove(Sender: TObject;
+  Shift: TShiftState; X, Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := SpeedButton2.Hint;
+end;
+
+procedure TFrConsManif.SpeedButton2Click(Sender: TObject);
+begin
+ gAbortar := True;
+end;
+
+procedure TFrConsManif.FormShow(Sender: TObject);
+begin
+
+ // Seta gAborta para Falso;
+ gAbortar := False;
+
+ FrConsManif.SpeedButton2.Enabled := False;
+ // Ler o arquivo ini e pega os dados do manifesto
+ FrGBNFe.LerNSU();
+ FrGBNFe.LerEMI();
+
+ if CheckBox2.Checked then
+  begin
+   CheckBox2.Caption := 'Indicador Emissor - Padrão 1';
+   ComboBox2.ItemIndex := 1;
+  end
+ else
+  begin
+   CheckBox2.Caption := 'Indicador Emissor - Padrão 0';
+   ComboBox2.ItemIndex := 0 ;
+  end;
+
+end;
+
+procedure TFrConsManif.CheckBox1Click(Sender: TObject);
+begin
+
+ FrGBNFe.GravarNSU();
+ FrGBNFe.LerNSU();
+
+end;
+
+procedure TFrConsManif.SpeedButton3Click(Sender: TObject);
+begin
+
+ FrGBNFe.GravarNSU();
+ FrGBNFe.LerNSU();
+
+end;
+
+procedure TFrConsManif.SpeedButton3MouseMove(Sender: TObject;
+  Shift: TShiftState; X, Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := SpeedButton3.Hint;
+end;
+
+procedure TFrConsManif.CheckBox1MouseMove(Sender: TObject;
+  Shift: TShiftState; X, Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := CheckBox1.Hint;
+end;
+
+procedure TFrConsManif.CheckBox2Click(Sender: TObject);
+begin
+
+ FrGBNFe.GravarEMI();
+ FrGBNFe.LerEMI();
+
+ if CheckBox2.Checked then
+  begin
+   CheckBox2.Caption := 'Indicador Emissor - Padrão 1';
+   ComboBox2.ItemIndex := 1;
+  end
+ else
+  begin
+   CheckBox2.Caption := 'Indicador Emissor - Padrão 0';
+   ComboBox2.ItemIndex := 0 ;
+  end;
+
+end;
+
+procedure TFrConsManif.CheckBox2MouseMove(Sender: TObject;
+  Shift: TShiftState; X, Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := CheckBox2.Hint;
+end;
+
+end.

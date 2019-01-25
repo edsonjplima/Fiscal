@@ -1,0 +1,172 @@
+       // 1. Efetua Verificação da Disponibilidade do Cancelamento Administrativo do PEDIDO
+
+       DmGerpa.spVrfCanNot.UnPrepare;
+        DmGerpa.spVrfCanNot.Params[01].AsInteger := iCodEmp;
+        DmGerpa.spVrfCanNot.Params[02].AsInteger := iCodPed;
+       DmGerpa.spVrfCanNot.Prepare;
+
+       DmGerpa.spVrfCanNot.ExecProc;
+
+       // Processando Retorno da Procedure
+
+       Case DmGerpa.spVrfCanNot.Params[00].AsInteger of
+        1:
+         begin
+          Application.MessageBox(PChar('Não será possível efetuar o cancelamento do Pedido Nº ' + IntToStr(ilCodPed) + ', possui Título(s) a Receber Baixado(s)!'), 'Atenção', MB_ICONINFORMATION );
+          Continue;
+         end;
+        2:
+         begin
+          Application.MessageBox(PChar('Não será possível efetuar o cancelamento do Pedido de Entrada em Depósito Nº ' + IntToStr(ilCodPed) + ', Exite(m) Pedido(s) de Saída em Depósito Pendente(s) ou Faturado(s) Vinculado(s)!'), 'Atenção', MB_ICONINFORMATION );
+          Continue;
+         end;
+        3:
+         begin
+          Application.MessageBox(PChar('Não será possível efetuar o cancelamento do Pedido de Transferência Nº ' + IntToStr(ilCodPed) + ', a Entrada foi Confirmada e/ou Atualizada !'), 'Atenção', MB_ICONINFORMATION );
+          Continue;
+         end;
+        4:
+         begin
+          Application.MessageBox(PChar('Não será possível efetuar o cancelamento do Pedido de Entrada via Fat. Nº ' + IntToStr(ilCodPed) + ', possui Título(s) a Pagar Baixado(s)!'), 'Atenção', MB_ICONINFORMATION );
+          Continue;
+         end;
+        5:
+         begin
+          Application.MessageBox(PChar('Não será possível efetuar o cancelamento do Pedido Complementar de Preço Nº ' + IntToStr(ilCodPed) + ', o Caixa está fechado!'), 'Atenção', MB_ICONINFORMATION );
+          Continue;
+         end;
+        6: // By Renildo ; 05.08.2009 ; 11:12
+         begin
+          Application.MessageBox(PChar('Não será possível efetuar o cancelamento do Pedido Nº ' + IntToStr(ilCodPed) + ', Posição Diferente de Faturado !'), 'Atenção', MB_ICONINFORMATION );
+          Continue;
+         end;
+        7: // By Renildo ; 05.08.2009 ; 11:12
+         begin
+          Application.MessageBox(PChar('Não será possível efetuar o cancelamento do Pedido Nº ' + IntToStr(ilCodPed) + ', Prazo para Cancelamento Excedido, Conforme Regras da Empresa!'), 'Atenção', MB_ICONINFORMATION );
+          Continue;
+         end;
+        8: // By Renildo ; 06.08.2009 ; 11:12
+         begin
+          Application.MessageBox(PChar('Não será possível efetuar o cancelamento do Pedido Nº ' + IntToStr(ilCodPed) + ', Pedido foi Devolvido!'), 'Atenção', MB_ICONINFORMATION );
+          Continue;
+         end;
+        9: // By Renildo ; 13.08.2009 ; 11:02
+         begin
+          Application.MessageBox(PChar('Não será possível efetuar o cancelamento do Pedido Nº ' + IntToStr(ilCodPed) + ', Comissão Normal Referente a este Faturamento já Fechada, deve-se Cancelar o Fechamento!'), 'Atenção', MB_ICONINFORMATION );
+          Continue;
+         end;
+       10: // By Renildo ; 21.09.2011 ; 16:53
+         begin
+          Application.MessageBox(PChar('Não será possível efetuar o cancelamento do Pedido Nº ' + IntToStr(ilCodPed) + ', possui Título(s) a Pagar Baixado(s)!'), 'Atenção', MB_ICONINFORMATION );
+          Continue;
+         end;
+       11:  // By Renildo ; 23.12.2011 ; 08:07
+         begin
+          Application.MessageBox(PChar('Não será possível efetuar o cancelamento do Pedido Nº ' + IntToStr(ilCodPed) + ', pois se Refere a uma Ordem de Carregamento com Contas a Pagar Baixado !'), 'Atenção', MB_ICONINFORMATION );
+          Continue;
+         end;
+       12:  // By Renildo ; 08.05.2012 ; 15:31
+         begin
+          Application.MessageBox(PChar('Não será possível efetuar o cancelamento do Pedido Nº ' + IntToStr(ilCodPed) + ', pois ele foi Agrupado, Originando Outro Pedido !'), 'Atenção', MB_ICONINFORMATION );
+          Continue;
+         end;
+       13:  // By Renildo ; 18.06.2009 ; 12:07
+         begin
+          Application.MessageBox(PChar('Não será possível efetuar o cancelamento do Pedido Nº ' + IntToStr(ilCodPed) + ', pois se Refere a uma Devolução de Compra/Venda com Ordem de Pagamento Baixada via Caixa, e o Caixa está Fechado !'), 'Atenção', MB_ICONINFORMATION );
+          Continue;
+         end;
+       14:
+         begin
+          Application.MessageBox(PChar('Não será possível efetuar o cancelamento do Pedido Nº ' + IntToStr(ilCodPed) + ', pois se Refere a uma Devolução de Compra/Venda com Ordem de Pagamento Baixada !'), 'Atenção', MB_ICONINFORMATION );
+          Continue;
+         end;
+       End;
+
+       // 2. EXECUTAR CANCELAMENTO FISCAL NA SEFAZ - GBNFE
+
+       // --- EDSON --- //
+
+       // 3. Efetua o Cancelamento Administrativo do PEDIDO
+
+       DmGerpa.spCanNot.UnPrepare;
+        DmGerpa.spCanNot.Params[01].AsInteger := iCodEmp;
+        DmGerpa.spCanNot.Params[02].AsInteger := iCodPed;
+        DmGerpa.spCanNot.Params[03].AsInteger := iCodMot;
+       DmGerpa.spCanNot.Prepare;
+
+       DmGerpa.spCanNot.ExecProc;
+
+       // Processando Retorno da Procedure
+
+       Case DmGerpa.spCanNot.Params[00].AsInteger of
+        1:
+         begin
+          Application.MessageBox(PChar('Não será possível efetuar o cancelamento do Pedido Nº ' + IntToStr(ilCodPed) + ', possui Título(s) a Receber Baixado(s)!'), 'Atenção', MB_ICONINFORMATION );
+          Continue;
+         end;
+        2:
+         begin
+          Application.MessageBox(PChar('Não será possível efetuar o cancelamento do Pedido de Entrada em Depósito Nº ' + IntToStr(ilCodPed) + ', Exite(m) Pedido(s) de Saída em Depósito Pendente(s) ou Faturado(s) Vinculado(s)!'), 'Atenção', MB_ICONINFORMATION );
+          Continue;
+         end;
+        3:
+         begin
+          Application.MessageBox(PChar('Não será possível efetuar o cancelamento do Pedido de Transferência Nº ' + IntToStr(ilCodPed) + ', a Entrada foi Confirmada e/ou Atualizada !'), 'Atenção', MB_ICONINFORMATION );
+          Continue;
+         end;
+        4:
+         begin
+          Application.MessageBox(PChar('Não será possível efetuar o cancelamento do Pedido de Entrada via Fat. Nº ' + IntToStr(ilCodPed) + ', possui Título(s) a Pagar Baixado(s)!'), 'Atenção', MB_ICONINFORMATION );
+          Continue;
+         end;
+        5:
+         begin
+          Application.MessageBox(PChar('Não será possível efetuar o cancelamento do Pedido Complementar de Preço Nº ' + IntToStr(ilCodPed) + ', o Caixa está fechado!'), 'Atenção', MB_ICONINFORMATION );
+          Continue;
+         end;
+        6: // By Renildo ; 05.08.2009 ; 11:12
+         begin
+          Application.MessageBox(PChar('Não será possível efetuar o cancelamento do Pedido Nº ' + IntToStr(ilCodPed) + ', Posição Diferente de Faturado !'), 'Atenção', MB_ICONINFORMATION );
+          Continue;
+         end;
+        7: // By Renildo ; 05.08.2009 ; 11:12
+         begin
+          Application.MessageBox(PChar('Não será possível efetuar o cancelamento do Pedido Nº ' + IntToStr(ilCodPed) + ', Prazo para Cancelamento Excedido, Conforme Regras da Empresa!'), 'Atenção', MB_ICONINFORMATION );
+          Continue;
+         end;
+        8: // By Renildo ; 06.08.2009 ; 11:12
+         begin
+          Application.MessageBox(PChar('Não será possível efetuar o cancelamento do Pedido Nº ' + IntToStr(ilCodPed) + ', Pedido foi Devolvido!'), 'Atenção', MB_ICONINFORMATION );
+          Continue;
+         end;
+        9: // By Renildo ; 13.08.2009 ; 11:02
+         begin
+          Application.MessageBox(PChar('Não será possível efetuar o cancelamento do Pedido Nº ' + IntToStr(ilCodPed) + ', Comissão Normal Referente a este Faturamento já Fechada, deve-se Cancelar o Fechamento!'), 'Atenção', MB_ICONINFORMATION );
+          Continue;
+         end;
+       10: // By Renildo ; 21.09.2011 ; 16:53
+         begin
+          Application.MessageBox(PChar('Não será possível efetuar o cancelamento do Pedido Nº ' + IntToStr(ilCodPed) + ', possui Título(s) a Pagar Baixado(s)!'), 'Atenção', MB_ICONINFORMATION );
+          Continue;
+         end;
+       11:  // By Renildo ; 23.12.2011 ; 08:07
+         begin
+          Application.MessageBox(PChar('Não será possível efetuar o cancelamento do Pedido Nº ' + IntToStr(ilCodPed) + ', pois se Refere a uma Ordem de Carregamento com Contas a Pagar Baixado !'), 'Atenção', MB_ICONINFORMATION );
+          Continue;
+         end;
+       12:  // By Renildo ; 08.05.2012 ; 15:31
+         begin
+          Application.MessageBox(PChar('Não será possível efetuar o cancelamento do Pedido Nº ' + IntToStr(ilCodPed) + ', pois ele foi Agrupado, Originando Outro Pedido !'), 'Atenção', MB_ICONINFORMATION );
+          Continue;
+         end;
+       13:  // By Renildo ; 18.06.2009 ; 12:07
+         begin
+          Application.MessageBox(PChar('Não será possível efetuar o cancelamento do Pedido Nº ' + IntToStr(ilCodPed) + ', pois se Refere a uma Devolução de Compra/Venda com Ordem de Pagamento Baixada via Caixa, e o Caixa está Fechado !'), 'Atenção', MB_ICONINFORMATION );
+          Continue;
+         end;
+       14:
+         begin
+          Application.MessageBox(PChar('Não será possível efetuar o cancelamento do Pedido Nº ' + IntToStr(ilCodPed) + ', pois se Refere a uma Devolução de Compra/Venda com Ordem de Pagamento Baixada !'), 'Atenção', MB_ICONINFORMATION );
+          Continue;
+         end;
+       End;

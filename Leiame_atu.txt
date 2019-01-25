@@ -1,0 +1,165 @@
+
+-------
+
+Nova atualização a partir 03/12/2014 V.4-14-12-3
+
+Implanta a Rotina de Manifesto MDe
+
+Implica criação dos campos xPed e nItemPed - Pedido feito pela Campovita
+
+PASSOS:
+- Tirar o Backup do banco de dados NFe
+
+Depois, Antes de rodar os Scripts:
+- Deletar as trÊs tabelas de entradas NFeE_Fat, NFeE_Ite e NFeE_Mov
+- Esse procedimento vc vai fazer pra todas as atualizações apartir da versão 4-14-12-3
+
+Scripts:
+- Por ultimo Rodar os Scripts 04 e depois o 05.
+
+--------
+26-02-2015
+ Hoje foi atualizada a tabela de origem que implementa o código da situação tributária (cst)
+ e ficou disponibilizado na versão 4.15.2.26 
+
+--------
+
+09-07-2015 - v.4_15_7_9
+
+ Quando rodar esta versão e a versão instalada no cliente for igual ou maior que
+ esta -->  v_4-15-4-2 rodar somente o script [ 04. Altera Tabelas - Implica Nfe_Xml ]
+
+--------
+
+03-11-2015 - v.5_15_11_3
+
+ Versão do GBNFe elaborada devido a mudança dos componentes ACBr trunk para o trunk2 e
+ a implantação do projeto NFCe que está sendo desenvolvido juntamente com o NFe. foi 
+ criado dois scripts o 7 e o 8, para serem usados apartir desta versão para os empressas
+ que estejam utilizando o GBNFe versão anterior do dia 9/07/2015 v.4-15-7-9.
+
+--------
+
+09-03-2016
+  Foi incluido dois scripts 09 e 10 a partir desta data, onde o  09 - Verifica
+  Duplicidade de Chave, para o suporte dectar a data e modicar o script 10 com a 
+  data mais atual de duplicidade e as notas inutilizadas respectivamente para que 
+  seja efetuada as indexação das tabelas nfe_informacaoes, nfe_veicolo, nfe_volume
+  e notas_inutilizadas.
+ 
+
+--------
+13-05-2016
+  Esta versão quando for instalar em um cliente atualizado rodar o script 8, caso esteja
+  desatualizado rodar o script 7 e 8.
+
+
+--------
+02-06-2016 - v_5-16-6-2
+  A atualização desta versão quando for instalar em sobre a versão v_5-16-5-13 deverá ser
+  rodado o script 8, caso esteja sendo atualizado sobre versões mais antigas rodar os
+  scripts 7 e 8.
+  Atenção: não se esqueça do feedback do (Relatório de Entrega de Atualização do GBNFe)!
+
+--------
+
+06-06-2016 - v_5-16-6-6
+  A atualização desta versão quando for instalar sobre a versão v_5-16-5-2 não precisará 
+  deverá ser rodar scripts, caso esteja sendo atualizado sobre versões mais antigas rodar os
+  scripts 7 e 8 devem ser rodados.
+  Atenção: não se esqueça do feedback do (Relatório de Entrega de Atualização do GBNFe)!
+
+--------
+
+22-06-2016 - v_5-16-6-22
+  A atualização desta versão quando for instalar sobre a versão v_5-16-6-6 deverá ser
+  rodado o script 8, caso esteja sendo atualizado sobre versões mais antigas rodar os
+  scripts 7 e 8.
+  Atenção: não se esqueça do feedback do (Relatório de Entrega de Atualização do GBNFe)!
+
+  Foi atualizado o ACBr e todos os Schemas.
+
+--------
+
+16-09-2016 - v_5-16-9-16
+  A atualização desta versão quando for instalar sobre a versão v_5-16-9-5 deverá ser
+  rodado o script 7 e 8, caso esteja sendo atualizado sobre versões mais antigas verificar
+  aqui informçãoes sobre a versão e data.
+  Atenção: não se esqueça do feedback do (Relatório de Entrega de Atualização do GBNFe)!
+
+  Foi atualizado o ACBr e todos os Schemas.
+
+--------
+
+  
+-- A partir de 01/02/2018
+
+
+Foi corrigido o display de mensagens retornados da sefaz quando se envia
+uma (nota nfe ou nfce) que antes não era mostrada.
+
+Foi corrigido o envio de inutilização para o caso de reenvio de uma nota
+já existente no banco de dados da sefaz mais não atualizada no banco de 
+dados nfe, agora caso essa nota já tenha sido eviada pra sefaz o sistema
+procedera a continuação da gravação do banco de dados para atualizar as
+tabelas afetadas.
+
+
+
+
+Campos adicionados na tabela notas_inutilizadas
+   Add tpAmb  char(1) Null
+   Add verAplic  varchar(30) Null
+   Add cUF  int Null
+   Add CNPJ  varchar(14) Null
+   Add nProt  varchar(20) Null
+
+
+
+
+
+
+
+
+,t3.data_inclusao,
+,t3.tpAmb
+,t3.verAplic
+,t3.cStat
+,t3.xMotivo
+,t3.cUF
+,t3.CNPJ
+,t3.nProt
+
+
+
+
+
+//2018-2-1 T 0845
+Está sendo implementa inovações no sistema de inutilização, devido ter
+apresentado inconsistencia em uma inutilização sem resposta mais que 
+foi efetivado junto a sefaz, e está sendo acrescentado novos campos no
+arquivo de notas_inutilizadas para melhor entendimento...
+
+
+
+
+// 2018-2-6 T 1629 
+Foi corrigido a questão da instancia aberta em mesmo quando o sistema era fechado...
+
+
+
+Está sendo implementado e testado a nova vesão da nfe/nfce 4.0
+
+
+
+
+
+
+Atualização do banco de dados:
+
+
+
+
+Grato,
+
+Edson Lima (62) 985523545

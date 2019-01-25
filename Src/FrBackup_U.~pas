@@ -1,0 +1,143 @@
+unit FrBackup_U;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, dxExEdtr, ExtCtrls, dxCntner, dxEditor, dxEdLib, dxTL, dxTLClms,
+  StdCtrls, Placemnt, ActnList, Menus, RxMenus, ImgList, Buttons, ComCtrls,
+  DB, DBGrids;
+
+type
+  TFrBackup = class(TForm)
+    ImageList1: TImageList;
+    GroupBox8: TGroupBox;
+    dxButtonEdit2: TdxButtonEdit;
+    Bevel1: TBevel;
+    GroupBox1: TGroupBox;
+    Label2: TLabel;
+    ProgressBar1: TProgressBar;
+    DataSource1: TDataSource;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    StatusBar1: TStatusBar;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    Panel3: TPanel;
+    procedure FormActivate(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure DataSource1DataChange(Sender: TObject; Field: TField);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrBackup: TFrBackup;
+
+implementation
+
+uses GBNFe_U, DMNFe_U;
+
+{$R *.dfm}
+
+procedure TFrBackup.FormActivate(Sender: TObject);
+begin
+ dxButtonEdit2.Text := gCamBak;
+end;
+
+procedure TFrBackup.BitBtn2Click(Sender: TObject);
+begin
+ Close;
+end;
+
+procedure TFrBackup.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+var
+ Direction : Integer;
+begin
+ // Alterar a propriedade do KeypPeview do Form pra true
+ if not (ActiveControl is  TDbGrid) then
+  begin
+   Direction := -1;
+   Case Key of
+    VK_NEXT, VK_RETURN : Direction := 0;
+    VK_PRIOR	 : Direction := 1;
+    VK_ESCAPE : Close;
+   end;
+   if Direction <> -1 then
+    begin
+    Perform(WM_NEXTDLGCTL, Direction, 0);
+    key := 0;
+    end;
+  end;
+end;
+
+procedure TFrBackup.BitBtn1Click(Sender: TObject);
+var
+ i : Integer;
+begin
+ Progressbar1.Position := 0;
+
+ if MessageDlg('Confirma backup dos dados', mtConfirmation, [mbYes, mbNo], 0) = mrYes then begin
+ //---------------- executa procedure que le os arquivos textos
+  try
+   DMNFe.ZQuery2.DisableControls;
+   DMNFe.ZQuery2.Close;
+   DMNFe.ZQuery2.SQL.Clear;
+   DMNFe.ZQuery2.SQL.Add( 'exec sp_bkp :gCamBak                            '  );
+   DMNFe.ZQuery2.ParamByName('gCamBak').Value := gCamBak;
+   try
+    DMNFe.ZQuery2.ExecSQL;
+   except
+    Application.Messagebox('ERRO: Não executou a procedure SP_BKP','Atenção!',mb_iconstop+mb_ok);
+    exit;
+   end;
+
+   with ProgressBar1 do
+    begin
+     for i := 1 to 100 do
+      begin
+       Application.ProcessMessages;
+       Position := i;
+       Label2.Caption := IntToStr(i) + '%';
+       Sleep(10);
+      end;
+    end;
+
+   DMNFe.ZQuery2.Close;
+
+  finally
+   DMNFe.ZQuery2.EnableControls;
+  end;
+
+  MessageDlg('Backup realizado com sucesso',mtInformation,[mbOK],0);
+ end;
+end;
+
+procedure TFrBackup.DataSource1DataChange(Sender: TObject; Field: TField);
+//var
+ // i  : Integer;
+begin
+{
+ with ProgressBar1 do
+  begin
+   Application.ProcessMessages;
+   Min := 0;
+   Max := dmNFe.ZQuery2.RecordCount;
+   Position := i;
+  end;
+  }
+end;
+
+procedure TFrBackup.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+ Progressbar1.Position := 0;
+end;
+
+end.

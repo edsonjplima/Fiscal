@@ -1,0 +1,22 @@
+- GBNFe
+
+- Define o nível de acesso pra liberar botões 0 = nível master, 1 = nível restrito (sem Manifesto do Destinatário), 4 = Nível Somente (Manifesto do Destinatário)
+  Ex: 
+      slNivelAcesso := 0 // Nível master
+      slNivelAcesso := 1 // Nível restrito sem manifesto do destinatário
+      slNivelAcesso := 4 // Nível somente manifesto do destinatário
+
+-->  WinExec( PChar( GerpaIni.ReadString( 'Processos', 'CaminhoGBNFe', 'C:\Sistemas\GBNFe\Exe' ) + '\GBNFe.Exe /developed_gb_informática_ltda /' + slCodEmp + ' /' + spUsuario + ' /' + slNivelAcesso ), SW_SHOW );
+
+
+*****************************************************
+
+- GBCTe
+
+- Define o nível de acesso pra liberar botões 0 = nível master, 1 = nível restrito (sem Manifesto do Destinatário), 4 = Nível Somente (MDFe)
+  Ex: 
+      slNivelAcesso := 0 // Nível master
+      slNivelAcesso := 1 // Nível restrito sem MDFe
+      slNivelAcesso := 4 // Nível somente MDFe
+
+-->  WinExec( PChar( GerpaIni.ReadString( 'Processos', 'CaminhoGBCTe', 'C:\Sistemas\GBCTe\Exe' ) + '\GBCTe.exe /developed_gb_informática_ltda /' + slCodEmp + ' /' + spUsuario + ' /' + slNivelAcesso ), SW_SHOW );

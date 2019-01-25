@@ -1,0 +1,22 @@
+program Nfe_U;
+
+uses
+  Forms,
+  Nfe in 'Nfe.pas' {FrNfe},
+  FrImprimeVenda_U in 'FrImprimeVenda_U.pas' {FrImprimeVenda},
+  ufrmStatus in 'ufrmStatus.pas' {frmStatus},
+  FrConsultaNotas_U in 'FrConsultaNotas_U.pas' {FrConsultaNotas},
+  FrDestinatario_U in 'FrDestinatario_U.pas' {FrDestinatario},
+  FrEmitente_U in 'FrEmitente_U.pas' {FrEmitente},
+  FrNotaAvulsa_U in 'FrNotaAvulsa_U.pas' {FrNotaAvulsa},
+  FrInutilizacao_U in 'FrInutilizacao_U.pas' {FrInitilizacao};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.CreateForm(TFrImprimeVenda, FrImprimeVenda);
+  Application.CreateForm(TfrmStatus, frmStatus);
+  Application.CreateForm(TFrInitilizacao, FrInitilizacao);
+  Application.Run;
+end.

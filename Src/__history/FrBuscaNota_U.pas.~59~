@@ -1,0 +1,298 @@
+unit FrBuscaNota_U;
+
+interface
+
+uses
+ Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+ System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
+ Vcl.ComCtrls, Vcl.StdCtrls, Vcl.Buttons, Vcl.ExtCtrls, cxGraphics,
+ cxControls, cxLookAndFeels, cxLookAndFeelPainters, cxCustomData,
+ cxStyles, cxTL, cxTLdxBarBuiltInMenu, dxSkinsCore, dxSkinBlack,
+ dxSkinBlue, dxSkinBlueprint, dxSkinCaramel, dxSkinCoffee, dxSkinDarkRoom,
+ dxSkinDarkSide, dxSkinDevExpressDarkStyle, dxSkinDevExpressStyle,
+ dxSkinFoggy, dxSkinGlassOceans, dxSkinHighContrast, dxSkiniMaginary,
+ dxSkinLilian, dxSkinLiquidSky, dxSkinLondonLiquidSky, dxSkinMcSkin,
+ dxSkinMetropolis, dxSkinMetropolisDark, dxSkinMoneyTwins,
+ dxSkinOffice2007Black, dxSkinOffice2007Blue, dxSkinOffice2007Green,
+ dxSkinOffice2007Pink, dxSkinOffice2007Silver, dxSkinOffice2010Black,
+ dxSkinOffice2010Blue, dxSkinOffice2010Silver, dxSkinOffice2013DarkGray,
+ dxSkinOffice2013LightGray, dxSkinOffice2013White, dxSkinOffice2016Colorful,
+ dxSkinOffice2016Dark, dxSkinPumpkin, dxSkinSeven, dxSkinSevenClassic,
+ dxSkinSharp, dxSkinSharpPlus, dxSkinSilver, dxSkinSpringTime, dxSkinStardust,
+ dxSkinSummer2008, dxSkinTheAsphaltWorld, dxSkinsDefaultPainters,
+ dxSkinValentine, dxSkinVisualStudio2013Blue, dxSkinVisualStudio2013Dark,
+ dxSkinVisualStudio2013Light, dxSkinVS2010, dxSkinWhiteprint, dxSkinXmas2008Blue,
+ cxInplaceContainer, cxTextEdit, cxClasses, cxCalendar, cxCheckBox,
+ cxCurrencyEdit, cxMaskEdit, dxDateTimeWheelPicker, cxRichEdit, cxContainer,
+  cxEdit, dxCore, cxDateUtils, cxDropDownEdit;
+
+type
+ TFrBuscaNota = class(TForm)
+  Panel3: TPanel;
+  Panel2: TPanel;
+  BitBtn2: TBitBtn;
+  StatusBar1: TStatusBar;
+  Panel1: TPanel;
+  GroupBox1: TGroupBox;
+  Label1: TLabel;
+  GroupBox4: TGroupBox;
+  GroupBox2: TGroupBox;
+  cxTLBusca: TcxTreeList;
+    dtp1: TDateTimePicker;
+    dtp2: TDateTimePicker;
+  edt_CodDes: TEdit;
+  edt_NumNNF: TEdit;
+  cxTLCBuscaStrNNf: TcxTreeListColumn;
+  cxTLCBuscaStrDes: TcxTreeListColumn;
+  cxTLCBuscaDatDEM: TcxTreeListColumn;
+  cxTLCBuscaStrMod: TcxTreeListColumn;
+  cxTLCBuscaStrSer: TcxTreeListColumn;
+  cxTLCBuscaStrChv: TcxTreeListColumn;
+    cxdtp1: TcxDateEdit;
+    cxdtp2: TcxDateEdit;
+  procedure FormShow(Sender: TObject);
+  procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+  procedure BitBtn2MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+  procedure edt_CodDesKeyPress(Sender: TObject; var Key: Char);
+  procedure edt_NumNNFKeyPress(Sender: TObject; var Key: Char);
+  procedure cxTLBuscaDblClick(Sender: TObject);
+    procedure edt_CodDesChange(Sender: TObject);
+    procedure edt_NumNNFChange(Sender: TObject);
+    procedure cxdtp1PropertiesChange(Sender: TObject);
+    procedure cxdtp2PropertiesChange(Sender: TObject);
+ private
+    { Private declarations }
+ public
+    { Public declarations }
+    procedure pAtuBus();                                                        // Atualiza treelist de busca
+
+ end;
+
+var
+ FrBuscaNota: TFrBuscaNota;
+
+implementation
+
+uses
+ GBNFe_U, DMNFe_U, FrCCe_U, DMFD_U;
+
+{$R *.dfm}
+
+procedure TFrBuscaNota.FormShow(Sender: TObject);
+begin
+
+ //FrGBNFe.RadioGroup1.ItemIndex  := 2;  // provisório
+ FrBuscaNota.Height             := 470;
+ FrBuscaNota.Width              := 750;
+
+ cxdtp1.Date := FrGBNFe.cxdtp1.Date;
+ cxdtp2.Date := FrGBNFe.cxdtp2.Date;
+
+ edt_CodDes.Text := FrGBNFe.edt_CodDes.Text;
+ edt_NumNNF.Text := FrGBNFe.edt_NumNNF.Text;
+
+ if ( edt_NumNNF.Text = '0' ) then edt_NumNNF.Text := '';
+ if ( edt_CodDes.Text = '0' ) then edt_CodDes.Text := '';
+
+end;
+
+procedure TFrBuscaNota.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+var
+ Direction: Integer;
+begin
+ // Altere a propriedade do KeyPreview do Form pra true
+ if not (ActiveControl is TCxTreeList) then
+ begin
+  Direction := -1;
+  case Key of
+   VK_NEXT, VK_RETURN:
+    Direction := 0;
+   VK_PRIOR:
+    Direction := 1;
+   VK_ESCAPE:
+    Close;
+  end;
+  if Direction <> -1 then
+  begin
+   Perform(WM_NEXTDLGCTL, Direction, 0);
+   Key := 0;
+  end;
+ end;
+end;
+
+procedure TFrBuscaNota.cxdtp1PropertiesChange(Sender: TObject);
+begin
+
+ // Faz a contestação da data inicial antiga
+ if cxdtp1.Date < (Date - 73000) then                                             // 73000 dias aproximadamente 200 anos
+  if Application.MessageBox('Data inicial muita antiga !', 'BUSCA - Período', mb_IconInformation + MB_OK) = IdOk then
+  begin
+   cxdtp1.SetFocus;
+   exit;
+  end;
+
+ // Faz a contestação da data final no período
+ if cxdtp2.Date < cxdtp1.Date then
+  if Application.MessageBox('A data inicial não pode ser maior que data final !', 'BUSCA - Período', mb_IconInformation + MB_OK) = IdOk then
+  begin
+   cxdtp2.SetFocus;
+   exit;
+  end;
+
+ pAtuBus();
+
+end;
+
+procedure TFrBuscaNota.cxdtp2PropertiesChange(Sender: TObject);
+begin
+
+ // Faz a contestação da data final antiga
+ if cxdtp2.Date < (Date - 73000) then                                             // 73000 dias aproximadamente 200 anos
+  if Application.MessageBox('Data final muito antiga !', 'BUSCA - Período', mb_IconInformation + MB_OK) = IdOk then
+  begin
+   cxdtp2.SetFocus;
+   exit;
+  end;
+
+ // Faz a contestação da data final no período
+ if cxdtp2.Date < cxdtp1.Date then
+  if Application.MessageBox('A data final não pode ser menor que data inicial !', 'BUSCA - Período', mb_IconInformation + MB_OK) = IdOk then
+  begin
+   cxdtp2.SetFocus;
+   exit;
+  end;
+
+ pAtuBus();
+
+end;
+
+procedure TFrBuscaNota.cxTLBuscaDblClick(Sender: TObject);
+begin
+
+ FrCCe.Edit_Nota.Text  := cxTLBusca.Items[cxTLBusca.FocusedNode.Index].Texts[cxTLCBuscaStrNNf.ItemIndex];
+ FrCCe.edit_Serie.Text := cxTLBusca.Items[cxTLBusca.FocusedNode.Index].Texts[cxTLCBuscaStrSer.ItemIndex];
+ gBuscaChave           := cxTLBusca.Items[cxTLBusca.FocusedNode.Index].Texts[cxTLCBuscaStrChv.ItemIndex];
+ close;
+
+end;
+
+procedure TFrBuscaNota.edt_CodDesChange(Sender: TObject);
+begin
+
+ pAtuBus();
+
+end;
+
+procedure TFrBuscaNota.edt_CodDesKeyPress(Sender: TObject; var Key: Char);
+begin
+
+ if not (Key in ['0'..'9', chr(8)]) then
+  Abort;
+
+end;
+
+procedure TFrBuscaNota.edt_NumNNFChange(Sender: TObject);
+begin
+
+ pAtuBus();
+
+end;
+
+procedure TFrBuscaNota.edt_NumNNFKeyPress(Sender: TObject; var Key: Char);
+begin
+
+ if not (Key in ['0'..'9', chr(8)]) then
+  Abort;
+
+end;
+
+procedure TFrBuscaNota.BitBtn2MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := BitBtn2.Hint;
+end;
+
+
+//el------------------GB Informática Ltda------------------------
+//
+// Data.......: 06.09.2017T09:07
+// Ultima Alt.:
+// Descrição..: Procedure que atualizaq treelist de busca
+//
+//------------------------------------------------------------ok-
+procedure TFrBuscaNota.pAtuBus();
+var
+ aux, vModelo, vSerie    : string;
+ nodInu, nodBus          : TcxTreeListNode;
+ vMod, vSer              : integer;
+
+begin
+
+ //if ( edt_NumNNF.Text = '' ) then edt_NumNNF.Text := '';
+ //if ( edt_CodDes.Text = '' ) then edt_CodDes.Text := '';
+ edt_NumNNF.SetFocus;
+
+ vSerie := '';
+
+ case FrGBNFe.RadioGroup2.ItemIndex of
+  0 : vModelo := '';
+  1 : vModelo := '55';
+  2 : vModelo := '65';
+ end;
+
+ aux := '';
+ aux := FrGBNFe.edt_CodEmp.Text + ',' + '''' + FormatDateTime('yyyy/mm/dd', cxdtp1.Date) + ''''+ ',';
+ aux := aux + '''' + FormatDateTime('yyyy/mm/dd', cxdtp2.Date) + '''' + ',';
+ aux := aux + '''' + edt_NumNNF.Text + '''' + ',';
+ aux := aux + '''' + edt_CodDes.Text + '''' + ',';
+ aux := aux + '''' + vModelo + '''' + ',';
+ aux := aux + '''' + vSerie + '''';
+
+ //----------------------------------------------------------------------------
+ // by Edson Lima ; 2013-7-26T1609 ; Atualiza dados das TreeLest - DE BUSCA
+ // Monta a grade busca notas
+
+ DMFD.FDQuery18.Close;
+ DMFD.FDQuery18.SQL.Clear;
+ DMFD.FDQuery18.SQL.Add( 'exec sp_nfe_transmitidas ' + aux );
+ DMFD.FDQuery18.Open;
+
+ FrBuscaNota.cxTLBusca.Clear;
+
+ if DMFD.FDQuery18.RecordCount > 0 Then
+  Begin
+   FrBuscaNota.cxTLBusca.BeginUpdate;
+
+   Try
+
+    DMFD.FDQuery18.First;
+
+    // Laço para montar grade
+
+    While Not DMFD.FDQuery18.Eof Do
+     begin
+
+      nodBus := FrBuscaNota.cxTLBusca.Add;
+
+      nodBus.Values[FrBuscaNota.cxTLCBuscaStrNnf.ItemIndex] := DMFD.FDQuery18.fieldByName('nfe_nnf').AsString;
+      nodBus.Values[FrBuscaNota.cxTLCBuscaStrDes.ItemIndex] := DMFD.FDQuery18.fieldByName('nfe_codigo_destinatario').AsString;
+      nodBus.Values[FrBuscaNota.cxTLCBuscaDatDem.ItemIndex] := DMFD.FDQuery18.fieldByName('nfe_demi').AsString;
+      nodBus.Values[FrBuscaNota.cxTLCBuscaStrMod.ItemIndex] := DMFD.FDQuery18.fieldByName('nfe_Modelo').AsString;
+      nodBus.Values[FrBuscaNota.cxTLCBuscaStrSer.ItemIndex] := DMFD.FDQuery18.fieldByName('nfe_Serie').AsString;
+      nodBus.Values[FrBuscaNota.cxTLCBuscaStrChv.ItemIndex] := DMFD.FDQuery18.fieldByName('nfe_chave_nfe').AsString;
+
+     DMFD.FDQuery18.Next;
+    end;
+
+  Finally
+
+   FrBuscaNota.cxTLBusca.EndUpdate;
+
+  end;
+
+ end;
+ //-----------------------------------------------------------------------------
+
+end;
+
+end.
+

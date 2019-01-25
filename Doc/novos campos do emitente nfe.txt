@@ -1,0 +1,45 @@
+Certificado_NumSerie	= Varchar(100)	-> FrPar.edtNumSerie		[Certificado] NumSerie='32303132303331353133313033353333'
+
+DANFE_QtdCopias		= Int		-> FrPar.Edit3			[COPIAS_DANFE] COPIAS=1 .. 99
+
+DANFE_Orientacao	= Int		-> FrPar.rgTipoDanfe		[Geral] DANFE=1 ou 0
+
+DANFE_Visualiza		= char(1) 	-> FrPar.CheckBox2		[PREVIEW_DANFE] PREVIEW='1' ou '0' (boolean)
+
+DANFE_LogoMarca		= Varchar(250)	-> FrPar.edtLogoMarca		[Geral] LogoMarca='C:\SISTEMAS\GBNFe\Logo campovita\logo-nfe.bmp'
+
+DANFE_LocSRV		= Int		-> FrPar.ragLocSrv		[Geral] LOCSRV=1 ou 0
+
+DANFE_CAMSRV		= Varchar(250)	-> FrPar.edtCamSrv		[Geral] CAMSRV='' ou '\\192.168.10.14\Sistemas\GBNFe' 
+
+Web_Ambiente		= Int		-> FrPar.rgTipoAmb		[WebService] Ambiente=1 ou 0
+
+Web_Visualizar		= char(1)	-> FrPar.ckVisualizar		[WebService] Visualizar='0' ou '1' (boolean)
+
+Proxy_Host		= Varchar(100)	-> FrPar.edtProxyHost		[Proxy] Host=''
+
+Proxy_Porta		= Varchar(10)	-> FrPar.edtProxyPorta		[Proxy] Porta=''
+
+Proxy_User		= Varchar(100)	-> FrPar.edtProxyUser		[Proxy] User=''
+
+Proxy_Pass		= Varchar(30)	-> FrPar.edtProxySenha		[Proxy] Pass=''
+
+Email_NEeMAIL		= Varchar(100)	-> FrPar.edtNEeMail		[Email] NEeMAIL='Campovita - MATRIZ'
+
+Email_Host		= Varchar(100)	-> FrPar.edtSmtpHost		[Email] Host='envio@campovita.com.br'
+
+Email_Port		= Varchar(10)	-> FrPar.edtSmtpPort		[Email] Port='25'
+
+Email_User		= Varchar(100)	-> FrPar.edtSmtpUser		[Email] User='envio@campovita.com.br'
+
+Email_Pass		= Varchar(30)	-> FrPar.edtSmtpPass		[Email] Pass='‡»¹~»·'
+
+Email_SSL		= char(1)	-> FrPar.cbEmailSSL		[Email] SSL='0' ou '1'
+
+Email_Assunto		= Varchar(150)	-> FrPar.edtEmailAssunto	[Email] Assunto='Nota Fiscal Eletrônica Gerada'
+
+Email_Assunto_Canc	= Varchar(150)	-> FrPar.edtEmailCancAssunto	[Email] Assunto_'Canc=Nota Fiscal Eletrônica Cancelada'
+
+Email_CC		= VArcahr(1000)	-> FrPar.edtEnvCC		[Email] CC=edsonjplima@gmail.com ; renildo@terra.com.br, edsonjplima@ig.com.br
+
+Email_Mensagem		= Text		-> FrPar.mmEmailMsg		[Email] Mensagem=746573746520646520646573656E766F6C76696D656E746F202D20474220496E666F726DE174696361204C746461

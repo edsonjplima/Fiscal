@@ -1,0 +1,24 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <DCC_PentiumSafeDivide>true</DCC_PentiumSafeDivide>
+        <DCC_Optimize>true</DCC_Optimize>
+        <DCC_RunTimeTypeInfo>true</DCC_RunTimeTypeInfo>
+        <Manifest_File>(None)</Manifest_File>
+        <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
+        <VerInfo_AutoGenVersion>false</VerInfo_AutoGenVersion>
+        <Debugger_RunParams>/developed_gb_informática_ltda &quot;/001&quot; /usuário_padrão &quot;/0&quot; &quot;/1&quot; &quot;/0&quot;</Debugger_RunParams>
+        <VerInfo_MajorVer>6</VerInfo_MajorVer>
+        <VerInfo_Release>6</VerInfo_Release>
+        <VerInfo_Build>14</VerInfo_Build>
+        <VerInfo_Keys>CompanyName=GB Informática Ltda;FileDescription=Gerador de Nota Fiscal Eletrônica;FileVersion=6.17.6.14;InternalName=GBNFe;LegalCopyright=edsonjplima;LegalTrademarks=edsonjplima;OriginalFilename=ACBr;ProductName=GBNFe;ProductVersion=1.0.0.0;Comments=Desenvolvedor Edson Lima - Versão Berlin - FireDac</VerInfo_Keys>
+        <AppEnableHighDPI>true</AppEnableHighDPI>
+    </PropertyGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Delphi.Personality.12</Borland.Personality>
+        <Borland.ProjectType>OptionSet</Borland.ProjectType>
+        <BorlandProject>
+            <Delphi.Personality/>
+        </BorlandProject>
+        <ProjectFileVersion>12</ProjectFileVersion>
+    </ProjectExtensions>
+</Project>

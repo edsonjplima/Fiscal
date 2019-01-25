@@ -1,0 +1,13 @@
+As novidades... 
+1 - Foi melhorada a janela do Manifesto inclusive a grade de amostragem
+2 - Foi criado uma coluna na grade pro feed-back do gerpa quanto ao tratamento do xml importado
+    As Entradas do Gerpa possíveis, mostrada na coluna [Entrada Gerpa]:
+    2.1 - em branco - Antes da importação ou download
+    2.2 - Pendente - Quando já tiver sido feito o download
+    2.3 - Importado - Quando tiver sido importado pra dentro do gerpa
+    2.4 - Cancelada - Quando tiver sido cancelada a entrada la no gerpa
+3 - Foi tirado as mensagens entre um manifesto e outro que eram mostradas entre um manifesto e outro, entre um download e outro...
+4 - Foi Implementado o download automático sempre que e feito uma ciencia ou uma confirmação o que for primeiro... 
+5 - Foi organizado a caixa de seleção que mostras as operações na grade! e outras coizinhas sem importância.
+
+

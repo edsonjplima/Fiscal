@@ -1,0 +1,62 @@
+unit DMNFe_U;
+
+interface
+
+uses
+  SysUtils, Classes, DB, DBTables, ZAbstractRODataset, ZAbstractDataset,
+  ZDataset, ZConnection, ZSqlUpdate, ZStoredProcedure;
+
+type
+  TdmNFe = class(TDataModule)
+    DataSource1: TDataSource;
+    DataSource2: TDataSource;
+    DataSource3: TDataSource;
+    DataSource4: TDataSource;
+    DataSource5: TDataSource;
+    DataSource11: TDataSource;
+    ZConnection1: TZConnection;
+    ZQuery1: TZQuery;
+    ZQuery2: TZQuery;
+    ZQuery3: TZQuery;
+    ZQuery4: TZQuery;
+    ZQuery5: TZQuery;
+    ZQuery6: TZQuery;
+    ZQuery7: TZQuery;
+    ZQuery8: TZQuery;
+    ZQuery9: TZQuery;
+    ZQuery10: TZQuery;
+    ZQuery11: TZQuery;
+    ZqryGeral: TZQuery;
+    ZQuery12: TZQuery;
+    DataSource12: TDataSource;
+    DataSource13: TDataSource;
+    ZQuery13: TZQuery;
+    DataSource14: TDataSource;
+    ZQuery14: TZQuery;
+    ZQuery15: TZQuery;
+    DataSource6: TDataSource;
+    ZQryGeral1: TZQuery;
+    ZConnectionGer: TZConnection;
+    ZQryGer: TZQuery;
+    spVrfCanNot: TZStoredProc;
+    spCanNot: TZStoredProc;
+    spVrfInuNot: TZStoredProc;
+    DataSource7: TDataSource;
+    ZQuery16: TZQuery;
+    DataSource16: TDataSource;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  dmNFe: TdmNFe;
+
+implementation
+
+uses GBNFe_U, ufrmStatus;
+
+{$R *.dfm}
+
+end.

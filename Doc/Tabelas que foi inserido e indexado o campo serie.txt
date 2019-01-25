@@ -1,0 +1,11 @@
+TABELAS QUE FORAM INSERIDOS E INDEXADOS A SERIE DA NOTA
+
+nfe_duplicatas
+nfe_faturas
+nfe_informacoes
+nfe_itens
+nfe_itens_DI
+nfe_itens_DI_ADI
+nfe_referenciada_cupon
+nfe_veiculo
+nfe_volume

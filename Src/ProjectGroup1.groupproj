@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{B225E904-56B3-4CF4-8AB0-8D2A2919BBE3}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="GBNFe.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Test\GBNFeTests2.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="GBNFe">
+        <MSBuild Projects="GBNFe.dproj"/>
+    </Target>
+    <Target Name="GBNFe:Clean">
+        <MSBuild Projects="GBNFe.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="GBNFe:Make">
+        <MSBuild Projects="GBNFe.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="GBNFeTests2">
+        <MSBuild Projects="Test\GBNFeTests2.dproj"/>
+    </Target>
+    <Target Name="GBNFeTests2:Clean">
+        <MSBuild Projects="Test\GBNFeTests2.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="GBNFeTests2:Make">
+        <MSBuild Projects="Test\GBNFeTests2.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="GBNFe;GBNFeTests2"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="GBNFe:Clean;GBNFeTests2:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="GBNFe:Make;GBNFeTests2:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

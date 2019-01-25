@@ -1,0 +1,462 @@
+unit FrXML_U;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, dxExEdtr, dxCntner, dxEditor, dxEdLib, dxDBELib, dxDBCtrl,
+  dxDBGrid, dxTL, StdCtrls, ComCtrls, Menus, Buttons, ExtCtrls, IWControl,
+  IWCompMemo, IWDBStdCtrls, OleCtrls, SHDocVw, dxDBTLCl, dxGrClms, XMLBrokr,
+  DBCtrls, xmldom, XMLIntf, msxmldom, XMLDoc;
+
+type
+ TWebControl = class(TWebBrowser)
+end;
+
+type
+  TFrXML = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    StatusBar1: TStatusBar;
+    Panel9: TPanel;
+    BitBtn12: TBitBtn;
+    BitBtn4: TBitBtn;
+    PopupMenu1: TPopupMenu;
+    LimparCorreo1: TMenuItem;
+    DesfazeraUltimaIncluso1: TMenuItem;
+    PageControl1: TPageControl;
+    TabSheet2: TTabSheet;
+    Panel5: TPanel;
+    GroupBox11: TGroupBox;
+    Edit8: TEdit;
+    GroupBox15: TGroupBox;
+    GroupBox1: TGroupBox;
+    dxDBGrid1: TdxDBGrid;
+    dxDBGrid1idLote_XML: TdxDBGridColumn;
+    dxDBGrid1nNF_XML: TdxDBGridColumn;
+    dxDBGrid1Evento_XML: TdxDBGridMaskColumn;
+    dxDBGrid1id_XML: TdxDBGridColumn;
+    WB_XML_Nota: TWebBrowser;
+    dxDBGrid1Column5: TdxDBGridMemoColumn;
+    XMLDocument1: TXMLDocument;
+    BitBtn1: TBitBtn;
+    btn1: TBitBtn;
+    procedure Edit8Exit(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure BitBtn12Click(Sender: TObject);
+    procedure BitBtn4Click(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure BitBtn4MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure BitBtn12MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure Panel9MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure GroupBox15MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure Panel5MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure dxDBGrid1MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure Edit8MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure Visualiza();
+    procedure BitBtn1MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure dxDBGrid1ChangeNode(Sender: TObject; OldNode,
+      Node: TdxTreeListNode);
+    procedure dxDBGrid1ChangeNodeEx(Sender: TObject);
+    procedure dxDBGrid1KeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure Edit8KeyPress(Sender: TObject; var Key: Char);
+    procedure btn1MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure btn1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrXML: TFrXML;
+
+implementation
+
+uses DMNFe_U, GBNFe_U, ufrmStatus;
+
+{$R *.dfm}
+
+procedure TFrXML.Edit8Exit(Sender: TObject);
+begin
+
+ if Edit8.Text <> '' then
+  if StrToInt(Edit8.Text) < 1 then
+   Edit8.Text := '';
+
+ WB_XML_Nota.Navigate('about:blank') ;
+
+end;
+
+procedure TFrXML.FormShow(Sender: TObject);
+begin
+
+ FrXML.Height := 561;
+ FrXML.Width := 781;
+
+ TWebControl(WB_XML_Nota).ParentColor := False;
+ TWebControl(WB_XML_Nota).Color := clInfoBk;
+
+ //if not DMNFe.ZQuery13.Active then
+ // DMNFe.ZQuery13.Open;
+
+ FrXML.Edit8.Text := '';
+
+ if not DMNFe.ZQuery13.IsEmpty then
+  begin
+   Bitbtn1.Enabled := True;
+   Bitbtn4.Enabled := True;
+  end
+ else
+  begin
+   Bitbtn1.Enabled := False;
+   Bitbtn4.Enabled := False;
+  end;
+
+end;
+
+procedure TFrXML.BitBtn12Click(Sender: TObject);
+begin
+ Close;
+end;
+
+procedure TFrXML.BitBtn4Click(Sender: TObject);
+var
+ vNomXML, vDataEmi           : string;
+ vNomTag, vDmiTag            : string;
+ i, x, y                     : Integer;
+ vGraNom, vGraBom            : Boolean;
+ vGNoDhE, vGBoDhE            : Boolean;
+begin
+
+ // by Edson Lima ; 2013-10-16T1607 ; Rotina que pega o nome do XML de dentro do
+ //                                   camop xml_nota
+ //-----------------------------------------------------------------------------
+
+ vNomXML := DMNFe.ZQuery13['xml_nota']   + DMNFe.ZQuery13['xml_nota1']  +       // pega os dados do campo memo
+            DMNFe.ZQuery13['xml_nota2']  + DMNFe.ZQuery13['xml_nota3']  +       // by Edson ; 2013-12-13T1555 ; acrescido as outras notas
+            DMNFe.ZQuery13['xml_nota4']  + DMNFe.ZQuery13['xml_nota5']  +       // by Edson ; 2014-04-29T1625 ; acrescido as outras notas
+            DMNFe.ZQuery13['xml_nota6']  + DMNFe.ZQuery13['xml_nota7']  +       // by Edson ; 2014-04-29T1625 ; acrescido as outras notas
+            DMNFe.ZQuery13['xml_nota8']  + DMNFe.ZQuery13['xml_nota9']  +       // by Edson ; 2014-04-29T1625 ; acrescido as outras notas
+            DMNFe.ZQuery13['xml_nota10'] + DMNFe.ZQuery13['xml_nota11'] +       // by Edson ; 2014-04-29T1625 ; acrescido as outras notas
+            DMNFe.ZQuery13['xml_nota12'] + DMNFe.ZQuery13['xml_nota13'] +       // by Edson ; 2014-04-29T1625 ; acrescido as outras notas
+            DMNFe.ZQuery13['xml_nota14'] + DMNFe.ZQuery13['xml_nota15'] +       // by Edson ; 2014-04-29T1625 ; acrescido as outras notas
+            DMNFe.ZQuery13['xml_nota16'] + DMNFe.ZQuery13['xml_nota17'] +       // by Edson ; 2014-04-29T1625 ; acrescido as outras notas
+            DMNFe.ZQuery13['xml_nota18'] + DMNFe.ZQuery13['xml_nota19'] +       // by Edson ; 2014-04-29T1625 ; acrescido as outras notas
+            DMNFe.ZQuery13['xml_nota20'];
+ gNomXML := '';
+ vDataEmi:= '';                                                              // limpa a variável global para atribuir novo nome
+ vGraNom := False;
+ vGraBom := False;
+ vGNoDhE := False;
+ vGBoDhE := False;
+ gAnoMes := '';
+ x       := 0;
+ y       := 0;
+
+ for i := 1 to length(vNomXML) do                                               // inicia loop em busca do nome 'id'
+  begin
+
+   if not vGraNom then
+    vNomTag := vNomTag + vNomXML[i];
+
+   if vNomTag <> 'I' then
+    vNomTag := '';
+
+   if vDmiTag <> 'd' then
+    vDmiTag := '';
+
+   // 1ª fase - Acha o nome 'id'
+   //
+   if ((vNomXML[i] = 'I') and (not vGraNom)) then
+    begin
+     vNomTag := vNomXML[i] + vNomXML[i+1] + vNomXML[i+2] + vNomXML[i+3] + vNomXML[i+4] + vNomXML[i+5] + vNomXML[i+6];
+     if (vNomTag = 'Id="NFe') then
+      begin
+       vGraNom := True;
+       vNomTag := '';
+       x := i + 7;
+      end
+     else
+      vNomTag := '';
+    end;
+
+   // 1ª fase - Acha a data de emissão 'dhEmi'
+   //
+   if ((vNomXML[i] = 'd') and (not vGNoDhE)) then
+    begin
+     vDmiTag := vNomXML[i] + vNomXML[i+1] + vNomXML[i+2] + vNomXML[i+3] + vNomXML[i+4] + vNomXML[i+5];
+     if (vDmiTag = 'dhEmi>') then
+      begin
+       vGNoDhE := True;
+       vDmiTag := '';
+       y := i + 6;
+      end
+     else
+      vDmiTag := '';
+    end;
+
+   // 2ª fase - pega o nome do arquivo xml dentro do campo memo xml
+   //
+   if (i = x) then
+    vGraBom := True;
+
+   if (vGraNom and vGraBom) then
+    begin
+     if (vNomXML[i] = '"') then
+      begin
+       gNomXML := gNomXML + '-nfe.xml';                                         // adiciona o final do nome mais a extensão e sai
+       FrGBNFe.MemoResp.Lines.Text := UTF8Encode(DMNFe.ZQuery13['xml_nota']    +// by Edson ; 2013-12-13T1555 ; acrescido as outras notas
+                                                 DMNFe.ZQuery13['xml_nota1']   +
+                                                 DMNFe.ZQuery13['xml_nota2']   +
+                                                 DMNFe.ZQuery13['xml_nota3']   +
+                                                 DMNFe.ZQuery13['xml_nota4']   +
+                                                 DMNFe.ZQuery13['xml_nota5']   +// by Edson ; 2014-04-29T1629 ; acrescido as outras notas
+                                                 DMNFe.ZQuery13['xml_nota6']   +
+                                                 DMNFe.ZQuery13['xml_nota7']   +
+                                                 DMNFe.ZQuery13['xml_nota8']   +
+                                                 DMNFe.ZQuery13['xml_nota9']   +
+                                                 DMNFe.ZQuery13['xml_nota10']  +
+                                                 DMNFe.ZQuery13['xml_nota11']  +
+                                                 DMNFe.ZQuery13['xml_nota12']  +
+                                                 DMNFe.ZQuery13['xml_nota13']  +
+                                                 DMNFe.ZQuery13['xml_nota14']  +
+                                                 DMNFe.ZQuery13['xml_nota15']  +
+                                                 DMNFe.ZQuery13['xml_nota16']  +
+                                                 DMNFe.ZQuery13['xml_nota17']  +
+                                                 DMNFe.ZQuery13['xml_nota18']  +// by Edson ; 2016-06-23T1549 ; acrescido as outras notas
+                                                 DMNFe.ZQuery13['xml_nota19']  +
+                                                 DMNFe.ZQuery13['xml_nota20']);
+
+       FrGBNFe.LoadXML1(FrGBNFe.MemoResp, WB_XML_Nota);
+       vGraBom := False;
+      end;
+
+     if (vNomXML[i] <> '"') then
+      gNomXML := gNomXML + vNomXML[i];                                          // gera o nome do arquivo XML que será gravado
+
+    end;
+
+   // 2ª fase - pega o nome do arquivo xml dentro do campo memo xml
+   //
+   if (i = y) then
+    vGBoDhE := True;
+
+   if (vGNoDhE and vGBoDhE) then
+    begin
+     if vNomXML[i] = 'T' then
+      begin
+       gAnoMes := Copy(vDataEmi, 1, 6);                                         // copia o ano e o mes para variável global.
+       vDataEmi := '';
+       FrGBNFe.MemoResp.Lines.Text := UTF8Encode(DMNFe.ZQuery13['xml_nota']    +// by Edson ; 2013-12-13T1555 ; acrescido as outras notas
+                                                 DMNFe.ZQuery13['xml_nota1']   +
+                                                 DMNFe.ZQuery13['xml_nota2']   +
+                                                 DMNFe.ZQuery13['xml_nota3']   +
+                                                 DMNFe.ZQuery13['xml_nota4']   +
+                                                 DMNFe.ZQuery13['xml_nota5']   +// by Edson ; 2014-04-29T1629 ; acrescido as outras notas
+                                                 DMNFe.ZQuery13['xml_nota6']   +
+                                                 DMNFe.ZQuery13['xml_nota7']   +
+                                                 DMNFe.ZQuery13['xml_nota8']   +
+                                                 DMNFe.ZQuery13['xml_nota9']   +
+                                                 DMNFe.ZQuery13['xml_nota10']  +
+                                                 DMNFe.ZQuery13['xml_nota11']  +
+                                                 DMNFe.ZQuery13['xml_nota12']  +
+                                                 DMNFe.ZQuery13['xml_nota13']  +
+                                                 DMNFe.ZQuery13['xml_nota14']  +
+                                                 DMNFe.ZQuery13['xml_nota15']  +
+                                                 DMNFe.ZQuery13['xml_nota16']  +
+                                                 DMNFe.ZQuery13['xml_nota17']  +
+                                                 DMNFe.ZQuery13['xml_nota18']  +// by Edson ; 2016-06-23T1549 ; acrescido as outras notas
+                                                 DMNFe.ZQuery13['xml_nota19']  +
+                                                 DMNFe.ZQuery13['xml_nota20']);
+       FrGBNFe.LoadXML1(FrGBNFe.MemoResp, WB_XML_Nota);
+       exit;
+      end;
+
+     if (vNomXML[i] <> '-') then                                                // gera a data que para definir o ano e mes da pasta que será gravado o xml
+      vDataEmi := vDataEmi + vNomXML[i];
+
+    end;
+
+  end;
+
+end;
+
+procedure TFrXML.BitBtn1Click(Sender: TObject);
+begin
+ Bitbtn1.Enabled := False;
+ Visualiza();
+ Bitbtn1.Enabled := True;
+end;
+
+procedure TFrXML.Visualiza();
+begin
+ FrGBNFe.MemoResp.Lines.Text := UTF8Encode(DMNFe.ZQuery13['xml_nota']    +      // by Edson ; 2013-12-13T1555 ; acrescido as outras notas
+                                           DMNFe.ZQuery13['xml_nota1']   +
+                                           DMNFe.ZQuery13['xml_nota2']   +
+                                           DMNFe.ZQuery13['xml_nota3']   +
+                                           DMNFe.ZQuery13['xml_nota4']   +
+                                           DMNFe.ZQuery13['xml_nota5']   +      // by Edson ; 2014-04-29T1629 ; acrescido as outras notas
+                                           DMNFe.ZQuery13['xml_nota6']   +
+                                           DMNFe.ZQuery13['xml_nota7']   +
+                                           DMNFe.ZQuery13['xml_nota8']   +
+                                           DMNFe.ZQuery13['xml_nota9']   +
+                                           DMNFe.ZQuery13['xml_nota10']  +
+                                           DMNFe.ZQuery13['xml_nota11']  +
+                                           DMNFe.ZQuery13['xml_nota12']  +
+                                           DMNFe.ZQuery13['xml_nota13']  +
+                                           DMNFe.ZQuery13['xml_nota14']  +
+                                           DMNFe.ZQuery13['xml_nota15']  +
+                                           DMNFe.ZQuery13['xml_nota16']  +
+                                           DMNFe.ZQuery13['xml_nota17']  +
+                                           DMNFe.ZQuery13['xml_nota18']  +      // by Edson ; 2016-06-23T1549 ; acrescido as outras notas
+                                           DMNFe.ZQuery13['xml_nota19']  +
+                                           DMNFe.ZQuery13['xml_nota20']);
+ FrGBNFe.LoadXML2(FrGBNFe.MemoResp, WB_XML_Nota);
+end;
+
+procedure TFrXML.BitBtn4MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := BitBtn4.Hint;
+end;
+
+procedure TFrXML.BitBtn12MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := BitBtn12.Hint;
+end;
+
+procedure TFrXML.Panel9MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := Panel9.Hint;
+end;
+
+procedure TFrXML.GroupBox15MouseMove(Sender: TObject; Shift: TShiftState;
+  X, Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := GroupBox15.Hint;
+end;
+
+procedure TFrXML.Panel5MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := Panel5.Hint;
+end;
+
+procedure TFrXML.dxDBGrid1MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := dxDBGrid1.Hint;
+end;
+
+procedure TFrXML.Edit8MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := Edit8.Hint;
+end;
+
+procedure TFrXML.BitBtn1MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := BitBtn1.Hint;
+end;
+
+procedure TFrXML.dxDBGrid1ChangeNode(Sender: TObject; OldNode,
+  Node: TdxTreeListNode);
+begin
+ WB_XML_Nota.Navigate('about:blank') ;
+end;
+
+procedure TFrXML.dxDBGrid1ChangeNodeEx(Sender: TObject);
+begin
+ WB_XML_Nota.Navigate('about:blank') ;
+end;
+
+procedure TFrXML.dxDBGrid1KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+ WB_XML_Nota.Navigate('about:blank') ;
+end;
+
+procedure TFrXML.Edit8KeyPress(Sender: TObject; var Key: Char);
+begin
+
+ if not (key in['0'..'9',chr(8),chr(13)]) then
+  gTcDgXml := False
+ else
+  begin
+   gTcDgXml := True;
+   if (Key = Chr(13)) then
+    begin
+
+     Edit8Exit(Sender);
+
+     if ( Edit8.Text <> '' ) then
+      begin
+       if ( frmStatus = nil ) then
+        frmStatus := TfrmStatus.Create(Application);
+       frmStatus.lblStatus.Caption := 'Aguarde! Buscando de notas!';
+       frmStatus.Show;
+       Application.ProcessMessages;
+       frmStatus.BringToFront;
+
+       btn1Click(Sender);
+
+      end;
+
+    end;
+  end;
+
+end;
+
+procedure TFrXML.btn1MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := Btn1.Hint;
+end;
+
+procedure TFrXML.btn1Click(Sender: TObject);
+begin
+
+ if gTcDgXml then
+  begin
+
+   try
+    DMNFe.ZQuery13.Close;
+     DMNFe.ZQuery13.ParamByName('nNF').AsString          := Trim(Edit8.Text);
+     DMNFe.ZQuery13.ParamByName('Codigo_Loja').AsInteger := FrGBNFe.dxSpinEdit1.IntValue;
+    DMNFe.ZQuery13.Open;
+   except
+   end;
+
+   if not DMNFe.ZQuery13.IsEmpty then
+    begin
+     Bitbtn1.Enabled := True;
+     Bitbtn4.Enabled := True;
+    end
+   else
+    begin
+     Bitbtn1.Enabled := False;
+     Bitbtn4.Enabled := False;
+    end;
+
+   gTcDgXml := False;
+   Edit8.SetFocus;
+
+  end;
+
+end;
+
+end.

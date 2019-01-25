@@ -1,0 +1,3914 @@
+unit FrBuscaChave_U;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, dxExEdtr, dxTLClms, dxTL, dxCntner, dxEdLib, dxEditor, StdCtrls,
+  Buttons, ComCtrls, ExtCtrls, Menus, Gauges, ZDataset, ACBrNFe, pcnAuxiliar,
+  pcnNFeRTXT, ACBrMDFe, ACBrBase, ACBrDFe, DateUtils;
+
+type
+  TFrBuscaChave = class(TForm)
+    Panel3: TPanel;
+    StatusBar1: TStatusBar;
+    Panel2: TPanel;
+    PopupMenu1: TPopupMenu;
+    MarcaTodas1: TMenuItem;
+    DesmarcaTodas1: TMenuItem;
+    GroupBox2: TGroupBox;
+    Edit_Busca_Chave: TEdit;
+    SpeedButton4: TSpeedButton;
+    Panel4: TPanel;
+    SpeedButton7: TSpeedButton;
+    Panel1: TPanel;
+    GroupBox8: TGroupBox;
+    Edit_idLote: TEdit;
+    GroupBox10: TGroupBox;
+    Edit_DataEvento: TEdit;
+    GroupBox11: TGroupBox;
+    Edit_dtRegEvento: TEdit;
+    GroupBox13: TGroupBox;
+    Edit_id: TEdit;
+    GroupBox14: TGroupBox;
+    Edit_Evento: TEdit;
+    GroupBox15: TGroupBox;
+    Edit_nProt: TEdit;
+    GroupBox17: TGroupBox;
+    Edit_xJust: TEdit;
+    RG_tpEvento: TRadioGroup;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    RadioGroup1: TRadioGroup;
+    PopupMenu2: TPopupMenu;
+    MenuItem1: TMenuItem;
+    GroupBox12: TGroupBox;
+    Label12: TLabel;
+    dxDateEdit1: TdxDateEdit;
+    dxDateEdit2: TdxDateEdit;
+    CheckBox1: TCheckBox;
+    Panel5: TPanel;
+    SpeedButton3: TSpeedButton;
+    Panel11: TPanel;
+    Panel6: TPanel;
+    Panel10: TPanel;
+    dxTLBuscaChave: TdxTreeList;
+    dxTLCBuscaChaveCheckSel: TdxTreeListCheckColumn;
+    dxTLCBuscaChaveCheckD_S: TdxTreeListCheckColumn;
+    dxTLCBuscaChaveCheckD_B: TdxTreeListCheckColumn;
+    dxTLBuscaChaveImage: TdxTreeListImageColumn;
+    dxTLCBuscaChaveMaskPosMov: TdxTreeListMaskColumn;
+    dxTLCBuscaChaveMaskxNome: TdxTreeListMaskColumn;
+    dxTLCBuscaChaveMaskCnpjCpf: TdxTreeListMaskColumn;
+    dxTLCBuscaChaveMaskIE: TdxTreeListMaskColumn;
+    dxTLCBuscaChaveMaskNota: TdxTreeListMaskColumn;
+    dxTLCBuscaChaveSerie: TdxTreeListMaskColumn;
+    dxTLCBuscaChaveCurrencyVNF: TdxTreeListCurrencyColumn;
+    dxTLCBuscaChaveDateDEmi: TdxTreeListDateColumn;
+    dxTLCBuscaChaveMaskCha: TdxTreeListMaskColumn;
+    dxTLCBuscaChaveMaskNSU: TdxTreeListMaskColumn;
+    dxTLBuscaChaveMaskCodLoja: TdxTreeListMaskColumn;
+    dxTLCBuscaChaveMaskcSitConf: TdxTreeListMaskColumn;
+    dxTLCBuscaChaveMaskcSitNFe: TdxTreeListMaskColumn;
+    dxTLBuscaChaveMaskTpNFe: TdxTreeListMaskColumn;
+    dxTLBuscaChaveMaskdhRecbto: TdxTreeListMaskColumn;
+    dxTLCBuscaChaveMaskDigVal: TdxTreeListMaskColumn;
+    GroupBox1: TGroupBox;
+    Edit_QSel: TEdit;
+    ConsultaWeb5N1: TMenuItem;
+    ConsultaWeb5CopiaNChavereadeTransferncia1: TMenuItem;
+    ConsultaWeb5ConsultaWeb1: TMenuItem;
+    grp1: TGroupBox;
+    dxspndt1: TdxSpinEdit;
+    grp2: TGroupBox;
+    Label1: TLabel;
+    SbImprMDFe1: TSpeedButton;
+    ExcluirxmlsTemp1: TMenuItem;
+    ExcluirxmlsTemp1N1: TMenuItem;
+    hdrcntrl1: THeaderControl;
+    img1: TImage;
+    SpeedButton: TSpeedButton;
+    SpeedButton51: TSpeedButton;
+    ConsultaWeb5N2: TMenuItem;
+    AtualizarNota1: TMenuItem;
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure FormShow(Sender: TObject);
+    procedure Edit_Chave_nfeKeyPress(Sender: TObject; var Key: Char);
+    procedure dxTLBuscaChaveClick(Sender: TObject);
+    procedure dxTLBuscaChaveEditing(Sender: TObject; Node: TdxTreeListNode;
+      var Allow: Boolean);
+    procedure dxTLBuscaChaveExit(Sender: TObject);
+    procedure MarcaTodas1Click(Sender: TObject);
+    procedure DesmarcaTodas1Click(Sender: TObject);
+    procedure Edit_Busca_ChaveChange(Sender: TObject);
+    procedure SpeedButton2MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure GroupBox2MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure SpeedButton4MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure SpeedButton4Click(Sender: TObject);
+    procedure SpeedButton1MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure SpeedButton7Click(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure MenuItem1Click(Sender: TObject);
+    procedure RG_tpEventoClick(Sender: TObject);
+    procedure RadioGroup1Click(Sender: TObject);
+    procedure dxTLBuscaChaveKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure dxTLBuscaChaveKeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure SpeedButton7MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure dxTLBuscaChaveMouseMove(Sender: TObject; Shift: TShiftState;
+      X, Y: Integer);
+    procedure GroupBox15MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure GroupBox8MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure GroupBox14MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure GroupBox10MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure GroupBox11MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure GroupBox13MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure GroupBox17MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure FormCreate(Sender: TObject);
+    procedure dxDateEdit1Exit(Sender: TObject);
+    procedure dxDateEdit2Exit(Sender: TObject);
+    procedure GroupBox12MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure CheckBox1Click(Sender: TObject);
+    procedure SpeedButton3MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure SpeedButton3Click(Sender: TObject);
+    procedure GroupBox1MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure RG_tpEventoExit(Sender: TObject);
+    procedure ConsultaWeb5CopiaNChavereadeTransferncia1Click(
+      Sender: TObject);
+    procedure ConsultaWeb5ConsultaWeb1Click(Sender: TObject);
+    procedure SbImprMDFe1Click(Sender: TObject);
+    procedure ExcluirxmlsTemp1Click(Sender: TObject);
+    procedure SpeedButton51Click(Sender: TObject);
+    procedure SpeedButtonClick(Sender: TObject);
+    procedure AtualizarNota1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    function Atualiza(rep : boolean) : Boolean;                                 // Habilita ou desabilita componentes
+    function fTrataErro(Status : integer) : Boolean;                            // Mostra uma mensagem conforme o codigo de retorno
+    function SenhaMaster(SenMst : String) : boolean;                            // Função que chama a janela da senha master
+    function fADAtrib( TemSel : boolean ) : boolean;                            // Ativa e Desativa Atributos dos componentes da janela
+
+    Procedure pAtribCon( ClEx: boolean ;  dxTL : TdxTreeList; dxTLCCdL, dxTLCCha : TdxTreeListMaskColumn ; ZQ :  TZQuery ); // Atribui consulta da TreeList e Monta a query das pendentes
+    procedure MarcaBloco( dxTLPend : TdxTreeList; blMarca : Boolean; blTodos : Boolean = False ); // Marca bloco de seleção TreeList
+    procedure ImportarXML(ArqXml : String);                                     // Procedure que importa o Xml
+    procedure DelRegErrXML(ArqXml : String);                                    // Deleta os registros com erro do Xml
+    procedure MostraDados(Codigo_loja, Chave_nfe : String ; dEmi : TDateTime);  // Mostra os dados selecionados quando clic na grade
+    Procedure HaDe(HD : Boolean);                                               // Habilita ou desabilita componentes
+    procedure AtuMDe();                                                         // Atualiza as notas mde conforme a sefaz                              
+    Procedure pAtuTLMDFe( dxTL : TdxTreeList;
+                                          dxTLCSel  :  TdxTreeListCheckColumn;
+                                          dxTLCX_S  :  TdxTreeListCheckColumn ;
+                                          dxTLCX_B  :  TdxTreeListCheckColumn ;
+                                          dxTLCIMG  :  TdxTreeListImageColumn ;
+                                          dxTLCPOS  :  TdxTreeListMaskColumn ;
+                                          dxTLCNSU  :  TdxTreeListMaskColumn ;
+                                          dxTLCCdL  :  TdxTreeListMaskColumn ;
+                                          dxTLCSer  :  TdxTreeListMaskColumn ;
+                                          dxTLCNot  :  TdxTreeListMaskColumn ;
+                                          dxTLCCha  :  TdxTreeListMaskColumn ;
+                                          dxTLCCpf  :  TdxTreeListMaskColumn ;
+                                          dxTLCxNo  :  TdxTreeListMaskColumn ;
+                                          dxTLC_IE  :  TdxTreeListMaskColumn ;
+                                          dxTLCDEm  :  TdxTreeListDateColumn ;
+                                          dxTLCTpN  :  TdxTreeListMaskColumn ;
+                                          dxTLCVNF  :  TdxTreeListCurrencyColumn ;
+                                          dxTLCDgV  :  TdxTreeListMaskColumn ;
+                                          dxTLCDhR  :  TdxTreeListMaskColumn ;
+                                          dxTLCcSN  :  TdxTreeListMaskColumn ;
+                                          dxTLCcSC  :  TdxTreeListMaskColumn ;
+                                          ZQ :  TZQuery );                      // Atualiza dados das TreeLest da Consulta de Manifestação
+
+  end;
+
+procedure BlockInput(ABlockInput : boolean); stdcall; external 'USER32.DLL';
+
+var
+  FrBuscaChave      : TFrBuscaChave;
+
+implementation
+
+uses DMNFe_U, FrManif_U, pcnConversao, pcnConversaoNFe, GBNFe_U, FrPar_U, ufrmStatus,
+  FrPw_U, FrConsManif_U, FrImportXML_U, FrSenMst_U, FrMens_U,
+  ACBrDFeWebService, ACBrNFeWebServices, pcnRetDistDFeInt, pcnNFe,
+  ACBrNFeNotasFiscais, pcnEventoNFe, pcnRetEnvEventoNFe, FrContab_U;
+
+{$R *.dfm}
+
+procedure TFrBuscaChave.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+var
+ Direction : Integer;
+begin
+ // Altere a propriedade do KeyPreview do Form pra true
+ if not (ActiveControl is  TDxTreeList) then
+  begin
+   Direction := -1;
+   Case Key of
+    VK_NEXT, VK_RETURN : Direction := 0;
+    VK_PRIOR	 : Direction := 1;
+    VK_ESCAPE : Close;
+   end;
+   if Direction <> -1 then
+    begin
+    Perform(WM_NEXTDLGCTL, Direction, 0);
+    key := 0;
+    end;
+  end;
+end;
+
+procedure TFrBuscaChave.FormShow(Sender: TObject);
+var
+ x : integer;
+begin
+ 
+ // Mostra o código e o nome da empresa
+ dxspndt1.Text  := FrGBNFe.dxSpinEdit1.Text;
+ Label1.Caption := FrGBNFe.Label1.Caption;
+
+ // Inicia o gItem como -1
+ gItem := -1;
+
+ // Ativa tabela nfe_CDFe
+ dmNFe.ZQuery14.Active := True;
+
+ if gNivel = '4' then
+  begin
+   FrBuscaChave.Align       := alBottom; // Expande acima da barra do menu iniciar do windows
+   FrBuscaChave.WindowState := wsMaximized;
+   FrBuscaChave.Panel11.Caption := 'NFe Versão(Z): ' + FrGBNFe.GetBuildInfo;
+  end
+ else
+  begin
+   FrBuscaChave.Height := 640;
+   FrBuscaChave.Width  := 1049;
+   FrBuscaChave.Position := poScreenCenter;
+  end;
+
+ // Define o parametro inicial do codigo da loja ; by Edson Lima ;
+ DMNFe.ZQuery14.Close;
+ DMNFe.ZQuery14.ParamByName('Codigo_Loja1').AsInteger     := StrToInt(gCodEmp);
+ DMNFe.ZQuery14.ParamByName('Codigo_Loja2').AsInteger     := StrToInt(gCodEmp);
+ DMNFe.ZQuery14.ParamByName('cSitConf').AsString          := '0';
+ if Checkbox1.Checked then
+  begin
+   DMNFe.ZQuery14.ParamByName('DtInicial').AsString        := FormatDateTime('yyyy/mm/dd', dxDateEdit1.Date);
+   DMNFe.ZQuery14.ParamByName('DtFinal').AsString          := FormatDateTime('yyyy/mm/dd', dxDateEdit2.Date);
+  end
+ else
+  begin
+   DMNFe.ZQuery14.ParamByName('DtInicial').AsString        := FormatDateTime('yyyy/mm/dd', Date - 180);
+   DMNFe.ZQuery14.ParamByName('DtFinal').AsString          := FormatDateTime('yyyy/mm/dd', Date);
+  end;
+ DMNFe.ZQuery14.ParamByName('Chave_nfe').AsString        := FrBuscaChave.Edit_Busca_Chave.Text;
+ DMNFe.ZQuery14.Open;
+
+ // Zera o contador de itens selecionados
+ Edit_QSel.Text := '0';
+
+ // Seta caminho inicial
+ FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.DownloadNFe.PathDownload        := gCamXml;
+ FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.PathEvento                      := gCamXml;
+ FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.PathSalvar                      := gCamXml;
+ FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.PathNFe                         := gCamXml;
+ FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.PathInu                         := gCamXml;
+
+ //-----------------------------------------------------------------------------
+ // by Edson Lima ; 2013-7-26T1609 ; Atualiza dados das TreeLest
+
+  if not DMNFe.ZQuery14.IsEmpty then
+   pAtuTLMDFe(
+               FrBuscaChave.dxTLBuscaChave,                  FrBuscaChave.dxTLCBuscaChaveCheckSel,
+               FrBuscaChave.dxTLCBuscaChaveCheckD_S,         FrBuscaChave.dxTLCBuscaChaveCheckD_B,
+               FrBuscaChave.dxTLBuscaChaveImage,             FrBuscaChave.dxTLCBuscaChaveMaskPosMov,
+               FrBuscaChave.dxTLCBuscaChaveMaskNSU,          FrBuscaChave.dxTLBuscaChaveMaskCodLoja,
+               FrBuscaChave.dxTLCBuscaChaveSerie,            FrBuscaChave.dxTLCBuscaChaveMaskNota,
+               FrBuscaChave.dxTLCBuscaChaveMaskCha,          FrBuscaChave.dxTLCBuscaChaveMaskCnpjCpf,
+               FrBuscaChave.dxTLCBuscaChaveMaskxNome,        FrBuscaChave.dxTLCBuscaChaveMaskIE,
+               FrBuscaChave.dxTLCBuscaChaveDateDemi,         FrBuscaChave.dxTLBuscaChaveMaskTpNFe,
+               FrBuscaChave.dxTLCBuscaChaveCurrencyVNF,      FrBuscaChave.dxTLCBuscaChaveMaskDigVal,
+               FrBuscaChave.dxTLBuscaChaveMaskdhRecbto,      FrBuscaChave.dxTLCBuscaChaveMaskcSitNFe,
+               FrBuscaChave.dxTLCBuscaChaveMaskcSitConf,     DMNFe.ZQuery14);
+
+ //-----------------------------------------------------------------------------
+
+ Panel10.Caption      := 'N O V A S';
+
+end;
+
+procedure TFrBuscaChave.Edit_Chave_nfeKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+ if not (key in['0'..'9', chr(8)]) then Abort;
+end;
+
+procedure TFrBuscaChave.dxTLBuscaChaveClick(Sender: TObject);
+var
+ i                            : integer;
+ Codigo_loja, Chave_nfe       : string;
+ dEmi                         : TDateTime;
+begin
+
+ if dxTLBuscaChave.FocusedColumn = dxTLCBuscaChaveCheckSel.index then
+  begin
+   dxTLBuscaChave.FocusedColumn := dxTLCBuscaChaveCheckD_S.ColIndex;
+  end;
+
+ gClEx := true;
+
+ dxTLBuscaChaveExit(Sender);
+
+ i           := dxTLBuscaChave.FocusedNumber;
+ Codigo_loja := dxTLBuscaChave.Items[i].Strings[dxTLBuscaChaveMaskCodLoja.Index];
+ Chave_nfe   := dxTLBuscaChave.Items[i].Strings[dxTLCBuscaChaveMaskCha.Index];
+ dEmi        := StrToDateTime(dxTLBuscaChave.Items[i].Strings[dxTLCBuscaChaveDatedEmi.Index]);
+
+ MostraDados(Codigo_loja, Chave_nfe, dEmi);
+
+end;
+
+procedure TFrBuscaChave.dxTLBuscaChaveEditing(Sender: TObject;
+  Node: TdxTreeListNode; var Allow: Boolean);
+var
+ T           : Integer;
+begin
+
+ // by Edson Lima ; 2015-7-31T1525 ; Reelabora está rotina para corrigir erro
+ // Rotina qua atualiza o contador de quantidade de registros selecionados
+
+ Allow := ( dxTLBuscaChave.FocusedColumn = dxTLCBuscaChaveCheckSel.Index );     // True se o campo seleção foi clicado e false o contrario
+
+ if Allow then
+  begin
+
+   T := StrToInt(Edit_QSel.Text);
+
+   if StrToBool(node.Strings[dxTLCBuscaChaveCheckSel.Index]) then               // True  se estava selecionada antes de clic
+    Edit_QSel.Text := IntToStr(T - 1)
+   else                                                                         // False se estava selecionada antes de clic
+    Edit_QSel.Text := IntToStr(T + 1);
+
+  end;
+
+end;
+
+procedure TFrBuscaChave.dxTLBuscaChaveExit(Sender: TObject);
+begin
+
+ // by Edson Lima ; 2013-7-17T1024 ; Chama a procedure de atribuição de seleção da TreeList
+ pAtribCon(gClEx, dxTLBuscaChave, dxTLBuscaChaveMaskCodLoja, dxTLCBuscaChaveMaskCha, DMNFe.ZQuery14);
+
+end;
+
+procedure TFrBuscaChave.MarcaTodas1Click(Sender: TObject);
+begin
+ MarcaBloco( dxTLBuscaChave, True, True );
+ RG_tpEvento.Enabled      := True;
+end;
+
+procedure TFrBuscaChave.DesmarcaTodas1Click(Sender: TObject);
+begin
+ MarcaBloco( dxTLBuscaChave, False, True );
+ MenuItem1Click(Sender);
+ SpeedButton2.Enabled  := True;
+ SpeedButton3.Enabled  := True;
+ RG_tpEvento.Enabled   := False;
+end;
+
+procedure TFrBuscaChave.Edit_Busca_ChaveChange(Sender: TObject);
+begin
+
+ try
+  DMNFe.ZQuery14.Close;
+   DMNFe.ZQuery14.ParamByName('Codigo_Loja1').AsInteger      := StrToInt(gCodEmp);
+   DMNFe.ZQuery14.ParamByName('Codigo_Loja2').AsInteger      := StrToInt(gCodEmp);
+   if Checkbox1.Checked then
+    begin
+     DMNFe.ZQuery14.ParamByName('DtInicial').AsString        := FormatDateTime('yyyy/mm/dd', dxDateEdit1.Date);
+     DMNFe.ZQuery14.ParamByName('DtFinal').AsString          := FormatDateTime('yyyy/mm/dd', dxDateEdit2.Date);
+    end
+   else
+    begin
+     DMNFe.ZQuery14.ParamByName('DtInicial').AsString        := FormatDateTime('yyyy/mm/dd', Date - 180);
+     DMNFe.ZQuery14.ParamByName('DtFinal').AsString          := FormatDateTime('yyyy/mm/dd', Date);
+    end;
+   DMNFe.ZQuery14.ParamByName('Chave_nfe').AsString        := Trim(Edit_Busca_Chave.Text);
+  DMNFe.ZQuery14.Open;
+
+  // Zera o contador de itens selecionados
+  Edit_QSel.Text := '0';
+  
+ except
+ end;
+
+ //-----------------------------------------------------------------------------
+ // by Edson Lima ; 2013-7-26T1609 ; Atualiza dados das TreeLest
+ pAtuTLMDFe(
+             FrBuscaChave.dxTLBuscaChave,                  FrBuscaChave.dxTLCBuscaChaveCheckSel,
+             FrBuscaChave.dxTLCBuscaChaveCheckD_S,         FrBuscaChave.dxTLCBuscaChaveCheckD_B,
+             FrBuscaChave.dxTLBuscaChaveImage,             FrBuscaChave.dxTLCBuscaChaveMaskPosMov,
+             FrBuscaChave.dxTLCBuscaChaveMaskNSU,          FrBuscaChave.dxTLBuscaChaveMaskCodLoja,
+             FrBuscaChave.dxTLCBuscaChaveSerie,            FrBuscaChave.dxTLCBuscaChaveMaskNota,
+             FrBuscaChave.dxTLCBuscaChaveMaskCha,          FrBuscaChave.dxTLCBuscaChaveMaskCnpjCpf,
+             FrBuscaChave.dxTLCBuscaChaveMaskxNome,        FrBuscaChave.dxTLCBuscaChaveMaskIE,
+             FrBuscaChave.dxTLCBuscaChaveDateDemi,         FrBuscaChave.dxTLBuscaChaveMaskTpNFe,
+             FrBuscaChave.dxTLCBuscaChaveCurrencyVNF,      FrBuscaChave.dxTLCBuscaChaveMaskDigVal,
+             FrBuscaChave.dxTLBuscaChaveMaskdhRecbto,      FrBuscaChave.dxTLCBuscaChaveMaskcSitNFe,
+             FrBuscaChave.dxTLCBuscaChaveMaskcSitConf,     DMNFe.ZQuery14);
+
+ //-----------------------------------------------------------------------------
+
+end;
+
+procedure TFrBuscaChave.SpeedButton2MouseMove(Sender: TObject;
+  Shift: TShiftState; X, Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := SpeedButton2.Hint;
+end;
+
+procedure TFrBuscaChave.GroupBox2MouseMove(Sender: TObject;
+  Shift: TShiftState; X, Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := GroupBox2.Hint;
+end;
+
+procedure TFrBuscaChave.SpeedButton4MouseMove(Sender: TObject;
+  Shift: TShiftState; X, Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := SpeedButton4.Hint;
+end;
+
+procedure TFrBuscaChave.SpeedButton4Click(Sender: TObject);
+begin
+ // FrGBNFe.ACBrNFe1.Free;
+ close;
+end;
+
+//------------------------------------------------------------------------------
+// Função....: pAtuTLMDFe
+// Objetivo..: Atualiza dados das TreeLest de consulta da manifestação
+// Parametros: Recebe a TreeList e a Query - Monta a grade
+// Criação...: 2014/5/14T1553
+// Autor.....: Edson Lima
+//------------------------------------------------------------------------------
+Procedure TFrBuscaChave.pAtuTLMDFe( dxTL : TdxTreeList; dxTLCSel  :  TdxTreeListCheckColumn ;
+                                                dxTLCX_S  :  TdxTreeListCheckColumn ;
+                                                dxTLCX_B  :  TdxTreeListCheckColumn ;
+                                                dxTLCIMG  :  TdxTreeListImageColumn ;
+                                                dxTLCPOS  :  TdxTreeListMaskColumn ;
+                                                dxTLCNSU  :  TdxTreeListMaskColumn ;
+                                                dxTLCCdL  :  TdxTreeListMaskColumn ;
+                                                dxTLCSer  :  TdxTreeListMaskColumn ;
+                                                dxTLCNot  :  TdxTreeListMaskColumn ;
+                                                dxTLCCha  :  TdxTreeListMaskColumn ;
+                                                dxTLCCpf  :  TdxTreeListMaskColumn ;
+                                                dxTLCxNo  :  TdxTreeListMaskColumn ;
+                                                dxTLC_IE  :  TdxTreeListMaskColumn ;
+                                                dxTLCDEm  :  TdxTreeListDateColumn ;
+                                                dxTLCTpN  :  TdxTreeListMaskColumn ;
+                                                dxTLCVNF  :  TdxTreeListCurrencyColumn ;
+                                                dxTLCDgV  :  TdxTreeListMaskColumn ;
+                                                dxTLCDhR  :  TdxTreeListMaskColumn ;
+                                                dxTLCcSN  :  TdxTreeListMaskColumn ;
+                                                dxTLCcSC  :  TdxTreeListMaskColumn ;
+                                                ZQ :  TZQuery );
+var
+ nodPed : TdxTreeListNode;
+begin
+ dxTL.ClearNodes;
+
+ if ZQ.RecordCount > 0 Then
+  Begin
+
+   dxTL.BeginUpdate;
+
+   Try
+    ZQ.First;
+
+    // Laço para montar grade
+
+    While Not ZQ.Eof Do
+     begin
+      nodPed := dxTL.Add;
+
+      nodPed.Values[dxTLCSel.Index] := 'False';
+
+      if ZQ['MDFe_Xml_Aut'] = '0' then
+       nodPed.Values[dxTLCX_S.index] := False
+      else
+       nodPed.Values[dxTLCX_S.index] := True;
+      if ZQ['MDFe_Xml_Bai'] = '0' then
+       nodPed.Values[dxTLCX_B.index] := False
+      else
+       nodPed.Values[dxTLCX_B.index] := True;
+
+      nodPed.Values[dxTLCNSU.Index] := ZQ.fieldByName('MDFe_NSU').AsString;
+      nodPed.Values[dxTLCCdL.Index] := ZQ.fieldByName('MDFe_Codigo_loja').AsInteger;
+      nodPed.Values[dxTLCSer.Index] := copy(ZQ.fieldByName('MDFe_Chave_nfe').AsString, 23, 3);
+      nodPed.Values[dxTLCNot.Index] := copy(ZQ.fieldByName('MDFe_Chave_nfe').AsString, 26, 9);
+      nodPed.Values[dxTLCCha.Index] := ZQ.fieldByName('MDFe_Chave_nfe').AsString;
+      nodPed.Values[dxTLCCpf.Index] := ZQ.fieldByName('MDFe_cnpj_cpf').AsString;
+      nodPed.Values[dxTLCxNo.Index] := ZQ.fieldByName('MDFe_xNome').AsString;
+      nodPed.Values[dxTLC_IE.Index] := ZQ.fieldByName('MDFe_IE').AsString;
+      nodPed.Values[dxTLCDEm.Index] := ZQ.fieldByName('MDFe_dEmi').AsDateTime;
+
+      if ZQ['MDFe_tpNF'] = 0 then
+       nodPed.Values[dxTLCTpN.Index] := '0-Entrada'
+      else
+       nodPed.Values[dxTLCTpN.Index] := '1-Saída';
+
+      nodPed.Values[dxTLCVNF.Index] := ZQ.fieldByName('MDFe_vNF').AsCurrency;
+      nodPed.Values[dxTLCDgV.Index] := ZQ.fieldByName('MDFe_digVal').AsString;
+      nodPed.Values[dxTLCDhR.Index] := ZQ.fieldByName('MDFe_dhRecbto').AsString;
+
+      Case ZQ['MDFe_cSitNFe'] of
+       1: nodPed.Values[dxTLCcSN.Index] := '1-Autorizado';
+       2: nodPed.Values[dxTLCcSN.Index] := '2-Denegado';
+       3: nodPed.Values[dxTLCcSN.Index] := '3-Cancelado';
+       4: nodPed.Values[dxTLCcSN.Index] := '4-Encerrado';
+      end;
+
+      Case ZQ['MDFe_cSitConf'] of
+       0: nodPed.Values[dxTLCcSC.Index] := '0-Sem Manifestação';
+       1: nodPed.Values[dxTLCcSC.Index] := '1-Oper. Confirmada';
+       2: nodPed.Values[dxTLCcSC.Index] := '2-Desconhecida';
+       3: nodPed.Values[dxTLCcSC.Index] := '3-Op.Não Realizada';
+       4: nodPed.Values[dxTLCcSC.Index] := '4-Ciência';
+       5: nodPed.Values[dxTLCcSC.Index] := '5-Denegadas';
+       6: nodPed.Values[dxTLCcSC.Index] := '6-Canceladas';
+       7: nodPed.Values[dxTLCcSC.Index] := '7-Terceiros';
+       8: nodPed.Values[dxTLCcSC.Index] := '8-Encerradas';
+      end;
+
+      nodPed.Values[dxTLCImg.Index] := ZQ['MDFe_cSitConf'];
+
+      Case ZQ['PosMov'] of
+       1 : nodPed.Values[dxTLCPOS.Index] := '';
+       2 : nodPed.Values[dxTLCPOS.Index] := 'Cancelada';
+       3 : nodPed.Values[dxTLCPOS.Index] := 'Entrada';
+       4 : nodPed.Values[dxTLCPOS.Index] := 'Importada';
+       5 : nodPed.Values[dxTLCPOS.Index] := 'Penden';
+      end;
+
+      ZQ.Next;
+     end;
+   Finally
+    dxTL.EndUpdate;
+   end;
+
+  end;
+
+end;
+
+//------------------------------------------------------------------------------
+// Função....: pAtribCon
+// Objetivo..: Atribui Consulta da TreeList e Monta a Query referenciada
+// Parametros: Recebe a TreeList e o nome do campo
+// Criação...: 2014/5/14T1458
+// Autor.....: Edson Lima
+//------------------------------------------------------------------------------
+Procedure TFrBuscaChave.pAtribCon( ClEx: boolean ; dxTL : TdxTreeList; dxTLCCdL, dxTLCCha : TdxTreeListMaskColumn ; ZQ :  TZQuery );
+Var
+ I          : Integer;
+ TemSel     : Boolean;
+
+begin
+
+ // by Edson ; 2014-5-14T1458 ; Atribui consulta da TreeList e Monta a query das pendentes
+
+ TemSel := False;
+
+ if not ClEx then
+  begin
+   for I := 0 to dxTL.Count - 1 do
+    begin
+     ZQ.First;
+     while (not ZQ.Eof) do
+      begin
+
+       ZQ.FieldByName('Checado').ReadOnly := False;
+
+       if ((ZQ['MDFe_Codigo_loja'] = dxTL.Items[I].Strings[dxTLCCdL.Index]) and
+           (ZQ['MDFe_Chave_nfe']   = dxTL.Items[I].Strings[dxTLCCha.Index])) then
+        begin
+         if (dxTL.Items[I].Strings[00] = 'True') then
+          begin
+
+           ZQ.edit;
+           ZQ['Checado'] := 'Y';
+           TemSel := True;
+
+          end
+         else
+          begin
+
+           ZQ.edit;
+           ZQ['Checado'] := 'N';
+
+          end;
+        end;
+       ZQ.Next;
+      end;
+    end;
+  end
+ else
+  begin
+   for I := 0 to dxTL.Count - 1 do
+    begin
+     if (dxTL.Items[I].Strings[00] = 'True') then
+      begin
+       TemSel := True;
+      end;
+    end;
+  end;
+
+ gClEx := false;
+
+ fADAtrib(TemSel);
+
+end;
+
+//------------------------------------------------------------------------------
+// Função....: fADAtrib
+// Objetivo..: Ativa ou desativa atributos dos componentes
+// Parametros: Recebe a TreeList e o nome do campo
+// Criação...: 2014/12/22T1144
+// Autor.....: Edson Lima
+//------------------------------------------------------------------------------
+function TFrBuscaChave.fADAtrib( TemSel : boolean ) : boolean;
+begin
+
+ if TemSel then
+  begin
+   RG_tpEvento.Enabled   := True;
+
+   case RG_tpEvento.ItemIndex of
+    0, 1, 2 :
+     begin
+      SpeedButton1.Enabled  := False;
+      SpeedButton2.Enabled  := False;
+      SpeedButton3.Enabled  := False;
+      SpeedButton7.Enabled  := True;
+      Edit_xJust.Enabled    := False;
+      Edit_xJust.Color      := $00DDDDDD;
+     end;
+    3 :
+     begin
+      SpeedButton1.Enabled  := False;
+      SpeedButton2.Enabled  := False;
+      SpeedButton3.Enabled  := False;
+      SpeedButton7.Enabled  := True;
+      Edit_xJust.Enabled    := True;
+      Edit_xJust.Color      := $00C4F0FF;
+   end;
+    4 :
+     begin
+      SpeedButton1.Enabled  := True;
+      SpeedButton2.Enabled  := False;
+      SpeedButton3.Enabled  := False;
+      SpeedButton7.Enabled  := False;
+      Edit_xJust.Enabled    := False;
+      Edit_xJust.Color      := $00DDDDDD;
+     end;
+    -1 :
+     begin
+      SpeedButton1.Enabled  := False;
+      SpeedButton2.Enabled  := True;
+      SpeedButton3.Enabled  := True;
+      SpeedButton7.Enabled  := False;
+      Edit_xJust.Enabled    := False;
+      Edit_xJust.Color      := $00DDDDDD                                                                                                    ;
+     end;
+   end;
+
+  end
+ else
+  begin
+
+   RG_tpEvento.ItemIndex := -1;
+   SpeedButton1.Enabled  := False;
+   SpeedButton2.Enabled  := True;
+   SpeedButton3.Enabled  := True;
+   SpeedButton7.Enabled  := False;
+   RG_tpEvento.Enabled   := False;
+
+   case RG_tpEvento.ItemIndex of
+    0, 1, 2 :
+     begin
+      SpeedButton1.Enabled  := False;
+      SpeedButton2.Enabled  := False;
+      SpeedButton3.Enabled  := False;
+      SpeedButton7.Enabled  := True;
+      Edit_xJust.Enabled    := False;
+      Edit_xJust.Color      := $00DDDDDD;
+     end;
+    3 :
+     begin
+      SpeedButton1.Enabled  := False;
+      SpeedButton2.Enabled  := False;
+      SpeedButton3.Enabled  := False;
+      SpeedButton7.Enabled  := True;
+      Edit_xJust.Enabled    := True;
+      Edit_xJust.Color      := $00C4F0FF;
+   end;
+    4 :
+     begin
+      SpeedButton1.Enabled  := True;
+      SpeedButton2.Enabled  := False;
+      SpeedButton3.Enabled  := False;
+      SpeedButton7.Enabled  := False;
+      Edit_xJust.Enabled    := False;
+      Edit_xJust.Color      := $00DDDDDD;
+     end;
+    -1 :
+     begin
+      SpeedButton1.Enabled  := False;
+      SpeedButton2.Enabled  := True;
+      SpeedButton3.Enabled  := True;
+      SpeedButton7.Enabled  := False;
+      Edit_xJust.Enabled    := False;
+      Edit_xJust.Color      := $00DDDDDD                                                                                                    ;
+     end;
+   end;
+
+  end;
+
+end;
+
+//------------------------------------------------------------------------------
+// Função....: MarcaBloco
+// Objetivo..: Marca um bloco de Nodes selecionados
+// Parametros: Recebe a TreeList a marcar
+// Criação...: 2013/7/17T1017
+// Autor.....: Edson Lima (Modificador)
+//------------------------------------------------------------------------------
+procedure TFrBuscaChave.MarcaBloco( dxTLPend : TdxTreeList; blMarca : Boolean; blTodos : Boolean = False );
+Var
+ I       : Integer;
+ T, S    : Integer;
+
+begin
+ dxTLPend.BeginUpdate;
+
+ if (Edit_QSel.Text <> '') then
+  T := StrToInt(Edit_QSel.Text);
+ S := 0;
+
+ Try
+  if blTodos then
+   begin
+    for I := 0 to dxTLPend.Count - 1 do
+     begin
+      if blMarca then
+       begin
+        dxTLPend.Items[I].Strings[00] := 'True';
+        S := (S + 1);
+       end
+      else
+       begin
+        dxTLPend.Items[I].Strings[00] := 'False';
+        S := 0;
+       end;
+     end;
+    T := S;
+   end
+  else
+   for I := 0 to dxTLPend.SelectedCount - 1 do
+    begin
+     if blMarca then
+      begin
+       dxTLPend.SelectedNodes[I].Strings[00] := 'True';
+       T := (T + 1);
+      end
+     else
+      begin
+       dxTLPend.SelectedNodes[I].Strings[00] := 'False';
+       T := (T - 1);
+      end;
+    end;
+ Finally
+  dxTLPend.EndUpdate;
+  dxTLPend.Refresh;
+  Edit_QSel.Text := IntToStr(T);
+ end;
+end;
+
+procedure TFrBuscaChave.SpeedButton1MouseMove(Sender: TObject;
+  Shift: TShiftState; X, Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := SpeedButton1.Hint;
+end;
+
+procedure TFrBuscaChave.SpeedButton2Click(Sender: TObject);
+begin
+
+ if ( FrConsManif = nil ) then
+  FrConsManif := TFrConsManif.Create(Application)
+ else
+  FrConsManif := TFrConsManif.Create(Application);
+
+ FrConsManif.ShowModal;
+ FrConsManif.BringToFront;
+
+end;
+
+procedure TFrBuscaChave.SpeedButton7Click(Sender: TObject);
+var
+ Chave, idLote, CNPJ, vEvento, vVer_leiaute    : string;
+ lMsg, vtpEvento, vdescEvento, vVerEvento, vId : string;
+ TemSel, BaixaXml, vSAbortar                   : boolean;
+ vdhEvento                                     : tDateTime;
+begin
+
+ Try
+
+  vSAbortar := False;
+
+  if RG_TpEvento.ItemIndex = -1 then                                            // Veririca o tipo de evento do manifesto
+   begin
+    Application.Messagebox('ATT: Você precia selecionar um tipo de evento' + Chr(13) +
+                           'que irá aplicar às notas selecionadas!','Atenção!',MB_ICONASTERISK+mb_ok);
+    exit;
+   end;
+
+  if StrToInt(DMNFe.ZQuery14['MDFe_Evento']) > 19 then                          // Veririca a qtd de evento do manifesto
+   begin
+    Application.Messagebox('ATT: Você já atingiu a quantidade máxima' + Chr(13) +
+                           'de eventos para essa nota de manifesto!','Atenção!',MB_ICONASTERISK+mb_ok);
+    exit;
+   end;
+
+  Case RG_TpEvento.ItemIndex of
+   3 : if length(trim(Edit_xJust.Text)) < 15 then                               // Veririca a qtd de caracteres na justificativa
+        begin
+         Application.Messagebox('ATT: A justificativa deve ter pelo' + Chr(13) +
+                                'menos 15 caracteres!','Atenção!',MB_ICONASTERISK+mb_ok);
+         Edit_xJust.Enabled       := True;
+         Edit_xJust.Color         := $00C4F0FF;
+         Edit_xJust.SetFocus;
+         exit;
+        end;
+  end;
+
+  Case RG_TpEvento.ItemIndex of
+   0 : if Application.Messagebox('Gostaria de proseguir com o processo de' + Chr(13) +
+                                 'Ciência da Operação ?','Confirme', mb_YesNo+mb_ICONQUESTION+mb_DefButton2) = IdNo then exit;
+   1 : if Application.Messagebox('Gostaria de proseguir com o processo de' + Chr(13) +
+                                 'Confirmação da Operação ?','Confirme', mb_YesNo+mb_ICONQUESTION+mb_DefButton2) = IdNo then exit;
+   2 : if Application.Messagebox('Gostaria de proseguir com o processo de' + Chr(13) +
+                                 'Desconhecimento da Operação ?','Confirme', mb_YesNo+mb_ICONQUESTION+mb_DefButton2) = IdNo then exit;
+   3 :if Application.Messagebox('Gostaria de proseguir com o processo de' + Chr(13) +
+                                 'Operação não Realizada ?','Confirme', mb_YesNo+mb_ICONQUESTION+mb_DefButton2) = IdNo then exit;
+  end;
+
+  HaDe(False);                                                                  // Habilita ou Desabilita componentes dutante a consulta
+
+  TemSel           :=    False;                                                 // Inicia como falso a verificação de nota selecionada
+
+  DMNFe.ZQuery14.first;                                                         // Ler a Tabela de Manifestos e vai pro início
+
+  while (not DMNFe.ZQuery14.eof) do                                             // Permanece no loop enquanto não encontra o fim
+   begin
+
+    DMNFe.ZQuery14.FieldByName('Checado').ReadOnly := False;
+
+    if DMNFe.ZQuery14['Checado'] = 'Y' then
+     begin
+
+      TemSel       :=    True;                                                  // Torna verdadeiro se achar nota selecionada
+      BaixaXml     :=    False;                                                 // Inicia como falso o marcador da baixa de download
+      Chave        :=    DMNFe.ZQuery14['MDFe_Chave_nfe'];
+      idLote       :=    DMNFe.ZQuery14['MDFe_idLote'];
+      CNPJ         :=    DMNFe.ZQuery4['cnpj'];
+      vEvento      :=    IntToStr(StrToInt(DMNFe.ZQuery14['MDFe_Evento']) + 1);
+
+      // Verifica se o manifesto está autorizado para gerar eventos
+      if DMNFe.ZQuery14['MDFe_cSitNFe'] = 1 then                                // 1=Uso Autorizada, 2=Uso Denegada, 3=Uso Cancelada e 4=Uso Encerrado
+       begin
+
+        // Verifica se o manifesto não foi dado entrada no Gerpa
+        if DMNFe.ZQuery14['PosMov'] <> 3 then                                   // 3 = E de Entrada
+         begin
+
+          FrGBNFe.ACBrNFe1.NotasFiscais.Clear;
+          FrGBNFe.ACBrNFe1.EventoNFe.Evento.Clear;
+
+          with FrGBNFe.ACBrNFe1.EventoNFe.Evento.Add do
+           begin
+            Case RG_TpEvento.ItemIndex of
+             0 : begin
+                  infEvento.tpEvento       := teManifDestCiencia;
+                  vtpEvento                := '210210';
+                  vdescEvento              := 'Ciencia da Operacao';
+                  BaixaXml                 := True;
+                 end;
+             1 : begin
+                  infEvento.tpEvento       := teManifDestConfirmacao;
+                  vtpEvento                := '210200';
+                  vdescEvento              := 'Confirmacao da Operacao';
+                  BaixaXml                 := True;
+                 end;
+             2 : begin
+                  infEvento.tpEvento       := teManifDestDesconhecimento;
+                  vtpEvento                := '210220';
+                  vdescEvento              := 'Desconhecimento da Operacao';
+                  BaixaXml                 := False;
+                 end;
+             3 : begin
+                  infEvento.tpEvento       := teManifDestOperNaoRealizada;
+                  vtpEvento                := '210240';
+                  vdescEvento              := 'Operacao nao Realizada';
+                  BaixaXml                 := False;
+                  infEvento.detEvento.xJust:= Edit_xJust.Text;
+                 end;
+            end;
+
+            vId                            := 'ID' + vtpEvento + Chave + '1';
+            infEvento.id                   := vId;
+            infEvento.cOrgao               := 91;
+
+            If (FrPar.rgTipoAmb.ItemIndex = 0) then
+             infEvento.tpAmb               := taProducao
+            else
+             infEvento.tpAmb               := taHomologacao;
+
+            infEvento.CNPJ                 := CNPJ;
+            infEvento.chNFe                := Chave;
+            infEvento.dhEvento             := now;
+            vdhEvento                      := now;
+            infEvento.nSeqEvento           := 1;
+            infEvento.detEvento.descEvento := vdescEvento;
+
+            if (StrToInt64(DMNFe.ZQuery14['MDFe_NSU']) < StrToInt64(FrConsManif.Edit_NSU_nfe.Text)) then
+             begin
+              FrConsManif.Edit_NSU_nfe.Text := DMNFe.ZQuery14['MDFe_NSU'];
+              FrGBNFe.gravarNSU();
+             end;
+
+           end;
+
+          if not ( FrGBNFe.ACBrNFe1.EnviarEvento(StrToInt(IDLote)) ) then
+           begin
+            Application.Messagebox('Abortando processo! Erro de no envio do evento!','Atenção!',mb_iconstop+mb_ok);
+            Exit;
+           end;
+
+          vVer_leiaute := FrGBNFe.ACBrNFe1.EventoNFe.Evento.Add.InfEvento.versaoEvento;
+          vVerEvento   := FrGBNFe.ACBrNFe1.EventoNFe.Evento.Add.InfEvento.detEvento.versao;
+
+          with FrGBNFe.AcbrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento do
+           begin
+            lMsg :=
+                    'Id: '          + Id + #13 +
+                    'tpAmb: '       + TpAmbToStr(tpAmb) + #13 +
+                    'verAplic: '    + verAplic + #13 +
+                    'cOrgao: '      + IntToStr(cOrgao) + #13 +
+                    'cStat: '       + IntToStr(cStat) + #13 +
+                    'xMotivo: '     + xMotivo + #13 +
+                    'chNFe: '       + chNFe + #13 +
+                    'tpEvento: '    + TpEventoToStr(tpEvento) + #13 +
+                    'xEvento: '     + xEvento + #13 +
+                    'nSeqEvento: '  + IntToStr(nSeqEvento) + #13 +
+                    'CNPJDest: '    + CNPJDest + #13 +
+                    'emailDest: '   + emailDest + #13 +
+                    'dhRegEvento: ' + DateTimeToStr(dhRegEvento) + #13 +
+                    'nProt: '       + nProt;
+
+            vSAbortar := False;
+
+            // 135 - Evento registrado e vinculado a NF-e
+            // 136 - Evento registrado, mas não vinculado a NF-e
+            // 573 - Regeição: Duplicidade de evento
+            // 653 - Regeição: NFe Cancelada, arquivo indisponível para download
+            // 654 - Rejeição: NF-e Denegada, arquivo indisponível para download
+            // 650 - Rejeição: Evento de "Ciência da Operação" para NF-e Cancelada ou Denegada
+            // 574 - Rejeição: O autor do evento diverge do emissor da NF-e
+            // 575 - Rejeição: O autor do evento diverge do destinatário da NF-e
+            // 576 - Rejeição: O autor do evento não é um órgão autorizado a gerar o evento
+
+            if ((cStat = 135) or (cStat = 136) or (cStat = 573) or (cStat = 653) or (cStat = 654) or (cStat = 650) or
+                (cStat = 574) or (cStat = 575) or (cStat = 576)) then
+             begin
+              try
+               DMNFe.ZqryGeral.DisableControls;
+               DMNFe.ZqryGeral.Close;
+               DMNFe.ZqryGeral.SQL.Clear;
+               DMNFe.ZqryGeral.SQL.Add( 'update nfe_MDFe  set                        ' );
+               DMNFe.ZqryGeral.SQL.Add( '      Xml_Aut       = :Xml_Aut              ' );
+               DMNFe.ZqryGeral.SQL.Add( '   ,  Xml_Bai       = :Xml_Bai              ' );
+               DMNFe.ZqryGeral.SQL.Add( '   ,  Evento        = :Evento               ' );
+               DMNFe.ZqryGeral.SQL.Add( '   ,  Ver_leiaute   = :Ver_leiaute          ' );
+               DMNFe.ZqryGeral.SQL.Add( '   ,  id            = :id                   ' );
+               DMNFe.ZqryGeral.SQL.Add( '   ,  cOrgao        = :cOrgao               ' );
+               DMNFe.ZqryGeral.SQL.Add( '   ,  dhEvento      = :dhEvento             ' );
+               DMNFe.ZqryGeral.SQL.Add( '   ,  tpEvento      = :tpEvento             ' );
+               DMNFe.ZqryGeral.SQL.Add( '   ,  nSeqEvento    = :nSeqEvento           ' );
+               DMNFe.ZqryGeral.SQL.Add( '   ,  verEvento     = :verEvento            ' );
+               DMNFe.ZqryGeral.SQL.Add( '   ,  desEvento     = :desEvento            ' );
+               DMNFe.ZqryGeral.SQL.Add( '   ,  xJust         = :xJust                ' );
+               DMNFe.ZqryGeral.SQL.Add( '   ,  cStat         = :cStat                ' );
+               DMNFe.ZqryGeral.SQL.Add( '   ,  xMotivo       = :xMotivo              ' );
+               DMNFe.ZqryGeral.SQL.Add( '   ,  dhRegEvento   = :dhRegEvento          ' );
+               DMNFe.ZqryGeral.SQL.Add( '   ,  cSitConf      = :cSitConf             ' );
+               DMNFe.ZqryGeral.SQL.Add( '   ,  nProt         = :nProt                ' );
+               DMNFe.ZqryGeral.SQL.Add( '                                            ' );
+               DMNFe.ZqryGeral.SQL.Add( '  where Codigo_loja = :Codigo_loja    and   ' );
+               DMNFe.ZqryGeral.SQL.Add( '  isnull( Chave_nfe, '''')  Like ''%'' + :Chave_nfe + ''%'' ' );
+               DMNFe.ZqryGeral.ParamByName('Codigo_loja').AsInteger  := StrToInt(gCodEmp);
+               DMNFe.ZqryGeral.ParamByName('Chave_nfe'  ).AsString   := chNFe;
+
+               if BaixaXml then
+                begin
+                 DMNFe.ZqryGeral.ParamByName('Xml_Aut'   ).Value  := '1';
+                 DMNFe.ZqryGeral.ParamByName('Xml_Bai'   ).Value  := '1';
+                end
+               else
+                begin
+                 DMNFe.ZqryGeral.ParamByName('Xml_Aut'   ).Value  := '0';
+                 DMNFe.ZqryGeral.ParamByName('Xml_Bai'   ).Value  := '0';
+                end;
+
+               if ((cStat = 135) or (cStat = 136)) then
+                DMNFe.ZqryGeral.ParamByName('Evento'      ).Value  := vEvento
+               else
+                if DMNFe.ZQuery14['MDFe_Evento'] < 1 then
+                 DMNFe.ZqryGeral.ParamByName('Evento'      ).Value  := 1
+                else
+                 DMNFe.ZqryGeral.ParamByName('Evento'      ).Value  := DMNFe.ZQuery14['MDFe_Evento'];
+
+               DMNFe.ZqryGeral.ParamByName('Ver_leiaute' ).Value  := vVer_leiaute;
+               DMNFe.ZqryGeral.ParamByName('id'          ).Value  := vId;
+               DMNFe.ZqryGeral.ParamByName('cOrgao'      ).Value  := cOrgao;
+               DMNFe.ZqryGeral.ParamByName('dhEvento'    ).Value  := FormatDateTime('yyyy/mm/dd', vdhEvento);
+               DMNFe.ZqryGeral.ParamByName('tpEvento'    ).Value  := tpEvento;
+               DMNFe.ZqryGeral.ParamByName('nSeqEvento'  ).Value  := nSeqEvento;
+               DMNFe.ZqryGeral.ParamByName('verEvento'   ).Value  := vVerEvento;
+               DMNFe.ZqryGeral.ParamByName('desEvento'   ).Value  := xEvento;
+               DMNFe.ZqryGeral.ParamByName('xJust'       ).Value  := Edit_xJust.Text;
+               DMNFe.ZqryGeral.ParamByName('cStat'       ).Value  := IntToStr(cStat);
+               DMNFe.ZqryGeral.ParamByName('xMotivo'     ).Value  := xMotivo;
+               DMNFe.ZqryGeral.ParamByName('dhRegEvento' ).Value  := FormatDateTime('yyyy/mm/dd', dhRegEvento);
+
+               // seta as notas de Ciência, Confirmação, Desconhecimento e Não Realizada
+               Case RG_TpEvento.ItemIndex of
+                0  : DMNFe.ZqryGeral.ParamByName('cSitConf'   ).Value  := 4;    // Ciência
+                1  : DMNFe.ZqryGeral.ParamByName('cSitConf'   ).Value  := 1;    // Operação Confirmada
+                2  : DMNFe.ZqryGeral.ParamByName('cSitConf'   ).Value  := 2;    // Desconhecida
+                3  : DMNFe.ZqryGeral.ParamByName('cSitConf'   ).Value  := 3;    // Operação Não Realizada
+               end;
+
+               // seta as notas denegadas, canceladas e de terceiros
+               case cStat of
+                650           : DMNFe.ZqryGeral.ParamByName('cSitConf'   ).Value  := 6;  // Cancelada
+                653           : DMNFe.ZqryGeral.ParamByName('cSitConf'   ).Value  := 5;  // Denegada
+                654           : DMNFe.ZqryGeral.ParamByName('cSitConf'   ).Value  := 6;  // Cancelada
+                574, 575, 576 : DMNFe.ZqryGeral.ParamByName('cSitConf'   ).Value  := 7;  // Terceiros
+               end;
+
+               DMNFe.ZqryGeral.ParamByName('nProt'       ).Value  := nProt;
+
+               DMNFe.ZConnection1.StartTransaction;
+               DMNFe.ZqryGeral.ExecSQL;
+
+               case cStat of
+                650, 653, 654, 574, 575, 576 : vSAbortar := True;
+               end;
+
+               case cStat of
+                650, 654      : Application.Messagebox(pchar('Att: Nota nº ' + copy(DMNFe.ZQuery14['MDFe_Chave_nfe'], 26, 9) + ', com uso cancelada!'),'Atenção!',MB_ICONASTERISK+mb_ok);
+                653           : Application.Messagebox(pchar('Att: Nota nº ' + copy(DMNFe.ZQuery14['MDFe_Chave_nfe'], 26, 9) + ', com uso denegaga!'),'Atenção!',MB_ICONASTERISK+mb_ok);
+                574, 575, 576 : Application.Messagebox(pchar('Att: Nota nº ' + copy(DMNFe.ZQuery14['MDFe_Chave_nfe'], 26, 9) + ', com uso de terceiros!'),'Atenção!',MB_ICONASTERISK+mb_ok);
+               end;
+
+              except
+               HaDe(True);                                                          // Habilita ou Desabilita componentes dutante a consulta
+               DMNFe.ZConnection1.Rollback;
+               Application.Messagebox('ERRO: MDe não alterada !','Atenção!',MB_ICONERROR+mb_ok);
+              end;
+             end
+            else
+             begin
+
+              fTrataErro(cStat);
+
+             end;
+
+           end;
+
+          // Linha enibida pela CR em 13 de janeiro de 2015
+          // ShowMessage(lMsg);                                                 // Mosta a mensagem de retorno do manifesto
+
+         end
+        else                                                                    // Caso contrário se for igual a 3 = E de Entrada
+         begin
+          Application.Messagebox(pchar('Att: O manifesto com a chave nº ' + copy(DMNFe.ZQuery14['MDFe_Chave_nfe'], 26, 9) + ', já foi registrado no estoque,' + Chr(13) +
+                                 'para gerar novo evento de manifesto nesta nota você precisa' + Chr(13) +
+                                 'cancelar o processo de entrada no estoque, depois retornar aqui' + Chr(13) +
+                                 'e fazer novamente este processo!'),'Atenção!',MB_ICONASTERISK+mb_ok);
+         end;
+       end
+      else                                                                      // Caso contrário se o uso for 2-Denegada ou 3-Cancelada
+       begin
+
+        if DMNFe.ZQuery14['MDFe_cSitNFe'] = 2 then                              // 2=Uso Denegado
+         Application.Messagebox(pchar('Att: Nota nº ' + copy(DMNFe.ZQuery14['MDFe_Chave_nfe'], 26, 9) + ', com uso denegado!'),'Atenção!',MB_ICONASTERISK+mb_ok)
+        else
+        if DMNFe.ZQuery14['MDFe_cSitNFe'] = 3 then                              // 3=Uso Cancelado
+         Application.Messagebox(pchar('Att: Nota nº ' + copy(DMNFe.ZQuery14['MDFe_Chave_nfe'], 26, 9) + ', com uso cancelado!'),'Atenção!',MB_ICONASTERISK+mb_ok)
+        else
+        if DMNFe.ZQuery14['MDFe_cSitNFe'] = 4 then                              // 3=Uso Encerrado
+         Application.Messagebox(pchar('Att: Nota nº ' + copy(DMNFe.ZQuery14['MDFe_Chave_nfe'], 26, 9) + ', com uso encerrado!'),'Atenção!',MB_ICONASTERISK+mb_ok);
+
+       end;
+
+     end;
+
+    //--------------------------------------------------------------------------
+    // Dispara o download automático
+
+    // aborta processo no caso da nota não poder ser baixada, caso de denegada, cancelada ou de terceiros
+    if not vSAbortar then
+     begin
+      if BaixaXml then
+       begin
+        gDowAuto := true;
+        SpeedButton1Click(Sender);
+        gDowAuto := false;
+       end;
+     end;
+
+    //--------------------------------------------------------------------------
+
+    DMNFe.ZQuery14.Next;                                                        // Ler o próximo registro
+   end;
+
+  // Simula um clic no RadioGroup para atualizar a tabela
+  FrBuscaChave.RadioGroup1Click(Sender);
+
+  // Define o parametro inicial do codigo da loja ; by Edson Lima ;
+  DMNFe.ZQuery14.Close;
+  DMNFe.ZQuery14.ParamByName('Codigo_Loja1').AsInteger    := StrToInt(gCodEmp);
+  DMNFe.ZQuery14.ParamByName('Codigo_Loja2').AsInteger    := StrToInt(gCodEmp);
+  case RadioGroup1.ItemIndex of
+   0 : DMNFe.ZQuery14.ParamByName('cSitConf').AsString    := '0';
+   1 : DMNFe.ZQuery14.ParamByName('cSitConf').AsString    := '4';
+   2 : DMNFe.ZQuery14.ParamByName('cSitConf').AsString    := '1';
+   3 : DMNFe.ZQuery14.ParamByName('cSitConf').AsString    := '2';
+   4 : DMNFe.ZQuery14.ParamByName('cSitConf').AsString    := '3';
+   5 : DMNFe.ZQuery14.ParamByName('cSitConf').AsString    := '5';
+   6 : DMNFe.ZQuery14.ParamByName('cSitConf').AsString    := '6';
+   7 : DMNFe.ZQuery14.ParamByName('cSitConf').AsString    := '7';
+   8 : DMNFe.ZQuery14.ParamByName('cSitConf').AsString    := '_';
+  end;
+  if Checkbox1.Checked then
+   begin
+    DMNFe.ZQuery14.ParamByName('DtInicial').AsString      := FormatDateTime('yyyy/mm/dd', dxDateEdit1.Date);
+    DMNFe.ZQuery14.ParamByName('DtFinal').AsString        := FormatDateTime('yyyy/mm/dd', dxDateEdit2.Date);
+   end
+  else
+   begin
+    DMNFe.ZQuery14.ParamByName('DtInicial').AsString      := FormatDateTime('yyyy/mm/dd', Date - 180);
+    DMNFe.ZQuery14.ParamByName('DtFinal').AsString        := FormatDateTime('yyyy/mm/dd', Date);
+   end;
+  DMNFe.ZQuery14.ParamByName('Chave_nfe').AsString        := FrBuscaChave.Edit_Busca_Chave.Text;
+  DMNFe.ZQuery14.Open;
+
+  //------------------------------------------------------------------------
+  // by Edson Lima ; 2013-7-26T1609 ; Atualiza dados das TreeLest
+
+   if not DMNFe.ZQuery14.IsEmpty then
+    pAtuTLMDFe(
+                FrBuscaChave.dxTLBuscaChave,                  FrBuscaChave.dxTLCBuscaChaveCheckSel,
+                FrBuscaChave.dxTLCBuscaChaveCheckD_S,         FrBuscaChave.dxTLCBuscaChaveCheckD_B,
+                FrBuscaChave.dxTLBuscaChaveImage,             FrBuscaChave.dxTLCBuscaChaveMaskPosMov,
+                FrBuscaChave.dxTLCBuscaChaveMaskNSU,          FrBuscaChave.dxTLBuscaChaveMaskCodLoja,
+                FrBuscaChave.dxTLCBuscaChaveSerie,            FrBuscaChave.dxTLCBuscaChaveMaskNota,
+                FrBuscaChave.dxTLCBuscaChaveMaskCha,          FrBuscaChave.dxTLCBuscaChaveMaskCnpjCpf,
+                FrBuscaChave.dxTLCBuscaChaveMaskxNome,        FrBuscaChave.dxTLCBuscaChaveMaskIE,
+                FrBuscaChave.dxTLCBuscaChaveDateDemi,         FrBuscaChave.dxTLBuscaChaveMaskTpNFe,
+                FrBuscaChave.dxTLCBuscaChaveCurrencyVNF,      FrBuscaChave.dxTLCBuscaChaveMaskDigVal,
+                FrBuscaChave.dxTLBuscaChaveMaskdhRecbto,      FrBuscaChave.dxTLCBuscaChaveMaskcSitNFe,
+                FrBuscaChave.dxTLCBuscaChaveMaskcSitConf,     DMNFe.ZQuery14);
+
+
+  //------------------------------------------------------------------------
+
+  if Not TemSel then                                                            // Veririca se o usuário selecionou notas
+   begin
+    Application.Messagebox('ATT: Você não selecionou nenhuma nota!','Atenção!',MB_ICONASTERISK+mb_ok);
+    HaDe(True);                                                                 // Habilita ou Desabilita componentes dutante a consulta
+    exit;
+   end;
+
+  HaDe(True);                                                                   // Habilita ou Desabilita componentes dutante a consulta
+
+ except
+
+  HaDe(True);                                                                   // Habilita ou Desabilita componentes dutante a consulta
+
+ end;
+
+end;
+
+procedure TFrBuscaChave.SpeedButton1Click(Sender: TObject);
+var
+ indContador, x, vmr, vCntNotPro           : integer;
+ strPathArquivo, lMsg, vCha, vArq, vArI    : String;
+ TemSel                                    : boolean;
+ vCam, vTxt                                : String;
+ SearchRec                                 : TSearchRec;
+ Result, vmE, vmA                          : Integer;
+ vAll, vIdYesNo, vIsChecked                : Boolean;
+begin
+
+ vAll            := false;
+ vIdYesNo        := false;
+
+ gDeuErrConsiste := false;
+ vIsChecked      := false;
+ vCntNotPro      := 0;
+
+ if not gImportXML then // Se gImportXML for verdadeiro faz a Importação caso contrario foz donwload
+  begin
+
+   Try
+
+    if not gDowAuto then                                                        // Download do xml automática
+     if Application.Messagebox('Gostaria de proseguir com o processo de' + Chr(13) +
+                               'Download do XML da NF-e ?','Confirme', mb_YesNo+mb_ICONQUESTION+mb_DefButton2) = IdNo then exit;
+
+    HaDe(False);                                                                // Habilita ou Desabilita componentes dutante a consulta
+
+    TemSel           :=    False;                                               // Inicia como falso a verificação de nota selecionada
+
+    if not gDowAuto then                                                        // Download do xml automática
+     DMNFe.ZQuery14.first;                                                      // Ler a Tabela de Manifestos e vai pro início
+
+    while (not DMNFe.ZQuery14.eof) do                                           // Permanece no loop enquanto não encontra o fim
+     begin
+
+      DMNFe.ZQuery14.FieldByName('Checado').ReadOnly := False;
+
+      if DMNFe.ZQuery14['Checado'] = 'Y' then
+       begin
+
+        if not gDowAuto then                                                    // Download do xml automática
+         if StrToInt(DMNFe.ZQuery14['MDFe_Xml_Aut']) <> 1 then                  // Veririca a qtd de evento do manifesto
+          begin
+           if Application.Messagebox('Xml não solicitado' + Chr(13) +
+                                     'deseja continuar?', pchar('Id Lote:' + IntToStr(DMNFe.ZQuery14['MDFe_idLote']) + ' - Confirme!' ), mb_YesNo+mb_ICONQUESTION+mb_DefButton2) = IdNo then
+           exit;
+          end;
+
+        if not gDowAuto then                                                    // Download do xml automática
+         if StrToInt(DMNFe.ZQuery14['MDFe_Xml_Bai']) <> 0 then                  // Veririca a qtd de evento do manifesto
+          begin
+           if not gDowAuto then                                                 // Download do xml automática
+            if Application.Messagebox('Pedido de download já processado' + Chr(13) +
+                                      'deseja continuar?', pchar('Id Lote:' + IntToStr(DMNFe.ZQuery14['MDFe_idLote']) + ' - Confirme!' ), mb_YesNo+mb_ICONQUESTION+mb_DefButton2) = IdNo then
+            exit;
+          end;
+
+        TemSel       :=    True;                                                // Torna verdadeiro se achar nota selecionada
+
+        with FrGBNFe.ACBrNFe1 do
+         begin
+          DownloadNFe.Download.CNPJ      :=   DMNFe.ZQuery4['cnpj'];
+
+          If FrPar.rgTipoAmb.ItemIndex = 0 then
+           DownloadNFe.Download.tpAmb    := taProducao
+          else
+           DownloadNFe.Download.tpAmb    := taHomologacao;
+
+          DownloadNFe.Download.Chaves.Clear;
+          DownloadNFe.Download.Chaves.Add;
+          DownloadNFe.Download.Chaves.Items[DownloadNFe.Download.Chaves.Count-1].chNFe := DMNFe.ZQuery14['MDFe_Chave_nfe'];
+
+          //--------------------------------------------------------------------
+          // trunk2
+          FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.DownloadNFe.PathDownload      := gCamXml;
+          FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.PathEvento                    := gCamXml;
+          FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.PathSalvar                    := gCamXml;
+          FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.PathNFe                       := gCamXml;
+          FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.PathInu                       := gCamXml;
+
+          FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.PathSchemas                   := gCamSch;
+          Configuracoes.Arquivos.PathSalvar                                     := FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.PathSalvar;
+
+          Download;                                                             // Efetua o download do Xml da nota fiscal
+
+          //--------------------------------------------------------------------
+
+          with WebServices.DownloadNFe.retDownloadNFe.retNFe do
+           begin
+            for indContador := 0 to WebServices.DownloadNFe.retDownloadNFe.retNFe.Count - 1 do
+             begin
+
+              // by Edson Lima ; 2015-9-2T1659 ; Trata o mes pra buscar o xml
+              vmE := StrToInt(formatdatetime('mm',  StrToDateTime(DMNFe.ZQuery14['MDFe_dEmi'])));
+              vmA := StrToInt(formatdatetime('mm',  Now));
+
+              strPathArquivo := (gCamXml + formatdatetime('yyyy',StrToDateTime(DMNFe.ZQuery14['MDFe_dEmi']))
+                                         + formatdatetime('mm',  StrToDateTime(DMNFe.ZQuery14['MDFe_dEmi']))
+                                         + '\Down\' + Items[indContador].chNFe + '-nfe.xml');
+
+              if (vmA > vmE) then
+               begin
+                for x := vmE to vmA do
+                 begin
+                  if FileExists(strPathArquivo) then
+                   break
+                  else
+                   strPathArquivo := (gCamXml + formatdatetime('yyyy', Now)
+                                              + IntToStrZero(x, 2)
+                                              + '\Down\' + Items[indContador].chNFe + '-nfe.xml');
+                 end;
+               end;
+
+              //----------------------------------------------------------------
+
+              if ((Items[indContador].cStat = 139) or (Items[indContador].cStat = 140) or (Items[indContador].cStat = 555)) then
+               begin
+
+                ImportarXML(strPathArquivo);                                      // Salva os dados do Xml nas tabelas de entrada
+                gDeuErrConsiste := false;
+
+                try
+                 if ((Items[indContador].cStat = 139) or (Items[indContador].cStat = 140)) then
+                  begin
+                   DMNFe.ZqryGeral.DisableControls;
+                   DMNFe.ZqryGeral.Close;
+                   DMNFe.ZqryGeral.SQL.Clear;
+                   DMNFe.ZqryGeral.SQL.Add( 'update nfe_MDFe  set                        ' );
+                   DMNFe.ZqryGeral.SQL.Add( '      Xml_Bai       = :Xml_Bai              ' );
+                   DMNFe.ZqryGeral.SQL.Add( '                                            ' );
+                   DMNFe.ZqryGeral.SQL.Add( '  where Codigo_loja = :Codigo_loja    and   ' );
+                   DMNFe.ZqryGeral.SQL.Add( '        Evento      = :Evento         and   ' );
+                   DMNFe.ZqryGeral.SQL.Add( '  isnull( Chave_nfe, '''')  Like ''%'' + :Chave_nfe + ''%'' ' );
+
+                   DMNFe.ZqryGeral.ParamByName('Xml_Bai'   ).Value  := '1';
+                   DMNFe.ZqryGeral.ParamByName('Codigo_loja').AsInteger  := StrToInt(gCodEmp);
+                   DMNFe.ZqryGeral.ParamByName('Evento'     ).AsString   := DMNFe.ZQuery14['MDFe_Evento'];
+                   DMNFe.ZqryGeral.ParamByName('Chave_nfe'  ).AsString   := Items[indContador].chNFe;
+
+                   DMNFe.ZConnection1.StartTransaction;
+                   DMNFe.ZqryGeral.ExecSQL;
+                  end;
+
+                 except
+                  HaDe(True);                                                      // Habilita ou Desabilita componentes dutante a consulta
+                  DMNFe.ZConnection1.Rollback;
+                  Application.Messagebox('ERRO: MDe não alterada !','Atenção!',MB_ICONERROR+mb_ok);
+                 end;
+
+                 lMsg :=
+                         'Id: '          + IntToStr(Items[indContador].Id) + #13 +
+                         'cStat: '       + IntToStr(Items[indContador].cStat) + #13 +
+                         'xMotivo: '     + Items[indContador].xMotivo + #13 +
+                         'chNFe: '       + Items[indContador].chNFe;
+
+                 // Linha enibida pela CR em 13 de janeiro de 2015
+                 //ShowMessage(lMsg);                                                // Mosta a mensagem de retorno do manifesto
+
+                end
+               else
+                begin
+
+                 If (FrPar.rgTipoAmb.ItemIndex = 0) then
+                  fTrataErro(Items[indContador].cStat);
+
+                end;
+             end;
+           end;
+         end;
+       end;
+
+      if not gDowAuto then                                                      // Download do xml automática
+       DMNFe.ZQuery14.Next                                                         // Ler o pro próx.registro
+      else
+       exit;
+     end;
+
+    // Define o parametro inicial do codigo da loja ; by Edson Lima ;
+    if not gDowAuto then                                                        // Download do xml automática
+     begin
+      DMNFe.ZQuery14.Close;
+      DMNFe.ZQuery14.ParamByName('Codigo_Loja1').AsInteger     := StrToInt(gCodEmp);
+      DMNFe.ZQuery14.ParamByName('Codigo_Loja2').AsInteger     := StrToInt(gCodEmp);
+      case RadioGroup1.ItemIndex of
+       0 : DMNFe.ZQuery14.ParamByName('cSitConf').AsString    := '0';
+       1 : DMNFe.ZQuery14.ParamByName('cSitConf').AsString    := '4';
+       2 : DMNFe.ZQuery14.ParamByName('cSitConf').AsString    := '1';
+       3 : DMNFe.ZQuery14.ParamByName('cSitConf').AsString    := '2';
+       4 : DMNFe.ZQuery14.ParamByName('cSitConf').AsString    := '3';
+       5 : DMNFe.ZQuery14.ParamByName('cSitConf').AsString    := '5';
+       6 : DMNFe.ZQuery14.ParamByName('cSitConf').AsString    := '6';
+       7 : DMNFe.ZQuery14.ParamByName('cSitConf').AsString    := '7';
+       8 : DMNFe.ZQuery14.ParamByName('cSitConf').AsString    := '_';
+      end;
+      if Checkbox1.Checked then
+       begin
+        DMNFe.ZQuery14.ParamByName('DtInicial').AsString        := FormatDateTime('yyyy/mm/dd', dxDateEdit1.Date);
+        DMNFe.ZQuery14.ParamByName('DtFinal').AsString          := FormatDateTime('yyyy/mm/dd', dxDateEdit2.Date);
+       end
+      else
+       begin
+        DMNFe.ZQuery14.ParamByName('DtInicial').AsString        := FormatDateTime('yyyy/mm/dd', Date - 180);
+        DMNFe.ZQuery14.ParamByName('DtFinal').AsString          := FormatDateTime('yyyy/mm/dd', Date);
+       end;
+      DMNFe.ZQuery14.ParamByName('Chave_nfe').AsString        := FrBuscaChave.Edit_Busca_Chave.Text;
+      DMNFe.ZQuery14.Open;
+
+      // Zera o contador de itens selecionados
+      Edit_QSel.Text := '0';
+
+      //------------------------------------------------------------------
+      // by Edson Lima ; 2013-7-26T1609 ; Atualiza dados das TreeList
+
+       if not DMNFe.ZQuery14.IsEmpty then
+        pAtuTLMDFe(
+                    FrBuscaChave.dxTLBuscaChave,                  FrBuscaChave.dxTLCBuscaChaveCheckSel,
+                    FrBuscaChave.dxTLCBuscaChaveCheckD_S,         FrBuscaChave.dxTLCBuscaChaveCheckD_B,
+                    FrBuscaChave.dxTLBuscaChaveImage,             FrBuscaChave.dxTLCBuscaChaveMaskPosMov,
+                    FrBuscaChave.dxTLCBuscaChaveMaskNSU,          FrBuscaChave.dxTLBuscaChaveMaskCodLoja,
+                    FrBuscaChave.dxTLCBuscaChaveSerie,            FrBuscaChave.dxTLCBuscaChaveMaskNota,
+                    FrBuscaChave.dxTLCBuscaChaveMaskCha,          FrBuscaChave.dxTLCBuscaChaveMaskCnpjCpf,
+                    FrBuscaChave.dxTLCBuscaChaveMaskxNome,        FrBuscaChave.dxTLCBuscaChaveMaskIE,
+                    FrBuscaChave.dxTLCBuscaChaveDateDemi,         FrBuscaChave.dxTLBuscaChaveMaskTpNFe,
+                    FrBuscaChave.dxTLCBuscaChaveCurrencyVNF,      FrBuscaChave.dxTLCBuscaChaveMaskDigVal,
+                    FrBuscaChave.dxTLBuscaChaveMaskdhRecbto,      FrBuscaChave.dxTLCBuscaChaveMaskcSitNFe,
+                    FrBuscaChave.dxTLCBuscaChaveMaskcSitConf,     DMNFe.ZQuery14);
+
+      //------------------------------------------------------------------
+     end;
+
+    HaDe(True);                                                                   // Habilita ou Desabilita componentes dutante a consulta
+
+    if ( frmStatus <> nil ) then
+     frmStatus.Hide;
+
+   except
+
+    HaDe(True);                                                                   // Habilita ou Desabilita componentes dutante a consulta
+
+   end;
+
+  end
+
+ //*****************************************************************************
+
+ else                                                                           // Verdadeiro se for Importação e Falso se for Download
+
+ //*****************************************************************************
+ // by EL ; 2014-11-13T1144 ; Rotina de Importação do XML da NFe
+ //*****************************************************************************
+
+  begin
+
+   Try
+
+    if FrImportXML.CheckListBox1.Count < 1 then
+     begin
+      Application.Messagebox('Não tem itens na caixa de Arq. Xmls a importar!','Informação!',MB_ICONASTERISK+mb_ok);
+      exit;
+     end;
+
+    if Application.Messagebox('Gostaria de proseguir com o processo de' + Chr(13) +
+                              'Importação do XML da NF-e de Entrada?','Confirme', mb_YesNo+mb_ICONQUESTION+mb_DefButton2) = IdNo then exit;
+
+    HaDe(False);                                                                // Habilita ou Desabilita componentes dutante a consulta
+
+    TemSel           :=    False;                                               // Inicia como falso a verificação de nota selecionada
+
+    FrImportXML.Gauge1.Progress       := 0;
+    FrImportXML.Gauge1.MaxValue       := FrImportXML.CheckListBox1.Items.Count;
+
+    for x := 0 to Pred(FrImportXML.CheckListBox1.Items.Count) do
+     begin
+
+      FrImportXML.Gauge1.Progress := FrImportXML.Gauge1.Progress + 1;
+
+      Application.ProcessMessages;
+
+      if gAbortar then
+        begin
+         if Application.Messagebox('Gostaria de abortar o processo de' + Chr(13) +
+                                   'Importação do Xml  ?','Confirme',
+                                    mb_YesNo+mb_ICONQUESTION+mb_DefButton2) = IdYes then
+          begin
+           HaDe(True);                                                            // Habilita ou Desabilita componentes dutante a consulta
+           FrImportXML.CheckListBox1.Clear;
+           Exit;
+          end
+         else
+          gAbortar := False;
+
+        end;
+
+      if FrImportXML.CheckListBox1.Checked[x] then
+       begin
+
+        vIsChecked := true;
+        vCntNotPro := (vCntNotPro + 1);
+
+        vCam := FrImportXML.DirectoryListBox1.Directory + '\';
+        vCha := Copy(FrImportXML.CheckListBox1.Items[x], 1, 44);                // Pega a chave do nome do arquivo
+        vArq := (vCam      +  Copy(FrImportXML.CheckListBox1.Items[x], 1, Length(FrImportXML.CheckListBox1.Items[x]))); // Pega a nome do completo Arquivo com a Extensão
+        vArI := (gCamXMLi  +  Copy(FrImportXML.CheckListBox1.Items[x], 1, Length(FrImportXML.CheckListBox1.Items[x]))); // Pega a nome do completo Arquivo com a Extensão
+
+        TemSel       :=    True;                                                // Torna verdadeiro se achar nota selecionada
+
+        FrGBNFe.ACBrNFe1.NotasFiscais.Clear;
+        FrGBNFe.ACBrNFe1.NotasFiscais.LoadFromFile(vArq);
+
+        if FileExists(vArI) then                                                // Caso o arquivo é importado já tenha sido importado
+         begin
+          if not vAll then
+           begin
+
+            FrMens.Memo1.Lines.Text := ( 'Arquivo ' + Copy(FrImportXML.CheckListBox1.Items[x], 1, Length(FrImportXML.CheckListBox1.Items[x]))
+                                       + ', Consta que já foi importado! Gostaria de proseguir com a Importação do XML de Entrada?');
+            FrMens.ShowModal;
+
+            case gmr of
+             3 : // Antes --> IdCancel :
+              begin
+               HaDe(True);                                                      // Habilita ou Desabilita componentes dutante a consulta
+
+               if not gDeuErrConsiste then
+                Application.Messagebox('A Importação fei abortada!','Informação!',MB_ICONASTERISK+mb_ok);
+               gDeuErrConsiste := false;
+
+               FrImportXML.FileListBox1.Clear;
+               FrImportXML.CheckListBox1.Clear;
+               FrImportXML.DirectoryListBox1.Directory := gCamXml;
+               FrImportXML.DirectoryListBox1.Directory := vCam;
+
+               exit;
+              end;
+
+             6, 10 :   // Se a escolha for [Sim] ou [Sim todos]
+              begin
+
+               if (gmr = 10) then
+                vAll := true
+               else
+                vAll := false;
+
+               vIdYesNo := true;
+
+               ImportarXML(vArq);                                               // Salva os dados do Xml nas tabelas de entrada
+               // by Edson Lima ; 2015-9-21T1641 ; Antes => FrGBNFe.ACBrNFe1.NotasFiscais.SaveToFile(vArI);  //Salva os XMLs Depois da Importação.
+               FrGBNFe.ACBrNFe1.NotasFiscais.GravarXML(vArI);                   //Salva os XMLs Depois da Importação.
+
+               //if (vCam = gCamXMLf) then
+               // if FileExists(vArq) then
+               //  DeleteFile(vArq);
+
+              end;
+
+             7, 9 :    // Se a resposta for [Não] ou [Não Todos]
+              begin
+
+               Application.ProcessMessages;
+
+               vCntNotPro := (vCntNotPro - 1);
+
+               if (gmr = 9) then
+                vAll := true
+               else
+                vAll := false;
+
+               vIdYesNo := false;
+
+              end;
+            end;
+           end
+          else
+           begin
+
+            if vIdYesNo then
+             begin
+
+              Application.ProcessMessages;
+
+              ImportarXML(vArq);                                                // Salva os dados do Xml nas tabelas de entrada
+              // by Edson Lima ; 2015-9-21T1641 ; Antes => FrGBNFe.ACBrNFe1.NotasFiscais.SaveToFile(vArI);  //Salva os XMLs Depois da Importação.
+              FrGBNFe.ACBrNFe1.NotasFiscais.GravarXML(vArI);                    //Salva os XMLs Depois da Importação.
+
+              //if (vCam = gCamXMLf) then
+              // if FileExists(vArq) then
+              //  DeleteFile(vArq);
+
+             end
+            else
+             if (gmr = 9) then
+              vCntNotPro := (vCntNotPro - 1);
+
+           end;
+         end
+        else  // Caso seja a primeira vez que o arquivo é importado
+         begin
+
+           ImportarXML(vArq);                                                    // Salva os dados do Xml nas tabelas de entrada
+           // by Edson Lima ; 2015-9-21T1641 ; Antes => FrGBNFe.ACBrNFe1.NotasFiscais.SaveToFile(vArI);  //Salva os XMLs Depois da Importação.
+           FrGBNFe.ACBrNFe1.NotasFiscais.GravarXML(vArI);                   //Salva os XMLs Depois da Importação.
+
+           //if (vCam = gCamXMLf) then
+           // if FileExists(vArq) then
+           //  DeleteFile(vArq);
+
+         end;
+       end;
+     end;
+
+    HaDe(True);                                                                 // Habilita ou Desabilita componentes dutante a consulta
+
+    if ((not gDeuErrConsiste) and (vIsChecked)) then
+     begin
+      if (vCntNotPro > 1) then
+       vTxt := ' notas foram efetuadas '
+      else
+       vTxt := ' nota foi efetuada ';
+      Application.Messagebox(PChar( 'A Importação de ' + IntToStr(vCntNotPro) + vTxt + 'com sucesso!' ),'Informação!',MB_ICONASTERISK+mb_ok);
+     end
+    else if ((not gDeuErrConsiste) and (not vIsChecked)) then
+     begin
+      Application.Messagebox('Nenhum registro selecionado!','Informação!',MB_ICONASTERISK+mb_ok);
+      exit;
+     end;
+
+    gDeuErrConsiste := false;
+
+    FrImportXML.FileListBox1.Clear;
+    FrImportXML.CheckListBox1.Clear;
+    FrImportXML.DirectoryListBox1.Directory := gCamPesXML;
+    FrImportXML.DirectoryListBox1.Directory := vCam;
+
+   except
+    HaDe(True);                                                                 // Habilita ou Desabilita componentes dutante a consulta
+   end;
+
+  end;
+
+end;
+
+//------------------------------------------------------------------------------
+// Procedure: ImportaXML() - Salva os dados do Xml nas tabelas de entrada
+//            traz como parametros o caminho e o nome do arquivo Xml
+//            by Edson Lima ; 18/06/2014T1517
+//------------------------------------------------------------------------------
+procedure TFrBuscaChave.ImportarXML(ArqXml : String);
+var
+ i, j, k, n                     : integer;
+ Nota, Node, NodePai, NodeItem  : TTreeNode;
+ NFeRTXT                        : TNFeRTXT;
+ vTotItens, vTotFat, vTotNot    : Currency;
+ vObs, vCST, vCSOSN             : String;
+begin
+
+ FrGBNFe.ACBrNFe1.NotasFiscais.Clear;
+
+ //tenta TXT
+ FrGBNFe.ACBrNFe1.NotasFiscais.Add;
+ NFeRTXT := TNFeRTXT.Create(FrGBNFe.ACBrNFe1.NotasFiscais.Items[0].NFe);
+ NFeRTXT.CarregarArquivo(ArqXml);
+
+ if NFeRTXT.LerTxt then
+  begin
+   NFeRTXT.Free;
+  end
+ else
+  begin
+   NFeRTXT.Free;
+
+   //tenta XML
+   FrGBNFe.ACBrNFe1.NotasFiscais.Clear;
+   try
+    FrGBNFe.ACBrNFe1.NotasFiscais.LoadFromFile(ArqXml);
+   except
+    on E: Exception do Raise Exception.Create('Arquivo XML da NF-e inválido.'+ E.Message);
+   end;
+  end;
+
+ //----------------------------------------
+ // Verificação dos valores contidos no xml
+ //----------------------------------------
+
+ vTotItens  := 0;
+ vTotFat    := 0;
+
+ FrGBNFe.trvwNFe.Items.Clear;
+
+ for n:=0 to FrGBNFe.ACBrNFe1.NotasFiscais.Count-1 do
+  begin
+   with FrGBNFe.ACBrNFe1.NotasFiscais.Items[n].NFe do
+    begin
+
+      vTotNot     := ( Total.ICMSTot.vNF + Total.ICMSTot.vDesc  +
+                       Total.ICMSTot.vOutro );                                   //Guarda o valor total da nota
+
+     for I := 0 to Det.Count-1 do
+      begin
+       vTotItens := (vTotItens + Det.Items[I].Prod.vProd);
+      end;
+
+     for I := 0 to Cobr.Dup.Count-1 do
+      begin
+       vTotFat := (vTotFat + Cobr.Dup.Items[I].vDup);                           // Guarda o total da fatura
+      end;
+
+     // Critica os valores colhidos do arquivo Xml
+     //if vTotItens <> vTotNot then
+     // begin
+     //  Application.Messagebox('ERRO: Total da Nota está diferente do total dos itens !','Atenção!',MB_ICONERROR+mb_ok);
+     //  exit;
+     // end;
+     //else if vTotFat <> 0 then
+     // begin
+     //  if vTotFat <> vTotNot then
+     //   begin
+     //    Application.Messagebox('ERRO: Total da nota está diferente do total das faturas !','Atenção!',MB_ICONERROR+mb_ok);
+     //    exit;
+     //   end;
+     // end;
+
+    end;
+
+   vTotItens  := 0;
+   vTotFat    := 0;
+
+  end;
+ //----------------------------------------
+
+ FrGBNFe.trvwNFe.Items.Clear;
+                                                                                //        tabela      campos ñ encontrados
+ for n:=0 to FrGBNFe.ACBrNFe1.NotasFiscais.Count-1 do                           //*    =  NFeE_Fat -           -
+  begin                                                                         //**   =  NFeE_Ite -  [SitTri] [EAN13] [ValSbt]
+   with FrGBNFe.ACBrNFe1.NotasFiscais.Items[n].NFe do                           //***  =  NFeE_Mov -  [SubSerie] [NomFanTrp] [SetorTrp]
+    begin                                                                       //                    [IBGETrp]  [CepTrp]    [EmailEmt]
+
+     //-------------------------------------------------------------------------
+     // Observações fiscais
+
+     for I:=0 to InfAdic.obsCont.Count-1 do
+      begin
+       with InfAdic.obsCont.Items[I] do
+        begin
+         vObs := (trim(xCampo) + trim(xTexto));
+         end;
+      end;
+
+     for I:=0 to InfAdic.obsFisco.Count-1 do
+      begin
+       with InfAdic.obsFisco.Items[I] do
+        begin
+         vObs := (vObs + trim(xCampo) + trim(xTexto));
+        end;
+      end;
+
+     vObs := (vObs + trim(InfAdic.infCpl) + trim(InfAdic.infAdFisco));
+
+     //-------------------------------------------------------------------------
+     // Grava na tabela de movimentos de entrada
+     // by Edson Lima ; 13-6-2014 ; 15:18
+     //-------------------------------------------------------------------------
+
+     DMNFe.ZqryGeral.DisableControls;
+     DMNFe.ZqryGeral.Close;
+     DMNFe.ZqryGeral.SQL.Clear;
+     DMNFe.ZqryGeral.SQL.Add( ' Select                                          ' );
+     DMNFe.ZqryGeral.SQL.Add( '  t1.CodEmp         as  Mov_CodEmp               ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.CnpjEmt        as  Mov_CnpjEmt              ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.InsEstEmt      as  Mov_InsEstEmt            ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.CodNot         as  Mov_CodNot               ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.Modelo         as  Mov_Modelo               ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.Serie          as  Mov_Serie                ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.SubSerie       as  Mov_SubSerie             ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.DatNot         as  Mov_DatNot               ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.BasIcm         as  Mov_BasIcm               ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.ValIcm         as  Mov_ValIcm               ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.BasSbt         as  Mov_BasSbt               ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.ValSbt         as  Mov_ValSbt               ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.ValPro         as  Mov_ValPro               ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.ValFre         as  Mov_ValFre               ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.TipFre         as  Mov_TipFre               ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.ValSeg         as  Mov_ValSeg               ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.ValDes         as  Mov_ValDes               ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.ValOut         as  Mov_ValOut               ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.BasIpi         as  Mov_BasIpi               ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.ValIpi         as  Mov_ValIpi               ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.ValPis         as  Mov_ValPis               ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.ValCfs         as  Mov_ValCfs               ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.ValNot         as  Mov_ValNot               ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.NtrOpr         as  Mov_NtrOpr               ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.ForPag         as  Mov_ForPag               ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.ChvNFe         as  Mov_ChvNFe               ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.ObsMov         as  Mov_ObsMov               ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.CnpjTrp        as  Mov_CnpjTrp              ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.InsEstTrp 	    as  Mov_InsEstTrp            ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.NomeTrp        as  Mov_NomeTrp              ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.NomFanTrp 	    as  Mov_NomFanTrp            ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.EnderecoTrp    as  Mov_EnderecoTrp          ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.SetorTrp       as  Mov_SetorTrp             ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.CidadeTrp      as  Mov_CidadeTrp            ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.UFTrp 	        as  Mov_UFTrp                ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.IBGETrp        as  Mov_IBGETrp              ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.CepTrp 	       as  Mov_CepTrp               ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.PlacaVei 	     as  Mov_PlacaVei             ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.UFVei 	        as  Mov_UFVei 	              ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.CnpjDst        as  Mov_CnpjDst              ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.InsEstDst      as  Mov_InsEstDst            ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.PosMov     	   as  Mov_PosMov               ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.InsEstSbtEmt   as  Mov_InsEstSbtEmt         ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.NomEmt 	       as  Mov_NomEmt               ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.NomFanEmt      as  Mov_NomFanEmt            ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.EnderecoEmt    as  Mov_EnderecoEmt          ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.SetorEmt 	     as  Mov_SetorEmt    	        ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.CidadeEmt      as  Mov_CidadeEmt            ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.UFEmt 	        as  Mov_UFEmt 	              ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.IBGEEmt        as  Mov_IBGEEmt              ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.CepEmt         as  Mov_CepEmt               ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.FoneEmt 	      as  Mov_FoneEmt 	            ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.EmailEmt 	     as  Mov_EmailEmt 	           ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.Status 	       as  Mov_Status 	             ' );
+     DMNFe.ZqryGeral.SQL.Add( ' ,t1.ValDsn 	       as  Mov_ValDsn 	             ' );
+     DMNFe.ZqryGeral.SQL.Add( '                                                 ' );
+     DMNFe.ZqryGeral.SQL.Add( ' from NFeE_Mov t1 join emitente t2 on t1.CodEmp = t2.Codigo_loja ' );
+     DMNFe.ZqryGeral.SQL.Add( '                                                 ' );
+     DMNFe.ZqryGeral.SQL.Add( '  where t1.CodEmp      = :CodEmp      and        ' );
+     DMNFe.ZqryGeral.SQL.Add( '        t2.Codigo_loja = :Codigo_loja and        ' );
+     DMNFe.ZqryGeral.SQL.Add( '        t1.CnpjEmt     = :CnpjEmt     and        ' );
+     DMNFe.ZqryGeral.SQL.Add( '        t1.InsEstEmt   = :InsEstEmt   and        ' );
+     DMNFe.ZqryGeral.SQL.Add( '        t1.CodNot      = :CodNot      and        ' );
+     DMNFe.ZqryGeral.SQL.Add( '        t1.Modelo      = :Modelo      and        ' );
+     DMNFe.ZqryGeral.SQL.Add( '        t1.Serie       = :Serie       and        ' );
+     DMNFe.ZqryGeral.SQL.Add( '  isnull( t1.ChvNFe, '''')  Like ''%'' + :ChvNFe + ''%'' ' );
+     DMNFe.ZqryGeral.ParamByName('CodEmp'      ).Value {AsInteger}    := StrToInt(gCodEmp);
+     DMNFe.ZqryGeral.ParamByName('Codigo_loja' ).Value {AsInteger}    := StrToInt(gCodEmp);
+     DMNFe.ZqryGeral.ParamByName('CnpjEmt'     ).Value        := Emit.CNPJCPF;
+     DMNFe.ZqryGeral.ParamByName('InsEstEmt'   ).Value        := Emit.IE;
+     DMNFe.ZqryGeral.ParamByName('CodNot'      ).Value {AsInteger}    := Ide.nNF;
+     DMNFe.ZqryGeral.ParamByName('Modelo'      ).Value        := IntToStr(Ide.modelo);
+     DMNFe.ZqryGeral.ParamByName('Serie'       ).Value        := IntToStr(Ide.serie);
+     DMNFe.ZqryGeral.ParamByName('ChvNFe'      ).Value {AsString}     := procNFe.chNFe;
+     DMNFe.ZqryGeral.Open;
+
+     if DMNFe.ZqryGeral.IsEmpty then
+      begin
+       // Grava novo registro NFeE_Mov
+       try
+        DMNFe.ZqryGeral.DisableControls;
+        DMNFe.ZqryGeral.Close;
+        DMNFe.ZqryGeral.SQL.Clear;
+        DMNFe.ZqryGeral.SQL.Add( 'Insert into NFeE_Mov (                        ' );
+        DMNFe.ZqryGeral.SQL.Add( '      CodEmp                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   ,  CnpjEmt                                 ' );
+        DMNFe.ZqryGeral.SQL.Add( '   ,  InsEstEmt                               ' );
+        DMNFe.ZqryGeral.SQL.Add( '   ,  CodNot                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   ,  Modelo                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   ,  Serie                                   ' );
+        //DMNFe.ZqryGeral.SQL.Add( '   ,  SubSerie                                ' );
+        DMNFe.ZqryGeral.SQL.Add( '   ,  DatNot                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   ,  BasIcm                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   ,  ValIcm                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   ,  BasSbt                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   ,  ValSbt                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   ,  ValPro                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   ,  ValFre                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   ,  TipFre                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   ,  ValSeg                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   ,  ValDes                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   ,  ValOut                                  ' );
+        //DMNFe.ZqryGeral.SQL.Add( '   ,  BasIpi                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   ,  ValIpi                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   ,  ValPis                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   ,  ValCfs                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   ,  ValNot                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   ,  NtrOpr                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   ,  ForPag                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   ,  ChvNFe                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   ,  ObsMov                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   ,  CnpjTrp                                 ' );
+        DMNFe.ZqryGeral.SQL.Add( '   ,  InsEstTrp 	                             ' );
+        DMNFe.ZqryGeral.SQL.Add( '   ,  NomeTrp                                 ' );
+        //DMNFe.ZqryGeral.SQL.Add( '   ,  NomFanTrp 	                             ' );
+        DMNFe.ZqryGeral.SQL.Add( '   ,  EnderecoTrp                             ' );
+        //DMNFe.ZqryGeral.SQL.Add( '   ,  SetorTrp                                ' );
+        DMNFe.ZqryGeral.SQL.Add( '   ,  CidadeTrp                               ' );
+        DMNFe.ZqryGeral.SQL.Add( '   ,  UFTrp 		                                ' );
+        //DMNFe.ZqryGeral.SQL.Add( '   ,  IBGETrp                                 ' );
+        //DMNFe.ZqryGeral.SQL.Add( '   ,  CepTrp 	                                ' );
+        DMNFe.ZqryGeral.SQL.Add( '   ,  PlacaVei 	                              ' );
+        DMNFe.ZqryGeral.SQL.Add( '   ,  UFVei 		                                ' );
+        DMNFe.ZqryGeral.SQL.Add( '   ,  CnpjDst                                 ' );
+        DMNFe.ZqryGeral.SQL.Add( '   ,  InsEstDst                               ' );
+        DMNFe.ZqryGeral.SQL.Add( '   ,  InsEstSbtEmt                            ' );
+        DMNFe.ZqryGeral.SQL.Add( '   ,  NomEmt 	                                ' );
+        DMNFe.ZqryGeral.SQL.Add( '   ,  NomFanEmt                               ' );
+        DMNFe.ZqryGeral.SQL.Add( '   ,  EnderecoEmt                             ' );
+        DMNFe.ZqryGeral.SQL.Add( '   ,  SetorEmt 	                              ' );
+        DMNFe.ZqryGeral.SQL.Add( '   ,  CidadeEmt                               ' );
+        DMNFe.ZqryGeral.SQL.Add( '   ,  UFEmt 	                                 ' );
+        DMNFe.ZqryGeral.SQL.Add( '   ,  IBGEEmt                                 ' );
+        DMNFe.ZqryGeral.SQL.Add( '   ,  CepEmt                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   ,  FoneEmt 	                               ' );
+        //DMNFe.ZqryGeral.SQL.Add( '   ,  EmailEmt 	                              ' );
+        DMNFe.ZqryGeral.SQL.Add( '   ,  Status                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   ,  ValDsn                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '                     )                        ' );
+        DMNFe.ZqryGeral.SQL.Add( '  Values            (                         ' );
+        DMNFe.ZqryGeral.SQL.Add( '     :CodEmp                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   , :CnpjEmt                                 ' );
+        DMNFe.ZqryGeral.SQL.Add( '   , :InsEstEmt                               ' );
+        DMNFe.ZqryGeral.SQL.Add( '   , :CodNot                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   , :Modelo                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   , :Serie                                   ' );
+        //DMNFe.ZqryGeral.SQL.Add( '   , :SubSerie                                ' );
+        DMNFe.ZqryGeral.SQL.Add( '   , :DatNot                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   , :BasIcm                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   , :ValIcm                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   , :BasSbt                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   , :ValSbt                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   , :ValPro                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   , :ValFre                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   , :TipFre                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   , :ValSeg                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   , :ValDes                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   , :ValOut                                  ' );
+        //DMNFe.ZqryGeral.SQL.Add( '   , :BasIpi                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   , :ValIpi                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   , :ValPis                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   , :ValCfs                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   , :ValNot                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   , :NtrOpr                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   , :ForPag                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   , :ChvNFe                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   , :ObsMov                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   , :CnpjTrp                                 ' );
+        DMNFe.ZqryGeral.SQL.Add( '   , :InsEstTrp 	                             ' );
+        DMNFe.ZqryGeral.SQL.Add( '   , :NomeTrp                                 ' );
+        //DMNFe.ZqryGeral.SQL.Add( '   , :NomFanTrp 	                             ' );
+        DMNFe.ZqryGeral.SQL.Add( '   , :EnderecoTrp                             ' );
+        //DMNFe.ZqryGeral.SQL.Add( '   , :SetorTrp                                ' );
+        DMNFe.ZqryGeral.SQL.Add( '   , :CidadeTrp                               ' );
+        DMNFe.ZqryGeral.SQL.Add( '   , :UFTrp 		                                ' );
+        //DMNFe.ZqryGeral.SQL.Add( '   , :IBGETrp                                 ' );
+        //DMNFe.ZqryGeral.SQL.Add( '   , :CepTrp 	                                ' );
+        DMNFe.ZqryGeral.SQL.Add( '   , :PlacaVei 	                              ' );
+        DMNFe.ZqryGeral.SQL.Add( '   , :UFVei 		                                ' );
+        DMNFe.ZqryGeral.SQL.Add( '   , :CnpjDst                                 ' );
+        DMNFe.ZqryGeral.SQL.Add( '   , :InsEstDst                               ' );
+        DMNFe.ZqryGeral.SQL.Add( '   , :InsEstSbtEmt                            ' );
+        DMNFe.ZqryGeral.SQL.Add( '   , :NomEmt 	                                ' );
+        DMNFe.ZqryGeral.SQL.Add( '   , :NomFanEmt                               ' );
+        DMNFe.ZqryGeral.SQL.Add( '   , :EnderecoEmt                             ' );
+        DMNFe.ZqryGeral.SQL.Add( '   , :SetorEmt 	                              ' );
+        DMNFe.ZqryGeral.SQL.Add( '   , :CidadeEmt                               ' );
+        DMNFe.ZqryGeral.SQL.Add( '   , :UFEmt 	                                 ' );
+        DMNFe.ZqryGeral.SQL.Add( '   , :IBGEEmt                                 ' );
+        DMNFe.ZqryGeral.SQL.Add( '   , :CepEmt                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   , :FoneEmt 	                               ' );
+        //DMNFe.ZqryGeral.SQL.Add( '   , :EmailEmt 	                              ' );
+        DMNFe.ZqryGeral.SQL.Add( '   , :Status                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '   , :ValDsn                                  ' );
+        DMNFe.ZqryGeral.SQL.Add( '                    )                         ' );
+        DMNFe.ZqryGeral.ParamByName('CodEmp'      ).Value       :=  StrToInt(gCodEmp);
+        DMNFe.ZqryGeral.ParamByName('CnpjEmt'     ).Value       :=  copy(Emit.CNPJCPF, 1, 18);
+        DMNFe.ZqryGeral.ParamByName('InsEstEmt'   ).Value       :=  copy(Emit.IE, 1, 25);
+        DMNFe.ZqryGeral.ParamByName('CodNot'      ).Value       :=  Ide.nNF;
+        DMNFe.ZqryGeral.ParamByName('Modelo'      ).Value       :=  copy(IntToStr(Ide.modelo), 1, 2);
+        DMNFe.ZqryGeral.ParamByName('Serie'       ).Value       :=  copy(IntToStr(Ide.serie), 1, 3);
+        //DMNFe.ZqryGeral.ParamByName('SubSerie'    ).Value       :=  '';
+        DMNFe.ZqryGeral.ParamByName('DatNot'      ).Value       :=  FormatDateTime('yyyy/mm/dd hh:nn:ss', Ide.dEmi);
+        DMNFe.ZqryGeral.ParamByName('BasIcm'      ).AsFloat     :=  Total.ICMSTot.vBC;
+        DMNFe.ZqryGeral.ParamByName('ValIcm'      ).AsFloat     :=  Total.ICMSTot.vICMS;
+        DMNFe.ZqryGeral.ParamByName('BasSbt'      ).AsFloat     :=  Total.ICMSTot.vBCST;
+        DMNFe.ZqryGeral.ParamByName('ValSbt'      ).AsFloat     :=  Total.ICMSTot.vST;
+        DMNFe.ZqryGeral.ParamByName('ValPro'      ).AsFloat     :=  Total.ICMSTot.vProd;
+        DMNFe.ZqryGeral.ParamByName('ValFre'      ).AsFloat     :=  Total.ICMSTot.vFrete;
+        DMNFe.ZqryGeral.ParamByName('TipFre'      ).Value       :=  copy(modFreteToStr(Transp.modFrete), 1, 1);
+        DMNFe.ZqryGeral.ParamByName('ValSeg'      ).AsFloat     :=  Total.ICMSTot.vSeg;
+        DMNFe.ZqryGeral.ParamByName('ValDes'      ).AsFloat     :=  Total.ICMSTot.vDesc;
+        DMNFe.ZqryGeral.ParamByName('ValOut'      ).AsFloat     :=  Total.ICMSTot.vOutro;
+        //DMNFe.ZqryGeral.ParamByName('BasIpi'      ).Value       :=  0;
+        DMNFe.ZqryGeral.ParamByName('ValIpi'      ).AsFloat     :=  Total.ICMSTot.vIPI;
+        DMNFe.ZqryGeral.ParamByName('ValPis'      ).AsFloat     :=  Total.ICMSTot.vPIS;
+        DMNFe.ZqryGeral.ParamByName('ValCfs'      ).AsFloat     :=  Total.ICMSTot.vCOFINS;
+        DMNFe.ZqryGeral.ParamByName('ValNot'      ).AsFloat     :=  Total.ICMSTot.vNF;
+        DMNFe.ZqryGeral.ParamByName('NtrOpr'      ).Value       :=  copy(Ide.natOp, 1, 75);
+        DMNFe.ZqryGeral.ParamByName('ForPag'      ).Value       :=  copy(IndpagToStr(Ide.indPag), 1, 50);
+        DMNFe.ZqryGeral.ParamByName('ChvNFe'      ).Value       :=  copy(procNFe.chNFe, 1, 44);
+        DMNFe.ZqryGeral.ParamByName('ObsMov'      ).Value       :=  copy(vObs, 1, 250);
+        DMNFe.ZqryGeral.ParamByName('CnpjTrp'     ).Value       :=  copy(Transp.Transporta.CNPJCPF, 1, 18);
+        DMNFe.ZqryGeral.ParamByName('InsEstTrp'   ).Value       :=  copy(Transp.Transporta.IE, 1, 25);
+        DMNFe.ZqryGeral.ParamByName('NomeTrp'     ).Value       :=  copy(Transp.Transporta.xNome, 1, 75);
+        //DMNFe.ZqryGeral.ParamByName('NomFanTrp'   ).Value       :=  '';
+        DMNFe.ZqryGeral.ParamByName('EnderecoTrp' ).Value       :=  copy(Transp.Transporta.xEnder, 1, 75);
+        //DMNFe.ZqryGeral.ParamByName('SetorTrp'    ).Value       :=  '';
+        DMNFe.ZqryGeral.ParamByName('CidadeTrp'   ).Value       :=  copy(Transp.Transporta.xMun, 1, 50);
+        DMNFe.ZqryGeral.ParamByName('UFTrp'       ).Value       :=  copy(Transp.Transporta.UF, 1, 2);
+        //DMNFe.ZqryGeral.ParamByName('IBGETrp'     ).Value       :=  '';
+        //DMNFe.ZqryGeral.ParamByName('CepTrp'      ).Value       :=  '';
+        DMNFe.ZqryGeral.ParamByName('PlacaVei'    ).Value       :=  copy(Transp.veicTransp.placa, 1, 8);
+        DMNFe.ZqryGeral.ParamByName('UFVei'       ).Value       :=  copy(Transp.veicTransp.UF, 1, 2);
+        DMNFe.ZqryGeral.ParamByName('CnpjDst'     ).Value       :=  copy(Dest.CNPJCPF, 1, 18);
+        DMNFe.ZqryGeral.ParamByName('InsEstDst'   ).Value       :=  copy(Dest.IE, 1, 25);
+        DMNFe.ZqryGeral.ParamByName('InsEstSbtEmt').Value       :=  copy(Emit.IEST, 1, 18);
+        DMNFe.ZqryGeral.ParamByName('NomEmt'      ).Value       :=  copy(Emit.xNome, 1, 75);
+        DMNFe.ZqryGeral.ParamByName('NomFanEmt'   ).Value       :=  copy(Emit.xFant, 1, 50);
+        DMNFe.ZqryGeral.ParamByName('EnderecoEmt' ).Value       :=  copy(Emit.EnderEmit.xLgr + ',' + Emit.EnderEmit.nro + ' - ' + Emit.EnderEmit.xCpl, 1, 75);
+        DMNFe.ZqryGeral.ParamByName('SetorEmt'    ).Value       :=  copy(Emit.EnderEmit.xBairro, 1, 50);
+        DMNFe.ZqryGeral.ParamByName('CidadeEmt'   ).Value       :=  copy(Emit.EnderEmit.xMun, 1, 50);
+        DMNFe.ZqryGeral.ParamByName('UFEmt'       ).Value       :=  copy(Emit.EnderEmit.UF, 1, 2);
+        DMNFe.ZqryGeral.ParamByName('IBGEEmt'     ).Value       :=  copy(Emit.CNAE, 1, 8);
+        DMNFe.ZqryGeral.ParamByName('CepEmt'      ).Value       :=  copy(IntToStr(Emit.EnderEmit.CEP), 1, 9);
+        DMNFe.ZqryGeral.ParamByName('FoneEmt'     ).Value       :=  copy(Emit.EnderEmit.fone, 1, 25);
+        //DMNFe.ZqryGeral.ParamByName('EmailEmt'    ).Value       :=  '';
+        DMNFe.ZqryGeral.ParamByName('Status'      ).Value       :=  procNFe.cStat;
+        DMNFe.ZqryGeral.ParamByName('ValDsn'      ).AsFloat     :=  Total.ICMSTot.vICMSDeson;
+        DMNFe.ZConnection1.StartTransaction;
+        DMNFe.ZqryGeral.ExecSQL;
+       except
+        DMNFe.ZConnection1.Rollback;
+        gDeuErrConsiste := true;
+        DelRegErrXML(ArqXml);
+        Application.Messagebox('ERRO: NFeE_Mov não criada !','Atenção!',MB_ICONERROR+mb_ok);
+       end;
+     end;
+
+    //--------------------------------------------------------------------------
+    // Grava na tabela de Itens de entrada
+    // by Edson Lima ; 13-6-2014 ; 15:18
+    //--------------------------------------------------------------------------
+
+    for I := 0 to Det.Count-1 do
+     begin
+      DMNFe.ZqryGeral.DisableControls;
+      DMNFe.ZqryGeral.Close;
+      DMNFe.ZqryGeral.SQL.Clear;
+      DMNFe.ZqryGeral.SQL.Add( ' Select                                         ' );
+      DMNFe.ZqryGeral.SQL.Add( '  t1.CodEmp         as  Ite_CodEmp              ' );
+      DMNFe.ZqryGeral.SQL.Add( ' ,t1.CnpjEmt        as  Ite_CnpjEmt             ' );
+      DMNFe.ZqryGeral.SQL.Add( ' ,t1.InsEstEmt      as  Ite_InsEstEmt           ' );
+      DMNFe.ZqryGeral.SQL.Add( ' ,t1.CodNot         as  Ite_CodNot              ' );
+      DMNFe.ZqryGeral.SQL.Add( ' ,t1.Modelo         as  Ite_Modelo              ' );
+      DMNFe.ZqryGeral.SQL.Add( ' ,t1.Serie          as  Ite_Serie               ' );
+      DMNFe.ZqryGeral.SQL.Add( ' ,t1.CodPro         as  Ite_CodPro              ' );
+      DMNFe.ZqryGeral.SQL.Add( ' ,t1.NomPro         as  Ite_NomPro              ' );
+      DMNFe.ZqryGeral.SQL.Add( ' ,t1.SeqIte         as  Ite_SeqIte              ' );
+      DMNFe.ZqryGeral.SQL.Add( ' ,t1.CodNCM         as  Ite_CodNCM              ' );
+      DMNFe.ZqryGeral.SQL.Add( ' ,t1.SitTri         as  Ite_SitTri              ' );
+      DMNFe.ZqryGeral.SQL.Add( ' ,t1.CodCfo         as  Ite_CodCfo              ' );
+      DMNFe.ZqryGeral.SQL.Add( ' ,t1.Unidade        as  Ite_Unidade             ' );
+      DMNFe.ZqryGeral.SQL.Add( ' ,t1.EAN13          as  Ite_EAN13               ' );
+      DMNFe.ZqryGeral.SQL.Add( ' ,t1.cEAN           as  Ite_cEAN                ' );
+      DMNFe.ZqryGeral.SQL.Add( ' ,t1.QtdPro         as  Ite_QtdPro              ' );
+      DMNFe.ZqryGeral.SQL.Add( ' ,t1.ValPro         as  Ite_ValPro              ' );
+      DMNFe.ZqryGeral.SQL.Add( ' ,t1.ValDes         as  Ite_ValDes              ' );
+      DMNFe.ZqryGeral.SQL.Add( ' ,t1.ValTot         as  Ite_ValTot              ' );
+      DMNFe.ZqryGeral.SQL.Add( ' ,t1.BasIcm         as  Ite_BasIcm              ' );
+      DMNFe.ZqryGeral.SQL.Add( ' ,t1.AlqIcm         as  Ite_AlqIcm              ' );
+      DMNFe.ZqryGeral.SQL.Add( ' ,t1.ValIcm         as  Ite_ValIcm              ' );
+      DMNFe.ZqryGeral.SQL.Add( ' ,t1.BasIpi         as  Ite_BasIpi              ' );
+      DMNFe.ZqryGeral.SQL.Add( ' ,t1.AlqIpi         as  Ite_AlqIpi              ' );
+      DMNFe.ZqryGeral.SQL.Add( ' ,t1.ValIpi         as  Ite_ValIpi              ' );
+      DMNFe.ZqryGeral.SQL.Add( ' ,t1.BasSbt         as  Ite_BasSbt              ' );
+      DMNFe.ZqryGeral.SQL.Add( ' ,t1.ValSbt         as  Ite_ValSbt              ' );
+      DMNFe.ZqryGeral.SQL.Add( ' ,t1.ValSeg         as  Ite_ValSeg              ' );
+      DMNFe.ZqryGeral.SQL.Add( ' ,t1.ValFre         as  Ite_ValFre              ' );
+      DMNFe.ZqryGeral.SQL.Add( ' ,t1.ValOut 	    as  Ite_ValOut              ' );
+      DMNFe.ZqryGeral.SQL.Add( ' ,t1.ValPis         as  Ite_ValPis              ' );
+      DMNFe.ZqryGeral.SQL.Add( ' ,t1.ValCfs    	    as  Ite_ValCfs              ' );
+      DMNFe.ZqryGeral.SQL.Add( ' ,t1.ValDsn    	    as  Ite_ValDsn              ' );
+      DMNFe.ZqryGeral.SQL.Add( ' ,t1.MotDsn    	    as  Ite_MotDsn              ' );
+      DMNFe.ZqryGeral.SQL.Add( '                                                ' );
+      DMNFe.ZqryGeral.SQL.Add( ' from NFeE_Ite t1 join emitente t2 on t1.CodEmp = t2.Codigo_loja ' );
+      DMNFe.ZqryGeral.SQL.Add( '                                                ' );
+      DMNFe.ZqryGeral.SQL.Add( '  where t1.CodEmp      = :CodEmp      and       ' );
+      DMNFe.ZqryGeral.SQL.Add( '        t2.Codigo_loja = :Codigo_loja and       ' );
+      DMNFe.ZqryGeral.SQL.Add( '        t1.CnpjEmt     = :CnpjEmt     and       ' );
+      DMNFe.ZqryGeral.SQL.Add( '        t1.InsEstEmt   = :InsEstEmt   and       ' );
+      DMNFe.ZqryGeral.SQL.Add( '        t1.CodNot      = :CodNot      and       ' );
+      DMNFe.ZqryGeral.SQL.Add( '        t1.Modelo      = :Modelo      and       ' );
+      DMNFe.ZqryGeral.SQL.Add( '        t1.Serie       = :Serie       and       ' );
+      DMNFe.ZqryGeral.SQL.Add( '        t1.CodPro      = :CodPro      and       ' );
+      DMNFe.ZqryGeral.SQL.Add( '        t1.SeqIte      = :SeqIte                ' );
+      DMNFe.ZqryGeral.SQL.Add( '                                                ' );
+      DMNFe.ZqryGeral.ParamByName('CodEmp'      ).AsInteger    := StrToInt(gCodEmp);
+      DMNFe.ZqryGeral.ParamByName('Codigo_loja' ).AsInteger    := StrToInt(gCodEmp);
+      DMNFe.ZqryGeral.ParamByName('CnpjEmt'     ).AsString     := Emit.CNPJCPF;
+      DMNFe.ZqryGeral.ParamByName('InsEstEmt'   ).AsString     := Emit.IE;
+      DMNFe.ZqryGeral.ParamByName('CodNot'      ).AsInteger    := Ide.nNF;
+      DMNFe.ZqryGeral.ParamByName('Modelo'      ).Value        := IntToStr(Ide.modelo);
+      DMNFe.ZqryGeral.ParamByName('Serie'       ).Value        := IntToStr(Ide.serie);
+      DMNFe.ZqryGeral.ParamByName('CodPro'      ).Value        := copy(Det.Items[I].Prod.cProd, 1, 60);
+      DMNFe.ZqryGeral.ParamByName('SeqIte'      ).AsInteger    := Det.Items[I].Prod.nItem;
+      DMNFe.ZqryGeral.Open;
+
+      if DMNFe.ZqryGeral.IsEmpty then
+       begin
+        // Grava novo registro NFeE_Ite
+        try
+         DMNFe.ZqryGeral.DisableControls;
+         DMNFe.ZqryGeral.Close;
+         DMNFe.ZqryGeral.SQL.Clear;
+         DMNFe.ZqryGeral.SQL.Add( 'Insert into NFeE_Ite (                       ' );
+         DMNFe.ZqryGeral.SQL.Add( '      CodEmp                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   ,  CnpjEmt                                ' );
+         DMNFe.ZqryGeral.SQL.Add( '   ,  InsEstEmt                              ' );
+         DMNFe.ZqryGeral.SQL.Add( '   ,  CodNot                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   ,  Modelo                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   ,  Serie                                  ' );
+         DMNFe.ZqryGeral.SQL.Add( '   ,  CodPro                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   ,  SeqIte                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   ,  NomPro                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   ,  CodNCM                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   ,  SitTri                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   ,  CodCfo                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   ,  Unidade                                ' );
+         //DMNFe.ZqryGeral.SQL.Add( '   ,  EAN13                                  ' );
+         DMNFe.ZqryGeral.SQL.Add( '   ,  cEAN                                   ' );
+         DMNFe.ZqryGeral.SQL.Add( '   ,  QtdPro                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   ,  ValPro                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   ,  ValDes                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   ,  ValTot                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   ,  BasIcm                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   ,  AlqIcm                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   ,  ValIcm                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   ,  BasIpi                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   ,  AlqIpi                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   ,  ValIpi                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   ,  BasSbt                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   ,  ValSbt                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   ,  ValSeg                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   ,  ValFre                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   ,  ValOut 	  	                            ' );
+         DMNFe.ZqryGeral.SQL.Add( '   ,  ValPis                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   ,  ValCfs    	                            ' );
+         DMNFe.ZqryGeral.SQL.Add( '   ,  ValDsn    	                            ' );
+         DMNFe.ZqryGeral.SQL.Add( '   ,  MotDsn    	                            ' );
+         DMNFe.ZqryGeral.SQL.Add( '                     )                       ' );
+         DMNFe.ZqryGeral.SQL.Add( '  Values            (                        ' );
+         DMNFe.ZqryGeral.SQL.Add( '     :CodEmp                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   , :CnpjEmt                                ' );
+         DMNFe.ZqryGeral.SQL.Add( '   , :InsEstEmt                              ' );
+         DMNFe.ZqryGeral.SQL.Add( '   , :CodNot                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   , :Modelo                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   , :Serie                                  ' );
+         DMNFe.ZqryGeral.SQL.Add( '   , :CodPro                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   , :SeqIte                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   , :NomPro                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   , :CodNCM                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   , :SitTri                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   , :CodCfo                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   , :Unidade                                ' );
+         //DMNFe.ZqryGeral.SQL.Add( '   , :EAN13                                  ' );
+         DMNFe.ZqryGeral.SQL.Add( '   , :cEAN                                   ' );
+         DMNFe.ZqryGeral.SQL.Add( '   , :QtdPro                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   , :ValPro                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   , :ValDes                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   , :ValTot                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   , :BasIcm                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   , :AlqIcm                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   , :ValIcm                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   , :BasIpi                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   , :AlqIpi                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   , :ValIpi                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   , :BasSbt                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   , :ValSbt                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   , :ValSeg                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   , :ValFre                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   , :ValOut 	                               ' );
+         DMNFe.ZqryGeral.SQL.Add( '   , :ValPis                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   , :ValCfs    	                            ' );
+         DMNFe.ZqryGeral.SQL.Add( '   , :ValDsn    	                            ' );
+         DMNFe.ZqryGeral.SQL.Add( '   , :MotDsn    	                            ' );
+         DMNFe.ZqryGeral.SQL.Add( '                    )                        ' );
+         DMNFe.ZqryGeral.ParamByName('CodEmp'       ).Value    :=  StrToInt(gCodEmp);
+         DMNFe.ZqryGeral.ParamByName('CnpjEmt'      ).Value    :=  copy(Emit.CNPJCPF, 1, 18);
+         DMNFe.ZqryGeral.ParamByName('InsEstEmt'    ).Value    :=  copy(Emit.IE, 1, 25);
+         DMNFe.ZqryGeral.ParamByName('CodNot'       ).Value    :=  Ide.nNF;
+         DMNFe.ZqryGeral.ParamByName('Modelo'       ).Value    :=  copy(IntToStr(Ide.modelo), 1, 2);
+         DMNFe.ZqryGeral.ParamByName('Serie'	    ).Value    :=  copy(IntToStr(Ide.serie), 1, 3);
+         DMNFe.ZqryGeral.ParamByName('CodPro'       ).Value    :=  copy(Det.Items[I].Prod.cProd, 1, 60);
+         DMNFe.ZqryGeral.ParamByName('SeqIte'       ).Value    :=  Det.Items[I].Prod.nItem;
+         DMNFe.ZqryGeral.ParamByName('NomPro'       ).Value    :=  copy(Det.Items[I].Prod.xProd, 1, 100);
+         DMNFe.ZqryGeral.ParamByName('CodNCM'       ).Value    :=  copy(Det.Items[I].Prod.NCM, 1, 8);
+
+         // by Edson Lima ; 2014-10-11T1129 ; Alterado para adequar ao gerpa nesta data
+         if ( length(CSOSNICMSToStr(Det.Items[I].Imposto.ICMS.CSOSN)) = 3 ) then
+          begin
+           vCSOSN := OrigToStr(Det.Items[I].Imposto.ICMS.orig) + copy(CSOSNICMSToStr(Det.Items[I].Imposto.ICMS.CSOSN), 1, 3);
+           DMNFe.ZqryGeral.ParamByName('SitTri'       ).Value    :=  copy(vCSOSN, 1, 4)
+          end
+         else
+          begin
+           vCST := OrigToStr(Det.Items[I].Imposto.ICMS.orig) + CSTICMSToStr(Det.Items[I].Imposto.ICMS.CST);
+           DMNFe.ZqryGeral.ParamByName('SitTri'       ).Value    :=  copy(vCST, 1, 3);
+          end;
+
+         DMNFe.ZqryGeral.ParamByName('CodCfo'       ).Value    :=  copy(Det.Items[I].Prod.CFOP, 1, 4);
+         DMNFe.ZqryGeral.ParamByName('Unidade'      ).Value    :=  copy(Det.Items[I].Prod.uCom, 1, 6);
+         //DMNFe.ZqryGeral.ParamByName('EAN13'	      ).Value    :=  0;
+         DMNFe.ZqryGeral.ParamByName('cEAN'	        ).Value    :=  copy(Det.Items[I].Prod.cEAN, 1, 13);
+         DMNFe.ZqryGeral.ParamByName('QtdPro'       ).AsFloat  :=  Det.Items[I].Prod.qCom;
+         DMNFe.ZqryGeral.ParamByName('ValPro'       ).AsFloat  :=  Det.Items[I].Prod.vUnCom;
+         DMNFe.ZqryGeral.ParamByName('ValDes'       ).AsFloat  :=  Det.Items[I].Prod.vDesc;
+         DMNFe.ZqryGeral.ParamByName('ValTot'       ).AsFloat  :=  Det.Items[I].Prod.vProd;
+         DMNFe.ZqryGeral.ParamByName('BasIcm'       ).AsFloat  :=  Det.Items[I].Imposto.ICMS.vBC;
+         DMNFe.ZqryGeral.ParamByName('AlqIcm'       ).AsFloat  :=  Det.Items[I].Imposto.ICMS.pICMS;
+         DMNFe.ZqryGeral.ParamByName('ValIcm'       ).AsFloat  :=  Det.Items[I].Imposto.ICMS.vICMS;
+         DMNFe.ZqryGeral.ParamByName('BasIpi'       ).AsFloat  :=  Det.Items[I].Imposto.IPI.vBC;
+         DMNFe.ZqryGeral.ParamByName('AlqIpi'       ).AsFloat  :=  Det.Items[I].Imposto.IPI.pIPI;
+         DMNFe.ZqryGeral.ParamByName('ValIpi'       ).AsFloat  :=  Det.Items[I].Imposto.IPI.vIPI;
+         DMNFe.ZqryGeral.ParamByName('BasSbt'       ).AsFloat  :=  Det.Items[I].Imposto.ICMS.vBCST;
+         DMNFe.ZqryGeral.ParamByName('ValSbt'       ).AsFloat  :=  Det.Items[I].Imposto.ICMS.vICMSST;
+         DMNFe.ZqryGeral.ParamByName('ValSeg'       ).AsFloat  :=  Det.Items[I].Prod.vSeg;
+         DMNFe.ZqryGeral.ParamByName('ValFre'       ).AsFloat  :=  Det.Items[I].Prod.vFrete;
+         DMNFe.ZqryGeral.ParamByName('ValOut'       ).AsFloat  :=  Det.Items[I].Prod.vOutro;
+         DMNFe.ZqryGeral.ParamByName('ValPis'       ).AsFloat  :=  Det.Items[I].Imposto.PIS.vPIS;
+         DMNFe.ZqryGeral.ParamByName('ValCfs'       ).AsFloat  :=  Det.Items[I].Imposto.COFINS.vCOFINS;
+         DMNFe.ZqryGeral.ParamByName('ValDsn'       ).AsFloat  :=  Det.Items[I].Imposto.ICMS.vICMSDeson;
+         DMNFe.ZqryGeral.ParamByName('MotDsn'       ).Value    :=  Det.Items[I].Imposto.ICMS.motDesICMS;
+
+         DMNFe.ZConnection1.StartTransaction;
+         DMNFe.ZqryGeral.ExecSQL;
+        except
+         DMNFe.ZConnection1.Rollback;
+         gDeuErrConsiste := true;
+         DelRegErrXML(ArqXml);
+         Application.Messagebox('ERRO: NFeE_Ite não criada !','Atenção!',MB_ICONERROR+mb_ok);
+        end;
+       end;
+     end;
+
+    //--------------------------------------------------------------------------
+    // Grava na tabela de Faturas de entrada
+    // by Edson Lima ; 16-6-2014 ; 16:03
+    //--------------------------------------------------------------------------
+
+    for I := 0 to Cobr.Dup.Count-1 do
+     begin
+      DMNFe.ZqryGeral.DisableControls;
+      DMNFe.ZqryGeral.Close;
+      DMNFe.ZqryGeral.SQL.Clear;
+      DMNFe.ZqryGeral.SQL.Add( ' Select                                         ' );
+      DMNFe.ZqryGeral.SQL.Add( '  t1.CodEmp         as  Fat_CodEmp              ' );
+      DMNFe.ZqryGeral.SQL.Add( ' ,t1.CnpjEmt        as  Fat_CnpjEmt             ' );
+      DMNFe.ZqryGeral.SQL.Add( ' ,t1.InsEstEmt      as  Fat_InsEstEmt           ' );
+      DMNFe.ZqryGeral.SQL.Add( ' ,t1.CodNot         as  Fat_CodNot              ' );
+      DMNFe.ZqryGeral.SQL.Add( ' ,t1.Modelo         as  Fat_Modelo              ' );
+      DMNFe.ZqryGeral.SQL.Add( ' ,t1.Serie          as  Fat_Serie               ' );
+      DMNFe.ZqryGeral.SQL.Add( ' ,t1.CodFat         as  Fat_CodFat              ' );
+      DMNFe.ZqryGeral.SQL.Add( ' ,t1.DatFat         as  Fat_DatFat              ' );
+      DMNFe.ZqryGeral.SQL.Add( ' ,t1.ValFat         as  Fat_ValFat              ' );
+      DMNFe.ZqryGeral.SQL.Add( '                                                ' );
+      DMNFe.ZqryGeral.SQL.Add( ' from NFeE_Fat t1 join emitente t2 on t1.CodEmp = t2.Codigo_loja ' );
+      DMNFe.ZqryGeral.SQL.Add( '                                                ' );
+      DMNFe.ZqryGeral.SQL.Add( '  where t1.CodEmp      = :CodEmp      and       ' );
+      DMNFe.ZqryGeral.SQL.Add( '        t2.Codigo_loja = :Codigo_loja and       ' );
+      DMNFe.ZqryGeral.SQL.Add( '        t1.CnpjEmt     = :CnpjEmt     and       ' );
+      DMNFe.ZqryGeral.SQL.Add( '        t1.InsEstEmt   = :InsEstEmt   and       ' );
+      DMNFe.ZqryGeral.SQL.Add( '        t1.CodNot      = :CodNot      and       ' );
+      DMNFe.ZqryGeral.SQL.Add( '        t1.Modelo      = :Modelo      and       ' );
+      DMNFe.ZqryGeral.SQL.Add( '        t1.Serie       = :Serie       and       ' );
+      DMNFe.ZqryGeral.SQL.Add( '        t1.CodFat      = :CodFat                ' );
+      DMNFe.ZqryGeral.SQL.Add( '                                                ' );
+      DMNFe.ZqryGeral.ParamByName('CodEmp'      ).AsInteger    := StrToInt(gCodEmp);
+      DMNFe.ZqryGeral.ParamByName('Codigo_loja' ).AsInteger    := StrToInt(gCodEmp);
+      DMNFe.ZqryGeral.ParamByName('CnpjEmt'     ).AsString     := Emit.CNPJCPF;
+      DMNFe.ZqryGeral.ParamByName('InsEstEmt'   ).AsString     := Emit.IE;
+      DMNFe.ZqryGeral.ParamByName('CodNot'      ).AsInteger    := Ide.nNF;
+      DMNFe.ZqryGeral.ParamByName('Modelo'      ).Value        := IntToStr(Ide.modelo);
+      DMNFe.ZqryGeral.ParamByName('Serie'       ).Value        := IntToStr(Ide.serie);
+      DMNFe.ZqryGeral.ParamByName('CodFat'      ).Value        := Cobr.Dup.Items[I].nDup;
+      DMNFe.ZqryGeral.Open;
+
+      if DMNFe.ZqryGeral.IsEmpty then
+       begin
+        // Grava novo registro NFeE_Fat
+        try
+         DMNFe.ZqryGeral.DisableControls;
+         DMNFe.ZqryGeral.Close;
+         DMNFe.ZqryGeral.SQL.Clear;
+         DMNFe.ZqryGeral.SQL.Add( 'Insert into NFeE_Fat (                       ' );
+         DMNFe.ZqryGeral.SQL.Add( '      CodEmp                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   ,  CnpjEmt                                ' );
+         DMNFe.ZqryGeral.SQL.Add( '   ,  InsEstEmt                              ' );
+         DMNFe.ZqryGeral.SQL.Add( '   ,  CodNot                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   ,  Modelo                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   ,  Serie                                  ' );
+         DMNFe.ZqryGeral.SQL.Add( '   ,  CodFat                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   ,  DatFat                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   ,  ValFat                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '                     )                       ' );
+         DMNFe.ZqryGeral.SQL.Add( '  Values            (                        ' );
+         DMNFe.ZqryGeral.SQL.Add( '     :CodEmp                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   , :CnpjEmt                                ' );
+         DMNFe.ZqryGeral.SQL.Add( '   , :InsEstEmt                              ' );
+         DMNFe.ZqryGeral.SQL.Add( '   , :CodNot                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   , :Modelo                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   , :Serie                                  ' );
+         DMNFe.ZqryGeral.SQL.Add( '   , :CodFat                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   , :DatFat                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '   , :ValFat                                 ' );
+         DMNFe.ZqryGeral.SQL.Add( '                    )                        ' );
+
+         DMNFe.ZqryGeral.ParamByName('CodEmp'       ).Value    :=  StrToInt(gCodEmp);
+         DMNFe.ZqryGeral.ParamByName('CnpjEmt'      ).Value    :=  copy(Emit.CNPJCPF, 1, 18);
+         DMNFe.ZqryGeral.ParamByName('InsEstEmt'    ).Value    :=  copy(Emit.IE, 1, 25);
+         DMNFe.ZqryGeral.ParamByName('CodNot'       ).Value    :=  Ide.nNF;
+         DMNFe.ZqryGeral.ParamByName('Modelo'       ).Value    :=  copy(IntToStr(Ide.modelo), 1, 2);
+         DMNFe.ZqryGeral.ParamByName('Serie'		      ).Value    :=  copy(IntToStr(Ide.serie), 1, 3);
+         DMNFe.ZqryGeral.ParamByName('CodFat'       ).Value    :=  copy(Cobr.Dup.Items[I].nDup, 1, 15);
+         DMNFe.ZqryGeral.ParamByName('DatFat'       ).Value    :=  FormatDateTime('yyyy/mm/dd hh:nn:ss', Cobr.Dup.Items[I].dVenc);
+         DMNFe.ZqryGeral.ParamByName('ValFat'       ).AsFloat  :=  Cobr.Dup.Items[I].vDup;
+         DMNFe.ZConnection1.StartTransaction;
+         DMNFe.ZqryGeral.ExecSQL;
+        except
+         DMNFe.ZConnection1.Rollback;
+         gDeuErrConsiste := true;
+         DelRegErrXML(ArqXml);
+         Application.Messagebox('ERRO: NFeE_Fat não criada !','Atenção!',MB_ICONERROR+mb_ok);
+        end;
+       end;
+     end;
+    end;
+  end;
+end;
+
+//------------------------------------------------------------------------------
+// Procedure: DelRegErrXML() - Deleta reg.com erro do Xml nas tabelas de entrada
+//            traz como parametros o caminho e o nome do arquivo Xml
+//            by Edson Lima ; 03/03/2015T1436
+//------------------------------------------------------------------------------
+procedure TFrBuscaChave.DelRegErrXML(ArqXml : String);
+var
+  i, j, k, n                     : integer;
+  Nota, Node, NodePai, NodeItem  : TTreeNode;
+  NFeRTXT                        : TNFeRTXT;
+  vObs, vCST, vCSOSN             : String;
+begin
+
+ FrGBNFe.ACBrNFe1.NotasFiscais.Clear;
+
+ //tenta TXT
+ FrGBNFe.ACBrNFe1.NotasFiscais.Add;
+ NFeRTXT := TNFeRTXT.Create(FrGBNFe.ACBrNFe1.NotasFiscais.Items[0].NFe);
+ NFeRTXT.CarregarArquivo(ArqXml);
+
+ if NFeRTXT.LerTxt then
+  NFeRTXT.Free
+ else
+  begin
+   NFeRTXT.Free;
+
+   //tenta XML
+   FrGBNFe.ACBrNFe1.NotasFiscais.Clear;
+   try
+    FrGBNFe.ACBrNFe1.NotasFiscais.LoadFromFile(ArqXml);
+   except
+    on E: Exception do Raise Exception.Create('Arquivo XML da NF-e inválido.'+ E.Message);
+   end;
+  end;
+
+
+ FrGBNFe.trvwNFe.Items.Clear;
+                                                                                
+ for n:=0 to FrGBNFe.ACBrNFe1.NotasFiscais.Count-1 do                           
+  begin                                                                         
+   with FrGBNFe.ACBrNFe1.NotasFiscais.Items[n].NFe do                           
+    begin
+
+     //-------------------------------------------------------------------------
+     // Deleta registro na tabela de movimentos de entrada que deu erro
+     // by Edson Lima ; 03-3-2015 ; 15:01
+     //-------------------------------------------------------------------------
+
+     DMNFe.ZqryGeral.DisableControls;
+     DMNFe.ZqryGeral.Close;
+     DMNFe.ZqryGeral.SQL.Clear;
+     DMNFe.ZqryGeral.SQL.Add( ' Delete from NFeE_Mov                            ' );
+     DMNFe.ZqryGeral.SQL.Add( '                                                 ' );
+     DMNFe.ZqryGeral.SQL.Add( '  where t1.CodEmp      = :CodEmp      and        ' );
+     DMNFe.ZqryGeral.SQL.Add( '        t2.Codigo_loja = :Codigo_loja and        ' );
+     DMNFe.ZqryGeral.SQL.Add( '        t1.CnpjEmt     = :CnpjEmt     and        ' );
+     DMNFe.ZqryGeral.SQL.Add( '        t1.InsEstEmt   = :InsEstEmt   and        ' );
+     DMNFe.ZqryGeral.SQL.Add( '        t1.CodNot      = :CodNot      and        ' );
+     DMNFe.ZqryGeral.SQL.Add( '        t1.Modelo      = :Modelo      and        ' );
+     DMNFe.ZqryGeral.SQL.Add( '        t1.Serie       = :Serie       and        ' );
+     DMNFe.ZqryGeral.SQL.Add( '  isnull( t1.ChvNFe, '''')  Like ''%'' + :ChvNFe + ''%'' ' );
+     DMNFe.ZqryGeral.ParamByName('CodEmp'      ).Value        := StrToInt(gCodEmp);
+     DMNFe.ZqryGeral.ParamByName('Codigo_loja' ).Value        := StrToInt(gCodEmp);
+     DMNFe.ZqryGeral.ParamByName('CnpjEmt'     ).Value        := Emit.CNPJCPF;
+     DMNFe.ZqryGeral.ParamByName('InsEstEmt'   ).Value        := Emit.IE;
+     DMNFe.ZqryGeral.ParamByName('CodNot'      ).Value        := Ide.nNF;
+     DMNFe.ZqryGeral.ParamByName('Modelo'      ).Value        := IntToStr(Ide.modelo);
+     DMNFe.ZqryGeral.ParamByName('Serie'       ).Value        := IntToStr(Ide.serie);
+     DMNFe.ZqryGeral.ParamByName('ChvNFe'      ).Value        := procNFe.chNFe;
+     DMNFe.ZqryGeral.Open;
+
+     for I := 0 to Det.Count-1 do
+      begin
+       DMNFe.ZqryGeral.DisableControls;
+       DMNFe.ZqryGeral.Close;
+       DMNFe.ZqryGeral.SQL.Clear;
+       DMNFe.ZqryGeral.SQL.Add( ' Delete from NFeE_Ite                           ' );
+       DMNFe.ZqryGeral.SQL.Add( '  where t1.CodEmp      = :CodEmp      and       ' );
+       DMNFe.ZqryGeral.SQL.Add( '        t2.Codigo_loja = :Codigo_loja and       ' );
+       DMNFe.ZqryGeral.SQL.Add( '        t1.CnpjEmt     = :CnpjEmt     and       ' );
+       DMNFe.ZqryGeral.SQL.Add( '        t1.InsEstEmt   = :InsEstEmt   and       ' );
+       DMNFe.ZqryGeral.SQL.Add( '        t1.CodNot      = :CodNot      and       ' );
+       DMNFe.ZqryGeral.SQL.Add( '        t1.Modelo      = :Modelo      and       ' );
+       DMNFe.ZqryGeral.SQL.Add( '        t1.Serie       = :Serie       and       ' );
+       DMNFe.ZqryGeral.SQL.Add( '        t1.CodPro      = :CodPro      and       ' );
+       DMNFe.ZqryGeral.SQL.Add( '        t1.SeqIte      = :SeqIte                ' );
+       DMNFe.ZqryGeral.SQL.Add( '                                                ' );
+       DMNFe.ZqryGeral.ParamByName('CodEmp'      ).AsInteger    := StrToInt(gCodEmp);
+       DMNFe.ZqryGeral.ParamByName('Codigo_loja' ).AsInteger    := StrToInt(gCodEmp);
+       DMNFe.ZqryGeral.ParamByName('CnpjEmt'     ).AsString     := Emit.CNPJCPF;
+       DMNFe.ZqryGeral.ParamByName('InsEstEmt'   ).AsString     := Emit.IE;
+       DMNFe.ZqryGeral.ParamByName('CodNot'      ).AsInteger    := Ide.nNF;
+       DMNFe.ZqryGeral.ParamByName('Modelo'      ).Value        := IntToStr(Ide.modelo);
+       DMNFe.ZqryGeral.ParamByName('Serie'       ).Value        := IntToStr(Ide.serie);
+       DMNFe.ZqryGeral.ParamByName('CodPro'      ).Value        := copy(Det.Items[I].Prod.cProd, 1, 60);
+       DMNFe.ZqryGeral.ParamByName('SeqIte'      ).AsInteger    := Det.Items[I].Prod.nItem;
+       DMNFe.ZqryGeral.Open;
+      end;
+
+     //--------------------------------------------------------------------------
+     // Grava na tabela de Faturas de entrada
+     // by Edson Lima ; 16-6-2014 ; 16:03
+     //--------------------------------------------------------------------------
+
+     for I := 0 to Cobr.Dup.Count-1 do
+      begin
+       DMNFe.ZqryGeral.DisableControls;
+       DMNFe.ZqryGeral.Close;
+       DMNFe.ZqryGeral.SQL.Clear;
+       DMNFe.ZqryGeral.SQL.Add( ' Select from NFeE_Fat                           ' );
+       DMNFe.ZqryGeral.SQL.Add( '  where t1.CodEmp      = :CodEmp      and       ' );
+       DMNFe.ZqryGeral.SQL.Add( '        t2.Codigo_loja = :Codigo_loja and       ' );
+       DMNFe.ZqryGeral.SQL.Add( '        t1.CnpjEmt     = :CnpjEmt     and       ' );
+       DMNFe.ZqryGeral.SQL.Add( '        t1.InsEstEmt   = :InsEstEmt   and       ' );
+       DMNFe.ZqryGeral.SQL.Add( '        t1.CodNot      = :CodNot      and       ' );
+       DMNFe.ZqryGeral.SQL.Add( '        t1.Modelo      = :Modelo      and       ' );
+       DMNFe.ZqryGeral.SQL.Add( '        t1.Serie       = :Serie       and       ' );
+       DMNFe.ZqryGeral.SQL.Add( '        t1.CodFat      = :CodFat                ' );
+       DMNFe.ZqryGeral.SQL.Add( '                                                ' );
+       DMNFe.ZqryGeral.ParamByName('CodEmp'      ).AsInteger    := StrToInt(gCodEmp);
+       DMNFe.ZqryGeral.ParamByName('Codigo_loja' ).AsInteger    := StrToInt(gCodEmp);
+       DMNFe.ZqryGeral.ParamByName('CnpjEmt'     ).AsString     := Emit.CNPJCPF;
+       DMNFe.ZqryGeral.ParamByName('InsEstEmt'   ).AsString     := Emit.IE;
+       DMNFe.ZqryGeral.ParamByName('CodNot'      ).AsInteger    := Ide.nNF;
+       DMNFe.ZqryGeral.ParamByName('Modelo'      ).Value        := IntToStr(Ide.modelo);
+       DMNFe.ZqryGeral.ParamByName('Serie'       ).Value        := IntToStr(Ide.serie);
+       DMNFe.ZqryGeral.ParamByName('CodFat'      ).Value        := Cobr.Dup.Items[I].nDup;
+       DMNFe.ZqryGeral.Open;
+      end;
+    end;
+  end;
+end;
+
+procedure TFrBuscaChave.MenuItem1Click(Sender: TObject);
+begin
+ RG_tpEvento.ItemIndex       := -1;
+ SpeedButton1.Enabled        := False;
+ SpeedButton2.Enabled        := True;
+ SpeedButton3.Enabled        := True;
+ SpeedButton7.Enabled        := False;
+end;
+
+procedure TFrBuscaChave.RG_tpEventoClick(Sender: TObject);
+begin
+
+ if (((RadioGroup1.ItemIndex = 1) and (RG_tpEvento.ItemIndex = 0))  or
+     ((RadioGroup1.ItemIndex = 2) and (RG_tpEvento.ItemIndex = 1))  or
+     ((RadioGroup1.ItemIndex = 3) and (RG_tpEvento.ItemIndex = 2))  or
+     ((RadioGroup1.ItemIndex = 4) and (RG_tpEvento.ItemIndex = 3))) then
+  begin
+   RG_tpEvento.ItemIndex := gItem;
+   exit;
+  end;
+ if ((RadioGroup1.ItemIndex = 0) and (RG_tpEvento.ItemIndex = 4)) then
+  begin
+   RG_tpEvento.ItemIndex := gItem;
+   exit;
+  end;
+ if ((RadioGroup1.ItemIndex = 5) or (RadioGroup1.ItemIndex = 6)) then
+  begin
+   RG_tpEvento.ItemIndex := -1;
+   exit;
+  end;
+
+ if (RadioGroup1.ItemIndex = 7) then
+  begin
+   RG_tpEvento.ItemIndex := -1;
+   exit;
+  end;
+
+ if (RadioGroup1.ItemIndex = 8) then
+  begin
+   RG_tpEvento.ItemIndex := -1;
+   exit;
+  end;
+
+ gItem := RG_tpEvento.ItemIndex;
+
+ case RG_tpEvento.ItemIndex of
+  0, 1, 2 :
+   begin
+    SpeedButton1.Enabled        := False;
+    SpeedButton2.Enabled        := False;
+    SpeedButton3.Enabled        := False;
+    SpeedButton7.Enabled        := True;
+    Edit_xJust.Enabled          := False;
+    Edit_xJust.Color            := $00DDDDDD;
+   end;
+  3 :
+   begin
+    SpeedButton1.Enabled        := False;
+    SpeedButton2.Enabled        := False;
+    SpeedButton3.Enabled        := False;
+    SpeedButton7.Enabled        := True;
+    Edit_xJust.Enabled          := True;
+    Edit_xJust.Color            := $00C4F0FF;
+ end;
+  4 :
+   begin
+    SpeedButton1.Enabled        := True;
+    SpeedButton2.Enabled        := False;
+    SpeedButton3.Enabled        := False;
+    SpeedButton7.Enabled        := False;
+    Edit_xJust.Enabled          := False;
+    Edit_xJust.Color            := $00DDDDDD;
+   end;
+  -1 :
+   begin
+    SpeedButton1.Enabled        := False;
+    SpeedButton2.Enabled        := True;
+    SpeedButton3.Enabled        := True;
+    SpeedButton7.Enabled        := False;
+    Edit_xJust.Enabled          := False;
+    Edit_xJust.Color            := $00DDDDDD;
+   end;
+ end;
+end;
+
+procedure TFrBuscaChave.RadioGroup1Click(Sender: TObject);
+var
+ x : integer;
+begin
+
+ gItem := -1;
+
+ // Define o parametro inicial do codigo da loja ; by Edson Lima ;
+ DMNFe.ZQuery14.Close;
+ DMNFe.ZQuery14.ParamByName('Codigo_Loja1').AsInteger    := StrToInt(gCodEmp);
+ DMNFe.ZQuery14.ParamByName('Codigo_Loja2').AsInteger    := StrToInt(gCodEmp);
+ case RadioGroup1.ItemIndex of
+  0 : DMNFe.ZQuery14.ParamByName('cSitConf').AsString    := '0';
+  1 : DMNFe.ZQuery14.ParamByName('cSitConf').AsString    := '4';
+  2 : DMNFe.ZQuery14.ParamByName('cSitConf').AsString    := '1';
+  3 : DMNFe.ZQuery14.ParamByName('cSitConf').AsString    := '2';
+  4 : DMNFe.ZQuery14.ParamByName('cSitConf').AsString    := '3';
+  5 : DMNFe.ZQuery14.ParamByName('cSitConf').AsString    := '5';
+  6 : DMNFe.ZQuery14.ParamByName('cSitConf').AsString    := '6';
+  7 : DMNFe.ZQuery14.ParamByName('cSitConf').AsString    := '7';
+  8 : DMNFe.ZQuery14.ParamByName('cSitConf').AsString    := '_';
+ end;
+
+ case RadioGroup1.ItemIndex of
+  0 : Panel10.Caption      := 'N O V A S';
+  1 : Panel10.Caption      := 'C I Ê N C I A S   D A   O P E R A Ç Ã O';
+  2 : Panel10.Caption      := 'C O N F I R M A Ç Ã O   D A   O P E R A Ç Ã O';
+  3 : Panel10.Caption      := 'D E S C O N H E C I M E N T O   D A   O P E R A Ç Ã O';
+  4 : Panel10.Caption      := 'O P E R A Ç Ã O   N Ã O   R E A L I Z A D A';
+  5 : Panel10.Caption      := 'D E N E G A D A S';
+  6 : Panel10.Caption      := 'C A N C E L A D A S';
+  7 : Panel10.Caption      := 'T E R C E I R O S';
+  8 : Panel10.Caption      := 'T O D A S';
+ end;
+
+ if Checkbox1.Checked then
+  begin
+   DMNFe.ZQuery14.ParamByName('DtInicial').AsString        := FormatDateTime('yyyy/mm/dd', dxDateEdit1.Date);
+   DMNFe.ZQuery14.ParamByName('DtFinal').AsString          := FormatDateTime('yyyy/mm/dd', dxDateEdit2.Date);
+  end
+ else
+  begin
+   DMNFe.ZQuery14.ParamByName('DtInicial').AsString        := FormatDateTime('yyyy/mm/dd', Date - 180);
+   DMNFe.ZQuery14.ParamByName('DtFinal').AsString          := FormatDateTime('yyyy/mm/dd', Date);
+  end;
+
+ DMNFe.ZQuery14.ParamByName('Chave_nfe').AsString        := FrBuscaChave.Edit_Busca_Chave.Text;
+ DMNFe.ZQuery14.Open;
+
+ // Zera o contador de itens selecionados
+ Edit_QSel.Text := '0';
+
+ //-----------------------------------------------------------------------------
+ // by Edson Lima ; 2013-7-26T1609 ; Atualiza dados das TreeLest
+
+ pAtuTLMDFe(
+             FrBuscaChave.dxTLBuscaChave,                  FrBuscaChave.dxTLCBuscaChaveCheckSel,
+             FrBuscaChave.dxTLCBuscaChaveCheckD_S,         FrBuscaChave.dxTLCBuscaChaveCheckD_B,
+             FrBuscaChave.dxTLBuscaChaveImage,             FrBuscaChave.dxTLCBuscaChaveMaskPosMov,
+             FrBuscaChave.dxTLCBuscaChaveMaskNSU,          FrBuscaChave.dxTLBuscaChaveMaskCodLoja,
+             FrBuscaChave.dxTLCBuscaChaveSerie,            FrBuscaChave.dxTLCBuscaChaveMaskNota,
+             FrBuscaChave.dxTLCBuscaChaveMaskCha,          FrBuscaChave.dxTLCBuscaChaveMaskCnpjCpf,
+             FrBuscaChave.dxTLCBuscaChaveMaskxNome,        FrBuscaChave.dxTLCBuscaChaveMaskIE,
+             FrBuscaChave.dxTLCBuscaChaveDateDemi,         FrBuscaChave.dxTLBuscaChaveMaskTpNFe,
+             FrBuscaChave.dxTLCBuscaChaveCurrencyVNF,      FrBuscaChave.dxTLCBuscaChaveMaskDigVal,
+             FrBuscaChave.dxTLBuscaChaveMaskdhRecbto,      FrBuscaChave.dxTLCBuscaChaveMaskcSitNFe,
+             FrBuscaChave.dxTLCBuscaChaveMaskcSitConf,     DMNFe.ZQuery14);
+
+ //-----------------------------------------------------------------------------
+
+ MenuItem1Click(Sender);
+ RG_tpEvento.Enabled := False;
+
+end;
+
+//------------------------------------------------------------------------------
+// Procedure: Mostra ImportaXML() - Salva os dados do Xml nas tabelas de entrada
+//            traz como parametros o caminho e o nome do arquivo Xml
+//            by Edson Lima ; 18/06/2014T1517
+//------------------------------------------------------------------------------
+procedure TFrBuscaChave.MostraDados(Codigo_loja, Chave_nfe : String ; dEmi : TDateTime); // Mostra os dados selecionados quando clic na grade
+begin
+
+ // Define o parametro inicial do codigo da loja ; by Edson Lima ;
+ DMNFe.ZqryGeral.DisableControls;
+ DMNFe.ZqryGeral.Close;
+ DMNFe.ZqryGeral.SQL.Clear;
+ DMNFe.ZqryGeral.SQL.Add( ' Select                                          ' );
+ DMNFe.ZqryGeral.SQL.Add( '  t1.idLote        as  MDFe_idLote               ' );
+ DMNFe.ZqryGeral.SQL.Add( ' ,t1.Evento        as  MDFe_Evento               ' );
+ DMNFe.ZqryGeral.SQL.Add( ' ,t1.dhEvento      as  MDFe_dhEvento             ' );
+ DMNFe.ZqryGeral.SQL.Add( ' ,t1.dhRegEvento   as  MDFe_dhRegEvento          ' );
+ DMNFe.ZqryGeral.SQL.Add( ' ,t1.id            as  MDFe_id                   ' );
+ DMNFe.ZqryGeral.SQL.Add( ' ,t1.nProt         as  MDFe_nProt                ' );
+ DMNFe.ZqryGeral.SQL.Add( '                                                 ' );
+ DMNFe.ZqryGeral.SQL.Add( ' from nfe_MDFe t1 join emitente t2 on t1.Codigo_loja = t2.Codigo_loja ' );
+ DMNFe.ZqryGeral.SQL.Add( '  where t1.Codigo_loja = :Codigo_loja and        ' );
+ DMNFe.ZqryGeral.SQL.Add( '        t2.Codigo_loja = :Codigo_loja and        ' );
+ DMNFe.ZqryGeral.SQL.Add( '  isnull( t1.Chave_nfe, '''')  Like  ''%'' + :Chave_nfe + ''%'' ' );
+
+ DMNFe.ZqryGeral.ParamByName('Codigo_loja').AsInteger  := StrToInt(Codigo_loja);
+ DMNFe.ZqryGeral.ParamByName('Chave_nfe').AsString     := Chave_nfe;
+ DMNFe.ZqryGeral.Open;
+
+ if not DMNFe.ZqryGeral.IsEmpty then
+  begin
+   if not (DMNFe.ZqryGeral['MDFe_idLote'] = null) then
+    Edit_idLote.Text         :=  IntToStr(DMNFe.ZqryGeral['MDFe_idLote'])
+   else
+    Edit_idLote.Text         :=  '';
+
+   if not (DMNFe.ZqryGeral['MDFe_Evento'] = null) then
+    Edit_Evento.Text         :=  DMNFe.ZqryGeral['MDFe_Evento']
+   else
+    Edit_Evento.Text         :=  '';
+
+   if not (DMNFe.ZqryGeral['MDFe_dhEvento'] = null) then
+    Edit_DataEvento.Text     :=  DMNFe.ZqryGeral['MDFe_dhEvento']
+   else
+    Edit_DataEvento.Text     :=  '';
+
+   if not (DMNFe.ZqryGeral['MDFe_dhRegEvento'] = null) then
+    Edit_dtRegEvento.Text    :=  DMNFe.ZqryGeral['MDFe_dhRegEvento']
+   else
+    Edit_dtRegEvento.Text    :=  '';
+
+   if not (DMNFe.ZqryGeral['MDFe_id'] = null) then
+    Edit_id.Text             :=  DMNFe.ZqryGeral['MDFe_id']
+   else
+    Edit_id.Text             :=  '';
+
+   if not (DMNFe.ZqryGeral['MDFe_nProt'] = null) then
+    Edit_nProt.Text          :=  DMNFe.ZqryGeral['MDFe_nProt']
+   else
+    Edit_nProt.Text          :=  '';
+  end;
+
+end;
+
+procedure TFrBuscaChave.dxTLBuscaChaveKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+var
+ i                            : integer;
+ Codigo_loja, Chave_nfe       : string;
+ dEmi                         : TDateTime;
+begin
+
+ i           := dxTLBuscaChave.FocusedNumber;
+ Codigo_loja := dxTLBuscaChave.Items[i].Strings[dxTLBuscaChaveMaskCodLoja.Index];
+ Chave_nfe   := dxTLBuscaChave.Items[i].Strings[dxTLCBuscaChaveMaskCha.Index];
+ dEmi        := StrToDateTime(dxTLBuscaChave.Items[i].Strings[dxTLCBuscaChaveDatedEmi.Index]);
+
+ MostraDados(Codigo_loja, Chave_nfe, dEmi);
+
+end;
+
+//------------------------------------------------------------------------------
+// Procedure: HaDe(HB : Boolean) - habilita ou desabilita componentes
+//         traz como parametros true e false
+//         by Edson Lima ; 07/07/2014T1034
+//------------------------------------------------------------------------------
+Procedure TFrBuscaChave.HaDe(hd : Boolean);                                     // Habilita ou desabilita componentes
+begin
+
+ if hd then
+  begin
+   // Habilita componentes dutante a consulta ----------------------------------
+   //BlockInput(False); // Habilita mouse e teclado
+   dxTLBuscaChave.Enabled               := True;
+   RadioGroup1.Enabled                  := True;
+   FrConsManif.ComboBox1.Enabled        := True;
+   FrConsManif.ComboBox2.Enabled        := True;
+   FrConsManif.Edit_NSU_nfe.Enabled     := True;
+   Edit_Busca_chave.Enabled             := True;
+   SpeedButton4.Enabled                 := True;
+   Edit_xJust.Enabled                   := True;
+   if RG_tpEvento.ItemIndex = 3 then
+    Edit_xJust.Color                    := $00C4F0FF
+   else
+    Edit_xJust.Color                    := $00DDDDDD;
+   //----------------------------------------------------------------------------
+  end
+ else
+  begin
+   // Dessativa componentes dutante a consulta ----------------------------------
+   //BlockInput(True); // Desabilita mouse e teclado
+   dxTLBuscaChave.Enabled               := False;
+   RadioGroup1.Enabled                  := False;
+   FrConsManif.ComboBox1.Enabled        := False;
+   FrConsManif.ComboBox2.Enabled        := False;
+   FrConsManif.Edit_NSU_nfe.Enabled     := False;
+   Edit_Busca_chave.Enabled             := False;
+   SpeedButton4.Enabled                 := False;
+   Edit_xJust.Enabled                   := False;
+   Edit_xJust.Color                     := $00DDDDDD;
+   //----------------------------------------------------------------------------
+  end;
+
+end;
+
+//------------------------------------------------------------------------------
+// Função: Atualiza() - Atualiza atravéz da consulta na sefaz
+//         Retorna como parametros true e false
+//         by Edson Lima ; 07/07/2014T1129
+//------------------------------------------------------------------------------
+function TFrBuscaChave.Atualiza(rep : boolean) : Boolean;                       // Habilita ou desabilita componentes
+var
+ cUFAutor, CNPJ, IndNFe, IndEmi, ultNSU, vTpEvento, ANSU   : string;
+ ok, Tem_Doctos, vIni                                      : boolean;
+ i, vReg                                                   : Integer;
+ vSetenta_PorCento                                         : Real;
+
+begin
+
+ Try
+
+  vIni := True;
+  vReg := 0;
+
+  HaDe(False);                                                                  // Habilita ou Desabilita componentes dutante a consulta
+
+  //----------------------------------------------------------------------------
+  // cUFAutor - Unidade Federativa do Destinatário da Nota
+  cUFAutor := DMNFe.ZQuery4['codigo_uf'];
+
+  //----------------------------------------------------------------------------
+
+  // CNPJ do destinatário da NFe
+  CNPJ := DMNFe.ZQuery4['cnpj'];
+
+  //----------------------------------------------------------------------------
+
+  // veja NT 2012/002 pág. 11 para identificar os valores possíveis
+  // Indicador de NF-e consultada:
+  // 0=Todas as NF-e;
+  // 1=Somente as NF-e que ainda não tiveram manifestação do destinatário
+  //   (Desconhecimento da operação, Operação não Realizada ou Confirmação da Operação);
+  // 2=Idem anterior, incluindo as NF-e que também não tiveram a Ciência da Operação.
+  indNFe := IntToStr(FrConsManif.ComboBox1.ItemIndex);
+
+  //----------------------------------------------------------------------------
+
+  // *veja NT 2012/002 pág. 11 para identificar os valores possíveis
+  // Indicador do Emissor da NF-e:
+  // 0=Todos os Emitentes / Remetentes;
+  // 1=Somente as NF-e emitidas por emissores / remetentes que não tenham a mesma
+  //  raiz do CNPJ do destinatário (para excluir as notas fiscais de transferência
+  //  entre filiais).
+  IndEmi := IntToStr(FrConsManif.ComboBox2.ItemIndex);
+
+  //----------------------------------------------------------------------------
+  // veja NT 2012/002 pág. 11 para identificar os valores possíveis
+  // Último NSU recebido pela Empresa.
+  // Caso seja informado com zero, ou com um NSU muito antigo, a consulta retornará
+  // unicamente as notas fiscais que tenham sido recepcionadas nos últimos 15 dias.
+
+  if FrConsManif.CheckBox1.Checked then
+   ultNSU := FrConsManif.Edit_NSU_nfe.Text
+  else
+   ultNSU := '0';
+
+  //----------------------------------------------------------------------------
+
+  // ANSU - NSU específico
+  ANSU := '';
+
+  //----------------------------------------------------------------------------
+
+  Tem_Doctos                          := True;
+
+  if rep then
+   begin
+    FrConsManif.Gauge1.Progress       := gGauge;
+    FrConsManif.Gauge1.MaxValue       := gGauMa;
+    ultNSU                            := gUltNSU;
+   end
+  else
+   begin
+    FrConsManif.Gauge1.Progress       := 0;
+    FrConsManif.Gauge1.MaxValue       := 100;
+   end;
+
+  if rep then
+   begin
+    FrConsManif.Edit1.Text            := gTP;
+    FrConsManif.Edit2.Text            := gDL;
+    FrConsManif.Edit3.Text            := gRN;
+    FrConsManif.Edit4.Text            := gRS;
+   end
+  else
+   begin
+    FrConsManif.Edit1.Text            := '0';
+    FrConsManif.Edit2.Text            := '0';
+    FrConsManif.Edit3.Text            := '0';
+    FrConsManif.Edit4.Text            := '0';
+    gTP                               := '0';
+    gDL                               := '0';
+    gRN                               := '0';
+    gRS                               := '0';
+   end;
+
+  // FrConsManif.Gauge1.MaxValue := 100;                                        // by Edson Lima ; 2016-4-28T1453 ; Foi inibido nesta data
+
+  while Tem_Doctos do
+   begin
+
+    if gAbortar then
+     if Application.Messagebox('Gostaria de abortar o processo de' + Chr(13) +
+                               'Consolidação do manifesto ?','Confirme',
+                                mb_YesNo+mb_ICONQUESTION+mb_DefButton2) = IdYes then //No then
+      begin
+       FrGBNFe.gravarNSU();
+       Exit;
+      end
+     else
+      begin
+       gAbortar := False;
+      end;
+
+    Tem_Doctos := False;
+
+    FrGBNFe.ACBrNFe1.NotasFiscais.Clear ;
+    FrGBNFe.ACBrNFe1.EventoNFe.Evento.Clear ;
+    FrGBNFe.AcbrNFe1.WebServices.ConsNFeDest.retConsNFeDest.ret.Clear ;
+
+    try
+
+     FrGBNFe.ACBrNFe1.DistribuicaoDFe(StrToInt(cUFAutor),CNPJ,ultNSU,ANSU);
+
+     //-------------------------------------------------------------------------
+     // by Edson Lima ; 2015-9-1T0801 ; Define o contador da toolbar
+
+     if vIni then
+      begin
+       vReg := (StrToInt(FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.maxNSU) -
+                StrToInt(FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.ultNSU));
+       FrConsManif.Gauge1.MaxValue := vReg;
+       vIni := false;
+      end;
+
+     //-------------------------------------------------------------------------
+
+    except
+
+     HaDe(True);                                                                // Habilita ou Desabilita componentes dutante a consulta
+     result := true;
+     exit;
+
+    end ;
+
+    if (FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.ultNSU =
+        FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.maxNSU) then
+     Tem_Doctos := False
+    else
+     Tem_Doctos := True;
+
+    FrConsManif.Edit1.Text := IntToStr(StrToInt(FrConsManif.Edit1.text) + 1);
+    gTP                    := FrConsManif.Edit1.Text;
+
+    ultNSU  := FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.ultNSU;
+    gUltNSU := FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.ultNSU;
+    gGauge  := FrConsManif.Gauge1.Progress;
+    gGauMa  := FrConsManif.Gauge1.MaxValue;
+
+    if FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.cStat = 138 then
+      FrConsManif.Edit2.Text := IntToStr(StrToInt(FrConsManif.Edit2.text) + 1);
+
+    gDL                      := FrConsManif.Edit2.Text;
+
+    // by Edson Lima ; 2015-9-1T1734 ; Finalizar a barra de progresso
+    if not Tem_Doctos then
+     begin
+      FrConsManif.Gauge1.MaxValue   := vReg;
+      FrConsManif.Gauge1.Progress   := vReg;
+     end;
+
+    // Retorno de NFe Destinadas
+    for i := 0 to FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Count -1 do
+     begin
+      if Trim(FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.chNFe) <> '' then
+       begin
+
+        //---------------------------------------------------------------------------
+        // by Edson Lima ; 2015-9-1T08010 ; processa a barra de progresso
+
+        if Tem_Doctos then
+         begin
+          FrConsManif.Gauge1.Progress   := FrConsManif.Gauge1.Progress + 1;
+         end;
+
+        //-----------------------------------------------------------------------------
+        // Grava na tabela de consultas
+        // by Edson Lima ; 11-9-2012 ; 17:22
+        //-----------------------------------------------------------------------------
+
+        // Define o parametro inicial do codigo da loja ; by Edson Lima ;
+        DMNFe.ZqryGeral.DisableControls;
+        DMNFe.ZqryGeral.Close;
+        DMNFe.ZqryGeral.SQL.Clear;
+        DMNFe.ZqryGeral.SQL.Add( ' Select                                          ' );
+        DMNFe.ZqryGeral.SQL.Add( '  t1.Xml_Aut       as  MDFe_Xml_Aut              ' );
+        DMNFe.ZqryGeral.SQL.Add( ' ,t1.Xml_Bai       as  MDFe_Xml_Bai              ' );
+        DMNFe.ZqryGeral.SQL.Add( ' ,t1.idLote        as  MDFe_idLote               ' );
+        DMNFe.ZqryGeral.SQL.Add( ' ,t1.NSU           as  MDFe_NSU                  ' );
+        DMNFe.ZqryGeral.SQL.Add( ' ,t1.Codigo_loja   as  MDFe_Codigo_loja          ' );
+        DMNFe.ZqryGeral.SQL.Add( ' ,t1.Chave_nfe     as  MDFe_Chave_nfe            ' );
+        DMNFe.ZqryGeral.SQL.Add( ' ,t1.Evento        as  MDFe_Evento               ' );
+        DMNFe.ZqryGeral.SQL.Add( ' ,t1.cnpj_cpf      as  MDFe_cnpj_cpf             ' );
+        DMNFe.ZqryGeral.SQL.Add( ' ,t1.xNome         as  MDFe_xNome                ' );
+        DMNFe.ZqryGeral.SQL.Add( ' ,t1.IE            as  MDFe_IE                   ' );
+        DMNFe.ZqryGeral.SQL.Add( ' ,t1.dEmi          as  MDFe_dEmi                 ' );
+        DMNFe.ZqryGeral.SQL.Add( ' ,t1.tpNF          as  MDFe_tpNF                 ' );
+        DMNFe.ZqryGeral.SQL.Add( ' ,t1.vNF           as  MDFe_vNF                  ' );
+        DMNFe.ZqryGeral.SQL.Add( ' ,t1.digVal        as  MDFe_digVal               ' );
+        DMNFe.ZqryGeral.SQL.Add( ' ,t1.dhRecbto      as  MDFe_dhRecbto             ' );
+        DMNFe.ZqryGeral.SQL.Add( ' ,t1.cStat         as  MDFe_cStat                ' );
+        DMNFe.ZqryGeral.SQL.Add( ' ,t1.xMotivo       as  MDFe_xMotivo              ' );
+        DMNFe.ZqryGeral.SQL.Add( ' ,t1.cSitNFe       as  MDFe_cSitNFe              ' );
+        DMNFe.ZqryGeral.SQL.Add( ' ,t1.cSitConf      as  MDFe_cSitConf             ' );
+        DMNFe.ZqryGeral.SQL.Add( ' ,t2.cnpj          as  MEMI_cnpj                 ' );
+        DMNFe.ZqryGeral.SQL.Add( '                                                 ' );
+        DMNFe.ZqryGeral.SQL.Add( ' from nfe_MDFe t1 join emitente t2 on t1.Codigo_loja = t2.Codigo_loja ' );
+        DMNFe.ZqryGeral.SQL.Add( '  where t1.Codigo_loja = :Codigo_loja and        ' );
+        DMNFe.ZqryGeral.SQL.Add( '        t2.Codigo_loja = :Codigo_loja and        ' );
+        DMNFe.ZqryGeral.SQL.Add( '  isnull( t1.Chave_nfe, '''')  Like ''%'' + :Chave_nfe + ''%'' ' );
+        DMNFe.ZqryGeral.SQL.Add( '  Order by t1.dEmi desc                          ' );
+
+        DMNFe.ZqryGeral.ParamByName('Codigo_loja').AsInteger  := StrToInt(gCodEmp);
+        DMNFe.ZqryGeral.ParamByName('Chave_nfe').AsString     := FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.chNFe;
+        DMNFe.ZqryGeral.Open;
+
+        // mostra a NSU no campo de NSU
+        FrConsManif.Edit_NSU_nfe.Text := FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.ultNSU;
+
+        if DMNFe.ZqryGeral.IsEmpty then
+         begin
+          FrConsManif.Edit3.Text := IntToStr(StrToInt(FrConsManif.Edit3.text) + 1);
+
+          gRN                    := FrConsManif.Edit3.Text;
+
+          // Grava novo registro MDe
+          try
+           DMNFe.ZqryGeral.DisableControls;
+           DMNFe.ZqryGeral.Close;
+           DMNFe.ZqryGeral.SQL.Clear;
+           DMNFe.ZqryGeral.SQL.Add( 'Insert into nfe_MDFe (                       ' );
+           DMNFe.ZqryGeral.SQL.Add( '      Xml_Aut                                ' );
+           DMNFe.ZqryGeral.SQL.Add( '   ,  Xml_Bai                                ' );
+           DMNFe.ZqryGeral.SQL.Add( '   ,  NSU                                    ' );
+           DMNFe.ZqryGeral.SQL.Add( '   ,  Codigo_loja                            ' );
+           DMNFe.ZqryGeral.SQL.Add( '   ,  Chave_nfe                              ' );
+           DMNFe.ZqryGeral.SQL.Add( '   ,  Evento                                 ' );
+           DMNFe.ZqryGeral.SQL.Add( '   ,  cnpj_cpf                               ' );
+           DMNFe.ZqryGeral.SQL.Add( '   ,  xNome                                  ' );
+           DMNFe.ZqryGeral.SQL.Add( '   ,  IE                                     ' );
+           DMNFe.ZqryGeral.SQL.Add( '   ,  dEmi                                   ' );
+           DMNFe.ZqryGeral.SQL.Add( '   ,  tpNF                                   ' );
+           DMNFe.ZqryGeral.SQL.Add( '   ,  vNF                                    ' );
+           DMNFe.ZqryGeral.SQL.Add( '   ,  digVal                                 ' );
+           DMNFe.ZqryGeral.SQL.Add( '   ,  dhRecbto                               ' );
+           DMNFe.ZqryGeral.SQL.Add( '   ,  cStat                                  ' );
+           DMNFe.ZqryGeral.SQL.Add( '   ,  xMotivo                                ' );
+           DMNFe.ZqryGeral.SQL.Add( '   ,  cSitNFe                                ' );
+           DMNFe.ZqryGeral.SQL.Add( '   ,  cSitConf                               ' );
+           DMNFe.ZqryGeral.SQL.Add( '   ,  id                                     ' );
+           DMNFe.ZqryGeral.SQL.Add( '                    )                        ' );
+           DMNFe.ZqryGeral.SQL.Add( '  Values            (                        ' );
+           DMNFe.ZqryGeral.SQL.Add( '     :Xml_Aut                                ' );
+           DMNFe.ZqryGeral.SQL.Add( '   , :Xml_Bai                                ' );
+           DMNFe.ZqryGeral.SQL.Add( '   , :NSU                                    ' );
+           DMNFe.ZqryGeral.SQL.Add( '   , :Codigo_loja                            ' );
+           DMNFe.ZqryGeral.SQL.Add( '   , :Chave_nfe                              ' );
+           DMNFe.ZqryGeral.SQL.Add( '   , :Evento                                 ' );
+           DMNFe.ZqryGeral.SQL.Add( '   , :cnpj_cpf                               ' );
+           DMNFe.ZqryGeral.SQL.Add( '   , :xNome                                  ' );
+           DMNFe.ZqryGeral.SQL.Add( '   , :IE                                     ' );
+           DMNFe.ZqryGeral.SQL.Add( '   , :dEmi                                   ' );
+           DMNFe.ZqryGeral.SQL.Add( '   , :tpNF                                   ' );
+           DMNFe.ZqryGeral.SQL.Add( '   , :vNF                                    ' );
+           DMNFe.ZqryGeral.SQL.Add( '   , :digVal                                 ' );
+           DMNFe.ZqryGeral.SQL.Add( '   , :dhRecbto                               ' );
+           DMNFe.ZqryGeral.SQL.Add( '   , :cStat                                  ' );
+           DMNFe.ZqryGeral.SQL.Add( '   , :xMotivo                                ' );
+           DMNFe.ZqryGeral.SQL.Add( '   , :cSitNFe                                ' );
+           DMNFe.ZqryGeral.SQL.Add( '   , :cSitConf                               ' );
+           DMNFe.ZqryGeral.SQL.Add( '   , :id                                     ' );
+           DMNFe.ZqryGeral.SQL.Add( '                    )                        ' );
+
+           //Case FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.cSitConf of
+           // smdSemManifestacao       : DMNFe.ZqryGeral.ParamByName('Xml_Aut'   ).Value  := '0';
+           // smdConfirmada            : DMNFe.ZqryGeral.ParamByName('Xml_Aut'   ).Value  := '1';
+           // smdDesconhecida          : DMNFe.ZqryGeral.ParamByName('Xml_Aut'   ).Value  := '0';
+           // smdOperacaoNaoRealizada  : DMNFe.ZqryGeral.ParamByName('Xml_Aut'   ).Value  := '0';
+           // smdCiencia               : DMNFe.ZqryGeral.ParamByName('Xml_Aut'   ).Value  := '1';
+           //end;
+
+           DMNFe.ZqryGeral.ParamByName('Xml_Aut'     ).AsString  := '0';        // Provisório
+
+           //Case FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.cSitConf of
+           // smdSemManifestacao       : DMNFe.ZqryGeral.ParamByName('Xml_Bai'   ).Value  := '0';
+           // smdConfirmada            : DMNFe.ZqryGeral.ParamByName('Xml_Bai'   ).Value  := '1';
+           // smdDesconhecida          : DMNFe.ZqryGeral.ParamByName('Xml_Bai'   ).Value  := '0';
+           // smdOperacaoNaoRealizada  : DMNFe.ZqryGeral.ParamByName('Xml_Bai'   ).Value  := '0';
+           // smdCiencia               : DMNFe.ZqryGeral.ParamByName('Xml_Bai'   ).Value  := '1';
+           //end;
+
+           DMNFe.ZqryGeral.ParamByName('Xml_Bai'    ).AsString   := '0';        // Provisório
+
+           DMNFe.ZqryGeral.ParamByName('NSU'        ).AsString   := FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].NSU;
+           DMNFe.ZqryGeral.ParamByName('Codigo_loja').AsInteger  := StrToInt(gCodEmp);
+           DMNFe.ZqryGeral.ParamByName('Chave_nfe'  ).AsString   := FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.chNFe;
+           DMNFe.ZqryGeral.ParamByName('Evento'     ).AsString   := '0';
+           DMNFe.ZqryGeral.ParamByName('cnpj_cpf'   ).Value      := FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.CNPJCPF;
+           DMNFe.ZqryGeral.ParamByName('xNome'      ).Value      := Copy(FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.xNome, 1, 60);
+           DMNFe.ZqryGeral.ParamByName('IE'         ).Value      := FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.IE;
+           DMNFe.ZqryGeral.ParamByName('dEmi'       ).AsString   := FormatDateTime('yyyy/mm/dd', FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.dhEmi);
+           Case FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.tpNF of
+            tnEntrada : DMNFe.ZqryGeral.ParamByName('tpNF'       ).AsString  := '0';
+            tnSaida   : DMNFe.ZqryGeral.ParamByName('tpNF'       ).AsString  := '1';
+           end;
+           DMNFe.ZqryGeral.ParamByName('vNF'        ).AsFloat    := FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.vNF;
+           DMNFe.ZqryGeral.ParamByName('digVal'     ).Value      := FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.digVal;
+           DMNFe.ZqryGeral.ParamByName('dhRecbto'   ).AsString   := FormatDateTime('yyyy/mm/dd hh:nn:ss', FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.dhRecbto);
+           DMNFe.ZqryGeral.ParamByName('cStat'      ).Value      := FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.cStat;
+           DMNFe.ZqryGeral.ParamByName('xMotivo'    ).Value      := FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.xMotivo;
+           Case FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.cSitNFe of
+            snAutorizado : DMNFe.ZqryGeral.ParamByName('cSitNFe'    ).AsString  := '1';
+            snDenegado   : DMNFe.ZqryGeral.ParamByName('cSitNFe'    ).AsString  := '2';
+            snCancelado  : DMNFe.ZqryGeral.ParamByName('cSitNFe'    ).AsString  := '3';
+            snEncerrado  : DMNFe.ZqryGeral.ParamByName('cSitNFe'    ).AsString  := '4';
+           end;
+           Case FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.cSitNFe of
+            snAutorizado :
+             begin
+
+              //Case FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.cSitConf of
+              // smdSemManifestacao       : DMNFe.ZqryGeral.ParamByName('cSitConf'   ).Value  := 0;
+              // smdConfirmada            : DMNFe.ZqryGeral.ParamByName('cSitConf'   ).Value  := 1;
+              // smdDesconhecida          : DMNFe.ZqryGeral.ParamByName('cSitConf'   ).Value  := 2;
+              // smdOperacaoNaoRealizada  : DMNFe.ZqryGeral.ParamByName('cSitConf'   ).Value  := 3;
+              // smdCiencia               : DMNFe.ZqryGeral.ParamByName('cSitConf'   ).Value  := 4;
+              //end;
+
+              DMNFe.ZqryGeral.ParamByName('cSitConf'   ).AsInteger  := 0;       // Provisório
+
+             end;
+
+            // Result := EnumeradoToStr(t, ['1', '2', '3', '4'], [snAutorizado, snDenegado, snCancelado, snEncerrado]);
+            //snDenegado                  : DMNFe.ZqryGeral.ParamByName('cSitConf'   ).Value  := 5;        // 2
+            //snCancelado                 : DMNFe.ZqryGeral.ParamByName('cSitConf'   ).Value  := 6;        // 3
+            //snEncerrado                 : DMNFe.ZqryGeral.ParamByName('cSitConf'   ).Value  := 7;        // 4
+           end;
+
+           //Case FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.cSitConf of
+           // smdSemManifestacao       : vTpEvento := '';
+           // smdConfirmada            : vTpEvento := '210200';
+           // smdDesconhecida          : vTpEvento := '210210';
+           // smdOperacaoNaoRealizada  : vTpEvento := '210220';
+           // smdCiencia               : vTpEvento := '210240';
+           //end;
+
+           vTpEvento := '';                                                     // Provisório
+
+           //if FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.cSitConf <> smdSemManifestacao then
+           // begin
+           //  DMNFe.ZqryGeral.ParamByName('Evento'     ).Value  := '1';
+           //  DMNFe.ZqryGeral.ParamByName('id'         ).Value  := 'ID' + vTpEvento + FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.chNFe + '1';
+           // end
+           //else
+           // begin
+           //  DMNFe.ZqryGeral.ParamByName('id'         ).Value  := '';
+           //  DMNFe.ZqryGeral.ParamByName('Evento'     ).Value  := '0';
+           // end;
+
+           // Provisório
+           DMNFe.ZqryGeral.ParamByName('Evento'     ).AsString  := '1';
+           DMNFe.ZqryGeral.ParamByName('id'         ).AsString  := 'ID' + vTpEvento + FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.chNFe + '1';
+
+           DMNFe.ZConnection1.StartTransaction;
+           DMNFe.ZqryGeral.ExecSQL;
+          except
+           HaDe(True);                                                          // Habilita ou Desabilita componentes dutante a consulta
+           DMNFe.ZConnection1.Rollback;
+           Application.Messagebox('ERRO: MDe não criada !','Atenção!',MB_ICONERROR+mb_ok);
+           result := true;
+          end;
+         end   // by Edson Lima ; 2015-9-1T1623
+        else
+         begin
+          FrConsManif.Edit4.Text := IntToStr(StrToInt(FrConsManif.Edit4.text) + 1);
+
+          gRS        := FrConsManif.Edit4.Text;
+          // Grava novo registro MDe
+          //try
+          // DMNFe.ZqryGeral.DisableControls;
+          // DMNFe.ZqryGeral.Close;
+          // DMNFe.ZqryGeral.SQL.Clear;
+          // DMNFe.ZqryGeral.SQL.Add( 'update nfe_MDFe  set                        ' );
+          // DMNFe.ZqryGeral.SQL.Add( '      Xml_Aut       = :Xml_Aut              ' );
+          // DMNFe.ZqryGeral.SQL.Add( '   ,  Xml_Bai       = :Xml_Bai              ' );
+          // DMNFe.ZqryGeral.SQL.Add( '   ,  NSU           = :NSU                  ' );
+          // DMNFe.ZqryGeral.SQL.Add( '   ,  cnpj_cpf      = :cnpj_cpf             ' );
+          // DMNFe.ZqryGeral.SQL.Add( '   ,  xNome         = :xNome                ' );
+          // DMNFe.ZqryGeral.SQL.Add( '   ,  IE            = :IE                   ' );
+          // //DMNFe.ZqryGeral.SQL.Add( '   ,  dEmi          = :dEmi                 ' );
+          // DMNFe.ZqryGeral.SQL.Add( '   ,  tpNF          = :tpNF                 ' );
+          // DMNFe.ZqryGeral.SQL.Add( '   ,  vNF           = :vNF                  ' );
+          // DMNFe.ZqryGeral.SQL.Add( '   ,  digVal        = :digVal               ' );
+          // DMNFe.ZqryGeral.SQL.Add( '   ,  dhRecbto      = :dhRecbto             ' );
+          // //DMNFe.ZqryGeral.SQL.Add( '   ,  cStat         = :cStat                ' );
+          // //DMNFe.ZqryGeral.SQL.Add( '   ,  xMotivo       = :xMotivo              ' );
+          // DMNFe.ZqryGeral.SQL.Add( '   ,  cSitNFe       = :cSitNFe              ' );
+          // DMNFe.ZqryGeral.SQL.Add( '   ,  cSitConf      = :cSitConf             ' );
+          // DMNFe.ZqryGeral.SQL.Add( '                                            ' );
+          // DMNFe.ZqryGeral.SQL.Add( '  where Codigo_loja = :Codigo_loja and      ' );
+          // DMNFe.ZqryGeral.SQL.Add( '  isnull( Chave_nfe, '''')  Like ''%'' + :Chave_nfe + ''%'' ' );
+          //
+          // DMNFe.ZqryGeral.ParamByName('Codigo_loja').AsInteger  := StrToInt(gCodEmp);
+          // DMNFe.ZqryGeral.ParamByName('Chave_nfe').AsString     := FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.chNFe;
+          //
+          // //Case FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.cSitConf of
+          // // smdSemManifestacao       : DMNFe.ZqryGeral.ParamByName('Xml_Aut'   ).Value  := '0';
+          // // smdConfirmada            : DMNFe.ZqryGeral.ParamByName('Xml_Aut'   ).Value  := '1';
+          // // smdDesconhecida          : DMNFe.ZqryGeral.ParamByName('Xml_Aut'   ).Value  := '0';
+          // // smdOperacaoNaoRealizada  : DMNFe.ZqryGeral.ParamByName('Xml_Aut'   ).Value  := '0';
+          // // smdCiencia               : DMNFe.ZqryGeral.ParamByName('Xml_Aut'   ).Value  := '1';
+          // //end;
+          //
+          // DMNFe.ZqryGeral.ParamByName('Xml_Aut'   ).Value  := '0';             // Provisório
+          //
+          // //Case FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.cSitConf of
+          // // smdSemManifestacao       : DMNFe.ZqryGeral.ParamByName('Xml_Bai'   ).Value  := '0';
+          // // smdConfirmada            : DMNFe.ZqryGeral.ParamByName('Xml_Bai'   ).Value  := '1';
+          // // smdDesconhecida          : DMNFe.ZqryGeral.ParamByName('Xml_Bai'   ).Value  := '0';
+          // // smdOperacaoNaoRealizada  : DMNFe.ZqryGeral.ParamByName('Xml_Bai'   ).Value  := '0';
+          // // smdCiencia               : DMNFe.ZqryGeral.ParamByName('Xml_Bai'   ).Value  := '1';
+          // //end;
+          //
+          // DMNFe.ZqryGeral.ParamByName('Xml_Bai'   ).Value  := '0';             // Provisório
+          //
+          // DMNFe.ZqryGeral.ParamByName('NSU'        ).AsString := FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].NSU;
+          // DMNFe.ZqryGeral.ParamByName('cnpj_cpf'   ).Value    := FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.CNPJCPF;
+          // DMNFe.ZqryGeral.ParamByName('xNome'      ).Value    := FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.xNome;
+          // DMNFe.ZqryGeral.ParamByName('IE'         ).Value    := FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.IE;
+          // //DMNFe.ZqryGeral.ParamByName('dEmi'       ).Value    := FormatDateTime('yyyy/mm/dd', FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.dEmi);
+          // Case FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.tpNF of
+          //  tnEntrada : DMNFe.ZqryGeral.ParamByName('tpNF'       ).Value  := '0';
+          //  tnSaida   : DMNFe.ZqryGeral.ParamByName('tpNF'       ).Value  := '1';
+          // end;
+          // DMNFe.ZqryGeral.ParamByName('vNF'        ).AsFloat  := FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.vNF;
+          // DMNFe.ZqryGeral.ParamByName('digVal'     ).Value    := FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.digVal;
+          // DMNFe.ZqryGeral.ParamByName('dhRecbto'   ).Value    := DateToStr(FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.dhRecbto);
+          //
+          // Case FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.cSitNFe of
+          //  snAutorizado : DMNFe.ZqryGeral.ParamByName('cSitNFe'    ).Value  := '1';
+          //  snDenegado   : DMNFe.ZqryGeral.ParamByName('cSitNFe'    ).Value  := '2';
+          //  snCancelado  : DMNFe.ZqryGeral.ParamByName('cSitNFe'    ).Value  := '3';
+          //  snEncerrado  : DMNFe.ZqryGeral.ParamByName('cSitNFe'    ).Value  := '4';
+          // end;
+          //
+          // Case FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.cSitNFe of
+          //  snAutorizado :
+          //   begin
+          //
+          //    //Case FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.cSitConf of
+          //    // smdSemManifestacao       : DMNFe.ZqryGeral.ParamByName('cSitConf'   ).Value  := 0;
+          //    // smdConfirmada            : DMNFe.ZqryGeral.ParamByName('cSitConf'   ).Value  := 1;
+          //    // smdDesconhecida          : DMNFe.ZqryGeral.ParamByName('cSitConf'   ).Value  := 2;
+          //    // smdOperacaoNaoRealizada  : DMNFe.ZqryGeral.ParamByName('cSitConf'   ).Value  := 3;
+          //    // smdCiencia               : DMNFe.ZqryGeral.ParamByName('cSitConf'   ).Value  := 4;
+          //    //end;
+          //
+          //    DMNFe.ZqryGeral.ParamByName('cSitConf'   ).Value  := 0;           // Provisório
+          //
+          //   end;
+          //
+          //  // Result := EnumeradoToStr(t, ['1', '2', '3', '4'], [snAutorizado, snDenegado, snCancelado, snEncerrado]);
+          //  snDenegado                  : DMNFe.ZqryGeral.ParamByName('cSitConf'   ).Value  := 5;        // 2
+          //  snCancelado                 : DMNFe.ZqryGeral.ParamByName('cSitConf'   ).Value  := 6;        // 3
+          //  snEncerrado                 : DMNFe.ZqryGeral.ParamByName('cSitConf'   ).Value  := 7;        // 4
+          // end;
+          //
+          // DMNFe.ZConnection1.StartTransaction;
+          // DMNFe.ZqryGeral.ExecSQL;
+          //except
+          // HaDe(True);                                                          // Habilita ou Desabilita componentes dutante a consulta
+          // DMNFe.ZConnection1.Rollback;
+          // Application.Messagebox('ERRO: MDe não alterada !','Atenção!',MB_ICONERROR+mb_ok);
+          // result := true;
+          //end;
+         end;
+
+        //----------------------------------------------------------------------
+
+
+        // Define o parametro inicial do codigo da loja ; by Edson Lima ;
+        DMNFe.ZQuery14.Close;
+        DMNFe.ZQuery14.ParamByName('Codigo_Loja1').AsInteger     := StrToInt(gCodEmp);
+        DMNFe.ZQuery14.ParamByName('Codigo_Loja2').AsInteger     := StrToInt(gCodEmp);
+        case RadioGroup1.ItemIndex of
+         0 : DMNFe.ZQuery14.ParamByName('cSitConf').AsString    := '0';
+         1 : DMNFe.ZQuery14.ParamByName('cSitConf').AsString    := '4';
+         2 : DMNFe.ZQuery14.ParamByName('cSitConf').AsString    := '1';
+         3 : DMNFe.ZQuery14.ParamByName('cSitConf').AsString    := '2';
+         4 : DMNFe.ZQuery14.ParamByName('cSitConf').AsString    := '3';
+         5 : DMNFe.ZQuery14.ParamByName('cSitConf').AsString    := '5';
+         6 : DMNFe.ZQuery14.ParamByName('cSitConf').AsString    := '6';
+         7 : DMNFe.ZQuery14.ParamByName('cSitConf').AsString    := '7';
+         8 : DMNFe.ZQuery14.ParamByName('cSitConf').AsString    := '_';
+        end;
+        if Checkbox1.Checked then
+         begin
+          DMNFe.ZQuery14.ParamByName('DtInicial').AsString        := FormatDateTime('yyyy/mm/dd', dxDateEdit1.Date);
+          DMNFe.ZQuery14.ParamByName('DtFinal').AsString          := FormatDateTime('yyyy/mm/dd', dxDateEdit2.Date);
+         end
+        else
+         begin
+          DMNFe.ZQuery14.ParamByName('DtInicial').AsString        := FormatDateTime('yyyy/mm/dd', Date - 180);
+          DMNFe.ZQuery14.ParamByName('DtFinal').AsString          := FormatDateTime('yyyy/mm/dd', Date);
+         end;
+        DMNFe.ZQuery14.ParamByName('Chave_nfe').AsString        := FrBuscaChave.Edit_Busca_Chave.Text;
+        DMNFe.ZQuery14.Open;
+
+         // Zera o contador de itens selecionados
+         Edit_QSel.Text := '0';
+
+        //-----------------------------------------------------------------------------
+        // by Edson Lima ; 2013-7-26T1609 ; Atualiza dados das TreeLest
+
+         if not DMNFe.ZQuery14.IsEmpty then
+          pAtuTLMDFe(
+                      FrBuscaChave.dxTLBuscaChave,                  FrBuscaChave.dxTLCBuscaChaveCheckSel,
+                      FrBuscaChave.dxTLCBuscaChaveCheckD_S,         FrBuscaChave.dxTLCBuscaChaveCheckD_B,
+                      FrBuscaChave.dxTLBuscaChaveImage,             FrBuscaChave.dxTLCBuscaChaveMaskPosMov,
+                      FrBuscaChave.dxTLCBuscaChaveMaskNSU,          FrBuscaChave.dxTLBuscaChaveMaskCodLoja,
+                      FrBuscaChave.dxTLCBuscaChaveSerie,            FrBuscaChave.dxTLCBuscaChaveMaskNota,
+                      FrBuscaChave.dxTLCBuscaChaveMaskCha,          FrBuscaChave.dxTLCBuscaChaveMaskCnpjCpf,
+                      FrBuscaChave.dxTLCBuscaChaveMaskxNome,        FrBuscaChave.dxTLCBuscaChaveMaskIE,
+                      FrBuscaChave.dxTLCBuscaChaveDateDemi,         FrBuscaChave.dxTLBuscaChaveMaskTpNFe,
+                      FrBuscaChave.dxTLCBuscaChaveCurrencyVNF,      FrBuscaChave.dxTLCBuscaChaveMaskDigVal,
+                      FrBuscaChave.dxTLBuscaChaveMaskdhRecbto,      FrBuscaChave.dxTLCBuscaChaveMaskcSitNFe,
+                      FrBuscaChave.dxTLCBuscaChaveMaskcSitConf,     DMNFe.ZQuery14);
+
+        //-----------------------------------------------------------------------------
+
+       end ;
+     end ;
+
+    // Retorno de NFe Destinadas
+    FrGBNFe.ACBrNFe1.NotasFiscais.Clear ;
+    FrGBNFe.ACBrNFe1.EventoNFe.Evento.Clear ;
+   end ;
+
+  Application.ProcessMessages;
+
+  Application.Messagebox('CONSULTA MANIFESTO: Processo terminado com sucesso!','Atenção!',MB_ICONASTERISK+mb_ok);
+
+  HaDe(True);                                                                   // Habilita ou Desabilita componentes dutante a consulta
+
+  FrGBNFe.gravarNSU();
+
+  result := false;
+
+ except
+
+  HaDe(True);                                                                   // Habilita ou Desabilita componentes dutante a consulta
+
+  FrGBNFe.gravarNSU();
+
+  result := true;
+
+ end;
+
+end;
+
+
+procedure TFrBuscaChave.dxTLBuscaChaveKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+var
+ i                            : integer;
+ Codigo_loja, Chave_nfe       : string;
+ dEmi                         : TDateTime;
+begin
+
+ i           := dxTLBuscaChave.FocusedNumber;
+ Codigo_loja := dxTLBuscaChave.Items[i].Strings[dxTLBuscaChaveMaskCodLoja.Index];
+ Chave_nfe   := dxTLBuscaChave.Items[i].Strings[dxTLCBuscaChaveMaskCha.Index];
+ dEmi        := StrToDateTime(dxTLBuscaChave.Items[i].Strings[dxTLCBuscaChaveDatedEmi.Index]);
+
+ MostraDados(Codigo_loja, Chave_nfe, dEmi);
+
+end;
+
+//------------------------------------------------------------------------------
+// Função: fTrataErro() - Mostra uma mensagem conforme o codigo de retorno
+//         Retorna como parametros true e false
+//         by Edson Lima ; 09/07/2014T1722
+//------------------------------------------------------------------------------
+function TFrBuscaChave.fTrataErro(Status : integer) : Boolean;                                // Mostra uma mensagem conforme o codigo de retorno
+var
+ msn : string;
+begin
+
+ case Status of
+  489 : msn := 'CNPJ informado inválido (DV ou zeros)';
+  490 : msn := 'CPF informado inválido (DV ou zeros)';
+  491 : msn := 'O tpEvento informado inválido';
+  492 : msn := 'O verEvento informado inválido';
+  493 : msn := 'Evento não atende o Schema XML específico';
+  494 : msn := 'Chave de Acesso inexistente';
+  572 : msn := 'Erro Atributo ID do evento não corresponde' + Chr(13) + 'a concatenação dos campos (“ID” +' + Chr(13) + 'tpEvento + chNFe + nSeqEvento)';
+  573 : msn := 'Duplicidade de Evento';
+  574 : msn := 'O autor do evento diverge do' + Chr(13) + 'emissor da NF-e';
+  575 : msn := 'O autor do evento diverge do' + Chr(13) + 'destinatário da NF-e';
+  576 : msn := 'O autor do evento não é um órgão' + Chr(13) + 'autorizado a gerar o evento';
+  577 : msn := 'A data do evento não pode ser' + Chr(13) + 'menor que a data de emissão da NF-e';
+  578 : msn := 'A data do evento não pode ser' + Chr(13) + 'maior que a data do processamento';
+  579 : msn := 'A data do evento não pode ser menor que a' + Chr(13) + 'data de autorização para NF-e não' + Chr(13) + 'emitida em contingência';
+  580 : msn := 'O evento exige uma NF-e autorizada';
+  587 : msn := 'Usar somente o namespace padrão da NF-e';
+  588 : msn := 'Não é permitida a presença de caracteres' + Chr(13) + 'de edição no início/fim da mensagem ou entre as' + Chr(13) + 'tags da mensagem';
+  589 : msn := 'Número do NSU informado superior ao maior' + Chr(13) + 'NSU da base de dados da SEFAZ';
+  593 : msn := 'CNPJ-Base consultado difere do CNPJ-Base' + Chr(13) + 'do Certificado Digital';
+  594 : msn := 'O número de sequencia do evento informado' + Chr(13) + 'é maior que o permitido';
+  595 : msn := 'Obrigatória a informação da' + Chr(13) + 'justificativa do evento';
+  596 : msn := 'Evento apresentado fora do prazo: [prazo vigente]';
+  614 : msn := 'Chave de Acesso inválida (Código UF inválido)';
+  615 : msn := 'Chave de Acesso inválida (Ano menor que' + Chr(13) + '06 ou Ano maior que Ano corrente)';
+  616 : msn := 'Chave de Acesso inválida' + Chr(13) + '(Mês menor que 1 ou Mês maior que 12)';
+  617 : msn := 'Chave de Acesso inválida' + Chr(13) + '(CNPJ zerado ou dígito inválido)';
+  618 : msn := 'Chave de Acesso inválida' + Chr(13) + '(modelo diferente de 55)';
+  619 : msn := 'Chave de Acesso inválida (número NF = 0)';
+  631 : msn := 'CNPJ-Base do Destinatário difere do' + Chr(13) + 'CNPJ-Base do Certificado Digital';
+  632 : msn := 'Solicitação fora de prazo, a NF-e não' + Chr(13) + 'está mais disponível para download';
+  633 : msn := 'NF-e indisponível para download devido' + Chr(13) + 'a ausência de Manifestação do Destinatário';
+  634 : msn := 'Destinatário da NF-e não tem o mesmo' + Chr(13) + 'CNPJ raiz do solicitante do download';
+  650 : msn := 'Evento de "Ciência da Operação" para' + Chr(13) + 'NF-e Cancelada ou Denegada';
+  651 : msn := 'Evento de "Desconhecimento da Operação"' + Chr(13) + 'para NF-e Cancelada ou Denegada';
+  653 : msn := 'NF-e Cancelada, arquivo' + Chr(13) + 'indisponível para download';
+  654 : msn := 'NF-e Denegada, arquivo' + Chr(13) + 'indisponível para download';
+  655 : msn := 'Evento de Ciência da Operação informado' + Chr(13) + 'após a manifestação final do destinatário';
+  656 : msn := 'Consumo Indevido';
+  657 : msn := 'Código do Órgão diverge do órgão autorizador';
+  658 : msn := 'UF do destinatário da Chave de Acesso' + Chr(13) + 'diverge da UF autorizadora';
+ else
+  msn := 'Mensagem não catalogada !';
+ end;
+
+ Application.Messagebox(pchar(msn), pchar('Rejeição - Status:' + ' ' + IntToStr(Status)), MB_ICONASTERISK+mb_ok);
+ result := True;
+
+end;
+
+procedure TFrBuscaChave.SpeedButton7MouseMove(Sender: TObject;
+  Shift: TShiftState; X, Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := SpeedButton7.Hint;
+end;
+
+procedure TFrBuscaChave.dxTLBuscaChaveMouseMove(Sender: TObject;
+  Shift: TShiftState; X, Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := dxTLBuscaChave.Hint;
+end;
+
+procedure TFrBuscaChave.GroupBox15MouseMove(Sender: TObject;
+  Shift: TShiftState; X, Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := GroupBox15.Hint;
+end;
+
+procedure TFrBuscaChave.GroupBox8MouseMove(Sender: TObject;
+  Shift: TShiftState; X, Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := GroupBox8.Hint;
+end;
+
+procedure TFrBuscaChave.GroupBox14MouseMove(Sender: TObject;
+  Shift: TShiftState; X, Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := GroupBox14.Hint;
+end;
+
+procedure TFrBuscaChave.GroupBox10MouseMove(Sender: TObject;
+  Shift: TShiftState; X, Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := GroupBox10.Hint;
+end;
+
+procedure TFrBuscaChave.GroupBox11MouseMove(Sender: TObject;
+  Shift: TShiftState; X, Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := GroupBox11.Hint;
+end;
+
+procedure TFrBuscaChave.GroupBox13MouseMove(Sender: TObject;
+  Shift: TShiftState; X, Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := GroupBox13.Hint;
+end;
+
+procedure TFrBuscaChave.GroupBox17MouseMove(Sender: TObject;
+  Shift: TShiftState; X, Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := GroupBox17.Hint;
+end;
+
+procedure TFrBuscaChave.FormCreate(Sender: TObject);
+begin
+ dxDateEdit1.Date := date() - 20;                                               // Reduz 20 dias
+ dxDateEdit2.Date := date();                                                    // Data atual
+ if not Checkbox1.Checked then
+  begin
+   dxDateEdit1.Enabled := False;
+   dxDateEdit2.Enabled := False;
+  end;
+end;
+
+procedure TFrBuscaChave.dxDateEdit1Exit(Sender: TObject);
+begin
+
+ // Faz a contestação da data inicial antiga
+ if dxDateEdit1.Date < (Date - 73000) then                                      // 73000 dias aproximadamente 200 anos
+  if Application.MessageBox( 'Data inicial muita antiga !', 'GBNFe - Período', mb_IconInformation + MB_OK ) = IdOk then
+   begin
+    dxDateEdit1.SetFocus;
+    exit;
+   end;
+
+ // Faz a contestação da data final no período
+ if dxDateEdit2.Date < dxDateEdit1.Date then
+  if Application.MessageBox( 'A data inicial não pode ser maior que data final !', 'GBNFe - Período', mb_IconInformation + MB_OK ) = IdOk then
+   begin
+    dxDateEdit1.SetFocus;
+    exit;
+   end;
+
+ // Define o parametro inicial do codigo da loja ; by Edson Lima ;
+ DMNFe.ZQuery14.Close;
+  if Checkbox1.Checked then
+   begin
+    DMNFe.ZQuery14.ParamByName('DtInicial').AsString        := FormatDateTime('yyyy/mm/dd', dxDateEdit1.Date);
+    DMNFe.ZQuery14.ParamByName('DtFinal').AsString          := FormatDateTime('yyyy/mm/dd', dxDateEdit2.Date);
+   end
+  else
+   begin
+    DMNFe.ZQuery14.ParamByName('DtInicial').AsString        := FormatDateTime('yyyy/mm/dd', Date - 180);
+    DMNFe.ZQuery14.ParamByName('DtFinal').AsString          := FormatDateTime('yyyy/mm/dd', Date);
+   end;
+ DMNFe.ZQuery14.Open;
+
+ // Zera o contador de itens selecionados
+ Edit_QSel.Text := '0';
+
+ //-----------------------------------------------------------------------------
+ // by Edson Lima ; 2013-7-26T1609 ; Atualiza dados das TreeLest
+
+ pAtuTLMDFe(
+             FrBuscaChave.dxTLBuscaChave,                  FrBuscaChave.dxTLCBuscaChaveCheckSel,
+             FrBuscaChave.dxTLCBuscaChaveCheckD_S,         FrBuscaChave.dxTLCBuscaChaveCheckD_B,
+             FrBuscaChave.dxTLBuscaChaveImage,             FrBuscaChave.dxTLCBuscaChaveMaskPosMov,
+             FrBuscaChave.dxTLCBuscaChaveMaskNSU,          FrBuscaChave.dxTLBuscaChaveMaskCodLoja,
+             FrBuscaChave.dxTLCBuscaChaveSerie,            FrBuscaChave.dxTLCBuscaChaveMaskNota,
+             FrBuscaChave.dxTLCBuscaChaveMaskCha,          FrBuscaChave.dxTLCBuscaChaveMaskCnpjCpf,
+             FrBuscaChave.dxTLCBuscaChaveMaskxNome,        FrBuscaChave.dxTLCBuscaChaveMaskIE,
+             FrBuscaChave.dxTLCBuscaChaveDateDemi,         FrBuscaChave.dxTLBuscaChaveMaskTpNFe,
+             FrBuscaChave.dxTLCBuscaChaveCurrencyVNF,      FrBuscaChave.dxTLCBuscaChaveMaskDigVal,
+             FrBuscaChave.dxTLBuscaChaveMaskdhRecbto,      FrBuscaChave.dxTLCBuscaChaveMaskcSitNFe,
+             FrBuscaChave.dxTLCBuscaChaveMaskcSitConf,     DMNFe.ZQuery14);
+
+ //-----------------------------------------------------------------------------
+
+end;
+
+procedure TFrBuscaChave.dxDateEdit2Exit(Sender: TObject);
+begin
+
+ // Faz a contestação da data final antiga
+ if dxDateEdit2.Date < (Date - 73000) then                                      // 73000 dias aproximadamente 200 anos
+  if Application.MessageBox( 'Data final muito antiga !', 'GBNFe - Período', mb_IconInformation + MB_OK ) = IdOk then
+   begin
+    dxDateEdit2.SetFocus;
+    exit;
+   end;
+
+ // Faz a contestação da data final no período
+ if dxDateEdit2.Date < dxDateEdit1.Date then
+  if Application.MessageBox( 'A data final não pode ser menor que data inicial !', 'GBNFe - Período', mb_IconInformation + MB_OK ) = IdOk then
+   begin
+    dxDateEdit2.SetFocus;
+    exit;
+   end;
+
+ // Define o parametro inicial do codigo da loja ; by Edson Lima ;
+ DMNFe.ZQuery14.Close;
+  if Checkbox1.Checked then
+   begin
+    DMNFe.ZQuery14.ParamByName('DtInicial').AsString        := FormatDateTime('yyyy/mm/dd', dxDateEdit1.Date);
+    DMNFe.ZQuery14.ParamByName('DtFinal').AsString          := FormatDateTime('yyyy/mm/dd', dxDateEdit2.Date);
+   end
+  else
+   begin
+    DMNFe.ZQuery14.ParamByName('DtInicial').AsString        := FormatDateTime('yyyy/mm/dd', Date - 180);
+    DMNFe.ZQuery14.ParamByName('DtFinal').AsString          := FormatDateTime('yyyy/mm/dd', Date);
+   end;
+ DMNFe.ZQuery14.Open;
+
+ // Zera o contador de itens selecionados
+ Edit_QSel.Text := '0';
+ 
+ //-----------------------------------------------------------------------------
+ // by Edson Lima ; 2013-7-26T1609 ; Atualiza dados das TreeLest
+
+ pAtuTLMDFe(
+             FrBuscaChave.dxTLBuscaChave,                  FrBuscaChave.dxTLCBuscaChaveCheckSel,
+             FrBuscaChave.dxTLCBuscaChaveCheckD_S,         FrBuscaChave.dxTLCBuscaChaveCheckD_B,
+             FrBuscaChave.dxTLBuscaChaveImage,             FrBuscaChave.dxTLCBuscaChaveMaskPosMov,
+             FrBuscaChave.dxTLCBuscaChaveMaskNSU,          FrBuscaChave.dxTLBuscaChaveMaskCodLoja,
+             FrBuscaChave.dxTLCBuscaChaveSerie,            FrBuscaChave.dxTLCBuscaChaveMaskNota,
+             FrBuscaChave.dxTLCBuscaChaveMaskCha,          FrBuscaChave.dxTLCBuscaChaveMaskCnpjCpf,
+             FrBuscaChave.dxTLCBuscaChaveMaskxNome,        FrBuscaChave.dxTLCBuscaChaveMaskIE,
+             FrBuscaChave.dxTLCBuscaChaveDateDemi,         FrBuscaChave.dxTLBuscaChaveMaskTpNFe,
+             FrBuscaChave.dxTLCBuscaChaveCurrencyVNF,      FrBuscaChave.dxTLCBuscaChaveMaskDigVal,
+             FrBuscaChave.dxTLBuscaChaveMaskdhRecbto,      FrBuscaChave.dxTLCBuscaChaveMaskcSitNFe,
+             FrBuscaChave.dxTLCBuscaChaveMaskcSitConf,     DMNFe.ZQuery14);
+
+ //-----------------------------------------------------------------------------
+
+end;
+
+procedure TFrBuscaChave.GroupBox12MouseMove(Sender: TObject;
+  Shift: TShiftState; X, Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := GroupBox2.Hint;
+end;
+
+procedure TFrBuscaChave.CheckBox1Click(Sender: TObject);
+begin
+ if not Checkbox1.Checked then
+  begin
+   dxDateEdit1.Enabled := False;
+   dxDateEdit2.Enabled := False;
+  end
+ else
+  begin
+   dxDateEdit1.Enabled := True;
+   dxDateEdit2.Enabled := True;
+  end;
+
+ // Define o parametro inicial do codigo da loja ; by Edson Lima ;
+ DMNFe.ZQuery14.Close;
+  if Checkbox1.Checked then
+   begin
+    DMNFe.ZQuery14.ParamByName('DtInicial').AsString        := FormatDateTime('yyyy/mm/dd', dxDateEdit1.Date);
+    DMNFe.ZQuery14.ParamByName('DtFinal').AsString          := FormatDateTime('yyyy/mm/dd', dxDateEdit2.Date);
+   end
+  else
+   begin
+    DMNFe.ZQuery14.ParamByName('DtInicial').AsString        := FormatDateTime('yyyy/mm/dd', Date - 180);
+    DMNFe.ZQuery14.ParamByName('DtFinal').AsString          := FormatDateTime('yyyy/mm/dd', Date);
+   end;
+ DMNFe.ZQuery14.Open;
+
+ // Zera o contador de itens selecionados
+ Edit_QSel.Text := '0';
+
+ // Zera o contador de itens selecionados
+ Edit_QSel.Text := '0';
+
+ //-----------------------------------------------------------------------------
+ // by Edson Lima ; 2013-7-26T1609 ; Atualiza dados das TreeLest
+
+ pAtuTLMDFe(
+             FrBuscaChave.dxTLBuscaChave,                  FrBuscaChave.dxTLCBuscaChaveCheckSel,
+             FrBuscaChave.dxTLCBuscaChaveCheckD_S,         FrBuscaChave.dxTLCBuscaChaveCheckD_B,
+             FrBuscaChave.dxTLBuscaChaveImage,             FrBuscaChave.dxTLCBuscaChaveMaskPosMov,
+             FrBuscaChave.dxTLCBuscaChaveMaskNSU,          FrBuscaChave.dxTLBuscaChaveMaskCodLoja,
+             FrBuscaChave.dxTLCBuscaChaveSerie,            FrBuscaChave.dxTLCBuscaChaveMaskNota,
+             FrBuscaChave.dxTLCBuscaChaveMaskCha,          FrBuscaChave.dxTLCBuscaChaveMaskCnpjCpf,
+             FrBuscaChave.dxTLCBuscaChaveMaskxNome,        FrBuscaChave.dxTLCBuscaChaveMaskIE,
+             FrBuscaChave.dxTLCBuscaChaveDateDemi,         FrBuscaChave.dxTLBuscaChaveMaskTpNFe,
+             FrBuscaChave.dxTLCBuscaChaveCurrencyVNF,      FrBuscaChave.dxTLCBuscaChaveMaskDigVal,
+             FrBuscaChave.dxTLBuscaChaveMaskdhRecbto,      FrBuscaChave.dxTLCBuscaChaveMaskcSitNFe,
+             FrBuscaChave.dxTLCBuscaChaveMaskcSitConf,     DMNFe.ZQuery14);
+
+ //-----------------------------------------------------------------------------
+
+end;
+
+procedure TFrBuscaChave.SpeedButton3MouseMove(Sender: TObject;
+  Shift: TShiftState; X, Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := SpeedButton3.Hint;
+end;
+
+procedure TFrBuscaChave.SpeedButton3Click(Sender: TObject);
+begin
+
+ FrImportXML.DirectoryListBox1.Directory := gCamXml;
+
+ if ( FrImportXML = nil ) then
+  FrImportXML := TFrImportXML.Create(Application)
+ else
+  FrImportXML := TFrImportXML.Create(Application);
+
+ FrImportXML.ShowModal;
+ FrImportXML.BringToFront;
+
+end;
+
+//******************************************************************************
+// Função que chama a janela da senha master
+// by Edson Lima - 2014-12-8T1724
+//******************************************************************************
+function TFrBuscaChave.SenhaMaster(SenMst : String) : boolean;
+var
+ vSenMst : string;
+begin
+
+ vSenMst := chr(71) + chr(98) + chr(73) + chr(110) + chr(102) + chr(111) + chr(49) + chr(64);
+
+ if SenMst <> '' then
+  begin
+   if SenMst = vSenMst then
+    begin
+     gSenMst := vSenMst;
+     result  := true;
+    end;
+  end;
+
+ // Chama a janela de entrada da senha
+ if ( FrSenMst = nil ) then
+  FrSenMst := TFrSenMst.Create(Application)
+ else
+  FrSenMst := TFrSenMst.Create(Application);
+
+ FrSenMst.ShowModal;
+ FrSenMst.BringToFront;
+ //-----------------------------------
+
+ if gSenMst = vSenMst then
+  result := true
+ else
+  result := false;
+
+end;
+
+procedure TFrBuscaChave.GroupBox1MouseMove(Sender: TObject;
+  Shift: TShiftState; X, Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := GroupBox1.Hint;
+end;
+
+procedure TFrBuscaChave.RG_tpEventoExit(Sender: TObject);
+begin
+ gItem := RG_tpEvento.ItemIndex;
+end;
+
+procedure TFrBuscaChave.ConsultaWeb5CopiaNChavereadeTransferncia1Click(
+  Sender: TObject);
+begin
+
+ dxTLBuscaChaveExit(Sender);
+ FrGBNFe.pCopiaNChaveMDFe(DMNFe.ZQuery14);
+
+ Application.Messagebox('Pronto, chaves já se encontram na área' + chr(13) + 'de transferência do windows!','Informações MDFe:',MB_ICONINFORMATION+mb_ok);
+
+ //-----------------------------------------------------------------------------
+ // by Edson Lima ; 2013-7-26T1609 ; Atualiza dados das TreeLest
+
+ pAtuTLMDFe(
+             FrBuscaChave.dxTLBuscaChave,                  FrBuscaChave.dxTLCBuscaChaveCheckSel,
+             FrBuscaChave.dxTLCBuscaChaveCheckD_S,         FrBuscaChave.dxTLCBuscaChaveCheckD_B,
+             FrBuscaChave.dxTLBuscaChaveImage,             FrBuscaChave.dxTLCBuscaChaveMaskPosMov,
+             FrBuscaChave.dxTLCBuscaChaveMaskNSU,          FrBuscaChave.dxTLBuscaChaveMaskCodLoja,
+             FrBuscaChave.dxTLCBuscaChaveSerie,            FrBuscaChave.dxTLCBuscaChaveMaskNota,
+             FrBuscaChave.dxTLCBuscaChaveMaskCha,          FrBuscaChave.dxTLCBuscaChaveMaskCnpjCpf,
+             FrBuscaChave.dxTLCBuscaChaveMaskxNome,        FrBuscaChave.dxTLCBuscaChaveMaskIE,
+             FrBuscaChave.dxTLCBuscaChaveDateDemi,         FrBuscaChave.dxTLBuscaChaveMaskTpNFe,
+             FrBuscaChave.dxTLCBuscaChaveCurrencyVNF,      FrBuscaChave.dxTLCBuscaChaveMaskDigVal,
+             FrBuscaChave.dxTLBuscaChaveMaskdhRecbto,      FrBuscaChave.dxTLCBuscaChaveMaskcSitNFe,
+             FrBuscaChave.dxTLCBuscaChaveMaskcSitConf,     DMNFe.ZQuery14);
+
+ //-----------------------------------------------------------------------------
+
+end;
+
+procedure TFrBuscaChave.ConsultaWeb5ConsultaWeb1Click(Sender: TObject);
+begin
+
+ dxTLBuscaChaveExit(Sender);
+ FrGBNFe.pPegaChaveCWM(DMNFe.ZQuery14);
+
+ //-----------------------------------------------------------------------------
+ // by Edson Lima ; 2013-7-26T1609 ; Atualiza dados das TreeLest
+
+ pAtuTLMDFe(
+             FrBuscaChave.dxTLBuscaChave,                  FrBuscaChave.dxTLCBuscaChaveCheckSel,
+             FrBuscaChave.dxTLCBuscaChaveCheckD_S,         FrBuscaChave.dxTLCBuscaChaveCheckD_B,
+             FrBuscaChave.dxTLBuscaChaveImage,             FrBuscaChave.dxTLCBuscaChaveMaskPosMov,
+             FrBuscaChave.dxTLCBuscaChaveMaskNSU,          FrBuscaChave.dxTLBuscaChaveMaskCodLoja,
+             FrBuscaChave.dxTLCBuscaChaveSerie,            FrBuscaChave.dxTLCBuscaChaveMaskNota,
+             FrBuscaChave.dxTLCBuscaChaveMaskCha,          FrBuscaChave.dxTLCBuscaChaveMaskCnpjCpf,
+             FrBuscaChave.dxTLCBuscaChaveMaskxNome,        FrBuscaChave.dxTLCBuscaChaveMaskIE,
+             FrBuscaChave.dxTLCBuscaChaveDateDemi,         FrBuscaChave.dxTLBuscaChaveMaskTpNFe,
+             FrBuscaChave.dxTLCBuscaChaveCurrencyVNF,      FrBuscaChave.dxTLCBuscaChaveMaskDigVal,
+             FrBuscaChave.dxTLBuscaChaveMaskdhRecbto,      FrBuscaChave.dxTLCBuscaChaveMaskcSitNFe,
+             FrBuscaChave.dxTLCBuscaChaveMaskcSitConf,     DMNFe.ZQuery14);
+
+ //-----------------------------------------------------------------------------
+
+end;
+
+procedure TFrBuscaChave.SbImprMDFe1Click(Sender: TObject);
+begin
+ FrGBNFe.BitBtn10Click(Sender);
+end;
+
+procedure TFrBuscaChave.ExcluirxmlsTemp1Click(Sender: TObject);
+begin
+ FrGBNFe.ConsultaWeb5inuClick(Sender);
+end;
+
+procedure TFrBuscaChave.SpeedButton51Click(Sender: TObject);
+begin
+ FrGBNFe.SpeedButton2Click(Sender);
+end;
+
+procedure TFrBuscaChave.SpeedButtonClick(Sender: TObject);
+begin
+ FrGBNFe.SpeedButton1Click(Sender);
+end;
+
+//------------------------------------------------------------------------------
+// Atualizar registro de notas manifestadas conforme sefaz
+// by Edson Lima ; 2016-12-20T1448 ;
+//------------------------------------------------------------------------------
+procedure TFrBuscaChave.AtuMDe();
+var
+ strPathArquivo, aux, vDescr       : string;
+ x, vmE, vmA                       : Integer;
+
+
+{
+ indContador, vmr, vCntNotPro           : integer;
+ lMsg, vCha, vArq, vArI    : String;
+ TemSel                                    : boolean;
+ vCam, vTxt                                : String;
+ SearchRec                                 : TSearchRec;
+ Result,                                   : Integer;
+ vAll, vIdYesNo, vIsChecked                : Boolean;
+}
+
+
+begin
+
+ FrGBNFe.ACBrNFe1.Configuracoes.Geral.VersaoDF := ve310;
+
+ DMNFe.ZQuery14.first;
+
+ while ( not DMNFe.ZQuery14.eof ) do
+  begin
+
+   DMNFe.ZQuery14.FieldByName('Checado').ReadOnly := False;
+
+   if DMNFe.ZQuery14['Checado'] = 'Y' then
+    begin
+
+     vAux             := DMNFe.ZQuery14['MDFe_Chave_nfe'];
+
+     if vAux <> '' then
+      begin
+
+       //-----------------------------------------------------------------------
+       // by Edson Lima ; 2015-9-2T1659 ; Trata o mes pra buscar o xml
+
+       vmE := StrToInt(formatdatetime('mm',  StrToDateTime(DMNFe.ZQuery14['MDFe_dEmi'])));
+       vmA := StrToInt(formatdatetime('mm',  Now));
+
+       strPathArquivo := (gCamXml + formatdatetime('yyyy',StrToDateTime(DMNFe.ZQuery14['MDFe_dEmi']))
+                                  + formatdatetime('mm',  StrToDateTime(DMNFe.ZQuery14['MDFe_dEmi']))
+                                  + '\Down\' + vAux + '-nfe.xml');
+
+       if (vmA > vmE) then
+        begin
+         for x := vmE to vmA do
+          begin
+           if FileExists(strPathArquivo) then
+            break
+           else
+            strPathArquivo := (gCamXml + formatdatetime('yyyy', Now)
+                                       + IntToStrZero(x, 2)
+                                       + '\Down\' + vAux + '-nfe.xml');
+          end;
+        end;
+
+       //----------------------------------------------------------------------
+
+       // Consulta Notas Manifestadas
+       vAux := strPathArquivo;
+       FrGBNFe.ACBrNFe1.NotasFiscais.Clear;
+       FrGBNFe.ACBrNFe1.NotasFiscais.LoadFromFile(vAux);
+       FrGBNFe.ACBrNFe1.Consultar;
+
+       FrGBNFe.memoLog.Clear;
+       FrGBNFe.MemoResp.Lines.Text   := UTF8Encode(FrGBNFe.ACBrNFe1.WebServices.Consulta.RetWS);
+       FrGBNFe.MemoLog.Lines.Add(vDescr);
+       FrGBNFe.MemoLog.Lines.Add('Status');
+       FrGBNFe.MemoLog.Lines.Add('Tipo de Ambiente:'     + TpAmbToStr(FrGBNFe.ACBrNFe1.WebServices.Consulta.TpAmb));
+       FrGBNFe.MemoLog.Lines.Add('Versão do Aplicativo: '+ FrGBNFe.ACBrNFe1.WebServices.Consulta.verAplic);
+       FrGBNFe.MemoLog.Lines.Add('Código do Status: '    + IntToStr(FrGBNFe.ACBrNFe1.WebServices.Consulta.cStat));
+       FrGBNFe.MemoLog.Lines.Add('Código da UF: '        + IntToStr(FrGBNFe.ACBrNFe1.WebServices.Consulta.cUF));
+       FrGBNFe.MemoLog.Lines.Add('Descrição: '           + FrGBNFe.ACBrNFe1.WebServices.Consulta.xMotivo);
+       FrGBNFe.MemoLog.Lines.Add('Mensagem: '            + FrGBNFe.ACBrNFe1.WebServices.Consulta.Msg);
+       FrGBNFe.MemoLog.Lines.Add('Data do recebimento: ' + vartostr(FrGBNFe.ACBrNFe1.WebServices.Consulta.DhRecbto));
+       FrGBNFe.MemoLog.Lines.Add('Protocolo: '           + FrGBNFe.ACBrNFe1.WebServices.Consulta.Protocolo);
+       FrGBNFe.memoRespWS.Lines.Text := UTF8Encode(FrGBNFe.ACBrNFe1.WebServices.Consulta.RetornoWS);
+       FrGBNFe.LoadXML(FrGBNFe.MemoResp, FrGBNFe.WBResposta);
+      end;
+
+       if vartostr(FrGBNFe.ACBrNFe1.WebServices.Consulta.cStat) <> '217' then
+        begin
+        end;
+
+      end;
+      DMNFe.ZQuery14.Next;
+    end;
+
+end;
+
+
+procedure TFrBuscaChave.AtualizarNota1Click(Sender: TObject);
+begin
+ AtuMDe();
+end;
+
+end.

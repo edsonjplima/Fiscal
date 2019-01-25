@@ -1,0 +1,3 @@
+1 - Atenção: excluir o campo (iddest null), antes de rodar o script 7. Depois sera criado outro campo (iddest not null default('0') )
+
+2 - a partir de 09/04/2018 instruir o usuário a atualizar a senha do email

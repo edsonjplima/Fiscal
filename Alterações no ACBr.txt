@@ -1,0 +1,25 @@
+
+Boa tarde amigos do ACBr! dia 10/11/2016 efetuei uma atualização do acbr trank2, obs todo meu sistema já
+funciona na versão trank2 delphi7, e a partir deste dia comecei a receber essa mensagem "Versão do 
+arquivo XML não suportada", sempre que tento rodar o manifestação do destinatário, tentei mudar a 
+versão para ve200, ve300 e ve310 e a atualizei os schemas, mais continuei recebendo essa mesma mensagem,
+hoje dia 14 resolvi voltar a incluir no aplicativo pcnConversaoNFe.pas a ve100, depois de implementado 
+minha aplicação rodou sem a pendencia em anexo. Não sei o como devo proceder: 1- Esperar por novos 
+Schemas ou 2 - Esperar a devida correção pela equipe do acbr?
+Acredito que o CCe também não está funcionando devido os arquivos de schemas ainda estarem na versão 1.00.
+
+---
+
+Eu tive um problema parecido. Bastou apagar alguns arquivos novos na pasta schemas que resolveu. 
+Parece que existe uma versão que ainda não está totalmente implementada no ACBr.
+
+distDFeInt_v1.01.xsd
+resEvento_v1.01.xsd
+resNFe_v1.01.xsd
+retDistDFeInt_v1.01.xsd
+tiposDistDFe_v1.01.xsd
+
+---
+
+// by Edson Lima ; 18/11/2016 - Linha comentada no fonte ACBrNFeDANFeRL
+RLNFe.PrintDialog := not(FMostrarPreview) and (EstaVazio(FImpressora));

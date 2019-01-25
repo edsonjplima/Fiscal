@@ -1,0 +1,546 @@
+unit FrEmail_U;
+
+interface
+
+uses
+ Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+ Dialogs, Buttons, ExtCtrls, ComCtrls, StdCtrls, IdSMTP, Gauges, dxExEdtr,
+ dxTLClms, dxTL, dxCntner, ShellAPi, IniFiles, DBGrids, OleCtrls, SHDocVw,
+ DB, DBTables, Grids, pcnConversaoNFe, ACBrNFe, ACBrUtil, Menus, Mask,
+ pcnConversao, ToolWin, dxDBTLCl, dxGrClms, dxDBCtrl, dxDBGrid,
+ dxEditor, dxEdLib, dxDBELib, OleServer, ExcelXP, dxDBEdtr, RxLookup,
+ DBCtrls, RpDefine, RpRender, RpRenderCanvas, RpRenderPreview, ImgList,
+ IdMessage, IdBaseComponent, IdComponent, IdTCPConnection, IdTCPClient,
+ IdMessageClient, IdMailBox, RpRave, DateUtil, AppEvnts, ACBrBase,
+ ZDataset, frxClass, Printers, IdHTTP, ClipBrd, WinInet, IdFTP, Excel97;
+
+type
+  TFrEmail = class(TForm)
+    stat1: TStatusBar;
+    pnl1: TPanel;
+    pnl2: TPanel;
+    pnl3: TPanel;
+    Sb: TSpeedButton;
+    Sb11: TSpeedButton;
+    pnl4: TPanel;
+    grp1: TGroupBox;
+    grp3: TGroupBox;
+    medt1_Evento: TEdit;
+    grp4: TGroupBox;
+    medt_Cc: TEdit;
+    grp5: TGroupBox;
+    medt1_QSel: TEdit;
+    Mensagem: TMemo;
+    g1: TGauge;
+    Sb12: TSpeedButton;
+    grp2: TGroupBox;
+    eMailsInvalidos: TMemo;
+    pnl5: TPanel;
+    lstTLEmail: TdxTreeList;
+    CodDes: TdxTreeListMaskColumn;
+    Sel: TdxTreeListCheckColumn;
+    Sb13: TSpeedButton;
+    grp6: TGroupBox;
+    medt_Cc1: TEdit;
+    RazSoc: TdxTreeListMaskColumn;
+    eMail: TdxTreeListMaskColumn;
+    PopupMenu: TPopupMenu;
+    ConsultaWeb5MarcaTodas1: TMenuItem;
+    ConsultaWeb5DesmarcarTodas1: TMenuItem;
+    procedure Sb11Click(Sender: TObject);
+    procedure SpeedButtonClick(Sender: TObject);
+    procedure SbClick(Sender: TObject);
+    procedure medt_CcExit(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure Sb12Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure lstTLEmailClick(Sender: TObject);
+    procedure lstTLEmailCustomDrawCell(Sender: TObject; ACanvas: TCanvas;
+      ARect: TRect; ANode: TdxTreeListNode; AColumn: TdxTreeListColumn;
+      ASelected, AFocused, ANewItemRow: Boolean; var AText: String;
+      var AColor: TColor; AFont: TFont; var AAlignment: TAlignment;
+      var ADone: Boolean);
+    procedure lstTLEmailEditing(Sender: TObject; Node: TdxTreeListNode;
+      var Allow: Boolean);
+    procedure lstTLEmailExit(Sender: TObject);
+    procedure Sb13Click(Sender: TObject);
+    procedure ConsultaWeb5MarcaTodas1Click(Sender: TObject);
+    procedure ConsultaWeb5DesmarcarTodas1Click(Sender: TObject);
+    procedure medt_Cc1KeyPress(Sender: TObject; var Key: Char);
+    procedure rg1Click(Sender: TObject);
+    procedure MensagemKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    Procedure pAtribSelM( dxTL : TdxTreeList; CodDes  : TdxTreeListMaskColumn ;
+                                              RazSoc  : TdxTreeListMaskColumn ;
+                                              eMail   : TdxTreeListMaskColumn ;
+                                              ZQ :  TZQuery );                  // Procedure de atribuição de seleção nas querys
+    Procedure pAtuTLeMail( dxTL : TdxTreeList; Sel     :  TdxTreeListCheckColumn ;
+                                               CodDes  : TdxTreeListMaskColumn ;
+                                               RazSoc  : TdxTreeListMaskColumn ;
+                                               eMail   : TdxTreeListMaskColumn ;
+                                               ZQ      :  TZQuery );            // Procedure de atribuição de seleção nas querys
+    procedure pAtuEmail();                                                      // Atualiza a tabela treeliste do email
+    procedure MarcaBlocoM( lstTLEmail : TdxTreeList; blMarca : Boolean; blTodos : Boolean = False ); // Marca bloco de seleção TreeList
+
+  end;
+
+var
+  FrEmail: TFrEmail;
+
+implementation
+
+uses DMNFe_U, FrPar_U, GBNFe_U;
+
+{$R *.dfm}
+
+procedure TFrEmail.Sb11Click(Sender: TObject);
+begin
+ Close;
+end;
+
+procedure TFrEmail.SpeedButtonClick(Sender: TObject);
+begin
+ close;
+end;
+
+procedure TFrEmail.SbClick(Sender: TObject);
+var
+ I, vC                                    : Integer;
+ vP                                       : String;
+ Para, vI                                 : String;
+ vAq                                      : TStrings;
+begin
+
+ lstTLEmailExit(Sender);                                                        // força um exit do treelist
+
+ if MessageDlg('Confirma o envio de email?' + _tipo_emissao + ':', mtConfirmation, [mbYes, mbNo], 0) = mrNo then
+  exit;
+
+ Sb.Enabled   := False;
+ Sb11.Enabled := False;
+ Sb12.Enabled := False;
+ Sb13.Enabled := False;
+
+ g1.Progress := 0;
+
+ stat1.Panels[0].Text := ' Aquarde, Selecionando destinatários!';
+ Application.ProcessMessages;
+
+ g1.MaxValue := DMNFe.ZQuery16.RecordCount;
+
+ eMailsInvalidos.Clear;
+ stat1.Panels[0].Text := ' Enviando eMails!';
+ Application.ProcessMessages;
+
+ DMNFe.ZQuery16.first;
+
+ while ( not DMNFe.ZQuery16.eof )  do
+  begin
+
+   DMNFe.ZQuery16.FieldByName('Checado').ReadOnly := False;
+
+   g1.Progress := (g1.Progress + 1);
+
+   if DMNFe.ZQuery16['Checado'] = 'Y' then
+    begin
+
+     Application.ProcessMessages;
+     FrGBNFe.IdMessage.Clear;
+
+     para := vartostr(DMNFe.ZQuery16['email']);
+
+     // Coleta os email do campo Cc e CCo, separados por virgula ou ponto-e-virgula
+     if ( Length(trim(medt_Cc.Text)) > 0 ) then
+      begin
+
+       for I := 1 to (Length(trim(medt_Cc.Text))+1) do
+        begin
+         if (medt_Cc.Text[I] = ',') or (medt_Cc.Text[I] = ';') or (I = Length(medt_Cc.Text)+1)then
+          begin
+           FrGBNFe.IdMessage.CCList.Add.Address := Trim(vI);
+           vI := '';
+         end
+         else
+          vI := (vI + Trim(medt_Cc.Text[I]));
+        end;
+
+      end;
+
+     //FrGBNFe.IdMessage.CCList.Add.Address := Trim(medt1_idLote.Text);
+
+     vI := '';                                                                  // Limpa variável
+     vC := 0;                                                                   // zera contador
+
+     // Coleta os email do campo para, separados por virgula ou ponto-e-virgula
+     for I := 1 to (Length(Para)+1) do
+      begin
+       if (Para[I] = ',') or (Para[I] = ';') or (I = Length(Para)+1)then
+        begin
+         if vC > 0 then
+          FrGBNFe.IdMessage.CCList.Add.Address := Trim(vI)                      //especifique um email válido
+         else
+          vP := trim(vI);                                                       // Atribui apenas o primeiro email
+
+         vI := '';
+         inc(vC);                                                               // Incrementa 1
+        end
+       else
+        vI := (vI + Trim(Para[I]));
+      end;
+
+     Para := vP;
+
+     // Envia email do xml cancelado
+     FrGBNFe.IdSMTP.Port                         := StrToInt(FrPar.edtSmtpPort.Text);
+     FrGBNFe.IdSMTP.Host                         := FrPar.edtSmtpHost.Text;
+     FrGBNFe.IdSMTP.Username                     := FrPar.edtSmtpUser.Text;
+     FrGBNFe.IdSMTP.Password                     := FrPar.edtSmtpPass.Text;
+     FrGBNFe.IdSMTP.AuthenticationType           := atLogin;
+     FrGBNFe.IdSMTP.UseEhlo                      := True;
+     FrGBNFe.IdSMTP.Connect(0);
+
+     FrGBNFe.IdMessage.From.Name                 := medt1_QSel.Text;
+     FrGBNFe.IdMessage.From.Address              := FrPar.edtSmtpUser.Text;
+     FrGBNFe.IdMessage.From.Name                 := Trim(medt1_QSel.Text);      // Format('%s<%s>', [Trim(FrPar.edtNEeMail.Text), Trim(FrPar.edtSmtpUser.Text)]) ;
+     FrGBNFe.IdMessage.Recipients.EMailAddresses := Para;
+
+     FrGBNFe.IdMessage.Subject                   := medt1_Evento.Text;
+     FrGBNFe.IdMessage.Body.Add('A:');
+     FrGBNFe.IdMessage.Body.Add(DMNFe.ZQuery16['razao_social'] + ',' );
+     FrGBNFe.IdMessage.Body.Add('');
+     FrGBNFe.IdMessage.Body.Add(Mensagem.Lines.Text);
+
+     //FrGBNFe.TIdAttachment.Create(Idmessage.MessageParts, TFileName(xAuxC));
+
+     try
+
+      FrGBNFe.IdSMTP.Send(FrGBNFe.IdMessage);
+      FrGBNFe.IdSMTP.Disconnect;
+
+     except
+
+      FrGBNFe.IdSMTP.Disconnect;
+      eMailsInvalidos.Lines.Add(DMNFe.ZQuery16['razao_social'] + ' - eMail: ' + DMNFe.ZQuery16['email']);
+
+     end;
+
+    end;
+
+   DMNFe.ZQuery16.Next;
+
+  end;
+
+ MessageDlg('Fim de envio do eMail para os destinatários e Cc!', mtInformation, [mbOK], 0);
+
+ Sb.Enabled   := True;
+ Sb11.Enabled := True;
+ Sb12.Enabled := True;
+ Sb13.Enabled := True;
+
+ stat1.Panels[0].Text := ' Envio terminado!';
+ Application.ProcessMessages;
+
+end;
+
+procedure TFrEmail.medt_CcExit(Sender: TObject);
+begin
+
+ if not fValidaEmail(medt_Cc.Text) then
+  begin
+   Application.Messagebox('eMail inválido! ','Atenção!',MB_ICONINFORMATION+mb_ok);
+   medt_Cc.SetFocus;
+  end;
+
+end;
+
+procedure TFrEmail.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+var
+ Direction : Integer;
+begin
+ // Altere a propriedade do KeyPreview do Form pra true
+ Direction := -1;
+ Case Key of
+  VK_NEXT, VK_RETURN : Direction := 0;
+  VK_PRIOR	 : Direction := 1;
+  VK_ESCAPE : Close;
+ end;
+ if Direction <> -1 then
+  begin
+   Perform(WM_NEXTDLGCTL, Direction, 0);
+   key := 0;
+  end;
+end;
+
+procedure TFrEmail.Sb12Click(Sender: TObject);
+begin
+ Close;
+end;
+
+procedure TFrEmail.FormShow(Sender: TObject);
+begin
+
+ // Define o tamanho da janela
+ FrEmail.Height := 564;
+ FrEmail.Left   := 500;
+ FrEmail.Top    := 88;
+ FrEmail.Width  := 830;
+
+ medt1_QSel.Text := FrGBNFe.Label1.Caption;
+
+ pAtuEmail();
+
+end;
+
+procedure TFrEmail.lstTLEmailClick(Sender: TObject);
+begin
+ if lstTLEmail.FocusedColumn = Sel.index then
+  begin
+   lstTLEmail.FocusedColumn := CodDes.index;
+   lstTLEmail.FocusedColumn := Sel.index;
+  end;
+end;
+
+procedure TFrEmail.lstTLEmailCustomDrawCell(Sender: TObject;
+  ACanvas: TCanvas; ARect: TRect; ANode: TdxTreeListNode;
+  AColumn: TdxTreeListColumn; ASelected, AFocused, ANewItemRow: Boolean;
+  var AText: String; var AColor: TColor; AFont: TFont;
+  var AAlignment: TAlignment; var ADone: Boolean);
+begin
+
+ // by Edson Lima ; 2015-10-16T1353 ; Ajusta a cor conforme registro selecionado
+
+ if ( ASelected ) then
+  AFont.Color := $00FF8000
+ else
+  AFont.Color := clWindowFrame;
+
+end;
+
+procedure TFrEmail.lstTLEmailEditing(Sender: TObject; Node: TdxTreeListNode;
+  var Allow: Boolean);
+begin
+
+ Allow := ( lstTLEmail.FocusedColumn = Sel.Index ) or
+          ( node.Strings[Sel.Index] = 'True' );
+
+end;
+
+procedure TFrEmail.lstTLEmailExit(Sender: TObject);
+begin
+
+ // by Edson Lima ; 2013-7-17T1024 ; Chama a procedure de atribuição de seleção da TreeList
+ pAtribSelM(lstTLEmail, CodDes, RazSoc, eMail, DMNFe.ZQuery16);
+
+end;
+
+
+//------------------------------------------------------------------------------
+// Função....: pAtribSel
+// Objetivo..: Atribui seleção da TreeList e Monta a Query referenciada
+// Parametros: Recebe a TreeList e o nome do campo
+// Criação...: 2017/3/24T1043
+// Autor.....: Edson Lima
+//------------------------------------------------------------------------------
+Procedure TFrEmail.pAtribSelM( dxTL : TdxTreeList; CodDes  : TdxTreeListMaskColumn ;
+                                                   RazSoc  : TdxTreeListMaskColumn ;
+                                                   eMail   : TdxTreeListMaskColumn ;
+                                                   ZQ      :  TZQuery );        // Procedure de atribuição de seleção nas querys
+Var
+ I : Integer;
+begin
+
+  for I := 0 to dxTL.Count - 1 do
+  begin
+
+   ZQ.First;
+
+   while (not ZQ.Eof) do
+    begin
+
+     ZQ.FieldByName('Checado').ReadOnly := False;
+
+     if ((ZQ['Codigo']         = dxTL.Items[I].Strings[CodDes.Index])  and
+         (ZQ['razao_social']   = dxTL.Items[I].Strings[RazSoc.Index])  and
+         (ZQ['email']          = dxTL.Items[I].Strings[eMail.Index])) then
+      begin
+       if (dxTL.Items[I].Strings[00] = 'True') then
+        begin
+
+         ZQ.Edit;
+         ZQ['Checado'] := 'Y';
+
+        end
+       else
+        begin
+
+         ZQ.Edit;
+         ZQ['Checado'] := 'N';
+
+        end;
+      end;
+
+     ZQ.Next;
+
+    end;
+  end;
+
+end;
+
+
+//------------------------------------------------------------------------------
+// by Edson Lima ; 2017-3-30T0924
+// atualiza a tabela treeliste do email
+//------------------------------------------------------------------------------
+procedure TFrEmail.pAtuEmail();
+begin
+
+ // Ler e execulta a query de contingência
+ DMNFe.ZQuery16.Close;
+  DMNFe.ZQuery16.ParamByName('razao_social').AsString  := medt_Cc1.Text;
+ DMNFe.ZQuery16.Open;
+
+ // by Edson Lima ; 2017-04-06T1629 ; Atualiza dados das TreeLest dos email dos destinatários
+ pAtuTLeMail(lstTLEmail, Sel, CodDes, RazSoc, eMail, DMNFe.ZQuery16);
+
+end;
+
+//------------------------------------------------------------------------------
+// Função....: pAtuTLeMail
+// Objetivo..: Atualiza dados das TreeLest de eMail
+// Parametros: Recebe a TreeList e a Query - Monta a grade
+// Criação...: 2017/4/7T1010
+// By........: Edson Lima
+//------------------------------------------------------------------------------
+Procedure TFrEmail.pAtuTLeMail( dxTL : TdxTreeList; Sel     :  TdxTreeListCheckColumn ;
+                                                    CodDes  : TdxTreeListMaskColumn ;
+                                                    RazSoc  : TdxTreeListMaskColumn ;
+                                                    eMail   : TdxTreeListMaskColumn ;
+                                                    ZQ      :  TZQuery );
+var
+ nodPed : TdxTreeListNode;
+begin
+ dxTL.ClearNodes;
+
+ if ZQ.RecordCount > 0 Then
+  Begin
+   dxTL.BeginUpdate;
+
+   Try
+    ZQ.First;
+
+    // Laço para montar grade
+
+    While Not ZQ.Eof Do
+     begin
+      nodPed := dxTL.Add;
+
+      nodPed.Values[Sel.Index] := 'False';
+      nodPed.Values[CodDes.Index] := ZQ.fieldByName('codigo').AsString;
+      nodPed.Values[RazSoc.Index] := ZQ.fieldByName('razao_social').AsString;
+      nodPed.Values[eMail .Index] := ZQ.fieldByName('email').AsString;
+
+     ZQ.Next;
+    end;
+  Finally
+   dxTL.EndUpdate;
+  end;
+ end;
+end;
+
+procedure TFrEmail.Sb13Click(Sender: TObject);
+begin
+
+ pAtuEmail();
+
+end;
+
+procedure TFrEmail.ConsultaWeb5MarcaTodas1Click(Sender: TObject);
+begin
+
+ MarcaBlocoM( lstTLEmail, True, True );
+
+end;
+
+procedure TFrEmail.ConsultaWeb5DesmarcarTodas1Click(Sender: TObject);
+begin
+
+ MarcaBlocoM( lstTLEmail, False, True );
+
+end;
+
+//------------------------------------------------------------------------------
+// Função....: MarcaBlocoM
+// Objetivo..: Marca um bloco de Nodes selecionados
+// Parametros: Recebe a TreeList a marcar
+// Criação...: 2017/4/7T1337
+// By........: Edson Lima
+//------------------------------------------------------------------------------
+procedure TFrEmail.MarcaBlocoM( lstTLEmail : TdxTreeList; blMarca : Boolean; blTodos : Boolean = False );
+Var
+ I : Integer;
+
+begin
+
+ lstTLEmail.BeginUpdate;
+
+ Try
+  if blTodos then
+   for I := 0 to lstTLEmail.Count - 1 do
+    begin
+     if blMarca then
+      lstTLEmail.Items[I].Strings[00] := 'True'
+     else
+      lstTLEmail.Items[I].Strings[00] := 'False';
+    end
+  else
+   for I := 0 to lstTLEmail.SelectedCount - 1 do
+    begin
+     if blMarca then
+      lstTLEmail.SelectedNodes[I].Strings[00] := 'True'
+     else
+      lstTLEmail.SelectedNodes[I].Strings[00] := 'False';
+    end;
+ Finally
+  lstTLEmail.EndUpdate;
+  lstTLEmail.Refresh;
+ end;
+end;
+
+
+
+procedure TFrEmail.medt_Cc1KeyPress(Sender: TObject; var Key: Char);
+begin
+
+ if (key in[chr(13)]) then Sb13Click(Sender);
+
+end;
+
+procedure TFrEmail.rg1Click(Sender: TObject);
+begin
+ pAtuEmail();
+end;
+
+procedure TFrEmail.MensagemKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+var
+ Direction : Integer;
+begin
+ // Altere a propriedade do KeyPreview do Form pra true
+ Direction := -1;
+ Case Key of
+  VK_PRIOR	 : Direction := 1;
+ end;
+ if Direction <> -1 then
+  begin
+   Perform(WM_NEXTDLGCTL, Direction, 0);
+   key := 0;
+  end;
+end;
+
+end.

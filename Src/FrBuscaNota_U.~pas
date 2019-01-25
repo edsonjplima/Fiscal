@@ -1,0 +1,164 @@
+unit FrBuscaNota_U;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, dxExEdtr, dxTL, dxDBCtrl, dxDBGrid, dxCntner, ComCtrls,
+  StdCtrls, Buttons, ExtCtrls, dxDBTL, dxDBTLCl, dxEditor, dxEdLib,
+  dxTLClms;
+
+type
+  TFrBuscaNota = class(TForm)
+    Panel3: TPanel;
+    Panel2: TPanel;
+    BitBtn2: TBitBtn;
+    StatusBar1: TStatusBar;
+    Panel1: TPanel;
+    GroupBox1: TGroupBox;
+    dxDateEdit1: TdxDateEdit;
+    dxDateEdit2: TdxDateEdit;
+    Label1: TLabel;
+    GroupBox4: TGroupBox;
+    dxSpinEdit3: TdxSpinEdit;
+    GroupBox2: TGroupBox;
+    dxSpinEdit2: TdxSpinEdit;
+    dxTLBusca: TdxTreeList;
+    dxTLCBuscaMaskChave: TdxTreeListMaskColumn;
+    dxTLCBuscaMaskNnf: TdxTreeListMaskColumn;
+    dxTLCBuscaDateDEmi: TdxTreeListDateColumn;
+    dxTLCBuscaMaskDest: TdxTreeListMaskColumn;
+    dxTLCBuscaMaskMod: TdxTreeListMaskColumn;
+    dxTLCBuscaMaskSer: TdxTreeListMaskColumn;
+    procedure FormShow(Sender: TObject);
+    procedure dxSpinEdit3Exit(Sender: TObject);
+    procedure dxSpinEdit2Exit(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure dxDateEdit1Exit(Sender: TObject);
+    procedure dxDateEdit2Exit(Sender: TObject);
+    procedure dxTLBuscaDblClick(Sender: TObject);
+    procedure BitBtn2MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrBuscaNota: TFrBuscaNota;
+
+implementation
+
+uses GBNFe_U, DMNFe_U, FrCCe_U;
+
+{$R *.dfm}
+
+procedure TFrBuscaNota.FormShow(Sender: TObject);
+begin
+ dxDateEdit1.Date                := FrGBNFe.dxDateEdit1.Date;
+ dxDateEdit2.Date                := FrGBNFe.dxDateEdit2.Date;
+ dxSpinEdit2.IntValue            := FrGBNFe.dxSpinEdit2.IntValue;
+ dxSpinEdit3.IntValue            := FrGBNFe.dxSpinEdit3.IntValue;
+ FrGBNFe.radiogroup2.ItemIndex   := 1;
+end;
+
+procedure TFrBuscaNota.dxSpinEdit3Exit(Sender: TObject);
+begin
+ FrGBNFe.dxSpinEdit3.Text := dxSpinEdit3.Text;
+ FrGBNFe.pAtuNFe();
+end;
+
+procedure TFrBuscaNota.dxSpinEdit2Exit(Sender: TObject);
+begin
+ FrGBNFe.dxSpinEdit2.Text := dxSpinEdit2.Text;
+ FrGBNFe.pAtuNFe();
+end;
+
+procedure TFrBuscaNota.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+var
+ Direction : Integer;
+begin
+ // Altere a propriedade do KeyPreview do Form pra true
+ if not (ActiveControl is  TDxTreeList) then
+  begin
+   Direction := -1;
+   Case Key of
+    VK_NEXT, VK_RETURN : Direction := 0;
+    VK_PRIOR	 : Direction := 1;
+    VK_ESCAPE : Close;
+   end;
+   if Direction <> -1 then
+    begin
+    Perform(WM_NEXTDLGCTL, Direction, 0);
+    key := 0;
+    end;
+  end;
+end;
+
+procedure TFrBuscaNota.dxDateEdit1Exit(Sender: TObject);
+begin
+
+ // Faz a contestação da data inicial antiga
+ if dxDateEdit1.Date < (Date - 73000) then                                      // 73000 dias aproximadamente 200 anos
+  if Application.MessageBox( 'Data inicial muita antiga !', 'BUSCA - Período', mb_IconInformation + MB_OK ) = IdOk then
+   begin
+    dxDateEdit1.SetFocus;
+    exit;
+   end;
+
+ // Faz a contestação da data final no período
+ if dxDateEdit2.Date < dxDateEdit1.Date then
+  if Application.MessageBox( 'A data inicial não pode ser maior que data final !', 'BUSCA - Período', mb_IconInformation + MB_OK ) = IdOk then
+   begin
+    dxDateEdit1.SetFocus;
+    exit;
+   end;
+
+ FrGBNFe.dxDateEdit1.Date := dxDateEdit1.Date;
+ FrGBNFe.pAtuNFe();
+end;
+
+procedure TFrBuscaNota.dxDateEdit2Exit(Sender: TObject);
+begin
+ // Faz a contestação da data final antiga
+ if dxDateEdit2.Date < (Date - 73000) then                                      // 73000 dias aproximadamente 200 anos
+  if Application.MessageBox( 'Data final muito antiga !', 'BUSCA - Período', mb_IconInformation + MB_OK ) = IdOk then
+   begin
+    dxDateEdit2.SetFocus;
+    exit;
+   end;
+
+ // Faz a contestação da data final no período
+ if dxDateEdit2.Date < dxDateEdit1.Date then
+  if Application.MessageBox( 'A data final não pode ser menor que data inicial !', 'BUSCA - Período', mb_IconInformation + MB_OK ) = IdOk then
+   begin
+    dxDateEdit2.SetFocus;
+    exit;
+   end;
+
+ FrGBNFe.dxDateEdit2.Date := dxDateEdit2.Date;
+ FrGBNFe.pAtuNFe();
+end;
+
+procedure TFrBuscaNota.dxTLBuscaDblClick(Sender: TObject);
+begin
+ FrCCe.Edit_Nota.Text  := dxTLBusca.Items[dxTLBusca.FocusedNumber].Strings[00];
+ FrCCe.edit_Serie.Text := dxTLBusca.Items[dxTLBusca.FocusedNumber].Strings[00];
+
+ Codigo_loja := dxTLBuscaChave.Items[i].Strings[dxTLBuscaChaveMaskCodLoja.Index];
+ Chave_nfe   := dxTLBuscaChave.Items[i].Strings[dxTLCBuscaChaveMaskCha.Index];
+ dEmi        := StrToDateTime(dxTLBuscaChave.Items[i].Strings[dxTLCBuscaChaveDatedEmi.Index]);
+
+ close;
+end;
+
+procedure TFrBuscaNota.BitBtn2MouseMove(Sender: TObject;
+  Shift: TShiftState; X, Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := BitBtn2.Hint;
+end;
+
+end.

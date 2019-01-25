@@ -1,0 +1,1593 @@
+unit FrCCe_U;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Buttons, StdCtrls, ComCtrls, ExtCtrls, jpeg, dxExEdtr, dxCntner,
+  dxTL, dxDBCtrl, dxDBGrid, dxDBTLCl, dxGrClms, Mask, ToolEdit, RXDBCtrl,
+  Menus, StrUtils, QDialogs;
+
+type
+  TFrCCe = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    StatusBar1: TStatusBar;
+    Panel9: TPanel;
+    BitBtn12: TBitBtn;
+    Panel4: TPanel;
+    SpeedButton2: TSpeedButton;
+    Image1: TImage;
+    SpeedButton1: TSpeedButton;
+    SpeedButton4: TSpeedButton;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    BitBtn3: TBitBtn;
+    BitBtn4: TBitBtn;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    Panel5: TPanel;
+    GroupBox11: TGroupBox;
+    Edit8: TEdit;
+    GroupBox15: TGroupBox;
+    Panel3: TPanel;
+    GroupBox1: TGroupBox;
+    Edit_Nota: TEdit;
+    GroupBox2: TGroupBox;
+    GroupBox5: TGroupBox;
+    Memo1: TMemo;
+    GroupBox6: TGroupBox;
+    Memo2: TMemo;
+    GroupBox8: TGroupBox;
+    GroupBox9: TGroupBox;
+    Edit_Evento: TEdit;
+    Edit_Sit: TEdit;
+    Edit_SitDesc: TEdit;
+    dxDBGrid1: TdxDBGrid;
+    dxDBGrid1nNF_CCe: TdxDBGridColumn;
+    dxDBGrid1cStat_CCe: TdxDBGridMaskColumn;
+    dxDBGrid1Evento_CCe: TdxDBGridMaskColumn;
+    dxDBGrid1id_CCe: TdxDBGridColumn;
+    GroupBox3: TGroupBox;
+    Edit_idLote: TEdit;
+    GroupBox10: TGroupBox;
+    dxDBGrid1idLote_CCe: TdxDBGridColumn;
+    dxDBGrid1cOrgao_CCe: TdxDBGridColumn;
+    dxDBGrid1tpEvento_CCe: TdxDBGridColumn;
+    dxDBGrid1xMotivo_CCe: TdxDBGridColumn;
+    dxDBGrid1emailDest_CCe: TdxDBGridColumn;
+    dxDBGrid1nProt_CCe: TdxDBGridColumn;
+    GroupBox12: TGroupBox;
+    GroupBox13: TGroupBox;
+    Edit_Leiase: TEdit;
+    SpeedButton3: TSpeedButton;
+    PopupMenu1: TPopupMenu;
+    LimparCorreo1: TMenuItem;
+    DesfazeraUltimaIncluso1: TMenuItem;
+    Edit_DataEvento: TEdit;
+    Edit_dtRegEvento: TEdit;
+    GroupBox4: TGroupBox;
+    Edit_id: TEdit;
+    GroupBox7: TGroupBox;
+    Edit_nProt: TEdit;
+    GroupBox14: TGroupBox;
+    Edit_emailDest: TEdit;
+    Label1: TLabel;
+    GroupBox16: TGroupBox;
+    Edit_Ondesele: TEdit;
+    Edit_Campo: TEdit;
+    dxDBGrid1Evento_NFe: TdxDBGridMaskColumn;
+    dxDBGrid1xCorrecao_CCe: TdxDBGridMaskColumn;
+    dxDBGrid1xCorrecao_NFe: TdxDBGridMaskColumn;
+    dxDBGrid1cStat_NFe: TdxDBGridMaskColumn;
+    dxDBGrid1xMotivo_NFe: TdxDBGridMaskColumn;
+    dxDBGrid1dhRegEvento_NFe: TdxDBGridDateColumn;
+    dxDBGrid1nProt_NFe: TdxDBGridMaskColumn;
+    dxDBGrid1dhRec_NFe: TdxDBGridDateColumn;
+    dxDBGrid1Sit_NFe: TdxDBGridMaskColumn;
+    dxDBGrid1Motivo_NFe: TdxDBGridMaskColumn;
+    dxDBGrid1dhEvento_CCe: TdxDBGridMaskColumn;
+    dxDBGrid1dhRegEvento_CCe: TdxDBGridMaskColumn;
+    grp1: TGroupBox;
+    edit_Serie: TEdit;
+    procedure SpeedButton4Click(Sender: TObject);
+    procedure BitBtn12Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure PageControl1Change(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure Edit8Change(Sender: TObject);
+    procedure dxDBGrid1DblClick(Sender: TObject);
+    procedure LimparCorreo1Click(Sender: TObject);
+    procedure SpeedButton3Click(Sender: TObject);
+    procedure Memo2Enter(Sender: TObject);
+    procedure Memo2Exit(Sender: TObject);
+    procedure DesfazeraUltimaIncluso1Click(Sender: TObject);
+    procedure PopupMenu1Popup(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure Edit_NotaKeyPress(Sender: TObject; var Key: Char);
+    procedure Edit_NotaExit(Sender: TObject);
+    procedure GroupBox6Exit(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure BitBtn4Click(Sender: TObject);
+    procedure Edit_NotaKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure Edit8KeyPress(Sender: TObject; var Key: Char);
+    procedure GroupBox11MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure Panel5MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure PageControl1MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure SpeedButton2MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure SpeedButton1MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure SpeedButton4MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure Panel3MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure GroupBox3MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure GroupBox1MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure GroupBox2MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure GroupBox10MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure GroupBox4MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure GroupBox9MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure GroupBox8MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure GroupBox7MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure GroupBox14MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure GroupBox12MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure GroupBox16MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure GroupBox13MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure GroupBox5MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure GroupBox6MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure SpeedButton3MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure BitBtn1MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure BitBtn2MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure BitBtn3MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure BitBtn4MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure BitBtn12MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure Panel9MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure Image1MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure Label1MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure dxDBGrid1MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure GroupBox15MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure BitBtn3Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    procedure p_Atualiza();                                                     // Atualiza dados da CCe
+    Procedure p_ImprimeCCe();                                                   // Imprime CCe
+  end;
+
+var
+ FrCCe: TFrCCe;
+
+ // variáveis local
+ v_Aux, Ver_Laiaute, cOrgao, v_tpAmb, v_CNPJ_CPF, v_chNFe,
+ tpEvento, v_tpEvento, v_nSeqEvento, Ver_CCe,  xCondUso,
+ xEvento                                   : string;
+
+ v_cStat, v_xMotivo, v_dhRegEvento, v_nProt: String;
+
+ v_dias: integer;                                                               // contador de dias
+ v_novo: boolean;                                                               // define se estiver criando uma nova carta
+ v_alte: boolean;                                                               // define se estiver alterando nova carta existente
+
+
+implementation
+
+uses GBNFe_U, DMNFe_U, FrPar_U, VMXCCePrint, FrBuscaNota_U;
+
+{$R *.dfm}
+
+procedure TFrCCe.SpeedButton4Click(Sender: TObject);
+begin
+
+ if Application.MessageBox( PChar('Confirme a transmissão da CCe ?'), 'GBNFe - Transmitir CC-e', mb_IconInformation + mb_YesNo ) = IdYes then
+  begin
+   Edit_NotaExit(Sender);
+   FrGBNFe.TransmiteCCe();
+   FrGBNFe.pAtuNFe();
+  end;
+
+ // atualiza tabela CCe --------------------------------------------------------
+ dxDBGrid1.Refresh;
+ DMNFe.ZQuery11.Close;
+ DMNFe.ZQuery11.Open;
+ dxDBGrid1.Refresh;
+ //*****************************************************************************
+
+ PageControl1Change(Sender);
+
+end;
+
+procedure TFrCCe.BitBtn12Click(Sender: TObject);
+begin
+ close;
+end;
+
+procedure TFrCCe.FormShow(Sender: TObject);
+begin
+ // Ativa tabela CCe
+ dmNFe.ZQuery11.Active := True;
+
+ FrCCe.Height := 590;
+ FrCCe.Width  := 791;
+ FrCCe.Position := poScreenCenter;
+
+ FrCCe.PageControl1.TabIndex := 1;
+ v_novo := False;
+
+ // Define o parametro inicial do codigo da loja ; by Edson Lima ;
+ DMNFe.ZQuery11.Close;
+  DMNFe.ZQuery11.ParamByName('Codigo_Loja').AsInteger := FrGBNFe.dxSpinEdit1.intValue;
+ DMNFe.ZQuery11.Open;
+
+ // Limpa tela de edição
+ FrCCe.PageControl1Change(Sender);
+
+end;
+
+procedure TFrCCe.PageControl1Change(Sender: TObject);
+begin
+ if FrCCe.PageControl1.TabIndex = 0 then
+  begin
+   if FrCCe.Edit_Sit.Text = '128' then
+    begin
+     FrCCe.BitBtn1.Enabled := True;
+     FrCCe.BitBtn2.Enabled := True;
+     FrCCe.BitBtn3.Enabled := False;
+     FrCCe.BitBtn4.Enabled := False;
+    end
+   else if FrCCe.Edit_Sit.Text = '135' then
+    begin
+     FrCCe.BitBtn1.Enabled := True;
+     FrCCe.BitBtn2.Enabled := False;
+     FrCCe.BitBtn3.Enabled := True;
+     FrCCe.BitBtn4.Enabled := True;
+    end
+   else if Trim(FrCCe.Edit_Sit.Text) <> '' then
+    begin
+     FrCCe.BitBtn1.Enabled := True;
+     FrCCe.BitBtn2.Enabled := True;
+     FrCCe.BitBtn3.Enabled := False;
+     FrCCe.BitBtn4.Enabled := False;
+    end
+   else
+    begin
+     // Limpa os campos da carta de correção
+     FrCCe.Edit_idLote.Text            := '';
+     FrCCe.Edit_Nota.Text              := '';
+     FrCCe.Edit_Serie.Text             := '';
+     FrCCe.Edit_Sit.Text               := '';
+     FrCCe.Edit_SitDesc.Text           := '';
+     FrCCe.Edit_DataEvento.Text        := '';
+     FrCCe.Edit_id.Text                := '';
+     FrCCe.Edit_Evento.Text            := '';
+     FrCCe.Edit_dtRegEvento.Text       := '';
+     FrCCe.Edit_nProt.Text             := '';
+     FrCCe.Edit_emailDest.Text         := '';
+     FrCCe.Memo1.Text                  := '';
+     FrCCe.Memo2.Text                  := '';
+     FrCCe.Edit_Nota.Enabled           := False;
+     FrCCe.Edit_Nota.Color             := $00DDDDDD;
+
+     v_alte := False;
+     v_novo := False;
+     FrCCe.BitBtn1.Enabled := True;
+     FrCCe.BitBtn2.Enabled := False;
+     FrCCe.BitBtn3.Enabled := False;
+     FrCCe.BitBtn4.Enabled := False;
+    end;
+   if not v_novo then
+    begin
+     FrCCe.SpeedButton2.Enabled := False;
+     FrCCe.SpeedButton1.Enabled := False;
+     FrCCe.SpeedButton4.Enabled := False;
+    end;
+   if v_novo then
+    begin
+     FrCCe.SpeedButton2.Enabled := True;
+     FrCCe.SpeedButton1.Enabled := False;
+     FrCCe.SpeedButton4.Enabled := False;
+    end
+   else
+    begin
+     if v_alte then
+      begin
+       FrCCe.SpeedButton2.Enabled := True;
+       FrCCe.SpeedButton1.Enabled := True;
+       FrCCe.SpeedButton4.Enabled := True;
+      end;
+     if not v_alte then
+      begin
+       FrCCe.SpeedButton2.Enabled := False;
+       FrCCe.SpeedButton1.Enabled := False;
+       FrCCe.SpeedButton4.Enabled := False;
+      end;
+    end;
+  end
+ else
+  begin
+   FrCCe.BitBtn1.Enabled := False;
+   FrCCe.BitBtn2.Enabled := False;
+   FrCCe.BitBtn3.Enabled := False;
+   FrCCe.BitBtn4.Enabled := False;
+   FrCCe.SpeedButton2.Enabled := False;
+   FrCCe.SpeedButton1.Enabled := False;
+   FrCCe.SpeedButton4.Enabled := False;
+  end;
+
+ if DMNFe.ZQuery11.IsEmpty then
+  p_Atualiza();
+end;
+
+procedure TFrCCe.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+var
+ Direction : Integer;
+begin
+ // Altere a propriedade do KeypPeview do Form pra true
+ if not (ActiveControl is  TdxDbGrid) then
+  begin
+   Direction := -1;
+   Case Key of
+    VK_NEXT, VK_RETURN : Direction := 0;
+    VK_PRIOR	 : Direction := 1;
+    VK_ESCAPE : Close;
+   end;
+   if Direction <> -1 then
+    begin
+     Perform(WM_NEXTDLGCTL, Direction, 0);
+     key := 0;
+    end;
+  end;
+end;
+
+procedure TFrCCe.Edit8Change(Sender: TObject);
+begin
+ // Filtra a tabela CCe
+ DMNFe.ZQuery11.Close;
+  DMNFe.ZQuery11.ParamByName('Nota').Value            := FrCCe.Edit8.Text;
+ DMNFe.ZQuery11.Open;
+end;
+
+procedure TFrCCe.dxDBGrid1DblClick(Sender: TObject);
+begin
+ if not DMNFe.ZQuery11.IsEmpty then
+  begin
+   FrCCe.PageControl1.TabIndex := 0;
+
+   FrCCe.Edit_idLote.Text             := FormatFloat('0000000', DMNFe.ZQuery11['CCe_idLote']);
+   FrCCe.Edit_Nota.Text               := DMNFe.ZQuery11['CCe_nNF'];
+   FrCCe.Edit_Serie.Text              := DMNFe.ZQuery11['CCe_Serie'];
+
+   if DMNFe.ZQuery11['CCe_cStat'] <> null then
+    FrCCe.Edit_Sit.Text               := DMNFe.ZQuery11['CCe_cStat']
+   else
+    FrCCe.Edit_Sit.Text               := '';
+
+   if DMNFe.ZQuery11['CCe_xMotivo'] <> null then
+    FrCCe.Edit_SitDesc.Text           := DMNFe.ZQuery11['CCe_xMotivo']
+   else
+    FrCCe.Edit_SitDesc.Text           := '';
+
+   if DMNFe.ZQuery11['CCe_dhEvento'] <> null then
+    FrCCe.Edit_DataEvento.Text        := DMNFe.ZQuery11['CCe_dhEvento']
+   else
+    FrCCe.Edit_DataEvento.Text        := '';
+
+   if DMNFe.ZQuery11['CCe_id'] <> null then
+    FrCCe.Edit_id.Text                := DMNFe.ZQuery11['CCe_id']
+   else
+    FrCCe.Edit_id.Text                := '';
+
+   if DMNFe.ZQuery11['CCe_Evento'] <> null then
+    FrCCe.Edit_Evento.Text            := DMNFe.ZQuery11['CCe_Evento']
+   else
+    FrCCe.Edit_Evento.Text            := '';
+
+   if DMNFe.ZQuery11['CCe_dhRegEvento'] <> null then
+    FrCCe.Edit_dtRegEvento.Text       := DMNFe.ZQuery11['CCe_dhRegEvento']
+   else
+    FrCCe.Edit_dtRegEvento.Text       := '';
+
+   if DMNFe.ZQuery11['CCe_nProt'] <> null then
+    FrCCe.Edit_nProt.Text             := DMNFe.ZQuery11['CCe_nProt']
+   else
+    FrCCe.Edit_nProt.Text             := '';
+
+   if DMNFe.ZQuery11['CCe_emailDest'] <> null then
+    FrCCe.Edit_emailDest.Text         := DMNFe.ZQuery11['CCe_emailDest']
+   else
+    FrCCe.Edit_emailDest.Text         := '';
+
+   if DMNFe.ZQuery11['NFe_xCorrecao_CCe'] <> null then
+    FrCCe.Memo1.Text                  := DMNFe.ZQuery11['NFe_xCorrecao_CCe']
+   else
+    FrCCe.Memo1.Text                  := '';
+
+   //------------------------------------------------------------------
+
+   if Trim(FrCCe.Edit_Sit.Text) <> '' then
+    begin
+     if Trim(FrCCe.Edit_Sit.Text) = '128' then
+      begin
+       FrCCe.BitBtn1.Enabled         := True;
+       FrCCe.BitBtn2.Enabled         := True;
+       FrCCe.BitBtn3.Enabled         := False;
+       FrCCe.BitBtn4.Enabled         := False;
+      end
+     else if Trim(FrCCe.Edit_Sit.Text) = '135' then
+      begin
+       FrCCe.BitBtn1.Enabled         := True;
+       FrCCe.BitBtn2.Enabled         := True;
+       FrCCe.BitBtn3.Enabled         := True;
+       FrCCe.BitBtn4.Enabled         := True;
+      end
+     else if Trim(FrCCe.Edit_Sit.Text) = '136' then
+      begin
+       FrCCe.BitBtn1.Enabled         := True;
+       FrCCe.BitBtn2.Enabled         := True;
+       FrCCe.BitBtn3.Enabled         := True;
+       FrCCe.BitBtn4.Enabled         := True;
+      end
+     else
+      begin
+       FrCCe.BitBtn1.Enabled         := True;
+       FrCCe.BitBtn2.Enabled         := True;
+       FrCCe.BitBtn3.Enabled         := False;
+       FrCCe.BitBtn4.Enabled         := False;
+      end;
+     // Desabilita as teclas Salvar, Excluir e Transmitir
+     FrCCe.SpeedButton2.Enabled      := False;
+     FrCCe.SpeedButton1.Enabled      := False;
+     FrCCe.SpeedButton4.Enabled      := False;
+     // Atribui outros para cor e atributos de não edição
+     FrCCe.Edit_Campo.Enabled        := False;
+     FrCCe.Edit_Ondesele.Enabled     := False;
+     FrCCe.Edit_Leiase.Enabled       := False;
+     FrCCe.SpeedButton3.Enabled      := False;
+     FrCCe.Memo1.Enabled             := False;
+     FrCCe.Memo2.Enabled             := False;
+     // FrCCe.Edit_Nota.ReadOnly        := False;                               // by Edson Lima ; Inibido para dar entrada somente pelo F8
+     v_novo                          := False;
+     v_alte                          := False;
+     FrCCe.BitBtn1.SetFocus;
+    end
+   else
+    begin
+     FrCCe.BitBtn1.Enabled           := True;
+     FrCCe.BitBtn2.Enabled           := True;
+     FrCCe.BitBtn3.Enabled           := False;
+     FrCCe.BitBtn4.Enabled           := False;
+     // Habilita as teclas Salvar, Excluir e Transmitir
+     FrCCe.SpeedButton2.Enabled      := True;
+     FrCCe.SpeedButton1.Enabled      := True;
+     FrCCe.SpeedButton4.Enabled      := True;
+     // Atribui outros para cor e atributos de edição
+     FrCCe.Edit_Campo.Enabled        := True;
+     FrCCe.Edit_Ondesele.Enabled     := True;
+     FrCCe.Edit_Leiase.Enabled       := True;
+     FrCCe.SpeedButton3.Enabled      := True;
+     FrCCe.Memo2.Enabled             := True;
+     if DMNFe.ZQuery11['CCe_xCorrecao'] <> null then
+      FrCCe.Memo2.Text               := DMNFe.ZQuery11['CCe_xCorrecao']
+     else
+      FrCCe.Memo2.Text               := '';
+     FrCCe.Edit_Nota.Enabled         := True;
+     v_novo                          := False;
+     v_alte                          := True;
+    end;
+  end;
+
+ gModelo := DMNFe.ZQuery11['CCe_Modelo'];
+ gSerie  := DMNFe.ZQuery11['CCe_Serie'];
+
+ if not DMNFe.ZQuery11.IsEmpty then
+  begin
+   v_aux := '';
+   v_aux := FrGBNFe.dxSpinEdit1.text + ',' + '''' + FormatDateTime('yyyy/mm/dd', FrGBNFe.dxDateEdit1.Date) + ''''+ ',';
+   v_aux := v_aux + '''' + FormatDateTime('yyyy/mm/dd', FrGBNFe.dxDateEdit2.Date) + '''' + ',';
+   v_Aux := v_Aux + '''' + trim(FrCCe.Edit_Nota.Text) + '''' + ',';
+   v_aux := v_aux + '''' + FrGBNFe.dxSpinEdit3.Text + '''' + ',';
+   v_aux := v_aux + '''' + IntToStr(gModelo) + '''' + ',';
+   v_aux := v_aux + '''' + IntToStr(gSerie) + '''';
+
+   DMNFe.ZQuery5.Close;
+   DMNFe.ZQuery5.SQL.Clear;
+   DMNFe.ZQuery5.SQL.Add( 'exec sp_nfe_transmitidas ' + v_Aux );
+   DMNFe.ZQuery5.Open;
+  end;
+
+end;
+
+procedure TFrCCe.LimparCorreo1Click(Sender: TObject);
+begin
+ FrCCe.Memo2.Clear;
+end;
+
+procedure TFrCCe.SpeedButton3Click(Sender: TObject);
+var
+ Linha: String;
+begin
+
+ // Desativa o <enter>
+ FrCCe.KeyPreview := False;
+
+ // Faz a crítica nos campos de entradas
+ if (trim(FrCCe.Edit_Campo.Text) = '') then
+  begin
+   ShowMessage('Não existe dados no campo "Campo"!');
+   exit;
+  end;
+
+ if (trim(FrCCe.Edit_Ondesele.Text) = '')then
+  begin
+   ShowMessage('Não existe dados no campo "Onde se lê"!');
+   exit;
+  end;
+
+ if (trim(FrCCe.Edit_Leiase.Text) = '')then
+  begin
+   ShowMessage('Não existe dados no campo "Leia-se"!');
+   exit;
+  end;
+
+ // Define a linha do memo ; by Edson Lima ; 27-12-2012 ; 09:07
+ Linha := ('No campo:[ ' + trim(FrCCe.Edit_Campo.Text) + ' ], onde se lê: [ ' + trim(FrCCe.Edit_Ondesele.Text) + ' ], leia-se: [ ' + trim(FrCCe.Edit_Leiase.Text) + ' ]');
+
+ // Campo memo (pula linha) quando se inclui novas alterações
+ if v_novo then
+  if (Length(FrCCe.Memo2.Text) > 0) then
+   FrCCe.Memo2.Perform(EM_REPLACESEL, 1, LongInt(PChar(#13#10 + Linha)))
+  else
+   FrCCe.Memo2.Perform(EM_REPLACESEL, 1, LongInt(PChar(Linha)))
+ else
+  if (Length(FrCCe.Memo2.Text) > 0) then
+   FrCCe.Memo2.Perform(EM_REPLACESEL, 1, LongInt(PChar(Linha + #13#10)))
+  else
+   FrCCe.Memo2.Perform(EM_REPLACESEL, 1, LongInt(PChar(Linha)));
+
+ // Limpa os campos de correção
+ FrCCe.Edit_Campo.Text       := '';
+ FrCCe.Edit_Ondesele.Text    := '';
+ FrCCe.Edit_Leiase.Text      := '';
+
+ // Ativa novamente o <enter>
+ FrCCe.KeyPreview := True;
+end;
+
+procedure TFrCCe.Memo2Enter(Sender: TObject);
+begin
+ FrCCe.KeyPreview := False;
+end;
+
+procedure TFrCCe.Memo2Exit(Sender: TObject);
+begin
+ FrCCe.KeyPreview := True;
+end;
+
+procedure TFrCCe.DesfazeraUltimaIncluso1Click(Sender: TObject);
+begin
+ FrCCe.Memo2.Perform(EM_UNDO,0,0);
+end;
+
+procedure TFrCCe.PopupMenu1Popup(Sender: TObject);
+begin
+ if (FrCCe.Memo2.Perform(EM_CANUNDO,0 , 0) <> 0) then
+  FrCCe.PopupMenu1.Items[1].Visible := True
+ else
+  FrCCe.PopupMenu1.Items[1].Visible := False;
+end;
+
+procedure TFrCCe.BitBtn1Click(Sender: TObject);
+var
+ v_idLote: Integer;
+begin
+ // Permite editar nota
+ FrCCe.PageControl1.TabIndex := 0;
+
+ v_novo                            := True;
+ v_alte                            := False;
+ FrCCe.Edit_Nota.Enabled           := True;
+ //FrCCe.Edit_Nota.ReadOnly          := False;                                  // by Edson Lima ; Inibido para dar entrada somente pelo F8
+ FrCCe.Edit_Nota.Color             := $00C4F0FF;
+
+ FrCCe.BitBtn1.Enabled             := True;
+ FrCCe.BitBtn2.Enabled             := False;
+ FrCCe.BitBtn3.Enabled             := False;
+ FrCCe.BitBtn4.Enabled             := False;
+
+ FrCCe.SpeedButton2.Enabled        := True;
+ FrCCe.SpeedButton1.Enabled        := False;
+ FrCCe.SpeedButton4.Enabled        := False;
+
+ FrCCe.Edit_Campo.Enabled          := True;
+ FrCCe.Edit_Ondesele.Enabled       := True;
+ FrCCe.Edit_Leiase.Enabled         := True;
+ FrCCe.SpeedButton3.Enabled        := True;
+ FrCCe.Memo2.Enabled               := False;
+
+ // Carrega as correções anteriores
+ if DMNFe.ZQuery11['CCe_xCorrecao'] <> null then
+  FrCCe.Memo2.Text                 := DMNFe.ZQuery11['CCe_xCorrecao']
+ else
+  FrCCe.Memo2.Text                 := '';
+
+ // Limpa os campos
+ DMNFe.ZQuery11.First;
+ v_idLote := 0;
+ While not DMNFe.ZQuery11.Eof do
+  begin
+   if  (DMNFe.ZQuery11['CCe_idLote'] > v_idLote) then
+    v_idLote := DMNFe.ZQuery11['CCe_idLote'];
+   DMNFe.ZQuery11.Next;
+  end;
+ FrCCe.Edit_idLote.Text := IntToStr(v_idLote + 1);
+ FrCCe.Edit_Nota.Text              := '';
+ FrCCe.Edit_Serie.Text             := '';
+ FrCCe.Edit_Sit.Text               := '';
+ FrCCe.Edit_SitDesc.Text           := '';
+ FrCCe.Edit_DataEvento.Text        := '';
+ FrCCe.Edit_id.Text                := '';
+ FrCCe.Edit_Evento.Text            := '';
+ FrCCe.Edit_dtRegEvento.Text       := '';
+ FrCCe.Edit_nProt.Text             := '';
+ FrCCe.Edit_emailDest.Text         := '';
+ FrCCe.Memo1.Text                  := '';
+ FrCCe.Memo2.Text                  := '';
+ FrCCe.Edit_Nota.SetFocus;
+end;
+
+procedure TFrCCe.SpeedButton2Click(Sender: TObject);
+begin
+ if v_alte then
+  begin
+   // Altera CCe
+   if (StrToInt(FrCCe.Edit_Nota.Text) > 0) then
+    begin
+     try
+      DMNFe.ZQuery2.DisableControls;
+      DMNFe.ZQuery2.Close;
+      DMNFe.ZQuery2.SQL.Clear;
+      DMNFe.ZQuery2.SQL.Add( 'Update NFe_CCe Set                                   ' );
+      DMNFe.ZQuery2.SQL.Add( '    idLote         = :idLote                         ' );
+      DMNFe.ZQuery2.SQL.Add( '   ,Codigo_Loja    = :Codigo_Loja                    ' );
+      DMNFe.ZQuery2.SQL.Add( '   ,nNF            = :nNF                            ' );
+      DMNFe.ZQuery2.SQL.Add( '   ,Evento	        = :Evento	                        ' );
+      DMNFe.ZQuery2.SQL.Add( '   ,Ver_Laiaute    = :Ver_Laiaute                    ' );
+      DMNFe.ZQuery2.SQL.Add( '   ,id   	         = :id   	                         ' );
+      DMNFe.ZQuery2.SQL.Add( '   ,cOrgao         = :cOrgao                         ' );
+      DMNFe.ZQuery2.SQL.Add( '   ,chave_nfe	     = :chave_nfe	                     ' );
+      DMNFe.ZQuery2.SQL.Add( '   ,dhEvento	      = :dhEvento	                      ' );
+      DMNFe.ZQuery2.SQL.Add( '   ,tpEvento       = :tpEvento                       ' );
+      DMNFe.ZQuery2.SQL.Add( '   ,nSeqEvento   	 = :nSeqEvento	                    ' );
+      DMNFe.ZQuery2.SQL.Add( '   ,Ver_CCe	       = :Ver_CCe	                       ' );
+      DMNFe.ZQuery2.SQL.Add( '   ,desc_Evento    = :desc_Evento                    ' );
+      DMNFe.ZQuery2.SQL.Add( '   ,xCorrecao	     = :xCorrecao	                     ' );
+      DMNFe.ZQuery2.SQL.Add( '   ,xCondUso	      = :xCondUso	                      ' );
+      DMNFe.ZQuery2.SQL.Add( '   ,cStat          = :cStat                          ' );
+      DMNFe.ZQuery2.SQL.Add( '   ,xMotivo        = :xMotivo                        ' );
+      DMNFe.ZQuery2.SQL.Add( '   ,emailDest      = :emailDest                      ' );
+      DMNFe.ZQuery2.SQL.Add( '   ,dhRegEvento    = :dhRegEvento                    ' );
+      DMNFe.ZQuery2.SQL.Add( '   ,nProt          = :nProt                          ' );
+      DMNFe.ZQuery2.SQL.Add( 'where                                                ' );
+      DMNFe.ZQuery2.SQL.Add( '    Codigo_Loja    = :Codigo_Loja  and               ' );
+      DMNFe.ZQuery2.SQL.Add( '    nNF            = :nNF          and               ' );
+      DMNFe.ZQuery2.SQL.Add( '    Evento         = :Evento       and               ' );
+      DMNFe.ZQuery2.SQL.Add( '    dEmi           = :dEmi         and               ' );
+      DMNFe.ZQuery2.SQL.Add( '    Modelo         = :Modelo       and               ' );
+      DMNFe.ZQuery2.SQL.Add( '    Serie          = :Serie                          ' );
+      DMNFe.ZQuery2.ParamByName('idLote'     ).Value  := StrToInt(FrCCe.Edit_idLote.Text);
+      DMNFe.ZQuery2.ParamByName('Codigo_Loja').Value  := FrGBNFe.dxSpinEdit1.intValue;
+      DMNFe.ZQuery2.ParamByName('nNF'        ).Value  := StrToInt(FrCCe.Edit_Nota.Text);
+      DMNFe.ZQuery2.ParamByName('Evento'     ).Value  := FrCCe.Edit_Evento.Text;
+      DMNFe.ZQuery2.ParamByName('dEmi'       ).Value  := FormatDateTime('yyyy/mm/dd', DMNFe.ZQuery5['nfe_dEmi']);
+      DMNFe.ZQuery2.ParamByName('Modelo'     ).Value  := DMNFe.ZQuery5['nfe_Modelo'];
+      DMNFe.ZQuery2.ParamByName('Serie'      ).Value  := DMNFe.ZQuery5['nfe_Serie'];
+      DMNFe.ZQuery2.ParamByName('Ver_Laiaute').Value  := '';
+      DMNFe.ZQuery2.ParamByName('id'   	     ).Value  := FrCCe.Edit_id.Text;
+      DMNFe.ZQuery2.ParamByName('cOrgao'     ).Value  := '';
+      DMNFe.ZQuery2.ParamByName('chave_nfe'  ).Value  := v_chNFe;
+      DMNFe.ZQuery2.ParamByName('dhEvento'   ).Value  := '';
+      DMNFe.ZQuery2.ParamByName('tpEvento'   ).Value  := c_tpEvento;
+      DMNFe.ZQuery2.ParamByName('nSeqEvento' ).Value  := StrToInt(FrCCe.Edit_Evento.Text);
+      DMNFe.ZQuery2.ParamByName('Ver_CCe'    ).Value  := '';
+      DMNFe.ZQuery2.ParamByName('desc_Evento').Value  := c_desc_Evento;
+      DMNFe.ZQuery2.ParamByName('xCorrecao'  ).Value  := FrCCe.Memo2.Text;
+      DMNFe.ZQuery2.ParamByName('xCondUso'   ).Value  := c_xCondUso;
+      DMNFe.ZQuery2.ParamByName('cStat'      ).Value  := '';
+      DMNFe.ZQuery2.ParamByName('xMotivo'    ).Value  := '';
+      DMNFe.ZQuery2.ParamByName('emailDest'  ).Value  := FrCCe.Edit_emailDest.Text;
+      DMNFe.ZQuery2.ParamByName('dhRegEvento').Value  := '';
+      DMNFe.ZQuery2.ParamByName('nProt'      ).Value  := '';
+      DMNFe.ZQuery2.ParamByName('Codigo_Loja').Value  := FrGBNFe.dxSpinEdit1.intValue;
+      DMNFe.ZQuery2.ParamByName('nNF'        ).Value  := StrToInt(FrCCe.Edit_Nota.Text);
+      DMNFe.ZQuery2.ParamByName('Evento'     ).Value  := FrCCe.Edit_Evento.Text;
+
+      DMNFe.ZConnection1.StartTransaction;
+      DMNFe.ZQuery2.ExecSQL;
+     except
+      DMNFe.ZConnection1.Rollback;
+      Application.Messagebox('ERRO: CCe não alterada !','Atenção!',mb_iconstop+mb_ok);
+      v_alte := False;
+     end;
+    end;
+  end;
+ if v_novo then
+  begin
+   // Grava novo CCe
+   if (StrToInt(FrCCe.Edit_Nota.Text) > 0) then
+    begin
+     try
+      DMNFe.ZQuery2.DisableControls;
+      DMNFe.ZQuery2.Close;
+      DMNFe.ZQuery2.SQL.Clear;
+      DMNFe.ZQuery2.SQL.Add( 'Insert into NFe_CCe (                                ' );
+      DMNFe.ZQuery2.SQL.Add( '    idLote                                           ' );
+      DMNFe.ZQuery2.SQL.Add( '   ,Codigo_Loja                                      ' );
+      DMNFe.ZQuery2.SQL.Add( '   ,nNF                                              ' );
+      DMNFe.ZQuery2.SQL.Add( '   ,Evento	                                          ' );
+      DMNFe.ZQuery2.SQL.Add( '   ,dEmi	          	                                 ' );
+      DMNFe.ZQuery2.SQL.Add( '   ,Modelo	       	                                  ' );
+      DMNFe.ZQuery2.SQL.Add( '   ,Serie	         	                                 ' );
+      DMNFe.ZQuery2.SQL.Add( '   ,Ver_Laiaute                                      ' );
+      DMNFe.ZQuery2.SQL.Add( '   ,id   	                                           ' );
+      DMNFe.ZQuery2.SQL.Add( '   ,cOrgao                                           ' );
+      DMNFe.ZQuery2.SQL.Add( '   ,chave_nfe	                                       ' );
+      DMNFe.ZQuery2.SQL.Add( '   ,dhEvento	                                        ' );
+      DMNFe.ZQuery2.SQL.Add( '   ,tpEvento                                         ' );
+      DMNFe.ZQuery2.SQL.Add( '   ,nSeqEvento	                                      ' );
+      DMNFe.ZQuery2.SQL.Add( '   ,Ver_CCe	                                         ' );
+      DMNFe.ZQuery2.SQL.Add( '   ,desc_Evento                                      ' );
+      DMNFe.ZQuery2.SQL.Add( '   ,xCorrecao	                                       ' );
+      DMNFe.ZQuery2.SQL.Add( '   ,xCondUso	                                        ' );
+      DMNFe.ZQuery2.SQL.Add( '   ,cStat                                            ' );
+      DMNFe.ZQuery2.SQL.Add( '   ,xMotivo                                          ' );
+      DMNFe.ZQuery2.SQL.Add( '   ,emailDest                                        ' );
+      DMNFe.ZQuery2.SQL.Add( '   ,dhRegEvento                                      ' );
+      DMNFe.ZQuery2.SQL.Add( '   ,nProt)                                           ' );
+      DMNFe.ZQuery2.SQL.Add( '  Values (                                           ' );
+      DMNFe.ZQuery2.SQL.Add( '     :idLote                                         ' );
+      DMNFe.ZQuery2.SQL.Add( '   , :Codigo_Loja                                    ' );
+      DMNFe.ZQuery2.SQL.Add( '   , :nNF                                            ' );
+      DMNFe.ZQuery2.SQL.Add( '   , :Evento	                                        ' );
+      DMNFe.ZQuery2.SQL.Add( '   , :dEmi  	                                        ' );
+      DMNFe.ZQuery2.SQL.Add( '   , :Modelo	                                        ' );
+      DMNFe.ZQuery2.SQL.Add( '   , :Serie 	                                        ' );
+      DMNFe.ZQuery2.SQL.Add( '   , :Ver_Laiaute                                    ' );
+      DMNFe.ZQuery2.SQL.Add( '   , :id   	                                         ' );
+      DMNFe.ZQuery2.SQL.Add( '   , :cOrgao                                         ' );
+      DMNFe.ZQuery2.SQL.Add( '   , :chave_nfe	                                     ' );
+      DMNFe.ZQuery2.SQL.Add( '   , :dhEvento	                                      ' );
+      DMNFe.ZQuery2.SQL.Add( '   , :tpEvento                                       ' );
+      DMNFe.ZQuery2.SQL.Add( '   , :nSeqEvento	                                    ' );
+      DMNFe.ZQuery2.SQL.Add( '   , :Ver_CCe	                                       ' );
+      DMNFe.ZQuery2.SQL.Add( '   , :desc_Evento                                    ' );
+      DMNFe.ZQuery2.SQL.Add( '   , :xCorrecao	                                     ' );
+      DMNFe.ZQuery2.SQL.Add( '   , :xCondUso	                                      ' );
+      DMNFe.ZQuery2.SQL.Add( '   , :cStat                                          ' );
+      DMNFe.ZQuery2.SQL.Add( '   , :xMotivo                                        ' );
+      DMNFe.ZQuery2.SQL.Add( '   , :emailDest                                      ' );
+      DMNFe.ZQuery2.SQL.Add( '   , :dhRegEvento                                    ' );
+      DMNFe.ZQuery2.SQL.Add( '   , :nProt)                                         ' );
+      DMNFe.ZQuery2.ParamByName('idLote'     ).Value  := StrToInt(FrCCe.Edit_idLote.Text);
+      DMNFe.ZQuery2.ParamByName('Codigo_Loja').Value  := FrGBNFe.dxSpinEdit1.intValue;
+      DMNFe.ZQuery2.ParamByName('nNF'        ).Value  := StrToInt(FrCCe.Edit_Nota.Text);
+      DMNFe.ZQuery2.ParamByName('Evento'     ).Value  := FrCCe.Edit_Evento.Text;
+      DMNFe.ZQuery2.ParamByName('dEmi'       ).Value  := FormatDateTime('yyyy/mm/dd', DMNFe.ZQuery5['nfe_dEmi']);
+      DMNFe.ZQuery2.ParamByName('Modelo'     ).Value  := DMNFe.ZQuery5['nfe_Modelo'];
+      DMNFe.ZQuery2.ParamByName('Serie'      ).Value  := DMNFe.ZQuery5['nfe_Serie'];
+      DMNFe.ZQuery2.ParamByName('Ver_Laiaute').Value  := '';
+      DMNFe.ZQuery2.ParamByName('id'   	     ).Value  := FrCCe.Edit_id.Text;
+      DMNFe.ZQuery2.ParamByName('cOrgao'     ).Value  := '';
+      DMNFe.ZQuery2.ParamByName('chave_nfe'  ).Value  := v_chNFe;
+      DMNFe.ZQuery2.ParamByName('dhEvento'   ).Value  := '';
+      DMNFe.ZQuery2.ParamByName('tpEvento'   ).Value  := c_tpEvento;
+      DMNFe.ZQuery2.ParamByName('nSeqEvento' ).Value  := StrToInt(FrCCe.Edit_Evento.Text);
+      DMNFe.ZQuery2.ParamByName('Ver_CCe'    ).Value  := '';
+      DMNFe.ZQuery2.ParamByName('desc_Evento').Value  := c_desc_Evento;
+
+      if (StrToInt(FrCCe.Edit_Evento.Text) > 1) then
+       DMNFe.ZQuery2.ParamByName('xCorrecao' ).Value  := (trim(FrCCe.Memo1.Lines.Text) + #13#10 + trim(FrCCe.Memo2.Lines.Text))
+      else
+       DMNFe.ZQuery2.ParamByName('xCorrecao' ).Value  := FrCCe.Memo2.Text;
+
+      DMNFe.ZQuery2.ParamByName('xCondUso'   ).Value  := c_xCondUso;
+      DMNFe.ZQuery2.ParamByName('cStat'      ).Value  := '';
+      DMNFe.ZQuery2.ParamByName('xMotivo'    ).Value  := '';
+      DMNFe.ZQuery2.ParamByName('emailDest'  ).Value  := FrCCe.Edit_emailDest.Text;
+      DMNFe.ZQuery2.ParamByName('dhRegEvento').Value  := '';
+      DMNFe.ZQuery2.ParamByName('nProt'      ).Value  := '';
+
+      DMNFe.ZConnection1.StartTransaction;
+      DMNFe.ZQuery2.ExecSQL;
+     except
+      DMNFe.ZConnection1.Rollback;
+      Application.Messagebox('ERRO: CCe não criada !','Atenção!',mb_iconstop+mb_ok);
+      v_novo := False;
+     end;
+    end;
+  end;
+
+ // Salva dados na NFe que foi excluido da CCe (atualiza o numero do evento)
+ if ((StrToInt(FrCCe.Edit_Nota.Text) > 0) and (v_alte or v_novo)) then
+  begin
+   try
+    DMNFe.ZQuery2.DisableControls;
+    DMNFe.ZQuery2.Close;
+    DMNFe.ZQuery2.SQL.Clear;
+    DMNFe.ZQuery2.SQL.Add( 'Update nfe set                                         ' );
+    DMNFe.ZQuery2.SQL.Add( '  evento_CCe               = :evento_CCe               ' );
+    DMNFe.ZQuery2.SQL.Add( 'where codigo_loja          = :codigo_loja              ' );
+    DMNFe.ZQuery2.SQL.Add( '  and demi                 = :demi                     ' );
+    DMNFe.ZQuery2.SQL.Add( '  and nnf                  = :nnf                      ' );
+    DMNFe.ZQuery2.SQL.Add( '  and Modelo               = :Modelo                   ' );
+    DMNFe.ZQuery2.SQL.Add( '  and Serie                = :Serie                    ' );
+    DMNFe.ZQuery2.Params[0].AsString  := Edit_Evento.Text;
+    DMNFe.ZQuery2.Params[1].AsInteger := FrGBNFe.dxSpinEdit1.intValue;
+    DMNFe.ZQuery2.Params[2].AsString  := FormatDateTime('yyyy/mm/dd', DMNFe.ZQuery5['nfe_demi']);
+    DMNFe.ZQuery2.Params[3].AsInteger := DMNFe.ZQuery5['nfe_nnf'];
+    DMNFe.ZQuery2.Params[4].AsString  := DMNFe.ZQuery5['nfe_Modelo'];
+    DMNFe.ZQuery2.Params[5].AsString  := DMNFe.ZQuery5['nfe_Serie'];
+    try
+     DMNFe.ZConnection1.StartTransaction;
+     DMNFe.ZQuery2.ExecSQL;
+    except
+     DMNFe.ZConnection1.Rollback;
+     Application.Messagebox('ERRO: NFe não foi atualizado os dados da Nota!','Atenção!',mb_iconstop+mb_ok);
+    end;
+    DMNFe.ZQuery2.Close;
+   finally
+    DMNFe.ZQuery2.EnableControls;
+   end;
+
+   // atualiza tabela CCe
+   dxDBGrid1.Refresh;
+   DMNFe.ZQuery11.Close;
+   DMNFe.ZQuery11.Open;
+   dxDBGrid1.Refresh;
+   //********************
+   v_novo := False;
+   v_alte := True;
+
+   FrCCe.PageControl1Change(Sender);
+   FrCCe.Edit_Nota.Enabled           := False;
+   PageControl1.TabIndex             := 1;
+
+  end;
+
+end;
+
+procedure TFrCCe.Edit_NotaKeyPress(Sender: TObject; var Key: Char);
+begin
+ if not (key in['0'..'9', chr(8)]) then Abort;
+end;
+
+procedure TFrCCe.Edit_NotaExit(Sender: TObject);
+var
+ v_evento, xAux              : string;
+begin
+ // Verifica se o campo da nota está em branco, se sim aborta
+ if FrCCe.Edit_Nota.Text = '' then exit;
+
+ if (v_novo or v_alte) or (FrCCe.Edit_Nota.Text <> '') then
+  begin
+
+   v_aux := '';
+   v_aux := FrGBNFe.dxSpinEdit1.text + ',' + '''' + FormatDateTime('yyyy/mm/dd', FrGBNFe.dxDateEdit1.Date) + ''''+ ',';
+   v_aux := v_aux + '''' + FormatDateTime('yyyy/mm/dd', FrGBNFe.dxDateEdit2.Date) + '''' + ',';
+   v_Aux := v_Aux + '''' + trim(FrCCe.Edit_Nota.Text) + '''' + ',';
+   v_aux := v_aux + '''' + FrGBNFe.dxSpinEdit3.Text + '''' + ',';
+   v_aux := v_aux + '''' + '55' + '''' + ',';
+   v_aux := v_aux + '''' + FrCCe.Edit_Serie.Text + '''';
+
+   DMNFe.ZQuery5.Close;
+   DMNFe.ZQuery5.SQL.Clear;
+   DMNFe.ZQuery5.SQL.Add( 'exec sp_nfe_transmitidas ' + v_Aux );
+   DMNFe.ZQuery5.Open;
+
+   if not DMNFe.ZQuery5.IsEmpty then
+    begin
+
+     // A que se aplica a Carta de Correção Eletrônica?
+     // Segundo o § 7º Cláusula décima quarta – A do Ajuste SINIEF 7/2005, a partir de 01/07/2012 não mais
+     // poderá ser utilizada a carta de correção em papel, ficando obrigado a emissão da Carta de Correção
+     // Eletrônica (CC-e) para sanar erros em campos específicos da Nota Fiscal Eletrônica (NF-e), cujo
+     // condição de uso foi disciplinada pelo § 1º-A do art. 7º do Convênio S/N, de 15 de dezembro de 1970
+     // que determinou a sua utilização e condição para regularização de erro ocorrido na emissão de documento
+     // fiscal, desde que o erro não esteja relacionado com:
+     // I - as variáveis que determinam o valor do imposto tais como: base de cálculo, alíquota, diferença
+     // de preço, quantidade, valor da operação ou da prestação;
+     // II - a correção de dados cadastrais que implique mudança do remetente ou do destinatário;
+     // III - a data de emissão ou de saída
+     //
+     // E quanto ao prazo para emissão?
+     // Quanto ao prazo  de emissão da Carta de Correção Eletrônica temos uma certa controversa. Vejam que na
+     // Nota Técnica 2011.004,  item 6.2 – Regra de validação da CC-e,  que o prazo máximo  é de 720 horas
+     // (30 dias) da autorização e uso da NF-e.  Entretando, se formos analisar a legalidade  da limitação
+     // deste prazo através  da  interpretação do  o Art. 138 combinado com o Art 173 do Código Tributário
+     // Nacional, o prazo para a emissão da Carta de correção é de cinco anos . Até mesmo por ser a carta de
+     // correção uma espécie de denúncia espontânea, permitindo ao contribuinte sanar qualquer irreguladidade
+     // antes de intervenção fiscal.
+     // Para convalidar sobre esta  interpretação, temos também o Manual de Orientação do Contribuinte – Versão
+     // 5.0, de março de 2012 que não menciona mais o prazo para emissão da Carta de Correção Eletrônica (CC-e),
+     // podendo erros em campos específicos de NF-e,acima citados, serem sanados a qualquer tempo.
+
+     // Calcula a quantidade de dias desde que a NFe foi altorizada
+     v_Dias := (date() - DMNFe.ZQuery5['nfe_data_hora_recebimento']);
+
+     // Cinco anos mais 1 dia bisexto = 1826 dias
+     if (v_Dias <= 1826) then
+      begin
+
+       if (DMNFe.ZQuery5['nfe_evento_CCe'] <> null) then
+        v_evento := DMNFe.ZQuery5['nfe_evento_CCe']
+       else
+        v_evento := '0';
+
+       if (DMNFe.ZQuery5['nfe_chave_nfe'] <> null) then
+        v_chNFe := DMNFe.ZQuery5['nfe_chave_nfe']
+       else
+        v_chNFe := '';
+
+       if (trim(v_evento) = '') then v_evento := '0';
+
+       if (StrToInt(v_evento) < 21) then
+        begin
+         if v_novo then
+          begin
+           if (StrToInt(v_evento) < 20) then
+            begin
+             if v_evento = '0' then
+              FrCCe.Edit_Evento.Text        := '1'
+             else
+              begin
+               DMNFe.ZQuery2.Close;
+               DMNFe.ZQuery2.SQL.Clear;
+               DMNFe.ZQuery2.SQL.Add( 'Select *                                   ' );
+               DMNFe.ZQuery2.SQL.Add( ' from nfe_CCe t1                           ' );
+               DMNFe.ZQuery2.SQL.Add( ' where t1.Codigo_Loja = :Codigo_Loja and   ' );
+               DMNFe.ZQuery2.SQL.Add( '       t1.nNF         = :Nota        and   ' );
+               DMNFe.ZQuery2.SQL.Add( '       t1.Evento      = :Evento      and   ' );
+               DMNFe.ZQuery2.SQL.Add( '       t1.dEmi        = :dEmi        and   ' );
+               DMNFe.ZQuery2.SQL.Add( '       t1.Modelo      = :Modelo      and   ' );
+               DMNFe.ZQuery2.SQL.Add( '       t1.Serie       = :Serie             ' );
+               DMNFe.ZQuery2.ParamByName('Codigo_Loja').AsInteger := FrGBNFe.dxSpinEdit1.intValue;
+               DMNFe.ZQuery2.ParamByName('Nota').AsString         := FrCCe.Edit_Nota.Text;
+               DMNFe.ZQuery2.ParamByName('Evento').AsString       := v_evento;
+               DMNFe.ZQuery2.ParamByName('dEmi').Value            := FormatDateTime('yyyy/mm/dd', VarToDateTime(DMNFe.ZQuery5['nfe_demi']));
+               DMNFe.ZQuery2.ParamByName('Modelo').AsString       := DMNFe.ZQuery5['nfe_Modelo'];
+               DMNFe.ZQuery2.ParamByName('Serie').AsString        := DMNFe.ZQuery5['nfe_Serie'];
+               DMNFe.ZQuery2.Open;
+
+               if ( not DMNFe.ZQuery2.IsEmpty )  then
+                begin
+                 if ( Trim(DMNFe.ZQuery2['cStat']) = '' )  then
+                  begin
+                   ShowMessage('Existe uma CCe criada anteriormente com o evento de nº. [' + v_evento + ']' + chr(13) +
+                               'que ainda está em aberto e não foi enviada, vc só pode gerar' + chr(13) +
+                               'uma nova CCe para essa nota depois de enviar está CCe!');
+                   FrCCe.Edit_Nota.Text := '';
+                   FrCCe.Edit_Nota.SetFocus;
+                   exit;
+                  end;
+                end;
+
+                FrCCe.Edit_Evento.Text        := IntToStr(StrToInt(v_evento) + 1);
+
+              end;
+            end
+           else
+            begin
+             ShowMessage('O número de seqüencia do evento para essa nota já atingiu' + chr(13) +
+                         'o limite de permitido, de vinte eventos !');
+             FrCCe.Edit_Nota.Text := '';
+             FrCCe.Edit_Nota.SetFocus;
+             exit;
+            end;
+          end;
+
+         if v_alte then
+          begin
+           if (DMNFe.ZQuery5['NFe_evento_CCe'] = Null) then
+            FrCCe.Edit_Evento.Text        := '1'
+           else
+            FrCCe.Edit_Evento.Text        := IntToStr(StrToInt(DMNFe.ZQuery5['NFe_evento_CCe']));
+          end;
+
+         v_nSeqEvento                   := FrCCe.Edit_Evento.Text;
+
+         if (DMNFe.ZQuery5['NFe_xCorrecao_CCe'] = Null) then
+          FrCCe.Memo1.Text              := ''
+         else
+          FrCCe.Memo1.Text              := DMNFe.ZQuery5['NFe_xCorrecao_CCe'];
+
+         // FrCCe.Memo2.Text               := FrCCe.Memo1.Text;
+
+         if (DMNFe.ZQuery5['NFe_chave_nfe'] = Null) then
+          v_chNFe                       := ''
+         else
+          v_chNFe                       := DMNFe.ZQuery5['NFe_chave_nfe'];
+
+         FrCCe.Edit_id.Text             := 'ID' + v_tpEvento + v_chNFe + v_nSeqEvento;
+
+         // by Edson ; 2013/08/12T09:36 ; Contulta a nota na base sefaz para obter dados, ex: a data do evento..
+         xAux                          := DMNFe.ZQuery5['nfe_chave_nfe'];
+         xAux                          := trim(gCamLog) + trim(xAux) + '-nfe.xml';
+         FrGBNFe.ACBrNFe1.NotasFiscais.Clear;
+         try
+          FrGBNFe.ACBrNFe1.NotasFiscais.LoadFromFile(xAux);
+         except
+          ShowMessage('O arquivo XML referente esta nota não foi encontrado! ' + chr(13) +
+                      'Selecione outra nota!');
+          FrCCe.Edit_Nota.Text := '';
+          FrCCe.Edit_Nota.SetFocus;
+          exit;
+         end;
+        end
+       else
+        begin
+         ShowMessage('O número de seqüencia do evento para essa nota já atingiu' + chr(13) +
+                     'o limite de permitido, de vinte eventos !');
+         FrCCe.Edit_Nota.Text := '';
+         FrCCe.Edit_Nota.SetFocus;
+        end;
+      end
+     else
+      begin
+       ShowMessage('NF-e autorizada há mais de 1826 dias (43824) horas !' + chr(13) +
+                   'Data da Autorização ' + FormatDateTime('dd/mm/yyyy" "hh:mm:ss',
+                    DMNFe.ZQuery5['nfe_data_hora_recebimento']) + ' - ' + IntToStr(v_Dias) + ' dias');
+       FrCCe.Edit_Nota.Text := '';
+       FrCCe.Edit_Nota.SetFocus;
+      end;
+    end
+   else
+    begin
+     ShowMessage('Nota Fiscal eLetrônica não encontrada ou não autorizada!');
+     BitBtn2.Enabled := False;
+     BitBtn3.Enabled := False;
+     BitBtn4.Enabled := False;
+     //PageControl1Change(Sender);
+     //FrCCe.PageControl1.TabIndex := 1;
+    end;
+  end;
+
+end;
+
+procedure TFrCCe.GroupBox6Exit(Sender: TObject);
+begin
+ FrCCe.Edit_Nota.SetFocus;
+end;
+
+//******************************************************************************
+// procedure p_Atualiza()
+// by Edson ; 17/12/2013 ; 11:23 ; Atualiza os dados da CCe
+procedure TFrCCe.p_Atualiza();
+begin
+ dxDBGrid1.DataSource.DataSet.Active := False;
+ dxDBGrid1.DataSource.DataSet.Active := True;
+ v_novo := False;
+
+ // Limpa os campos
+ FrCCe.Edit_idLote.Text            := '';
+ FrCCe.Edit_Nota.Text              := '';
+ FrCCe.Edit_Serie.Text             := '';
+ FrCCe.Edit_Sit.Text               := '';
+ FrCCe.Edit_SitDesc.Text           := '';
+ FrCCe.Edit_DataEvento.Text        := '';
+ FrCCe.Edit_id.Text                := '';
+ FrCCe.Edit_Evento.Text            := '';
+ FrCCe.Edit_dtRegEvento.Text       := '';
+ FrCCe.Edit_nProt.Text             := '';
+ FrCCe.Edit_emailDest.Text         := '';
+ FrCCe.Memo1.Text                  := '';
+ FrCCe.Memo2.Text                  := '';
+
+ dxDBGrid1.DataSource.DataSet.Active := True;
+end;
+
+procedure TFrCCe.SpeedButton1Click(Sender: TObject);
+begin
+ // Verifica se o campo da nota está em branco, se sim aborta
+ if FrCCe.Edit_Nota.Text = '' then exit;
+
+ // Acha a nota fiscal em transmitida se existir permite deletar
+ v_aux := '';
+ v_aux := FrGBNFe.dxSpinEdit1.text + ',' + '''' + FormatDateTime('yyyy/mm/dd', FrGBNFe.dxDateEdit1.Date) + ''''+ ',';
+ v_aux := v_aux + '''' + FormatDateTime('yyyy/mm/dd', FrGBNFe.dxDateEdit2.Date) + '''' + ',';
+ v_Aux := v_Aux + '''' + trim(FrCCe.Edit_Nota.Text) + '''' + ',';
+ v_aux := v_aux + '''' + FrGBNFe.dxSpinEdit3.Text + '''' + ',';
+ v_aux := v_aux + '''' + '55' + '''' + ',';
+ v_aux := v_aux + '''' + FrCCe.Edit_Serie.Text + '''';
+
+ DMNFe.ZQuery5.Close;
+ DMNFe.ZQuery5.SQL.Clear;
+ DMNFe.ZQuery5.SQL.Add( 'exec sp_nfe_transmitidas ' + v_Aux );
+ DMNFe.ZQuery5.Open;
+
+ // Deleta nota na tabela CCe, existente em NFe transmitidas
+ if not DMNFe.ZQuery5.IsEmpty then
+  begin
+
+   if Application.MessageBox( PChar('Confirme a Exclusão desta CCe?'), 'GBNFe - Exclusão de CC-e', mb_IconInformation + mb_YesNo ) = IdNo then
+    exit;
+
+   try
+    DMNFe.ZQuery2.DisableControls;
+    DMNFe.ZQuery2.Close;
+    DMNFe.ZQuery2.SQL.Clear;
+    DMNFe.ZQuery2.SQL.Add( 'delete from NFe_CCe                                    ' );
+    DMNFe.ZQuery2.SQL.Add( 'where codigo_loja          = :codigo_loja              ' );
+    DMNFe.ZQuery2.SQL.Add( '  and nNf                  = :nNf                      ' );
+    DMNFe.ZQuery2.SQL.Add( '  and evento               = :evento                   ' );
+    DMNFe.ZQuery2.Params[0].AsInteger := FrGBNFe.dxSpinEdit1.intValue;
+    DMNFe.ZQuery2.Params[1].AsInteger := StrToInt(FrCCe.Edit_Nota.Text);
+    DMNFe.ZQuery2.Params[2].AsString  := FrCCe.Edit_Evento.Text;
+    try
+     DMNFe.ZConnection1.StartTransaction;
+     DMNFe.ZQuery2.ExecSQL;
+     PageControl1.TabIndex := 1;
+     dxDBGrid1.Refresh;
+    except
+     DMNFe.ZConnection1.Rollback;
+     Application.Messagebox('ERRO: CCe não foi deletada !','Atenção!',mb_iconstop+mb_ok);
+    end;
+    DMNFe.ZQuery2.Close;
+   finally
+    DMNFe.ZQuery2.EnableControls;
+    // atualiza tabela CCe
+    dxDBGrid1.Refresh;
+    DMNFe.ZQuery11.Close;
+    DMNFe.ZQuery11.Open;
+    dxDBGrid1.Refresh;
+   end;
+
+   // Salva dados na NFe que foi excluido da CCe (atualiza o numero do evento)
+   try
+    DMNFe.ZQuery2.DisableControls;
+    DMNFe.ZQuery2.Close;
+    DMNFe.ZQuery2.SQL.Clear;
+    DMNFe.ZQuery2.SQL.Add( 'Update nfe set                                         ' );
+    DMNFe.ZQuery2.SQL.Add( '  evento_CCe               = :evento_CCe               ' );
+    DMNFe.ZQuery2.SQL.Add( 'where codigo_loja          = :codigo_loja              ' );
+    DMNFe.ZQuery2.SQL.Add( '  and demi                 = :demi                     ' );
+    DMNFe.ZQuery2.SQL.Add( '  and nnf                  = :nnf                      ' );
+    DMNFe.ZQuery2.SQL.Add( '  and Modelo               = :Modelo                   ' );
+    DMNFe.ZQuery2.SQL.Add( '  and Serie                = :Serie                    ' );
+    if (StrToInt(VarToStr(DMNFe.ZQuery5['nfe_evento_CCe'])) > 0) then
+     DMNFe.ZQuery2.Params[0].AsString  := IntToStr(StrToInt(DMNFe.ZQuery5['nfe_evento_CCe'] - 1))
+    else
+     DMNFe.ZQuery2.Params[0].AsString  := '0';
+    DMNFe.ZQuery2.Params[1].AsInteger := FrGBNFe.dxSpinEdit1.intValue;
+    DMNFe.ZQuery2.Params[2].AsString  := FormatDateTime('yyyy/mm/dd', DMNFe.ZQuery5['nfe_demi']);
+    DMNFe.ZQuery2.Params[3].AsInteger := DMNFe.ZQuery5['nfe_nnf'];
+    DMNFe.ZQuery2.Params[4].AsString  := DMNFe.ZQuery5['nfe_Modelo'];
+    DMNFe.ZQuery2.Params[5].AsString  := DMNFe.ZQuery5['nfe_Serie'];
+    try
+     DMNFe.ZConnection1.StartTransaction;
+     DMNFe.ZQuery2.ExecSQL;
+    except
+     DMNFe.ZConnection1.Rollback;
+     Application.Messagebox('ERRO: NFe não atualizou os dados da Nota!','Atenção!',mb_iconstop+mb_ok);
+    end;
+    DMNFe.ZQuery2.Close;
+   finally
+    DMNFe.ZQuery2.EnableControls;
+   end;
+
+  end;
+
+ //PageControl1Change(Sender);
+ DMNFe.ZConnection1.Connected := False;
+ DMNFe.ZConnection1.Connected := True;
+ FormShow(Sender);
+
+end;
+
+procedure TFrCCe.BitBtn4Click(Sender: TObject);
+begin
+
+ if Application.MessageBox( PChar('Confirme a impressão da CCe ?'), 'GBNFe - Impressão CC-e', mb_IconInformation + mb_YesNo ) = IdYes then
+  begin
+   p_ImprimeCCe();
+  end;
+
+end;
+
+procedure TFrCCe.p_ImprimeCCe();
+var
+ CCeImp1                                  : TCCeImp;
+ xAux_PDF, xAux_NFe, xAux_XML             : String;
+ Chave, idLote, CNPJ, nSeqEvento          : String;
+ vEvento, vtpEvento, vn                   : String;
+begin
+
+ // Verifica se o campo da nota está em branco, se sim aborta
+ if FrCCe.Edit_Nota.Text = '' then exit;
+
+ if ( FrCCe.Edit_Nota.Text <> '' ) then
+  begin
+   v_aux := '';
+   v_aux := FrGBNFe.dxSpinEdit1.text + ',' + '''' + FormatDateTime('yyyy/mm/dd', FrGBNFe.dxDateEdit1.Date) + ''''+ ',';
+   v_aux := v_aux + '''' + FormatDateTime('yyyy/mm/dd', FrGBNFe.dxDateEdit2.Date) + '''' + ',';
+   v_Aux := v_Aux + '''' + trim(FrCCe.Edit_Nota.Text) + '''' + ',';
+   v_aux := v_aux + '''' + FrGBNFe.dxSpinEdit3.Text + '''' + ',';
+   v_aux := v_aux + '''' + '55' + '''' + ',';
+   v_aux := v_aux + '''' + FrCCe.Edit_Serie.Text + '''';
+
+   DMNFe.ZQuery5.Close;
+   DMNFe.ZQuery5.SQL.Clear;
+   DMNFe.ZQuery5.SQL.Add( 'exec sp_nfe_transmitidas ' + v_Aux );
+   DMNFe.ZQuery5.Open;
+
+ end;
+
+ //*******************************************************************************
+ // by Edson ; 2013-03-04 ;08:41 ; Atribuição para consistir nnf na hora do update
+ gCdloja_Consiste := FrGBNFe.dxSpinEdit1.Text;
+ gdEmi_Consiste   := FormatDateTime('yyyy/mm/dd', DMNFe.ZQuery5['nfe_demi']);
+ gNNF_Consiste    := vartostr(DMNFe.ZQuery5['nfe_nnf']);
+ gSerie_Consiste  := vartostr(DMNFe.ZQuery5['nfe_serie']);
+ gSerie           := StrToInt(gSerie_Consiste);
+
+ // Atribuição de variáveis que serão usadas durante a transmissão
+ Chave         := DMNFe.ZQuery11['CCe_chave_nfe'];
+ idLote        := DMNFe.ZQuery11['CCe_idLote'];
+ CNPJ          := DMNFe.ZQuery4['cnpj'];
+ nSeqEvento    := DMNFe.ZQuery11['CCe_Evento'];
+ vEvento       := DMNFe.ZQuery11['CCe_Evento'];
+ vtpEvento     := DMNFe.ZQuery11['CCe_tpEvento'];
+ xAux          := DMNFe.ZQuery5['nfe_chave_nfe'];
+ vn            := Format('%.2d', [StrToInt(nSeqEvento)] );                      // Formata variável com dois digitos ex:[1] => [01]
+
+ xAux_PDF      := (trim(gCamPDF) + trim(vtpEvento) + trim(xAux) + vn + '-ProcEventoNFe.pdf');    // tps_PDF, tps_preview ou tps_Print
+ xAux_NFe      := (trim(gCamLog) + trim(xAux) + '-nfe.xml');                                     // XML da NFe corrigida
+ xAux_XML := trim(gCamXml) +                                                    // Caminho do arquivo log (gCamXml contém o caminho padrão) ex: c:\Sistemas\GBNFe\Arq\Emp001\Xml\
+             FormatDateTime('yyyymm',Date) +                                    // Ano, mês
+             '\Evento\CCe\' +                                                   // Evento e CCe
+             trim(vtpEvento) +                                                  // Tipo de evento, neste caso (110110)
+             trim(xAux) +                                                       // Chave da NFe
+             vn +                                                               // Sequencia do Evento com duas casas decimais
+             '-procEventoNFe.xml';                                              // Final do nome + tipo (xml)
+
+ CCeImp1 := TCCeImp.Create(nil);
+
+ // Gera PDF
+ CCeImp1.defineSaida( tps_PDF, xAux_PDF );                                      // tps_PDF, tps_preview ou tps_Print
+ CCeImp1.defineXMLNFe( xAux_NFe );                                              // XML da NFe corrigida
+ CCeImp1.defineXMLCCe( xAux_XML );                                              // XML da CCe
+ CCeImp1.defineLayOut( fp_Portrait );                                           // implementado impressão retrato
+ CCeImp1.defineArqPDF( xAux_PDF );                                              // define o nome do Arquivo PDF
+ CCeImp1.defineSoftHouse( gSistema );                                           // GB Informática Ltda
+
+ try
+
+  CCeImp1.Execute;
+
+ except
+
+  Application.Messagebox('ERRO: Dados inconsitentes na impressão !','Atenção!', mb_iconstop+mb_ok);
+
+ end;
+
+ // Imprime
+ if MessageDlg('Imprimir CCe? [Sim]-Direto na impressora [Não]-No Monitor', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+  begin
+   CCeImp1.defineSaida( tps_Print, 'Imp' );                                       // tps_PDF, tps_preview ou tps_Print
+   CCeImp1.defineXMLNFe( xAux_NFe );                                              // XML da NFe corrigida
+   CCeImp1.defineXMLCCe( xAux_XML );                                              // XML da CCe
+   CCeImp1.defineLayOut( fp_Portrait );                                           // implementado impressão retrato
+   CCeImp1.defineSoftHouse(gSistema);                                             // GB Informática Ltda
+
+   try
+
+    CCeImp1.Execute;
+
+   except
+
+    Application.Messagebox('ERRO: Dados inconsitentes na impressão !','Atenção!', mb_iconstop+mb_ok);
+
+   end;
+
+  end
+ else
+  begin
+   CCeImp1.defineSaida( tps_preview, 'pdf' );                                     // tps_PDF, tps_preview ou tps_Print
+   CCeImp1.defineXMLNFe( xAux_NFe );                                              // XML da NFe corrigida
+   CCeImp1.defineXMLCCe( xAux_XML );                                              // XML da CCe
+   CCeImp1.defineLayOut( fp_Portrait );                                           // implementado impressão retrato
+   CCeImp1.defineSoftHouse(gSistema);                                             // GB Informática Ltda
+
+   try
+
+    CCeImp1.Execute;
+
+   except
+
+    Application.Messagebox('ERRO: Dados inconsitentes na impressão !','Atenção!', mb_iconstop+mb_ok);
+
+   end;
+
+  end;
+
+ CCeImp1.Free;
+
+end;
+
+procedure TFrCCe.Edit_NotaKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+ if v_novo then
+  begin
+   if (key = (VK_F8)) then
+    begin
+     if ( FrBuscaNota = nil ) then
+       FrBuscaNota := TFrBuscaNota.Create(Application);
+     FrBuscaNota.ShowModal;
+     FrBuscaNota.BringToFront;
+     FrCCe.Edit_Nota.SetFocus;
+    end;
+  end;
+end;
+
+procedure TFrCCe.BitBtn2Click(Sender: TObject);
+begin
+
+
+ if Application.MessageBox( PChar('Confirme a consulta da CCe ?'), 'GBNFe - Consulta CC-e', mb_IconInformation + mb_YesNo ) = IdYes then
+  begin
+   Edit_NotaExit(Sender);
+   FrGBNFe.ConsultaCCe();
+   FrGBNFe.pAtuNFeT();
+  end;
+
+ FrCCe.PageControl1Change(Sender);
+end;
+
+procedure TFrCCe.Edit8KeyPress(Sender: TObject; var Key: Char);
+begin
+ if not (key in['0'..'9', chr(8)]) then Abort;
+end;
+
+procedure TFrCCe.GroupBox11MouseMove(Sender: TObject; Shift: TShiftState;
+  X, Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := GroupBox11.Hint;
+end;
+
+procedure TFrCCe.Panel5MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := Panel5.Hint;
+end;
+
+procedure TFrCCe.PageControl1MouseMove(Sender: TObject; Shift: TShiftState;
+  X, Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := PageControl1.Hint;
+end;
+
+procedure TFrCCe.SpeedButton2MouseMove(Sender: TObject; Shift: TShiftState;
+  X, Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := SpeedButton2.Hint;
+end;
+
+procedure TFrCCe.SpeedButton1MouseMove(Sender: TObject; Shift: TShiftState;
+  X, Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := SpeedButton1.Hint;
+end;
+
+procedure TFrCCe.SpeedButton4MouseMove(Sender: TObject; Shift: TShiftState;
+  X, Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := SpeedButton4.Hint;
+end;
+
+procedure TFrCCe.Panel3MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := Panel3.Hint;
+end;
+
+procedure TFrCCe.GroupBox3MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := GroupBox3.Hint;
+end;
+
+procedure TFrCCe.GroupBox1MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := GroupBox1.Hint;
+end;
+
+procedure TFrCCe.GroupBox2MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := GroupBox2.Hint;
+end;
+
+procedure TFrCCe.GroupBox10MouseMove(Sender: TObject; Shift: TShiftState;
+  X, Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := GroupBox10.Hint;
+end;
+
+procedure TFrCCe.GroupBox4MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := GroupBox4.Hint;
+end;
+
+procedure TFrCCe.GroupBox9MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := GroupBox9.Hint;
+end;
+
+procedure TFrCCe.GroupBox8MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := GroupBox8.Hint;
+end;
+
+procedure TFrCCe.GroupBox7MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := GroupBox7.Hint;
+end;
+
+procedure TFrCCe.GroupBox14MouseMove(Sender: TObject; Shift: TShiftState;
+  X, Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := GroupBox14.Hint;
+end;
+
+procedure TFrCCe.GroupBox12MouseMove(Sender: TObject; Shift: TShiftState;
+  X, Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := GroupBox12.Hint;
+end;
+
+procedure TFrCCe.GroupBox16MouseMove(Sender: TObject; Shift: TShiftState;
+  X, Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := GroupBox16.Hint;
+end;
+
+procedure TFrCCe.GroupBox13MouseMove(Sender: TObject; Shift: TShiftState;
+  X, Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := GroupBox13.Hint;
+end;
+
+procedure TFrCCe.GroupBox5MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := GroupBox5.Hint;
+end;
+
+procedure TFrCCe.GroupBox6MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := GroupBox6.Hint;
+end;
+
+procedure TFrCCe.SpeedButton3MouseMove(Sender: TObject; Shift: TShiftState;
+  X, Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := SpeedButton3.Hint;
+end;
+
+procedure TFrCCe.BitBtn1MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := BitBtn1.Hint;
+end;
+
+procedure TFrCCe.BitBtn2MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := BitBtn2.Hint;
+end;
+
+procedure TFrCCe.BitBtn3MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := BitBtn3.Hint;
+end;
+
+procedure TFrCCe.BitBtn4MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := BitBtn4.Hint;
+end;
+
+procedure TFrCCe.BitBtn12MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := BitBtn12.Hint;
+end;
+
+procedure TFrCCe.Panel9MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := Panel9.Hint;
+end;
+
+procedure TFrCCe.Image1MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := Image1.Hint;
+end;
+
+procedure TFrCCe.Label1MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := Label1.Hint;
+end;
+
+procedure TFrCCe.dxDBGrid1MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := dxDBGrid1.Hint;
+end;
+
+procedure TFrCCe.GroupBox15MouseMove(Sender: TObject; Shift: TShiftState;
+  X, Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := GroupBox15.Hint;
+end;
+
+procedure TFrCCe.BitBtn3Click(Sender: TObject);
+begin
+
+ if Application.MessageBox( PChar('Confirma o envio do email da CCe ?'), 'GBNFe - Envio de eMail CC-e', mb_IconInformation + mb_YesNo ) = IdYes then
+  begin
+   gOpImpr := True;
+   FrGBNFe.EnviaEmailCCe();
+   FrGBNFe.pAtuNFe();
+   gOpImpr := False;
+  end;
+
+ FrCCe.PageControl1Change(Sender);
+
+end;
+
+end.
+
