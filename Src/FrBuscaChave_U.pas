@@ -1923,7 +1923,7 @@ begin
      if ( Dest.CNPJCPF = DMFD.FDQuery4['cnpj'] ) then
       vImporta := True
      else
-      vImporta := False;
+      vImporta := false;
 
     end;
 

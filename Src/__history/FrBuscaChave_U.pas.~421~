@@ -198,12 +198,12 @@ type
     function fADAtrib( TemSel : boolean ) : boolean;                            // Ativa e Desativa Atributos dos componentes da janela
     function fTemSel(cxTLM : TcxTreeList; cxTLbSel : Tcxtreelistcolumn): Boolean;// Verifica se foi selecionado algum item na treelist (novo berlin)
     function fQtdItensSelMDe(cxTLM : TcxTreeList; cxTLbSel : Tcxtreelistcolumn): Integer; // Retorna a quantidade de itens selecionados no MDe
+    function ImportarXML(ArqXml : String) : boolean;                            // Procedure que importa o Xml
 
     Procedure pAtribCon( ClEx: boolean ; cxTLM : TcxTreeList; cxTLMsCdL,
                          cxTLMsChv : TcxTreeListColumn ; FD :  TFDQuery );       // Atribui consulta da TreeList e Monta a query das pendentes
     procedure MarcaBloco( cxTLM : TcxTreeList; blMarca : Boolean;
                           blTodos : Boolean = False );                          // Marca bloco de seleção TreeList
-    procedure ImportarXML(ArqXml : String);                                     // Procedure que importa o Xml
     procedure DelRegErrXML(ArqXml : String);                                    // Deleta os registros com erro do Xml
     procedure MostraDados(Codigo_loja, Chave_nfe : String ; dEmi : TDateTime);  // Mostra os dados selecionados quando clic na grade
     Procedure HaDe(HD : Boolean);                                               // Habilita ou desabilita componentes
@@ -1567,9 +1567,6 @@ begin
                          'xMotivo: '     + xMotivo + #13 +
                          'chNFe: '       + docZip.Items[indContador].resNFe.chNFe;
 
-                 // Linha enibida pela CR em 13 de janeiro de 2015
-                 //ShowMessage(lMsg);                                           // Mosta a mensagem de retorno do manifesto
-
                 end
                else
                 begin
@@ -1767,13 +1764,10 @@ begin
 
                vIdYesNo := true;
 
-               ImportarXML(vArq);                                               // Salva os dados do Xml nas tabelas de entrada
-               // by Edson Lima ; 2015-9-21T1641 ; Antes => FrGBNFe.ACBrNFe1.NotasFiscais.SaveToFile(vArI);  //Salva os XMLs Depois da Importação.
-               FrGBNFe.ACBrNFe1.NotasFiscais.GravarXML(vArI);                   //Salva os XMLs Depois da Importação.
+               if not ( ImportarXML(vArq) ) then                                // Salva os dados do Xml nas tabelas de entrada
+                vCntNotPro := (vCntNotPro - 1);
 
-               //if (vCam = gCamXMLf) then
-               // if FileExists(vArq) then
-               //  DeleteFile(vArq);
+               FrGBNFe.ACBrNFe1.NotasFiscais.GravarXML(vArI);                   //Salva os XMLs Depois da Importação.
 
               end;
 
@@ -1802,13 +1796,10 @@ begin
 
               Application.ProcessMessages;
 
-              ImportarXML(vArq);                                                // Salva os dados do Xml nas tabelas de entrada
-              // by Edson Lima ; 2015-9-21T1641 ; Antes => FrGBNFe.ACBrNFe1.NotasFiscais.SaveToFile(vArI);  //Salva os XMLs Depois da Importação.
-              FrGBNFe.ACBrNFe1.NotasFiscais.GravarXML(vArI);                    //Salva os XMLs Depois da Importação.
+              if not ( ImportarXML(vArq) ) then                                 // Salva os dados do Xml nas tabelas de entrada
+               vCntNotPro := (vCntNotPro - 1);
 
-              //if (vCam = gCamXMLf) then
-              // if FileExists(vArq) then
-              //  DeleteFile(vArq);
+              FrGBNFe.ACBrNFe1.NotasFiscais.GravarXML(vArI);                    //Salva os XMLs Depois da Importação.
 
              end
             else
@@ -1820,13 +1811,10 @@ begin
         else  // Caso seja a primeira vez que o arquivo é importado
          begin
 
-           ImportarXML(vArq);                                                    // Salva os dados do Xml nas tabelas de entrada
-           // by Edson Lima ; 2015-9-21T1641 ; Antes => FrGBNFe.ACBrNFe1.NotasFiscais.SaveToFile(vArI);  //Salva os XMLs Depois da Importação.
-           FrGBNFe.ACBrNFe1.NotasFiscais.GravarXML(vArI);                   //Salva os XMLs Depois da Importação.
+          if not ( ImportarXML(vArq) ) then                                     // Salva os dados do Xml nas tabelas de entrada
+           vCntNotPro := (vCntNotPro - 1);
 
-           //if (vCam = gCamXMLf) then
-           // if FileExists(vArq) then
-           //  DeleteFile(vArq);
+          FrGBNFe.ACBrNFe1.NotasFiscais.GravarXML(vArI);                        //Salva os XMLs Depois da Importação.
 
          end;
        end;
@@ -1868,14 +1856,18 @@ end;
 //            traz como parametros o caminho e o nome do arquivo Xml
 //            by Edson Lima ; 18/06/2014T1517
 //------------------------------------------------------------------------------
-procedure TFrBuscaChave.ImportarXML(ArqXml : String);
+function TFrBuscaChave.ImportarXML(ArqXml : String) : Boolean;
 var
  i, j, k, n, l                  : integer;
  Nota, Node, NodePai, NodeItem  : TTreeNode;
  NFeRTXT                        : TNFeRTXT;
  vTotItens, vTotFat, vTotNot    : Currency;
  vObs, vCST, vCSOSN             : String;
+ vImporta                       : Boolean;
+
 begin
+
+ Result := True;
 
  FrGBNFe.ACBrNFe1.NotasFiscais.Clear;
 
@@ -1928,14 +1920,27 @@ begin
        vTotFat := (vTotFat + Cobr.Dup.Items[I].vDup);                           // Guarda o total da fatura
       end;
 
+     if ( Dest.CNPJCPF = DMFD.FDQuery4['cnpj'] ) then
+      vImporta := True
+     else
+      vImporta := False;
+
     end;
 
    vTotItens  := 0;
    vTotFat    := 0;
 
   end;
- //----------------------------------------
+ //-----------------------------------------------------------------------------
+ // Se o cnpj não for igual do destinatário ou transp ou emit não fará importação
 
+ if not vImporta then
+  begin
+   Result := False;
+   Exit;
+  end;
+
+ //----------------------------------------
  FrGBNFe.trvwNFe.Items.Clear;
                                                                                 //        tabela      campos ñ encontrados
  for n:=0 to FrGBNFe.ACBrNFe1.NotasFiscais.Count-1 do                           //*    =  NFeE_Fat -           -
@@ -4392,4 +4397,3 @@ begin
 end;
 
 end.
-
