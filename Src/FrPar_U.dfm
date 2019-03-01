@@ -373,7 +373,7 @@ object FrPar: TFrPar
       Top = 1
       Width = 677
       Height = 310
-      ActivePage = TabSheet1
+      ActivePage = ts1
       Align = alClient
       TabOrder = 0
       OnChange = PageControl1Change
@@ -2698,10 +2698,10 @@ object FrPar: TFrPar
             669
             282)
           object grp10: TGroupBox
-            Left = 0
+            Left = 4
             Top = 2
             Width = 246
-            Height = 65
+            Height = 61
             Anchors = [akLeft, akTop, akRight]
             Caption = ' Exclus'#227'o dos Arquivos tempor'#225'rios '
             Color = 14544639
@@ -2710,7 +2710,7 @@ object FrPar: TFrPar
             TabOrder = 0
             DesignSize = (
               246
-              65)
+              61)
             object grp11: TGroupBox
               Left = 10
               Top = 16
@@ -2766,7 +2766,7 @@ object FrPar: TFrPar
                 114
                 44)
               object cxdtp1: TcxDateEdit
-                Left = 21
+                Left = 12
                 Top = 16
                 Anchors = [akTop, akRight]
                 EditValue = 0d
@@ -2776,7 +2776,7 @@ object FrPar: TFrPar
                 Style.ButtonStyle = btsOffice11
                 TabOrder = 0
                 OnExit = cxdtp1Exit
-                Width = 84
+                Width = 93
               end
             end
           end
@@ -3072,6 +3072,300 @@ object FrPar: TFrPar
                 Text = '1440'
                 OnExit = edt1Exit
                 OnKeyPress = edt1KeyPress
+              end
+            end
+          end
+          object grp41: TGroupBox
+            Left = 4
+            Top = 62
+            Width = 246
+            Height = 215
+            Anchors = [akLeft, akTop, akRight]
+            Caption = ' UF Exige Resp. T'#233'cnico '
+            Color = 14544639
+            ParentBackground = False
+            ParentColor = False
+            TabOrder = 2
+            DesignSize = (
+              246
+              215)
+            object grp42: TGroupBox
+              Left = 10
+              Top = 11
+              Width = 47
+              Height = 41
+              Hint = 'O Estado exige dados do Respons'#225'vel T'#233'cnico?'
+              Caption = ' Exig? '
+              Color = 14544639
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'MS Sans Serif'
+              Font.Style = []
+              ParentColor = False
+              ParentFont = False
+              TabOrder = 0
+              OnMouseMove = grp42MouseMove
+              DesignSize = (
+                47
+                41)
+              object chk_RespTec: TCheckBox
+                Left = 12
+                Top = 14
+                Width = 29
+                Height = 17
+                Anchors = [akLeft, akRight]
+                Color = 12906751
+                ParentColor = False
+                TabOrder = 0
+              end
+            end
+            object grp43: TGroupBox
+              Left = 63
+              Top = 11
+              Width = 50
+              Height = 41
+              Hint = 'ID do C'#243'digo de Seguran'#231'a do Respons'#225'vel T'#233'cnico (CSRT)'
+              Caption = ' iD '
+              Color = 14544639
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'MS Sans Serif'
+              Font.Style = []
+              ParentColor = False
+              ParentFont = False
+              TabOrder = 1
+              OnMouseMove = grp43MouseMove
+              DesignSize = (
+                50
+                41)
+              object edt_IdResTec: TEdit
+                Left = 10
+                Top = 13
+                Width = 33
+                Height = 21
+                Anchors = [akLeft, akTop, akRight]
+                BevelKind = bkSoft
+                BorderStyle = bsNone
+                Color = 15792383
+                Font.Charset = DEFAULT_CHARSET
+                Font.Color = 16512
+                Font.Height = -11
+                Font.Name = 'Tahoma'
+                Font.Style = []
+                MaxLength = 2
+                ParentFont = False
+                ReadOnly = True
+                TabOrder = 0
+              end
+            end
+            object grp45: TGroupBox
+              Left = 10
+              Top = 94
+              Width = 225
+              Height = 41
+              Hint = 'Nome do Respons'#225'vel T'#233'cnico'
+              Anchors = [akLeft, akTop, akRight]
+              Caption = ' Nome do Respons'#225'vel T'#233'cnico '
+              Color = 14544639
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'MS Sans Serif'
+              Font.Style = []
+              ParentBackground = False
+              ParentColor = False
+              ParentFont = False
+              TabOrder = 2
+              OnMouseMove = grp45MouseMove
+              DesignSize = (
+                225
+                41)
+              object edt_NomeResTec: TEdit
+                Left = 12
+                Top = 13
+                Width = 204
+                Height = 21
+                Anchors = [akLeft, akTop, akRight]
+                BevelKind = bkSoft
+                BorderStyle = bsNone
+                Color = 15792383
+                Font.Charset = DEFAULT_CHARSET
+                Font.Color = 16512
+                Font.Height = -11
+                Font.Name = 'Tahoma'
+                Font.Style = []
+                MaxLength = 250
+                ParentFont = False
+                ReadOnly = True
+                TabOrder = 0
+              end
+            end
+            object grp46: TGroupBox
+              Left = 10
+              Top = 134
+              Width = 225
+              Height = 41
+              Hint = 'e-Mail do Respons'#225'vel T'#233'cnico'
+              Anchors = [akLeft, akTop, akRight]
+              Caption = ' e-Mail do Respons'#225'vel T'#233'cnico '
+              Color = 14544639
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'MS Sans Serif'
+              Font.Style = []
+              ParentBackground = False
+              ParentColor = False
+              ParentFont = False
+              TabOrder = 3
+              OnMouseMove = grp46MouseMove
+              DesignSize = (
+                225
+                41)
+              object edt_emaildResTec: TEdit
+                Left = 12
+                Top = 13
+                Width = 204
+                Height = 21
+                Anchors = [akLeft, akTop, akRight]
+                BevelKind = bkSoft
+                BorderStyle = bsNone
+                Color = 15792383
+                Font.Charset = DEFAULT_CHARSET
+                Font.Color = 16512
+                Font.Height = -11
+                Font.Name = 'Tahoma'
+                Font.Style = []
+                MaxLength = 250
+                ParentFont = False
+                ReadOnly = True
+                TabOrder = 0
+              end
+            end
+            object grp47: TGroupBox
+              Left = 10
+              Top = 174
+              Width = 225
+              Height = 38
+              Hint = 'Telefone do Respons'#225'vel T'#233'cnico'
+              Anchors = [akLeft, akTop, akRight]
+              Caption = ' Telefone do Respons'#225'vel T'#233'cnico '
+              Color = 14544639
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'MS Sans Serif'
+              Font.Style = []
+              ParentBackground = False
+              ParentColor = False
+              ParentFont = False
+              TabOrder = 4
+              OnMouseMove = grp47MouseMove
+              DesignSize = (
+                225
+                38)
+              object edt_FoneResTec: TEdit
+                Left = 8
+                Top = 13
+                Width = 208
+                Height = 21
+                Anchors = [akLeft, akTop, akRight]
+                BevelKind = bkSoft
+                BorderStyle = bsNone
+                Color = 15792383
+                Font.Charset = DEFAULT_CHARSET
+                Font.Color = 16512
+                Font.Height = -11
+                Font.Name = 'Tahoma'
+                Font.Style = []
+                MaxLength = 250
+                ParentFont = False
+                ReadOnly = True
+                TabOrder = 0
+              end
+            end
+            object grp48: TGroupBox
+              Left = 121
+              Top = 11
+              Width = 114
+              Height = 41
+              Hint = 'C'#243'digo de Seguran'#231'a do Respons'#225'vel T'#233'cnico (CSRT)'
+              Caption = ' CSRT '
+              Color = 14544639
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'MS Sans Serif'
+              Font.Style = []
+              ParentColor = False
+              ParentFont = False
+              TabOrder = 5
+              OnMouseMove = grp48MouseMove
+              DesignSize = (
+                114
+                41)
+              object edt_CSRTResTec: TEdit
+                Left = 10
+                Top = 13
+                Width = 95
+                Height = 21
+                Anchors = [akLeft, akTop, akRight]
+                BevelKind = bkSoft
+                BorderStyle = bsNone
+                Color = 15792383
+                Font.Charset = DEFAULT_CHARSET
+                Font.Color = 16512
+                Font.Height = -11
+                Font.Name = 'Tahoma'
+                Font.Style = []
+                MaxLength = 250
+                ParentFont = False
+                ReadOnly = True
+                TabOrder = 0
+              end
+            end
+            object grp49: TGroupBox
+              Left = 10
+              Top = 51
+              Width = 225
+              Height = 41
+              Hint = 'CNPJ do Respons'#225'vel T'#233'cnico'
+              Anchors = [akLeft, akTop, akRight]
+              Caption = ' CNPJ Resp. T'#233'cnico '
+              Color = 14544639
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'MS Sans Serif'
+              Font.Style = []
+              ParentBackground = False
+              ParentColor = False
+              ParentFont = False
+              TabOrder = 6
+              OnMouseMove = grp49MouseMove
+              DesignSize = (
+                225
+                41)
+              object edt_CNPJResTec: TEdit
+                Left = 12
+                Top = 13
+                Width = 204
+                Height = 21
+                Anchors = [akLeft, akTop, akRight]
+                BevelKind = bkSoft
+                BorderStyle = bsNone
+                Color = 15792383
+                Font.Charset = DEFAULT_CHARSET
+                Font.Color = 16512
+                Font.Height = -11
+                Font.Name = 'Tahoma'
+                Font.Style = []
+                MaxLength = 250
+                ParentFont = False
+                ReadOnly = True
+                TabOrder = 0
               end
             end
           end

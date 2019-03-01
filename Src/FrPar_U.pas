@@ -209,6 +209,21 @@ type
     grp40: TGroupBox;
     edt1: TEdit;
     lbl1: TLabel;
+    grp41: TGroupBox;
+    grp42: TGroupBox;
+    chk_RespTec: TCheckBox;
+    grp43: TGroupBox;
+    grp45: TGroupBox;
+    edt_NomeResTec: TEdit;
+    grp46: TGroupBox;
+    edt_emaildResTec: TEdit;
+    edt_IdResTec: TEdit;
+    grp47: TGroupBox;
+    edt_FoneResTec: TEdit;
+    grp48: TGroupBox;
+    edt_CSRTResTec: TEdit;
+    grp49: TGroupBox;
+    edt_CNPJResTec: TEdit;
     procedure sbtnCaminhoCertClick(Sender: TObject);
     procedure sbtnGetCertClick(Sender: TObject);
     procedure btnSalvarConfigClick(Sender: TObject);
@@ -305,6 +320,20 @@ type
     procedure btn5Click(Sender: TObject);
     procedure edt1KeyPress(Sender: TObject; var Key: Char);
     procedure edt1Exit(Sender: TObject);
+    procedure grp42MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure grp43MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure grp48MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure grp49MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure grp45MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure grp46MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure grp47MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
   private
     { Private declarations }
   public
@@ -322,8 +351,9 @@ uses GBNFe_U, ACBrDFeSSL, DMNFe_U, DMFD_U, FrBackup_U;
 procedure TFrPar.sbtnCaminhoCertClick(Sender: TObject);
 begin
 
+  //
   // by Edson Lima ; 3-4-2012 ; 16:32 ; foi retida apartir dessa data
-
+  //
   // OpenDialog1.Title := 'Selecione o Certificado';
   // OpenDialog1.DefaultExt := '*.pfx';
   // OpenDialog1.Filter := 'Arquivos PFX (*.pfx)|*.pfx|Todos os Arquivos (*.*)|*.*';
@@ -332,6 +362,7 @@ begin
   // begin
   //   edtCaminho.Text :=  OpenDialog1.FileName;
   // end;
+  //
 
 end;
 
@@ -937,6 +968,48 @@ procedure TFrPar.grp6MouseMove(Sender: TObject; Shift: TShiftState; X,
   Y: Integer);
 begin
  StatusBar1.Panels[0].Text := Grp6.Hint;
+end;
+
+procedure TFrPar.grp42MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := Grp42.Hint;
+end;
+
+procedure TFrPar.grp43MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := Grp43.Hint;
+end;
+
+procedure TFrPar.grp45MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := Grp45.Hint;
+end;
+
+procedure TFrPar.grp46MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := Grp46.Hint;
+end;
+
+procedure TFrPar.grp47MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := Grp47.Hint;
+end;
+
+procedure TFrPar.grp48MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := Grp48.Hint;
+end;
+
+procedure TFrPar.grp49MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := Grp49.Hint;
 end;
 
 procedure TFrPar.grp4MouseMove(Sender: TObject; Shift: TShiftState; X,

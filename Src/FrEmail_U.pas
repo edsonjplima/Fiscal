@@ -11,7 +11,7 @@ uses
  ACBrUtil, Vcl.Menus, Vcl.Mask, pcnConversao, Vcl.ToolWin, Vcl.OleServer,
  ExcelXP, Vcl.DBCtrls, Vcl.ImgList, IdMessage, IdBaseComponent, IdComponent,
  IdTCPConnection, IdTCPClient, IdMessageClient, IdMailBox, Vcl.AppEvnts,
- ACBrBase, FireDAC.Comp.Client, frxClass, Vcl.Printers, IdHTTP, Vcl.ClipBrd,
+ ACBrBase, FireDAC.Comp.Client, Vcl.Printers, IdHTTP, Vcl.ClipBrd,
  Winapi.WinInet, IdFTP, cxGraphics, IdSSLOpenSSL, IdText, IdAttachmentFile,
  IdExplicitTLSClientServerBase, cxControls, cxLookAndFeels,
  cxLookAndFeelPainters, cxCustomData, cxStyles, cxTL, cxTextEdit, cxCheckBox,
@@ -32,7 +32,7 @@ uses
  dxSkinVisualStudio2013Blue, dxSkinVisualStudio2013Dark,
  dxSkinVisualStudio2013Light, dxSkinVS2010, dxSkinWhiteprint,
  dxSkinXmas2008Blue, cxInplaceContainer, cxCurrencyEdit, Vcl.Outline,
-  dxActivityIndicator, cxImageComboBox;
+ dxActivityIndicator, cxImageComboBox, frxClass;
 
 type
   TFrEmail = class(TForm)

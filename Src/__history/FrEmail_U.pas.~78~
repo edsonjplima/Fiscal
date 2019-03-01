@@ -1,0 +1,707 @@
+unit FrEmail_U;
+
+interface
+
+uses
+ Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+ System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
+ Vcl.Buttons, Vcl.ExtCtrls, Vcl.ComCtrls, Vcl.StdCtrls, IdSMTP,
+ Vcl.Samples.Gauges, Winapi.ShellAPi, System.IniFiles, Vcl.DBGrids,
+ Vcl.OleCtrls, SHDocVw, Data.DB, Vcl.Grids, pcnConversaoNFe, ACBrNFe,
+ ACBrUtil, Vcl.Menus, Vcl.Mask, pcnConversao, Vcl.ToolWin, Vcl.OleServer,
+ ExcelXP, Vcl.DBCtrls, Vcl.ImgList, IdMessage, IdBaseComponent, IdComponent,
+ IdTCPConnection, IdTCPClient, IdMessageClient, IdMailBox, Vcl.AppEvnts,
+ ACBrBase, FireDAC.Comp.Client, Vcl.Printers, IdHTTP, Vcl.ClipBrd,              //frxClass,   15/02/2019
+ Winapi.WinInet, IdFTP, cxGraphics, IdSSLOpenSSL, IdText, IdAttachmentFile,
+ IdExplicitTLSClientServerBase, cxControls, cxLookAndFeels,
+ cxLookAndFeelPainters, cxCustomData, cxStyles, cxTL, cxTextEdit, cxCheckBox,
+ cxMaskEdit, cxCalendar, dxDateTimeWheelPicker, cxRichEdit,
+ cxTLdxBarBuiltInMenu, dxSkinsCore, dxSkinBlack, dxSkinBlue,
+ dxSkinBlueprint, dxSkinCaramel, dxSkinCoffee, dxSkinDarkRoom, dxSkinDarkSide,
+ dxSkinDevExpressDarkStyle, dxSkinDevExpressStyle, dxSkinFoggy,
+ dxSkinGlassOceans, dxSkinHighContrast, dxSkiniMaginary, dxSkinLilian,
+ dxSkinLiquidSky, dxSkinLondonLiquidSky, dxSkinMcSkin, dxSkinMetropolis,
+ dxSkinMetropolisDark, dxSkinMoneyTwins, dxSkinOffice2007Black,
+ dxSkinOffice2007Blue, dxSkinOffice2007Green, dxSkinOffice2007Pink,
+ dxSkinOffice2007Silver, dxSkinOffice2010Black, dxSkinOffice2010Blue,
+ dxSkinOffice2010Silver, dxSkinOffice2013DarkGray, dxSkinOffice2013LightGray,
+ dxSkinOffice2013White, dxSkinOffice2016Colorful, dxSkinOffice2016Dark,
+ dxSkinPumpkin, dxSkinSeven, dxSkinSevenClassic, dxSkinSharp, dxSkinSharpPlus,
+ dxSkinSilver, dxSkinSpringTime, dxSkinStardust, dxSkinSummer2008,
+ dxSkinTheAsphaltWorld, dxSkinsDefaultPainters, dxSkinValentine,
+ dxSkinVisualStudio2013Blue, dxSkinVisualStudio2013Dark,
+ dxSkinVisualStudio2013Light, dxSkinVS2010, dxSkinWhiteprint,
+ dxSkinXmas2008Blue, cxInplaceContainer, cxCurrencyEdit, Vcl.Outline,
+ dxActivityIndicator, cxImageComboBox;
+
+type
+  TFrEmail = class(TForm)
+    stat1: TStatusBar;
+    pnl1: TPanel;
+    pnl2: TPanel;
+    pnl3: TPanel;
+    Sb: TSpeedButton;
+    Sb11: TSpeedButton;
+    pnl4: TPanel;
+    grp1: TGroupBox;
+    grp3: TGroupBox;
+    medt1_Assunto: TEdit;
+    grp4: TGroupBox;
+    medt_Cc: TEdit;
+    grp5: TGroupBox;
+    medt1_QSel: TEdit;
+    Mensagem: TMemo;
+    g1: TGauge;
+    Sb12: TSpeedButton;
+    grp2: TGroupBox;
+    eMailsInvalidos: TMemo;
+    pnl5: TPanel;
+    Sb13: TSpeedButton;
+    grp6: TGroupBox;
+    medt_Cc1: TEdit;
+    PopupMenu: TPopupMenu;
+    ConsultaWeb5MarcaTodas1: TMenuItem;
+    ConsultaWeb5DesmarcarTodas1: TMenuItem;
+    pnl6: TPanel;
+    cxTLE: TcxTreeList;
+    cxTLEbSel: TcxTreeListColumn;
+    cxTLEiCdD: TcxTreeListColumn;
+    cxTLEsxNo: TcxTreeListColumn;
+    cxTLEsMai: TcxTreeListColumn;
+    procedure Sb11Click(Sender: TObject);
+    procedure SpeedButtonClick(Sender: TObject);
+    procedure SbClick(Sender: TObject);
+    procedure medt_CcExit(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure Sb12Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure lstTLEmailClick(Sender: TObject);
+    procedure lstTLEmailExit(Sender: TObject);
+    procedure Sb13Click(Sender: TObject);
+    procedure ConsultaWeb5MarcaTodas1Click(Sender: TObject);
+    procedure ConsultaWeb5DesmarcarTodas1Click(Sender: TObject);
+    procedure medt_Cc1KeyPress(Sender: TObject; var Key: Char);
+    procedure rg1Click(Sender: TObject);
+    procedure MensagemKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure MensagemEnter(Sender: TObject);
+    procedure MensagemExit(Sender: TObject);
+    procedure cxTLEEditing(Sender: TcxCustomTreeList;
+      AColumn: TcxTreeListColumn; var Allow: Boolean);
+    procedure grp5MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+    procedure grp3MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+    procedure grp4MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+    procedure grp1MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+    procedure grp2MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+    procedure grp6MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+    procedure Sb13MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+    procedure cxTLEMouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure Sb11MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+    procedure SbMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+    procedure Sb12MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure cxTLECustomDrawDataCell(Sender: TcxCustomTreeList;
+      ACanvas: TcxCanvas; AViewInfo: TcxTreeListEditCellViewInfo;
+      var ADone: Boolean);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    Procedure pAtribSelM( cxTLE : TcxTreeList; cxTLEiCdD : TcxTreeListColumn ;
+                                               cxTLEsxNo : TcxTreeListColumn ;
+                                               cxTLEsMai : TcxTreeListColumn ;
+                                               FD        : TFDQuery );          // Procedure de atribuição de seleção nas querys
+    Procedure pAtuTLeMail( cxTLE : TcxTreeList; cxTLEbSel  : TcxTreeListColumn ;
+                                                     cxTLEiCdD  : TcxTreeListColumn ;
+                                                     cxTLEsxNo  : TcxTreeListColumn ;
+                                                     cxTLEsMai  : TcxTreeListColumn ;
+                                                     FD         : TFDQuery );   // Procedure de atribuição de seleção nas querys
+    procedure pAtuEmail();                                                      // Atualiza a tabela treeliste do email
+    procedure MarcaBlocoM( cxTLE : TcxTreeList; blMarca : Boolean; blTodos : Boolean = False ); // Marca bloco de seleção TreeList
+
+  end;
+
+var
+  FrEmail: TFrEmail;
+
+implementation
+
+uses DMFD_U, FrPar_U, GBNFe_U;
+
+{$R *.dfm}
+
+procedure TFrEmail.Sb11Click(Sender: TObject);
+begin
+ Close;
+end;
+
+procedure TFrEmail.Sb11MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+
+ Stat1.Panels[1].Text := '  ' + Sb11.Hint;
+
+end;
+
+procedure TFrEmail.SpeedButtonClick(Sender: TObject);
+begin
+ close;
+end;
+
+procedure TFrEmail.SbClick(Sender: TObject);
+var
+ I, vC                                    : Integer;
+ vP                                       : String;
+ Para, vI                                 : String;
+ vAq                                      : TStrings;
+ sMensagem, CC, Anexos                    : Tstrings;
+
+begin
+
+ lstTLEmailExit(Sender);                                                        // força um exit do treelist
+
+ if MessageDlg('Confirma o envio de email?' + _tipo_emissao + ':', mtConfirmation, [mbYes, mbNo], 0) = mrNo then
+  exit;
+
+ Sb.Enabled   := False;
+ Sb11.Enabled := False;
+ Sb12.Enabled := False;
+ Sb13.Enabled := False;
+
+ g1.Progress := 0;
+
+ stat1.Panels[1].Text := '  Aquarde, Selecionando destinatários!';
+ Application.ProcessMessages;
+
+ g1.MaxValue := DMFD.FDQuery16.RecordCount;
+
+ eMailsInvalidos.Clear;
+ stat1.Panels[1].Text := '  Enviando eMails!';
+ Application.ProcessMessages;
+
+ CC          :=TstringList.Create;
+ sMensagem   :=TstringList.Create;
+ Anexos      :=TstringList.Create;
+
+ DMFD.FDQuery16.first;
+
+ while ( not DMFD.FDQuery16.eof )  do
+  begin
+
+   DMFD.FDQuery16.FieldByName('Checado').ReadOnly := False;
+
+   g1.Progress := (g1.Progress + 1);
+
+   if DMFD.FDQuery16['Checado'] = 'Y' then
+    begin
+
+     Application.ProcessMessages;
+     FrGBNFe.IdMessage.Clear;
+
+     para := vartostr(DMFD.FDQuery16['email']);
+
+     // Coleta os email do campo Cc e CCo, separados por virgula ou ponto-e-virgula
+     if ( Length(trim(medt_Cc.Text)) > 0 ) then
+      begin
+
+       for I := 1 to (Length(trim(medt_Cc.Text))+1) do
+        begin
+         if (medt_Cc.Text[I] = ',') or (medt_Cc.Text[I] = ';') or (I = Length(medt_Cc.Text)+1)then
+          begin
+           CC.Add(Trim(vI));
+           vI := '';
+         end
+         else
+          vI := (vI + Trim(medt_Cc.Text[I]));
+        end;
+
+      end;
+
+     vI := '';                                                                  // Limpa variável
+     vC := 0;                                                                   // zera contador
+
+     // Coleta os email do campo para, separados por virgula ou ponto-e-virgula
+     for I := 1 to (Length(Para)+1) do
+      begin
+       if (Para[I] = ',') or (Para[I] = ';') or (I = Length(Para)+1)then
+        begin
+         if vC > 0 then
+          CC.Add(Trim(vI))                                                      //especifique um email válido
+         else
+          vP := trim(vI);                                                       // Atribui apenas o primeiro email
+
+         vI := '';
+         inc(vC);                                                               // Incrementa 1
+        end
+       else
+        vI := (vI + Trim(Para[I]));
+      end;
+
+     //sMensagem.Add( 'A:' + #13#10 + '');
+     //sMensagem.Add( DMFD.FDQuery16['razao_social'] + ', ' + #13#10 + '' );
+     //sMensagem.Add( #13#10 );
+
+//     for I := 0 to Mensagem.Lines.Count -1 do
+      sMensagem.Text := ( 'A:' + #13#10 + DMFD.FDQuery16['razao_social'] + ', ' + #13#10 + Mensagem.Text );
+
+
+//     sMensagem.Add( Mensagem.Lines.Text + #13#10 + '' );
+
+     Para       := vP;
+
+     // Envia email do xml CCe
+
+     try
+      try
+
+       FrGBNFe.ACBrNFe1.EnviarEmail
+        (
+           Para
+         , medt1_Assunto.Text
+         , sMensagem
+         , CC
+         , anexos
+         , nil
+        );
+
+      except on e:exception do
+
+       begin
+
+        Sb.Enabled   := True;
+        Sb11.Enabled := True;
+        Sb12.Enabled := True;
+        Sb13.Enabled := True;
+
+        eMailsInvalidos.Lines.Add(DMFD.FDQuery16['razao_social'] + ' - eMail: ' +
+                                  DMFD.FDQuery16['email'] + e.Message );
+
+       end;
+
+      end;
+
+     finally
+
+      CC.Clear;
+      sMensagem.Clear;
+      Anexos.Clear;
+
+     end;
+
+    end;
+
+   DMFD.FDQuery16.Next;
+
+  end;
+
+ CC.Free;
+ sMensagem.Free;
+ Anexos.Free;
+
+ MessageDlg('Fim de envio do eMail para os destinatários e Cc!', mtInformation, [mbOK], 0);
+
+ Sb.Enabled   := True;
+ Sb11.Enabled := True;
+ Sb12.Enabled := True;
+ Sb13.Enabled := True;
+
+ stat1.Panels[1].Text := '  Envio terminado!';
+ Application.ProcessMessages;
+
+end;
+
+procedure TFrEmail.SbMouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+
+ Stat1.Panels[1].Text := '  ' + Sb.Hint;
+
+end;
+
+procedure TFrEmail.medt_CcExit(Sender: TObject);
+begin
+
+ if not fValidaEmail(medt_Cc.Text, 'S') then
+  begin
+
+   Application.Messagebox('eMail inválido! ','Atenção!',MB_ICONINFORMATION+mb_ok);
+   medt_Cc.SetFocus;
+
+  end;
+
+end;
+
+procedure TFrEmail.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+
+ FrGBNFe.BringToFront;
+
+end;
+
+procedure TFrEmail.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+var
+ Direction : Integer;   
+ 
+begin
+ // Altere a propriedade do KeyPreview do Form pra true
+ Direction := -1;
+ Case Key of
+  VK_NEXT, VK_RETURN : Direction := 0;
+  VK_PRIOR	 : Direction := 1;
+  VK_ESCAPE : Close;
+ end;
+ if Direction <> -1 then
+  begin
+   Perform(WM_NEXTDLGCTL, Direction, 0);
+   key := 0;
+  end;
+end;
+
+procedure TFrEmail.Sb12Click(Sender: TObject);
+begin
+ Close;
+end;
+
+procedure TFrEmail.Sb12MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+
+ Stat1.Panels[1].Text := '  ' + Sb12.Hint;
+
+end;
+
+procedure TFrEmail.FormShow(Sender: TObject);
+begin
+
+ // Define o tamanho da janela
+ FrEmail.Height := 629;
+ FrEmail.Width  := 826;
+
+ medt1_QSel.Text := FrGBNFe.Label1.Caption;
+
+ pAtuEmail();
+
+end;
+
+procedure TFrEmail.grp1MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+
+ Stat1.Panels[1].Text := '  ' + grp1.Hint;
+
+end;
+
+procedure TFrEmail.grp2MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+
+ Stat1.Panels[1].Text := '  ' + grp2.Hint;
+
+end;
+
+procedure TFrEmail.grp3MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+
+ Stat1.Panels[1].Text := '  ' + grp3.Hint;
+
+end;
+
+procedure TFrEmail.grp4MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+
+ Stat1.Panels[1].Text := '  ' + grp4.Hint;
+
+end;
+
+procedure TFrEmail.grp5MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+
+ Stat1.Panels[1].Text := '  ' + grp5.Hint;
+
+end;
+
+procedure TFrEmail.grp6MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+
+ Stat1.Panels[1].Text := '  ' + grp6.Hint;
+
+end;
+
+procedure TFrEmail.lstTLEmailClick(Sender: TObject);
+begin
+ if cxTLE.FocusedColumn.ItemIndex = cxTLEbSel.ItemIndex then
+  begin
+   cxTLE.FocusedColumn.ItemIndex := cxTLEiCdD.ItemIndex;
+   cxTLE.FocusedColumn.ItemIndex := cxTLEbSel.ItemIndex;
+  end;
+end;
+
+procedure TFrEmail.lstTLEmailExit(Sender: TObject);
+begin
+
+ // by Edson Lima ; 2013-7-17T1024 ; Chama a procedure de atribuição de seleção da TreeList
+ pAtribSelM(cxTLE, cxTLEiCdD, cxTLEsxNo, cxTLEsMai, DMFD.FDQuery16);
+
+end;
+
+
+//------------------------------------------------------------------------------
+// Função....: pAtribSel
+// Objetivo..: Atribui seleção da TreeList e Monta a Query referenciada
+// Parametros: Recebe a TreeList e o nome do campo
+// Criação...: 20]17/3/24T1043
+// Autor.....: Edson Lima
+//------------------------------------------------------------------------------
+Procedure TFrEmail.pAtribSelM( cxTLE : TcxTreeList; cxTLEiCdD : TcxTreeListColumn ;
+                                                    cxTLEsxNo : TcxTreeListColumn ;
+                                                    cxTLEsMai : TcxTreeListColumn ;
+                                                    FD        : TFDQuery );     // Procedure de atribuição de seleção nas querys
+Var
+ I : Integer;
+begin
+
+  for I := 0 to cxTLE.Count - 1 do
+  begin
+
+   FD.First;
+
+   while (not FD.Eof) do
+    begin
+
+     FD.FieldByName('Checado').ReadOnly := False;
+
+     if ((FD['Codigo']         = cxTLE.Items[I].Texts[cxTLEiCdD.ItemIndex])  and
+         (FD['razao_social']   = cxTLE.Items[I].Texts[cxTLEsxNo.ItemIndex])  and
+         (FD['email']          = cxTLE.Items[I].Texts[cxTLEsMai.ItemIndex])) then
+      begin
+       if (cxTLE.Items[I].Texts[00] = 'True') then
+        begin
+
+         FD.Edit;
+         FD['Checado'] := 'Y';
+
+        end
+       else
+        begin
+
+         FD.Edit;
+         FD['Checado'] := 'N';
+
+        end;
+      end;
+
+     FD.Next;
+
+    end;
+  end;
+
+end;
+
+
+//------------------------------------------------------------------------------
+// by Edson Lima ; 2017-3-30T0924
+// atualiza a tabela treeliste do email
+//------------------------------------------------------------------------------
+procedure TFrEmail.pAtuEmail();
+begin
+
+ // Ler e execulta a query de contingência
+ DMFD.FDQuery16.Close;
+  DMFD.FDQuery16.ParamByName('razao_social').AsString  := medt_Cc1.Text;
+ DMFD.FDQuery16.Open;
+
+ // by Edson Lima ; 2017-04-06T1629 ; Atualiza dados das TreeLest dos email dos destinatários
+ pAtuTLeMail(cxTLE, cxTLEbSel, cxTLEiCdD, cxTLEsxNo, cxTLEsMai, DMFD.FDQuery16);
+
+end;
+
+//------------------------------------------------------------------------------
+// Função....: pAtuTLeMail
+// Objetivo..: Atualiza dados das TreeLest de eMail
+// Parametros: Recebe a TreeList e a Query - Monta a grade
+// Criação...: 2017/4/7T1010
+// By........: Edson Lima
+//------------------------------------------------------------------------------
+Procedure TFrEmail.pAtuTLeMail( cxTLE : TcxTreeList; cxTLEbSel  : TcxTreeListColumn ;
+                                                     cxTLEiCdD  : TcxTreeListColumn ;
+                                                     cxTLEsxNo  : TcxTreeListColumn ;
+                                                     cxTLEsMai  : TcxTreeListColumn ;
+                                                     FD         : TFDQuery );
+var
+ nodPed : TcxTreeListNode;
+begin
+ cxTLE.Clear;
+
+ if FD.RecordCount > 0 Then
+  Begin
+   cxTLE.BeginUpdate;
+
+   Try
+    FD.First;
+
+    // Laço para montar grade
+
+    While Not FD.Eof Do
+     begin
+      nodPed := cxTLE.Add;
+
+      nodPed.Values[cxTLEbSel.ItemIndex] := 'False';
+      nodPed.Values[cxTLEiCdD.ItemIndex] := FD.fieldByName('codigo').AsString;
+      nodPed.Values[cxTLEsxNo.ItemIndex] := FD.fieldByName('razao_social').AsString;
+      nodPed.Values[cxTLEsMai.ItemIndex] := FD.fieldByName('email').AsString;
+
+     FD.Next;
+    end;
+  Finally
+   cxTLE.EndUpdate;
+  end;
+ end;
+end;
+
+procedure TFrEmail.Sb13Click(Sender: TObject);
+begin
+
+ pAtuEmail();
+
+end;
+
+procedure TFrEmail.Sb13MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+
+ Stat1.Panels[1].Text := '  ' + Sb13.Hint;
+
+end;
+
+procedure TFrEmail.ConsultaWeb5MarcaTodas1Click(Sender: TObject);
+begin
+
+ MarcaBlocoM( cxTLE, True, True );
+
+end;
+
+procedure TFrEmail.cxTLECustomDrawDataCell(Sender: TcxCustomTreeList;
+  ACanvas: TcxCanvas; AViewInfo: TcxTreeListEditCellViewInfo;
+  var ADone: Boolean);
+begin
+
+ ACanvas.Font.Color := $00804000;
+
+end;
+
+procedure TFrEmail.cxTLEEditing(Sender: TcxCustomTreeList;
+  AColumn: TcxTreeListColumn; var Allow: Boolean);
+begin
+
+ Allow := ( cxTLE.FocusedColumn.ItemIndex = cxTLEbSel.ItemIndex ) or
+          ( cxTLE.Selections[cxTLEbSel.ItemIndex].Texts[00] = 'True' );
+
+
+end;
+
+procedure TFrEmail.cxTLEMouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+
+ Stat1.Panels[1].Text := '  ' + cxTLE.Hint;
+
+end;
+
+procedure TFrEmail.ConsultaWeb5DesmarcarTodas1Click(Sender: TObject);
+begin
+
+ MarcaBlocoM( cxTLE, False, True );
+
+end;
+
+//------------------------------------------------------------------------------
+// Função....: MarcaBlocoM
+// Objetivo..: Marca um bloco de Nodes selecionados
+// Parametros: Recebe a TreeList a marcar
+// Criação...: 2017/4/7T1337
+// By........: Edson Lima
+//------------------------------------------------------------------------------
+procedure TFrEmail.MarcaBlocoM( cxTLE : TcxTreeList; blMarca : Boolean; blTodos : Boolean = False );
+Var
+ I : Integer;
+
+begin
+
+ cxTLE.BeginUpdate;
+
+ Try
+  if blTodos then
+   for I := 0 to cxTLE.Count - 1 do
+    begin
+     if blMarca then
+      cxTLE.Items[I].Texts[00] := 'True'
+     else
+      cxTLE.Items[I].Texts[00] := 'False';
+    end
+  else
+   for I := 0 to cxTLE.SelectionCount - 1 do
+    begin
+     if blMarca then
+      cxTLE.Selections[I].Texts[00] := 'True'
+     else
+      cxTLE.Selections[I].Texts[00] := 'False';
+    end;
+ Finally
+  cxTLE.EndUpdate;
+  cxTLE.Refresh;
+ end;
+end;
+
+
+
+procedure TFrEmail.medt_Cc1KeyPress(Sender: TObject; var Key: Char);
+begin
+
+ if (key in[chr(13)]) then Sb13Click(Sender);
+
+end;
+
+procedure TFrEmail.rg1Click(Sender: TObject);
+begin
+ pAtuEmail();
+end;
+
+procedure TFrEmail.MensagemKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+var
+ Direction : Integer;
+begin
+ // Altere a propriedade do KeyPreview do Form pra true
+ Direction := -1;
+ Case Key of
+  VK_PRIOR	 : Direction := 1;
+ end;
+ if Direction <> -1 then
+  begin
+   Perform(WM_NEXTDLGCTL, Direction, 0);
+   key := 0;
+  end;
+end;
+
+procedure TFrEmail.MensagemEnter(Sender: TObject);
+begin
+
+ FrEmail.KeyPreview := False;
+
+end;
+
+procedure TFrEmail.MensagemExit(Sender: TObject);
+begin
+
+ FrEmail.KeyPreview := True;
+
+end;
+
+end.

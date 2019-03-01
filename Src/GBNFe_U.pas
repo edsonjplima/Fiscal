@@ -13,7 +13,7 @@ uses
   Vcl.ImgList, IdMessage, IdBaseComponent, IdComponent, IdTCPConnection,
   IdTCPClient, IdMessageClient, IdSMTP, IdMailBox, Vcl.AppEvnts, ACBrBase,
   ACBrMDFe, ACBrDFe, IdSSLOpenSSL, IdAttachmentFile, ACBrNFeDANFEClass,
-  ACBrNFeDANFeESCPOS, ACBrPosPrinter, ACBrNFeDANFEFR, frxClass,
+  ACBrNFeDANFeESCPOS, ACBrPosPrinter, ACBrNFeDANFEFR,
   FireDAC.Phys.MSSQL, FireDAC.Phys.Intf, FireDAC.Phys.SQLPreprocessor,
   FireDAC.Phys.ODBCCli, FireDAC.Phys.ODBCWrapper, FireDAC.Phys.SQLGenerator,
   FireDAC.Phys.Meta, FireDAC.Phys.ODBCBase, FireDAC.Phys.MSSQLDef,
@@ -44,7 +44,8 @@ uses
   ACBrNFeDANFEFRDM, IdExplicitTLSClientServerBase, IdSMTPBase,
   cxInplaceContainer, cxImageComboBox, cxMemo, IdIOHandler, IdIOHandlerSocket,
   IdIOHandlerStack, IdSSL, TypInfo, ACBrSMSClass, ACBrSMS, dxActivityIndicator,
-  cxContainer, cxEdit, cxDropDownEdit, RLPreviewForm, blcksock;
+  cxContainer, cxEdit, cxDropDownEdit, RLPreviewForm, blcksock, ACBrDFeReport,
+  ACBrDFeDANFeReport, frxClass;
 
 type
  TWebControl = class(TWebBrowser)
@@ -687,6 +688,23 @@ begin
       begin
 
        vAux := _nota;
+
+       //-----------------------------------------------------------------------
+       // Informações do Responsável Técnico pelo NF-e NFC-e - insert dos dados
+       if ( FrPar.chk_RespTec.Checked ) then
+        begin
+
+         ACBrNFe1.Configuracoes.RespTec.IdCSRT := StrToInt(FrPar.edt_IdResTec.Text);
+         ACBrNFe1.Configuracoes.RespTec.CSRT   := Trim(FrPar.edt_CSRTResTec.Text);
+
+         infRespTec.CNPJ     := FrPar.edt_CNPJResTec.Text;
+         infRespTec.xContato := Trim(FrPar.edt_NomeResTec.Text);
+         infRespTec.email    := Trim(FrPar.edt_emaildResTec.Text);
+         infRespTec.fone     := Trim(FrPar.edt_FoneResTec.Text);
+
+        end;
+
+       //-----------------------------------------------------------------------
 
        // by Edson Lima ; 2017-6-9T0949 ; Define quem será usado como cNF
        if ( (DMFD.FDQuery1['nfe_CodPed'] = null) or
@@ -3087,23 +3105,23 @@ begin
              pGravaNFe('004', 'protocolo', 'recibo',                 'chave_nfe', 'situacao',
                        'motivo', 'data_hora_recebimento',  'CalcHoraNFCe',     'codigo_loja',
                        'demi',      'nnf',                    'serie', 'chave_nfe',
-                       ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtNFe.Items[0].nProt,
+                       ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].nProt,
                        ACBrNFe1.WebServices.Retorno.NFeRetorno.nRec,
-                       ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtNFe.Items[0].chNFe,
-                       ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtNFe.Items[0].cStat,
-                       ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtNFe.Items[0].xMotivo,
-                       FormatDateTime('yyyy/mm/dd hh:nn:ss', ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtNFe.Items[0].dhRecbto),
+                       ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].chDFe,
+                       ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].cStat,
+                       ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].xMotivo,
+                       FormatDateTime('yyyy/mm/dd hh:nn:ss', ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].dhRecbto),
                        'N',
                        edt_CodEmp.Text,
                        FormatDateTime('yyyy/mm/dd', DMFD.FDQuery1['nfe_demi']),
                        DMFD.FDQuery1['nfe_nnf'],
                        DMFD.FDQuery1['nfe_serie'],
-                       ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtNFe.Items[0].chNFe, true);
+                       ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].chDFe, true);
 
              //-----------------------------------------------------------------
              // by Edson Lima ; 2017-1-5T1054 ; Grava a chave no pedido do gerente
-             if ( (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtNFe.Items[0].cStat) = '100') or
-                  (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtNFe.Items[0].cStat) = '150') ) then
+             if ( (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].cStat) = '100') or
+                  (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].cStat) = '150') ) then
               fGraGer( gChvNFe, gCd_Emp, gCodPed );
              //-----------------------------------------------------------------
 
@@ -3112,15 +3130,15 @@ begin
              //-----------------------------------------------------------------
              // Caso a exceção seja por denegação
              //-----------------------------------------------------------------
-             if (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtNFe.Items[i].xMotivo) =
+             if (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].xMotivo) =
                 'Rejeicao: NF-e esta denegada na base de dados da Secretaria de Fazenda Estadual')  or
-                (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtNFe.Items[i].xMotivo) =
+                (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].xMotivo) =
                 'Uso Denegado : Irregularidade fiscal do destinatario')                             or
-                (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtNFe.Items[i].cStat) = '301')  or
-                (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtNFe.Items[i].cStat) = '302')  or
-                (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtNFe.Items[i].cStat) = '303')  or
-                (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtNFe.Items[i].cStat) = '110')  or
-                (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtNFe.Items[i].cStat) = '205')  then
+                (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].cStat) = '301')  or
+                (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].cStat) = '302')  or
+                (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].cStat) = '303')  or
+                (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].cStat) = '110')  or
+                (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].cStat) = '205')  then
               begin
 
                //---------------------------------------------------------------
@@ -3184,24 +3202,24 @@ begin
 
              ACBrNFe1.WebServices.Retorno.Recibo := ACBrNFe1.WebServices.Enviar.Recibo;
              ACBrNFe1.WebServices.Retorno.Executar;
-             for i := 0 to ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtNFe.Count-1 do
+             for i := 0 to ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Count-1 do
               begin
                // by Edson Lima ; 2013/03/12 ; 14:23 ; Atualiza a nfe no update centralizado
                pGravaNFe('005',    'protocolo', 'recibo',   'chave_nfe',    'situacao',
                          'motivo', 'data_hora_recebimento', 'CalcHoraNFCe', 'codigo_loja',
                          'demi',   'nnf',       'serie',    'chave_nfe',
-                         ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtNFe.Items[i].nProt,
+                         ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].nProt,
                          ACBrNFe1.WebServices.Retorno.NFeRetorno.nRec,
-                         ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtNFe.Items[i].chNFe,
-                         ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtNFe.Items[i].cStat,
-                         ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtNFe.Items[i].xMotivo,
-                         FormatDateTime('yyyy/mm/dd hh:nn:ss', ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtNFe.Items[i].dhRecbto),
+                         ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].chDFe,
+                         ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].cStat,
+                         ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].xMotivo,
+                         FormatDateTime('yyyy/mm/dd hh:nn:ss', ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].dhRecbto),
                          'N',
                          edt_CodEmp.Text,
                          FormatDateTime('yyyy/mm/dd', DMFD.FDQuery1['nfe_demi']),
                          DMFD.FDQuery1['nfe_nnf'],
                          DMFD.FDQuery1['nfe_serie'],
-                         ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtNFe.Items[0].chNFe, true);
+                         ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].chDFe, true);
 
               end;
 
@@ -3220,15 +3238,15 @@ begin
             //-------------------------------------------------------------------
             // Caso a exceção seja por denegação
             //-------------------------------------------------------------------
-            if (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtNFe.Items[i].xMotivo) =
+            if (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].xMotivo) =
                'Rejeicao: NF-e esta denegada na base de dados da Secretaria de Fazenda Estadual')  or
-               (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtNFe.Items[i].xMotivo) =
+               (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].xMotivo) =
                'Uso Denegado : Irregularidade fiscal do destinatario')                             or
-               (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtNFe.Items[i].cStat) = '301')  or
-               (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtNFe.Items[i].cStat) = '302')  or
-               (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtNFe.Items[i].cStat) = '303')  or
-               (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtNFe.Items[i].cStat) = '110')  or
-               (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtNFe.Items[i].cStat) = '205')  then
+               (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].cStat) = '301')  or
+               (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].cStat) = '302')  or
+               (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].cStat) = '303')  or
+               (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].cStat) = '110')  or
+               (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].cStat) = '205')  then
              begin
 
               //----------------------------------------------------------------
@@ -5369,6 +5387,13 @@ begin
   DMFD.FDQuery4.SQL.Add( '  Email_Mensagem         = :Email_Mensagem,       ' );
   DMFD.FDQuery4.SQL.Add( '  OUTROS_ExcTmp          = :OUTROS_ExcTmp,        ' );
   DMFD.FDQuery4.SQL.Add( '  OUTROS_DtIni           = :OUTROS_DtIni          ' );
+  DMFD.FDQuery4.SQL.Add( '  RT_UFExige             = :RT_UFExige            ' );
+  DMFD.FDQuery4.SQL.Add( '  RT_idCSRT              = :RT_idCSRT             ' );
+  DMFD.FDQuery4.SQL.Add( '  RT_CSRT                = :RT_CSRT               ' );
+  DMFD.FDQuery4.SQL.Add( '  RT_CNPJ                = :RT_CNPJ               ' );
+  DMFD.FDQuery4.SQL.Add( '  RT_xContato            = :RT_xContato           ' );
+  DMFD.FDQuery4.SQL.Add( '  RT_email               = :RT_email              ' );
+  DMFD.FDQuery4.SQL.Add( '  RT_fone                = :RT_fone               ' );
   DMFD.FDQuery4.SQL.Add( ' where codigo_loja = :codigo_loja                 ' );
 
   //----------------------------------------------------------------------------
@@ -5566,6 +5591,18 @@ begin
    DMFD.FDQuery4.ParamByName('OUTROS_ExcTmp').AsString           := 'S'
   else
    DMFD.FDQuery4.ParamByName('OUTROS_ExcTmp').AsString           := 'N';
+
+  if FrPar.chk_RespTec.Checked then
+   DMFD.FDQuery4.ParamByName('RT_UFExige').AsString              := 'S'
+  else
+   DMFD.FDQuery4.ParamByName('RT_UFExige').AsString              := 'N';
+
+  DMFD.FDQuery4.ParamByName('RT_idCSRT').AsString                := FrPar.edt_IdResTec.Text;
+  DMFD.FDQuery4.ParamByName('RT_CSRT').AsString                  := FrPar.edt_CSRTResTec.Text;
+  DMFD.FDQuery4.ParamByName('RT_CNPJ').AsString                  := FrPar.edt_CNPJResTec.Text;
+  DMFD.FDQuery4.ParamByName('RT_xContato').AsString              := FrPar.edt_NomeResTec.Text;
+  DMFD.FDQuery4.ParamByName('RT_email').AsString                 := FrPar.edt_emaildResTec.Text;
+  DMFD.FDQuery4.ParamByName('RT_fone').AsString                  := FrPar.edt_FoneResTec.Text;
 
   DMFD.FDQuery4.ParamByName('codigo_loja').AsString              := edt_CodEmp.Text;
   DMFD.FDQuery4.ParamByName('OUTROS_DtIni').AsString             := FormatDateTime('yyyy/mm/dd', FrPar.cxdtp1.Date);
@@ -5993,6 +6030,23 @@ begin
    end
   else
    FrPar.CheckBox.Checked        := False;
+
+  if (DMFD.FDQuery4['RT_UFExige'] <> Null) then
+   begin
+    if (DMFD.FDQuery4['RT_UFExige'] = 'S') then
+     FrPar.chk_RespTec.Checked   := True
+    else
+     FrPar.chk_RespTec.Checked   := False;
+   end
+  else
+   FrPar.chk_RespTec.Checked     := False;
+
+    FrPar.edt_IdResTec.Text        := DMFD.FDQuery4['RT_idCSRT'  ];
+    FrPar.edt_CSRTResTec.Text      := DMFD.FDQuery4['RT_CSRT'    ];
+    FrPar.edt_CNPJResTec.Text      := DMFD.FDQuery4['RT_CNPJ'    ];
+    FrPar.edt_NomeResTec.Text      := DMFD.FDQuery4['RT_xContato'];
+    FrPar.edt_emaildResTec.Text    := DMFD.FDQuery4['RT_email'   ];
+    FrPar.edt_FoneResTec.Text      := DMFD.FDQuery4['RT_fone'    ];
 
   if (DMFD.FDQuery4['OUTROS_DtIni'] <> Null) then
    FrPar.cxdtp1.Date             := DMFD.FDQuery4['OUTROS_DtIni']
@@ -7304,12 +7358,12 @@ begin
           else
            begin
             // by Edson Lima ; 2013/03/11 ; 06:57 ; com essa nova abordágem, é possível a continuação após uma rejeição e verificado seu codigo de retorno ;
-            if (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtNFe.Items[0].cStat) <> '100') and
-               (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtNFe.Items[0].cStat) <> '150') then exit;
+            if (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].cStat) <> '100') and
+               (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].cStat) <> '150') then exit;
 
             if gDeuErrConsiste then Exit;
 
-            xAux := vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtNFe.Items[0].chNFe);
+            xAux := vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].chDFe);
             if xAux <> '' then
              begin
 
@@ -7320,7 +7374,7 @@ begin
               grava_xml_no_banco;
 
               //---------------------enviar email
-              xAux := vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtNFe.Items[0].chNFe);
+              xAux := vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].chDFe);
               //pega os dados do destinatario
               DMFD.FDQuery2.Close;
               DMFD.FDQuery2.SQL.Clear;
@@ -9144,7 +9198,7 @@ begin
         if not gDuplic then // by Edson ; 2013-11-22T1420 ; Só envia email se não der duplicidade de nota
          begin
           //---------------------enviar email
-          xAux := vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtNFe.Items[0].chNFe);
+          xAux := vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].chDFe);
           //pega os dados do destinatario
           DMFD.FDQuery2.Close;
           DMFD.FDQuery2.SQL.Clear;
@@ -14163,76 +14217,70 @@ Var
  Ok         : Boolean;
 begin
 
- ACBrNFeDANFERL1.Impressora                       := FrPar.edtImpNFe.Text;
- ACBrNFeDANFCeFortes1.Impressora                  := FrPar.edtImpNFCe.Text;
- ACBrNFe1.Configuracoes.Arquivos.AdicionarLiteral := True;
- ACBrNFe1.DANFE.PathPDF                           := gCamPdf;
+ ACBrNFeDANFERL1.Impressora                        := FrPar.edtImpNFe.Text;
+ ACBrNFeDANFCeFortes1.Impressora                   := FrPar.edtImpNFCe.Text;
+ ACBrNFe1.Configuracoes.Arquivos.AdicionarLiteral  := True;
+ ACBrNFe1.DANFE.PathPDF                            := gCamPdf;
 
  case FrPar.cbb1.ItemIndex of
   0 : begin
        if ( FrPar.cbbTipoDANF.ItemIndex = 1 ) then
-        ACBrNFe1.DANFE.TamanhoFonteEndereco        := 6
+        ACBrNFeDANFERL1.Fonte.TamanhoFonteEndereco := 6
        else
-        ACBrNFe1.DANFE.TamanhoFonteEndereco        := 8;
-       ACBrNFe1.DANFE.LogoemCima                   := True;
-       ACBrNFe1.DANFE.ExpandirLogoMarca            := False;
+        ACBrNFeDANFERL1.Fonte.TamanhoFonteEndereco := 8;
+       ACBrNFeDANFERL1.LogoemCima                  := True;
+       ACBrNFeDANFERL1.ExpandeLogoMarca            := False;
       end;
   1 : begin
-       ACBrNFe1.DANFE.TamanhoFonteEndereco         := 8;
-       ACBrNFe1.DANFE.LogoemCima                   := False;
-       ACBrNFe1.DANFE.ExpandirLogoMarca            := True;
+       ACBrNFeDANFERL1.Fonte.TamanhoFonteEndereco  := 8;
+       ACBrNFeDANFERL1.LogoemCima                  := False;
+       ACBrNFeDANFERL1.ExpandeLogoMarca            := True;
       end;
   2 : begin
-       ACBrNFe1.DANFE.TamanhoFonteEndereco         := 8;
-       ACBrNFe1.DANFE.LogoemCima                   := False;
-       ACBrNFe1.DANFE.ExpandirLogoMarca            := False;
+       ACBrNFeDANFERL1.Fonte.TamanhoFonteEndereco  := 8;
+       ACBrNFeDANFERL1.LogoemCima                  := False;
+       ACBrNFeDANFERL1.ExpandeLogoMarca            := False;
       end;
  end;
 
- ACBrNFe1.DANFE.Logo                          := FrPar.edtLogoMarca.Text;
- ACBrNFeDANFeRL1.Logo                         := FrPar.edtLogoMarca.Text;
- ACBrNFeDANFCeFortes1.Logo                    := FrPar.edtLogoMarca.Text;
+ ACBrNFe1.DANFE.Logo                               := FrPar.edtLogoMarca.Text;
+ ACBrNFeDANFeRL1.Logo                              := FrPar.edtLogoMarca.Text;
+ ACBrNFeDANFCeFortes1.Logo                         := FrPar.edtLogoMarca.Text;
 
  if gModelo = 65 then
   begin
 
-   ACBrNFe1.DANFE                             := ACBrNFeDANFCeFortes1;
-   ACBrNFeDANFCeFortes1.PathPDF               := gCamPdf;
-   ACBrNFeDANFCeFortes1.Sistema               := gSistema;
-   ACBrNFeDANFCeFortes1.Usuario               := gUsu;
-
-   //if ( gCpt = 1 ) then
-   // ACBrNFeDANFCeFortes1.NumCopias             := 1
-   //else
-    ACBrNFeDANFCeFortes1.NumCopias             := strtoint(FrPar.ed_QtdCopNFCe.Text);
+   ACBrNFe1.DANFE                                  := ACBrNFeDANFCeFortes1;
+   ACBrNFeDANFCeFortes1.PathPDF                    := gCamPdf;
+   ACBrNFeDANFCeFortes1.Sistema                    := gSistema;
+   ACBrNFeDANFCeFortes1.Usuario                    := gUsu;
+   ACBrNFeDANFCeFortes1.NumCopias                  := strtoint(FrPar.ed_QtdCopNFCe.Text);
 
    if not FrPar.CheckBox2.Checked then
-    ACBrNFeDANFCeFortes1.MostrarPreview       := false
+    ACBrNFeDANFCeFortes1.MostraPreview             := false
    else
-    ACBrNFeDANFCeFortes1.MostrarPreview       := true;
+    ACBrNFeDANFCeFortes1.MostraPreview             := true;
 
-   // Utilizado o ACBrNFeDANFERL1 porque o ACBrNFeDANFCeFortes1 não aceita
    if FrPar.CheckBox8.Checked then
-    ACBrNFeDANFERL1.ExibeCampoFatura          := True
+    ACBrNFeDANFERL1.ExibeCampoFatura               := True
    else
-    ACBrNFeDANFERL1.ExibeCampoFatura          := False;
+    ACBrNFeDANFERL1.ExibeCampoFatura               := False;
 
    case FrPar.cbbTipoDANFCE.ItemIndex of
-    0: ACBrNFeDANFCeFortes1.TipoDANFE         := tiSemGeracao;
-    1: ACBrNFeDANFCeFortes1.TipoDANFE         := tiSimplificado;
-    2: ACBrNFeDANFCeFortes1.TipoDANFE         := tiNFCe;
-    3: ACBrNFeDANFCeFortes1.TipoDANFE         := tiMsgEletronica;
+    0: ACBrNFeDANFCeFortes1.TipoDANFE              := tiSemGeracao;
+    1: ACBrNFeDANFCeFortes1.TipoDANFE              := tiSimplificado;
+    2: ACBrNFeDANFCeFortes1.TipoDANFE              := tiNFCe;
+    3: ACBrNFeDANFCeFortes1.TipoDANFE              := tiMsgEletronica;
    end;
 
    case FrPar.cbbTipoDANFCE.ItemIndex of
-    0: ACBrNFe1.DANFE.TipoDANFE               := StrToTpImp(OK, '0');
-    1: ACBrNFe1.DANFE.TipoDANFE               := StrToTpImp(OK, '3');
-    2: ACBrNFe1.DANFE.TipoDANFE               := StrToTpImp(OK, '4');
-    3: ACBrNFe1.DANFE.TipoDANFE               := StrToTpImp(OK, '5');
+    0: ACBrNFe1.DANFE.TipoDANFE                    := StrToTpImp(OK, '0');
+    1: ACBrNFe1.DANFE.TipoDANFE                    := StrToTpImp(OK, '3');
+    2: ACBrNFe1.DANFE.TipoDANFE                    := StrToTpImp(OK, '4');
+    3: ACBrNFe1.DANFE.TipoDANFE                    := StrToTpImp(OK, '5');
    end;
 
    // ACBrNFe1.DANFE.TipoDANFE                  := StrToTpImp(OK, '4');         // StrToEnumerado(ok, s, ['0', '1', '2', '3', '4', '5', '6'], [tiSemGeracao, tiRetrato, tiPaisagem, tiSimplificado, tiNFCe, tiMsgEletronica, tiNFCeA4]);
-
    // TpcnTipoImpressao = (tiSemGeracao, tiRetrato, tiPais  result := StrToEnumerado(ok, s,
    //                              ['0',          '1',       '2',        '3',            '4',    '5'],
    //                     [tiSemGeracao, tiRetrato, tiPaisagem, tiSimplificado, tiNFCe, tiMsgEletronica]);
@@ -14241,46 +14289,43 @@ begin
  else
   begin
 
-   ACBrNFe1.DANFE                             := ACBrNFeDANFeRL1;
-   ACBrNFeDANFeRL1.PathPDF                    := gCamPdf;
-   ACBrNFeDANFeRL1.Sistema                    := gSistema;
-   ACBrNFeDANFeRL1.Usuario                    := gUsu;
-
-   //if ( gCpt = 1 ) then
-   // ACBrNFeDANFeRL1.NumCopias                 := 1
-   //else
-    ACBrNFeDANFeRL1.NumCopias                 := strtoint(FrPar.ed_QtdCopNFe.Text);
+   ACBrNFe1.DANFE                                  := ACBrNFeDANFeRL1;
+   ACBrNFeDANFeRL1.PathPDF                         := gCamPdf;
+   ACBrNFeDANFeRL1.Sistema                         := gSistema;
+   ACBrNFeDANFeRL1.Usuario                         := gUsu;
+   ACBrNFeDANFeRL1.NumCopias                       := strtoint(FrPar.ed_QtdCopNFe.Text);
 
    if not FrPar.CheckBox2.Checked then
-    ACBrNFeDANFERL1.MostrarPreview            := false
+    ACBrNFeDANFERL1.MostraPreview                  := false
    else
-    ACBrNFeDANFERL1.MostrarPreview            := true;
+    ACBrNFeDANFERL1.MostraPreview                  := true;
 
    if FrPar.CheckBox8.Checked then
     ACBrNFeDANFERL1.ExibeCampoFatura          := True
    else
     ACBrNFeDANFERL1.ExibeCampoFatura          := False;
 
-   case FrPar.cbb1.ItemIndex of
-    0 : begin
-         if ( FrPar.cbbTipoDANF.ItemIndex = 1 ) then
-          ACBrNFe1.DANFE.TamanhoFonteEndereco        := 6
-         else
-          ACBrNFe1.DANFE.TamanhoFonteEndereco        := 8;
-         ACBrNFe1.DANFE.LogoemCima                   := True;
-         ACBrNFe1.DANFE.ExpandirLogoMarca            := False;
-        end;
-    1 : begin
-         ACBrNFe1.DANFE.TamanhoFonteEndereco         := 8;
-         ACBrNFe1.DANFE.LogoemCima                   := False;
-         ACBrNFe1.DANFE.ExpandirLogoMarca            := True;
-        end;
-    2 : begin
-         ACBrNFe1.DANFE.TamanhoFonteEndereco         := 8;
-         ACBrNFe1.DANFE.LogoemCima                   := False;
-         ACBrNFe1.DANFE.ExpandirLogoMarca            := False;
-        end;
-   end;
+//   Bloco inibido aguardando alteração no componente fastreport 15/02/2019
+//   case FrPar.cbb1.ItemIndex of
+//    0 : begin
+//         if ( FrPar.cbbTipoDANF.ItemIndex = 1 ) then
+//          ACBrNFe1.DANFE.TamanhoFonteEndereco        := 6
+//         else
+//          ACBrNFe1.DANFE.TamanhoFonteEndereco        := 8;
+//         ACBrNFe1.DANFE.LogoemCima                   := True;
+//         ACBrNFe1.DANFE.ExpandirLogoMarca            := False;
+//        end;
+//    1 : begin
+//         ACBrNFe1.DANFE.TamanhoFonteEndereco         := 8;
+//         ACBrNFe1.DANFE.LogoemCima                   := False;
+//         ACBrNFe1.DANFE.ExpandirLogoMarca            := True;
+//        end;
+//    2 : begin
+//         ACBrNFe1.DANFE.TamanhoFonteEndereco         := 8;
+//         ACBrNFe1.DANFE.LogoemCima                   := False;
+//         ACBrNFe1.DANFE.ExpandirLogoMarca            := False;
+//        end;
+//   end;
 
    case FrPar.cbbTipoDANF.ItemIndex of
     0: ACBrNFeDANFeRL1.TipoDANFE              := tiSemGeracao;
@@ -14313,110 +14358,104 @@ Var
  Ok         : Boolean;
 begin
 
- ACBrNFeDANFEFR1.Impressora                   := FrPar.edtImpNFe.Text;
- ACBrNFeDANFeESCPOS1.Impressora               := FrPar.edtImpNFCe.Text;
+ ACBrNFeDANFEFR1.Impressora                          := FrPar.edtImpNFe.Text;
+ ACBrNFeDANFeESCPOS1.Impressora                      := FrPar.edtImpNFCe.Text;
 
  case FrPar.cbb1.ItemIndex of
   0 : begin
        if ( FrPar.cbbTipoDANF.ItemIndex = 1 ) then
-        ACBrNFe1.DANFE.TamanhoFonteEndereco        := 6
+        ACBrNFeDANFeRL1.Fonte.TamanhoFonteEndereco   := 6
        else
-        ACBrNFe1.DANFE.TamanhoFonteEndereco        := 8;
-       ACBrNFe1.DANFE.LogoemCima                   := True;
-       ACBrNFe1.DANFE.ExpandirLogoMarca            := False;
+        ACBrNFeDANFeRL1.Fonte.TamanhoFonteEndereco   := 8;
+       ACBrNFeDANFeRL1.LogoemCima                    := True;
+       ACBrNFeDANFeRL1.ExpandeLogoMarca              := False;
       end;
   1 : begin
-       ACBrNFe1.DANFE.TamanhoFonteEndereco         := 8;
-       ACBrNFe1.DANFE.LogoemCima                   := False;
-       ACBrNFe1.DANFE.ExpandirLogoMarca            := True;
+       ACBrNFeDANFeRL1.Fonte.TamanhoFonteEndereco    := 8;
+       ACBrNFeDANFeRL1.LogoemCima                    := False;
+       ACBrNFeDANFeRL1.ExpandeLogoMarca              := True;
       end;
   2 : begin
-       ACBrNFe1.DANFE.TamanhoFonteEndereco         := 8;
-       ACBrNFe1.DANFE.LogoemCima                   := False;
-       ACBrNFe1.DANFE.ExpandirLogoMarca            := False;
+       ACBrNFeDANFeRL1.Fonte.TamanhoFonteEndereco    := 8;
+       ACBrNFeDANFeRL1.LogoemCima                    := False;
+       ACBrNFeDANFeRL1.ExpandeLogoMarca              := False;
       end;
  end;
 
- ACBrNFe1.DANFE.Logo                          := FrPar.edtLogoMarca.Text;
- ACBrNFeDANFeFR1.Logo                         := FrPar.edtLogoMarca.Text;
+ ACBrNFe1.DANFE.Logo                                 := FrPar.edtLogoMarca.Text;
+ ACBrNFeDANFeFR1.Logo                                := FrPar.edtLogoMarca.Text;
  if ( gModelo = 55 ) then
   begin
 
-   ACBrNFeDANFEFR1.FastFileEvento               := gCamRep + 'Eventos.fr3';
-   ACBrNFeDANFEFR1.FastFileInutilizacao         := gCamRep + 'INUTILIZACAO.fr3';
+   ACBrNFeDANFEFR1.FastFileEvento                    := gCamRep + 'Eventos.fr3';
+   ACBrNFeDANFEFR1.FastFileInutilizacao              := gCamRep + 'INUTILIZACAO.fr3';
 
   end
  else
   begin
 
-   ACBrNFeDANFEFR1.FastFileEvento               := gCamRep + 'EventosNFCe.fr3';
-   ACBrNFeDANFEFR1.FastFileInutilizacao         := gCamRep + 'INUTILIZACAONFCe.fr3';
+   ACBrNFeDANFEFR1.FastFileEvento                    := gCamRep + 'EventosNFCe.fr3';
+   ACBrNFeDANFEFR1.FastFileInutilizacao              := gCamRep + 'INUTILIZACAONFCe.fr3';
 
   end;
 
- ACBrNFeDANFeESCPOS1.Logo                     := FrPar.edtLogoMarca.Text;
+ ACBrNFeDANFeESCPOS1.Logo                            := FrPar.edtLogoMarca.Text;
 
  if gModelo = 65 then
   begin
 
-   ACBrNFe1.DANFE                             := ACBrNFeDANFCeFortes1;
-   ACBrNFeDANFCeFortes1.PathPDF               := gCamPdf;
-   ACBrNFeDANFCeFortes1.Sistema               := gSistema;
-   ACBrNFeDANFCeFortes1.Usuario               := gUsu;
-
-   //if ( gCpt = 1 ) then
-   // ACBrNFeDANFCeFortes1.NumCopias             := 1
-   //else
-    ACBrNFeDANFCeFortes1.NumCopias             := strtoint(FrPar.ed_QtdCopNFCe.Text);
+   ACBrNFe1.DANFE                                    := ACBrNFeDANFCeFortes1;
+   ACBrNFeDANFCeFortes1.PathPDF                      := gCamPdf;
+   ACBrNFeDANFCeFortes1.Sistema                      := gSistema;
+   ACBrNFeDANFCeFortes1.Usuario                      := gUsu;
+   ACBrNFeDANFCeFortes1.NumCopias                    := strtoint(FrPar.ed_QtdCopNFCe.Text);
 
    if not FrPar.CheckBox2.Checked then
-    ACBrNFeDANFCeFortes1.MostrarPreview       := false
+    ACBrNFeDANFCeFortes1.MostraPreview               := false
    else
-    ACBrNFeDANFCeFortes1.MostrarPreview       := true;
+    ACBrNFeDANFCeFortes1.MostraPreview               := true;
 
-   // Utilizado o ACBrNFeDANFERL1 porque o ACBrNFeDANFCeFortes1 não aceita
    if FrPar.CheckBox8.Checked then
-    ACBrNFeDANFERL1.ExibeCampoFatura          := True
+    ACBrNFeDANFERL1.ExibeCampoFatura                 := True
    else
-    ACBrNFeDANFERL1.ExibeCampoFatura          := False;
+    ACBrNFeDANFERL1.ExibeCampoFatura                 := False;
 
    case FrPar.cbb1.ItemIndex of
     0 : begin
          if ( FrPar.cbbTipoDANF.ItemIndex = 1 ) then
-          ACBrNFe1.DANFE.TamanhoFonteEndereco        := 6
+          ACBrNFeDANFeRL1.Fonte.TamanhoFonteEndereco := 6
          else
-          ACBrNFe1.DANFE.TamanhoFonteEndereco        := 8;
-         ACBrNFe1.DANFE.LogoemCima                   := True;
-         ACBrNFe1.DANFE.ExpandirLogoMarca            := False;
+          ACBrNFeDANFeRL1.Fonte.TamanhoFonteEndereco := 8;
+         ACBrNFeDANFeRL1.LogoemCima                  := True;
+         ACBrNFeDANFeRL1.ExpandeLogoMarca            := False;
         end;
     1 : begin
-         ACBrNFe1.DANFE.TamanhoFonteEndereco         := 8;
-         ACBrNFe1.DANFE.LogoemCima                   := False;
-         ACBrNFe1.DANFE.ExpandirLogoMarca            := True;
+         ACBrNFeDANFeRL1.Fonte.TamanhoFonteEndereco  := 8;
+         ACBrNFeDANFeRL1.LogoemCima                  := False;
+         ACBrNFeDANFeRL1.ExpandeLogoMarca            := True;
         end;
     2 : begin
-         ACBrNFe1.DANFE.TamanhoFonteEndereco         := 8;
-         ACBrNFe1.DANFE.LogoemCima                   := False;
-         ACBrNFe1.DANFE.ExpandirLogoMarca            := False;
+         ACBrNFeDANFeRL1.Fonte.TamanhoFonteEndereco  := 8;
+         ACBrNFeDANFeRL1.LogoemCima                  := False;
+         ACBrNFeDANFeRL1.ExpandeLogoMarca            := False;
         end;
    end;
 
    case FrPar.cbbTipoDANFCE.ItemIndex of
-    0: ACBrNFeDANFCeFortes1.TipoDANFE         := tiSemGeracao;
-    1: ACBrNFeDANFCeFortes1.TipoDANFE         := tiSimplificado;
-    2: ACBrNFeDANFCeFortes1.TipoDANFE         := tiNFCe;
-    3: ACBrNFeDANFCeFortes1.TipoDANFE         := tiMsgEletronica;
+    0: ACBrNFeDANFCeFortes1.TipoDANFE                := tiSemGeracao;
+    1: ACBrNFeDANFCeFortes1.TipoDANFE                := tiSimplificado;
+    2: ACBrNFeDANFCeFortes1.TipoDANFE                := tiNFCe;
+    3: ACBrNFeDANFCeFortes1.TipoDANFE                := tiMsgEletronica;
    end;
 
    case FrPar.cbbTipoDANFCE.ItemIndex of
-    0: ACBrNFe1.DANFE.TipoDANFE               := StrToTpImp(OK, '0');
-    1: ACBrNFe1.DANFE.TipoDANFE               := StrToTpImp(OK, '3');
-    2: ACBrNFe1.DANFE.TipoDANFE               := StrToTpImp(OK, '4');
-    3: ACBrNFe1.DANFE.TipoDANFE               := StrToTpImp(OK, '5');
+    0: ACBrNFe1.DANFE.TipoDANFE                      := StrToTpImp(OK, '0');
+    1: ACBrNFe1.DANFE.TipoDANFE                      := StrToTpImp(OK, '3');
+    2: ACBrNFe1.DANFE.TipoDANFE                      := StrToTpImp(OK, '4');
+    3: ACBrNFe1.DANFE.TipoDANFE                      := StrToTpImp(OK, '5');
    end;
 
    // ACBrNFe1.DANFE.TipoDANFE                  := StrToTpImp(OK, '4');         // StrToEnumerado(ok, s, ['0', '1', '2', '3', '4', '5', '6'], [tiSemGeracao, tiRetrato, tiPaisagem, tiSimplificado, tiNFCe, tiMsgEletronica, tiNFCeA4]);
-
    // TpcnTipoImpressao = (tiSemGeracao, tiRetrato, tiPais  result := StrToEnumerado(ok, s,
    //                               ['0',          '1',       '2',        '3',            '4',    '5'],
    //                               [tiSemGeracao, tiRetrato, tiPaisagem, tiSimplificado, tiNFCe, tiMsgEletronica]);
@@ -14425,69 +14464,66 @@ begin
  else
   begin
 
-   ACBrNFe1.DANFE                             := ACBrNFeDANFEFR1;
-   ACBrNFeDANFeFR1.PathPDF                    := gCamPdf;
-   ACBrNFeDANFeFR1.Sistema                    := gSistema;
-   ACBrNFeDANFeFR1.Usuario                    := gUsu;
-
-   //if ( gCpt = 1 ) then
-   // ACBrNFeDANFeFR1.NumCopias                 := 1
-   //else
-    ACBrNFeDANFeFR1.NumCopias                 := strtoint(FrPar.ed_QtdCopNFe.Text);
+   ACBrNFe1.DANFE                                    := ACBrNFeDANFEFR1;
+   ACBrNFeDANFeFR1.PathPDF                           := gCamPdf;
+   ACBrNFeDANFeFR1.Sistema                           := gSistema;
+   ACBrNFeDANFeFR1.Usuario                           := gUsu;
+   ACBrNFeDANFeFR1.NumCopias                         := strtoint(FrPar.ed_QtdCopNFe.Text);
 
    if not FrPar.CheckBox2.Checked then
-    ACBrNFeDANFEFR1.MostrarPreview            := false
+    ACBrNFeDANFEFR1.MostraPreview                    := false
    else
-    ACBrNFeDANFEFR1.MostrarPreview            := true;
+    ACBrNFeDANFEFR1.MostraPreview                    := true;
 
    if FrPar.CheckBox8.Checked then
-    ACBrNFeDANFEFR1.ExibeCampoFatura          := True
+    ACBrNFeDANFEFR1.ExibeCampoFatura                 := True
    else
-    ACBrNFeDANFEFR1.ExibeCampoFatura          := False;
+    ACBrNFeDANFEFR1.ExibeCampoFatura                 := False;
 
-   case FrPar.cbb1.ItemIndex of
-    0 : begin
-         if ( FrPar.cbbTipoDANF.ItemIndex = 1 ) then
-          ACBrNFe1.DANFE.TamanhoFonteEndereco        := 6
-         else
-          ACBrNFe1.DANFE.TamanhoFonteEndereco        := 8;
-         ACBrNFe1.DANFE.LogoemCima                   := True;
-         ACBrNFe1.DANFE.ExpandirLogoMarca            := False;
-        end;
-    1 : begin
-         ACBrNFe1.DANFE.TamanhoFonteEndereco         := 8;
-         ACBrNFe1.DANFE.LogoemCima                   := False;
-         ACBrNFe1.DANFE.ExpandirLogoMarca            := True;
-        end;
-    2 : begin
-         ACBrNFe1.DANFE.TamanhoFonteEndereco         := 8;
-         ACBrNFe1.DANFE.LogoemCima                   := False;
-         ACBrNFe1.DANFE.ExpandirLogoMarca            := False;
-        end;
+//   Bloco inibido a espera de atualização no componente fastreport 15/02/2019
+//   case FrPar.cbb1.ItemIndex of
+//    0 : begin
+//         if ( FrPar.cbbTipoDANF.ItemIndex = 1 ) then
+//          ACBrNFeDANFEFR1.TamanhoFonteEndereco        := 6
+//         else
+//          ACBrNFe1.DANFE.TamanhoFonteEndereco        := 8;
+//         ACBrNFeDANFEFR1.LogoemCima                   := True;
+//         ACBrNFe1.DANFE.ExpandirLogoMarca            := False;
+//        end;
+//    1 : begin
+//         ACBrNFe1.DANFE.TamanhoFonteEndereco         := 8;
+//         ACBrNFe1.DANFE.LogoemCima                   := False;
+//         ACBrNFe1.DANFE.ExpandirLogoMarca            := True;
+//        end;
+//    2 : begin
+//         ACBrNFe1.DANFE.TamanhoFonteEndereco         := 8;
+//         ACBrNFe1.DANFE.LogoemCima                   := False;
+//         ACBrNFe1.DANFE.ExpandirLogoMarca            := False;
+//        end;
+//   end;
+
+   case FrPar.cbbTipoDANF.ItemIndex of
+    0: ACBrNFeDANFeFR1.TipoDANFE                     := tiSemGeracao;
+    1: ACBrNFeDANFeFR1.TipoDANFE                     := tiRetrato;
+    2: ACBrNFeDANFeFR1.TipoDANFE                     := tiPaisagem;
+    3: ACBrNFeDANFeFR1.TipoDANFE                     := tiSimplificado;
+    4: ACBrNFeDANFeFR1.TipoDANFE                     := tiMsgEletronica;
    end;
 
    case FrPar.cbbTipoDANF.ItemIndex of
-    0: ACBrNFeDANFeFR1.TipoDANFE              := tiSemGeracao;
-    1: ACBrNFeDANFeFR1.TipoDANFE              := tiRetrato;
-    2: ACBrNFeDANFeFR1.TipoDANFE              := tiPaisagem;
-    3: ACBrNFeDANFeFR1.TipoDANFE              := tiSimplificado;
-    4: ACBrNFeDANFeFR1.TipoDANFE              := tiMsgEletronica;
+    0: ACBrNFe1.DANFE.TipoDANFE                      := StrToTpImp(OK, '0');
+    1: ACBrNFe1.DANFE.TipoDANFE                      := StrToTpImp(OK, '1');
+    2: ACBrNFe1.DANFE.TipoDANFE                      := StrToTpImp(OK, '2');
+    3: ACBrNFe1.DANFE.TipoDANFE                      := StrToTpImp(OK, '3');
+    4: ACBrNFe1.DANFE.TipoDANFE                      := StrToTpImp(OK, '5');
    end;
 
    case FrPar.cbbTipoDANF.ItemIndex of
-    0: ACBrNFe1.DANFE.TipoDANFE               := StrToTpImp(OK, '0');
-    1: ACBrNFe1.DANFE.TipoDANFE               := StrToTpImp(OK, '1');
-    2: ACBrNFe1.DANFE.TipoDANFE               := StrToTpImp(OK, '2');
-    3: ACBrNFe1.DANFE.TipoDANFE               := StrToTpImp(OK, '3');
-    4: ACBrNFe1.DANFE.TipoDANFE               := StrToTpImp(OK, '5');
-   end;
-
-   case FrPar.cbbTipoDANF.ItemIndex of
-    0: ACBrNFeDANFeFR1.FastFile               := gCamRep + 'DANFE.fr3';                // tiSemGeracao;
-    1: ACBrNFeDANFeFR1.FastFile               := gCamRep + 'DANFeRetratoNovo.fr3';     // tiRetrato;
-    2: ACBrNFeDANFeFR1.FastFile               := gCamRep + 'DANFePaisagem.fr3';        // tiPaisagem;
-    3: ACBrNFeDANFeFR1.FastFile               := gCamRep + 'DANFeRetratoFS.fr3';       // tiSimplificado;
-    4: ACBrNFeDANFeFR1.FastFile               := gCamRep + 'DANFeRetrato_Basic.fr3';   // tiMsgEletronica;
+    0: ACBrNFeDANFeFR1.FastFile                      := gCamRep + 'DANFE.fr3';                // tiSemGeracao;
+    1: ACBrNFeDANFeFR1.FastFile                      := gCamRep + 'DANFeRetratoNovo.fr3';     // tiRetrato;
+    2: ACBrNFeDANFeFR1.FastFile                      := gCamRep + 'DANFePaisagem.fr3';        // tiPaisagem;
+    3: ACBrNFeDANFeFR1.FastFile                      := gCamRep + 'DANFeRetratoFS.fr3';       // tiSimplificado;
+    4: ACBrNFeDANFeFR1.FastFile                      := gCamRep + 'DANFeRetrato_Basic.fr3';   // tiMsgEletronica;
    end;
 
   end;
@@ -16696,6 +16732,8 @@ begin
   result := StrToDatetime(vdhEve + vUTC);
 
 end;
+
+
 
 
 //------------------------------------------------------------------------------

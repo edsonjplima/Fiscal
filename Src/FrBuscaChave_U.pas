@@ -1223,18 +1223,30 @@ begin
 
           TemSel       :=    True;                                              // Torna verdadeiro se achar nota selecionada
 
+
           with FrGBNFe.ACBrNFe1 do
            begin
-            DownloadNFe.Download.CNPJ      :=   DMFD.FDQuery4['cnpj'];
+
+//
+//            Foi isolado esse bloco por conta de erro de compilação para o novo acbr baixado em 15/02/2019
+
+            WebServices.DistribuicaoDFe.CNPJCPF      :=   DMFD.FDQuery4['cnpj'];
 
             If FrPar.rgTipoAmb.ItemIndex = 0 then
-             DownloadNFe.Download.tpAmb    := taProducao
+             Configuracoes.WebServices.Ambiente  := taProducao
             else
-             DownloadNFe.Download.tpAmb    := taHomologacao;
+             Configuracoes.WebServices.Ambiente  := taHomologacao;
 
-            DownloadNFe.Download.Chaves.Clear;
-            DownloadNFe.Download.Chaves.Add;
-            DownloadNFe.Download.Chaves.Items[DownloadNFe.Download.Chaves.Count-1].chNFe := DMFD.FDQryGeral2['MDFe_Chave_nfe'];
+//            DownloadNFe.Download.CNPJ      :=   DMFD.FDQuery4['cnpj'];
+//
+//            If FrPar.rgTipoAmb.ItemIndex = 0 then
+//             DownloadNFe.Download.tpAmb    := taProducao
+//            else
+//             DownloadNFe.Download.tpAmb    := taHomologacao;
+//
+//            DownloadNFe.Download.Chaves.Clear;
+//            DownloadNFe.Download.Chaves.Add;
+//            DownloadNFe.Download.Chaves.Items[DownloadNFe.Download.Chaves.Count-1].chNFe := DMFD.FDQryGeral2['MDFe_Chave_nfe'];
 
             //------------------------------------------------------------------
             // trunk2
@@ -1271,7 +1283,8 @@ begin
 
                 strPathArquivo := (gCamXml + formatdatetime('yyyy',StrToDateTime(DMFD.FDQryGeral2['MDFe_dEmi']))
                                            + formatdatetime('mm',  StrToDateTime(DMFD.FDQryGeral2['MDFe_dEmi']))
-                                           + '\Down\' + docZip.Items[indContador].resNFe.chNFe + '-nfe.xml');
+//                                           + '\Down\' + docZip.Items[indContador].resNFe.chNFe + '-nfe.xml');     Isolado p/atu 15/02/2019
+                                           + '\Down\' + docZip.Items[indContador].resDFe.chDFe + '-nfe.xml');
 
                 if (vmA > vmE) then
                  begin
@@ -1282,7 +1295,8 @@ begin
                     else
                      strPathArquivo := (gCamXml + formatdatetime('yyyy', Now())
                                                 + IntToStrZero(z, 2)
-                                                + '\Down\' + docZip.Items[indContador].resNFe.chNFe + '-nfe.xml');
+//                                                + '\Down\' + docZip.Items[indContador].resNFe.chNFe + '-nfe.xml'); Isolado p/atu 15/02/2019
+                                                + '\Down\' + docZip.Items[indContador].resDFe.chDFe + '-nfe.xml');
                    end;
                  end;
 
@@ -1310,7 +1324,7 @@ begin
                      DMFD.FDQryGeral1.ParamByName('Xml_Bai'   ).Value  := '1';
                      DMFD.FDQryGeral1.ParamByName('Codigo_loja').AsInteger  := StrToInt(gCodEmp);
                      DMFD.FDQryGeral1.ParamByName('Evento'     ).AsString   := DMFD.FDQryGeral2['MDFe_Evento'];
-                     DMFD.FDQryGeral1.ParamByName('Chave_nfe'  ).AsString   := docZip.Items[indContador].resNFe.chNFe;
+                     DMFD.FDQryGeral1.ParamByName('Chave_nfe'  ).AsString   := docZip.Items[indContador].resDFe.chDFe;
 
                      DMFD.FDQryGeral1.ExecSQL;
                     end;
@@ -1323,10 +1337,11 @@ begin
                    end;
 
                    lMsg :=
-                           'Id: '          + IntToStr(docZip.Items[indContador].Id) + #13 +
+//                           'Id: '          + IntToStr(docZip.Items[indContador].id) + #13 +
+                           'Protocolo: '   + docZip.Items[indContador].resDFe.nProt + #13 +
                            'cStat: '       + IntToStr(cStat) + #13 +
                            'xMotivo: '     + xMotivo + #13 +
-                           'chNFe: '       + docZip.Items[indContador].resNFe.chNFe;
+                           'chNFe: '       + docZip.Items[indContador].resDFe.chDFe;
 
                    // Linha enibida pela CR em 13 de janeiro de 2015
                    //ShowMessage(lMsg);                                           // Mosta a mensagem de retorno do manifesto
@@ -1466,16 +1481,18 @@ begin
         with FrGBNFe.ACBrNFe1 do
          begin
 
-          DownloadNFe.Download.CNPJ      :=   DMFD.FDQuery4['cnpj'];
+//          Bloco enibido durante a atualização do acbr do dia 15/02/2019
 
-          If FrPar.rgTipoAmb.ItemIndex = 0 then
-           DownloadNFe.Download.tpAmb    := taProducao
-          else
-           DownloadNFe.Download.tpAmb    := taHomologacao;
+            WebServices.DistribuicaoDFe.CNPJCPF      :=   DMFD.FDQuery4['cnpj'];
 
-          DownloadNFe.Download.Chaves.Clear;
-          DownloadNFe.Download.Chaves.Add;
-          DownloadNFe.Download.Chaves.Items[DownloadNFe.Download.Chaves.Count-1].chNFe := DMFD.FDQryGeral2['MDFe_Chave_nfe'];
+            If FrPar.rgTipoAmb.ItemIndex = 0 then
+             Configuracoes.WebServices.Ambiente  := taProducao
+            else
+             Configuracoes.WebServices.Ambiente  := taHomologacao;
+
+//          DownloadNFe.Download.Chaves.Clear;
+//          DownloadNFe.Download.Chaves.Add;
+//          DownloadNFe.Download.Chaves.Items[DownloadNFe.Download.Chaves.Count-1].chNFe := DMFD.FDQryGeral2['MDFe_Chave_nfe'];
 
           //--------------------------------------------------------------------
           // trunk2
@@ -1512,7 +1529,7 @@ begin
 
               strPathArquivo := (gCamXml + formatdatetime('yyyy',StrToDateTime(DMFD.FDQryGeral2['MDFe_dEmi']))
                                          + formatdatetime('mm',  StrToDateTime(DMFD.FDQryGeral2['MDFe_dEmi']))
-                                         + '\Down\' + docZip.Items[indContador].resNFe.chNFe + '-nfe.xml');
+                                         + '\Down\' + docZip.Items[indContador].resDFe.chDFe + '-nfe.xml');
 
               if (vmA > vmE) then
                begin
@@ -1523,7 +1540,7 @@ begin
                   else
                    strPathArquivo := (gCamXml + formatdatetime('yyyy', now())
                                               + IntToStrZero(x, 2)
-                                              + '\Down\' + docZip.Items[indContador].resNFe.chNFe + '-nfe.xml');
+                                              + '\Down\' + docZip.Items[indContador].resDFe.chDFe + '-nfe.xml');
                  end;
                end;
 
@@ -1551,7 +1568,7 @@ begin
                    DMFD.FDQryGeral1.ParamByName('Xml_Bai'   ).Value       := '1';
                    DMFD.FDQryGeral1.ParamByName('Codigo_loja').AsInteger  := StrToInt(gCodEmp);
                    DMFD.FDQryGeral1.ParamByName('Evento'     ).AsString   := DMFD.FDQryGeral2['MDFe_Evento'];
-                   DMFD.FDQryGeral1.ParamByName('Chave_nfe'  ).AsString   := docZip.Items[indContador].resNFe.chNFe;
+                   DMFD.FDQryGeral1.ParamByName('Chave_nfe'  ).AsString   := docZip.Items[indContador].resDFe.chDFe;
 
                    DMFD.FDQryGeral1.ExecSQL;
                   end;
@@ -1562,10 +1579,11 @@ begin
                  end;
 
                  lMsg :=
-                         'Id: '          + IntToStr(docZip.Items[indContador].Id) + #13 +
+//                         'Id: '          + IntToStr(docZip.Items[indContador].Id) + #13 +
+                         'Protocolo: '   + docZip.Items[indContador].resDFe.nProt + #13 +
                          'cStat: '       + IntToStr(cStat) + #13 +
                          'xMotivo: '     + xMotivo + #13 +
-                         'chNFe: '       + docZip.Items[indContador].resNFe.chNFe;
+                         'chNFe: '       + docZip.Items[indContador].resDFe.chDFe;
 
                 end
                else
@@ -3233,7 +3251,8 @@ begin
 
     FrGBNFe.ACBrNFe1.NotasFiscais.Clear ;
     FrGBNFe.ACBrNFe1.EventoNFe.Evento.Clear ;
-    FrGBNFe.AcbrNFe1.WebServices.ConsNFeDest.retConsNFeDest.ret.Clear ;
+//    FrGBNFe.AcbrNFe1.WebServices.ConsNFeDest.retConsNFeDest.ret.Clear ;       - Antes
+    FrGBNFe.AcbrNFe1.WebServices.Consulta.Clear ;                               // Alteração acbr 15/02/2019
 
     try
 
@@ -3289,7 +3308,7 @@ begin
     // Retorno de NFe Destinadas
     for i := 0 to FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Count -1 do
      begin
-      if Trim(FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.chNFe) <> '' then
+      if Trim(FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resDFe.chDFe) <> '' then
        begin
 
         //---------------------------------------------------------------------------
@@ -3338,7 +3357,7 @@ begin
         DMFD.FDQryGeral1.SQL.Add( '  Order by t1.dEmi desc                          ' );
 
         DMFD.FDQryGeral1.ParamByName('Codigo_loja').AsInteger  := StrToInt(gCodEmp);
-        DMFD.FDQryGeral1.ParamByName('Chave_nfe').AsString     := FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.chNFe;
+        DMFD.FDQryGeral1.ParamByName('Chave_nfe').AsString     := FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resDFe.chDFe;
         DMFD.FDQryGeral1.Open;
 
         // mostra a NSU no campo de NSU
@@ -3416,29 +3435,29 @@ begin
 
            DMFD.FDQryGeral1.ParamByName('NSU'        ).AsString   := FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].NSU;
            DMFD.FDQryGeral1.ParamByName('Codigo_loja').AsInteger  := StrToInt(gCodEmp);
-           DMFD.FDQryGeral1.ParamByName('Chave_nfe'  ).AsString   := FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.chNFe;
+           DMFD.FDQryGeral1.ParamByName('Chave_nfe'  ).AsString   := FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resDFe.chDFe;
            DMFD.FDQryGeral1.ParamByName('Evento'     ).AsString   := '0';
-           DMFD.FDQryGeral1.ParamByName('cnpj_cpf'   ).Value      := FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.CNPJCPF;
-           DMFD.FDQryGeral1.ParamByName('xNome'      ).Value      := Copy(FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.xNome, 1, 60);
-           DMFD.FDQryGeral1.ParamByName('IE'         ).Value      := FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.IE;
-           DMFD.FDQryGeral1.ParamByName('dEmi'       ).AsString   := FormatDateTime('yyyy/mm/dd', FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.dhEmi);
-           Case FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.tpNF of
+           DMFD.FDQryGeral1.ParamByName('cnpj_cpf'   ).Value      := FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resDFe.CNPJCPF;
+           DMFD.FDQryGeral1.ParamByName('xNome'      ).Value      := Copy(FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resDFe.xNome, 1, 60);
+           DMFD.FDQryGeral1.ParamByName('IE'         ).Value      := FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resDFe.IE;
+           DMFD.FDQryGeral1.ParamByName('dEmi'       ).AsString   := FormatDateTime('yyyy/mm/dd', FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resDFe.dhEmi);
+           Case FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resDFe.tpNF of
             tnEntrada : DMFD.FDQryGeral1.ParamByName('tpNF'       ).AsString  := '0';
             tnSaida   : DMFD.FDQryGeral1.ParamByName('tpNF'       ).AsString  := '1';
            end;
-           DMFD.FDQryGeral1.ParamByName('vNF'        ).AsFloat    := FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.vNF;
-           DMFD.FDQryGeral1.ParamByName('digVal'     ).Value      := FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.digVal;
-           DMFD.FDQryGeral1.ParamByName('dhRecbto'   ).AsString   := FormatDateTime('yyyy/mm/dd hh:nn:ss', FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.dhRecbto);
+           DMFD.FDQryGeral1.ParamByName('vNF'        ).AsFloat    := FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resDFe.vNF;
+           DMFD.FDQryGeral1.ParamByName('digVal'     ).Value      := FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resDFe.digVal;
+           DMFD.FDQryGeral1.ParamByName('dhRecbto'   ).AsString   := FormatDateTime('yyyy/mm/dd hh:nn:ss', FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resDFe.dhRecbto);
            DMFD.FDQryGeral1.ParamByName('cStat'      ).Value      := FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.cStat;
            DMFD.FDQryGeral1.ParamByName('xMotivo'    ).Value      := FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.xMotivo;
-           Case FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.cSitNFe of
+           Case FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resDFe.cSitDFe of
             snAutorizado : DMFD.FDQryGeral1.ParamByName('cSitNFe'    ).AsString  := '1';
             snDenegado   : DMFD.FDQryGeral1.ParamByName('cSitNFe'    ).AsString  := '2';
             snCancelado  : DMFD.FDQryGeral1.ParamByName('cSitNFe'    ).AsString  := '3';
             snEncerrado  : DMFD.FDQryGeral1.ParamByName('cSitNFe'    ).AsString  := '4';
            end;
 
-           Case FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.cSitNFe of
+           Case FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resDFe.cSitDFe of
             snAutorizado :
              begin
 
@@ -3474,7 +3493,7 @@ begin
            if ( vTpEvento <> '' ) then
             begin
              DMFD.FDQryGeral1.ParamByName('Evento'     ).Value  := '1';
-             DMFD.FDQryGeral1.ParamByName('id'         ).Value  := 'ID' + vTpEvento + FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.chNFe + '1';
+             DMFD.FDQryGeral1.ParamByName('id'         ).Value  := 'ID' + vTpEvento + FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resDFe.chDFe + '1';
             end
            else
             begin
