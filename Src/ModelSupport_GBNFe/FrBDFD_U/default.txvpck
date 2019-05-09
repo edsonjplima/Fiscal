@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<nodeSet version="1.0">
+  <view uin="swlqriuihb8q02cio_v">
+    <property name="$defaultDiagram" value="true" />
+    <property name="$metaclass" value="Package Diagram" />
+    <property name="$name" value="default" />
+    <reference referencedUin="delphi:e_class:src:GBNFe:FrBDFD_U.TFrBDFD">
+      <property name="$shortcutReference" value="true" />
+      <property name="bounds" value="10,10,217,775" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:FrBDFD_U.TFrBDFD.pnl1" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:FrBDFD_U.TFrBDFD.pnl2" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:FrBDFD_U.TFrBDFD.pnl3" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:FrBDFD_U.TFrBDFD.pnl4" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:FrBDFD_U.TFrBDFD.btn1" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:FrBDFD_U.TFrBDFD.btnSalvarConfig" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:FrBDFD_U.TFrBDFD.stat1" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:FrBDFD_U.TFrBDFD.grp12" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:FrBDFD_U.TFrBDFD.grp13" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:FrBDFD_U.TFrBDFD.chk_LoginPrompt_NFe" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:FrBDFD_U.TFrBDFD.grp14" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:FrBDFD_U.TFrBDFD.cbb_DriverID_NFe" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:FrBDFD_U.TFrBDFD.grp18" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:FrBDFD_U.TFrBDFD.edt_Server_NFe" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:FrBDFD_U.TFrBDFD.grp19" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:FrBDFD_U.TFrBDFD.edt_UserName_NFe" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:FrBDFD_U.TFrBDFD.grp20" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:FrBDFD_U.TFrBDFD.edt_Password_NFe" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:FrBDFD_U.TFrBDFD.grp15" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:FrBDFD_U.TFrBDFD.edt_Database_NFe" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:FrBDFD_U.TFrBDFD.grp16" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:FrBDFD_U.TFrBDFD.chk_Connected_NFe" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:FrBDFD_U.TFrBDFD.grp17" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:FrBDFD_U.TFrBDFD.grp21" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:FrBDFD_U.TFrBDFD.chk_LoginPrompt_Ger" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:FrBDFD_U.TFrBDFD.grp22" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:FrBDFD_U.TFrBDFD.cbb_DriverID_Ger" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:FrBDFD_U.TFrBDFD.grp23" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:FrBDFD_U.TFrBDFD.edt_Server_Ger" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:FrBDFD_U.TFrBDFD.grp24" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:FrBDFD_U.TFrBDFD.edt_UserName_Ger" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:FrBDFD_U.TFrBDFD.grp25" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:FrBDFD_U.TFrBDFD.edt_Password_Ger" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:FrBDFD_U.TFrBDFD.grp26" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:FrBDFD_U.TFrBDFD.edt_Database_Ger" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:FrBDFD_U.TFrBDFD.grp27" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:FrBDFD_U.TFrBDFD.chk_Connected_Ger" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:FrBDFD_U.TFrBDFD.grp28" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:FrBDFD_U.TFrBDFD.OSAuthent_NFe" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:FrBDFD_U.TFrBDFD.grp29" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:FrBDFD_U.TFrBDFD.OSAuthent_Ger" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:FrBDFD_U.TFrBDFD.pnl5" />
+      <reference referencedUin="delphi:e_method:src:GBNFe:FrBDFD_U.TFrBDFD.btn1Click(System.TObject)" />
+      <reference referencedUin="delphi:e_method:src:GBNFe:FrBDFD_U.TFrBDFD.btnSalvarConfigClick(System.TObject)" />
+      <reference referencedUin="delphi:e_method:src:GBNFe:FrBDFD_U.TFrBDFD.FormShow(System.TObject)" />
+      <reference referencedUin="delphi:e_method:src:GBNFe:FrBDFD_U.TFrBDFD.FormClose(System.TObject,ref@System.UITypes.TCloseAction)" />
+    </reference>
+    <reference referencedUin="delphi:e_class:src:GBNFe:FrBDFD_U.@unitclass">
+      <property name="$shortcutReference" value="true" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:FrBDFD_U.@unitclass.FrBDFD" />
+      <reference referencedUin="delphi:l_ast:src:GBNFe:FrBDFD_U.@unitclass.FrBDFD" />
+    </reference>
+  </view>
+</nodeSet>

@@ -380,6 +380,10 @@ object FrPar: TFrPar
       OnMouseDown = PageControl1MouseDown
       object TabSheet1: TTabSheet
         Caption = 'DANFE'
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         object Panel6: TPanel
           Left = 0
           Top = 0
@@ -550,6 +554,7 @@ object FrPar: TFrPar
               Font.Style = []
               MaxLength = 2
               ParentFont = False
+              ReadOnly = True
               TabOrder = 0
               Text = '1'
               OnExit = ed_QtdCopNFeExit
@@ -1197,6 +1202,10 @@ object FrPar: TFrPar
       end
       object TabSheet6: TTabSheet
         Caption = 'Certificado'
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         object Panel5: TPanel
           Left = 0
           Top = 0
@@ -1532,6 +1541,10 @@ object FrPar: TFrPar
       end
       object TabSheet7: TTabSheet
         Caption = 'WebService'
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         DesignSize = (
           669
           282)
@@ -1782,6 +1795,10 @@ object FrPar: TFrPar
       end
       object TabSheet8: TTabSheet
         Caption = 'eMail'
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         object Panel11: TPanel
           Left = 0
           Top = 0
@@ -2092,6 +2109,10 @@ object FrPar: TFrPar
       object tsBancoDados: TTabSheet
         Caption = 'Banco de Dados'
         ImageIndex = 5
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         DesignSize = (
           669
           282)
@@ -2686,6 +2707,10 @@ object FrPar: TFrPar
       object ts1: TTabSheet
         Caption = 'Arq Temp. e Backups'
         ImageIndex = 4
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         object pnl1: TPanel
           Left = 0
           Top = 0
@@ -3081,7 +3106,7 @@ object FrPar: TFrPar
             Width = 246
             Height = 215
             Anchors = [akLeft, akTop, akRight]
-            Caption = ' UF Exige Resp. T'#233'cnico '
+            Caption = ' Exig'#234'ncia de Respons'#225'vel T'#233'cnico '
             Color = 14544639
             ParentBackground = False
             ParentColor = False
@@ -3094,7 +3119,9 @@ object FrPar: TFrPar
               Top = 11
               Width = 47
               Height = 41
-              Hint = 'O Estado exige dados do Respons'#225'vel T'#233'cnico?'
+              Hint = 
+                'O Estado exige dados do Respons'#225'vel T'#233'cnico? [ Selecionado = '#39'S'#39 +
+                ' / Deselecionado = '#39'N'#39' ]'
               Caption = ' Exig? '
               Color = 14544639
               Font.Charset = DEFAULT_CHARSET
@@ -3112,7 +3139,7 @@ object FrPar: TFrPar
               object chk_RespTec: TCheckBox
                 Left = 12
                 Top = 14
-                Width = 29
+                Width = 15
                 Height = 17
                 Anchors = [akLeft, akRight]
                 Color = 12906751
@@ -3155,9 +3182,12 @@ object FrPar: TFrPar
                 Font.Name = 'Tahoma'
                 Font.Style = []
                 MaxLength = 2
+                NumbersOnly = True
                 ParentFont = False
-                ReadOnly = True
+                ParentShowHint = False
+                ShowHint = False
                 TabOrder = 0
+                OnKeyPress = edt_IdResTecKeyPress
               end
             end
             object grp45: TGroupBox
@@ -3177,7 +3207,7 @@ object FrPar: TFrPar
               ParentBackground = False
               ParentColor = False
               ParentFont = False
-              TabOrder = 2
+              TabOrder = 4
               OnMouseMove = grp45MouseMove
               DesignSize = (
                 225
@@ -3219,7 +3249,7 @@ object FrPar: TFrPar
               ParentBackground = False
               ParentColor = False
               ParentFont = False
-              TabOrder = 3
+              TabOrder = 5
               OnMouseMove = grp46MouseMove
               DesignSize = (
                 225
@@ -3261,15 +3291,15 @@ object FrPar: TFrPar
               ParentBackground = False
               ParentColor = False
               ParentFont = False
-              TabOrder = 4
+              TabOrder = 6
               OnMouseMove = grp47MouseMove
               DesignSize = (
                 225
                 38)
               object edt_FoneResTec: TEdit
-                Left = 8
+                Left = 12
                 Top = 13
-                Width = 208
+                Width = 204
                 Height = 21
                 Anchors = [akLeft, akTop, akRight]
                 BevelKind = bkSoft
@@ -3301,7 +3331,7 @@ object FrPar: TFrPar
               Font.Style = []
               ParentColor = False
               ParentFont = False
-              TabOrder = 5
+              TabOrder = 2
               OnMouseMove = grp48MouseMove
               DesignSize = (
                 114
@@ -3343,7 +3373,7 @@ object FrPar: TFrPar
               ParentBackground = False
               ParentColor = False
               ParentFont = False
-              TabOrder = 6
+              TabOrder = 3
               OnMouseMove = grp49MouseMove
               DesignSize = (
                 225

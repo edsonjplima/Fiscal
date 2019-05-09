@@ -334,6 +334,7 @@ type
       Y: Integer);
     procedure grp47MouseMove(Sender: TObject; Shift: TShiftState; X,
       Y: Integer);
+    procedure edt_IdResTecKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
   public
@@ -628,6 +629,11 @@ begin
   edtSmtpPort.Text := '0';
 end;
 
+procedure TFrPar.edt_IdResTecKeyPress(Sender: TObject; var Key: Char);
+begin
+ if not (key in['0'..'9', chr(8)]) then Abort;
+end;
+
 procedure TFrPar.ed_QtdCopNFeExit(Sender: TObject);
 begin
  if (trim(ed_QtdCopNFe.Text) = '') then
@@ -732,15 +738,18 @@ begin
 
  while ( ((vPassword) <> (vP)) and (PageControl1.TabIndex = 4) ) do
   begin
+
    if not(InputQuery('Password!', #1'Senha:', vPassword )) then
     begin
      PageControl1.TabIndex := gTabIndPar;
      exit;
     end;
+
     if ( (vPassword) <> (vP) ) then
      MessageDlg('Senha inválida, tente novamente!', mtConfirmation,[mbOK],0)
     else
      gSenhaBD := vPassword;
+
   end;
 
 end;

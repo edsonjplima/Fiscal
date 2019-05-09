@@ -1225,9 +1225,11 @@ begin
  // by Edson ; 2013-03-04 ;08:41 ; Atribuição para consistir nnf na hora do update
  gCdloja_Consiste := FrGBNFe.edt_CodEmp.Text;
  gdEmi_Consiste   := FormatDateTime('yyyy/mm/dd', DMFD.FDQuery5['nfe_demi']);
+ gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
  gNNF_Consiste    := vartostr(DMFD.FDQuery5['nfe_nnf']);
  gSerie_Consiste  := vartostr(DMFD.FDQuery5['nfe_serie']);
  gSerie           := StrToInt(gSerie_Consiste);
+ gModelo_Consiste := vartostr(DMFD.FDQuery5['nfe_modelo']);
 
  // Atribuição de variáveis que serão usadas durante a transmissão
  Chave         := DMFD.FDQuery11['CCe_chave_nfe'];

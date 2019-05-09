@@ -1,2 +1,23 @@
 <?xml version="1.0"?>
-<TgConfig Version="3" SubLevelDisabled="False" />
+<TgConfig Version="3" SubLevelDisabled="False">
+  <Option Name="namespaceFolder.DMFD_U" Type="System.String" Value="DMFD_U" Category="General" IsBrowsable="False" />
+  <Option Name="namespaceFolder.FrBDFD_U" Type="System.String" Value="FrBDFD_U" Category="General" IsBrowsable="False" />
+  <Option Name="namespaceFolder.FrPar_U" Type="System.String" Value="FrPar_U" Category="General" IsBrowsable="False" />
+  <Option Name="namespaceFolder.FrMens_U" Type="System.String" Value="FrMens_U" Category="General" IsBrowsable="False" />
+  <Option Name="namespaceFolder.FrConsManif_U" Type="System.String" Value="FrConsManif_U" Category="General" IsBrowsable="False" />
+  <Option Name="namespaceFolder.FrSeleciona_U" Type="System.String" Value="FrSeleciona_U" Category="General" IsBrowsable="False" />
+  <Option Name="namespaceFolder.FrContab_U" Type="System.String" Value="FrContab_U" Category="General" IsBrowsable="False" />
+  <Option Name="namespaceFolder.FrCCe_U" Type="System.String" Value="FrCCe_U" Category="General" IsBrowsable="False" />
+  <Option Name="namespaceFolder.FrInut_U" Type="System.String" Value="FrInut_U" Category="General" IsBrowsable="False" />
+  <Option Name="namespaceFolder.FrSenMst_U" Type="System.String" Value="FrSenMst_U" Category="General" IsBrowsable="False" />
+  <Option Name="namespaceFolder.FrXML_U" Type="System.String" Value="FrXML_U" Category="General" IsBrowsable="False" />
+  <Option Name="namespaceFolder.FrBuscaChave_U" Type="System.String" Value="FrBuscaChave_U" Category="General" IsBrowsable="False" />
+  <Option Name="namespaceFolder.GBNFe" Type="System.String" Value="GBNFe" Category="General" IsBrowsable="False" />
+  <Option Name="namespaceFolder.FrEmail_U" Type="System.String" Value="FrEmail_U" Category="General" IsBrowsable="False" />
+  <Option Name="namespaceFolder.FrImportXML_U" Type="System.String" Value="FrImportXML_U" Category="General" IsBrowsable="False" />
+  <Option Name="namespaceFolder.FrBuscaNota_U" Type="System.String" Value="FrBuscaNota_U" Category="General" IsBrowsable="False" />
+  <Option Name="namespaceFolder.FrPw_U" Type="System.String" Value="FrPw_U" Category="General" IsBrowsable="False" />
+  <Option Name="namespaceFolder.GBNFe_U" Type="System.String" Value="GBNFe_U" Category="General" IsBrowsable="False" />
+  <Option Name="namespaceFolder.ufrmStatus" Type="System.String" Value="ufrmStatus" Category="General" IsBrowsable="False" />
+  <Option Name="namespaceFolder.FrConWeb_U" Type="System.String" Value="FrConWeb_U" Category="General" IsBrowsable="False" />
+</TgConfig>

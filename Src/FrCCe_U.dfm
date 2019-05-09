@@ -731,6 +731,10 @@ object FrCCe: TFrCCe
     OnMouseMove = PageControl1MouseMove
     object TabSheet1: TTabSheet
       Caption = 'CCe'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object Panel3: TPanel
         Left = 0
         Top = 0
@@ -1392,6 +1396,10 @@ object FrCCe: TFrCCe
     object TabSheet2: TTabSheet
       Caption = 'Consulta'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object Panel5: TPanel
         Left = 0
         Top = 0

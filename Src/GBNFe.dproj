@@ -129,7 +129,8 @@
     </PropertyGroup>
     <Import Project="Delphi_Xe10.1_Berlin.optset" Condition="'$(Cfg_2_Win32)'!='' And Exists('Delphi_Xe10.1_Berlin.optset')"/>
     <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
-        <VerInfo_Release>1</VerInfo_Release>
+        <Debugger_RunParams>/developed_gb_informática_ltda &quot;/003&quot; /usuário_padrão &quot;/0&quot; &quot;/1&quot; &quot;/0&quot;</Debugger_RunParams>
+        <VerInfo_Release>5</VerInfo_Release>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <VerInfo_MinorVer>19</VerInfo_MinorVer>
         <VerInfo_Build>9</VerInfo_Build>
@@ -137,7 +138,7 @@
         <VerInfo_PreRelease>true</VerInfo_PreRelease>
         <VerInfo_Private>true</VerInfo_Private>
         <VerInfo_DLL>true</VerInfo_DLL>
-        <VerInfo_Keys>CompanyName=GB Informática Ltda;FileDescription=Gerador de Nota Fiscal Eletrônica;FileVersion=6.19.1.9;InternalName=GBNFe;LegalCopyright=edsonjplima;LegalTrademarks=edsonjplima;OriginalFilename=ACBr;ProductName=GBNFe;ProductVersion=1.0.0.0;Comments=Desenvolvedor Edson Lima - Versão Berlin - FireDac</VerInfo_Keys>
+        <VerInfo_Keys>CompanyName=GB Informática Ltda;FileDescription=Gerador de Nota Fiscal Eletrônica;FileVersion=6.19.5.9;InternalName=GBNFe;LegalCopyright=edsonjplima;LegalTrademarks=edsonjplima;OriginalFilename=ACBr;ProductName=GBNFe;ProductVersion=1.0.0.0;Comments=Desenvolvedor Edson Lima - Versão Berlin - FireDac</VerInfo_Keys>
         <CfgDependentOn>Delphi_Xe10.1_Berlin.optset</CfgDependentOn>
     </PropertyGroup>
     <ItemGroup>
@@ -202,6 +203,30 @@
         <DCCReference Include="FrBDFD_U.pas">
             <Form>FrBDFD</Form>
         </DCCReference>
+        <None Include="ModelSupport_GBNFe\default.txaPackage"/>
+        <None Include="ModelSupport_GBNFe\default.txvpck"/>
+        <None Include="ModelSupport_GBNFe\FrConsManif_U\default.txvpck"/>
+        <None Include="ModelSupport_GBNFe\FrSeleciona_U\default.txvpck"/>
+        <None Include="ModelSupport_GBNFe\FrInut_U\default.txvpck"/>
+        <None Include="ModelSupport_GBNFe\FrPar_U\default.txvpck"/>
+        <None Include="ModelSupport_GBNFe\FrContab_U\default.txvpck"/>
+        <None Include="ModelSupport_GBNFe\FrSenMst_U\default.txvpck"/>
+        <None Include="ModelSupport_GBNFe\FrBDFD_U\default.txvpck"/>
+        <None Include="ModelSupport_GBNFe\FrEmail_U\default.txvpck"/>
+        <None Include="ModelSupport_GBNFe\GBNFe\default.txvpck"/>
+        <None Include="ModelSupport_GBNFe\FrCCe_U\default.txvpck"/>
+        <None Include="ModelSupport_GBNFe\FrXML_U\default.txvpck"/>
+        <None Include="ModelSupport_GBNFe\FrImportXML_U\default.txvpck"/>
+        <None Include="ModelSupport_GBNFe\FrConWeb_U\default.txvpck"/>
+        <None Include="ModelSupport_GBNFe\ufrmStatus\default.txvpck"/>
+        <None Include="ModelSupport_GBNFe\FrMens_U\default.txvpck"/>
+        <None Include="ModelSupport_GBNFe\GBNFe_U\default.txvpck"/>
+        <None Include="ModelSupport_GBNFe\FrPw_U\default.txvpck"/>
+        <None Include="ModelSupport_GBNFe\DMFD_U\default.txvpck"/>
+        <None Include="ModelSupport_GBNFe\FrBuscaChave_U\default.txvpck"/>
+        <None Include="ModelSupport_GBNFe\FrBuscaNota_U\default.txvpck"/>
+        <None Include="ModelSupport_GBNFe\DMFD_U\default.txaPackage"/>
+        <None Include="ModelSupport_GBNFe\FrBDFD_U\default.txaPackage"/>
         <BuildConfiguration Include="Debug">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -223,6 +248,7 @@
                     <Source Name="MainSource">GBNFe.dpr</Source>
                 </Source>
                 <Excluded_Packages>
+                    <Excluded_Packages Name="D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Lib\Delphi\LibD24\ACBr_Integrador.bpl">ACBr - Integrador - (http://www.projetoacbr.com.br/)</Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\dclDataSnapNativeServer240.bpl">Embarcadero DBExpress DataSnap Native Server Components</Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\bcboffice2k240.bpl">Embarcadero C++Builder Office 2000 Servers Package</Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\bcbofficexp240.bpl">Embarcadero C++Builder Office XP Servers Package</Excluded_Packages>
@@ -236,18 +262,177 @@
                 <Platform value="Win64">False</Platform>
             </Platforms>
             <Deployment Version="3">
+                <DeployFile LocalName="ModelSupport_GBNFe\FrBDFD_U\default.txaPackage" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="ModelSupport_GBNFe\FrBuscaNota_U\default.txvpck" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="ModelSupport_GBNFe\DMFD_U\default.txvpck" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="ModelSupport_GBNFe\FrEmail_U\default.txvpck" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="ModelSupport_GBNFe\DMFD_U\default.txaPackage" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="ModelSupport_GBNFe\FrCCe_U\default.txvpck" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="ModelSupport_GBNFe\default.txaPackage" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="ModelSupport_GBNFe\FrPar_U\default.txvpck" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="ModelSupport_GBNFe\GBNFe_U\default.txvpck" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="ModelSupport_GBNFe\FrMens_U\default.txvpck" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="ModelSupport_GBNFe\FrBDFD_U\default.txvpck" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="ModelSupport_GBNFe\FrSenMst_U\default.txvpck" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="ModelSupport_GBNFe\FrInut_U\default.txvpck" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="ModelSupport_GBNFe\default.txvpck" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="ModelSupport_GBNFe\FrConWeb_U\default.txvpck" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="ModelSupport_GBNFe\FrContab_U\default.txvpck" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="ModelSupport_GBNFe\FrPw_U\default.txvpck" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="ModelSupport_GBNFe\ufrmStatus\default.txvpck" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="ModelSupport_GBNFe\FrSeleciona_U\default.txvpck" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="ModelSupport_GBNFe\FrImportXML_U\default.txvpck" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="ModelSupport_GBNFe\GBNFe\default.txvpck" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="..\Exe\GBNFe.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>GBNFe.exe</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployClass Name="ProjectiOSDeviceResourceRules">
+                <DeployFile LocalName="ModelSupport_GBNFe\FrBuscaChave_U\default.txvpck" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="ModelSupport_GBNFe\FrXML_U\default.txvpck" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="ModelSupport_GBNFe\FrConsManif_U\default.txvpck" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployClass Name="DependencyModule">
+                    <Platform Name="Win32">
+                        <Operation>0</Operation>
+                        <Extensions>.dll;.bpl</Extensions>
+                    </Platform>
                     <Platform Name="iOSDevice64">
                         <Operation>1</Operation>
+                        <Extensions>.dylib</Extensions>
+                    </Platform>
+                    <Platform Name="OSX32">
+                        <RemoteDir>Contents\MacOS</RemoteDir>
+                        <Operation>1</Operation>
+                        <Extensions>.dylib</Extensions>
                     </Platform>
                     <Platform Name="iOSDevice32">
                         <Operation>1</Operation>
+                        <Extensions>.dylib</Extensions>
+                    </Platform>
+                    <Platform Name="iOSSimulator">
+                        <Operation>1</Operation>
+                        <Extensions>.dylib</Extensions>
                     </Platform>
                 </DeployClass>
                 <DeployClass Name="ProjectOSXResource">
@@ -598,27 +783,12 @@
                         <Operation>1</Operation>
                     </Platform>
                 </DeployClass>
-                <DeployClass Name="DependencyModule">
-                    <Platform Name="Win32">
-                        <Operation>0</Operation>
-                        <Extensions>.dll;.bpl</Extensions>
-                    </Platform>
+                <DeployClass Name="ProjectiOSDeviceResourceRules">
                     <Platform Name="iOSDevice64">
                         <Operation>1</Operation>
-                        <Extensions>.dylib</Extensions>
-                    </Platform>
-                    <Platform Name="OSX32">
-                        <RemoteDir>Contents\MacOS</RemoteDir>
-                        <Operation>1</Operation>
-                        <Extensions>.dylib</Extensions>
                     </Platform>
                     <Platform Name="iOSDevice32">
                         <Operation>1</Operation>
-                        <Extensions>.dylib</Extensions>
-                    </Platform>
-                    <Platform Name="iOSSimulator">
-                        <Operation>1</Operation>
-                        <Extensions>.dylib</Extensions>
                     </Platform>
                 </DeployClass>
                 <ProjectRoot Platform="iOSDevice64" Name="$(PROJECTNAME).app"/>
@@ -630,9 +800,9 @@
                 <ProjectRoot Platform="Android" Name="$(PROJECTNAME)"/>
                 <ProjectRoot Platform="iOSSimulator" Name="$(PROJECTNAME).app"/>
             </Deployment>
-            <ModelSupport>False</ModelSupport>
+            <ModelSupport>True</ModelSupport>
             <UnitTesting>
-                <TestProjectName>D:\Sistemas de Desenvolvimento\GBNFe\Src\Test\GBNFeTests2.dproj</TestProjectName>
+                <TestProjectName>D:\Sistemas de Desenvolvimento\GBNFe\Src\Test\GBNFeTests3.dproj</TestProjectName>
             </UnitTesting>
         </BorlandProject>
         <ProjectFileVersion>12</ProjectFileVersion>

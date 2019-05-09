@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<nodeSet version="1.0">
+  <view uin="2davvdiim46pr1wwn_v">
+    <property name="$defaultDiagram" value="true" />
+    <property name="$metaclass" value="Package Diagram" />
+    <property name="$name" value="default" />
+    <reference referencedUin="design:view:::ws50umo78082ttb3f_v">
+      <property name="$shortcutReference" value="true" />
+      <property name="bounds" value="0,0,142,151" />
+      <property name="location_set_by_user" value="True" />
+      <reference referencedUin="delphi:e_class:src:GBNFe:FrConsManif_U.@unitclass" />
+      <reference referencedUin="delphi:e_class:src:GBNFe:FrConsManif_U.TFrConsManif" />
+    </reference>
+    <reference referencedUin="design:view:::ldl93p5f0a8cbx00q_v">
+      <property name="$shortcutReference" value="true" />
+      <property name="bounds" value="160,0,137,151" />
+      <property name="location_set_by_user" value="True" />
+      <reference referencedUin="delphi:e_class:src:GBNFe:FrSeleciona_U.TFrSeleciona" />
+      <reference referencedUin="delphi:e_class:src:GBNFe:FrSeleciona_U.@unitclass" />
+    </reference>
+    <reference referencedUin="design:view:::1gdjaf66ba8zl8hrj_v">
+      <property name="$shortcutReference" value="true" />
+      <property name="bounds" value="880,0,120,151" />
+      <property name="location_set_by_user" value="True" />
+      <property name="bounds_setted_by_user" value="True" />
+      <reference referencedUin="delphi:e_class:src:GBNFe:FrInut_U.TFrInut" />
+      <reference referencedUin="delphi:e_class:src:GBNFe:FrInut_U.@unitclass" />
+    </reference>
+    <reference referencedUin="design:view:::akx1910bqa8d98w0q_v">
+      <property name="$shortcutReference" value="true" />
+      <property name="bounds" value="740,0,120,151" />
+      <property name="location_set_by_user" value="True" />
+      <property name="bounds_setted_by_user" value="True" />
+      <reference referencedUin="delphi:e_class:src:GBNFe:FrPar_U.TFrPar" />
+      <reference referencedUin="delphi:e_class:src:GBNFe:FrPar_U.@unitclass" />
+    </reference>
+    <reference referencedUin="design:view:::ghv02jgfxa8a1m2pf_v">
+      <property name="$shortcutReference" value="true" />
+      <property name="bounds" value="320,0,122,151" />
+      <property name="location_set_by_user" value="True" />
+      <reference referencedUin="delphi:e_class:src:GBNFe:FrContab_U.TFrContab" />
+      <reference referencedUin="delphi:e_class:src:GBNFe:FrContab_U.@unitclass" />
+    </reference>
+    <reference referencedUin="design:view:::z1g0d2pt0b8zhudzg_v">
+      <property name="$shortcutReference" value="true" />
+      <property name="bounds" value="1020,0,124,151" />
+      <property name="location_set_by_user" value="True" />
+      <reference referencedUin="delphi:e_class:src:GBNFe:FrSenMst_U.@unitclass" />
+      <reference referencedUin="delphi:e_class:src:GBNFe:FrSenMst_U.TFrSenMst" />
+    </reference>
+    <reference referencedUin="design:view:::swlqriuihb8q02cio_v">
+      <property name="$shortcutReference" value="true" />
+      <property name="bounds" value="440,180,116,151" />
+      <property name="location_set_by_user" value="True" />
+      <reference referencedUin="delphi:e_class:src:GBNFe:FrBDFD_U.TFrBDFD" />
+      <reference referencedUin="delphi:e_class:src:GBNFe:FrBDFD_U.@unitclass" />
+    </reference>
+    <reference referencedUin="design:view:::0327yhiqtb8m7t5bq_v">
+      <property name="$shortcutReference" value="true" />
+      <property name="bounds" value="300,180,114,151" />
+      <property name="location_set_by_user" value="True" />
+      <reference referencedUin="delphi:e_class:src:GBNFe:FrEmail_U.TFrEmail" />
+      <reference referencedUin="delphi:e_class:src:GBNFe:FrEmail_U.@unitclass" />
+    </reference>
+    <reference referencedUin="design:view:::w9f7ts2yb8g951mk_v">
+      <property name="$shortcutReference" value="true" />
+      <property name="bounds" value="180,180,100,151" />
+      <property name="location_set_by_user" value="True" />
+      <reference referencedUin="delphi:e_class:src:GBNFe:GBNFe.RecConf" />
+      <reference referencedUin="delphi:e_class:src:GBNFe:GBNFe.@unitclass" />
+    </reference>
+    <reference referencedUin="design:view:::n8kruf50cc8d6j5ii_v">
+      <property name="$shortcutReference" value="true" />
+      <property name="bounds" value="460,0,120,151" />
+      <property name="location_set_by_user" value="True" />
+      <property name="bounds_setted_by_user" value="True" />
+      <reference referencedUin="delphi:e_class:src:GBNFe:FrCCe_U.@unitclass" />
+      <reference referencedUin="delphi:e_class:src:GBNFe:FrCCe_U.TFrCCe" />
+    </reference>
+    <reference referencedUin="design:view:::01hivxijuc8nnf3bi_v">
+      <property name="$shortcutReference" value="true" />
+      <property name="bounds" value="1180,0,108,166" />
+      <property name="location_set_by_user" value="True" />
+      <reference referencedUin="delphi:e_class:src:GBNFe:FrXML_U.TWebControl" />
+      <reference referencedUin="delphi:e_class:src:GBNFe:FrXML_U.@unitclass" />
+      <reference referencedUin="delphi:e_class:src:GBNFe:FrXML_U.TFrXML" />
+    </reference>
+    <reference referencedUin="design:view:::9eodym964d8oibwtq_v">
+      <property name="$shortcutReference" value="true" />
+      <property name="bounds" value="580,180,143,151" />
+      <property name="location_set_by_user" value="True" />
+      <reference referencedUin="delphi:e_class:src:GBNFe:FrImportXML_U.TFrImportXML" />
+      <reference referencedUin="delphi:e_class:src:GBNFe:FrImportXML_U.@unitclass" />
+    </reference>
+    <reference referencedUin="design:view:::6dedv03gfd8lw59jj_v">
+      <property name="$shortcutReference" value="true" />
+      <property name="bounds" value="140,360,131,151" />
+      <property name="location_set_by_user" value="True" />
+      <reference referencedUin="delphi:e_class:src:GBNFe:FrConWeb_U.@unitclass" />
+      <reference referencedUin="delphi:e_class:src:GBNFe:FrConWeb_U.TFrConWeb" />
+    </reference>
+    <reference referencedUin="design:view:::gtdlisw2rd8nyjnym_v">
+      <property name="$shortcutReference" value="true" />
+      <property name="bounds" value="0,360,115,151" />
+      <property name="location_set_by_user" value="True" />
+      <reference referencedUin="delphi:e_class:src:GBNFe:ufrmStatus.TfrmStatus" />
+      <reference referencedUin="delphi:e_class:src:GBNFe:ufrmStatus.@unitclass" />
+    </reference>
+    <reference referencedUin="design:view:::g3ramour2e8eo4wuk_v">
+      <property name="$shortcutReference" value="true" />
+      <property name="bounds" value="1040,180,113,151" />
+      <property name="location_set_by_user" value="True" />
+      <reference referencedUin="delphi:e_class:src:GBNFe:FrMens_U.TFrMens" />
+      <reference referencedUin="delphi:e_class:src:GBNFe:FrMens_U.@unitclass" />
+    </reference>
+    <reference referencedUin="design:view:::i94c1hw09e8dssaye_v">
+      <property name="$shortcutReference" value="true" />
+      <property name="bounds" value="1180,180,112,166" />
+      <property name="location_set_by_user" value="True" />
+      <reference referencedUin="delphi:e_class:src:GBNFe:GBNFe_U.TFrGBNFe" />
+      <reference referencedUin="delphi:e_class:src:GBNFe:GBNFe_U.TWebControl" />
+      <reference referencedUin="delphi:e_class:src:GBNFe:GBNFe_U.@unitclass" />
+    </reference>
+    <reference referencedUin="design:view:::7qprvd0hle80e98oi_v">
+      <property name="$shortcutReference" value="true" />
+      <property name="bounds" value="900,180,100,151" />
+      <property name="location_set_by_user" value="True" />
+      <reference referencedUin="delphi:e_class:src:GBNFe:FrPw_U.TFrPw" />
+      <reference referencedUin="delphi:e_class:src:GBNFe:FrPw_U.@unitclass" />
+    </reference>
+    <reference referencedUin="design:view:::0joni1e4we867wgqf_v">
+      <property name="$shortcutReference" value="true" />
+      <property name="bounds" value="600,0,120,151" />
+      <property name="location_set_by_user" value="True" />
+      <property name="bounds_setted_by_user" value="True" />
+      <reference referencedUin="delphi:e_class:src:GBNFe:DMFD_U.@unitclass" />
+      <reference referencedUin="delphi:e_class:src:GBNFe:DMFD_U.TDMFD" />
+    </reference>
+    <reference referencedUin="design:view:::zet6av7ecf8ygmvoe_v">
+      <property name="$shortcutReference" value="true" />
+      <property name="bounds" value="0,180,153,151" />
+      <property name="location_set_by_user" value="True" />
+      <reference referencedUin="delphi:e_class:src:GBNFe:FrBuscaChave_U.@unitclass" />
+      <reference referencedUin="delphi:e_class:src:GBNFe:FrBuscaChave_U.TFrBuscaChave" />
+    </reference>
+    <reference referencedUin="design:view:::k4wp3dqyrf8fiwvjq_v">
+      <property name="$shortcutReference" value="true" />
+      <property name="bounds" value="740,180,143,151" />
+      <property name="location_set_by_user" value="True" />
+      <reference referencedUin="delphi:e_class:src:GBNFe:FrBuscaNota_U.TFrBuscaNota" />
+      <reference referencedUin="delphi:e_class:src:GBNFe:FrBuscaNota_U.@unitclass" />
+    </reference>
+  </view>
+</nodeSet>

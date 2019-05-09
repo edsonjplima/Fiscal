@@ -462,6 +462,7 @@ object FrInut: TFrInut
         MaxLength = 3
         ParentFont = False
         TabOrder = 0
+        OnExit = Edit3Exit
         OnKeyPress = Edit1KeyPress
       end
     end

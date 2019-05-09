@@ -43,6 +43,7 @@ type
     procedure rg1Click(Sender: TObject);
     procedure Edit6KeyPress(Sender: TObject; var Key: Char);
     procedure Edit4Exit(Sender: TObject);
+    procedure Edit3Exit(Sender: TObject);
   private
     { Private declarations }
   public
@@ -400,6 +401,19 @@ end;
 procedure TFrInut.Edit1KeyPress(Sender: TObject; var Key: Char);
 begin
  if not (key in['0'..'9',chr(8)]) then Abort;
+end;
+
+procedure TFrInut.Edit3Exit(Sender: TObject);
+begin
+
+ if ( (StrToInt(Edit3.Text) > 909) and (StrToInt(Edit3.Text) < 970) ) then
+  begin
+
+   Application.Messagebox('Série fora da faixa de inutilização!', 'Atenção!', mb_iconstop+mb_ok);
+   Edit3.SetFocus;
+
+  end;
+
 end;
 
 procedure TFrInut.Edit4Exit(Sender: TObject);

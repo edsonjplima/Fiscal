@@ -9,8 +9,9 @@
 
 /****** Object:  StoredProcedure [dbo].[sp_ler_nfe_textos]    Script Date: 06/13/2017 15:14:02 ******/
 
-USE [NFe]
+USE [NFe_PQ]
 GO
+
 /****** Object:  StoredProcedure [dbo].[sp_nfe_transmitidas]    Script Date: 03/08/2018 14:31:27 ******/
 DROP PROCEDURE [dbo].[sp_nfe_transmitidas]
 GO

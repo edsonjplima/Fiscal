@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<nodeSet version="1.0">
+  <view uin="0joni1e4we867wgqf_v">
+    <property name="$defaultDiagram" value="true" />
+    <property name="$metaclass" value="Package Diagram" />
+    <property name="$name" value="default" />
+    <reference referencedUin="delphi:e_class:src:GBNFe:DMFD_U.@unitclass">
+      <property name="$shortcutReference" value="true" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:DMFD_U.@unitclass.DMFD" />
+      <reference referencedUin="delphi:l_ast:src:GBNFe:DMFD_U.@unitclass.DMFD" />
+    </reference>
+    <reference referencedUin="delphi:e_class:src:GBNFe:DMFD_U.TDMFD">
+      <property name="$shortcutReference" value="true" />
+      <property name="bounds" value="10,10,183,743" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:DMFD_U.TDMFD.FDConNFe" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:DMFD_U.TDMFD.FDConGer" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:DMFD_U.TDMFD.FDQryGeral1" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:DMFD_U.TDMFD.FDQryGeral2" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:DMFD_U.TDMFD.DataSource17" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:DMFD_U.TDMFD.DataSource3" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:DMFD_U.TDMFD.DataSource5" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:DMFD_U.TDMFD.DataSource6" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:DMFD_U.TDMFD.DataSource7" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:DMFD_U.TDMFD.FDQuery1" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:DMFD_U.TDMFD.FDQuery2" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:DMFD_U.TDMFD.FDQuery3" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:DMFD_U.TDMFD.FDQuery4" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:DMFD_U.TDMFD.FDQuery5" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:DMFD_U.TDMFD.FDQuery6" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:DMFD_U.TDMFD.FDQuery7" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:DMFD_U.TDMFD.FDQuery8" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:DMFD_U.TDMFD.FDQuery9" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:DMFD_U.TDMFD.FDQuery10" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:DMFD_U.TDMFD.FDQuery11" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:DMFD_U.TDMFD.FDQuery12" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:DMFD_U.TDMFD.FDQuery13" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:DMFD_U.TDMFD.FDQuery14" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:DMFD_U.TDMFD.FDQuery15" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:DMFD_U.TDMFD.FDQuery16" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:DMFD_U.TDMFD.DataSource10" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:DMFD_U.TDMFD.DataSource11" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:DMFD_U.TDMFD.DataSource12" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:DMFD_U.TDMFD.DataSource14" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:DMFD_U.TDMFD.DataSource15" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:DMFD_U.TDMFD.DataSource16" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:DMFD_U.TDMFD.DataSource13" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:DMFD_U.TDMFD.FDQryGer" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:DMFD_U.TDMFD.spVrfCanNot" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:DMFD_U.TDMFD.spCanNot" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:DMFD_U.TDMFD.spVrfInuNot" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:DMFD_U.TDMFD.DataSource18" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:DMFD_U.TDMFD.FDQuery18" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:DMFD_U.TDMFD.FDQryGeral3" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:DMFD_U.TDMFD.FDQryGeral4" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:DMFD_U.TDMFD.DataSource1" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:DMFD_U.TDMFD.FDQuery19" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:DMFD_U.TDMFD.FDQryGeral5" />
+      <reference referencedUin="delphi:e_field:src:GBNFe:DMFD_U.TDMFD.FDQuery20" />
+    </reference>
+  </view>
+</nodeSet>
