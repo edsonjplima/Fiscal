@@ -373,17 +373,13 @@ object FrPar: TFrPar
       Top = 1
       Width = 677
       Height = 310
-      ActivePage = ts1
+      ActivePage = TabSheet1
       Align = alClient
       TabOrder = 0
       OnChange = PageControl1Change
       OnMouseDown = PageControl1MouseDown
       object TabSheet1: TTabSheet
         Caption = 'DANFE'
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object Panel6: TPanel
           Left = 0
           Top = 0
@@ -1202,10 +1198,6 @@ object FrPar: TFrPar
       end
       object TabSheet6: TTabSheet
         Caption = 'Certificado'
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object Panel5: TPanel
           Left = 0
           Top = 0
@@ -1541,10 +1533,6 @@ object FrPar: TFrPar
       end
       object TabSheet7: TTabSheet
         Caption = 'WebService'
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         DesignSize = (
           669
           282)
@@ -1795,10 +1783,6 @@ object FrPar: TFrPar
       end
       object TabSheet8: TTabSheet
         Caption = 'eMail'
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object Panel11: TPanel
           Left = 0
           Top = 0
@@ -2109,10 +2093,6 @@ object FrPar: TFrPar
       object tsBancoDados: TTabSheet
         Caption = 'Banco de Dados'
         ImageIndex = 5
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         DesignSize = (
           669
           282)
@@ -2707,10 +2687,6 @@ object FrPar: TFrPar
       object ts1: TTabSheet
         Caption = 'Arq Temp. e Backups'
         ImageIndex = 4
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object pnl1: TPanel
           Left = 0
           Top = 0

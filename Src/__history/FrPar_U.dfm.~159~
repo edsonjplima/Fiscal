@@ -380,6 +380,10 @@ object FrPar: TFrPar
       OnMouseDown = PageControl1MouseDown
       object TabSheet1: TTabSheet
         Caption = 'DANFE'
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         object Panel6: TPanel
           Left = 0
           Top = 0
@@ -1198,6 +1202,10 @@ object FrPar: TFrPar
       end
       object TabSheet6: TTabSheet
         Caption = 'Certificado'
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         object Panel5: TPanel
           Left = 0
           Top = 0
@@ -1533,6 +1541,10 @@ object FrPar: TFrPar
       end
       object TabSheet7: TTabSheet
         Caption = 'WebService'
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         DesignSize = (
           669
           282)
@@ -1783,6 +1795,10 @@ object FrPar: TFrPar
       end
       object TabSheet8: TTabSheet
         Caption = 'eMail'
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         object Panel11: TPanel
           Left = 0
           Top = 0
@@ -2093,6 +2109,10 @@ object FrPar: TFrPar
       object tsBancoDados: TTabSheet
         Caption = 'Banco de Dados'
         ImageIndex = 5
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         DesignSize = (
           669
           282)
@@ -2687,6 +2707,10 @@ object FrPar: TFrPar
       object ts1: TTabSheet
         Caption = 'Arq Temp. e Backups'
         ImageIndex = 4
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         object pnl1: TPanel
           Left = 0
           Top = 0
@@ -3095,10 +3119,11 @@ object FrPar: TFrPar
               Top = 11
               Width = 47
               Height = 41
-              Hint = 'O Estado exige dados do Respons'#225'vel T'#233'cnico?'
+              Hint = 
+                'O Estado exige dados do Respons'#225'vel T'#233'cnico? [ Selecionado = '#39'S'#39 +
+                ' / Deselecionado = '#39'N'#39' ]'
               Caption = ' Exig? '
               Color = 14544639
-              Enabled = False
               Font.Charset = DEFAULT_CHARSET
               Font.Color = clWindowText
               Font.Height = -11
@@ -3157,7 +3182,10 @@ object FrPar: TFrPar
                 Font.Name = 'Tahoma'
                 Font.Style = []
                 MaxLength = 2
+                NumbersOnly = True
                 ParentFont = False
+                ParentShowHint = False
+                ShowHint = False
                 TabOrder = 0
                 OnKeyPress = edt_IdResTecKeyPress
               end
@@ -3200,6 +3228,7 @@ object FrPar: TFrPar
                 Font.Style = []
                 MaxLength = 250
                 ParentFont = False
+                ReadOnly = True
                 TabOrder = 0
               end
             end
@@ -3241,6 +3270,7 @@ object FrPar: TFrPar
                 Font.Style = []
                 MaxLength = 250
                 ParentFont = False
+                ReadOnly = True
                 TabOrder = 0
               end
             end
@@ -3282,6 +3312,7 @@ object FrPar: TFrPar
                 Font.Style = []
                 MaxLength = 250
                 ParentFont = False
+                ReadOnly = True
                 TabOrder = 0
               end
             end
@@ -3321,6 +3352,7 @@ object FrPar: TFrPar
                 Font.Style = []
                 MaxLength = 250
                 ParentFont = False
+                ReadOnly = True
                 TabOrder = 0
               end
             end
@@ -3362,6 +3394,7 @@ object FrPar: TFrPar
                 Font.Style = []
                 MaxLength = 250
                 ParentFont = False
+                ReadOnly = True
                 TabOrder = 0
               end
             end

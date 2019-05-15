@@ -1,34 +1,41 @@
 ﻿[Closed Files]
-File_0=TSourceModule,'D:\Sistemas de Desenvolvimento\GBNFe\Src\FrPar_U.pas',0,1,198,5,214,0,0,,{1
-File_1=TSourceModule,'D:\Sistemas de Desenvolvimento\GBNFe\Src\ModelSupport_GBNFe\FrPar_U\default.txvpck',0,1,173,31,190,0,0,,
-File_2=TSourceModule,'d:\sistemas de desenvolvimento\gbnfe\src\DMFD_U.pas',0,1,38,6,55,0,0,,
-File_3=TSourceModule,'D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFeWinCrypt.pas',0,1,1147,1,1154,0,0,,
-File_4=TSourceModule,'D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\PCNNFe\pcnEnvEventoNFe.pas',0,1,40,21,48,0,0,,
-File_5=TSourceModule,'D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\ACBrNFe.pas',0,1,738,3,754,0,0,,
-File_6=TSourceModule,'D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\PCNNFe\pcnNFe.pas',0,1,1,1,1,0,0,,
-File_7=TSourceModule,'D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrSerial\ACBrECFEpson.pas',0,1,82,10,76,0,0,,
-File_8=TSourceModule,'D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\PCNComum\pcnRetDistDFeInt.pas',0,1,470,22,463,0,0,,
-File_9=TSourceModule,'D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\PCNComum\pcnConversao.pas',0,1,33,18,51,0,0,,
-File_10=TSourceModule,'D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\ACBrNFeWebServices.pas',0,1,31,24,39,0,0,,
-File_11=TSourceModule,'c:\program files (x86)\embarcadero\studio\18.0\SOURCE\RTL\SYS\System.pas',0,1,1,1,12,0,0,,
+File_0=TSourceModule,'D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBuscaChave_U.pas',0,1,1970,37,1988,0,0,,{1
+File_1=TSourceModule,'D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\PCNNFe\pcnNFe.pas',0,1,1463,16,1477,0,0,,
+File_2=TSourceModule,'D:\Sistemas de Desenvolvimento\GBNFe\Src\Uses_U.pas',0,1,1,98,13,0,0,,
+File_3=TTogetherDocModule,'D:\Sistemas de Desenvolvimento\GBNFe\Src\ModelSupport_GBNFe\DMFD_U\default.txaPackage',0
+File_4=TSourceModule,'D:\Sistemas de Desenvolvimento\GBNFe\Src\ModelSupport_GBNFe\FrPar_U\default.txvpck',0,1,173,31,190,0,0,,
+File_5=TSourceModule,'d:\sistemas de desenvolvimento\gbnfe\src\DMFD_U.pas',0,1,38,6,55,0,0,,
+File_6=TSourceModule,'D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFeWinCrypt.pas',0,1,1147,1,1154,0,0,,
+File_7=TSourceModule,'D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\PCNNFe\pcnEnvEventoNFe.pas',0,1,40,21,48,0,0,,
+File_8=TSourceModule,'D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\ACBrNFe.pas',0,1,738,3,754,0,0,,
+File_9=TSourceModule,'D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrSerial\ACBrECFEpson.pas',0,1,82,10,76,0,0,,
+File_10=TSourceModule,'D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\PCNComum\pcnRetDistDFeInt.pas',0,1,470,22,463,0,0,,
+File_11=TSourceModule,'D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\PCNComum\pcnConversao.pas',0,1,33,18,51,0,0,,
+File_12=TSourceModule,'D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\ACBrNFeWebServices.pas',0,1,31,24,39,0,0,,
+File_13=TSourceModule,'c:\program files (x86)\embarcadero\studio\18.0\SOURCE\RTL\SYS\System.pas',0,1,1,1,12,0,0,,
 
 [Modules]
 Module0=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
-Module1=default.htm
-Count=2
+Module1=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrPar_U.pas
+Module2=default.htm
+Count=3
 EditWindowCount=1
 
 [D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas]
+ModuleType=TSourceModule
+
+[D:\Sistemas de Desenvolvimento\GBNFe\Src\FrPar_U.pas]
 ModuleType=TSourceModule
 
 [default.htm]
 ModuleType=TURLModule
 
 [EditWindow0]
-ViewCount=2
+ViewCount=3
 CurrentEditView=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
 View0=0
 View1=1
+View2=2
 PercentageSizes=1
 Create=1
 Visible=1
@@ -63,13 +70,24 @@ WelcomePageURL=bds:/default.htm
 [View1]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
-CursorX=1
-CursorY=695
-TopLine=679
+CursorX=18
+CursorY=2731
+TopLine=1
 LeftCol=1
 Elisions=
-Bookmarks={1,8608,1}{2,7432,2}{3,653,1}{6,7627,1}
+Bookmarks={1,2667,22}{2,7447,2}{3,662,1}{6,7642,1}
 EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
+
+[View2]
+CustomEditViewType=TEditView
+Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrPar_U.pas
+CursorX=22
+CursorY=717
+TopLine=700
+LeftCol=1
+Elisions=
+Bookmarks={1,394,1}
+EditViewName=Borland.FormDesignerView
 
 [UndockedDesigner]
 Count=0
@@ -99,7 +117,9 @@ Dockable=1
 StayOnTop=0
 
 [Breakpoints]
-Count=0
+Count=2
+Breakpoint0='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',2648,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint1='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',2256,'',0,1,'',1,0,0,'',1,'','','',0,''
 
 [EmbarcaderoWin32Debugger_AddressBreakpoints]
 Count=0
@@ -581,11 +601,11 @@ Docked=1
 State=0
 Left=0
 Top=0
-Width=3825
+Width=9988
 Height=2698
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=3825
+ClientWidth=9988
 ClientHeight=2698
 TBDockHeight=1547
 LRDockWidth=8744
@@ -711,13 +731,13 @@ Create=1
 Visible=0
 Docked=1
 State=0
-Left=8
-Top=8
-Width=3825
+Left=1
+Top=27
+Width=9988
 Height=2988
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=3825
+ClientWidth=9988
 ClientHeight=2988
 TBDockHeight=2988
 LRDockWidth=3825

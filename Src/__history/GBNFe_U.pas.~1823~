@@ -52,6 +52,8 @@ type
 end;
 
 type
+
+type
  TFrGBNFe = class(TForm)
   Panel2: TPanel;
   Panel3: TPanel;
@@ -1077,7 +1079,7 @@ begin
                            DMFD.FDQuery1['nfe_serie'],
                            '',
                            gModelo,                                             // Conteúdo dos campos
-                           true)                                                // Consiste [s/n]
+                           true)                                                // Consiste [true/false]
          else
           pGravaNFe('001', 'situacao',
                            'motivo',
@@ -1104,7 +1106,7 @@ begin
                            DMFD.FDQuery1['nfe_serie'],
                            '',
                            gModelo,                                             // Conteúdo dos campos
-                           true);                                               // Consiste [s/n]
+                           true);                                               // Consiste [true/false]
         end;
        //**********************************************************************
 
@@ -3129,7 +3131,7 @@ begin
                           DMFD.FDQuery1['nfe_serie'],
                           Aux,
                           DMFD.FDQuery1['nfe_modelo'],                          // Conteúdo dos campos
-                          true);                                                // Consiste [s/n]
+                          true);                                                // Consiste [true/false]
 
         except
 
@@ -3234,7 +3236,7 @@ begin
                               DMFD.FDQuery1['nfe_serie'],
                               ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].chDFe,
                               DMFD.FDQuery1['nfe_modelo'],                      // Conteúdo dos campos
-                              true);                                            // Consiste [s/n]
+                              true);                                            // Consiste [true/false]
 
              //-----------------------------------------------------------------
              // by Edson Lima ; 2017-1-5T1054 ; Grava a chave no pedido do gerente
@@ -3350,7 +3352,7 @@ begin
                                 DMFD.FDQuery1['nfe_serie'],
                                 ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].chDFe,
                                 DMFD.FDQuery1['nfe_modelo'],                    // Conteúdo dos campos
-                                true);                                          // Consiste [s/n]
+                                true);                                          // Consiste [true/false]
 
               end;
 
@@ -8013,7 +8015,7 @@ begin
                             DMFD.FDQryGeral2['nfe_serie'],
                             ACBrNFe1.WebServices.Consulta.NFeChave,
                             DMFD.FDQryGeral2['nfe_modelo'],                     // Conteúdo dos campos
-                            true);                                              // Consiste [s/n]
+                            true);                                              // Consiste [true/false]
 
            //----------------------------------------------------------------------
            // by Edson Lima ; 2017-1-5T1027 ; Atribuição de dados nas variáveis do
@@ -8921,7 +8923,7 @@ begin
                            DMFD.FDQryGeral2['nfe_serie'],
                            ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.chNFe,
                            DMFD.FDQryGeral2['nfe_modelo'],                      // Conteúdo dos campos
-                           true);                                               // Consiste [s/n]
+                           true);                                               // Consiste [true/false]
 
           // Verifia se tem carta de correção e se tiver modifica o status da carta para CCe COM NFE CANCELADA
           if fGravaCCe( DMFD.FDQryGeral2['nfe_nnf'], '580', '(NFe Cancelada) - O evento exige uma NF-e autorizada' ) then
@@ -8929,8 +8931,8 @@ begin
                             'data_hora_recebimento',
                             '',
                             '',
-                            'cStat_CCe',
-                            'xMotivo_CCe',
+                            '',
+                            '',
                             '',
                             'codigo_loja',
                             'demi',
@@ -8951,7 +8953,7 @@ begin
                             DMFD.FDQryGeral2['nfe_serie'],
                             ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.chNFe,
                             DMFD.FDQryGeral2['nfe_modelo'],                     // Conteúdo dos campos
-                            true);                                              // Consiste [s/n]
+                            true);                                              // Consiste [true/false]
 
           //--------------------------------------------------------------------
           // by Edson Lima ; 7/1/2014T1026 ; Cancela CCe caso tenha alt. na NFe
@@ -9423,7 +9425,7 @@ begin
                            DMFD.FDQryGeral2['nfe_serie'],
                            DMFD.FDQryGeral2['nfe_chave_nfe'],
                            DMFD.FDQryGeral2['nfe_modelo'],                      // Conteúdo dos campos
-                           true)                                                // Consiste [s/n]
+                           true)                                                // Consiste [true/false]
 
          except
 
@@ -9467,7 +9469,7 @@ begin
                            DMFD.FDQryGeral2['nfe_serie'],
                            ACBrNFe1.WebServices.Consulta.NFeChave,
                            DMFD.FDQryGeral2['nfe_modelo'],                      // Conteúdo dos campos
-                           true);                                               // Consiste [s/n]
+                           true);                                               // Consiste [true/false]
 
          end;
 
@@ -9729,21 +9731,33 @@ begin
         //----------------------------------------------------------------------
 
         // by Edson Lima ; 2013/03/12 ; 14:23 ; Atualiza a nfe no update centralizado
-        pGravaNFe('011', 'protocolo', 'recibo', 'data_hora_recebimento',
-                  'chave_nfe', 'situacao',  'motivo', '',
-                  'codigo_loja', 'demi',    'nnf',    'serie', 'chave_nfe',
-                  ACBrNFe1.WebServices.Consulta.Protocolo,
-                  vnRec,
-                  FormatDateTime('yyyy/mm/dd hh:nn:ss', ACBrNFe1.WebServices.consulta.DhRecbto),
-                  ACBrNFe1.WebServices.Consulta.NFeChave,
-                  ACBrNFe1.WebServices.Consulta.cStat,
-                  ACBrNFe1.WebServices.Consulta.xMotivo,
-                  '',
-                  edt_CodEmp.Text,
-                  FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']),
-                  DMFD.FDQryGeral2['nfe_nnf'],
-                  DMFD.FDQryGeral2['nfe_serie'],
-                  ACBrNFe1.WebServices.Consulta.NFeChave, true);
+        pGravaNFe('011', 'protocolo',
+                         'recibo',
+                         'data_hora_recebimento',
+                         'chave_nfe',
+                         'situacao',
+                         'motivo',
+                         '',
+                         'codigo_loja',
+                         'demi',
+                         'nnf',
+                         'serie',
+                         'chave_nfe',
+                         'modelo',                                              // Nome dos campos
+                         ACBrNFe1.WebServices.Consulta.Protocolo,
+                         vnRec,
+                         FormatDateTime('yyyy/mm/dd hh:nn:ss', ACBrNFe1.WebServices.consulta.DhRecbto),
+                         ACBrNFe1.WebServices.Consulta.NFeChave,
+                         ACBrNFe1.WebServices.Consulta.cStat,
+                         ACBrNFe1.WebServices.Consulta.xMotivo,
+                         '',
+                         edt_CodEmp.Text,
+                         FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']),
+                         DMFD.FDQryGeral2['nfe_nnf'],
+                         DMFD.FDQryGeral2['nfe_serie'],
+                         ACBrNFe1.WebServices.Consulta.NFeChave,
+                         DMFD.FDQryGeral2['nfe_modelo'],                        // Conteúdo dos campos
+                         true);                                                 // Consiste [true/false]
        end
       else if ( (trim(vartostr(ACBrNFe1.WebServices.Consulta.cStat)) = '613') or
                 (trim(vartostr(ACBrNFe1.WebServices.Consulta.cStat)) = '539') ) then
@@ -11798,20 +11812,33 @@ begin
        (VarToStr(ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cStat) = '135')  or
        (VarToStr(ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cStat) = '136')) then
     begin
-     pGravaNFe('017', 'nProt_CCe', 'dhRegEvento_CCe', 'cStat_CCe',  'xMotivo_CCe', 'evento_CCe', 'xCorrecao_CCe', '',
-               'codigo_loja', 'demi',      'nnf',       'serie', 'Modelo',
-              ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.nProt,
-              FormatDateTime('yyyy/mm/dd hh:nn:ss', ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.dhRegEvento),
-              ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cStat,
-              ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.xMotivo,
-              StrToInt(nSeqEvento),
-              DMFD.FDQryGeral2['CCe_xCorrecao'],
-              '',
-              edt_CodEmp.Text,
-              FormatDateTime('yyyy/mm/dd', DMFD.FDQuery5['nfe_demi']),
-              DMFD.FDQuery5['nfe_nnf'],
-              DMFD.FDQuery5['nfe_serie'],
-              DMFD.FDQuery5['nfe_Modelo'], false);
+     pGravaNFe('017', 'nProt_CCe',
+                      'dhRegEvento_CCe',
+                      'cStat_CCe',
+                      'xMotivo_CCe',
+                      'evento_CCe',
+                      'xCorrecao_CCe',
+                      '',
+                      'codigo_loja',
+                      'demi',
+                      'nnf',
+                      'serie',
+                      '',
+                      'Modelo',                                                 // Nome dos campos
+                      ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.nProt,
+                      FormatDateTime('yyyy/mm/dd hh:nn:ss', ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.dhRegEvento),
+                      ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cStat,
+                      ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.xMotivo,
+                      StrToInt(nSeqEvento),
+                      DMFD.FDQryGeral2['CCe_xCorrecao'],
+                      '',
+                      edt_CodEmp.Text,
+                      FormatDateTime('yyyy/mm/dd', DMFD.FDQuery5['nfe_demi']),
+                      DMFD.FDQuery5['nfe_nnf'],
+                      DMFD.FDQuery5['nfe_serie'],
+                      '',
+                      DMFD.FDQuery5['nfe_Modelo'],                              // Conteúdo dos Módulos
+                      false);                                                   // Consiste [true/false]
 
      //pega os dados do destinatario
      DMFD.FDQuery2.Close;
@@ -12179,20 +12206,33 @@ begin
          (consulta.procEventoNFe.Items[vC].RetEventoNFe.cStat = 136)) then
       begin
 
-       pGravaNFe('017', 'nProt_CCe', 'dhRegEvento_CCe', 'cStat_CCe',  'xMotivo_CCe', 'evento_CCe', 'xCorrecao_CCe', '',
-                 'codigo_loja', 'demi', 'nnf', 'serie', 'chave_nfe',
-                 Consulta.procEventoNFe.Items[vC].RetEventoNFe.retEvento.Items[0].RetInfEvento.nProt,
-                 FormatDateTime('yyyy/mm/dd hh:nn:ss', Consulta.procEventoNFe.Items[vC].RetEventoNFe.retEvento.Items[0].RetInfEvento.dhRegEvento),
-                 consulta.procEventoNFe.Items[vC].RetEventoNFe.cStat,
-                 consulta.procEventoNFe.Items[vC].RetEventoNFe.xMotivo,
-                 StrToInt(nSeqEvento),
-                 DMFD.FDQryGeral2['CCe_xCorrecao'],
-                 '',
-                 edt_CodEmp.Text,
-                 FormatDateTime('yyyy/mm/dd', DMFD.FDQuery5['nfe_demi']),
-                 DMFD.FDQuery5['nfe_nnf'],
-                 DMFD.FDQuery5['nfe_serie'],
-                 consulta.protNFe.chNFe, true);
+       pGravaNFe('017', 'nProt_CCe',
+                        'dhRegEvento_CCe',
+                        'cStat_CCe',
+                        'xMotivo_CCe',
+                        'evento_CCe',
+                        'xCorrecao_CCe',
+                        '',
+                        'codigo_loja',
+                        'demi',
+                        'nnf',
+                        'serie',
+                        'chave_nfe',
+                        'modelo',                                               // Nomes dos campos
+                        Consulta.procEventoNFe.Items[vC].RetEventoNFe.retEvento.Items[0].RetInfEvento.nProt,
+                        FormatDateTime('yyyy/mm/dd hh:nn:ss', Consulta.procEventoNFe.Items[vC].RetEventoNFe.retEvento.Items[0].RetInfEvento.dhRegEvento),
+                        consulta.procEventoNFe.Items[vC].RetEventoNFe.cStat,
+                        consulta.procEventoNFe.Items[vC].RetEventoNFe.xMotivo,
+                        StrToInt(nSeqEvento),
+                        DMFD.FDQryGeral2['CCe_xCorrecao'],
+                        '',
+                        edt_CodEmp.Text,
+                        FormatDateTime('yyyy/mm/dd', DMFD.FDQuery5['nfe_demi']),
+                        DMFD.FDQuery5['nfe_nnf'],
+                        DMFD.FDQuery5['nfe_serie'],
+                        consulta.protNFe.chNFe,
+                        DMFD.FDQuery5['nfe_modelo'],                            // Conteúdo dos campos
+                        true);                                                  // Consiste [true/false]
 
        //pega os dados do destinatario
        DMFD.FDQuery2.Close;
@@ -12641,11 +12681,35 @@ begin
        if gAtuFSD then
         begin
 
-          pGravaNFe('016', 'situacao', 'motivo', '', '', '', '', '', 'codigo_loja', 'demi', 'nnf', 'serie', 'chave_nfe',
-                    '', 'Movida de Contingências', '', '', '', '', '', edt_CodEmp.Text, FormatDateTime('yyyy/mm/dd',
-                    DMFD.FDQryGeral2['nfe_demi']), DMFD.FDQryGeral2['nfe_nnf'], DMFD.FDQryGeral2['nfe_serie'],
-                    DMFD.FDQryGeral2['nfe_chave_nfe'], true);
-          gAtuFSD := False;
+         pGravaNFe('016', 'situacao',
+                          'motivo',
+                          '',
+                          '',
+                          '',
+                          '',
+                          '',
+                          'codigo_loja',
+                          'demi',
+                          'nnf',
+                          'serie',
+                          'chave_nfe',
+                          'modelo',                                             // Nome dos campos
+                          '',
+                          'Movida de Contingências',
+                          '',
+                          '',
+                          '',
+                          '',
+                          '',
+                          edt_CodEmp.Text, FormatDateTime('yyyy/mm/dd',
+                          DMFD.FDQryGeral2['nfe_demi']),
+                          DMFD.FDQryGeral2['nfe_nnf'],
+                          DMFD.FDQryGeral2['nfe_serie'],
+                          DMFD.FDQryGeral2['nfe_chave_nfe'],
+                          DMFD.FDQryGeral2['nfe_modelo'],                       // Conteúdo dos campos
+                          true);                                                // Consiste [true/false]
+
+         gAtuFSD := False;
 
         end
 
@@ -12655,26 +12719,26 @@ begin
 
          if ( (copy(vartostr(DMFD.FDQryGeral2['nfe_chave_nfe']), 35, 1) = '4') and
               (RadioGroup1.itemindex <> 1) ) then
-          pGravaNFe('016', 'situacao', 'motivo', '', '', '', '', '', 'codigo_loja', 'demi', 'nnf', 'serie', 'chave_nfe',
+          pGravaNFe('016', 'situacao', 'motivo', '', '', '', '', '', 'codigo_loja', 'demi', 'nnf', 'serie', 'chave_nfe', 'modelo',
                     AnsiUpperCase('EPEC'), 'Movida das Transmitidas', '', '', '', '', '', edt_CodEmp.Text,
                     FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']), DMFD.FDQryGeral2['nfe_nnf'],
-                    DMFD.FDQryGeral2['nfe_serie'], DMFD.FDQryGeral2['nfe_chave_nfe'], true)
+                    DMFD.FDQryGeral2['nfe_serie'], DMFD.FDQryGeral2['nfe_chave_nfe'], DMFD.FDQryGeral2['nfe_modelo'], true)
          else if ( (copy(vartostr(DMFD.FDQryGeral2['nfe_chave_nfe']), 35, 1) = '5') and
               (RadioGroup1.itemindex <> 1) ) then
-          pGravaNFe('016', 'situacao', 'motivo', '', '', '', '', '', 'codigo_loja', 'demi', 'nnf', 'serie', 'chave_nfe',
+          pGravaNFe('016', 'situacao', 'motivo', '', '', '', '', '', 'codigo_loja', 'demi', 'nnf', 'serie', 'chave_nfe', 'modelo',
                     AnsiUpperCase('FSDA'), 'Movida das Transmitidas', '', '', '', '', '', edt_CodEmp.Text,
                     FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']), DMFD.FDQryGeral2['nfe_nnf'],
-                    DMFD.FDQryGeral2['nfe_serie'], DMFD.FDQryGeral2['nfe_chave_nfe'], true)
+                    DMFD.FDQryGeral2['nfe_serie'], DMFD.FDQryGeral2['nfe_chave_nfe'], DMFD.FDQryGeral2['nfe_modelo'], true)
          else if (copy(vartostr(DMFD.FDQryGeral2['nfe_chave_nfe']), 35, 1) = '9') then
-          pGravaNFe('016', 'situacao', 'motivo', '', '', '', '', '', 'codigo_loja', 'demi', 'nnf', 'serie', 'chave_nfe',
+          pGravaNFe('016', 'situacao', 'motivo', '', '', '', '', '', 'codigo_loja', 'demi', 'nnf', 'serie', 'chave_nfe', 'modelo',
                     AnsiUpperCase('OFFL'), 'Movida das Transmitidas', '', '', '', '', '', edt_CodEmp.Text,
                     FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']), DMFD.FDQryGeral2['nfe_nnf'],
-                    DMFD.FDQryGeral2['nfe_serie'], DMFD.FDQryGeral2['nfe_chave_nfe'], true)
+                    DMFD.FDQryGeral2['nfe_serie'], DMFD.FDQryGeral2['nfe_chave_nfe'], DMFD.FDQryGeral2['nfe_modelo'], true)
          else
-          pGravaNFe('016', 'situacao', 'motivo', '', '', '', '', '', 'codigo_loja', 'demi', 'nnf', 'serie', 'chave_nfe',
+          pGravaNFe('016', 'situacao', 'motivo', '', '', '', '', '', 'codigo_loja', 'demi', 'nnf', 'serie', 'chave_nfe', 'modelo',
                     '',                           'Movida das Transmitidas', '', '', '', '', '', edt_CodEmp.Text,
                     FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']), DMFD.FDQryGeral2['nfe_nnf'],
-                    DMFD.FDQryGeral2['nfe_serie'], DMFD.FDQryGeral2['nfe_chave_nfe'], true);
+                    DMFD.FDQryGeral2['nfe_serie'], DMFD.FDQryGeral2['nfe_chave_nfe'], DMFD.FDQryGeral2['nfe_modelo'], true);
 
         end;
 

@@ -1,8 +1,15 @@
 program GBNFe;
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Classes,
-  Vcl.Forms, Data.DB, Vcl.Themes, Vcl.Styles, Winapi.ShellAPi,
+  Winapi.Windows,
+  Winapi.Messages,
+  System.SysUtils,
+  System.Classes,
+  Vcl.Forms,
+  Data.DB,
+  Vcl.Themes,
+  Vcl.Styles,
+  Winapi.ShellAPi,
   Vcl.Controls,
   GBNFe_U in 'GBNFe_U.pas' {FrGBNFe},
   FrPar_U in 'FrPar_U.pas' {FrPar},
@@ -22,7 +29,8 @@ uses
   FrEmail_U in 'FrEmail_U.pas' {FrEmail},
   DMFD_U in 'DMFD_U.pas' {DMFD: TDataModule},
   FrBuscaChave_U in 'FrBuscaChave_U.pas' {FrBuscaChave},
-  FrBDFD_U in 'FrBDFD_U.pas' {FrBDFD};
+  FrBDFD_U in 'FrBDFD_U.pas' {FrBDFD},
+  Uses_U in 'Uses_U.pas';
 
 type
   RecConf = Record
@@ -125,24 +133,25 @@ begin
  if gInstancias = '1' then
   begin
 
-   //Instancia:= CreateMutex(nil, false, 'InstanciaGbNFe');
    Instancia:= CreateMutex(nil, false, '{1A11F0B9-AFF3-4DB4-9FDF-460108C63581}');
    if ( WaitForSingleObject(Instancia, 0) = wait_Timeout ) then
     begin
 
      Application.MessageBox('Atenção, há outro Emissor aberto ! Ele será fechado...' + chr(13) +
                             'Depois chame-o novamente !','GBNFe  - Atenção',MB_ICONINFORMATION);
-     //PostMessageW(FindWindow('tfrgbnfe', nil), WM_CLOSE,0,0);
-     PostMessageW(FindWindow(Instancia, nil), WM_CLOSE,0,0);
+     PostMessageW(FindWindow('tfrgbnfe', nil), WM_CLOSE,0,0);
      TerminateThread(hHandle, iExit);
 
      if ( FrPar.CheckBox10.Checked = True ) then
       begin
 
+       winexec('taskkill /f /im GBNFe.exe', SW_HIDE);                           // Encerra o processo gbnfe definitivamente
+
        if ( Is64Bits ) then
         winexec('pskill64 -t GBNFE.Exe', SW_HIDE)                               // Encerra o processo gbnfe definitivamente
        else
         winexec('pskill   -t GBNFE.Exe', SW_HIDE);                              // Encerra o processo gbnfe definitivamente
+
       end;
 
      Exit;

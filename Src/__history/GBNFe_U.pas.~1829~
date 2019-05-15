@@ -52,6 +52,15 @@ type
 end;
 
 type
+ TUpdate = class
+
+ private
+
+ public
+
+end;
+
+type
  TFrGBNFe = class(TForm)
   Panel2: TPanel;
   Panel3: TPanel;
@@ -2649,41 +2658,25 @@ begin
                   ( (FrPar.cbb2.ItemIndex = 3) and (gModelo=65) ) ) then        // ve400
               begin
 
-               if (DMFD.FDQuery2['vBCUFDest'] = null) then                   // 09-01-2019 (Renildo) foi mudado de vBCFCPUFDest para vBCUFDeste
-                vBCFCPUFDest   := 0
-               else
+               if ( DMFD.FDQuery2['vBCUFDest'] > 0 ) then                       // 09-01-2019 (Renildo) foi mudado de vBCFCPUFDest para vBCUFDeste
                 vBCFCPUFDest   := DMFD.FDQuery2['vBCUFDest'];
 
               end;
 
-             if (DMFD.FDQuery2['pFCPUFDest'] = null) then
-              pFCPUFDest     := 0
-             else
+             if ( DMFD.FDQuery2['pFCPUFDest'] > 0 ) then
               pFCPUFDest     := DMFD.FDQuery2['pFCPUFDest'];
 
-             if (DMFD.FDQuery2['pICMSUFDest'] = null) then
-              pICMSUFDest    := 0
-             else
+             if (DMFD.FDQuery2['pICMSUFDest'] > 0 ) then
               pICMSUFDest    := DMFD.FDQuery2['pICMSUFDest'];
-             if (DMFD.FDQuery2['pICMSInter'] = null) then
-              pICMSInter     := 0
-             else
+             if ( DMFD.FDQuery2['pICMSInter'] > 0 ) then
               pICMSInter     := DMFD.FDQuery2['pICMSInter'];
-             if (DMFD.FDQuery2['pICMSInterPart'] = null) then
-              pICMSInterPart := 0
-             else
+             if ( DMFD.FDQuery2['pICMSInterPart'] > 0 ) then
               pICMSInterPart := DMFD.FDQuery2['pICMSInterPart'];
-             if (DMFD.FDQuery2['vFCPUFDest'] = null) then
-              vFCPUFDest     := 0
-             else
+             if ( DMFD.FDQuery2['vFCPUFDest'] > 0 ) then
               vFCPUFDest     := DMFD.FDQuery2['vFCPUFDest'];
-             if (DMFD.FDQuery2['vICMSUFDest'] = null) then
-              vICMSUFDest    := 0
-             else
+             if ( DMFD.FDQuery2['vICMSUFDest'] > 0 ) then
               vICMSUFDest    := DMFD.FDQuery2['vICMSUFDest'];
-             if (DMFD.FDQuery2['vICMSUFRemet'] = null) then
-              vICMSUFRemet   := 0
-             else
+             if ( DMFD.FDQuery2['vICMSUFRemet'] > 0 ) then
               vICMSUFRemet   := DMFD.FDQuery2['vICMSUFRemet'];
 
             end;
@@ -2697,17 +2690,25 @@ begin
                   ( (FrPar.cbb2.ItemIndex = 3) and (gModelo=65) ) ) then        // ve400
               begin
 
-//               pFCP	       := Imposto.ICMSUFDest.pFCPUFDest;                    // Percentual relativo ao Fundo de Combate à Pobreza (FCP). Nota: Percentual máximo de 2%, conforme a legislação.
-               pFCPST	     := Imposto.ICMSUFDest.pFCPUFDest;                    // Percentual relativo ao Fundo de Combate à Pobreza (FCP). Nota: Percentual máximo de 2%, conforme a legislação.
-               pFCPSTRet	  := Imposto.ICMSUFDest.pFCPUFDest;                    // Percentual relativo ao Fundo de Combate à Pobreza (FCP). Nota: Percentual máximo de 2%, conforme a legislação.
+               if ( Imposto.ICMSUFDest.pFCPUFDest > 0 ) then
+                begin
 
-//               vFCP	       := Imposto.ICMSUFDest.vFCPUFDest;                    // Valor do ICMS relativo ao Fundo de Combate à Pobreza (FCP)
-               vFCPST	     := Imposto.ICMSUFDest.vFCPUFDest;                    // Valor do ICMS relativo ao Fundo de Combate à Pobreza (FCP) retido por substituição tributária.
-               vFCPSTRet	  := Imposto.ICMSUFDest.vFCPUFDest;                    // Valor do ICMS relativo ao Fundo de Combate à Pobreza (FCP) retido por substituição tributária.
+                 pFCPST	     := Imposto.ICMSUFDest.pFCPUFDest;                  // Percentual relativo ao Fundo de Combate à Pobreza (FCP). Nota: Percentual máximo de 2%, conforme a legislação.
+                 pFCPSTRet	  := Imposto.ICMSUFDest.pFCPUFDest;                  // Percentual relativo ao Fundo de Combate à Pobreza (FCP). Nota: Percentual máximo de 2%, conforme a legislação.
 
-               vBCFCP	     := Imposto.ICMSUFDest.vBCFCPUFDest;                  // Informar o valor da Base de Cálculo do FCP
-               vBCFCPST	   := Imposto.ICMSUFDest.vBCFCPUFDest;                  // Informar o valor da Base de Cálculo do FCP
-               vBCFCPSTRet := Imposto.ICMSUFDest.vBCFCPUFDest;                  // Informar o valor da Base de Cálculo do FCP retido anteriormente por ST
+                 vFCPST	     := Imposto.ICMSUFDest.vFCPUFDest;                  // Valor do ICMS relativo ao Fundo de Combate à Pobreza (FCP) retido por substituição tributária.
+                 vFCPSTRet	  := Imposto.ICMSUFDest.vFCPUFDest;                  // Valor do ICMS relativo ao Fundo de Combate à Pobreza (FCP) retido por substituição tributária.
+
+                end;
+
+               if ( Imposto.ICMSUFDest.vBCFCPUFDest > 0 ) then
+                begin
+
+                 vBCFCP	     := Imposto.ICMSUFDest.vBCFCPUFDest;                // Informar o valor da Base de Cálculo do FCP
+                 vBCFCPST	   := Imposto.ICMSUFDest.vBCFCPUFDest;                // Informar o valor da Base de Cálculo do FCP
+                 vBCFCPSTRet := Imposto.ICMSUFDest.vBCFCPUFDest;                // Informar o valor da Base de Cálculo do FCP retido anteriormente por ST
+
+                end;
 
                pST	        := ( DMFD.FDQuery2['pc_icms_st'] +
                                 Imposto.ICMSUFDest.pFCPUFDest );                // Deve ser informada a alíquota do cálculo do ICMS-ST, já incluso o FCP. Exemplo: alíquota da mercadoria na venda ao consumidor final = 18% e 2% de FCP. A alíquota a ser informada no campo pST deve ser 20%.
@@ -3019,9 +3020,7 @@ begin
         Total.ICMSTot.vICMSDeson   := DMFD.FDQuery1['nfe_vICMSDeson'];          // by Edson Lima ; 11/10/2016
 
        // by Edson Lima ; 2016-3-22 ; partilha do icms e fundo de probreza
-       if DMFD.FDQuery1['nfe_vFCPUFDest'] = null then
-        Total.ICMSTot.vFCPUFDest   := 0
-       else
+       if DMFD.FDQuery1['nfe_vFCPUFDest'] > 0 then
         Total.ICMSTot.vFCPUFDest   := DMFD.FDQuery1['nfe_vFCPUFDest'];
 
        if DMFD.FDQuery1['nfe_vICMSUFDest'] = null then
@@ -10408,9 +10407,12 @@ begin
                          (CSOSN = csosn203) and (CSOSN = csosn900) ) then
                      begin
 
-                      trvwNFe.Items.AddChild(Node,'vBCFCPST='        + FloatToStr(ICMS.vBCFCPST));
-                      trvwNFe.Items.AddChild(Node,'pFCPST='          + FloatToStr(ICMS.pFCPST));
-                      trvwNFe.Items.AddChild(Node,'vFCPST='          + FloatToStr(ICMS.vFCPST));
+                      if ( ICMS.vBCFCPST > 0 ) then
+                       trvwNFe.Items.AddChild(Node,'vBCFCPST='        + FloatToStr(ICMS.vBCFCPST));
+                      if ( ICMS.pFCPST > 0 ) then
+                       trvwNFe.Items.AddChild(Node,'pFCPST='          + FloatToStr(ICMS.pFCPST));
+                      if ( ICMS.vFCPST > 0 ) then
+                       trvwNFe.Items.AddChild(Node,'vFCPST='          + FloatToStr(ICMS.vFCPST));
 
                      end;
 
@@ -11821,6 +11823,7 @@ begin
                       'demi',
                       'nnf',
                       'serie',
+                      '',
                       'Modelo',                                                 // Nome dos campos
                       ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.nProt,
                       FormatDateTime('yyyy/mm/dd hh:nn:ss', ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.dhRegEvento),
@@ -11833,6 +11836,7 @@ begin
                       FormatDateTime('yyyy/mm/dd', DMFD.FDQuery5['nfe_demi']),
                       DMFD.FDQuery5['nfe_nnf'],
                       DMFD.FDQuery5['nfe_serie'],
+                      '',
                       DMFD.FDQuery5['nfe_Modelo'],                              // Conteúdo dos Módulos
                       false);                                                   // Consiste [true/false]
 
@@ -12677,11 +12681,35 @@ begin
        if gAtuFSD then
         begin
 
-          pGravaNFe('016', 'situacao', 'motivo', '', '', '', '', '', 'codigo_loja', 'demi', 'nnf', 'serie', 'chave_nfe',
-                    '', 'Movida de Contingências', '', '', '', '', '', edt_CodEmp.Text, FormatDateTime('yyyy/mm/dd',
-                    DMFD.FDQryGeral2['nfe_demi']), DMFD.FDQryGeral2['nfe_nnf'], DMFD.FDQryGeral2['nfe_serie'],
-                    DMFD.FDQryGeral2['nfe_chave_nfe'], true);
-          gAtuFSD := False;
+         pGravaNFe('016', 'situacao',
+                          'motivo',
+                          '',
+                          '',
+                          '',
+                          '',
+                          '',
+                          'codigo_loja',
+                          'demi',
+                          'nnf',
+                          'serie',
+                          'chave_nfe',
+                          'modelo',                                             // Nome dos campos
+                          '',
+                          'Movida de Contingências',
+                          '',
+                          '',
+                          '',
+                          '',
+                          '',
+                          edt_CodEmp.Text, FormatDateTime('yyyy/mm/dd',
+                          DMFD.FDQryGeral2['nfe_demi']),
+                          DMFD.FDQryGeral2['nfe_nnf'],
+                          DMFD.FDQryGeral2['nfe_serie'],
+                          DMFD.FDQryGeral2['nfe_chave_nfe'],
+                          DMFD.FDQryGeral2['nfe_modelo'],                       // Conteúdo dos campos
+                          true);                                                // Consiste [true/false]
+
+         gAtuFSD := False;
 
         end
 
@@ -12691,26 +12719,26 @@ begin
 
          if ( (copy(vartostr(DMFD.FDQryGeral2['nfe_chave_nfe']), 35, 1) = '4') and
               (RadioGroup1.itemindex <> 1) ) then
-          pGravaNFe('016', 'situacao', 'motivo', '', '', '', '', '', 'codigo_loja', 'demi', 'nnf', 'serie', 'chave_nfe',
+          pGravaNFe('016', 'situacao', 'motivo', '', '', '', '', '', 'codigo_loja', 'demi', 'nnf', 'serie', 'chave_nfe', 'modelo',
                     AnsiUpperCase('EPEC'), 'Movida das Transmitidas', '', '', '', '', '', edt_CodEmp.Text,
                     FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']), DMFD.FDQryGeral2['nfe_nnf'],
-                    DMFD.FDQryGeral2['nfe_serie'], DMFD.FDQryGeral2['nfe_chave_nfe'], true)
+                    DMFD.FDQryGeral2['nfe_serie'], DMFD.FDQryGeral2['nfe_chave_nfe'], DMFD.FDQryGeral2['nfe_modelo'], true)
          else if ( (copy(vartostr(DMFD.FDQryGeral2['nfe_chave_nfe']), 35, 1) = '5') and
               (RadioGroup1.itemindex <> 1) ) then
-          pGravaNFe('016', 'situacao', 'motivo', '', '', '', '', '', 'codigo_loja', 'demi', 'nnf', 'serie', 'chave_nfe',
+          pGravaNFe('016', 'situacao', 'motivo', '', '', '', '', '', 'codigo_loja', 'demi', 'nnf', 'serie', 'chave_nfe', 'modelo',
                     AnsiUpperCase('FSDA'), 'Movida das Transmitidas', '', '', '', '', '', edt_CodEmp.Text,
                     FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']), DMFD.FDQryGeral2['nfe_nnf'],
-                    DMFD.FDQryGeral2['nfe_serie'], DMFD.FDQryGeral2['nfe_chave_nfe'], true)
+                    DMFD.FDQryGeral2['nfe_serie'], DMFD.FDQryGeral2['nfe_chave_nfe'], DMFD.FDQryGeral2['nfe_modelo'], true)
          else if (copy(vartostr(DMFD.FDQryGeral2['nfe_chave_nfe']), 35, 1) = '9') then
-          pGravaNFe('016', 'situacao', 'motivo', '', '', '', '', '', 'codigo_loja', 'demi', 'nnf', 'serie', 'chave_nfe',
+          pGravaNFe('016', 'situacao', 'motivo', '', '', '', '', '', 'codigo_loja', 'demi', 'nnf', 'serie', 'chave_nfe', 'modelo',
                     AnsiUpperCase('OFFL'), 'Movida das Transmitidas', '', '', '', '', '', edt_CodEmp.Text,
                     FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']), DMFD.FDQryGeral2['nfe_nnf'],
-                    DMFD.FDQryGeral2['nfe_serie'], DMFD.FDQryGeral2['nfe_chave_nfe'], true)
+                    DMFD.FDQryGeral2['nfe_serie'], DMFD.FDQryGeral2['nfe_chave_nfe'], DMFD.FDQryGeral2['nfe_modelo'], true)
          else
-          pGravaNFe('016', 'situacao', 'motivo', '', '', '', '', '', 'codigo_loja', 'demi', 'nnf', 'serie', 'chave_nfe',
+          pGravaNFe('016', 'situacao', 'motivo', '', '', '', '', '', 'codigo_loja', 'demi', 'nnf', 'serie', 'chave_nfe', 'modelo',
                     '',                           'Movida das Transmitidas', '', '', '', '', '', edt_CodEmp.Text,
                     FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']), DMFD.FDQryGeral2['nfe_nnf'],
-                    DMFD.FDQryGeral2['nfe_serie'], DMFD.FDQryGeral2['nfe_chave_nfe'], true);
+                    DMFD.FDQryGeral2['nfe_serie'], DMFD.FDQryGeral2['nfe_chave_nfe'], DMFD.FDQryGeral2['nfe_modelo'], true);
 
         end;
 
