@@ -16,19 +16,19 @@ File_13=TSourceModule,'c:\program files (x86)\embarcadero\studio\18.0\SOURCE\RTL
 
 [Modules]
 Module0=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
-Module1=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrPar_U.pas
-Module2=default.htm
+Module1=default.htm
+Module2=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrPar_U.pas
 Count=3
 EditWindowCount=1
 
 [D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas]
 ModuleType=TSourceModule
 
-[D:\Sistemas de Desenvolvimento\GBNFe\Src\FrPar_U.pas]
-ModuleType=TSourceModule
-
 [default.htm]
 ModuleType=TURLModule
+
+[D:\Sistemas de Desenvolvimento\GBNFe\Src\FrPar_U.pas]
+ModuleType=TSourceModule
 
 [EditWindow0]
 ViewCount=3
@@ -76,7 +76,7 @@ TopLine=1
 LeftCol=1
 Elisions=
 Bookmarks={1,2667,22}{2,7447,2}{3,662,1}{6,7642,1}
-EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
+EditViewName=Borland.FormDesignerView
 
 [View2]
 CustomEditViewType=TEditView
@@ -273,6 +273,11 @@ LRDockWidth=1894
 Dockable=1
 StayOnTop=0
 SplitPos=155
+
+[PropInspDesignerSelection]
+ArrangeBy=Name
+SelectedItem=CasasDecimais.vUnCom,
+ExpandedItems=Anchors=0,BorderIcons=0,Constraints=0,Configuracoes=1,DANFE=0,"LiveBindings Designer=0",MAIL=0,Configuracoes.Arquivos=0,Configuracoes.Certificados=0,Configuracoes.Geral=0,"Configuracoes.LiveBindings Designer=0",Configuracoes.RespTec=0,Configuracoes.WebServices=0,Configuracoes.Arquivos.DownloadNFe=0,"Configuracoes.Arquivos.LiveBindings Designer=0","Configuracoes.Arquivos.LiveBindings Designer.Element Layers=0","Configuracoes.Certificados.LiveBindings Designer=0","Configuracoes.Geral.LiveBindings Designer=0","Configuracoes.Geral.LiveBindings Designer.Element Layers=0","Configuracoes.LiveBindings Designer.Element Layers=0","Configuracoes.RespTec.LiveBindings Designer=0","Configuracoes.RespTec.LiveBindings Designer.Element Layers=0","Configuracoes.WebServices.LiveBindings Designer=0",Configuracoes.WebServices.TimeZoneConf=0,DANFE.ACBrNFe=0,DANFE.BorderIcon=0,DANFE.CasasDecimais=1,DANFE.DetArmamentos=0,DANFE.DetCombustiveis=0,DANFE.DetMedicamentos=0,DANFE.DetVeiculos=0,"DANFE.CasasDecimais.LiveBindings Designer=0","DANFE.LiveBindings Designer=0",CasasDecimais=1,DetArmamentos=0,DetCombustiveis=0,DetMedicamentos=0,DetVeiculos=0,Fonte=0,"CasasDecimais.LiveBindings Designer=0",ACBrNFe=0,BorderIcon=0
 
 [ClassBrowserTool]
 PercentageSizes=1
@@ -601,11 +606,11 @@ Docked=1
 State=0
 Left=0
 Top=0
-Width=9988
+Width=3825
 Height=2698
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=9988
+ClientWidth=3825
 ClientHeight=2698
 TBDockHeight=1547
 LRDockWidth=8744
@@ -731,13 +736,13 @@ Create=1
 Visible=0
 Docked=1
 State=0
-Left=1
-Top=27
-Width=9988
+Left=8
+Top=8
+Width=3825
 Height=2988
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=9988
+ClientWidth=3825
 ClientHeight=2988
 TBDockHeight=2988
 LRDockWidth=3825
