@@ -382,8 +382,8 @@ object DMFD: TDMFD
       '  ,codigo_loja'
       '  ,dEmi'
       '  ,nNF'
-      '  ,Serie'
       '  ,Modelo'
+      '  ,Serie'
       
         '  ,xml_nota,   xml_nota1,  xml_nota2,  xml_nota3,  xml_nota4,  x' +
         'ml_nota5'

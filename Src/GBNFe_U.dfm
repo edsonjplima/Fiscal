@@ -2348,7 +2348,7 @@ object FrGBNFe: TFrGBNFe
     Left = 312
     Top = 10
     Bitmap = {
-      494C0101CC041006D40610001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C0101CC041006E00610001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000004013000001002000000000000040
       1300000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -43237,8 +43237,8 @@ object FrGBNFe: TFrGBNFe
     MargemEsquerda = 0.700000000000000000
     MargemDireita = 0.700000000000000000
     CasasDecimais.Formato = tdetInteger
-    CasasDecimais.qCom = 3
-    CasasDecimais.vUnCom = 4
+    CasasDecimais.qCom = 2
+    CasasDecimais.vUnCom = 2
     CasasDecimais.MaskqCom = ',0.00'
     CasasDecimais.MaskvUnCom = ',0.00'
     ExibeCampoFatura = False
@@ -43254,6 +43254,7 @@ object FrGBNFe: TFrGBNFe
     MargemSuperior = 0.500000000000000000
     MargemEsquerda = 0.500000000000000000
     MargemDireita = 0.500000000000000000
+    ExpandeLogoMarca = True
     CasasDecimais.Formato = tdetInteger
     CasasDecimais.qCom = 2
     CasasDecimais.vUnCom = 2
@@ -43293,8 +43294,8 @@ object FrGBNFe: TFrGBNFe
     MargemEsquerda = 0.600000000000000000
     MargemDireita = 0.510000000000000000
     CasasDecimais.Formato = tdetInteger
-    CasasDecimais.qCom = 3
-    CasasDecimais.vUnCom = 4
+    CasasDecimais.qCom = 2
+    CasasDecimais.vUnCom = 2
     CasasDecimais.MaskqCom = ',0.00'
     CasasDecimais.MaskvUnCom = ',0.00'
     ACBrNFe = ACBrNFe1

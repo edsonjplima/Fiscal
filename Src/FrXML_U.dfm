@@ -400,7 +400,7 @@ object FrXML: TFrXML
     Top = 63
     Width = 950
     Height = 331
-    ActivePage = TabSheet1
+    ActivePage = TabSheet2
     Align = alClient
     Style = tsFlatButtons
     TabOrder = 2
@@ -540,6 +540,8 @@ object FrXML: TFrXML
             Styles.ColumnHeader = FrGBNFe.cxColumnHeader
             TabOrder = 0
             OnCustomDrawDataCell = cxTLXCustomDrawDataCell
+            ExplicitLeft = 0
+            ExplicitTop = 14
             object cxTLXbSel: TcxTreeListColumn
               PropertiesClassName = 'TcxCheckBoxProperties'
               Properties.Alignment = taCenter

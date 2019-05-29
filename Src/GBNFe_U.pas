@@ -14625,6 +14625,10 @@ begin
  ACBrNFeDANFCeFortes1.Impressora                   := FrPar.edtImpNFCe.Text;
  ACBrNFe1.Configuracoes.Arquivos.AdicionarLiteral  := True;
  ACBrNFe1.DANFE.PathPDF                            := gCamPdf;
+ ACBrNFeDANFeRL1.CasasDecimais.qCom                := 3;
+ ACBrNFeDANFeRL1.CasasDecimais.vUnCom              := 4;
+ ACBrNFeDANFEFR1.CasasDecimais.qCom                := 3;
+ ACBrNFeDANFEFR1.CasasDecimais.vUnCom              := 4;
 
  case FrPar.cbb1.ItemIndex of
   0 : begin
@@ -14764,6 +14768,8 @@ begin
 
  ACBrNFeDANFEFR1.Impressora                          := FrPar.edtImpNFe.Text;
  ACBrNFeDANFeESCPOS1.Impressora                      := FrPar.edtImpNFCe.Text;
+ ACBrNFeDANFEFR1.CasasDecimais.qCom                  := 3;
+ ACBrNFeDANFEFR1.CasasDecimais.vUnCom                := 4;
 
  case FrPar.cbb1.ItemIndex of
   0 : begin
@@ -17137,21 +17143,6 @@ begin
   result := StrToDatetime(vdhEve + vUTC);
 
 end;
-
-//var
-//DataArq, DataArq2: TDateFile;
-//begin
-//DataArq:= FileDateToDateTime(FileAge(´NomeDoArquivo´));
-//DataArq2:= FileDateToDateTime(FileAge(´NomeDoArquivo2´));
-//
-//if dataarq > dataarq2 then
-//<copia>
-//
-//end;
-
-
-
-
 
 //------------------------------------------------------------------------------
 //

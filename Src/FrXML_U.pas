@@ -1020,7 +1020,9 @@ end;
 
 procedure TFrXML.DesmarcaTodas1Click(Sender: TObject);
 begin
+
  MarcaBloco( cxTLX, False, True );
+
 end;
 
 procedure TFrXML.btn1Click(Sender: TObject);
