@@ -233,14 +233,14 @@ Create=1
 Visible=0
 Docked=1
 State=0
-Left=1
-Top=579
+Left=0
+Top=0
 Width=2769
 Height=2988
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=2669
-ClientHeight=2535
+ClientWidth=2769
+ClientHeight=2988
 TBDockHeight=2988
 LRDockWidth=2769
 Dockable=1
@@ -325,8 +325,8 @@ SplitPos=155
 
 [PropInspDesignerSelection]
 ArrangeBy=Name
-SelectedItem=ImprimeLogoLateral,ACBrNFe
-ExpandedItems=Anchors=0,Constraints=0,Font=0,LiveBindings=0,"LiveBindings Designer=0",Margins=0,Padding=0,BorderIcons=0,GlassFrame=0,BevelEdges=0,StyleElements=0,Touch=0,HorzScrollBar=0,Connection=0,FetchOptions=0,FieldOptions=0,FilterChanges=0,FilterOptions=0,FormatOptions=0,ResourceOptions=0,UpdateOptions=0,ActiveStoredUsage=0,FonteLinhaItem=0,PosPrinter=0,CasasDecimais=0,DescricaoPagamentos=0,"CasasDecimais.LiveBindings Designer=0",LookAndFeel=0,Navigator=0,PopupMenu=0,PopupMenus=0,Styles=0,PopupMenus.ColumnHeaderMenu=0,PopupMenus.FooterMenu=0,PopupMenus.GroupFooterMenu=0,OptionsBehavior=0,OptionsCustomizing=0,OptionsData=0,OptionsSelection=0,OptionsView=0,Preview=0
+SelectedItem=Action,
+ExpandedItems=Anchors=0,Constraints=0,Font=0,LiveBindings=0,"LiveBindings Designer=0",Margins=0,Padding=0,BorderIcons=0,GlassFrame=0,BevelEdges=0,StyleElements=0,Touch=0,HorzScrollBar=0,ActiveControl=0
 
 [ClassBrowserTool]
 PercentageSizes=1
@@ -785,8 +785,8 @@ Create=1
 Visible=0
 Docked=1
 State=0
-Left=1
-Top=579
+Left=8
+Top=8
 Width=3825
 Height=2988
 MaxLeft=-1
