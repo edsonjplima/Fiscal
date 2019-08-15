@@ -12,28 +12,28 @@ File_9=TSourceModule,'D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACB
 File_10=TSourceModule,'D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\ACBrNFe.pas',0,1,738,3,754,0,0,,
 
 [Modules]
-Module0=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrImportXML_U.pas
-Module1=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrPar_U.pas
+Module0=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBDFD_U.pas
+Module1=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrImportXML_U.pas
 Module2=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe.dproj
-Module3=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
-Module4=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBDFD_U.pas
+Module3=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrPar_U.pas
+Module4=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
 Module5=D:\Sistemas de Desenvolvimento\GBNFe\Src\DMFD_U.pas
 Count=6
 EditWindowCount=1
 
-[D:\Sistemas de Desenvolvimento\GBNFe\Src\FrImportXML_U.pas]
+[D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBDFD_U.pas]
 ModuleType=TSourceModule
 
-[D:\Sistemas de Desenvolvimento\GBNFe\Src\FrPar_U.pas]
+[D:\Sistemas de Desenvolvimento\GBNFe\Src\FrImportXML_U.pas]
 ModuleType=TSourceModule
 
 [D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe.dproj]
 ModuleType=TBaseProject
 
-[D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas]
+[D:\Sistemas de Desenvolvimento\GBNFe\Src\FrPar_U.pas]
 ModuleType=TSourceModule
 
-[D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBDFD_U.pas]
+[D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas]
 ModuleType=TSourceModule
 
 [D:\Sistemas de Desenvolvimento\GBNFe\Src\DMFD_U.pas]
@@ -41,7 +41,7 @@ ModuleType=TSourceModule
 
 [EditWindow0]
 ViewCount=6
-CurrentEditView=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrImportXML_U.pas
+CurrentEditView=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBDFD_U.pas
 View0=0
 View1=1
 View2=2
@@ -100,9 +100,9 @@ EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe.dpr
 [View2]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBDFD_U.pas
-CursorX=1
-CursorY=306
-TopLine=276
+CursorX=77
+CursorY=291
+TopLine=219
 LeftCol=1
 Elisions=
 Bookmarks=
@@ -169,9 +169,8 @@ Dockable=1
 StayOnTop=0
 
 [Breakpoints]
-Count=2
+Count=1
 Breakpoint0='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',5024,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint1='D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBDFD_U.pas',279,'',0,1,'',1,0,0,'',1,'','','',0,''
 
 [EmbarcaderoWin32Debugger_AddressBreakpoints]
 Count=0
@@ -242,8 +241,8 @@ Width=2769
 Height=2988
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=2669
-ClientHeight=2535
+ClientWidth=2769
+ClientHeight=2988
 TBDockHeight=2988
 LRDockWidth=2769
 Dockable=1
@@ -328,7 +327,7 @@ SplitPos=155
 
 [PropInspDesignerSelection]
 ArrangeBy=Name
-SelectedItem=Align,CustomHint
+SelectedItem=Action,
 ExpandedItems=Anchors=0,Constraints=0,Font=0,LiveBindings=0,"LiveBindings Designer=0",Margins=0,Padding=0,BorderIcons=0,GlassFrame=0,BevelEdges=0,StyleElements=0,Touch=0,HorzScrollBar=0
 
 [ClassBrowserTool]
