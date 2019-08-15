@@ -3,7 +3,8 @@ unit DMFD_U;
 interface
 
 uses
-  System.SysUtils, System.Classes, FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  System.SysUtils, System.Classes, Vcl.Forms, Winapi.Windows,
+  FireDAC.Stan.Intf, FireDAC.Stan.Option,
   FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def,
   FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.VCLUI.Wait,
   FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf, FireDAC.DApt, Data.DB,
@@ -56,6 +57,8 @@ type
     FDQuery19: TFDQuery;
     FDQryGeral5: TFDQuery;
     FDQuery20: TFDQuery;
+    procedure FDConGerError(ASender, AInitiator: TObject;
+      var AException: Exception);
   private
     { Private declarations }
   public
@@ -70,5 +73,14 @@ implementation
 {%CLASSGROUP 'Vcl.Controls.TControl'}
 
 {$R *.dfm}
+
+procedure TDMFD.FDConGerError(ASender, AInitiator: TObject;
+  var AException: Exception);
+begin
+
+ Application.Messagebox(PWideChar('Base de dados ERP não foi conectado, o aplicativo será fechado!'), PWideChar('Erro de conecção!'), MB_ICONERROR+mb_ok);
+ Halt;
+
+end;
 
 end.

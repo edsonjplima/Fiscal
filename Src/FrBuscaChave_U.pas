@@ -340,7 +340,7 @@ begin
  Edit_QSel.Text := '0';
 
  // Seta caminho inicial
- FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.DownloadNFe.PathDownload        := gCamXml;
+ FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.DownloadDFe.PathDownload        := gCamXml;        // Edson Lima ; 2019-07-29
  FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.PathEvento                      := gCamXml;
  FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.PathSalvar                      := gCamXml;
  FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.PathNFe                         := gCamXml;
@@ -1250,7 +1250,7 @@ begin
 
             //------------------------------------------------------------------
             // trunk2
-            FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.DownloadNFe.PathDownload    := gCamXml;
+            FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.DownloadDFe.PathDownload    := gCamXml;        // Edson Lima ; 2019-07-29
             FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.PathEvento                  := gCamXml;
             FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.PathSalvar                  := gCamXml;
             FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.PathNFe                     := gCamXml;
@@ -1496,7 +1496,7 @@ begin
 
           //--------------------------------------------------------------------
           // trunk2
-          FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.DownloadNFe.PathDownload      := gCamXml;
+          FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.DownloadDFe.PathDownload      := gCamXml;        // Edson Lima ; 2019-07-29
           FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.PathEvento                    := gCamXml;
           FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.PathSalvar                    := gCamXml;
           FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.PathNFe                       := gCamXml;
@@ -4416,3 +4416,4 @@ begin
 end;
 
 end.
+

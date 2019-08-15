@@ -115,11 +115,12 @@
     </reference>
     <reference referencedUin="design:view:::i94c1hw09e8dssaye_v">
       <property name="$shortcutReference" value="true" />
-      <property name="bounds" value="1180,180,112,166" />
+      <property name="bounds" value="1180,180,112,181" />
       <property name="location_set_by_user" value="True" />
       <reference referencedUin="delphi:e_class:src:GBNFe:GBNFe_U.TFrGBNFe" />
       <reference referencedUin="delphi:e_class:src:GBNFe:GBNFe_U.TWebControl" />
       <reference referencedUin="delphi:e_class:src:GBNFe:GBNFe_U.@unitclass" />
+      <reference referencedUin="delphi:e_class:src:GBNFe:GBNFe_U.TUpdate" />
     </reference>
     <reference referencedUin="design:view:::7qprvd0hle80e98oi_v">
       <property name="$shortcutReference" value="true" />

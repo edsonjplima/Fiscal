@@ -68,18 +68,57 @@ var
 
 begin
 
+ //-----------------------------------------------------------------------------
+ // COMO FUNCIONA O SISTEM DE ABERTURA DO GBNFE ATRAVÉS DO APLICATIVO ERP ------
+ //-----------------------------------------------------------------------------
+ //
+ // C:\Sistemas\GBNFe\Exe\GBNFe.exe /developed_gb_informática_ltda /003 /usuário_padrão /0 /1 /0 /0 /0 /GERPA
+ //
+ // ParamStr(0) - Deve conter a unidade, caminho, nome e tipo do aplicativo
+ // ParamStr(1) - Deve conter uma frase chave ex: /developed_gb_informática_ltda
+ // ParamStr(2) - Deve conter o código da empresa ex: /XXX
+ // ParamStr(3) - Deve conter o nome do usuário ex: /usuário_padrão
+ // ParamStr(4) - Deve conter o nível de acesso pra liberar botões 0 = nível
+ //               master, 1 = nível restrito MDe e 4 = Somente MDe, ex: /0
+ // ParamStr(5) - DEve conter a permissão de multiplas instâncias
+ //               sim = 0 ou não = 1, ex: /1
+ // ParamStr(6) - Deve conter a permissão para geracao de NF Express:
+ //               0=normal 1=express, ex: /0
+ // ParamStr(7) - Deve conter o número da nota fiscal, no caso do envio express,
+ //               atribui o número da nota na variável gNNF, ex: /0 ou /1452
+ // ParamStr(8) - Deve conter a opção do envio express 0=nenhum 1=envio
+ //               2=cancela 3=inutiliza 4=consulta, ex: /0
+ // ParamStr(9) - Deve conter o Tipo de ERP, ex: /GERPA, /SISAG e /SISA
+ //               Tamanho máximo de cinco caracteres
+ //
+ // Obs: É necessário a informação de todos os parâmetros
+ //
+ //-----------------------------------------------------------------------------
+
  // ----------------------------------------------------------------------------
  // by EL -> 19.10.2016 - Seta o componte de impressão que irá trabalhar
  //-----------------------------------------------------------------------------
  gCpt := 1;  // 1=FortesReport, 2 = FastReport
 
  // ----------------------------------------------------------------------------
+ // by EL -> 19.10.2016 - Recebe parâmetro (Tipo de ERP)
+ //-----------------------------------------------------------------------------
+ if ParamStr(9) = '' then gERP := 'GERPA'
+ else
+  gERP := UpperCase(Copy(ParamStr(9), 2, Length(ParamStr(9))-1 ));
+
+ // Seta caminho do executável
+ gCamExe := ExtractFilePath(Application.ExeName);                               // Pega o caminho do executavel GBNFe independente de quem o chamou
+
+ // ----------------------------------------------------------------------------
  // by EL -> 15.2.2012 - Recebe parâmetros (senha) do ERP
  // ----------------------------------------------------------------------------
  if ParamStr(1) <> '/developed_gb_informática_ltda' then
   begin
+
    Application.Messagebox(PWideChar('Esse aplicativo só poderá ser executado pelo ERP:' + gERP + '!'), PWideChar('' + gERP + ' - Erro de Execução!'), mb_iconstop+mb_ok);
    Halt;
+
   end
  else
   gEdtCodEmp := True;
@@ -96,7 +135,7 @@ begin
 
  // Define o nível de acesso pra liberar botões 0 = nível master, 1 = nível restrito MDe e 4 = Somente MDe
  if ParamStr(4) = '' then gNivel := '0'
-  else
+ else
   gNivel := Copy(ParamStr(4), 2, Length(ParamStr(4))-1 );
 
  // Define o multiplas instâncias sim = 0 ou não = 1
@@ -105,7 +144,7 @@ begin
   gInstancias := Copy(ParamStr(5), 2, Length(ParamStr(5))-1 );
 
  // Define a geracao de NF Express 0=normal 1=express
-  if ParamStr(6) = '' then gExpress := '0'
+ if ParamStr(6) = '' then gExpress := '0'
  else
   gExpress := Copy(ParamStr(6), 2, Length(ParamStr(6))-1 );
 
@@ -158,10 +197,35 @@ begin
     end;
   end;
 
+ //----------------------------------------------------------------------------
+ // Efetua a conecção com os bancos de dados
+ // by Edson Lima ; 2017-6-30T1043
+ //----------------------------------------------------------------------------
+ if not ( FileExists(gCamExe + 'GBNFe.ini') ) then
+  begin
+
+   if ( FrBDFD = nil ) then
+    FrBDFD := TFrBDFD.Create(Application);
+   FrBDFD.BringToFront;
+   FrBDFD.ShowModal;
+
+  end;
+
+ FrGBNFe.LerBDFD_E();
+
+ if not ( gTemSqlEmp ) then
+  begin
+
+   if ( FrBDFD = nil ) then
+    FrBDFD := TFrBDFD.Create(Application);
+   FrBDFD.BringToFront;
+   FrBDFD.ShowModal;
+
+  end;
+
   Application.Initialize;
   Application.HelpFile := 'C:\Sistemas de Desenvolvimento\GBNFe\Exe\Help\Manual Sistema GBNFe.chm';
   Application.CreateForm(TFrGBNFe, FrGBNFe);
-  Application.CreateForm(TFrBDFD, FrBDFD);
   Application.CreateForm(TFrPar, FrPar);
   Application.CreateForm(TFrInut, FrInut);
   Application.CreateForm(TfrmStatus, frmStatus);

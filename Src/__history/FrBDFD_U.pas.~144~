@@ -1,0 +1,538 @@
+unit FrBDFD_U;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
+  Vcl.StdCtrls, Vcl.ComCtrls, Vcl.Buttons, Vcl.ExtCtrls, System.IniFiles;
+
+type
+  TFrBDFD = class(TForm)
+    pnl1: TPanel;
+    pnl2: TPanel;
+    pnl3: TPanel;
+    pnl4: TPanel;
+    btn1: TBitBtn;
+    btnSalvarConfig: TBitBtn;
+    StatusBar1: TStatusBar;
+    grp12: TGroupBox;
+    grp13: TGroupBox;
+    chk_LoginPrompt_NFe: TCheckBox;
+    grp14: TGroupBox;
+    cbb_DriverID_NFe: TComboBox;
+    grp18: TGroupBox;
+    edt_Server_NFe: TEdit;
+    grp19: TGroupBox;
+    edt_UserName_NFe: TEdit;
+    grp20: TGroupBox;
+    edt_Password_NFe: TEdit;
+    grp15: TGroupBox;
+    edt_Database_NFe: TEdit;
+    grp16: TGroupBox;
+    chk_Connected_NFe: TCheckBox;
+    grp17: TGroupBox;
+    grp21: TGroupBox;
+    chk_LoginPrompt_Ger: TCheckBox;
+    grp22: TGroupBox;
+    cbb_DriverID_Ger: TComboBox;
+    grp23: TGroupBox;
+    edt_Server_Ger: TEdit;
+    grp24: TGroupBox;
+    edt_UserName_Ger: TEdit;
+    grp25: TGroupBox;
+    edt_Password_Ger: TEdit;
+    grp26: TGroupBox;
+    edt_Database_Ger: TEdit;
+    grp27: TGroupBox;
+    chk_Connected_Ger: TCheckBox;
+    grp28: TGroupBox;
+    OSAuthent_NFe: TCheckBox;
+    grp29: TGroupBox;
+    OSAuthent_Ger: TCheckBox;
+    pnl5: TPanel;
+    grp: TGroupBox;
+    edt_TpERP_Ger: TEdit;
+    BitBtn: TBitBtn;
+    BitBtn31: TBitBtn;
+    grp1: TGroupBox;
+    edt_CamBD_Ger: TEdit;
+    grp2: TGroupBox;
+    edt_CamBD_Nfe: TEdit;
+    procedure btn1Click(Sender: TObject);
+    procedure btnSalvarConfigClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure edt_Database_NFeExit(Sender: TObject);
+    procedure edt_Database_GerExit(Sender: TObject);
+    procedure grp12Exit(Sender: TObject);
+    procedure grp13MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure grp28MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure grp14MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure grp15MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure grp18MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure grp19MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure grp20MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure grp16MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure grp21MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure grp29MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure grpMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+    procedure grp22MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure grp26MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure grp23MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure grp24MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure grp25MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure grp27MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure BitBtnClick(Sender: TObject);
+    procedure BitBtn31Click(Sender: TObject);
+    procedure BitBtnMouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure BitBtn31MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure grp1MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+    procedure grp2MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+    procedure edt_Server_NFeExit(Sender: TObject);
+    procedure edt_UserName_NFeExit(Sender: TObject);
+    procedure edt_Password_NFeExit(Sender: TObject);
+    procedure edt_CamBD_NfeExit(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+
+    procedure GravarBDFD();                                                     // procedure que grava o arquivo GBNFe.ini
+
+  end;
+
+var
+  FrBDFD: TFrBDFD;
+
+implementation
+
+{$R *.dfm}
+
+uses GBNFe_U, FrPar_U, DMFD_U;
+
+procedure TFrBDFD.BitBtn31Click(Sender: TObject);
+var
+ vBD, vCamBD : string;
+begin
+
+ if ( Trim(edt_CamBD_Ger.Text) = '' ) then
+  begin
+
+   if ( edt_Server_Ger.Text = '(local)' ) then
+    vBD := 'C:\Program Files\Microsoft SQL Server\MSSQL13.MSSQLSERVER\MSSQL\DATA\'
+   else if ( edt_Server_Ger.Text <> '' ) then
+    vBD := '\\' + edt_Server_Ger.Text + '\c$\Program Files\Microsoft SQL Server\MSSQL13.MSSQLSERVER\MSSQL\DATA\';
+
+  end
+ else
+  vBD := edt_CamBD_Ger.Text;
+
+ vCamBD := vBD;
+ vBD := vBD + edt_Database_Ger.Text + '.mdf';
+
+ if not ( FileExists(vBD) ) then
+  begin
+
+   Application.Messagebox(PWideChar('O banco de dados ' + edt_database_Ger.Text + ', não foi encontrado!'), PWideChar('Parâmetros FireDAC'), MB_ICONEXCLAMATION+mb_ok);
+   if ( edt_Server_Ger.Text = '' ) then
+    Application.Messagebox(PWideChar('Campo [Server] do banco de dados ' + edt_database_Ger.Text + ', está em branco!'), PWideChar('Parâmetros FireDAC'), MB_ICONEXCLAMATION+mb_ok)
+
+  end
+ else
+  begin
+
+   Application.Messagebox(PWideChar('O banco de dados ' + edt_database_Ger.Text + ', foi encontrado!'), PWideChar('Parâmetros FireDAC'), MB_ICONINFORMATION+mb_ok);
+   edt_CamBD_Ger.Text := vCamBD;
+
+  end;
+
+end;
+
+procedure TFrBDFD.BitBtn31MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := BitBtn31.Hint;
+end;
+
+procedure TFrBDFD.BitBtnClick(Sender: TObject);
+var
+ vBD, vCamBD : string;
+begin
+
+ if ( Trim(edt_CamBD_NFe.Text) = '' ) then
+  begin
+
+   if ( LowerCase(edt_Server_NFe.Text) = '(local)' ) then
+    vBD := 'C:\Program Files\Microsoft SQL Server\MSSQL13.MSSQLSERVER\MSSQL\DATA\'
+   else if ( edt_Server_NFe.Text <> '' ) then
+    vBD := '\\' + edt_Server_NFe.Text + '\c$\Program Files\Microsoft SQL Server\MSSQL13.MSSQLSERVER\MSSQL\DATA\';
+
+  end
+ else
+  vBD := edt_CamBD_NFe.Text;
+
+ vCamBD := vBD;
+ vBD := vBD + edt_Database_NFe.Text + '.mdf';
+
+ if not ( FileExists(vBD) ) then
+  begin
+
+   Application.Messagebox(PWideChar('O banco de dados ' + edt_database_nfe.Text + ', não foi encontrado!'), PWideChar('Parâmetros FireDAC'), MB_ICONEXCLAMATION+mb_ok);
+   if ( edt_Server_NFe.Text = '' ) then
+    Application.Messagebox(PWideChar('Campo [Server] do banco de dados ' + edt_database_NFe.Text + ', está em branco!'), PWideChar('Parâmetros FireDAC'), MB_ICONEXCLAMATION+mb_ok)
+
+  end
+ else
+  begin
+
+   Application.Messagebox(PWideChar('O banco de dados ' + edt_database_nfe.Text + ', foi encontrado!'), PWideChar('Parâmetros FireDAC'), MB_ICONINFORMATION+mb_ok);
+   edt_CamBD_NFe.Text := vCamBD;
+
+  end;
+
+end;
+
+procedure TFrBDFD.BitBtnMouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := BitBtn.Hint;
+end;
+
+procedure TFrBDFD.btn1Click(Sender: TObject);
+begin
+
+ if not ( FileExists(gCamExe + 'GBNFe.ini') ) then Exit;
+
+ DMFD.FDConNFe.LoginPrompt                := FrPar.chk_LoginPrompt_NFe.Checked;
+ if ( FrPar.OSAuthent_NFe.Checked ) then
+  DMFD.FDConNFe.Params.Values['OSAuthent']:= 'Yes'
+ else
+  DMFD.FDConNFe.Params.Values['OSAuthent']:= 'No';
+ DMFD.FDConNFe.Params.Values['MARS']      := 'Yes';
+ DMFD.FDConNFe.Params.Values['DriverID']  := FrPar.cbb_DriverID_NFe.Text;
+ DMFD.FDConNFe.Params.Values['Database']  := FrPar.edt_Database_NFe.Text;
+ DMFD.FDConNFe.Params.Values['Server'  ]  := FrPar.edt_Server_NFe.Text;
+ if not ( FrPar.OSAuthent_NFe.Checked ) then
+  begin
+   DMFD.FDConNFe.Params.Values['UserName']:= FrPar.edt_UserName_NFe.Text;
+   DMFD.FDConNFe.Params.Values['Password']:= FrPar.edt_Password_NFe.Text;
+  end;
+ DMFD.FDConNFe.Connected                  := FrPar.chk_Connected_NFe.Checked;
+
+ if not DMFD.FDConNFe.Connected then
+  begin
+
+   fMensOnShow( 2, 'Base de dados NFe não foi conectado, o aplicativo será fechado!');
+   Halt;
+
+  end;
+
+ Close;
+
+end;
+
+procedure TFrBDFD.btnSalvarConfigClick(Sender: TObject);
+begin
+
+ if MessageDlg('Confirma atualização dos parâmetros', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+  GravarBDFD();
+
+end;
+
+procedure TFrBDFD.edt_CamBD_NfeExit(Sender: TObject);
+begin
+ edt_CamBD_Ger.Text := edt_CamBD_Nfe.Text;
+end;
+
+procedure TFrBDFD.edt_Database_GerExit(Sender: TObject);
+begin
+
+ gDBERP := edt_Database_Ger.Text;
+ grp17.Caption := ' Banco de Dados - Gertão: ERP - ' + gERP + ' (' + gDBERP + ')' + ' ';
+
+end;
+
+procedure TFrBDFD.edt_Database_NFeExit(Sender: TObject);
+begin
+
+ gNFe := edt_Database_NFe.Text;
+ grp12.Caption := ' Banco de Dados - Fiscal: NFe - ' + '(' + gNFe + ')' + ' - Emp: ' + gCodEmp + ' ';
+
+end;
+
+procedure TFrBDFD.edt_Password_NFeExit(Sender: TObject);
+begin
+
+ edt_Password_Ger.Text := edt_Password_NFe.Text;
+
+end;
+
+procedure TFrBDFD.edt_Server_NFeExit(Sender: TObject);
+begin
+
+ edt_Server_Ger.Text := edt_Server_NFe.Text;
+
+end;
+
+procedure TFrBDFD.edt_UserName_NFeExit(Sender: TObject);
+begin
+
+ edt_UserName_Ger.Text := edt_UserName_NFe.Text;
+
+end;
+
+procedure TFrBDFD.FormShow(Sender: TObject);
+begin
+
+ // Define os captions iniciais
+ edt_TpERP_Ger.Text := gERP;
+ grp17.Caption := ' Banco de Dados - Gertão: ERP - ' + gERP + ' (' + gDBERP + ')' + ' ';
+ grp12.Caption := ' Banco de Dados - Fiscal: NFe - ' + '(' + gNFe + ')' + ' - Emp: ' + gCodEmp + ' ';
+ edt_Database_NFe.SetFocus;
+
+end;
+
+//------------------------------------------------------------------------------
+// by Edson Lima - 2017-6-30T1121
+// procedure que grava o arquivo GBNFe.ini o Acesso Banco de Dados FareDac
+//------------------------------------------------------------------------------
+procedure TFrBDFD.GravarBDFD();
+Var
+ IniFile           : String ;
+ Ini               : TIniFile ;
+ vLoginPrompt_NFe,
+ vOSAuthent_NFe,
+ vDriverID_NFe,
+ vDatabase_NFe,
+ vServer_NFe,
+ vUserName_NFe,
+ vPassword_NFe,
+ vConnected_NFe,
+ vCamBD_NFe        : String;
+ vTpERP_Ger,
+ vLoginPrompt_Ger,
+ vOSAuthent_Ger,
+ vDriverID_Ger,
+ vDatabase_Ger,
+ vServer_Ger,
+ vUserName_Ger,
+ vPassword_Ger,
+ vConnected_Ger,
+ vCamBD_Ger        : String;
+
+begin
+
+ IniFile := gCamExe + 'GBNFe.Ini';
+ Ini := TIniFile.Create( IniFile );
+
+ try
+
+  // NFe
+  vLoginPrompt_NFe  := BoolToStr(chk_LoginPrompt_NFe.Checked);
+  vOSAuthent_NFe    := BoolToStr(OSAuthent_NFe.Checked);
+  if ( cbb_DriverID_NFe.Text <> '' )  then
+   vDriverID_NFe    := cbb_DriverID_NFe.Text;
+  if ( edt_Database_NFe.Text <> '' )  then
+   begin
+    vDatabase_NFe   := edt_Database_NFe.Text;
+    gNFe            := trim(vDatabase_NFe);
+   end;
+  if ( edt_Server_NFe.Text <> '' )  then
+   vServer_NFe      := edt_Server_NFe.Text;
+  if ( edt_UserName_NFe.Text <> '' )  then
+   vUserName_NFe    := edt_UserName_NFe.Text;
+  if ( trim(edt_Password_NFe.Text) <> '' )  then
+   vPassword_NFe    := FrGBNFe.Crypt( 'E',(trim(edt_Password_NFe.Text)) )
+  else
+   vPassword_NFe    := trim(edt_Password_NFe.Text);
+  vConnected_NFe    := BoolToStr(chk_Connected_NFe.Checked);
+  vCamBD_NFe        := Trim(edt_CamBD_NFe.Text);
+
+  Ini.WriteString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'LoginPrompt_NFe', vLoginPrompt_NFe) ;
+  Ini.WriteString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'OSAuthent_NFe',   vOSAuthent_NFe) ;
+  Ini.WriteString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'DriverID_NFe',    vDriverID_NFe) ;
+  Ini.WriteString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'Database_NFe',    vDatabase_NFe) ;
+  Ini.WriteString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'Server_NFe',      vServer_NFe) ;
+  Ini.WriteString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'UserName_NFe',    vUserName_NFe) ;
+  Ini.WriteString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'Password_NFe',    vPassword_NFe) ;
+  Ini.WriteString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'Connected_NFe',   vConnected_NFe) ;
+  Ini.WriteString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'CamBD_NFe',       vCamBD_NFe) ;
+
+  // ERP
+  vTpERP_Ger        := edt_TpERP_Ger.Text;
+  vLoginPrompt_Ger  := BoolToStr(chk_LoginPrompt_Ger.Checked);
+  vOSAuthent_Ger    := BoolToStr(OSAuthent_Ger.Checked);
+  if ( cbb_DriverID_Ger.Text <> '' )  then
+   vDriverID_Ger    := cbb_DriverID_Ger.Text;
+  if ( edt_Database_Ger.Text <> '' )  then
+   vDatabase_Ger    := edt_Database_Ger.Text;
+  if ( edt_Server_Ger.Text <> '' )  then
+   vServer_Ger      := edt_Server_Ger.Text;
+  if ( edt_UserName_Ger.Text <> '' )  then
+   vUserName_Ger    := edt_UserName_Ger.Text;
+  if ( trim(edt_Password_Ger.Text) <> '' )  then
+   vPassword_Ger    := FrGBNFe.Crypt( 'E',(trim(edt_Password_Ger.Text)) )
+  else
+   vPassword_Ger    := trim(edt_Password_Ger.Text);
+  vConnected_Ger    := BoolToStr(chk_Connected_Ger.Checked);
+  vCamBD_Ger        := Trim(edt_CamBD_Ger.Text);
+
+  Ini.WriteString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'TpERP_Ger', vTpERP_Ger) ;
+  Ini.WriteString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'LoginPrompt_Ger', vLoginPrompt_Ger) ;
+  Ini.WriteString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'OSAuthent_Ger',   vOSAuthent_Ger) ;
+  Ini.WriteString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'DriverID_Ger',    vDriverID_Ger) ;
+  Ini.WriteString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'Database_Ger',    vDatabase_Ger) ;
+  Ini.WriteString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'Server_Ger',      vServer_Ger) ;
+  Ini.WriteString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'UserName_Ger',    vUserName_Ger) ;
+  Ini.WriteString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'Password_Ger',    vPassword_Ger) ;
+  Ini.WriteString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'Connected_Ger',   vConnected_Ger) ;
+  Ini.WriteString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'CamBD_Ger',       vCamBD_Ger) ;
+
+ finally
+
+  Ini.Free ;
+
+ end;
+
+end;
+
+procedure TFrBDFD.grp12Exit(Sender: TObject);
+begin
+
+ edt_Database_Ger.SetFocus;
+
+end;
+
+procedure TFrBDFD.grp13MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := Grp13.Hint;
+end;
+
+procedure TFrBDFD.grp14MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := Grp14.Hint;
+end;
+
+procedure TFrBDFD.grp15MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := Grp15.Hint;
+end;
+
+procedure TFrBDFD.grp16MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := Grp16.Hint;
+end;
+
+procedure TFrBDFD.grp18MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := Grp18.Hint;
+end;
+
+procedure TFrBDFD.grp19MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := Grp19.Hint;
+end;
+
+procedure TFrBDFD.grp1MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := Grp1.Hint;
+end;
+
+procedure TFrBDFD.grp20MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := Grp20.Hint;
+end;
+
+procedure TFrBDFD.grp21MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := Grp21.Hint;
+end;
+
+procedure TFrBDFD.grp22MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := Grp22.Hint;
+end;
+
+procedure TFrBDFD.grp23MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := Grp23.Hint;
+end;
+
+procedure TFrBDFD.grp24MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := Grp24.Hint;
+end;
+
+procedure TFrBDFD.grp25MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := Grp25.Hint;
+end;
+
+procedure TFrBDFD.grp26MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := Grp26.Hint;
+end;
+
+procedure TFrBDFD.grp27MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := Grp27.Hint;
+end;
+
+procedure TFrBDFD.grp28MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := Grp28.Hint;
+end;
+
+procedure TFrBDFD.grp29MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := Grp29.Hint;
+end;
+
+procedure TFrBDFD.grp2MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := Grp2.Hint;
+end;
+
+procedure TFrBDFD.grpMouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := Grp.Hint;
+end;
+
+end.

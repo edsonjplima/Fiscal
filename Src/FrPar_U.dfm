@@ -373,7 +373,7 @@ object FrPar: TFrPar
       Top = 1
       Width = 677
       Height = 310
-      ActivePage = TabSheet1
+      ActivePage = TabSheet6
       Align = alClient
       TabOrder = 0
       OnChange = PageControl1Change
@@ -400,17 +400,17 @@ object FrPar: TFrPar
             Anchors = [akTop, akRight]
             Glyph.Data = {
               76010000424D7601000000000000760000002800000020000000100000000100
-              04000000000000010000130B0000130B00001000000000000000000000000000
+              04000000000000010000120B0000120B00001000000000000000000000000000
               800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
-              FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF0033333333B333
-              333B33FF33337F3333F73BB3777BB7777BB3377FFFF77FFFF77333B000000000
-              0B3333777777777777333330FFFFFFFF07333337F33333337F333330FFFFFFFF
-              07333337F3FF3FFF7F333330F00F000F07333337F77377737F333330FFFFFFFF
-              07333FF7F3FFFF3F7FFFBBB0F0000F0F0BB37777F7777373777F3BB0FFFFFFFF
-              0BBB3777F3FF3FFF77773330F00F000003333337F773777773333330FFFF0FF0
-              33333337F3FF7F37F3333330F08F0F0B33333337F7737F77FF333330FFFF003B
-              B3333337FFFF77377FF333B000000333BB33337777777F3377FF3BB3333BB333
-              3BB33773333773333773B333333B3333333B7333333733333337}
+              FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00555555555555
+              5555555555555555555555555555555555555555555555555555555555555555
+              555555555555555555555555555555555555555FFFFFFFFFF555550000000000
+              55555577777777775F55500B8B8B8B8B05555775F555555575F550F0B8B8B8B8
+              B05557F75F555555575F50BF0B8B8B8B8B0557F575FFFFFFFF7F50FBF0000000
+              000557F557777777777550BFBFBFBFB0555557F555555557F55550FBFBFBFBF0
+              555557F555555FF7555550BFBFBF00055555575F555577755555550BFBF05555
+              55555575FFF75555555555700007555555555557777555555555555555555555
+              5555555555555555555555555555555555555555555555555555}
             NumGlyphs = 2
             ParentShowHint = False
             ShowHint = True
@@ -425,17 +425,17 @@ object FrPar: TFrPar
             Anchors = [akTop, akRight]
             Glyph.Data = {
               76010000424D7601000000000000760000002800000020000000100000000100
-              04000000000000010000130B0000130B00001000000000000000000000000000
+              04000000000000010000120B0000120B00001000000000000000000000000000
               800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
-              FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF0033333333B333
-              333B33FF33337F3333F73BB3777BB7777BB3377FFFF77FFFF77333B000000000
-              0B3333777777777777333330FFFFFFFF07333337F33333337F333330FFFFFFFF
-              07333337F3FF3FFF7F333330F00F000F07333337F77377737F333330FFFFFFFF
-              07333FF7F3FFFF3F7FFFBBB0F0000F0F0BB37777F7777373777F3BB0FFFFFFFF
-              0BBB3777F3FF3FFF77773330F00F000003333337F773777773333330FFFF0FF0
-              33333337F3FF7F37F3333330F08F0F0B33333337F7737F77FF333330FFFF003B
-              B3333337FFFF77377FF333B000000333BB33337777777F3377FF3BB3333BB333
-              3BB33773333773333773B333333B3333333B7333333733333337}
+              FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00300000000000
+              0003377777777777777308888888888888807F33333333333337088888888888
+              88807FFFFFFFFFFFFFF7000000000000000077777777777777770F8F8F8F8F8F
+              8F807F333333333333F708F8F8F8F8F8F9F07F333333333337370F8F8F8F8F8F
+              8F807FFFFFFFFFFFFFF7000000000000000077777777777777773330FFFFFFFF
+              03333337F3FFFF3F7F333330F0000F0F03333337F77773737F333330FFFFFFFF
+              03333337F3FF3FFF7F333330F00F000003333337F773777773333330FFFF0FF0
+              33333337F3F37F3733333330F08F0F0333333337F7337F7333333330FFFF0033
+              33333337FFFF7733333333300000033333333337777773333333}
             NumGlyphs = 2
             ParentShowHint = False
             ShowHint = True
@@ -451,17 +451,17 @@ object FrPar: TFrPar
             Anchors = [akTop, akRight]
             Glyph.Data = {
               76010000424D7601000000000000760000002800000020000000100000000100
-              04000000000000010000130B0000130B00001000000000000000000000000000
+              04000000000000010000120B0000120B00001000000000000000000000000000
               800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
-              FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF0033333333B333
-              333B33FF33337F3333F73BB3777BB7777BB3377FFFF77FFFF77333B000000000
-              0B3333777777777777333330FFFFFFFF07333337F33333337F333330FFFFFFFF
-              07333337F3FF3FFF7F333330F00F000F07333337F77377737F333330FFFFFFFF
-              07333FF7F3FFFF3F7FFFBBB0F0000F0F0BB37777F7777373777F3BB0FFFFFFFF
-              0BBB3777F3FF3FFF77773330F00F000003333337F773777773333330FFFF0FF0
-              33333337F3FF7F37F3333330F08F0F0B33333337F7737F77FF333330FFFF003B
-              B3333337FFFF77377FF333B000000333BB33337777777F3377FF3BB3333BB333
-              3BB33773333773333773B333333B3333333B7333333733333337}
+              FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00300000000000
+              0003377777777777777308888888888888807F33333333333337088888888888
+              88807FFFFFFFFFFFFFF7000000000000000077777777777777770F8F8F8F8F8F
+              8F807F333333333333F708F8F8F8F8F8F9F07F333333333337370F8F8F8F8F8F
+              8F807FFFFFFFFFFFFFF7000000000000000077777777777777773330FFFFFFFF
+              03333337F3FFFF3F7F333330F0000F0F03333337F77773737F333330FFFFFFFF
+              03333337F3FF3FFF7F333330F00F000003333337F773777773333330FFFF0FF0
+              33333337F3F37F3733333330F08F0F0333333337F7337F7333333330FFFF0033
+              33333337FFFF7733333333300000033333333337777773333333}
             NumGlyphs = 2
             ParentShowHint = False
             ShowHint = True
@@ -550,7 +550,6 @@ object FrPar: TFrPar
               Font.Style = []
               MaxLength = 2
               ParentFont = False
-              ReadOnly = True
               TabOrder = 0
               Text = '1'
               OnExit = ed_QtdCopNFeExit
@@ -1209,27 +1208,26 @@ object FrPar: TFrPar
             669
             282)
           object sbtnGetCert: TSpeedButton
-            Left = 643
-            Top = 96
+            Left = 639
+            Top = 95
             Width = 23
             Height = 24
             Anchors = [akTop, akRight]
             Glyph.Data = {
               76010000424D7601000000000000760000002800000020000000100000000100
-              04000000000000010000130B0000130B00001000000000000000000000000000
+              04000000000000010000120B0000120B00001000000000000000000000000000
               800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
-              FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF0033333333B333
-              333B33FF33337F3333F73BB3777BB7777BB3377FFFF77FFFF77333B000000000
-              0B3333777777777777333330FFFFFFFF07333337F33333337F333330FFFFFFFF
-              07333337F3FF3FFF7F333330F00F000F07333337F77377737F333330FFFFFFFF
-              07333FF7F3FFFF3F7FFFBBB0F0000F0F0BB37777F7777373777F3BB0FFFFFFFF
-              0BBB3777F3FF3FFF77773330F00F000003333337F773777773333330FFFF0FF0
-              33333337F3FF7F37F3333330F08F0F0B33333337F7737F77FF333330FFFF003B
-              B3333337FFFF77377FF333B000000333BB33337777777F3377FF3BB3333BB333
-              3BB33773333773333773B333333B3333333B7333333733333337}
+              FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00555555555555
+              55555555FFFFFFFF5555555000000005555555577777777FF555550999999900
+              55555575555555775F55509999999901055557F55555557F75F5001111111101
+              105577FFFFFFFF7FF75F00000000000011057777777777775F755070FFFFFF0F
+              01105777F555557F75F75500FFFFFF0FF0105577F555FF7F57575550FF700008
+              8F0055575FF7777555775555000888888F005555777FFFFFFF77555550000000
+              0F055555577777777F7F555550FFFFFF0F05555557F5FFF57F7F555550F000FF
+              0005555557F777557775555550FFFFFF0555555557F555FF7F55555550FF7000
+              05555555575FF777755555555500055555555555557775555555}
             NumGlyphs = 2
             OnClick = sbtnGetCertClick
-            ExplicitLeft = 651
           end
           object Label1: TLabel
             Left = 14
@@ -1238,27 +1236,26 @@ object FrPar: TFrPar
             Height = 13
           end
           object SpeedButton1: TSpeedButton
-            Left = 643
-            Top = 140
+            Left = 639
+            Top = 139
             Width = 23
             Height = 24
             Anchors = [akTop, akRight]
             Glyph.Data = {
               76010000424D7601000000000000760000002800000020000000100000000100
-              04000000000000010000130B0000130B00001000000000000000000000000000
+              04000000000000010000120B0000120B00001000000000000000000000000000
               800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
-              FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF0033333333B333
-              333B33FF33337F3333F73BB3777BB7777BB3377FFFF77FFFF77333B000000000
-              0B3333777777777777333330FFFFFFFF07333337F33333337F333330FFFFFFFF
-              07333337F3FF3FFF7F333330F00F000F07333337F77377737F333330FFFFFFFF
-              07333FF7F3FFFF3F7FFFBBB0F0000F0F0BB37777F7777373777F3BB0FFFFFFFF
-              0BBB3777F3FF3FFF77773330F00F000003333337F773777773333330FFFF0FF0
-              33333337F3FF7F37F3333330F08F0F0B33333337F7737F77FF333330FFFF003B
-              B3333337FFFF77377FF333B000000333BB33337777777F3377FF3BB3333BB333
-              3BB33773333773333773B333333B3333333B7333333733333337}
+              FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00555555555555
+              55555555FFFFFFFF5555555000000005555555577777777FF555550999999900
+              55555575555555775F55509999999901055557F55555557F75F5001111111101
+              105577FFFFFFFF7FF75F00000000000011057777777777775F755070FFFFFF0F
+              01105777F555557F75F75500FFFFFF0FF0105577F555FF7F57575550FF700008
+              8F0055575FF7777555775555000888888F005555777FFFFFFF77555550000000
+              0F055555577777777F7F555550FFFFFF0F05555557F5FFF57F7F555550F000FF
+              0005555557F777557775555550FFFFFF0555555557F555FF7F55555550FF7000
+              05555555575FF777755555555500055555555555557775555555}
             NumGlyphs = 2
             OnClick = SpeedButton1Click
-            ExplicitLeft = 651
           end
           object GroupBox8: TGroupBox
             Left = 6
@@ -1533,55 +1530,6 @@ object FrPar: TFrPar
       end
       object TabSheet7: TTabSheet
         Caption = 'WebService'
-        DesignSize = (
-          669
-          282)
-        object btn2: TSpeedButton
-          Left = 301
-          Top = 238
-          Width = 23
-          Height = 24
-          Anchors = [akTop, akRight]
-          Glyph.Data = {
-            76010000424D7601000000000000760000002800000020000000100000000100
-            04000000000000010000130B0000130B00001000000000000000000000000000
-            800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
-            FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF0033333333B333
-            333B33FF33337F3333F73BB3777BB7777BB3377FFFF77FFFF77333B000000000
-            0B3333777777777777333330FFFFFFFF07333337F33333337F333330FFFFFFFF
-            07333337F3FF3FFF7F333330F00F000F07333337F77377737F333330FFFFFFFF
-            07333FF7F3FFFF3F7FFFBBB0F0000F0F0BB37777F7777373777F3BB0FFFFFFFF
-            0BBB3777F3FF3FFF77773330F00F000003333337F773777773333330FFFF0FF0
-            33333337F3FF7F37F3333330F08F0F0B33333337F7737F77FF333330FFFF003B
-            B3333337FFFF77377FF333B000000333BB33337777777F3377FF3BB3333BB333
-            3BB33773333773333773B333333B3333333B7333333733333337}
-          NumGlyphs = 2
-          OnClick = SpeedButton1Click
-          ExplicitLeft = 309
-        end
-        object btn1: TSpeedButton
-          Left = 643
-          Top = 236
-          Width = 23
-          Height = 24
-          Anchors = [akTop, akRight]
-          Glyph.Data = {
-            76010000424D7601000000000000760000002800000020000000100000000100
-            04000000000000010000130B0000130B00001000000000000000000000000000
-            800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
-            FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF0033333333B333
-            333B33FF33337F3333F73BB3777BB7777BB3377FFFF77FFFF77333B000000000
-            0B3333777777777777333330FFFFFFFF07333337F33333337F333330FFFFFFFF
-            07333337F3FF3FFF7F333330F00F000F07333337F77377737F333330FFFFFFFF
-            07333FF7F3FFFF3F7FFFBBB0F0000F0F0BB37777F7777373777F3BB0FFFFFFFF
-            0BBB3777F3FF3FFF77773330F00F000003333337F773777773333330FFFF0FF0
-            33333337F3FF7F37F3333330F08F0F0B33333337F7737F77FF333330FFFF003B
-            B3333337FFFF77377FF333B000000333BB33337777777F3377FF3BB3333BB333
-            3BB33773333773333773B333333B3333333B7333333733333337}
-          NumGlyphs = 2
-          OnClick = SpeedButton1Click
-          ExplicitLeft = 651
-        end
         object Panel10: TPanel
           Left = 0
           Top = 0
@@ -1589,6 +1537,8 @@ object FrPar: TFrPar
           Height = 282
           Align = alClient
           TabOrder = 0
+          ExplicitLeft = 301
+          ExplicitTop = -88
           DesignSize = (
             669
             282)
@@ -2114,7 +2064,9 @@ object FrPar: TFrPar
             Top = 16
             Width = 81
             Height = 41
-            Hint = 'Seta o login do prompt para entrara no sql server'
+            Hint = 
+              'Especifica se uma caixa de di'#225'logo de login '#233' exibida, antes de ' +
+              'abrir a conex'#227'o'
             Anchors = [akLeft, akTop, akRight]
             Caption = ' LoginPrompt:  '
             Color = 14544639
@@ -2126,7 +2078,7 @@ object FrPar: TFrPar
             ParentBackground = False
             ParentColor = False
             ParentFont = False
-            TabOrder = 0
+            TabOrder = 1
             OnMouseMove = grp11MouseMove
             object chk_LoginPrompt_NFe: TCheckBox
               Left = 36
@@ -2145,7 +2097,7 @@ object FrPar: TFrPar
             Top = 63
             Width = 79
             Height = 41
-            Hint = 'Driver iD do banco de dados'
+            Hint = 'Bancos de dados FireDAC suportados pelo RAD Studio'
             Caption = ' DriverID: '
             Color = 14544639
             Font.Charset = DEFAULT_CHARSET
@@ -2156,7 +2108,7 @@ object FrPar: TFrPar
             ParentBackground = False
             ParentColor = False
             ParentFont = False
-            TabOrder = 1
+            TabOrder = 2
             OnMouseMove = grp11MouseMove
             DesignSize = (
               79
@@ -2199,6 +2151,7 @@ object FrPar: TFrPar
             Top = 110
             Width = 307
             Height = 41
+            Hint = 'Nome de um servidor executando o SQL Server na rede'
             Anchors = [akLeft, akTop, akRight]
             Caption = ' Server: '
             Color = 14544639
@@ -2210,7 +2163,7 @@ object FrPar: TFrPar
             ParentBackground = False
             ParentColor = False
             ParentFont = False
-            TabOrder = 2
+            TabOrder = 3
             OnMouseMove = grp11MouseMove
             DesignSize = (
               307
@@ -2232,6 +2185,7 @@ object FrPar: TFrPar
             Top = 157
             Width = 107
             Height = 41
+            Hint = 'O nome de login do SQL Server'
             Caption = ' UserName: '
             Color = 14544639
             Font.Charset = DEFAULT_CHARSET
@@ -2242,7 +2196,7 @@ object FrPar: TFrPar
             ParentBackground = False
             ParentColor = False
             ParentFont = False
-            TabOrder = 3
+            TabOrder = 4
             OnMouseMove = grp11MouseMove
             DesignSize = (
               107
@@ -2264,6 +2218,9 @@ object FrPar: TFrPar
             Top = 157
             Width = 194
             Height = 41
+            Hint = 
+              'A senha de login do SQL Server, se OSAuthent = No. Caracter n'#227'o ' +
+              'suportado '#39'{}'#39
             Anchors = [akLeft, akTop, akRight]
             Caption = ' Password: '
             Color = 14544639
@@ -2275,7 +2232,7 @@ object FrPar: TFrPar
             ParentBackground = False
             ParentColor = False
             ParentFont = False
-            TabOrder = 4
+            TabOrder = 5
             OnMouseMove = grp11MouseMove
             DesignSize = (
               194
@@ -2298,7 +2255,7 @@ object FrPar: TFrPar
             Top = 63
             Width = 222
             Height = 41
-            Hint = 'Nome do banco de dados'
+            Hint = 'Nome do banco de dados padr'#227'o para a conex'#227'o'
             Anchors = [akLeft, akTop, akRight]
             Caption = ' Database: '
             Color = 14544639
@@ -2310,7 +2267,7 @@ object FrPar: TFrPar
             ParentBackground = False
             ParentColor = False
             ParentFont = False
-            TabOrder = 5
+            TabOrder = 0
             OnMouseMove = grp11MouseMove
             DesignSize = (
               222
@@ -2325,13 +2282,15 @@ object FrPar: TFrPar
               Ctl3D = False
               ParentCtl3D = False
               TabOrder = 0
+              OnExit = edt_Database_NFeExit
             end
           end
           object grp16: TGroupBox
             Left = 6
             Top = 204
-            Width = 81
+            Width = 75
             Height = 41
+            Hint = 'Se celecionado, inicia o banco de dados FireDAC conectado'
             Anchors = [akLeft, akTop, akRight]
             Caption = ' Connected: '
             Color = 14544639
@@ -2346,7 +2305,7 @@ object FrPar: TFrPar
             TabOrder = 6
             OnMouseMove = grp11MouseMove
             object chk_Connected_NFe: TCheckBox
-              Left = 36
+              Left = 28
               Top = 16
               Width = 13
               Height = 17
@@ -2358,11 +2317,13 @@ object FrPar: TFrPar
             end
           end
           object grp28: TGroupBox
-            Left = 80
+            Left = 93
             Top = 16
-            Width = 122
+            Width = 86
             Height = 41
-            Hint = 'Efetua autentica'#231#227'o por usu'#225'rio'
+            Hint = 
+              'Definido como Sim, autentica'#231#227'o do Windows. Se N'#227'o, autentica'#231#227'o' +
+              ' do MS SQL Server'
             Anchors = [akLeft, akTop, akRight]
             Caption = ' OSAuthent: '
             Color = 14544639
@@ -2388,6 +2349,63 @@ object FrPar: TFrPar
               TabOrder = 0
             end
           end
+          object grp: TGroupBox
+            Left = 87
+            Top = 204
+            Width = 121
+            Height = 41
+            Hint = 
+              'Guarda o caminho do banco de dados, dados meramente informativo.' +
+              ' '
+            Caption = ' Caminho do BD: '
+            Color = 14544639
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'MS Sans Serif'
+            Font.Style = []
+            ParentBackground = False
+            ParentColor = False
+            ParentFont = False
+            TabOrder = 8
+            OnMouseMove = grpMouseMove
+            object edt_CamBD_NFe: TEdit
+              Left = 8
+              Top = 14
+              Width = 105
+              Height = 19
+              Color = 15792383
+              Ctl3D = False
+              ParentCtl3D = False
+              TabOrder = 0
+            end
+          end
+          object BitBtn: TBitBtn
+            Left = 214
+            Top = 208
+            Width = 99
+            Height = 37
+            Cursor = crHandPoint
+            Hint = 'Verifica se existencia do banco de dados!'
+            Caption = 'BD NFe Existe!'
+            Glyph.Data = {
+              76010000424D7601000000000000760000002800000020000000100000000100
+              04000000000000010000130B0000130B00001000000000000000000000000000
+              800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+              FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+              333333333333333333FF33333333333330003FF3FFFFF3333777003000003333
+              300077F777773F333777E00BFBFB033333337773333F7F33333FE0BFBF000333
+              330077F3337773F33377E0FBFBFBF033330077F3333FF7FFF377E0BFBF000000
+              333377F3337777773F3FE0FBFBFBFBFB039977F33FFFFFFF7377E0BF00000000
+              339977FF777777773377000BFB03333333337773FF733333333F333000333333
+              3300333777333333337733333333333333003333333333333377333333333333
+              333333333333333333FF33333333333330003333333333333777333333333333
+              3000333333333333377733333333333333333333333333333333}
+            NumGlyphs = 2
+            TabOrder = 9
+            OnClick = BitBtnClick
+            OnMouseMove = BitBtnMouseMove
+          end
         end
         object grp17: TGroupBox
           Left = 334
@@ -2408,8 +2426,8 @@ object FrPar: TFrPar
             Width = 89
             Height = 41
             Hint = 
-              'Exclui os arquivos tempor'#225'rio, gerados e recebidos da SEFAZ dura' +
-              'nte os envios, consultas, etc.'
+              'Especifica se uma caixa de di'#225'logo de login '#233' exibida, antes de ' +
+              'abrir a conex'#227'o'
             Anchors = [akLeft, akTop, akRight]
             Caption = ' LoginPrompt:  '
             Color = 14544639
@@ -2421,7 +2439,7 @@ object FrPar: TFrPar
             ParentBackground = False
             ParentColor = False
             ParentFont = False
-            TabOrder = 0
+            TabOrder = 1
             OnMouseMove = grp11MouseMove
             object chk_LoginPrompt_Ger: TCheckBox
               Left = 36
@@ -2440,6 +2458,7 @@ object FrPar: TFrPar
             Top = 63
             Width = 79
             Height = 41
+            Hint = 'Bancos de dados FireDAC suportados pelo RAD Studio'
             Caption = ' DriverID: '
             Color = 14544639
             Font.Charset = DEFAULT_CHARSET
@@ -2450,14 +2469,14 @@ object FrPar: TFrPar
             ParentBackground = False
             ParentColor = False
             ParentFont = False
-            TabOrder = 1
+            TabOrder = 2
             OnMouseMove = grp11MouseMove
             DesignSize = (
               79
               41)
             object cbb_DriverID_Ger: TComboBox
               Left = 8
-              Top = 12
+              Top = 14
               Width = 61
               Height = 21
               Anchors = [akLeft, akTop, akRight]
@@ -2491,8 +2510,9 @@ object FrPar: TFrPar
           object grp23: TGroupBox
             Left = 6
             Top = 110
-            Width = 315
+            Width = 313
             Height = 41
+            Hint = 'Nome de um servidor executando o SQL Server na rede'
             Anchors = [akLeft, akTop, akRight]
             Caption = ' Server: '
             Color = 14544639
@@ -2504,15 +2524,15 @@ object FrPar: TFrPar
             ParentBackground = False
             ParentColor = False
             ParentFont = False
-            TabOrder = 2
+            TabOrder = 3
             OnMouseMove = grp11MouseMove
             DesignSize = (
-              315
+              313
               41)
             object edt_Server_Ger: TEdit
               Left = 8
               Top = 14
-              Width = 297
+              Width = 295
               Height = 19
               Anchors = [akLeft, akTop, akRight]
               Color = 15792383
@@ -2526,6 +2546,7 @@ object FrPar: TFrPar
             Top = 157
             Width = 107
             Height = 41
+            Hint = 'O nome de login do SQL Server'
             Caption = ' UserName: '
             Color = 14544639
             Font.Charset = DEFAULT_CHARSET
@@ -2536,7 +2557,7 @@ object FrPar: TFrPar
             ParentBackground = False
             ParentColor = False
             ParentFont = False
-            TabOrder = 3
+            TabOrder = 4
             OnMouseMove = grp11MouseMove
             DesignSize = (
               107
@@ -2556,8 +2577,11 @@ object FrPar: TFrPar
           object grp25: TGroupBox
             Left = 119
             Top = 157
-            Width = 202
+            Width = 200
             Height = 41
+            Hint = 
+              'A senha de login do SQL Server, se OSAuthent = No. Caracter n'#227'o ' +
+              'suportado '#39'{}'#39
             Anchors = [akLeft, akTop, akRight]
             Caption = ' Password: '
             Color = 14544639
@@ -2569,15 +2593,15 @@ object FrPar: TFrPar
             ParentBackground = False
             ParentColor = False
             ParentFont = False
-            TabOrder = 4
+            TabOrder = 5
             OnMouseMove = grp11MouseMove
             DesignSize = (
-              202
+              200
               41)
             object edt_Password_Ger: TEdit
               Left = 8
               Top = 14
-              Width = 183
+              Width = 181
               Height = 19
               Anchors = [akLeft, akTop, akRight]
               Color = 15792383
@@ -2592,6 +2616,7 @@ object FrPar: TFrPar
             Top = 63
             Width = 227
             Height = 41
+            Hint = 'Nome do banco de dados padr'#227'o para a conex'#227'o'
             Anchors = [akLeft, akTop, akRight]
             Caption = ' Database: '
             Color = 14544639
@@ -2603,7 +2628,7 @@ object FrPar: TFrPar
             ParentBackground = False
             ParentColor = False
             ParentFont = False
-            TabOrder = 5
+            TabOrder = 0
             OnMouseMove = grp11MouseMove
             DesignSize = (
               227
@@ -2619,13 +2644,15 @@ object FrPar: TFrPar
               ParentCtl3D = False
               ReadOnly = True
               TabOrder = 0
+              OnExit = edt_Database_GerExit
             end
           end
           object grp27: TGroupBox
             Left = 6
             Top = 204
-            Width = 89
+            Width = 75
             Height = 41
+            Hint = 'Se celecionado, inicia o banco de dados FireDAC conectado'
             Anchors = [akLeft, akTop, akRight]
             Caption = ' Connected: '
             Color = 14544639
@@ -2640,7 +2667,7 @@ object FrPar: TFrPar
             TabOrder = 6
             OnMouseMove = grp11MouseMove
             object chk_Connected_Ger: TCheckBox
-              Left = 36
+              Left = 32
               Top = 16
               Width = 13
               Height = 17
@@ -2652,11 +2679,13 @@ object FrPar: TFrPar
             end
           end
           object grp29: TGroupBox
-            Left = 101
+            Left = 105
             Top = 16
-            Width = 109
+            Width = 86
             Height = 41
-            Hint = 'Efetua autentica'#231#227'o por usu'#225'rio'
+            Hint = 
+              'Definido como Sim, autentica'#231#227'o do Windows. Se N'#227'o, autentica'#231#227'o' +
+              ' do MS SQL Server'
             Anchors = [akLeft, akTop, akRight]
             Caption = ' OSAuthent: '
             Color = 14544639
@@ -2681,6 +2710,97 @@ object FrPar: TFrPar
               ParentCtl3D = False
               TabOrder = 0
             end
+          end
+          object grp50: TGroupBox
+            Left = 199
+            Top = 16
+            Width = 120
+            Height = 41
+            Hint = 'Nome do tipo de banco de dados conforme o informado pelo ERP'
+            Caption = ' Tipo de ERP: '
+            Color = 14544639
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'MS Sans Serif'
+            Font.Style = []
+            ParentBackground = False
+            ParentColor = False
+            ParentFont = False
+            TabOrder = 8
+            OnMouseMove = grp50MouseMove
+            DesignSize = (
+              120
+              41)
+            object edt_TpERP_Ger: TEdit
+              Left = 12
+              Top = 15
+              Width = 95
+              Height = 19
+              Anchors = [akLeft, akTop, akRight]
+              Color = 15792383
+              Ctl3D = False
+              ParentCtl3D = False
+              ReadOnly = True
+              TabOrder = 0
+            end
+          end
+          object grp44: TGroupBox
+            Left = 87
+            Top = 204
+            Width = 127
+            Height = 41
+            Hint = 
+              'Guarda o caminho do banco de dados, dados meramente informativo.' +
+              ' '
+            Caption = ' Caminho do BD: '
+            Color = 14544639
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'MS Sans Serif'
+            Font.Style = []
+            ParentBackground = False
+            ParentColor = False
+            ParentFont = False
+            TabOrder = 9
+            OnMouseMove = grp44MouseMove
+            object edt_CamBD_Ger: TEdit
+              Left = 8
+              Top = 14
+              Width = 109
+              Height = 19
+              Color = 15792383
+              Ctl3D = False
+              ParentCtl3D = False
+              TabOrder = 0
+            end
+          end
+          object BitBtn3: TBitBtn
+            Left = 220
+            Top = 208
+            Width = 99
+            Height = 37
+            Cursor = crHandPoint
+            Hint = 'Verifica se existencia do banco de dados!'
+            Caption = 'BD NFe Existe!'
+            Glyph.Data = {
+              76010000424D7601000000000000760000002800000020000000100000000100
+              04000000000000010000130B0000130B00001000000000000000000000000000
+              800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+              FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+              333333333333333333FF33333333333330003FF3FFFFF3333777003000003333
+              300077F777773F333777E00BFBFB033333337773333F7F33333FE0BFBF000333
+              330077F3337773F33377E0FBFBFBF033330077F3333FF7FFF377E0BFBF000000
+              333377F3337777773F3FE0FBFBFBFBFB039977F33FFFFFFF7377E0BF00000000
+              339977FF777777773377000BFB03333333337773FF733333333F333000333333
+              3300333777333333337733333333333333003333333333333377333333333333
+              333333333333333333FF33333333333330003333333333333777333333333333
+              3000333333333333377733333333333333333333333333333333}
+            NumGlyphs = 2
+            TabOrder = 10
+            OnClick = BitBtn3Click
+            OnMouseMove = BitBtn3MouseMove
           end
         end
       end

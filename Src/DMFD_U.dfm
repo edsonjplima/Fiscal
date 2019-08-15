@@ -23,6 +23,7 @@ object DMFD: TDMFD
     ResourceOptions.AssignedValues = [rvAutoConnect, rvAutoReconnect]
     ResourceOptions.AutoReconnect = True
     LoginPrompt = False
+    OnError = FDConGerError
     Left = 598
     Top = 28
   end

@@ -12,37 +12,27 @@ File_9=TSourceModule,'D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACB
 File_10=TSourceModule,'c:\program files (x86)\embarcadero\studio\18.0\SOURCE\RTL\SYS\System.pas',0,1,1,1,12,0,0,,
 
 [Modules]
-Module0=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
-Module1=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrCCe_U.pas
-Module2=default.htm
-Module3=d:\sistemas de desenvolvimento\gbnfe\src\DMFD_U.pas
-Module4=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrPar_U.pas
-Count=5
+Module0=D:\Sistemas de Desenvolvimento\GBNFe\Src\Unit1.pas
+Module1=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBDFD_U.pas
+Module2=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
+Count=3
 EditWindowCount=1
+
+[D:\Sistemas de Desenvolvimento\GBNFe\Src\Unit1.pas]
+ModuleType=TSourceModule
+
+[D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBDFD_U.pas]
+ModuleType=TSourceModule
 
 [D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas]
 ModuleType=TSourceModule
 
-[D:\Sistemas de Desenvolvimento\GBNFe\Src\FrCCe_U.pas]
-ModuleType=TSourceModule
-
-[default.htm]
-ModuleType=TURLModule
-
-[d:\sistemas de desenvolvimento\gbnfe\src\DMFD_U.pas]
-ModuleType=TSourceModule
-
-[D:\Sistemas de Desenvolvimento\GBNFe\Src\FrPar_U.pas]
-ModuleType=TSourceModule
-
 [EditWindow0]
-ViewCount=5
-CurrentEditView=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
+ViewCount=3
+CurrentEditView=D:\Sistemas de Desenvolvimento\GBNFe\Src\Unit1.pas
 View0=0
 View1=1
 View2=2
-View3=3
-View4=4
 PercentageSizes=1
 Create=1
 Visible=1
@@ -71,52 +61,37 @@ TabDockBottomClients=MessageView=0,DockSite1=1
 TabDockRightClients=DockSite2=0,DockSite4=1
 
 [View0]
-CustomEditViewType=TWelcomePageView
-WelcomePageURL=bds:/default.htm
+CustomEditViewType=TEditView
+Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
+CursorX=1
+CursorY=15864
+TopLine=15814
+LeftCol=1
+Elisions=
+Bookmarks={1,665,1}{2,2477,1}{6,7703,1}
+EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
 
 [View1]
 CustomEditViewType=TEditView
-Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
-CursorX=28
-CursorY=2976
-TopLine=2950
-LeftCol=1
-Elisions=
-Bookmarks={1,8608,1}{2,7432,18}{3,653,1}{6,7627,9}
-EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
-
-[View2]
-CustomEditViewType=TEditView
-Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrCCe_U.pas
-CursorX=49
-CursorY=1226
-TopLine=1199
-LeftCol=1
-Elisions=
-Bookmarks={1,1255,1}{2,453,1}
-EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrCCe_U.pas
-
-[View3]
-CustomEditViewType=TEditView
-Module=d:\sistemas de desenvolvimento\gbnfe\src\DMFD_U.pas
-CursorX=6
-CursorY=55
-TopLine=38
+Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBDFD_U.pas
+CursorX=1
+CursorY=1
+TopLine=1
 LeftCol=1
 Elisions=
 Bookmarks=
-EditViewName=d:\sistemas de desenvolvimento\gbnfe\src\DMFD_U.pas
+EditViewName=Borland.FormDesignerView
 
-[View4]
+[View2]
 CustomEditViewType=TEditView
-Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrPar_U.pas
-CursorX=11
-CursorY=742
-TopLine=752
+Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\Unit1.pas
+CursorX=1
+CursorY=1
+TopLine=1
 LeftCol=1
 Elisions=
-Bookmarks={1,394,1}
-EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrPar_U.pas
+Bookmarks=
+EditViewName=Borland.FormDesignerView
 
 [UndockedDesigner]
 Count=0
@@ -146,17 +121,7 @@ Dockable=1
 StayOnTop=0
 
 [Breakpoints]
-Count=10
-Breakpoint0='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',10999,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint1='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',7127,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint2='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',12225,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint3='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',3180,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint4='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',7098,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint5='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',653,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint6='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',3304,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint7='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',7627,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint8='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',7630,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint9='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',7639,'',0,1,'',1,0,0,'',1,'','','',0,''
+Count=0
 
 [EmbarcaderoWin32Debugger_AddressBreakpoints]
 Count=0
@@ -205,11 +170,11 @@ State=0
 Left=0
 Top=0
 Width=2000
-Height=8186
+Height=8721
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=2000
-ClientHeight=8186
+ClientHeight=8721
 TBDockHeight=5895
 LRDockWidth=2350
 Dockable=1
@@ -221,13 +186,13 @@ Create=1
 Visible=0
 Docked=1
 State=0
-Left=1
-Top=27
-Width=9988
+Left=0
+Top=0
+Width=2769
 Height=2988
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=9988
+ClientWidth=2769
 ClientHeight=2988
 TBDockHeight=2988
 LRDockWidth=2769
@@ -311,6 +276,11 @@ Dockable=1
 StayOnTop=0
 SplitPos=155
 
+[PropInspDesignerSelection]
+ArrangeBy=Name
+SelectedItem=Caption,
+ExpandedItems=Anchors=0,BorderIcons=0,Constraints=0
+
 [ClassBrowserTool]
 PercentageSizes=1
 Create=1
@@ -377,11 +347,11 @@ State=0
 Left=0
 Top=0
 Width=2000
-Height=8186
+Height=8721
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=2000
-ClientHeight=8186
+ClientHeight=8721
 TBDockHeight=5953
 LRDockWidth=2512
 Dockable=1
@@ -675,6 +645,26 @@ LRDockWidth=1894
 Dockable=1
 StayOnTop=0
 
+[TestInsightForm]
+PercentageSizes=1
+Create=1
+Visible=0
+Docked=0
+State=0
+Left=0
+Top=0
+Width=3562
+Height=3814
+MaxLeft=-6
+MaxTop=-12
+ClientWidth=3462
+ClientHeight=3360
+TBDockHeight=3814
+LRDockWidth=3562
+Dockable=1
+StayOnTop=0
+TabIndex=0
+
 [ModelViewTool]
 PercentageSizes=1
 Create=1
@@ -772,20 +762,20 @@ Create=1
 Visible=0
 Docked=1
 State=0
-Left=4
-Top=24
+Left=8
+Top=8
 Width=2000
-Height=8477
+Height=9012
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=2000
-ClientHeight=8477
+ClientHeight=9012
 TBDockHeight=9012
 LRDockWidth=2000
 Dockable=1
 StayOnTop=0
 TabPosition=1
-ActiveTabID=ProjectManager
+ActiveTabID=frmDesignPreview
 TabDockClients=ProjectManager,ModelViewTool,DataExplorerContainer,frmDesignPreview,TFileExplorerForm
 
 [DockSite3]

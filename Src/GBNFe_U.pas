@@ -45,7 +45,7 @@ uses
   cxInplaceContainer, cxImageComboBox, cxMemo, IdIOHandler, IdIOHandlerSocket,
   IdIOHandlerStack, IdSSL, TypInfo, ACBrSMSClass, ACBrSMS, dxActivityIndicator,
   cxContainer, cxEdit, cxDropDownEdit, RLPreviewForm, blcksock, ACBrDFeReport,
-  ACBrDFeDANFeReport, frxClass;
+  ACBrDFeDANFeReport;
 
 type
  TWebControl = class(TWebBrowser)
@@ -230,7 +230,6 @@ type
   cxTLsnPro: TcxTreeListColumn;
   cxTLicSta: TcxTreeListColumn;
   cxTLsxMot: TcxTreeListColumn;
-  frxrprt1: TfrxReport;
   lbl1: TLabel;
 
   Procedure geraenvianf(Sender: TObject);
@@ -247,7 +246,6 @@ type
     Shift: TShiftState);
   procedure Timer1Timer(Sender: TObject);
   procedure Destinatrio1Click(Sender: TObject);
-  procedure FormShow(Sender: TObject);
   procedure BitBtn2Click(Sender: TObject);
   procedure BitBtn8Click(Sender: TObject);
   procedure Excluinota1Click(Sender: TObject);
@@ -372,6 +370,7 @@ type
     ACanvas: TcxCanvas; AViewInfo: TcxTreeListEditCellViewInfo;
     var ADone: Boolean);
   procedure rlprvwstp1AfterPrint(Sender: TObject);
+    procedure FormShow(Sender: TObject);
  private
   { Private declarations }
  public
@@ -466,6 +465,8 @@ type
   procedure pExcluiXmlErro(M, S, N : String);                                   // Proc que exclui os xml da nota - M = Modelo, S = Série, N = Nota
   procedure GravarBDFD();                                                       // Grava o arquivo GBNFe.ini o Acesso Banco de Dados FareDac
   procedure LerBDFD();                                                          // Ler o arquivo GBNFe.ini o Acesso Banco de Dados FareDac
+  procedure LerBDFD_E();                                                        // ler o arquivo GBNFe.ini e verifica se existe a empresa
+
   procedure pSelNfe(FD : TFDQuery ; CN1, CN2: Integer ; CN3: TDateTime ;
                                     CN4, CN5: string);                          // Filtra a nota
   procedure pMostraTipoAmb();                                                   // Mostra se o sistema está em produção ou em homologação
@@ -578,6 +579,7 @@ var
  gImprimindoCCe                                                           : Boolean = True;  // Define se está imprimindo CCe e não precisa mostrar na tela a consulta
  gAbortarXML                                                              : Boolean = False; // Será usado para abortar o processo de salvar o xml
  gConsiste                                                                : Boolean = true;  // Define se a consulta consiste [ true / false ]
+ gSimpObg                                                                 : Boolean = false; // Define se a consulta consiste [ true / false ]
 
  // Variáveis migradas
  _nota                                                                    : ShortString;    //String[15];
@@ -600,7 +602,7 @@ uses
      FrBackup_U, FrCCe_U, FrBuscaNota_U, FrXML_U, FrBuscaChave_U, FrConsManif_U,
      FrImportXML_U, ACBrDFeSSL, FrConWeb_U, pcnNFe, FrContab_U,
      ACBrNFeWebServices, pcnRetConsSitNFe, pcnRetEnvEventoNFe, pcnEventoNFe,
-     FrEmail_U, FrBDFD_U;
+     FrEmail_U, FrBDFD_U, BDFD_U;
 
 {$R *.dfm}
 
@@ -2284,7 +2286,23 @@ begin
 
                  begin
 
-                  cProdANP := StrToInt(VarToStr(DMFD.FDQuery2['CodSIMP']));     // E LA01 N 1-1 9 Utilizar a codificação de produtos do Sistema de Informações de Movimentação de Produtos - SIMP (http://www.anp.gov.br/simp/). (NT 2012/003)
+                  if (VarToStr(DMFD.FDQuery2['CodSIMP']) = '') then
+                   begin
+
+                    Application.Messagebox(PWideChar('Para o CFOP ' +
+                      VarToStr(DMFD.FDQuery2['cfop']) +
+                      ', O código SIMP é necessário!' + chr(13) + 'No ítem ' +
+                      VarToStr(DMFD.FDQuery2['codigo_item']) + '-' +
+                      VarToStr(DMFD.FDQuery2['descricao']) + '.'),
+                      PWideChar('Atenção!'), mb_iconstop+mb_ok);
+
+                    gSimpObg := true;
+                    exit;
+
+                   end
+                  else
+                   cProdANP := StrToInt(VarToStr(DMFD.FDQuery2['CodSIMP']));     // E LA01 N 1-1 9 Utilizar a codificação de produtos do Sistema de Informações de Movimentação de Produtos - SIMP (http://www.anp.gov.br/simp/). (NT 2012/003)
+
                   if ( (     DMFD.FDQuery2['descANP']  = null)   or
                        (trim(DMFD.FDQuery2['descANP']) = ''  ) ) then
                    descANP  := VarToStr(DMFD.FDQuery2['descricao'])             // E LA01 N 1-1 2-95 Utilizar a descrição de produtos do Sistema de Informações de Movimentação de Produtos - SIMP (http://www.anp.gov.br/simp/).
@@ -2316,7 +2334,23 @@ begin
 
                   begin
 
-                   cProdANP := StrToInt(VarToStr(DMFD.FDQuery2['CodSIMP']));     // E LA01 N 1-1 9 Utilizar a codificação de produtos do Sistema de Informações de Movimentação de Produtos - SIMP (http://www.anp.gov.br/simp/). (NT 2012/003)
+                   if (VarToStr(DMFD.FDQuery2['CodSIMP']) = '') then
+                    begin
+
+                     Application.Messagebox(PWideChar('Para o CFOP ' +
+                       VarToStr(DMFD.FDQuery2['cfop']) +
+                       ', O código SIMP é necessário!' + chr(13) + 'No ítem ' +
+                       VarToStr(DMFD.FDQuery2['codigo_item']) + '-' +
+                       VarToStr(DMFD.FDQuery2['descricao']) + '.'),
+                       PWideChar('Atenção!'), mb_iconstop+mb_ok);
+
+                     gSimpObg := true;
+                     exit;
+
+                    end
+                   else
+                    cProdANP := StrToInt(VarToStr(DMFD.FDQuery2['CodSIMP']));     // E LA01 N 1-1 9 Utilizar a codificação de produtos do Sistema de Informações de Movimentação de Produtos - SIMP (http://www.anp.gov.br/simp/). (NT 2012/003)
+
                    if ( (     DMFD.FDQuery2['descANP']  = null)   or
                         (trim(DMFD.FDQuery2['descANP']) = ''  ) ) then
                     descANP  := VarToStr(DMFD.FDQuery2['descricao'])             // E LA01 N 1-1 2-95 Utilizar a descrição de produtos do Sistema de Informações de Movimentação de Produtos - SIMP (http://www.anp.gov.br/simp/).
@@ -2370,7 +2404,23 @@ begin
 
                   begin
 
-                   cProdANP := StrToInt(VarToStr(DMFD.FDQuery2['CodSIMP']));     // E LA01 N 1-1 9 Utilizar a codificação de produtos do Sistema de Informações de Movimentação de Produtos - SIMP (http://www.anp.gov.br/simp/). (NT 2012/003)
+                   if (VarToStr(DMFD.FDQuery2['CodSIMP']) = '') then
+                    begin
+
+                     Application.Messagebox(PWideChar('Para o CFOP ' +
+                       VarToStr(DMFD.FDQuery2['cfop']) +
+                       ', O código SIMP é necessário!' + chr(13) + 'No ítem ' +
+                       VarToStr(DMFD.FDQuery2['codigo_item']) + '-' +
+                       VarToStr(DMFD.FDQuery2['descricao']) + '.'),
+                       PWideChar('Atenção!'), mb_iconstop+mb_ok);
+
+                     gSimpObg := true;
+                     exit;
+
+                    end
+                   else
+                    cProdANP := StrToInt(VarToStr(DMFD.FDQuery2['CodSIMP']));     // E LA01 N 1-1 9 Utilizar a codificação de produtos do Sistema de Informações de Movimentação de Produtos - SIMP (http://www.anp.gov.br/simp/). (NT 2012/003)
+
                    if ( (     DMFD.FDQuery2['descANP']  = null)   or
                         (trim(DMFD.FDQuery2['descANP']) = ''  ) ) then
                     descANP  := VarToStr(DMFD.FDQuery2['descricao'])             // E LA01 N 1-1 2-95 Utilizar a descrição de produtos do Sistema de Informações de Movimentação de Produtos - SIMP (http://www.anp.gov.br/simp/).
@@ -3146,14 +3196,18 @@ begin
                           DMFD.FDQuery1['nfe_modelo'],                          // Conteúdo dos campos
                           true);                                                // Consiste [true/false]
 
-        except
+        except on e:exception do
+         begin
 
-         MemoResp.Lines.Text   := UTF8Encode(ACBrNFe1.WebServices.Retorno.RetWS);
-         MemoLog.Lines.Text    := UTF8Encode(ACBrNFe1.WebServices.Retorno.Msg);
-         memoRespWS.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.Retorno.RetornoWS);
-         LoadXML(MemoResp, WBResposta);
+          MemoResp.Lines.Text   := UTF8Encode(ACBrNFe1.WebServices.Retorno.RetWS) + chr(13) + e.Message;
+          MemoLog.Lines.Text    := UTF8Encode(ACBrNFe1.WebServices.Retorno.Msg);
+          memoRespWS.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.Retorno.RetornoWS);
+          LoadXML(MemoResp, WBResposta);
+
+         end;
 
         end;
+
        end;
 
       //------------------------------------------------------------------------
@@ -3301,7 +3355,7 @@ begin
                    //-------------------------------------------------------------
                    // Efetua o Cancelamento Administrativo do PEDIDO da nota Denegada
                    //-------------------------------------------------------------
-                   if iCodPed <> 0 then
+                   if (iCodPed <> 6) then
                     begin
                      if not ( fCanCAP(StrToInt(gNNF_Consiste), StrToInt(edt_CodEmp.Text), iCodPed, gCodMtD) ) then
                       Application.MessageBox(PWideChar('Nota denegada, mas o pedido não foi cancelado!'), 'Atenção', MB_ICONINFORMATION );
@@ -3422,7 +3476,7 @@ begin
                   //-------------------------------------------------------------
                   // Efetua o Cancelamento Administrativo do PEDIDO da nota Denegada
                   //-------------------------------------------------------------
-                  if iCodPed <> 0 then
+                  if (iCodPed <> 0) then
                    begin
                     if not ( fCanCAP(StrToInt(gNNF_Consiste), StrToInt(edt_CodEmp.Text), iCodPed, gCodMtD) ) then
                      Application.MessageBox(PWideChar('Nota denegada, mas o pedido não foi cancelado!'), 'Atenção', MB_ICONINFORMATION );
@@ -4318,16 +4372,27 @@ begin
 
      DMFD.FDQuery2.ExecSQL;
 
-    except
-     Application.Messagebox('ERRO: Não inseriu o XML da nfe no banco de dados !','Atenção!',mb_iconstop+mb_ok);
-     exit;
+    except on e:Exception do
+     begin
+
+      Application.Messagebox(PWideChar('ERRO: Não inseriu o XML da nfe no banco de dados!' + Char(13) +
+                              e.Message),'Atenção!',mb_iconstop+mb_ok);
+      exit;
+
+     end;
+
     end;
+
     DMFD.FDQuery2.Close;
+
    finally
+
     DMFD.FDQuery2.EnableControls;
+
    end;
 
    //final - grava xml da nfe
+
   end;
 
 end;
@@ -5705,7 +5770,7 @@ begin
   DMFD.FDQuery4.ParamByName('Proxy_User').AsString               := FrPar.edtProxyUser.Text;
 
   if not ( trim(FrPar.edtProxySenha.Text) = '' ) then
-   DMFD.FDQuery4.ParamByName('Proxy_Pass').AsString              := Crypt( 'E',(trim(FrPar.edtProxySenha.Text)) ) // EncryptStr(trim(FrPar.edtProxySenha.Text), 2)
+   DMFD.FDQuery4.ParamByName('Proxy_Pass').AsString              := Crypt( 'E',(trim(FrPar.edtProxySenha.Text)) )
   else
    DMFD.FDQuery4.ParamByName('Proxy_Pass').AsString              := trim(FrPar.edtProxySenha.Text);
 
@@ -5761,10 +5826,14 @@ begin
    DMFD.FDQuery4.ExecSQL;
    pAtuNFe();
 
-  except
+  except on e:Exception do
+   begin
 
-   Application.Messagebox('ERRO: Parâmetros não gravado !','Atenção!',MB_ICONERROR+mb_ok);
-   pAtuNFe();   // by Edson Lima ; 2013/02/26 ; 16:03 ; Atualiza Grid
+    Application.Messagebox(PWideChar('ERRO: Parâmetros não gravado !' + Char(13) +
+                            e.Message), 'Atenção!',MB_ICONERROR+mb_ok);
+    pAtuNFe();
+
+   end;
 
   end;
 
@@ -6098,7 +6167,7 @@ begin
    FrPar.edtProxyUser.Text       := '';
   if ( (DMFD.FDQuery4['Proxy_Pass'] <> Null) and
        (DMFD.FDQuery4['Proxy_Pass'] <> '') ) then
-   FrPar.edtProxySenha.Text      := Crypt( 'D',(VarToStr(DMFD.FDQuery4['Proxy_Pass'])) ) // DecryptStr(VarToStr(DMFD.FDQuery4['Proxy_Pass']), 2)
+   FrPar.edtProxySenha.Text      := Crypt( 'D',(VarToStr(DMFD.FDQuery4['Proxy_Pass'])) )
   else
    FrPar.edtProxySenha.Text      := '';
   if (DMFD.FDQuery4['Email_NEeMAIL'] <> Null) then
@@ -6230,7 +6299,7 @@ begin
    FrPar.cxdtp1.Date             := IncMonth(Now(), -3);
 
   // by Edson Lima ; 2017-1-4T1001 ; Atribui as variáveis globais do Gerente
-  gDBERP                         := UpperCase(DMFD.FDQuery4['DBERP']);
+  gDBERP                         := FrPar.edt_Database_Ger.Text;
 
   if (DMFD.FDQuery4['CodMtC'] <> Null) then
    gCodMtC                       := DMFD.FDQuery4['CodMtC'];
@@ -6241,7 +6310,7 @@ begin
   if (DMFD.FDQuery4['CodMtI'] <> Null) then
    gCodMtI                       := DMFD.FDQuery4['CodMtI'];
 
-  gERP                           := UpperCase(DMFD.FDQuery4['ERP']);
+  gERP                           := UpperCase(FrPar.edt_TpERP_Ger.Text);
   //----------------------------------------------------------------------------
 
   // by Edson Lima ; 2015-10-16T0900 ; trunk2 novo - Prenchimento do componente acbrmail
@@ -6263,7 +6332,9 @@ begin
   //----------------------------------------------------------------------------
 
  finally
+
  end;
+
 end;
 
 //------------------------------------------------------------------------------
@@ -6325,7 +6396,7 @@ begin
    ACBrNFe1.Configuracoes.Arquivos.Salvar                        := true;
    ACBrNFe1.Configuracoes.Arquivos.EmissaoPathNFe                := true;
    ACBrNFe1.Configuracoes.Arquivos.PathNFe                       := gCamXml;
-   ACBrNFe1.Configuracoes.Arquivos.DownloadNFe.PathDownload      := gCamXml;
+   ACBrNFe1.Configuracoes.Arquivos.DownloadDFe.PathDownload      := gCamXml;                  // Edson Lima ; 2019-07-29
    ACBrNFe1.Configuracoes.Arquivos.PathInu                       := gCamXml;
    ACBrNFe1.Configuracoes.Arquivos.PathEvento                    := gCamXml;
    ACBrNFe1.Configuracoes.Geral.Salvar                           := true;                     // ckSalvar.Checked;
@@ -6376,22 +6447,34 @@ begin
 
  if FrPar.CheckBox5.Checked then
   begin
+
    try
+
     DMFD.FDQuery2.DisableControls;
     DMFD.FDQuery2.Close;
     DMFD.FDQuery2.SQL.Clear;
     DMFD.FDQuery2.SQL.Add( 'exec sp_ler_nfe_textos :gCamTxt ' );
     DMFD.FDQuery2.Params[0].AsString := gCamTxt;
+
     try
-      DMFD.FDQuery2.ExecSQL;
-      except
-        Application.Messagebox('ERRO: sp_ler_nfe_textos','Atenção!',MB_ICONERROR+mb_ok);
-      end;
+
+     DMFD.FDQuery2.ExecSQL;
+
+    except on e:Exception do
+
+     Application.Messagebox(PWideChar('ERRO: sp_ler_nfe_textos' + Char(13) +
+                             e.Message), 'Atenção!',MB_ICONERROR+mb_ok);
+
+    end;
+
     DMFD.FDQuery2.Close;
 
    finally
+
     DMFD.FDQuery2.EnableControls;
+
    end;
+
   end;
 
  //ler o retorno da critica da importação
@@ -6655,7 +6738,6 @@ procedure TFrGBNFe.FormShow(Sender: TObject);
 var
  vNNFenc : boolean;
 
-
 begin
 
  // Verificação e criação de pastas do sistema gbnfe
@@ -6665,343 +6747,347 @@ begin
  // Efetua a conecção com os bancos de dados
  // by Edson Lima ; 2017-6-30T1043
  //----------------------------------------------------------------------------
- if not ( FileExists(gCamExe + 'GBNFe.ini') ) then
-  begin
 
-   if ( FrBDFD = nil ) then
-    FrBDFD := TFrBDFD.Create(Application);
-   FrBDFD.BringToFront;
-   FrBDFD.ShowModal;
+ LerBDFD();
 
-  end
- else
-  LerBDFD();
-
- if not ( gTemSqlEmp ) then
-  begin
-
-   if ( FrBDFD = nil ) then
-    FrBDFD := TFrBDFD.Create(Application);
-   FrBDFD.BringToFront;
-   FrBDFD.ShowModal;
-
-  end;
 
  //-----------------------------------------------------------------------------
  // Conectar o banco de dados
 
-  try
+ if not ( FileExists(gCamExe + 'GBNFe.ini') ) then Halt;
 
-   DMFD.FDConNFe.LoginPrompt                := FrPar.chk_LoginPrompt_NFe.Checked;
-   if ( FrPar.OSAuthent_NFe.Checked ) then
-    DMFD.FDConNFe.Params.Values['OSAuthent']:= 'Yes'
-   else
-    DMFD.FDConNFe.Params.Values['OSAuthent']:= 'No';
-   DMFD.FDConNFe.Params.Values['MARS']      := 'Yes';
-   DMFD.FDConNFe.Params.Values['DriverID']  := FrPar.cbb_DriverID_NFe.Text;
-   DMFD.FDConNFe.Params.Values['Database']  := FrPar.edt_Database_NFe.Text;
-   DMFD.FDConNFe.Params.Values['Server'  ]  := FrPar.edt_Server_NFe.Text;
-   if not ( FrPar.OSAuthent_NFe.Checked ) then
-    begin
-     DMFD.FDConNFe.Params.Values['UserName']:= FrPar.edt_UserName_NFe.Text;
-     DMFD.FDConNFe.Params.Values['Password']:= FrPar.edt_Password_NFe.Text;
-    end;
-   DMFD.FDConNFe.Connected                  := FrPar.chk_Connected_NFe.Checked;
-   if not DMFD.FDConNFe.Connected then
-    begin
-     fMensOnShow( 2, 'Erro nos parâmetros de conecção do banco de dados NFe!');
-     exit;
-    end;
-
-  Except
-   fMensOnShow( 2, 'Erro de conecção com o banco de dados NFe!');
-   exit;
+ DMFD.FDConNFe.LoginPrompt                := FrPar.chk_LoginPrompt_NFe.Checked;
+ if ( FrPar.OSAuthent_NFe.Checked ) then
+  DMFD.FDConNFe.Params.Values['OSAuthent']:= 'Yes'
+ else
+  DMFD.FDConNFe.Params.Values['OSAuthent']:= 'No';
+ DMFD.FDConNFe.Params.Values['MARS']      := 'Yes';
+ DMFD.FDConNFe.Params.Values['DriverID']  := FrPar.cbb_DriverID_NFe.Text;
+ DMFD.FDConNFe.Params.Values['Database']  := FrPar.edt_Database_NFe.Text;
+ DMFD.FDConNFe.Params.Values['Server'  ]  := FrPar.edt_Server_NFe.Text;
+ if not ( FrPar.OSAuthent_NFe.Checked ) then
+  begin
+   DMFD.FDConNFe.Params.Values['UserName']:= FrPar.edt_UserName_NFe.Text;
+   DMFD.FDConNFe.Params.Values['Password']:= FrPar.edt_Password_NFe.Text;
   end;
 
- //-----------------------------------------------------------------------------
+ try
 
- //-----------------------------------------------------------------------------
- // Atualizar o camp cSitConf
- // FrBuscaChave.AtualizarCnpjCpfdoDestinatrio();
- //-----------------------------------------------------------------------------
+  DMFD.FDConNFe.Connected                  := FrPar.chk_Connected_NFe.Checked;
 
- //-----------------------------------------------------------------------------
- // Coloca o FrGBNFe na frente dos outros
- FrGBNFe.BringToFront;
- //-----------------------------------------------------------------------------
+ except
 
- //-----------------------------------------------------------------------------
- // Esta linha coloca a tela na frente ontop
- // SetWindowPos(Handle, HWND_TOPMOST,0,0,0,0,SWP_NOACTIVATE OR SWP_NOMOVE OR SWP_NOSIZE);
+  Halt;
 
- pLerEmp();                                     // By EL 8.2.2012 - Ler e atualiza os dados do emissor
- LerConf1();                                    // Ler a tabela emitente e pega os parâmetros
+ end;
 
- //-----------------------------------------------------------------------------
- // Grava o nome do banco de dados DBERP no arquivo ini
- //-----------------------------------------------------------------------------
-
- FrPar.edt_Database_Ger.Text := DMFD.FDQuery4['DBERP'];
- GravarBDFD;
-
- //-----------------------------------------------------------------------------
- // Verifica o caminho do arquivo da logomarca e da base de dados
- if not FileExists(PWideChar(PAnsiChar(FrPar.edtLogoMarca.Text))) then
+ if not DMFD.FDConNFe.Connected then
   begin
-   gTemLogo  := False;
+
+   Halt;
+
   end
  else
-  gTemLogo  := True;
- //-----------------------------------------------------------------------------
-
- edt_CodEmp.Text := gCodEmp;                                                    // Atualiza o edt_CodEmp com o gCodEmp passado por parâmetro pelo ERP
- ilCodEmp := StrToInt(gCodEmp);
-
- pAtrCam();                                                                     // Atribui os caminho
- LerConf2();                                                                    // Atribui dados nos parâmetros acbr
-
- pAtuNFe();                                     // Procedure de atualização
-
- PageControl1.TabIndex := 2;                    // Janela de mensagens de retorno
-
- /// by EL - 14.2.2012 --> Inicia a com as notas pendentes
- RadioGroup1.ItemIndex := 0;   // Pendentes
-
- // by EL 14.2.2012 -> função de coleta de dados
- fIniPen();
-
- DMFD.FDQuery3.CachedUpdates  := True;
- DMFD.FDQuery5.CachedUpdates  := True;
- DMFD.FDQuery6.CachedUpdates  := True;
- DMFD.FDQuery10.CachedUpdates := True;
-
- // Pega a versão e atribui no panel da janela principal
- Panel11.Caption := 'NFe && NFCe v(FD): Berlin - ' + GetBuildInfo('GbNFe.exe');
-
- // Pega a versão e atribui no panel da janela de Manifesto
- if gNivel = '4' then
   begin
-   FrBuscaChave.Panel11.Caption := 'NFe && NFCe v(FD): Berlin - ' + GetBuildInfo('GbNFe.exe');
-   FrBuscaChave.SpeedButton2.Visible  := True;
-   FrBuscaChave.SpeedButton51.Visible := True;
-   FrBuscaChave.img1.Visible          := True;
-   FrBuscaChave.Align                 := alBottom;
-   FrBuscaChave.WindowState           := wsMaximized;
-   FrBuscaChave.HeaderControl1.Visible:= true;
-  end;
 
- //*****************************************************************************
- //** ROTINAS DAS CHAMADAS EXPRESS PELO ERP
- //*****************************************************************************
+   FrGBNFe.BringToFront;
+   pLerEmp();                                                                   // By EL 8.2.2012 - Ler e atualiza os dados do emissor
+   LerConf1();                                                                  // Ler a tabela emitente e pega os parâmetros
 
- vNNFenc := false;
-
- if gExpress = '1' then
-  begin
-   case StrToInt(gOpcao) of
-    1 : //** ENVIA NOTA FISCAL
-     begin
-      RadioGroup1.ItemIndex := 0;                                               // seta parâmetro inicial para visualizar nfe a transmitir
-      RadioGroup1Click(Sender);                                                 // força um clic no evento radiogroup1
-
-      DMFD.FDQuery3.First;                                                      // vai pro inicio da tabela nfe
-      while (not DMFD.FDQuery3.eof) do                                          // fica no loop até que encontre o fim
-       begin
-        if (DMFD.FDQuery3['nfe_nnf'] = StrToInt(gNNF)) then                     // se a nota for igual a variavel gNNF marca registro
-         begin
-          DMFD.FDQuery3.FieldByName('Checado').ReadOnly := False;
-          DMFD.FDQuery3.Edit;                                                   // edita registro
-          DMFD.FDQuery3['Checado'] := 'Y';                                      // marca registro para processamento
-          vNNFenc := true;                                                      // especifica que a nota fiscal foi encontrada
-         end;
-         DMFD.FDQuery3.Next;                                                    // vai para o próximo registro e retorna para o loop
-       end;
-
-      try
-
-       BitBtn2Click(Sender);                                                    // força um clic no botão "enviar nota fiscal"
-
-      except
-
-       // Erro de Exceção gerada na volta do envio
-       fMensOnShow( 2, 'ERRO NÃO CATALOGADO: Nota Fiscal eletrônica ' + Chr(13) +
-                       'não enviada !' );
-
-       pAtuNFe();
-       close;                                                                   // se der erro sai do sistema
-      end;
-      if not vNNFenc then
-       Application.Messagebox('OBS: Nota Fiscal eletrônica não encontrada !',
-                              'Atenção!',MB_ICONASTERISK+mb_ok);
-      close;                                                                    // se terminar sem problema sai do sistema
-     end;
-    2 : //** CANCELA NOTA FISCAL
-     begin
-      RadioGroup1.ItemIndex := 2;                                               // seta parâmetro inicial para visualizar nfe a transmitir
-      RadioGroup1Click(Sender);                                                 // força um clic no evento radiogroup1
-      FrGBNFe.cxdtp1.Date := date() - 2;                                        // seta data da nota para o edt_CodEmp
-      btn2Click(Sender);
-
-      DMFD.FDQuery5.First;                                                      // vai pro inicio da tabela nfe
-      while (not DMFD.FDQuery5.eof) do                                          // fica no loop até que encontre o fim
-       begin
-        if (DMFD.FDQuery5['nfe_nnf'] = StrToInt(gNNF)) then                     // se a nota for igual a variavel gNNF marca registro
-         begin
-          DMFD.FDQuery5.FieldByName('Checado').ReadOnly := False;
-          DMFD.FDQuery5.Edit;                                                   // edita registro
-          DMFD.FDQuery5['Checado'] := 'Y';                                      // marca registro para processamento
-          vNNFenc := true;                                                      // especifica que a nota fiscal foi encontrada
-         end;
-         DMFD.FDQuery5.Next;                                                    // vai para o próximo registro e retorna para o loop
-       end;
-
-      try
-
-       BitBtn11Click(Sender);                                                   // força um clic no botão "cancelar nota fiscal"
-
-      except
-       Application.Messagebox('ERRO NÃO CATALOGADO: Nota Fiscal eletrônica' +
-                              'não cancelada !','Atenção!',MB_ICONERROR+mb_ok);
-       pAtuNFe();
-       close;                                                                   // se der erro sai do sistema
-      end;
-      if not vNNFenc then
-       Application.Messagebox('OBS: Nota Fiscal eletrônica não encontrada !',
-                              'Atenção!',MB_ICONASTERISK+mb_ok);
-      close;                                                                    // se terminar sem problema sai do sistema
-     end;
-
-    3 : //** INUTILIZA NOTA FISCAL
-     begin
-      RadioGroup1.ItemIndex := 0;                                               // seta parâmetro inicial para visualizar nfe a transmitir
-      RadioGroup1Click(Sender);                                                 // força um clic no evento radiogroup1
-      FrInut.Edit4.Text := gNNF;                                                // atribui o valor da variável gNNF para edit da tela de inutilização
-
-      try
-
-       BitBtn13Click(Sender);                                                   // força um clic no botão "inutilizar nota fiscal"
-
-      except
-       pAtuNFe();
-       close;                                                                   // se der erro sai do sistema
-      end;
-      close;                                                                    // se terminar sem problema sai do sistema
-     end;
-
-    4 : //** CONSULTA NOTA FISCAL
-     begin
-      RadioGroup1.ItemIndex := 2;                                               // seta parâmetro inicial para visualizar nfe a transmitir
-      RadioGroup1Click(Sender);                                                 // força um clic no evento radiogroup1
-      FrGBNFe.cxdtp1.Date := date() - 2;                                        // seta data da nota para o edt_CodEmp
-      btn2Click(Sender);                                                        // força um exit da data inicial
-
-      DMFD.FDQuery5.First;                                                      // vai pro inicio da tabela nfe
-      while (not DMFD.FDQuery5.eof) do                                          // fica no loop até que encontre o fim
-       begin
-        if (DMFD.FDQuery5['nfe_nnf'] = StrToInt(gNNF)) then                     // se a nota for igual a variavel gNNF marca registro
-         begin
-          DMFD.FDQuery5.FieldByName('Checado').ReadOnly := False;
-          DMFD.FDQuery5.Edit;                                                   // edita registro
-          DMFD.FDQuery5['Checado'] := 'Y';                                      // marca registro para processamento
-          vNNFenc := true;                                                      // especifica que a nota fiscal foi encontrada
-         end;
-         DMFD.FDQuery5.Next;                                                    // vai para o próximo registro e retorna para o loop
-       end;
-
-      try
-
-       gExcluir := True;                                                        // Seta variável global para ler somente um registro
-       BitBtn8Click(Sender);                                                    // força um clic no botão "consulta nota fiscal"
-       gExcluir := False;                                                       // Seta variável global para ler vários registros
-
-       if gDeuErrConsiste then Exit;                                            // Aborta no caso de erro
-
-      except
-       Application.Messagebox('ERRO NÃO CATALOGADO: Nota Fiscal eletrônica ' +
-                              'não consultada !','Atenção!',MB_ICONERROR+mb_ok);
-       pAtuNFe();
-       close;                                                                   // se der erro sai do sistema
-      end;
-      if not vNNFenc then
-       Application.Messagebox('OBS: Nota Fiscal eletrônica não encontrada !',
-                              'Atenção!',MB_ICONASTERISK+mb_ok);
-      close;                                                                    // se terminar sem problema sai do sistema
-     end;
-
-    5 : //** IMPRIMIR NOTA FISCAL
-     begin
-      RadioGroup1.ItemIndex := 2;                                               // seta parâmetro inicial para visualizar nfe transmitida
-      RadioGroup1Click(Sender);                                                 // força um clic no evento radiogroup1
-      FrGBNFe.cxdtp1.Date := date() - 2;                                        // seta data da nota para o edt_CodEmp
-      btn2Click(Sender);                                                        // força um exit da data inicial
-
-      DMFD.FDQuery5.First;                                                      // vai pro inicio da tabela nfe
-      while (not DMFD.FDQuery5.eof) do                                          // fica no loop até que encontre o fim
-       begin
-        if (DMFD.FDQuery5['nfe_nnf'] = StrToInt(gNNF)) then                     // se a nota for igual a variavel gNNF marca registro
-         begin
-          DMFD.FDQuery5.FieldByName('Checado').ReadOnly := False;
-          DMFD.FDQuery5.Edit;                                                   // edita registro
-          DMFD.FDQuery5['Checado'] := 'Y';                                      // marca registro para processamento
-          vNNFenc := true;                                                      // especifica que a nota fiscal foi encontrada
-         end;
-         DMFD.FDQuery5.Next;                                                    // vai para o próximo registro e retorna para o loop
-       end;
-
-      try
-
-       BitBtn9Click(Sender);                                                    // força um clic no botão "imprime nota fiscal"
-
-      except
-       Application.Messagebox('ERRO NÃO CATALOGADO: Nota Fiscal eletrônica ' +
-                              'não impressa !','Atenção!',MB_ICONERROR+mb_ok);
-       pAtuNFe();
-       close;                                                                   // se der erro sai do sistema
-      end;
-      if not vNNFenc then
-       Application.Messagebox('OBS: Nota Fiscal eletrônica não encontrada !','Atenção!',MB_ICONASTERISK+mb_ok);
-      close;                                                 // se terminar sem problema sai do sistema
-     end;
-
-   end;  //**case
-  end;   //**if
-
- // Ajusta o tamanho do Label1 (razão social) com o tamanho do groupbox3
- Label1.Width := (Groupbox3.Width - 20);
-
- gVerifCert := True;                                                            // Ativa as mensagens de verificação do certificado digital
-
- // Inibe a edição do código da empresa
- FrGBNFe.edt_CodEmp.ReadOnly := gEdtCodEmp;
-
- // Abre direto a janela MDe - Obs não pode haver outros comandos depois deste
- if gNivel = '4' then
-  begin
-   if ( FrBuscaChave = nil ) then
-    FrBuscaChave := TFrBuscaChave.Create(Application)
+   //---------------------------------------------------------------------------
+   // Verifica o caminho do arquivo da logomarca e da base de dados
+   if not FileExists(PWideChar(PAnsiChar(FrPar.edtLogoMarca.Text))) then
+    begin
+     gTemLogo  := False;
+    end
    else
-    FrBuscaChave := TFrBuscaChave.Create(Application);
-   FrBuscaChave.BringToFront;
-   FrBuscaChave.ShowModal;
+    gTemLogo  := True;
+   //---------------------------------------------------------------------------
 
-   BitBtn12Click(Sender);
+   edt_CodEmp.Text := gCodEmp;                                                  // Atualiza o edt_CodEmp com o gCodEmp passado por parâmetro pelo ERP
+   ilCodEmp := StrToInt(gCodEmp);
+
+   pAtrCam();                                                                   // Atribui os caminho
+   LerConf2();                                                                  // Atribui dados nos parâmetros acbr
+
+   pAtuNFe();                                                                   // Procedure de atualização
+
+   PageControl1.TabIndex := 2;                                                  // Janela de mensagens de retorno
+
+   /// by EL - 14.2.2012 --> Inicia a com as notas pendentes
+   RadioGroup1.ItemIndex := 0;   // Pendentes
+
+   // by EL 14.2.2012 -> função de coleta de dados
+   fIniPen();
+
+   DMFD.FDQuery3.CachedUpdates  := True;
+   DMFD.FDQuery5.CachedUpdates  := True;
+   DMFD.FDQuery6.CachedUpdates  := True;
+   DMFD.FDQuery10.CachedUpdates := True;
+
+   // Pega a versão e atribui no panel da janela principal
+   Panel11.Caption := 'NFe && NFCe v(FD): Berlin - ' + GetBuildInfo('GbNFe.exe');
+
+   // Pega a versão e atribui no panel da janela de Manifesto
+   if gNivel = '4' then
+    begin
+     FrBuscaChave.Panel11.Caption := 'NFe && NFCe v(FD): Berlin - ' + GetBuildInfo('GbNFe.exe');
+     FrBuscaChave.SpeedButton2.Visible  := True;
+     FrBuscaChave.SpeedButton51.Visible := True;
+     FrBuscaChave.img1.Visible          := True;
+     FrBuscaChave.Align                 := alBottom;
+     FrBuscaChave.WindowState           := wsMaximized;
+     FrBuscaChave.HeaderControl1.Visible:= true;
+    end;
+
+   //***************************************************************************
+   //** ROTINAS DAS CHAMADAS EXPRESS PELO ERP
+   //***************************************************************************
+
+   vNNFenc := false;
+
+   if gExpress = '1' then
+    begin
+     case StrToInt(gOpcao) of
+      1 : //** ENVIA NOTA FISCAL
+       begin
+        RadioGroup1.ItemIndex := 0;                                             // seta parâmetro inicial para visualizar nfe a transmitir
+        RadioGroup1Click(Sender);                                               // força um clic no evento radiogroup1
+
+        DMFD.FDQuery3.First;                                                    // vai pro inicio da tabela nfe
+        while (not DMFD.FDQuery3.eof) do                                        // fica no loop até que encontre o fim
+         begin
+          if (DMFD.FDQuery3['nfe_nnf'] = StrToInt(gNNF)) then                   // se a nota for igual a variavel gNNF marca registro
+           begin
+            DMFD.FDQuery3.FieldByName('Checado').ReadOnly := False;
+            DMFD.FDQuery3.Edit;                                                 // edita registro
+            DMFD.FDQuery3['Checado'] := 'Y';                                    // marca registro para processamento
+            vNNFenc := true;                                                    // especifica que a nota fiscal foi encontrada
+           end;
+           DMFD.FDQuery3.Next;                                                  // vai para o próximo registro e retorna para o loop
+         end;
+
+        try
+
+         BitBtn2Click(Sender);                                                  // força um clic no botão "enviar nota fiscal"
+
+        except on e:Exception do
+         begin
+
+          fMensOnShow( 2, 'ERRO NÃO CATALOGADO: Nota Fiscal eletrônica não enviada!' + Chr(13) +
+                           e.Message);
+
+          pAtuNFe();
+          close;                                                                // se der erro sai do sistema
+
+         end;
+
+        end;
+
+        if not vNNFenc then
+
+         Application.Messagebox('OBS: Nota Fiscal eletrônica não encontrada !',
+                                'Atenção!',MB_ICONASTERISK+mb_ok);
+
+        close;                                                                  // se terminar sem problema sai do sistema
+
+       end;
+
+      2 : //** CANCELA NOTA FISCAL
+       begin
+        RadioGroup1.ItemIndex := 2;                                             // seta parâmetro inicial para visualizar nfe a transmitir
+        RadioGroup1Click(Sender);                                               // força um clic no evento radiogroup1
+        FrGBNFe.cxdtp1.Date := date() - 2;                                      // seta data da nota para o edt_CodEmp
+        btn2Click(Sender);
+
+        DMFD.FDQuery5.First;                                                    // vai pro inicio da tabela nfe
+        while (not DMFD.FDQuery5.eof) do                                        // fica no loop até que encontre o fim
+         begin
+          if (DMFD.FDQuery5['nfe_nnf'] = StrToInt(gNNF)) then                   // se a nota for igual a variavel gNNF marca registro
+           begin
+            DMFD.FDQuery5.FieldByName('Checado').ReadOnly := False;
+            DMFD.FDQuery5.Edit;                                                 // edita registro
+            DMFD.FDQuery5['Checado'] := 'Y';                                    // marca registro para processamento
+            vNNFenc := true;                                                    // especifica que a nota fiscal foi encontrada
+           end;
+           DMFD.FDQuery5.Next;                                                  // vai para o próximo registro e retorna para o loop
+         end;
+
+        try
+
+         BitBtn11Click(Sender);                                                 // força um clic no botão "cancelar nota fiscal"
+
+        except on e:Exception do
+         begin
+
+          Application.Messagebox(PWideChar('ERRO NÃO CATALOGADO: Nota Fiscal eletrônica não cancelada!' +
+                                  e.Message), 'Atenção!',MB_ICONERROR+mb_ok);
+          pAtuNFe();
+          close;                                                                // se der erro sai do sistema
+
+         end;
+
+        end;
+
+        if not vNNFenc then
+         Application.Messagebox('OBS: Nota Fiscal eletrônica não encontrada !',
+                                'Atenção!',MB_ICONASTERISK+mb_ok);
+        close;                                                                  // se terminar sem problema sai do sistema
+
+       end;
+
+      3 : //** INUTILIZA NOTA FISCAL
+       begin
+        RadioGroup1.ItemIndex := 0;                                             // seta parâmetro inicial para visualizar nfe a transmitir
+        RadioGroup1Click(Sender);                                               // força um clic no evento radiogroup1
+        FrInut.Edit4.Text := gNNF;                                              // atribui o valor da variável gNNF para edit da tela de inutilização
+
+        try
+
+         BitBtn13Click(Sender);                                                 // força um clic no botão "inutilizar nota fiscal"
+
+        except
+
+         pAtuNFe();
+         close;                                                                 // se der erro sai do sistema
+
+        end;
+
+        close;                                                                  // se terminar sem problema sai do sistema
+
+       end;
+
+      4 : //** CONSULTA NOTA FISCAL
+       begin
+        RadioGroup1.ItemIndex := 2;                                             // seta parâmetro inicial para visualizar nfe a transmitir
+        RadioGroup1Click(Sender);                                               // força um clic no evento radiogroup1
+        FrGBNFe.cxdtp1.Date := date() - 2;                                      // seta data da nota para o edt_CodEmp
+        btn2Click(Sender);                                                      // força um exit da data inicial
+
+        DMFD.FDQuery5.First;                                                    // vai pro inicio da tabela nfe
+        while (not DMFD.FDQuery5.eof) do                                        // fica no loop até que encontre o fim
+         begin
+          if (DMFD.FDQuery5['nfe_nnf'] = StrToInt(gNNF)) then                   // se a nota for igual a variavel gNNF marca registro
+           begin
+            DMFD.FDQuery5.FieldByName('Checado').ReadOnly := False;
+            DMFD.FDQuery5.Edit;                                                 // edita registro
+            DMFD.FDQuery5['Checado'] := 'Y';                                    // marca registro para processamento
+            vNNFenc := true;                                                    // especifica que a nota fiscal foi encontrada
+           end;
+           DMFD.FDQuery5.Next;                                                  // vai para o próximo registro e retorna para o loop
+         end;
+
+        try
+
+         gExcluir := True;                                                      // Seta variável global para ler somente um registro
+         BitBtn8Click(Sender);                                                  // força um clic no botão "consulta nota fiscal"
+         gExcluir := False;                                                     // Seta variável global para ler vários registros
+
+         if gDeuErrConsiste then Exit;                                          // Aborta no caso de erro
+
+        except on e:Exception do
+         begin
+
+          Application.Messagebox(PWideChar('ERRO NÃO CATALOGADO: Nota Fiscal eletrônica não consultada!' + Chr(13) +
+                                  e.Message),'Atenção!',MB_ICONERROR+mb_ok);
+          pAtuNFe();
+       close;                                                                   // se der erro sai do sistema
+
+         end;
+
+        end;
+
+        if not vNNFenc then
+         Application.Messagebox('OBS: Nota Fiscal eletrônica não encontrada !',
+                                'Atenção!',MB_ICONASTERISK+mb_ok);
+      close;                                                                    // se terminar sem problema sai do sistema
+
+       end;
+
+      5 : //** IMPRIMIR NOTA FISCAL
+       begin
+        RadioGroup1.ItemIndex := 2;                                             // seta parâmetro inicial para visualizar nfe transmitida
+        RadioGroup1Click(Sender);                                               // força um clic no evento radiogroup1
+        FrGBNFe.cxdtp1.Date := date() - 2;                                      // seta data da nota para o edt_CodEmp
+        btn2Click(Sender);                                                      // força um exit da data inicial
+
+        DMFD.FDQuery5.First;                                                    // vai pro inicio da tabela nfe
+        while (not DMFD.FDQuery5.eof) do                                        // fica no loop até que encontre o fim
+         begin
+          if (DMFD.FDQuery5['nfe_nnf'] = StrToInt(gNNF)) then                   // se a nota for igual a variavel gNNF marca registro
+           begin
+            DMFD.FDQuery5.FieldByName('Checado').ReadOnly := False;
+            DMFD.FDQuery5.Edit;                                                 // edita registro
+            DMFD.FDQuery5['Checado'] := 'Y';                                    // marca registro para processamento
+            vNNFenc := true;                                                    // especifica que a nota fiscal foi encontrada
+           end;
+           DMFD.FDQuery5.Next;                                                  // vai para o próximo registro e retorna para o loop
+         end;
+
+        try
+
+         BitBtn9Click(Sender);                                                  // força um clic no botão "imprime nota fiscal"
+
+        except on e:Exception do
+         begin
+
+          Application.Messagebox(PWideChar('ERRO NÃO CATALOGADO: Nota Fiscal eletrônica não impressa!' + Chr(13) +
+                                 e.Message),'Atenção!',MB_ICONERROR+mb_ok);
+          pAtuNFe();
+        close;                                                                  // se der erro sai do sistema
+
+         end;
+
+        end;
+
+        if not vNNFenc then
+         Application.Messagebox('OBS: Nota Fiscal eletrônica não encontrada !','Atenção!',MB_ICONASTERISK+mb_ok);
+
+        close;                                                                  // se terminar sem problema sai do sistema
+
+       end;
+
+     end;  // **case
+    end;   // **if
+
+   // Ajusta o tamanho do Label1 (razão social) com o tamanho do groupbox3
+   Label1.Width := (Groupbox3.Width - 20);
+
+   gVerifCert := True;                                                          // Ativa as mensagens de verificação do certificado digital
+
+   // Inibe a edição do código da empresa
+   FrGBNFe.edt_CodEmp.ReadOnly := gEdtCodEmp;
+
+   // Abre direto a janela MDe - Obs não pode haver outros comandos depois deste
+   if gNivel = '4' then
+    begin
+     if ( FrBuscaChave = nil ) then
+      FrBuscaChave := TFrBuscaChave.Create(Application)
+     else
+      FrBuscaChave := TFrBuscaChave.Create(Application);
+     FrBuscaChave.BringToFront;
+     FrBuscaChave.ShowModal;
+
+     BitBtn12Click(Sender);
+    end;
+
+   //---------------------------------------------------------------------------
+
+   if (DMFD.FDQuery4['Versao']      = 've3131') then
+    ACBrNFe1.Configuracoes.Geral.VersaoDF := ve310
+   else if (DMFD.FDQuery4['Versao']      = 've4040') then
+    ACBrNFe1.Configuracoes.Geral.VersaoDF := ve400
+   else
+    ACBrNFe1.Configuracoes.Geral.VersaoDF := ve400;
+
+   //---------------------------------------------------------------------------
+
+   // Mostra se o sistema está em produção ou em homologação e a versão do sistema
+   pMostraTipoAmb();
+
+   //---------------------------------------------------------------------------
+
   end;
-
- //-----------------------------------------------------------------------------
-
- if (DMFD.FDQuery4['Versao']      = 've3131') then
-  ACBrNFe1.Configuracoes.Geral.VersaoDF := ve310
- else if (DMFD.FDQuery4['Versao']      = 've4040') then
-  ACBrNFe1.Configuracoes.Geral.VersaoDF := ve400
- else
-  ACBrNFe1.Configuracoes.Geral.VersaoDF := ve400;
-
- //-----------------------------------------------------------------------------
-
- // Mostra se o sistema está em produção ou em homologação e a versão do sistema
- pMostraTipoAmb();
-
- //-----------------------------------------------------------------------------
 
 end;
 
@@ -7533,6 +7619,15 @@ begin
           _demi        := DMFD.FDQryGeral2['nfe_demi'];
 
           geraenvianf(FrGBNFe);
+
+          // Quando um simp for obrigatório e tiver vindo vazio
+          if ( gSimpObg ) then
+           begin
+
+            gSimpObg := false;
+            exit;
+
+           end;
 
           if gGeraXml then
            Application.Messagebox(PWideChar('Pronto, já foi gerado o xml da nota: [' + gNNF_Consiste + ' ]'), 'Gerar XML:',MB_ICONINFORMATION+mb_ok)
@@ -8258,22 +8353,34 @@ begin
                  begin
                   //excluir nota
                   try
+
                    DMFD.FDQuery1.DisableControls;
                    DMFD.FDQuery1.Close;
                    DMFD.FDQuery1.SQL.Clear;
                    DMFD.FDQuery1.SQL.Add( 'exec sp_exclui_nfe ' + aux );
+
                    try
+
                     DMFD.FDQuery1.ExecSQL;
                     pExcluiXmlErro(VarToStr(DMFD.FDQryGeral2['nfe_modelo']),
                                    VarToStr(DMFD.FDQryGeral2['nfe_serie']),
                                    VarToStr(DMFD.FDQryGeral2['nfe_nnf']));
-                   except
-                    Application.Messagebox('ERRO: Não EXCLUIU este registro !','Atenção!',mb_iconstop+mb_ok);
+
+                   except on e:Exception do
+
+                    Application.Messagebox(PWideChar('ERRO: Não EXCLUIU este registro!' + Char(13) +
+                                            e.Message), 'Atenção!', mb_iconstop+mb_ok);
+
                    end;
+
                   finally
+
                    DMFD.FDQuery1.EnableControls;
+
                   end;
+
                  end;
+
                end;
 
               gDeuErrXml := False;
@@ -8288,23 +8395,36 @@ begin
                begin
                 //excluir nota
                 try
+
                  DMFD.FDQuery1.DisableControls;
                  DMFD.FDQuery1.Close;
                  DMFD.FDQuery1.SQL.Clear;
                  DMFD.FDQuery1.SQL.Add( 'exec sp_exclui_nfe ' + aux );
+
                  try
+
                   DMFD.FDQuery1.ExecSQL;
                   pExcluiXmlErro(VarToStr(DMFD.FDQryGeral2['nfe_modelo']),
                                  VarToStr(DMFD.FDQryGeral2['nfe_serie']),
                                  VarToStr(DMFD.FDQryGeral2['nfe_nnf']));
-                 except
-                  Application.Messagebox('ERRO: Não EXCLUIU este registro !','Atenção!',mb_iconstop+mb_ok);
+
+                 except on e:Exception do
+
+                  Application.Messagebox(PWideChar('ERRO: Não EXCLUIU este registro!' + Char(13) +
+                                          e.Message),'Atenção!',mb_iconstop+mb_ok);
+
                  end;
+
                 finally
+
                  DMFD.FDQuery1.EnableControls;
+
                 end;
+
                end;
+
              end;
+
            end;
         end;
 
@@ -8472,22 +8592,34 @@ begin
                  begin
                   //excluir nota
                   try
+
                    DMFD.FDQuery1.DisableControls;
                    DMFD.FDQuery1.Close;
                    DMFD.FDQuery1.SQL.Clear;
                    DMFD.FDQuery1.SQL.Add( 'exec sp_exclui_nfe ' + aux );
+
                    try
+
                     DMFD.FDQuery1.ExecSQL;
                     pExcluiXmlErro(VarToStr(DMFD.FDQryGeral2['nfe_modelo']),
                                    VarToStr(DMFD.FDQryGeral2['nfe_serie']),
                                    VarToStr(DMFD.FDQryGeral2['nfe_nnf']));
-                   except
-                    Application.Messagebox('ERRO: Não EXCLUIU este registro !','Atenção!',mb_iconstop+mb_ok);
+
+                   except on e:Exception do
+
+                    Application.Messagebox(PWideChar('ERRO: Não EXCLUIU este registro!' + Char(13) +
+                                            e.Message), 'Atenção!',mb_iconstop+mb_ok);
+
                    end;
+
                   finally
+
                    DMFD.FDQuery1.EnableControls;
+
                   end;
+
                  end;
+
                end;
 
               gDeuErrXml := False;
@@ -8502,24 +8634,38 @@ begin
                begin
                 //excluir nota
                 try
+
                  DMFD.FDQuery1.DisableControls;
                  DMFD.FDQuery1.Close;
                  DMFD.FDQuery1.SQL.Clear;
                  DMFD.FDQuery1.SQL.Add( 'exec sp_exclui_nfe ' + aux );
+
                  try
+
                   DMFD.FDQuery1.ExecSQL;
                   pExcluiXmlErro(VarToStr(DMFD.FDQryGeral2['nfe_modelo']),
                                  VarToStr(DMFD.FDQryGeral2['nfe_serie']),
                                  VarToStr(DMFD.FDQryGeral2['nfe_nnf']));
-                 except
-                  Application.Messagebox('ERRO: Não EXCLUIU este registro !','Atenção!',mb_iconstop+mb_ok);
+
+                 except on e:Exception do
+
+                  Application.Messagebox(PWideChar('ERRO: Não EXCLUIU este registro!' + Char(13) +
+                                         e.Message),'Atenção!',mb_iconstop+mb_ok);
+
                  end;
+
                 finally
+
                  DMFD.FDQuery1.EnableControls;
+
                 end;
+
                end;
+
              end;
+
            end;
+
         end;
 
       end;
@@ -9333,67 +9479,72 @@ begin
 
           ACBrNFe1.Enviar(0);
 
-         except
+         except on e:Exception do
+          begin
 
-          //consultar a nota transmitida
-          ACBrNFe1.NotasFiscais.Clear;
-          ACBrNFe1.NotasFiscais.LoadFromFile(vAux);
-          ACBrNFe1.Consultar;
+           //consultar a nota transmitida
+           ACBrNFe1.NotasFiscais.Clear;
+           ACBrNFe1.NotasFiscais.LoadFromFile(vAux);
+           ACBrNFe1.Consultar;
 
-          grava_xml_no_banco;
+           grava_xml_no_banco;
 
-          memoLog.Clear;
-          MemoResp.Lines.Text   := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetWS);
-          MemoLog.Lines.Text    := UTF8Encode(ACBrNFe1.WebServices.Consulta.Msg);
-          memoRespWS.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetornoWS);
-          LoadXML(MemoResp, WBResposta);
+           memoLog.Clear;
+           MemoResp.Lines.Text   := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetWS);
+           MemoLog.Lines.Text    := UTF8Encode(ACBrNFe1.WebServices.Consulta.Msg);
+           memoRespWS.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetornoWS);
+           LoadXML(MemoResp, WBResposta);
 
 
-          if ( (trim(vartostr(ACBrNFe1.WebServices.Consulta.cStat)) = '613') or
-               (trim(vartostr(ACBrNFe1.WebServices.Consulta.cStat)) = '539') ) then
-           begin
+           if ( (trim(vartostr(ACBrNFe1.WebServices.Consulta.cStat)) = '613') or
+                (trim(vartostr(ACBrNFe1.WebServices.Consulta.cStat)) = '539') ) then
+            begin
 
-            MessageDlg('DADOS DA NOTA : ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) + char(13) +
-                       ' Status=' + vartostr(ACBrNFe1.WebServices.Consulta.cStat) + char(13) +
-                       ' ' + vartostr(ACBrNFe1.WebServices.Consulta.xMotivo) + char(13) +
-                       ' Protocolo=' + ACBrNFe1.WebServices.Consulta.Protocolo +
-                       ' Data do recebimento=' + vartostr(ACBrNFe1.WebServices.Consulta.DhRecbto) + char(13) +
-                       ' ESTA NOTA VAI SER MOVIDA PARA PENDENTES, ENVIE E CONSULTE PARA ATUALIZAR!' + char(13) ,mtInformation,[mbOK],0);
-            gAtuFSD := True;
+             MessageDlg('DADOS DA NOTA : ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) + char(13) +
+                        ' Status=' + vartostr(ACBrNFe1.WebServices.Consulta.cStat) + char(13) +
+                        ' ' + vartostr(ACBrNFe1.WebServices.Consulta.xMotivo) + char(13) +
+                        ' Protocolo=' + ACBrNFe1.WebServices.Consulta.Protocolo +
+                        ' Data do recebimento=' + vartostr(ACBrNFe1.WebServices.Consulta.DhRecbto) + char(13) +
+                        ' ESTA NOTA VAI SER MOVIDA PARA PENDENTES, ENVIE E CONSULTE PARA ATUALIZAR!' + char(13) +
+                          e.Message, mtInformation,[mbOK],0);
+             gAtuFSD := True;
 
-            if ( gSenhaBD <> '' ) then
+             if ( gSenhaBD <> '' ) then
 
-             vZerSen := False
+              vZerSen := False
 
-            else
+             else
 
-             begin
+              begin
 
-              gSenhaBD := 'gb@1';
+               gSenhaBD := 'gb@1';
 
-             end;
+              end;
 
-            MovepPendentes1Click(Sender);
+             MovepPendentes1Click(Sender);
 
-            if ( vZerSen ) then
-             gSenhaBD := '';
+             if ( vZerSen ) then
+              gSenhaBD := '';
 
-            vZerSen := True;
+             vZerSen := True;
 
-           end
-          else
-           begin
+            end
+           else
+            begin
 
-            MessageDlg('DADOS DA NOTA : ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) + char(13) +
-                       ' Status=' + vartostr(ACBrNFe1.WebServices.Consulta.cStat) + char(13) +
-                       ' ' + vartostr(ACBrNFe1.WebServices.Consulta.xMotivo) + char(13) +
-                       ' Protocolo=' + ACBrNFe1.WebServices.Consulta.Protocolo +
-                       ' Data do recebimento=' + vartostr(ACBrNFe1.WebServices.Consulta.DhRecbto) + char(13) +
-                       ' PENDENCIA NÃO TRATADA CONTACTE O SUPORTE DA SOFT HOUSE RESPONSÁVEL!' + char(13) ,mtInformation,[mbOK],0);
+             MessageDlg('DADOS DA NOTA : ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) + char(13) +
+                        ' Status=' + vartostr(ACBrNFe1.WebServices.Consulta.cStat) + char(13) +
+                        ' ' + vartostr(ACBrNFe1.WebServices.Consulta.xMotivo) + char(13) +
+                        ' Protocolo=' + ACBrNFe1.WebServices.Consulta.Protocolo +
+                        ' Data do recebimento=' + vartostr(ACBrNFe1.WebServices.Consulta.DhRecbto) + char(13) +
+                        ' PENDENCIA NÃO TRATADA CONTACTE O SUPORTE DA SOFT HOUSE RESPONSÁVEL!' + char(13) +
+                          e.Message, mtInformation,[mbOK],0);
 
-           end;
+            end;
 
-          exit;
+           exit;
+
+          end;
 
          end;
 
@@ -9440,15 +9591,17 @@ begin
                            DMFD.FDQryGeral2['nfe_modelo'],                      // Conteúdo dos campos
                            true)                                                // Consiste [true/false]
 
-         except
+         except on e:Exception do
+          begin
 
-          memoLog.Clear;
-          MemoResp.Lines.Text   := UTF8Encode(ACBrNFe1.WebServices.Retorno.RetWS);
-          MemoLog.Lines.Text    := UTF8Encode(ACBrNFe1.WebServices.Retorno.Msg);
-          memoRespWS.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.Retorno.RetornoWS);
-          LoadXML(MemoResp, WBResposta);
+           memoLog.Clear;
+           MemoResp.Lines.Text   := UTF8Encode(ACBrNFe1.WebServices.Retorno.RetWS) + e.Message;
+           MemoLog.Lines.Text    := UTF8Encode(ACBrNFe1.WebServices.Retorno.Msg);
+           memoRespWS.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.Retorno.RetornoWS);
+           LoadXML(MemoResp, WBResposta);
+           Exit;
 
-          Exit;
+          end;
 
          end;
 
@@ -11928,22 +12081,36 @@ begin
       DMFD.FDQuery2.ParamByName('Serie').Value        := VarToStr(DMFD.FDQuery5['nfe_Serie']);
 
       try
+
        DMFD.FDQuery2.ExecSQL;
-      except
-       Application.Messagebox('ERRO: CCe não atualizada !','Atenção!',mb_iconstop+mb_ok);
+
+      except on e:Exception do
+
+       Application.Messagebox(PWideChar('ERRO: CCe não atualizada!' + Char(13) +
+                               e.Message),'Atenção!',mb_iconstop+mb_ok);
+
       end;
+
       DMFD.FDQuery2.Close;
+
      finally
+
       DMFD.FDQuery2.EnableControls;
+
      end;
+
     end
+
    else
+
     begin
+
      MessageDlg('Nota:[ ' + VarToStr(DMFD.FDQuery5['nfe_nnf']) + ' ]' + Chr(13) +
                 'Status: ' + VarToStr(ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cStat) + Chr(13) +
                 ' - Motivo:' + ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.xMotivo + Chr(13) +
                 'REJEIÇÃO', mtInformation, [mbOK], 0);
      exit;
+
     end;
 
    if ((VarToStr(ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cStat) = '128')  or
@@ -12312,22 +12479,34 @@ begin
         DMFD.FDQuery2.ParamByName('Modelo').Value       := VarToStr(DMFD.FDQuery5['nfe_Modelo']);
         DMFD.FDQuery2.ParamByName('Serie').Value        := VarToStr(DMFD.FDQuery5['nfe_Serie']);
         try
+
          DMFD.FDQuery2.ExecSQL;
-        except
-         Application.Messagebox('ERRO: CCe não atualizada !','Atenção!',mb_iconstop+mb_ok);
+
+        except on e:Exception do
+
+         Application.Messagebox(PWideChar('ERRO: CCe não atualizada!' + Char(13) +
+                                e.Message),'Atenção!',mb_iconstop+mb_ok);
+
         end;
+
         DMFD.FDQuery2.Close;
+
        finally
+
         DMFD.FDQuery2.EnableControls;
+
        end;
+
       end
      else
       begin
+
        MessageDlg('Nota:[ ' + VarToStr(DMFD.FDQuery5['nfe_nnf']) + ' ]' + Chr(13) +
                   'Status: ' + VarToStr(consulta.procEventoNFe.Items[vC].RetEventoNFe.cStat) + Chr(13) +
                   ' - Motivo:' + consulta.procEventoNFe.Items[vC].RetEventoNFe.xMotivo + Chr(13) +
                   'REJEIÇÃO', mtInformation, [mbOK], 0);
        exit;
+
       end;
     end;
   end;
@@ -12836,14 +13015,24 @@ begin
   DMFD.FDQuery2.ParamByName(c11).Value     := p11;
   DMFD.FDQuery2.ParamByName(c13).Value     := p13;
   try
+
    DMFD.FDQuery2.ExecSQL;
-  except
-   Application.Messagebox('ERRO: O Registro não foi atualizado !','Atenção!',mb_iconstop+mb_ok);
+
+  except on e:Exception do
+
+   Application.Messagebox(PWideChar('ERRO: O Registro não foi atualizado!' + Char(13) +
+                          e.Message),'Atenção!',mb_iconstop+mb_ok);
+
   end;
+
   DMFD.FDQuery2.Close;
+
  finally
+
   DMFD.FDQuery2.EnableControls;
+
  end;
+
 end;
 
 //------------------------------------------------------------------------------
@@ -13120,10 +13309,14 @@ begin
 
    end;
 
- except
+ except on e:Exception do
+  begin
 
-  MessageDlg('Inconsistência no envio do email!',mtInformation,[mbOK],0);
-  pAtuNFeT();
+   MessageDlg(PWideChar('Inconsistência no envio do email!' + Chr(13) +
+                         e.Message),mtInformation,[mbOK],0);
+   pAtuNFeT();
+
+  end;
 
  end;
 
@@ -14034,15 +14227,27 @@ begin
   DMFD.FDQuery2.ParamByName('nnf'        ).Value    := StrToInt(nNF);
 
   try
+
    DMFD.FDQuery2.ExecSQL;
-  except
-   Application.Messagebox('ERRO: NFe não foi atualizado os dados da Nota!','Atenção!',mb_iconstop+mb_ok);
-   result := False;
-   exit;
+
+  except on e:Exception do
+   begin
+
+    Application.Messagebox(PWideChar('ERRO: NFe não foi atualizado os dados da Nota!' + chr(13) +
+                                      e.Message),'Atenção!',mb_iconstop+mb_ok);
+    result := False;
+    exit;
+
+   end;
+
   end;
+
   DMFD.FDQuery2.Close;
+
  finally
+
   DMFD.FDQuery2.EnableControls;
+
  end;
 
  result := True;
@@ -14342,7 +14547,9 @@ Var
  vServer_NFe,
  vUserName_NFe,
  vPassword_NFe,
- vConnected_NFe    : String;
+ vConnected_NFe,
+ vCamBD_NFe        : String;
+ vTpERP_Ger,
  vLoginPrompt_Ger,
  vOSAuthent_Ger,
  vDriverID_Ger,
@@ -14350,7 +14557,8 @@ Var
  vServer_Ger,
  vUserName_Ger,
  vPassword_Ger,
- vConnected_Ger    : String;
+ vConnected_Ger,
+ vCamBD_Ger        : String;
 
 begin
 
@@ -14374,10 +14582,11 @@ begin
   if ( FrPar.edt_UserName_NFe.Text <> '' )  then
    vUserName_NFe    := FrPar.edt_UserName_NFe.Text;
   if ( trim(FrPar.edt_Password_NFe.Text) <> '' )  then
-   vPassword_NFe    := Crypt( 'E',(trim(FrPar.edt_Password_NFe.Text)) ) // EncryptStr(trim(FrPar.edt_Password_NFe.Text), 2)
+   vPassword_NFe    := Crypt( 'E',(trim(FrPar.edt_Password_NFe.Text)) )
   else
    vPassword_NFe    := trim(FrPar.edt_Password_NFe.Text);
   vConnected_NFe    := BoolToStr(FrPar.chk_Connected_NFe.Checked);
+  vCamBD_NFe        := Trim(FrPar.edt_CamBD_NFe.Text);
 
   Ini.WriteString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'LoginPrompt_NFe', vLoginPrompt_NFe) ;
   Ini.WriteString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'OSAuthent_NFe',   vOSAuthent_NFe) ;
@@ -14387,8 +14596,10 @@ begin
   Ini.WriteString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'UserName_NFe',    vUserName_NFe) ;
   Ini.WriteString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'Password_NFe',    vPassword_NFe) ;
   Ini.WriteString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'Connected_NFe',   vConnected_NFe) ;
+  Ini.WriteString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'CamBD_NFe',       vCamBD_NFe) ;
 
   // ERP
+  vTpERP_Ger        := FrPar.edt_TpERP_Ger.Text;
   vLoginPrompt_Ger  := BoolToStr(FrPar.chk_LoginPrompt_Ger.Checked);
   vOSAuthent_Ger    := BoolToStr(FrPar.OSAuthent_Ger.Checked);
   if ( FrPar.cbb_DriverID_Ger.Text <> '' )  then
@@ -14400,11 +14611,13 @@ begin
   if ( FrPar.edt_UserName_Ger.Text <> '' )  then
    vUserName_Ger    := FrPar.edt_UserName_Ger.Text;
   if ( trim(FrPar.edt_Password_Ger.Text) <> '' )  then
-   vPassword_Ger    := Crypt( 'E',(trim(FrPar.edt_Password_Ger.Text)) ) // EncryptStr(trim(FrPar.edt_Password_Ger.Text), 2)
+   vPassword_Ger    := Crypt( 'E',(trim(FrPar.edt_Password_Ger.Text)) )
   else
    vPassword_Ger    := trim(FrPar.edt_Password_Ger.Text);
   vConnected_Ger    := BoolToStr(FrPar.chk_Connected_Ger.Checked);
+  vCamBD_Ger        := Trim(FrPar.edt_CamBD_Ger.Text);
 
+  Ini.WriteString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'TpERP_Ger', vTpERP_Ger);
   Ini.WriteString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'LoginPrompt_Ger', vLoginPrompt_Ger) ;
   Ini.WriteString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'OSAuthent_Ger',   vOSAuthent_Ger) ;
   Ini.WriteString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'DriverID_Ger',    vDriverID_Ger) ;
@@ -14413,6 +14626,7 @@ begin
   Ini.WriteString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'UserName_Ger',    vUserName_Ger) ;
   Ini.WriteString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'Password_Ger',    vPassword_Ger) ;
   Ini.WriteString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'Connected_Ger',   vConnected_Ger) ;
+  Ini.WriteString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'CamBD_Ger',       vCamBD_Ger) ;
 
  finally
 
@@ -14440,7 +14654,9 @@ Var
  vServer_NFe,
  vUserName_NFe,
  vPassword_NFe,
- vConnected_NFe    : String;
+ vConnected_NFe,
+ vCamBD_NFe        : String;
+ vTpERP_Ger,
  vLoginPrompt_Ger,
  vOSAuthent_Ger,
  vDriverID_Ger,
@@ -14448,7 +14664,8 @@ Var
  vServer_Ger,
  vUserName_Ger,
  vPassword_Ger,
- vConnected_Ger    : String;
+ vConnected_Ger,
+ vCamBD_Ger        : String;
 
 begin
 
@@ -14467,25 +14684,33 @@ begin
    vUserName_NFe                      := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'UserName_NFe',    '') ;
    vPassword_NFe                      := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'Password_NFe',    '') ;
    vConnected_NFe                     := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'Connected_NFe',   'false') ;
+   vCamBD_NFe                         := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'CamBD_NFe',       '') ;
 
-   FrPar.chk_LoginPrompt_NFe.Checked  := StrToBool(vLoginPrompt_NFe);
-   FrPar.OSAuthent_NFe.Checked        := StrToBool(vOSAuthent_NFe);
    if ( vDriverID_NFe <> '' )  then
-    FrPar.cbb_DriverID_NFe.Text       := vDriverID_NFe;
-   if ( vDatabase_NFe <> '' )  then
     begin
-     FrPar.edt_Database_NFe.Text      := vDatabase_NFe;
-     gNFe                             := trim(vDatabase_NFe);
+
+     FrPar.chk_LoginPrompt_NFe.Checked  := StrToBool(vLoginPrompt_NFe);
+     FrPar.OSAuthent_NFe.Checked        := StrToBool(vOSAuthent_NFe);
+     if ( vDriverID_NFe <> '' )  then
+      FrPar.cbb_DriverID_NFe.Text       := vDriverID_NFe;
+     if ( vDatabase_NFe <> '' )  then
+      begin
+       FrPar.edt_Database_NFe.Text      := vDatabase_NFe;
+       gNFe                             := trim(vDatabase_NFe);
+      end;
+     if ( vServer_NFe <> '' )  then
+      FrPar.edt_Server_NFe.Text         := vServer_NFe;
+     if ( vUserName_NFe <> '' )  then
+      FrPar.edt_UserName_NFe.Text       := vUserName_NFe;
+     if ( vPassword_NFe <> '' )  then
+      FrPar.edt_Password_NFe.Text       := Crypt( 'D',(vPassword_NFe) );
+     FrPar.chk_Connected_NFe.Checked    := StrToBool(vConnected_NFe);
+     FrPar.edt_CamBD_NFe.Text           := vCamBD_NFe;
+
     end;
-   if ( vServer_NFe <> '' )  then
-    FrPar.edt_Server_NFe.Text         := vServer_NFe;
-   if ( vUserName_NFe <> '' )  then
-    FrPar.edt_UserName_NFe.Text       := vUserName_NFe;
-   if ( vPassword_NFe <> '' )  then
-    FrPar.edt_Password_NFe.Text       := Crypt( 'D',(vPassword_NFe) ); // DecryptStr(vPassword_NFe, 2);
-   FrPar.chk_Connected_NFe.Checked    := StrToBool(vConnected_NFe);
 
    // ERP
+   vTpERP_Ger                         := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'TpERP_Ger', '');
    vLoginPrompt_Ger                   := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'LoginPrompt_Ger', 'false') ;
    vOSAuthent_Ger                     := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'OSAuthent_Ger',   'false') ;
    vDriverID_Ger                      := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'DriverID_Ger',    '') ;
@@ -14494,25 +14719,78 @@ begin
    vUserName_Ger                      := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'UserName_Ger',    '') ;
    vPassword_Ger                      := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'Password_Ger',    '') ;
    vConnected_Ger                     := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'Connected_Ger',   'false') ;
+   vCamBD_Ger                         := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'CamBD_Ger',       '') ;
 
-   FrPar.chk_LoginPrompt_Ger.Checked  := StrToBool(vLoginPrompt_Ger);
-   FrPar.OSAuthent_Ger.Checked        := StrToBool(vOSAuthent_Ger);
-   if ( vDriverID_Ger <> '' )  then
-    FrPar.cbb_DriverID_Ger.Text       := vDriverID_Ger;
-   if ( vDatabase_Ger <> '' )  then
-    FrPar.edt_Database_Ger.Text       := vDatabase_Ger;
-   if ( vServer_Ger <> '' )  then
-    FrPar.edt_Server_Ger.Text         := vServer_Ger;
-   if ( vUserName_Ger <> '' )  then
-    FrPar.edt_UserName_Ger.Text       := vUserName_Ger;
-   if ( vPassword_Ger <> '' )  then
-    FrPar.edt_Password_Ger.Text       := Crypt( 'D',(vPassword_Ger) ); // DecryptStr(vPassword_Ger, 2);
-   FrPar.chk_Connected_Ger.Checked    := StrToBool(vConnected_Ger);
+   if ( vDriverID_NFe <> '' )  then
+    begin
+
+     FrPar.edt_TpERP_Ger.Text           := vTpERP_Ger;
+     FrPar.chk_LoginPrompt_Ger.Checked  := StrToBool(vLoginPrompt_Ger);
+     FrPar.OSAuthent_Ger.Checked        := StrToBool(vOSAuthent_Ger);
+     if ( vDriverID_Ger <> '' )  then
+      FrPar.cbb_DriverID_Ger.Text       := vDriverID_Ger;
+     if ( vDatabase_Ger <> '' )  then
+      FrPar.edt_Database_Ger.Text       := vDatabase_Ger;
+     if ( vServer_Ger <> '' )  then
+      FrPar.edt_Server_Ger.Text         := vServer_Ger;
+     if ( vUserName_Ger <> '' )  then
+      FrPar.edt_UserName_Ger.Text       := vUserName_Ger;
+     if ( vPassword_Ger <> '' )  then
+      FrPar.edt_Password_Ger.Text       := Crypt( 'D',(vPassword_Ger) );
+     FrPar.chk_Connected_Ger.Checked    := StrToBool(vConnected_Ger);
+     FrPar.edt_CamBD_Ger.Text           := vCamBD_Ger;
+
+    end;
 
    if ( vDriverID_NFe <> '' )  then
     gTemSqlEmp := true;
 
-  Except
+  Except on e:Exception do
+
+   Application.Messagebox( PWideChar( 'Inconsistência na leitura do arquivo ini' + chr(13) +
+                           e.Message ), PWideChar( 'Leitura do Aquivo Ini' ),
+                           MB_ICONINFORMATION + mb_ok );
+
+  end;
+
+ finally
+
+  Ini.Free ;
+
+ end;
+
+end;
+
+//------------------------------------------------------------------------------
+// by Edson Lima - 2017-6-30T1121
+// procedure que ler o arquivo GBNFe.ini EMP o Acesso Banco de Dados FareDac
+//------------------------------------------------------------------------------
+procedure TFrGBNFe.LerBDFD_E();
+Var
+ IniFile           : String ;
+ Ini               : TIniFile ;
+ Ok                : Boolean;
+ vDatabase_NFe     : string ;
+
+begin
+
+ IniFile := gCamExe + 'GBNFe.Ini';
+ Ini := TIniFile.Create( IniFile );
+
+ try
+  try
+
+   // NFe
+   vDatabase_NFe                      := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'Database_NFe',    '') ;
+
+   if ( vDatabase_NFe <> '' )  then
+    gTemSqlEmp := true;
+
+  Except on e:Exception do
+
+   Application.Messagebox( PWideChar( 'Inconsistência na leitura do arquivo Ini (Emp)!' + chr(13) +
+                           e.Message ), PWideChar( 'Leitura do Aquivo Ini-(Emp)' ),
+                           MB_ICONINFORMATION + mb_ok );
 
   end;
 
@@ -15506,7 +15784,7 @@ begin
    ACBrNFe1.Configuracoes.Arquivos.Salvar                        := true;
    ACBrNFe1.Configuracoes.Arquivos.EmissaoPathNFe                := true;
    ACBrNFe1.Configuracoes.Arquivos.PathNFe                       := gCamXml;
-   ACBrNFe1.Configuracoes.Arquivos.DownloadNFe.PathDownload      := gCamXml;
+   ACBrNFe1.Configuracoes.Arquivos.DownloadDFe.PathDownload      := gCamXml;                // Edson Lima ; 2019-07-29
    //ACBrNFe1.Configuracoes.Arquivos.PathCan                       := gCamXml;              // trunk2
    ACBrNFe1.Configuracoes.Arquivos.PathInu                       := gCamXml;
    //ACBrNFe1.Configuracoes.Arquivos.PathDPEC                      := gCamXml;              // trunk2
@@ -15861,11 +16139,20 @@ begin
  DMFD.FDQryGer.SQL.Add( 'Select *                                       ' );
  DMFD.FDQryGer.SQL.Add( 'from TabMot                                    ' );
  DMFD.FDQryGer.SQL.Add( 'where TipMot = ''C''                           ' );
+
  try
+
   DMFD.FDQryGer.Open;
- except
-  Application.Messagebox(PWideChar('Inconsistência na leitua da tabela TabMot do ERP:' + gERP + ' !'),'Atenção!',MB_ICONERROR+mb_ok);
-  Result := False;
+
+ except on e:Exception do
+  begin
+
+   Application.Messagebox(PWideChar('Inconsistência na leitua da tabela TabMot do ERP:' + gERP + '!' + Chr(13) +
+                                     e.Message),'Atenção!',MB_ICONERROR+mb_ok);
+   Result := False;
+
+  end;
+
  end;
 
  DMFD.FDQryGer.First;
@@ -15977,16 +16264,26 @@ begin
 
 
  try
+
   DMFD.spVrfCanNot.Close;
    DMFD.spVrfCanNot.ParamByName('@CodEmp').AsInteger := iCodEmp;
    DMFD.spVrfCanNot.ParamByName('@CodPed').AsInteger := iCodPed;
   DMFD.spVrfCanNot.ExecProc;
 
-  if ( DMFD.spVrfCanNot.Params[00].AsInteger > 0 ) then
+  if ( (DMFD.spVrfCanNot.Params[00].AsInteger <> 0)   and
+       (DMFD.spVrfCanNot.Params[00].AsInteger <> 6) ) then
    Result := False;
- except
-  Application.Messagebox(PWideChar('Inconsistência na procedure de verificação da política de cancelamento do EPR:' + gERP + ' !'),'Atenção!',MB_ICONERROR+mb_ok);
-  Result := False;
+
+ except on e:Exception do
+  begin
+
+   Application.Messagebox(PWideChar('Inconsistência na procedure de verificação' + Chr(13) +
+                                    'da política de cancelamento do EPR:' + gERP + '!' + Chr(13) +
+                                     e.Message),'Atenção!',MB_ICONERROR+mb_ok);
+   Result := False;
+
+  end;
+
  end;
 
  if ( trim(gERP) = 'GERPA' ) then
@@ -15999,7 +16296,7 @@ begin
     3:  Application.MessageBox(PWideChar('Não será possível efetuar o cancelamento do Pedido de Transferência Nº ' + IntToStr(iCodPed) + ', Nota nº ' + IntToStr(iCodNot) + ', a Entrada foi Confirmada e/ou Atualizada !'), 'Atenção', MB_ICONINFORMATION );
     4:  Application.MessageBox(PWideChar('Não será possível efetuar o cancelamento do Pedido de Entrada via Fat. Nº ' + IntToStr(iCodPed) + ', Nota nº ' + IntToStr(iCodNot) + ', possui Título(s) a Pagar Baixado(s)!'), 'Atenção', MB_ICONINFORMATION );
     5:  Application.MessageBox(PWideChar('Não será possível efetuar o cancelamento do Pedido Complementar de Preço Nº ' + IntToStr(iCodPed) + ', Nota nº ' + IntToStr(iCodNot) + ', o Caixa está fechado!'), 'Atenção', MB_ICONINFORMATION );
-    6:  Application.MessageBox(PWideChar('Não será possível efetuar o cancelamento do Pedido Nº ' + IntToStr(iCodPed) + ', Nota nº ' + IntToStr(iCodNot) + ', Posição Diferente de Faturado !'), 'Atenção', MB_ICONINFORMATION );
+//    6:  Application.MessageBox(PWideChar('Não será possível efetuar o cancelamento do Pedido Nº ' + IntToStr(iCodPed) + ', Nota nº ' + IntToStr(iCodNot) + ', Posição Diferente de Faturado !'), 'Atenção', MB_ICONINFORMATION );
     7:  Application.MessageBox(PWideChar('Não será possível efetuar o cancelamento do Pedido Nº ' + IntToStr(iCodPed) + ', Nota nº ' + IntToStr(iCodNot) + ', Prazo para Cancelamento Excedido, Conforme Regras da Empresa!'), 'Atenção', MB_ICONINFORMATION );
     8:  Application.MessageBox(PWideChar('Não será possível efetuar o cancelamento do Pedido Nº ' + IntToStr(iCodPed) + ', Nota nº ' + IntToStr(iCodNot) + ', Pedido foi Devolvido!'), 'Atenção', MB_ICONINFORMATION );
     9:  Application.MessageBox(PWideChar('Não será possível efetuar o cancelamento do Pedido Nº ' + IntToStr(iCodPed) + ', Nota nº ' + IntToStr(iCodNot) + ', Comissão Normal Referente a este Faturamento já Fechada, deve-se Cancelar o Fechamento!'), 'Atenção', MB_ICONINFORMATION );
@@ -16068,7 +16365,8 @@ begin
    DMFD.spCanNot.ParamByName('@CodMot').AsInteger := iCodMot;
   DMFD.spCanNot.ExecProc;
 
-  if ( DMFD.spCanNot.Params[00].AsInteger > 0 ) then
+  if ( (DMFD.spCanNot.Params[00].AsInteger <> 0)   and
+       (DMFD.spCanNot.Params[00].AsInteger <> 6) ) then
    Result := False;
  except
   Application.Messagebox(PWideChar('Inconsistência na procedure de cancelamento do ERP:' + gERP + ' !'),'Atenção!',MB_ICONERROR+mb_ok);
@@ -16086,7 +16384,7 @@ begin
      3: Application.MessageBox(PWideChar('Não será possível efetuar o cancelamento do Pedido de Transferência Nº ' + IntToStr(iCodPed) + ', Nota nº ' + IntToStr(iCodNot) + ', a Entrada foi Confirmada e/ou Atualizada !'), 'Atenção', MB_ICONINFORMATION );
      4: Application.MessageBox(PWideChar('Não será possível efetuar o cancelamento do Pedido de Entrada via Fat. Nº ' + IntToStr(iCodPed) + ', Nota nº ' + IntToStr(iCodNot) + ', possui Título(s) a Pagar Baixado(s)!'), 'Atenção', MB_ICONINFORMATION );
      5: Application.MessageBox(PWideChar('Não será possível efetuar o cancelamento do Pedido Complementar de Preço Nº ' + IntToStr(iCodPed) + ', Nota nº ' + IntToStr(iCodNot) + ', o Caixa está fechado!'), 'Atenção', MB_ICONINFORMATION );
-     6: Application.MessageBox(PWideChar('Não será possível efetuar o cancelamento do Pedido Nº ' + IntToStr(iCodPed) + ', Nota nº ' + IntToStr(iCodNot) + ', Posição Diferente de Faturado !'), 'Atenção', MB_ICONINFORMATION );
+//     6: Application.MessageBox(PWideChar('Não será possível efetuar o cancelamento do Pedido Nº ' + IntToStr(iCodPed) + ', Nota nº ' + IntToStr(iCodNot) + ', Posição Diferente de Faturado !'), 'Atenção', MB_ICONINFORMATION );
      7: Application.MessageBox(PWideChar('Não será possível efetuar o cancelamento do Pedido Nº ' + IntToStr(iCodPed) + ', Nota nº ' + IntToStr(iCodNot) + ', Prazo para Cancelamento Excedido, Conforme Regras da Empresa!'), 'Atenção', MB_ICONINFORMATION );
      8: Application.MessageBox(PWideChar('Não será possível efetuar o cancelamento do Pedido Nº ' + IntToStr(iCodPed) + ', Nota nº ' + IntToStr(iCodNot) + ', Pedido foi Devolvido!'), 'Atenção', MB_ICONINFORMATION );
      9: Application.MessageBox(PWideChar('Não será possível efetuar o cancelamento do Pedido Nº ' + IntToStr(iCodPed) + ', Nota nº ' + IntToStr(iCodNot) + ', Comissão Normal Referente a este Faturamento já Fechada, deve-se Cancelar o Fechamento!'), 'Atenção', MB_ICONINFORMATION );
@@ -16502,7 +16800,7 @@ begin
    ACBrNFe1.Configuracoes.Arquivos.Salvar                        := true;
    ACBrNFe1.Configuracoes.Arquivos.EmissaoPathNFe                := true;
    ACBrNFe1.Configuracoes.Arquivos.PathNFe                       := gCamXml;
-   ACBrNFe1.Configuracoes.Arquivos.DownloadNFe.PathDownload      := gCamXml;
+   ACBrNFe1.Configuracoes.Arquivos.DownloadDFe.PathDownload      := gCamXml;                // Edson Lima ; 2019-07-29
    //ACBrNFe1.Configuracoes.Arquivos.PathCan                       := gCamXml;              // trunk2
    ACBrNFe1.Configuracoes.Arquivos.PathInu                       := gCamXml;
    //ACBrNFe1.Configuracoes.Arquivos.PathDPEC                      := gCamXml;              // trunk2

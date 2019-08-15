@@ -27,7 +27,7 @@ object FrBDFD: TFrBDFD
     BevelOuter = bvNone
     TabOrder = 0
     object grp12: TGroupBox
-      Left = 10
+      Left = 12
       Top = 24
       Width = 328
       Height = 251
@@ -41,8 +41,8 @@ object FrBDFD: TFrBDFD
         Width = 89
         Height = 41
         Hint = 
-          'Exclui os arquivos tempor'#225'rio, gerados e recebidos da SEFAZ dura' +
-          'nte os envios, consultas, etc.'
+          'Especifica se uma caixa de di'#225'logo de login '#233' exibida, antes de ' +
+          'abrir a conex'#227'o'
         Caption = ' LoginPrompt:  '
         Color = 14544639
         Font.Charset = DEFAULT_CHARSET
@@ -54,6 +54,7 @@ object FrBDFD: TFrBDFD
         ParentColor = False
         ParentFont = False
         TabOrder = 0
+        OnMouseMove = grp13MouseMove
         object chk_LoginPrompt_NFe: TCheckBox
           Left = 36
           Top = 16
@@ -71,9 +72,7 @@ object FrBDFD: TFrBDFD
         Top = 63
         Width = 79
         Height = 41
-        Hint = 
-          'Exclui os arquivos tempor'#225'rio, gerados e recebidos da SEFAZ dura' +
-          'nte os envios, consultas, etc.'
+        Hint = 'Bancos de dados FireDAC suportados pelo RAD Studio'
         Caption = ' DriverID: '
         Color = 14544639
         Font.Charset = DEFAULT_CHARSET
@@ -84,7 +83,8 @@ object FrBDFD: TFrBDFD
         ParentBackground = False
         ParentColor = False
         ParentFont = False
-        TabOrder = 1
+        TabOrder = 2
+        OnMouseMove = grp14MouseMove
         object cbb_DriverID_NFe: TComboBox
           Left = 8
           Top = 14
@@ -122,9 +122,7 @@ object FrBDFD: TFrBDFD
         Top = 110
         Width = 315
         Height = 41
-        Hint = 
-          'Exclui os arquivos tempor'#225'rio, gerados e recebidos da SEFAZ dura' +
-          'nte os envios, consultas, etc.'
+        Hint = 'Nome de um servidor executando o SQL Server na rede'
         Caption = ' Server: '
         Color = 14544639
         Font.Charset = DEFAULT_CHARSET
@@ -135,7 +133,8 @@ object FrBDFD: TFrBDFD
         ParentBackground = False
         ParentColor = False
         ParentFont = False
-        TabOrder = 3
+        TabOrder = 4
+        OnMouseMove = grp18MouseMove
         object edt_Server_NFe: TEdit
           Left = 8
           Top = 14
@@ -145,6 +144,7 @@ object FrBDFD: TFrBDFD
           Ctl3D = False
           ParentCtl3D = False
           TabOrder = 0
+          OnExit = edt_Server_NFeExit
         end
       end
       object grp19: TGroupBox
@@ -152,9 +152,7 @@ object FrBDFD: TFrBDFD
         Top = 157
         Width = 107
         Height = 41
-        Hint = 
-          'Exclui os arquivos tempor'#225'rio, gerados e recebidos da SEFAZ dura' +
-          'nte os envios, consultas, etc.'
+        Hint = 'O nome de login do SQL Server'
         Caption = ' UserName: '
         Color = 14544639
         Font.Charset = DEFAULT_CHARSET
@@ -165,7 +163,8 @@ object FrBDFD: TFrBDFD
         ParentBackground = False
         ParentColor = False
         ParentFont = False
-        TabOrder = 4
+        TabOrder = 5
+        OnMouseMove = grp19MouseMove
         object edt_UserName_NFe: TEdit
           Left = 8
           Top = 14
@@ -175,6 +174,7 @@ object FrBDFD: TFrBDFD
           Ctl3D = False
           ParentCtl3D = False
           TabOrder = 0
+          OnExit = edt_UserName_NFeExit
         end
       end
       object grp20: TGroupBox
@@ -183,8 +183,8 @@ object FrBDFD: TFrBDFD
         Width = 202
         Height = 41
         Hint = 
-          'Exclui os arquivos tempor'#225'rio, gerados e recebidos da SEFAZ dura' +
-          'nte os envios, consultas, etc.'
+          'A senha de login do SQL Server, se OSAuthent = No. Caracter n'#227'o ' +
+          'suportado '#39'{}'#39
         Caption = ' Password: '
         Color = 14544639
         Font.Charset = DEFAULT_CHARSET
@@ -195,7 +195,8 @@ object FrBDFD: TFrBDFD
         ParentBackground = False
         ParentColor = False
         ParentFont = False
-        TabOrder = 5
+        TabOrder = 6
+        OnMouseMove = grp20MouseMove
         object edt_Password_NFe: TEdit
           Left = 8
           Top = 14
@@ -206,6 +207,7 @@ object FrBDFD: TFrBDFD
           ParentCtl3D = False
           PasswordChar = '*'
           TabOrder = 0
+          OnExit = edt_Password_NFeExit
         end
       end
       object grp15: TGroupBox
@@ -213,9 +215,7 @@ object FrBDFD: TFrBDFD
         Top = 63
         Width = 227
         Height = 41
-        Hint = 
-          'Exclui os arquivos tempor'#225'rio, gerados e recebidos da SEFAZ dura' +
-          'nte os envios, consultas, etc.'
+        Hint = 'Nome do banco de dados padr'#227'o para a conex'#227'o'
         Caption = ' Database: '
         Color = 14544639
         Font.Charset = DEFAULT_CHARSET
@@ -226,7 +226,8 @@ object FrBDFD: TFrBDFD
         ParentBackground = False
         ParentColor = False
         ParentFont = False
-        TabOrder = 2
+        TabOrder = 3
+        OnMouseMove = grp15MouseMove
         object edt_Database_NFe: TEdit
           Left = 10
           Top = 14
@@ -236,16 +237,15 @@ object FrBDFD: TFrBDFD
           Ctl3D = False
           ParentCtl3D = False
           TabOrder = 0
+          OnExit = edt_Database_NFeExit
         end
       end
       object grp16: TGroupBox
         Left = 6
         Top = 204
-        Width = 89
+        Width = 75
         Height = 41
-        Hint = 
-          'Exclui os arquivos tempor'#225'rio, gerados e recebidos da SEFAZ dura' +
-          'nte os envios, consultas, etc.'
+        Hint = 'Se celecionado, inicia o banco de dados FireDAC conectado'
         Caption = ' Connected: '
         Color = 14544639
         Font.Charset = DEFAULT_CHARSET
@@ -256,25 +256,30 @@ object FrBDFD: TFrBDFD
         ParentBackground = False
         ParentColor = False
         ParentFont = False
-        TabOrder = 6
+        TabOrder = 7
+        OnMouseMove = grp16MouseMove
         object chk_Connected_NFe: TCheckBox
-          Left = 36
+          Left = 32
           Top = 16
           Width = 13
           Height = 17
+          Checked = True
           Color = 15792383
           Ctl3D = False
           ParentColor = False
           ParentCtl3D = False
+          State = cbChecked
           TabOrder = 0
         end
       end
       object grp28: TGroupBox
         Left = 101
         Top = 16
-        Width = 109
+        Width = 86
         Height = 41
-        Hint = 'Efetua autentica'#231#227'o por usu'#225'rio'
+        Hint = 
+          'Definido como Sim, autentica'#231#227'o do Windows. Se N'#227'o, autentica'#231#227'o' +
+          ' do MS SQL Server'
         Anchors = [akLeft, akTop, akRight]
         Caption = ' OSAuthent: '
         Color = 14544639
@@ -286,7 +291,8 @@ object FrBDFD: TFrBDFD
         ParentBackground = False
         ParentColor = False
         ParentFont = False
-        TabOrder = 7
+        TabOrder = 1
+        OnMouseMove = grp28MouseMove
         object OSAuthent_NFe: TCheckBox
           Left = 36
           Top = 16
@@ -297,6 +303,64 @@ object FrBDFD: TFrBDFD
           ParentColor = False
           ParentCtl3D = False
           TabOrder = 0
+        end
+      end
+      object BitBtn: TBitBtn
+        Left = 222
+        Top = 208
+        Width = 99
+        Height = 37
+        Cursor = crHandPoint
+        Hint = 'Verifica se existencia do banco de dados!'
+        Caption = 'BD NFe Existe!'
+        Glyph.Data = {
+          76010000424D7601000000000000760000002800000020000000100000000100
+          04000000000000010000130B0000130B00001000000000000000000000000000
+          800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+          333333333333333333FF33333333333330003FF3FFFFF3333777003000003333
+          300077F777773F333777E00BFBFB033333337773333F7F33333FE0BFBF000333
+          330077F3337773F33377E0FBFBFBF033330077F3333FF7FFF377E0BFBF000000
+          333377F3337777773F3FE0FBFBFBFBFB039977F33FFFFFFF7377E0BF00000000
+          339977FF777777773377000BFB03333333337773FF733333333F333000333333
+          3300333777333333337733333333333333003333333333333377333333333333
+          333333333333333333FF33333333333330003333333333333777333333333333
+          3000333333333333377733333333333333333333333333333333}
+        NumGlyphs = 2
+        TabOrder = 9
+        OnClick = BitBtnClick
+        OnMouseMove = BitBtnMouseMove
+      end
+      object grp2: TGroupBox
+        Left = 87
+        Top = 204
+        Width = 129
+        Height = 41
+        Hint = 
+          'Guarda o caminho do banco de dados, dados meramente informativo.' +
+          ' '
+        Caption = ' Caminho do BD: '
+        Color = 14544639
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'MS Sans Serif'
+        Font.Style = []
+        ParentBackground = False
+        ParentColor = False
+        ParentFont = False
+        TabOrder = 8
+        OnMouseMove = grp2MouseMove
+        object edt_CamBD_Nfe: TEdit
+          Left = 8
+          Top = 14
+          Width = 111
+          Height = 19
+          Color = 15792383
+          Ctl3D = False
+          ParentCtl3D = False
+          TabOrder = 0
+          OnExit = edt_CamBD_NfeExit
         end
       end
     end
@@ -315,8 +379,8 @@ object FrBDFD: TFrBDFD
         Width = 89
         Height = 41
         Hint = 
-          'Exclui os arquivos tempor'#225'rio, gerados e recebidos da SEFAZ dura' +
-          'nte os envios, consultas, etc.'
+          'Especifica se uma caixa de di'#225'logo de login '#233' exibida, antes de ' +
+          'abrir a conex'#227'o'
         Caption = ' LoginPrompt:  '
         Color = 14544639
         Font.Charset = DEFAULT_CHARSET
@@ -328,6 +392,7 @@ object FrBDFD: TFrBDFD
         ParentColor = False
         ParentFont = False
         TabOrder = 0
+        OnMouseMove = grp21MouseMove
         object chk_LoginPrompt_Ger: TCheckBox
           Left = 36
           Top = 16
@@ -345,9 +410,7 @@ object FrBDFD: TFrBDFD
         Top = 63
         Width = 79
         Height = 41
-        Hint = 
-          'Exclui os arquivos tempor'#225'rio, gerados e recebidos da SEFAZ dura' +
-          'nte os envios, consultas, etc.'
+        Hint = 'Bancos de dados FireDAC suportados pelo RAD Studio'
         Caption = ' DriverID: '
         Color = 14544639
         Font.Charset = DEFAULT_CHARSET
@@ -358,7 +421,8 @@ object FrBDFD: TFrBDFD
         ParentBackground = False
         ParentColor = False
         ParentFont = False
-        TabOrder = 1
+        TabOrder = 3
+        OnMouseMove = grp22MouseMove
         object cbb_DriverID_Ger: TComboBox
           Left = 8
           Top = 14
@@ -396,9 +460,7 @@ object FrBDFD: TFrBDFD
         Top = 110
         Width = 315
         Height = 41
-        Hint = 
-          'Exclui os arquivos tempor'#225'rio, gerados e recebidos da SEFAZ dura' +
-          'nte os envios, consultas, etc.'
+        Hint = 'Nome de um servidor executando o SQL Server na rede'
         Caption = ' Server: '
         Color = 14544639
         Font.Charset = DEFAULT_CHARSET
@@ -409,7 +471,8 @@ object FrBDFD: TFrBDFD
         ParentBackground = False
         ParentColor = False
         ParentFont = False
-        TabOrder = 3
+        TabOrder = 5
+        OnMouseMove = grp23MouseMove
         object edt_Server_Ger: TEdit
           Left = 8
           Top = 14
@@ -426,9 +489,7 @@ object FrBDFD: TFrBDFD
         Top = 157
         Width = 107
         Height = 41
-        Hint = 
-          'Exclui os arquivos tempor'#225'rio, gerados e recebidos da SEFAZ dura' +
-          'nte os envios, consultas, etc.'
+        Hint = 'O nome de login do SQL Server'
         Caption = ' UserName: '
         Color = 14544639
         Font.Charset = DEFAULT_CHARSET
@@ -439,7 +500,8 @@ object FrBDFD: TFrBDFD
         ParentBackground = False
         ParentColor = False
         ParentFont = False
-        TabOrder = 4
+        TabOrder = 6
+        OnMouseMove = grp24MouseMove
         object edt_UserName_Ger: TEdit
           Left = 8
           Top = 14
@@ -457,8 +519,8 @@ object FrBDFD: TFrBDFD
         Width = 202
         Height = 41
         Hint = 
-          'Exclui os arquivos tempor'#225'rio, gerados e recebidos da SEFAZ dura' +
-          'nte os envios, consultas, etc.'
+          'A senha de login do SQL Server, se OSAuthent = No. Caracter n'#227'o ' +
+          'suportado '#39'{}'#39
         Caption = ' Password: '
         Color = 14544639
         Font.Charset = DEFAULT_CHARSET
@@ -469,7 +531,8 @@ object FrBDFD: TFrBDFD
         ParentBackground = False
         ParentColor = False
         ParentFont = False
-        TabOrder = 5
+        TabOrder = 7
+        OnMouseMove = grp25MouseMove
         object edt_Password_Ger: TEdit
           Left = 8
           Top = 14
@@ -487,9 +550,7 @@ object FrBDFD: TFrBDFD
         Top = 63
         Width = 227
         Height = 41
-        Hint = 
-          'Exclui os arquivos tempor'#225'rio, gerados e recebidos da SEFAZ dura' +
-          'nte os envios, consultas, etc.'
+        Hint = 'Nome do banco de dados padr'#227'o para a conex'#227'o'
         Caption = ' Database: '
         Color = 14544639
         Font.Charset = DEFAULT_CHARSET
@@ -500,7 +561,8 @@ object FrBDFD: TFrBDFD
         ParentBackground = False
         ParentColor = False
         ParentFont = False
-        TabOrder = 2
+        TabOrder = 4
+        OnMouseMove = grp26MouseMove
         object edt_Database_Ger: TEdit
           Left = 10
           Top = 14
@@ -509,18 +571,16 @@ object FrBDFD: TFrBDFD
           Color = 15792383
           Ctl3D = False
           ParentCtl3D = False
-          ReadOnly = True
           TabOrder = 0
+          OnExit = edt_Database_GerExit
         end
       end
       object grp27: TGroupBox
         Left = 6
         Top = 204
-        Width = 89
+        Width = 75
         Height = 41
-        Hint = 
-          'Exclui os arquivos tempor'#225'rio, gerados e recebidos da SEFAZ dura' +
-          'nte os envios, consultas, etc.'
+        Hint = 'Se celecionado, inicia o banco de dados FireDAC conectado'
         Caption = ' Connected: '
         Color = 14544639
         Font.Charset = DEFAULT_CHARSET
@@ -531,25 +591,30 @@ object FrBDFD: TFrBDFD
         ParentBackground = False
         ParentColor = False
         ParentFont = False
-        TabOrder = 6
+        TabOrder = 8
+        OnMouseMove = grp27MouseMove
         object chk_Connected_Ger: TCheckBox
-          Left = 36
+          Left = 32
           Top = 16
           Width = 13
           Height = 17
+          Checked = True
           Color = 15792383
           Ctl3D = False
           ParentColor = False
           ParentCtl3D = False
+          State = cbChecked
           TabOrder = 0
         end
       end
       object grp29: TGroupBox
         Left = 101
         Top = 16
-        Width = 109
+        Width = 86
         Height = 41
-        Hint = 'Efetua autentica'#231#227'o por usu'#225'rio'
+        Hint = 
+          'Definido como Sim, autentica'#231#227'o do Windows. Se N'#227'o, autentica'#231#227'o' +
+          ' do MS SQL Server'
         Anchors = [akLeft, akTop, akRight]
         Caption = ' OSAuthent: '
         Color = 14544639
@@ -561,7 +626,8 @@ object FrBDFD: TFrBDFD
         ParentBackground = False
         ParentColor = False
         ParentFont = False
-        TabOrder = 7
+        TabOrder = 1
+        OnMouseMove = grp29MouseMove
         object OSAuthent_Ger: TCheckBox
           Left = 36
           Top = 16
@@ -570,6 +636,93 @@ object FrBDFD: TFrBDFD
           Color = 15792383
           Ctl3D = False
           ParentColor = False
+          ParentCtl3D = False
+          TabOrder = 0
+        end
+      end
+      object grp: TGroupBox
+        Left = 193
+        Top = 16
+        Width = 128
+        Height = 41
+        Hint = 'Nome do tipo de banco de dados conforme o informado pelo ERP'
+        Caption = ' Tipo de ERP: '
+        Color = 14544639
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'MS Sans Serif'
+        Font.Style = []
+        ParentBackground = False
+        ParentColor = False
+        ParentFont = False
+        TabOrder = 2
+        OnMouseMove = grpMouseMove
+        object edt_TpERP_Ger: TEdit
+          Left = 10
+          Top = 15
+          Width = 107
+          Height = 19
+          Color = 15792383
+          Ctl3D = False
+          ParentCtl3D = False
+          ReadOnly = True
+          TabOrder = 0
+        end
+      end
+      object BitBtn31: TBitBtn
+        Left = 222
+        Top = 208
+        Width = 99
+        Height = 37
+        Cursor = crHandPoint
+        Hint = 'Verifica se existencia do banco de dados!'
+        Caption = 'BD ERP Existe!'
+        Glyph.Data = {
+          76010000424D7601000000000000760000002800000020000000100000000100
+          04000000000000010000130B0000130B00001000000000000000000000000000
+          800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+          333333333333333333FF33333333333330003FF3FFFFF3333777003000003333
+          300077F777773F333777E00BFBFB033333337773333F7F33333FE0BFBF000333
+          330077F3337773F33377E0FBFBFBF033330077F3333FF7FFF377E0BFBF000000
+          333377F3337777773F3FE0FBFBFBFBFB039977F33FFFFFFF7377E0BF00000000
+          339977FF777777773377000BFB03333333337773FF733333333F333000333333
+          3300333777333333337733333333333333003333333333333377333333333333
+          333333333333333333FF33333333333330003333333333333777333333333333
+          3000333333333333377733333333333333333333333333333333}
+        NumGlyphs = 2
+        TabOrder = 10
+        OnClick = BitBtn31Click
+        OnMouseMove = BitBtn31MouseMove
+      end
+      object grp1: TGroupBox
+        Left = 87
+        Top = 204
+        Width = 129
+        Height = 41
+        Hint = 
+          'Guarda o caminho do banco de dados, dados meramente informativo.' +
+          ' '
+        Caption = ' Caminho do BD: '
+        Color = 14544639
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'MS Sans Serif'
+        Font.Style = []
+        ParentBackground = False
+        ParentColor = False
+        ParentFont = False
+        TabOrder = 9
+        OnMouseMove = grp1MouseMove
+        object edt_CamBD_Ger: TEdit
+          Left = 8
+          Top = 14
+          Width = 111
+          Height = 19
+          Color = 15792383
+          Ctl3D = False
           ParentCtl3D = False
           TabOrder = 0
         end
@@ -628,10 +781,11 @@ object FrBDFD: TFrBDFD
       Align = alRight
       TabOrder = 0
       object btn1: TBitBtn
-        Left = 161
+        Left = 163
         Top = 7
         Width = 129
         Height = 25
+        Cursor = crHandPoint
         Hint = 'Fecha param'#234'tros'
         Caption = '         &Fechar'
         Glyph.Data = {
@@ -652,7 +806,7 @@ object FrBDFD: TFrBDFD
           333333333333888888F3333F00003333330000003333333333338FFFF8F3333F
           0000}
         NumGlyphs = 2
-        TabOrder = 0
+        TabOrder = 1
         OnClick = btn1Click
       end
       object btnSalvarConfig: TBitBtn
@@ -660,6 +814,7 @@ object FrBDFD: TFrBDFD
         Top = 7
         Width = 129
         Height = 25
+        Cursor = crHandPoint
         Hint = 'Salva os par'#226'metros no arquivo de emitente'
         Caption = '&Gravar'
         Glyph.Data = {
@@ -676,12 +831,12 @@ object FrBDFD: TFrBDFD
           99337F3FF7F3733777F30F08F0F0337999337F7737F73F7777330FFFF0039999
           93337FFFF7737777733300000033333333337777773333333333}
         NumGlyphs = 2
-        TabOrder = 1
+        TabOrder = 0
         OnClick = btnSalvarConfigClick
       end
     end
   end
-  object stat1: TStatusBar
+  object StatusBar1: TStatusBar
     Left = 0
     Top = 399
     Width = 689
