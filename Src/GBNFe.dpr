@@ -116,7 +116,10 @@ begin
  if ParamStr(1) <> '/developed_gb_informática_ltda' then
   begin
 
-   Application.Messagebox(PWideChar('Esse aplicativo só poderá ser executado pelo ERP:' + gERP + '!'), PWideChar('' + gERP + ' - Erro de Execução!'), mb_iconstop+mb_ok);
+   Application.Messagebox(PWideChar('Esse aplicativo só poderá ser executado' +
+                                    ' pelo ERP:' + gERP + '!'), PWideChar('' +
+                                    gERP + ' - Erro de Execução!'),
+                                    mb_iconstop+mb_ok);
    Halt;
 
   end

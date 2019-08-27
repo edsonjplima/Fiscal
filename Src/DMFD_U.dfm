@@ -218,6 +218,7 @@ object DMFD: TDMFD
       ',t3.ano'
       ',t3.modelo'
       ',t3.serie'
+      ',t3.UsuInu'
       'from notas_inutilizadas t3'
       '')
     Left = 294

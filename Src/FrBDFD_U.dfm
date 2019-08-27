@@ -229,7 +229,7 @@ object FrBDFD: TFrBDFD
         TabOrder = 3
         OnMouseMove = grp15MouseMove
         object edt_Database_NFe: TEdit
-          Left = 10
+          Left = 7
           Top = 14
           Width = 207
           Height = 19
@@ -456,7 +456,7 @@ object FrBDFD: TFrBDFD
         end
       end
       object grp23: TGroupBox
-        Left = 6
+        Left = 10
         Top = 110
         Width = 315
         Height = 41
@@ -781,7 +781,7 @@ object FrBDFD: TFrBDFD
       Align = alRight
       TabOrder = 0
       object btn1: TBitBtn
-        Left = 163
+        Left = 161
         Top = 7
         Width = 129
         Height = 25

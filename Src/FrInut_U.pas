@@ -317,7 +317,8 @@ begin
             FrGBNFe.ACBrNFe1.WebServices.Inutilizacao.xMotivo                 + '''' + ',' + '''' +  // @xMotivo         varchar(255),
             IntToStr(FrGBNFe.ACBrNFe1.WebServices.Inutilizacao.cUF)           + '''' + ',' + '''' +  // @cUF             int,
             FrGBNFe.ACBrNFe1.WebServices.Inutilizacao.CNPJ                    + '''' + ',' + '''' +  //	@CNPJ            varchar(14),
-            FrGBNFe.ACBrNFe1.WebServices.Inutilizacao.Protocolo                            + '''';   // @nProt           varchar(20)
+            FrGBNFe.ACBrNFe1.WebServices.Inutilizacao.Protocolo               + '''' + ',' + '''' +  //	@nProt           varchar(20),
+            gUsu                                                                           + '''';   // @UsuInu          varchar(15)
 
     end;
 

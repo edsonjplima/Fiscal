@@ -117,6 +117,9 @@ type
 
     procedure GravarBDFD();                                                     // procedure que grava o arquivo GBNFe.ini
 
+    function fAnalisaBDFD(): boolean;                                           // Função de analise de dados de Acesso Banco a base de dados
+    function fVerCamBranco(): Boolean;                                          // Verifica se alguns campos estão em branco
+
   end;
 
 var
@@ -219,7 +222,20 @@ end;
 procedure TFrBDFD.btn1Click(Sender: TObject);
 begin
 
- Close;
+ if ( (not (FileExists(gCamExe + 'GBNFe.ini'))) or (not (gNãoSalvouIni)) or
+      (fVerCamBranco()) ) then
+  begin
+
+   Application.MessageBox(PWideChar('Atenção, os dados não foram salvos!' + Char(13) +
+                                    'Ou arquivo ini não existe!' + Char(13) +
+                                    'Ou há campos deixado em branco!' + Char(13) +
+                                    'O sistema será fechado e os dados descartados!'), 'FireDAC', MB_ICONEXCLAMATION+mb_ok );
+   Halt;
+
+  end;
+
+ if fAnalisaBDFD() then
+  Close;
 
 end;
 
@@ -227,7 +243,12 @@ procedure TFrBDFD.btnSalvarConfigClick(Sender: TObject);
 begin
 
  if MessageDlg('Confirma atualização dos parâmetros', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
-  GravarBDFD();
+  begin
+
+   if fAnalisaBDFD() then
+    GravarBDFD();
+
+  end;
 
 end;
 
@@ -276,9 +297,11 @@ end;
 procedure TFrBDFD.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
 
- if ( (Trim(edt_Database_NFe.Text) = '') or
+ if ( (Trim(cbb_DriverID_NFe.Text) = '') or
+      (Trim(edt_Database_NFe.Text) = '') or
       (Trim(edt_Server_NFe.Text) = '')   or
       (Trim(edt_UserName_NFe.Text) = '') or
+      (Trim(cbb_DriverID_Ger.Text) = '') or
       (Trim(edt_Database_Ger.Text) = '') or
       (Trim(edt_Server_Ger.Text) = '')   or
       (Trim(edt_UserName_Ger.Text) = '') ) then
@@ -313,6 +336,37 @@ begin
  grp17.Caption := ' Banco de Dados - Gertão: ERP - ' + gERP + ' (' + gDBERP + ')' + ' ';
  grp12.Caption := ' Banco de Dados - Fiscal: NFe - ' + '(' + gNFe + ')' + ' - Emp: ' + gCodEmp + ' ';
  btn1.SetFocus;
+
+ if ( FileExists(gCamExe + 'GBNFe.ini') ) then
+  begin
+   // NFe
+   FrBDFD.chk_LoginPrompt_NFe.Checked    := StrToBool(gLoginPrompt_NFe) ;
+   FrBDFD.OSAuthent_NFe.Checked          := StrToBool(gOSAuthent_NFe) ;
+   FrBDFD.cbb_DriverID_NFe.Text          := gDriverID_NFe ;
+   FrBDFD.edt_Database_NFe.Text          := gDatabase_NFe ;
+   FrBDFD.edt_Server_NFe.Text            := gServer_NFe ;
+   FrBDFD.edt_UserName_NFe.Text          := gUserName_NFe ;
+   if ( trim(gPassword_NFe) <> '' ) then
+    FrBDFD.edt_Password_NFe.Text         := FrGBNFe.Crypt( 'D',(trim(gPassword_NFe)) )
+   else
+    FrBDFD.edt_Password_NFe.Text         := '';
+   FrBDFD.chk_Connected_NFe.Checked      := StrToBool(gConnected_NFe) ;
+   FrBDFD.edt_CamBD_NFe.Text             := gCamBD_NFe ;
+
+   // Ger
+   FrBDFD.chk_LoginPrompt_Ger.Checked    := StrToBool(gLoginPrompt_Ger) ;
+   FrBDFD.OSAuthent_Ger.Checked          := StrToBool(gOSAuthent_Ger) ;
+   FrBDFD.cbb_DriverID_Ger.Text          := gDriverID_Ger ;
+   FrBDFD.edt_Database_Ger.Text          := gDatabase_Ger ;
+   FrBDFD.edt_Server_Ger.Text            := gServer_Ger ;
+   FrBDFD.edt_UserName_Ger.Text          := gUserName_Ger ;
+   if ( trim(gPassword_Ger) <> '' ) then
+    FrBDFD.edt_Password_Ger.Text         := FrGBNFe.Crypt( 'D',(trim(gPassword_Ger)) )
+   else
+    FrBDFD.edt_Password_Ger.Text         := '';
+   FrBDFD.chk_Connected_Ger.Checked      := StrToBool(gConnected_Ger) ;
+   FrBDFD.edt_CamBD_Ger.Text             := gCamBD_Ger ;
+  end;
 
 end;
 
@@ -415,6 +469,69 @@ begin
  finally
 
   Ini.Free ;
+  gNãoSalvouIni := true;
+
+ end;
+
+end;
+
+//------------------------------------------------------------------------------
+// by Edson Lima - 2017-6-30T1121
+// Função de analise de dados de Acesso Banco a base de dados
+//------------------------------------------------------------------------------
+function TFrBDFD.fAnalisaBDFD() : boolean;
+var
+ vContexto, i : Integer;
+ vMens : TStringList;
+
+begin
+
+ vMens := TStringList.Create;
+ vContexto := -1; result := True;
+
+ vMens.clear;
+ vMens.add('O campo [DriverID] do BD NFe está vazio!');
+ vMens.add('O campo [Database] do BD NFe está vazio!');
+ vMens.add('O campo [Server] do BD NFe está vazio!');
+ vMens.add('O campo [UserName] do BD NFe está vazio!');
+ vMens.add('A Conecção está desmarcada no BD NFe está vazio!');
+ vMens.add('O campo [Caminho do BD] NFe está vazio!');
+ vMens.add('O campo [DriverID] do BD ERP está vazio!');
+ vMens.add('O campo [Database] do BD ERP está vazio!');
+ vMens.add('O campo [Server] do BD ERP está vazio!');
+ vMens.add('O campo [UserName] do BD ERP está vazio!');
+ vMens.add('A Conecção está desmarcada no BD ERP está vazio!');
+ vMens.add('O campo [Caminho do BD] ERP está vazio!');
+
+ try
+
+  if      ( Trim(cbb_DriverID_NFe.Text) = '' )  then vContexto := 0
+  else if ( Trim(edt_Database_NFe.Text) = '' )  then vContexto := 1
+  else if ( Trim(edt_Server_NFe.Text) = '' )    then vContexto := 2
+  else if ( Trim(edt_UserName_NFe.Text) = '' )  then vContexto := 3
+  else if not ( chk_Connected_NFe.Checked )     then vContexto := 4
+  else if ( Trim(edt_CamBD_NFe.Text) = '' )     then vContexto := 5
+  else if ( Trim(cbb_DriverID_Ger.Text) = '' )  then vContexto := 6
+  else if ( Trim(edt_Database_Ger.Text) = '' )  then vContexto := 7
+  else if ( Trim(edt_Server_Ger.Text) = '' )    then vContexto := 8
+  else if ( Trim(edt_UserName_Ger.Text) = '' )  then vContexto := 9
+  else if not ( chk_Connected_Ger.Checked )     then vContexto := 10
+  else if ( Trim(edt_CamBD_Ger.Text) = '' )     then vContexto := 11;
+
+  if ( vContexto <> -1 ) then
+   if Application.MessageBox(PWideChar( vMens[vContexto] + Char(13) +
+                             'Deseja continuar mesmo assim?'),
+                             PWideChar('Parâmetros FireDAC'),
+                             MB_ICONQUESTION + MB_YESNO ) = IdNo then
+    begin
+
+     result := False;
+
+    end;
+
+ finally
+
+  vMens.Free;
 
  end;
 
@@ -532,6 +649,23 @@ procedure TFrBDFD.grpMouseMove(Sender: TObject; Shift: TShiftState; X,
   Y: Integer);
 begin
  StatusBar1.Panels[0].Text := Grp.Hint;
+end;
+
+function TFrBDFD.fVerCamBranco(): Boolean;                                      // Verifica se alguns campos estão em branco
+begin
+
+ Result := False;
+
+ if ( (Trim(cbb_DriverID_NFe.Text) = '') or
+      (Trim(edt_Database_NFe.Text) = '') or
+      (Trim(edt_Server_NFe.Text) = '')   or
+      (Trim(edt_UserName_NFe.Text) = '') or
+      (Trim(cbb_DriverID_Ger.Text) = '') or
+      (Trim(edt_Database_Ger.Text) = '') or
+      (Trim(edt_Server_Ger.Text) = '')   or
+      (Trim(edt_UserName_Ger.Text) = '') ) then
+  Result := true;
+
 end;
 
 end.

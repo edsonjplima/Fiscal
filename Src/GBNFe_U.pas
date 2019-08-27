@@ -231,6 +231,7 @@ type
   cxTLicSta: TcxTreeListColumn;
   cxTLsxMot: TcxTreeListColumn;
   lbl1: TLabel;
+    cxTLsxInu: TcxTreeListColumn;
 
   Procedure geraenvianf(Sender: TObject);
   Procedure grava_xml_no_banco;
@@ -402,6 +403,7 @@ type
   function fMudaVersao( op, md: integer ): boolean;                             // Mudança de versão
   function fFusHor(HorVer, Hor_DF, FusHor :Boolean ; CdUf  :Integer ;
                            CdMun, vdhEve  :String ; dhEve :TDateTime ): TDateTime; // Redenriza o fuso horário
+  function fAcessar() : boolean;                                                // function que verifica o acesso da EMP no Banco de Dados FareDac
 
   procedure pImpr();                                                            // Chama a procedure de impressão
   procedure MarcaBloco( cxTL : TcxTreeList; blMarca : Boolean; blTodos : Boolean = False ); // Marca bloco de seleção TreeList    // xe 10.1 Berlin
@@ -440,9 +442,11 @@ type
   Procedure ConsultaCCe();                                                      // Consulta CCe
   Procedure EnviaEmailCCe();                                                    // Reencia emails da CCe
   procedure pGravaNFe(locErr, c01, c02, c03, c04, c05, c06, c07,
-                                   c08, c09, c10, c11, c12, c13: String;
+                                   c08, c09, c10, c11, c12, c13,
+                                   c14, c15, c16, c17, c18, c19: String;
                               p01, p02, p03, p04, p05, p06, p07,
-                                   p08, p09, p10, p11, p12, p13: Variant;
+                                   p08, p09, p10, p11, p12, p13,
+                                   p14, p15, p16, p17, p18, p19: Variant;
                               Consiste                         : Boolean);      // Procedure que grava NFe.
   procedure pEnviaEmailCan();                                                   // Procedure envia email de cancelamento
   procedure VerifCert();                                                        // Verifica o vencimento do certificado digital
@@ -580,6 +584,13 @@ var
  gAbortarXML                                                              : Boolean = False; // Será usado para abortar o processo de salvar o xml
  gConsiste                                                                : Boolean = true;  // Define se a consulta consiste [ true / false ]
  gSimpObg                                                                 : Boolean = false; // Define se a consulta consiste [ true / false ]
+ gNãoSalvouIni                                                            : Boolean = False; // Define se o arquivo ini foi salvo ou não
+ gLoginPrompt_NFe, gOSAuthent_NFe, gDriverID_NFe, gDatabase_NFe,
+ gServer_NFe, gUserName_NFe, gPassword_NFe, gConnected_NFe,
+ gCamBD_NFe                                                               : String;
+ gTpERP_Ger, gLoginPrompt_Ger, gOSAuthent_Ger, gDriverID_Ger,
+ gDatabase_Ger, gServer_Ger, gUserName_Ger, gPassword_Ger,
+ gConnected_Ger, gCamBD_Ger                                               : String;
 
  // Variáveis migradas
  _nota                                                                    : ShortString;    //String[15];
@@ -709,7 +720,7 @@ begin
        if ( FrPar.chk_RespTec.Checked ) then
         begin
 
-         ACBrNFe1.Configuracoes.RespTec.IdCSRT := StrToInt(FrPar.edt_IdResTec.Text);
+         ACBrNFe1.Configuracoes.RespTec.IdCSRT := StrToIntDef(FrPar.edt_IdResTec.Text, 0);
          ACBrNFe1.Configuracoes.RespTec.CSRT   := Trim(FrPar.edt_CSRTResTec.Text);
 
          infRespTec.CNPJ     := FrPar.edt_CNPJResTec.Text;
@@ -736,11 +747,11 @@ begin
 
        //infNFe.ID     := vAux;
        Ide.natOp     := DMFD.FDQuery1['nfe_natOp'];
-       Ide.nNF       := StrToInt(DMFD.FDQuery1['nfe_nnf']);
-       Ide.cNF       := StrToInt(gCdPed);
-       Ide.modelo    := StrToInt(DMFD.FDQuery1['nfe_Modelo']);
-       gModelo       := StrToInt(DMFD.FDQuery1['nfe_Modelo']);
-       gSerie        := StrToInt(DMFD.FDQuery1['nfe_Serie']);
+       Ide.nNF       := StrToIntDef(DMFD.FDQuery1['nfe_nnf'], 0);
+       Ide.cNF       := StrToIntDef(gCdPed, 0);
+       Ide.modelo    := StrToIntDef(DMFD.FDQuery1['nfe_Modelo'], 0);
+       gModelo       := StrToIntDef(DMFD.FDQuery1['nfe_Modelo'], 0);
+       gSerie        := StrToIntDef(DMFD.FDQuery1['nfe_Serie'], 0);
 
        if ( (Trim(DMFD.FDQuery1['nfe_serie']) = '') or (DMFD.FDQuery1['nfe_serie'] = null) ) then
         begin
@@ -749,7 +760,7 @@ begin
          gSerie           := 1;
         end
        else
-        Ide.serie     := StrToInt(DMFD.FDQuery1['nfe_serie']);
+        Ide.serie     := StrToIntDef(DMFD.FDQuery1['nfe_serie'], 0);
 
        // by Edson Lima ; 2017-6-9T0949 ; Define quem será usado como cNF
        gCdPed := VarToStr(DMFD.FDQuery1['nfe_CodPed']);
@@ -814,7 +825,7 @@ begin
        DMFD.FDQryGeral1.SQL.Add( 'and   nnf         = :parm3                     ' );
        DMFD.FDQryGeral1.SQL.Add( 'and   modelo      = :parm4                     ' );
        DMFD.FDQryGeral1.SQL.Add( 'and   serie       = :parm5                     ' );
-       DMFD.FDQryGeral1.Params[0].AsInteger := StrToInt(edt_CodEmp.Text);
+       DMFD.FDQryGeral1.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
        DMFD.FDQryGeral1.Params[1].AsString  := FormatDateTime('yyyy/mm/dd', DMFD.FDQuery1['nfe_demi']);
        DMFD.FDQryGeral1.Params[2].AsString  := DMFD.FDQuery1['nfe_nnf'];
        DMFD.FDQryGeral1.Params[3].AsString  := DMFD.FDQuery1['nfe_modelo'];
@@ -832,7 +843,7 @@ begin
        if ( (DMFD.FDQuery1['nfe_idDest'] = null) or (DMFD.FDQuery1['nfe_idDest'] = 0) ) then
         begin
 
-         if ( ((StrToInt(vCfop) > 4999) and (StrToInt(vCfop) < 6000)) and
+         if ( ((StrToIntDef(vCfop, 0) > 4999) and (StrToIntDef(vCfop, 0) < 6000)) and
                    (DMFD.FDQuery4['uf'] <> DMFD.FDQuery1['des_uf']) ) then
            Ide.idDest := doInterna
 
@@ -879,7 +890,7 @@ begin
 //       if not ( DMFD.FDQuery1['nfe_indFinal'] = null ) then
 //        begin
 
-         case ( StrToInt(DMFD.FDQuery1['nfe_indFinal']) ) of
+         case ( StrToIntDef(DMFD.FDQuery1['nfe_indFinal'], 0) ) of
           0:    Ide.indFinal := cfNao;
           1:    Ide.indFinal := cfConsumidorFinal;
           else  Ide.indFinal := cfNao;
@@ -895,7 +906,7 @@ begin
 
           0 :                                                                   // ve3131
 
-           case (StrToInt(DMFD.FDQuery1['nfe_indPres'])) of
+           case (StrToIntDef(DMFD.FDQuery1['nfe_indPres'], 0)) of
             0:    Ide.indPres := pcNao;
             1:    Ide.indPres := pcPresencial;
             2:    Ide.indPres := pcInternet;
@@ -907,7 +918,7 @@ begin
 
           1 :                                                                   // ve4040
 
-           case (StrToInt(DMFD.FDQuery1['nfe_indPres'])) of
+           case (StrToIntDef(DMFD.FDQuery1['nfe_indPres'], 0)) of
             0:    Ide.indPres := pcNao;
             1:    Ide.indPres := pcPresencial;
             2:    Ide.indPres := pcInternet;
@@ -925,7 +936,7 @@ begin
             if ( gModelo = 55 ) then
              begin
 
-              case (StrToInt(DMFD.FDQuery1['nfe_indPres'])) of
+              case (StrToIntDef(DMFD.FDQuery1['nfe_indPres'], 0)) of
                0:    Ide.indPres := pcNao;
                1:    Ide.indPres := pcPresencial;
                2:    Ide.indPres := pcInternet;
@@ -942,7 +953,7 @@ begin
 
              begin
 
-              case (StrToInt(DMFD.FDQuery1['nfe_indPres'])) of
+              case (StrToIntDef(DMFD.FDQuery1['nfe_indPres'], 0)) of
                0:    Ide.indPres := pcNao;
                1:    Ide.indPres := pcPresencial;
                2:    Ide.indPres := pcInternet;
@@ -963,7 +974,7 @@ begin
             if ( gModelo = 55 ) then
              begin
 
-              case (StrToInt(DMFD.FDQuery1['nfe_indPres'])) of
+              case (StrToIntDef(DMFD.FDQuery1['nfe_indPres'], 0)) of
                0:    Ide.indPres := pcNao;
                1:    Ide.indPres := pcPresencial;
                2:    Ide.indPres := pcInternet;
@@ -979,7 +990,7 @@ begin
 
              begin
 
-              case (StrToInt(DMFD.FDQuery1['nfe_indPres'])) of
+              case (StrToIntDef(DMFD.FDQuery1['nfe_indPres'], 0)) of
                0:    Ide.indPres := pcNao;
                1:    Ide.indPres := pcPresencial;
                2:    Ide.indPres := pcInternet;
@@ -1066,6 +1077,12 @@ begin
           pGravaNFe('001', 'situacao',
                            'motivo',
                            'data_hora_recebimento',
+                           'UsuTrs',
+                           '',
+                           '',
+                           '',
+                           '',
+                           '',
                            '',
                            '',
                            '',
@@ -1079,6 +1096,12 @@ begin
                            'ENVI',
                            'Tentativa de envio sem sucesso',
                            FormatDateTime('yyyy/mm/dd hh:nn:ss', now()),
+                           gUsu,
+                           '',
+                           '',
+                           '',
+                           '',
+                           '',
                            '',
                            '',
                            '',
@@ -1092,6 +1115,12 @@ begin
          else
           pGravaNFe('001', 'situacao',
                            'motivo',
+                           'UsuTrs',
+                           '',
+                           '',
+                           '',
+                           '',
+                           '',
                            '',
                            '',
                            '',
@@ -1105,6 +1134,12 @@ begin
                            'modelo',                                            // Nome dos campos
                            'ENVI',
                            'Tentativa de envio sem sucesso',
+                           gUsu,
+                           '',
+                           '',
+                           '',
+                           '',
+                           '',
                            '',
                            '',
                            '',
@@ -1119,8 +1154,8 @@ begin
         end;
        //**********************************************************************
 
-       Ide.cUF       := strtoint(DMFD.FDQuery4['codigo_uf']);
-       Ide.cMunFG    := StrToInt(DMFD.FDQuery4['codigo_municipio']);
+       Ide.cUF       := strtointDef(DMFD.FDQuery4['codigo_uf'], 0);
+       Ide.cMunFG    := StrToIntDef(DMFD.FDQuery4['codigo_municipio'], 0);
 
        if DMFD.FDQuery1['nfe_finalidade'] = 1 then Ide.finNFe := fnNormal;
        if DMFD.FDQuery1['nfe_finalidade'] = 2 then Ide.finNFe := fnComplementar;
@@ -1139,7 +1174,7 @@ begin
        DMFD.FDQuery2.SQL.Add( 'and   t2.nnf         = :parm3                                                                      ' );
        DMFD.FDQuery2.SQL.Add( 'and   t2.modelo      = :parm4                                                                      ' );
        DMFD.FDQuery2.SQL.Add( 'and   t2.serie       = :parm5                                                                      ' );
-       DMFD.FDQuery2.Params[0].AsInteger := StrToInt(edt_CodEmp.Text);
+       DMFD.FDQuery2.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
        DMFD.FDQuery2.Params[1].AsString  := FormatDateTime('yyyy/mm/dd', DMFD.FDQuery1['nfe_demi']);
        DMFD.FDQuery2.Params[2].AsString  := DMFD.FDQuery1['nfe_nnf'];
        DMFD.FDQuery2.Params[3].AsString  := DMFD.FDQuery1['nfe_modelo'];
@@ -1154,17 +1189,17 @@ begin
             begin
 
              // By Edson Lima ; 2015-4-2T0938 ; linha incluida
-             if ( (strtoint(DMFD.FDQuery2['mod']) = 55) or
-                  (strtoint(DMFD.FDQuery2['mod']) = 65) ) then
+             if ( (strtointDef(DMFD.FDQuery2['mod'], 0) = 55) or
+                  (strtointDef(DMFD.FDQuery2['mod'], 0) = 65) ) then
                RefNFe         := DMFD.FDQuery2['chave_nfe']
              else             // Mod 1/1A
               begin
-               RefNF.cUF      := strtoint(DMFD.FDQuery2['uf']);
+               RefNF.cUF      := strtointDef(DMFD.FDQuery2['uf'], 0);
                RefNF.AAMM     := DMFD.FDQuery2['aamm'];
                RefNF.CNPJ     := DMFD.FDQuery2['cnpj'];
-               RefNF.modelo   := strtoint(DMFD.FDQuery2['mod']);
-               RefNF.serie    := strtoint(DMFD.FDQuery2['Ser']);
-               RefNF.nNF      := strtoint(DMFD.FDQuery2['r_nnf']);
+               RefNF.modelo   := strtointDef(DMFD.FDQuery2['mod'], 0);
+               RefNF.serie    := strtointDef(DMFD.FDQuery2['Ser'], 0);
+               RefNF.nNF      := strtointDef(DMFD.FDQuery2['r_nnf'], 0);
               end;
 
             end;
@@ -1185,7 +1220,7 @@ begin
        DMFD.FDQuery2.SQL.Add( 'and   t2.nnf         = :parm3                                  ' );
        DMFD.FDQuery2.SQL.Add( 'and   t2.modelo      = :parm4                                  ' );
        DMFD.FDQuery2.SQL.Add( 'and   t2.serie       = :parm5                                  ' );
-       DMFD.FDQuery2.Params[0].AsInteger := StrToInt(edt_CodEmp.Text);
+       DMFD.FDQuery2.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
        DMFD.FDQuery2.Params[1].AsString  := FormatDateTime('yyyy/mm/dd', DMFD.FDQuery1['nfe_demi']);
        DMFD.FDQuery2.Params[2].AsString  := DMFD.FDQuery1['nfe_nnf'];
        DMFD.FDQuery2.Params[3].AsString  := DMFD.FDQuery1['nfe_modelo'];
@@ -1197,13 +1232,13 @@ begin
           with Ide.NFref.Add do
            begin
 
-            RefNFP.cUF     := strtoint(DMFD.FDQuery2['uf']);
+            RefNFP.cUF     := strtointDef(DMFD.FDQuery2['uf'], 0);
             RefNFP.AAMM    := DMFD.FDQuery2['aamm'];
             RefNFP.CNPJCPF := DMFD.FDQuery2['cnpj'];
             RefNFP.IE      := DMFD.FDQuery2['insc_estadual'];
             RefNFP.modelo  := DMFD.FDQuery2['mod'];
-            RefNFP.serie   := strtoint(DMFD.FDQuery2['Ser']);
-            RefNFP.nNF     := strtoint(DMFD.FDQuery2['r_nnf']);
+            RefNFP.serie   := strtointDef(DMFD.FDQuery2['Ser'], 0);
+            RefNFP.nNF     := strtointDef(DMFD.FDQuery2['r_nnf'], 0);
 
            end;
 
@@ -1223,7 +1258,7 @@ begin
        DMFD.FDQuery2.SQL.Add( 'and   t2.nnf         = :parm3                                                                                             ' );
        DMFD.FDQuery2.SQL.Add( 'and   t2.modelo      = :parm4                                                                                             ' );
        DMFD.FDQuery2.SQL.Add( 'and   t2.serie       = :parm5                                                                                             ' );
-       DMFD.FDQuery2.Params[0].AsInteger := StrToInt(edt_CodEmp.Text);
+       DMFD.FDQuery2.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
        DMFD.FDQuery2.Params[1].AsString  := FormatDateTime('yyyy/mm/dd', DMFD.FDQuery1['nfe_demi']);
        DMFD.FDQuery2.Params[2].AsString  := DMFD.FDQuery1['nfe_nnf'];
        DMFD.FDQuery2.Params[3].AsString  := DMFD.FDQuery1['nfe_modelo'];
@@ -1266,7 +1301,7 @@ begin
        Emit.xNome             := DMFD.FDQuery4['razao_social'];
        Emit.xFant             := DMFD.FDQuery4['nome_fantasia'];
        Emit.EnderEmit.fone    := DMFD.FDQuery4['fone'];
-       Emit.EnderEmit.CEP     := StrToInt(DMFD.FDQuery4['cep']);
+       Emit.EnderEmit.CEP     := StrToIntDef(DMFD.FDQuery4['cep'], 0);
        Emit.EnderEmit.xLgr    := DMFD.FDQuery4['endereco'];
        if ((DMFD.FDQuery4['numero'] = null) or (DMFD.FDQuery4['numero'] = '')) then
         Emit.EnderEmit.nro     := '0'
@@ -1277,10 +1312,10 @@ begin
        else
         Emit.EnderEmit.xCpl    := DMFD.FDQuery4['complemento'];
        Emit.EnderEmit.xBairro := DMFD.FDQuery4['bairro'];
-       Emit.EnderEmit.cMun    := StrToInt(DMFD.FDQuery4['codigo_municipio']);
+       Emit.EnderEmit.cMun    := StrToIntDef(DMFD.FDQuery4['codigo_municipio'], 0);
        Emit.EnderEmit.xMun    := DMFD.FDQuery4['municipio'];
        Emit.EnderEmit.UF      := DMFD.FDQuery4['uf'];
-       Emit.enderEmit.cPais   := strtoint(DMFD.FDQuery4['codigo_pais']);//1058;
+       Emit.enderEmit.cPais   := strtointDef(DMFD.FDQuery4['codigo_pais'], 0);//1058;
        Emit.enderEmit.xPais   := DMFD.FDQuery4['nome_pais'];//'BRASIL';
 
        if DMFD.FDQuery4['regime_tributario'] = 1 then
@@ -1314,11 +1349,11 @@ begin
 
              if ( (Trim(DMFD.FDQuery1['des_endereco']) = '') or (DMFD.FDQuery1['des_endereco'] = null) ) then
               begin
-               Dest.EnderDest.CEP     := strtoint(DMFD.FDQuery1['des_cep']);
+               Dest.EnderDest.CEP     := strtointDef(DMFD.FDQuery1['des_cep'], 0);
                Dest.EnderDest.xLgr    := 'Rua';
                Dest.EnderDest.nro     := '';
                Dest.EnderDest.xCpl    := '';
-               Dest.EnderDest.cMun    := strtoint(DMFD.FDQuery1['des_codigo_municipio']);
+               Dest.EnderDest.cMun    := strtointDef(DMFD.FDQuery1['des_codigo_municipio'], 0);
                Dest.EnderDest.xMun    := DMFD.FDQuery1['des_municipio'];
                Dest.EnderDest.UF      := DMFD.FDQuery1['des_uf'];
                Dest.EnderDest.Fone    := DMFD.FDQuery1['des_fone'];;
@@ -1332,12 +1367,12 @@ begin
              Dest.CNPJCPF           := '99999999/0001-91';
 
              Dest.CNPJCPF           := DMFD.FDQuery1['des_cnpj'];
-             Dest.EnderDest.CEP     := strtoint(DMFD.FDQuery1['des_cep']);
+             Dest.EnderDest.CEP     := strtointDef(DMFD.FDQuery1['des_cep'], 0);
              Dest.EnderDest.xLgr    := DMFD.FDQuery1['des_endereco'];
              Dest.EnderDest.nro     := DMFD.FDQuery1['des_numero'];
              Dest.EnderDest.xCpl    := '';
              Dest.EnderDest.xBairro := DMFD.FDQuery1['des_bairro'];
-             Dest.EnderDest.cMun    := strtoint(DMFD.FDQuery1['des_codigo_municipio']);
+             Dest.EnderDest.cMun    := strtointDef(DMFD.FDQuery1['des_codigo_municipio'], 0);
              Dest.EnderDest.xMun    := DMFD.FDQuery1['des_municipio'];
              Dest.EnderDest.UF      := DMFD.FDQuery1['des_uf'];
              Dest.EnderDest.Fone    := DMFD.FDQuery1['des_fone'];
@@ -1373,11 +1408,11 @@ begin
 
            if ( (Trim(DMFD.FDQuery1['des_endereco']) = '') or (DMFD.FDQuery1['des_endereco'] = null) ) then
             begin
-             Dest.EnderDest.CEP     := strtoint(DMFD.FDQuery1['des_cep']);
+             Dest.EnderDest.CEP     := strtointDef(DMFD.FDQuery1['des_cep'], 0);
              Dest.EnderDest.xLgr    := 'Rua';
              Dest.EnderDest.nro     := '';
              Dest.EnderDest.xCpl    := '';
-             Dest.EnderDest.cMun    := strtoint(DMFD.FDQuery1['des_codigo_municipio']);
+             Dest.EnderDest.cMun    := strtointDef(DMFD.FDQuery1['des_codigo_municipio'], 0);
              Dest.EnderDest.xMun    := DMFD.FDQuery1['des_municipio'];
              Dest.EnderDest.UF      := DMFD.FDQuery1['des_uf'];
              Dest.EnderDest.Fone    := DMFD.FDQuery1['des_fone'];;
@@ -1389,12 +1424,12 @@ begin
 
            begin
             Dest.CNPJCPF           := DMFD.FDQuery1['des_cnpj'];
-            Dest.EnderDest.CEP     := strtoint(DMFD.FDQuery1['des_cep']);
+            Dest.EnderDest.CEP     := strtointDef(DMFD.FDQuery1['des_cep'], 0);
             Dest.EnderDest.xLgr    := DMFD.FDQuery1['des_endereco'];
             Dest.EnderDest.nro     := DMFD.FDQuery1['des_numero'];
             Dest.EnderDest.xCpl    := '';
             Dest.EnderDest.xBairro := DMFD.FDQuery1['des_bairro'];
-            Dest.EnderDest.cMun    := strtoint(DMFD.FDQuery1['des_codigo_municipio']);
+            Dest.EnderDest.cMun    := strtointDef(DMFD.FDQuery1['des_codigo_municipio'], 0);
             Dest.EnderDest.xMun    := DMFD.FDQuery1['des_municipio'];
             Dest.EnderDest.UF      := DMFD.FDQuery1['des_uf'];
             Dest.EnderDest.Fone    := DMFD.FDQuery1['des_fone'];
@@ -1443,7 +1478,7 @@ begin
        if not ( DMFD.FDQuery1['des_indIEDest'] = null ) then
         begin
 
-         case (StrToInt(DMFD.FDQuery1['des_indIEDest'])) of
+         case (StrToIntDef(DMFD.FDQuery1['des_indIEDest'], 0)) of
           1:   // Contribuinte normal
            begin
 
@@ -1480,7 +1515,7 @@ begin
         Dest.xNome             := DMFD.FDQuery1['des_razao_social'];
 
        Dest.ISUF              := DMFD.FDQuery1['des_suframa'];
-       Dest.EnderDest.cPais   := strtoint(DMFD.FDQuery1['des_codigo_pais']);    //1058;
+       Dest.EnderDest.cPais   := strtointDef(DMFD.FDQuery1['des_codigo_pais'], 0);    //1058;
        Dest.EnderDest.xPais   := DMFD.FDQuery1['des_nome_pais'];                //'BRASIL';
 
        // By Edson Lima - 2016-6-30T1143 - Verifica o email do destinatário
@@ -1513,7 +1548,7 @@ begin
        DMFD.FDQuery2.SQL.Add( '  t2.modelo      = :parm4 and                    ' );
        DMFD.FDQuery2.SQL.Add( '  t2.serie       = :parm5                        ' );
        DMFD.FDQuery2.SQL.Add( '                                                 ' );
-       DMFD.FDQuery2.Params[0].AsInteger := StrToInt(edt_CodEmp.Text);
+       DMFD.FDQuery2.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
        DMFD.FDQuery2.Params[1].AsString  := FormatDateTime('yyyy/mm/dd', DMFD.FDQuery1['nfe_demi']);
        DMFD.FDQuery2.Params[2].AsString  := DMFD.FDQuery1['nfe_nnf'];
        DMFD.FDQuery2.Params[3].AsString  := DMFD.FDQuery1['nfe_modelo'];
@@ -1556,7 +1591,7 @@ begin
        DMFD.FDQuery2.SQL.Add( '  t2.Modelo      = :Modelo      and              ' );
        DMFD.FDQuery2.SQL.Add( '  t2.Serie       = :Serie                        ' );
        DMFD.FDQuery2.SQL.Add( '                                                 ' );
-       DMFD.FDQuery2.ParamByName('codigo_loja').AsInteger := StrToInt(edt_CodEmp.Text);
+       DMFD.FDQuery2.ParamByName('codigo_loja').AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
        DMFD.FDQuery2.ParamByName('demi'       ).AsString  := FormatDateTime('yyyy/mm/dd', DMFD.FDQuery1['nfe_demi']);
        DMFD.FDQuery2.ParamByName('nnf'        ).AsString  := DMFD.FDQuery1['nfe_nnf'];
        DMFD.FDQuery2.ParamByName('Modelo'     ).AsString  := DMFD.FDQuery1['nfe_modelo'];
@@ -1605,7 +1640,7 @@ begin
        DMFD.FDQuery2.SQL.Add( '                                                                       ' );
        DMFD.FDQuery2.SQL.Add( '  Order by t1.dvenc                                                    ' );
        DMFD.FDQuery2.SQL.Add( '                                                                       ' );
-       DMFD.FDQuery2.Params[0].AsInteger := StrToInt(edt_CodEmp.Text);
+       DMFD.FDQuery2.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
        DMFD.FDQuery2.Params[1].AsString  := FormatDateTime('yyyy/mm/dd', DMFD.FDQuery1['nfe_demi']);
        DMFD.FDQuery2.Params[2].AsString  := DMFD.FDQuery1['nfe_nnf'];
        DMFD.FDQuery2.Params[3].AsString  := DMFD.FDQuery1['nfe_modelo'];
@@ -1658,7 +1693,7 @@ begin
                  if not ( DMFD.FDQuery2['IndPag'] = null ) then
                   begin
 
-                   case (StrToInt(DMFD.FDQuery2['IndPag'])) of
+                   case (StrToIntDef(DMFD.FDQuery2['IndPag'], 0)) of
                     1:    IndPag := ipVista;
                     2:    IndPag := ipPrazo;
                     3:    IndPag := ipOutras;
@@ -1675,7 +1710,7 @@ begin
                    if not ( DMFD.FDQuery2['IndPag'] = null ) then
                     begin
 
-                     case (StrToInt(DMFD.FDQuery2['IndPag'])) of
+                     case (StrToIntDef(DMFD.FDQuery2['IndPag'], 0)) of
                       1:    IndPag := ipVista;
                       2:    IndPag := ipPrazo;
                       3:    IndPag := ipOutras;
@@ -1694,7 +1729,7 @@ begin
                    if not ( DMFD.FDQuery2['IndPag'] = null ) then
                     begin
 
-                     case (StrToInt(DMFD.FDQuery2['IndPag'])) of
+                     case (StrToIntDef(DMFD.FDQuery2['IndPag'], 0)) of
                       1:    IndPag := ipVista;
                       2:    IndPag := ipPrazo;
                       3:    IndPag := ipOutras;
@@ -1721,7 +1756,7 @@ begin
 
                   0 :                                                           // ve3131
 
-                   case StrToInt(DMFD.FDQuery2['tPag']) of
+                   case StrToIntDef(DMFD.FDQuery2['tPag'], 0) of
                     01 : tPag := fpDinheiro;
                     02 : tPag := fpCheque;
                     03 : tPag := fpCartaoCredito;
@@ -1736,7 +1771,7 @@ begin
 
                   1 :                                                           // ve4040
 
-                   case StrToInt(DMFD.FDQuery2['tPag']) of
+                   case StrToIntDef(DMFD.FDQuery2['tPag'], 0) of
                     01 : tPag := fpDinheiro;
                     02 : tPag := fpCheque;
                     03 : tPag := fpCartaoCredito;
@@ -1757,7 +1792,7 @@ begin
                    if ( gModelo = 55 ) then                                     // ve40
                     begin
 
-                     case StrToInt(DMFD.FDQuery2['tPag']) of
+                     case StrToIntDef(DMFD.FDQuery2['tPag'], 0) of
                       01 : tPag := fpDinheiro;
                       02 : tPag := fpCheque;
                       03 : tPag := fpCartaoCredito;
@@ -1779,7 +1814,7 @@ begin
 
                     begin
 
-                     case StrToInt(DMFD.FDQuery2['tPag']) of
+                     case StrToIntDef(DMFD.FDQuery2['tPag'], 0) of
                       01 : tPag := fpDinheiro;
                       02 : tPag := fpCheque;
                       03 : tPag := fpCartaoCredito;
@@ -1799,7 +1834,7 @@ begin
                    if ( gModelo = 65 ) then                                     // ve40
                     begin
 
-                     case StrToInt(DMFD.FDQuery2['tPag']) of
+                     case StrToIntDef(DMFD.FDQuery2['tPag'], 0) of
                       01 : tPag := fpDinheiro;
                       02 : tPag := fpCheque;
                       03 : tPag := fpCartaoCredito;
@@ -1821,7 +1856,7 @@ begin
 
                     begin
 
-                     case StrToInt(DMFD.FDQuery2['tPag']) of
+                     case StrToIntDef(DMFD.FDQuery2['tPag'], 0) of
                       01 : tPag := fpDinheiro;
                       02 : tPag := fpCheque;
                       03 : tPag := fpCartaoCredito;
@@ -1851,7 +1886,7 @@ begin
 
                   0 :                                                           // ve3131
 
-                   case StrToInt(DMFD.FDQuery2['tBand']) of
+                   case StrToIntDef(DMFD.FDQuery2['tBand'], 0) of
                     01 : tBand := bcVisa;
                     02 : tBand := bcMasterCard;
                     03 : tBand := bcAmericanExpress;
@@ -1861,7 +1896,7 @@ begin
 
                   1 :                                                           // ve4040
 
-                   case StrToInt(DMFD.FDQuery2['tBand']) of
+                   case StrToIntDef(DMFD.FDQuery2['tBand'], 0) of
                     01 : tBand := bcVisa;
                     02 : tBand := bcMasterCard;
                     03 : tBand := bcAmericanExpress;
@@ -1880,7 +1915,7 @@ begin
 
                     begin
 
-                     case StrToInt(DMFD.FDQuery2['tBand']) of
+                     case StrToIntDef(DMFD.FDQuery2['tBand'], 0) of
                       01 : tBand := bcVisa;
                       02 : tBand := bcMasterCard;
                       03 : tBand := bcAmericanExpress;
@@ -1899,7 +1934,7 @@ begin
 
                     begin
 
-                     case StrToInt(DMFD.FDQuery2['tBand']) of
+                     case StrToIntDef(DMFD.FDQuery2['tBand'], 0) of
                       01 : tBand := bcVisa;
                       02 : tBand := bcMasterCard;
                       03 : tBand := bcAmericanExpress;
@@ -1915,7 +1950,7 @@ begin
 
                     begin
 
-                     case StrToInt(DMFD.FDQuery2['tBand']) of
+                     case StrToIntDef(DMFD.FDQuery2['tBand'], 0) of
                       01 : tBand := bcVisa;
                       02 : tBand := bcMasterCard;
                       03 : tBand := bcAmericanExpress;
@@ -1934,7 +1969,7 @@ begin
 
                     begin
 
-                     case StrToInt(DMFD.FDQuery2['tBand']) of
+                     case StrToIntDef(DMFD.FDQuery2['tBand'], 0) of
                       01 : tBand := bcVisa;
                       02 : tBand := bcMasterCard;
                       03 : tBand := bcAmericanExpress;
@@ -2123,7 +2158,7 @@ begin
        DMFD.FDQuery2.SQL.Add( '                                                               ' );
        DMFD.FDQuery2.SQL.Add( 'Order by t1.sequencia                                          ' );
        DMFD.FDQuery2.SQL.Add( '                                                               ' );
-       DMFD.FDQuery2.Params[0].AsInteger := StrToInt(edt_CodEmp.Text);
+       DMFD.FDQuery2.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
        DMFD.FDQuery2.Params[1].AsString  := FormatDateTime('yyyy/mm/dd', DMFD.FDQuery1['nfe_demi']);
        DMFD.FDQuery2.Params[2].AsString  := DMFD.FDQuery1['nfe_nnf'];
        DMFD.FDQuery2.Params[3].AsString  := DMFD.FDQuery1['nfe_modelo'];
@@ -2267,7 +2302,7 @@ begin
                   if (VarToStr(DMFD.FDQuery2['CodSIMP']) <> '') then
                    begin
 
-                    cProdANP := StrToInt(VarToStr(DMFD.FDQuery2['CodSIMP']));
+                    cProdANP := StrToIntDef(VarToStr(DMFD.FDQuery2['CodSIMP']), 0);
                     if (vCfop = '5667') then
                      UFcons     := DMFD.FDQuery4['uf']
                     else
@@ -2301,7 +2336,7 @@ begin
 
                    end
                   else
-                   cProdANP := StrToInt(VarToStr(DMFD.FDQuery2['CodSIMP']));     // E LA01 N 1-1 9 Utilizar a codificação de produtos do Sistema de Informações de Movimentação de Produtos - SIMP (http://www.anp.gov.br/simp/). (NT 2012/003)
+                   cProdANP := StrToIntDef(VarToStr(DMFD.FDQuery2['CodSIMP']), 0); // E LA01 N 1-1 9 Utilizar a codificação de produtos do Sistema de Informações de Movimentação de Produtos - SIMP (http://www.anp.gov.br/simp/). (NT 2012/003)
 
                   if ( (     DMFD.FDQuery2['descANP']  = null)   or
                        (trim(DMFD.FDQuery2['descANP']) = ''  ) ) then
@@ -2349,7 +2384,7 @@ begin
 
                     end
                    else
-                    cProdANP := StrToInt(VarToStr(DMFD.FDQuery2['CodSIMP']));     // E LA01 N 1-1 9 Utilizar a codificação de produtos do Sistema de Informações de Movimentação de Produtos - SIMP (http://www.anp.gov.br/simp/). (NT 2012/003)
+                    cProdANP := StrToIntDef(VarToStr(DMFD.FDQuery2['CodSIMP']), 0); // E LA01 N 1-1 9 Utilizar a codificação de produtos do Sistema de Informações de Movimentação de Produtos - SIMP (http://www.anp.gov.br/simp/). (NT 2012/003)
 
                    if ( (     DMFD.FDQuery2['descANP']  = null)   or
                         (trim(DMFD.FDQuery2['descANP']) = ''  ) ) then
@@ -2383,7 +2418,7 @@ begin
                    if (VarToStr(DMFD.FDQuery2['CodSIMP']) <> '') then
                     begin
 
-                     cProdANP := StrToInt(VarToStr(DMFD.FDQuery2['CodSIMP']));
+                     cProdANP := StrToIntDef(VarToStr(DMFD.FDQuery2['CodSIMP']), 0);
                      if (vCfop = '5667') then
                       UFcons     := DMFD.FDQuery4['uf']
                      else
@@ -2419,7 +2454,7 @@ begin
 
                     end
                    else
-                    cProdANP := StrToInt(VarToStr(DMFD.FDQuery2['CodSIMP']));     // E LA01 N 1-1 9 Utilizar a codificação de produtos do Sistema de Informações de Movimentação de Produtos - SIMP (http://www.anp.gov.br/simp/). (NT 2012/003)
+                    cProdANP := StrToIntDef(VarToStr(DMFD.FDQuery2['CodSIMP']), 0); // E LA01 N 1-1 9 Utilizar a codificação de produtos do Sistema de Informações de Movimentação de Produtos - SIMP (http://www.anp.gov.br/simp/). (NT 2012/003)
 
                    if ( (     DMFD.FDQuery2['descANP']  = null)   or
                         (trim(DMFD.FDQuery2['descANP']) = ''  ) ) then
@@ -2453,7 +2488,7 @@ begin
                    if (VarToStr(DMFD.FDQuery2['CodSIMP']) <> '') then
                     begin
 
-                     cProdANP := StrToInt(VarToStr(DMFD.FDQuery2['CodSIMP']));
+                     cProdANP := StrToIntDef(VarToStr(DMFD.FDQuery2['CodSIMP']), 0);
                      if (vCfop = '5667') then
                       UFcons     := DMFD.FDQuery4['uf']
                      else
@@ -2538,7 +2573,7 @@ begin
            DMFD.FDQuery8.SQL.Add( '                                                               ' );
            DMFD.FDQuery8.SQL.Add( 'Order by t1.sequencia                                          ' );
            DMFD.FDQuery8.SQL.Add( '                                                               ' );
-           DMFD.FDQuery8.Params[0].AsInteger := StrToInt(edt_CodEmp.Text);
+           DMFD.FDQuery8.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
            DMFD.FDQuery8.Params[1].AsString  := FormatDateTime('yyyy/mm/dd', DMFD.FDQuery1['nfe_demi']);
            DMFD.FDQuery8.Params[2].AsString  := DMFD.FDQuery1['nfe_nnf'];
            DMFD.FDQuery8.Params[3].AsInteger := DMFD.FDQuery2['sequencia'];
@@ -2585,7 +2620,7 @@ begin
                DMFD.FDQuery9.SQL.Add( '                                                                         ' );
                DMFD.FDQuery9.SQL.Add( 'Order by t1.sequencia                                                    ' );
                DMFD.FDQuery9.SQL.Add( '                                                                         ' );
-               DMFD.FDQuery9.Params[0].AsInteger := StrToInt(edt_CodEmp.Text);
+               DMFD.FDQuery9.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
                DMFD.FDQuery9.Params[1].AsString  := FormatDateTime('yyyy/mm/dd', DMFD.FDQuery1['nfe_demi']);
                DMFD.FDQuery9.Params[2].AsString  := DMFD.FDQuery1['nfe_nnf'];
                DMFD.FDQuery9.Params[3].AsInteger := DMFD.FDQuery2['sequencia'];
@@ -2645,7 +2680,7 @@ begin
              DMFD.FDQuery19.SQL.Add( '                                          ' );
              DMFD.FDQuery19.SQL.Add( 'Order by t1.codigo_item                   ' );
              DMFD.FDQuery19.SQL.Add( '                                          ' );
-             DMFD.FDQuery19.Params[0].AsInteger := StrToInt(edt_CodEmp.Text);
+             DMFD.FDQuery19.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
              DMFD.FDQuery19.Params[1].AsString  := FormatDateTime('yyyy/mm/dd', DMFD.FDQuery1['nfe_demi']);
              DMFD.FDQuery19.Params[2].AsString  := DMFD.FDQuery1['nfe_nnf'];
              DMFD.FDQuery19.Params[3].AsString  := DMFD.FDQuery1['nfe_modelo'];
@@ -3163,7 +3198,7 @@ begin
 
          pImpr();
 
-         ACBrNFe1.NotasFiscais.GravarXML();                                     // trunk2 - Antes => ACBrNFe1.NotasFiscais.SaveToFile(); //Salva os XMLs para posterior envio do XML.
+         ACBrNFe1.NotasFiscais.GravarXML();
 
          _chave := aux;
 
@@ -3173,6 +3208,12 @@ begin
                           'situacao',
                           'motivo',
                           'CalcHoraNFCe',
+                          'UsuTrs',
+                          '',
+                          '',
+                          '',
+                          '',
+                          '',
                           '',
                           '',
                           'codigo_loja',
@@ -3186,6 +3227,12 @@ begin
                           AnsiUpperCase(_tipo_emissao),
                           ACBrNFe1.WebServices.EnvEvento.xMotivo,
                           'N',
+                          gUsu,
+                          '',
+                          '',
+                          '',
+                          '',
+                          '',
                           '',
                           '',
                           edt_CodEmp.Text,
@@ -3253,7 +3300,7 @@ begin
         // by Edson ; 2013-10-8T1031 ; Variável Global Chave criada para contestar gravação;
         gChave_Consiste  := Aux;
 
-        if (StrToInt(DMFD.FDQuery1['nfe_modelo']) = 65) then
+        if (StrToIntDef(DMFD.FDQuery1['nfe_modelo'], 0) = 65) then
          gTN              := '\NFCe\'
         else
          gTN              := '\NFe\';
@@ -3284,6 +3331,12 @@ begin
                               'motivo',
                               'data_hora_recebimento',
                               'CalcHoraNFCe',
+                              'UsuTrs',
+                              '',
+                              '',
+                              '',
+                              '',
+                              '',
                               'codigo_loja',
                               'demi',
                               'nnf',
@@ -3297,6 +3350,12 @@ begin
                               ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].xMotivo,
                               FormatDateTime('yyyy/mm/dd hh:nn:ss', ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].dhRecbto),
                               'N',
+                              gUsu,
+                              '',
+                              '',
+                              '',
+                              '',
+                              '',
                               edt_CodEmp.Text,
                               FormatDateTime('yyyy/mm/dd', DMFD.FDQuery1['nfe_demi']),
                               DMFD.FDQuery1['nfe_nnf'],
@@ -3349,7 +3408,7 @@ begin
                if iCodPed <> 0 then
                 begin
 
-                 if ( fVerPAG(StrToInt(gNNF_Consiste), StrToInt(edt_CodEmp.Text), iCodPed) ) then
+                 if ( fVerPAG(StrToIntDef(gNNF_Consiste, 0), StrToIntDef(edt_CodEmp.Text, 0), iCodPed) ) then
                   begin
 
                    //-------------------------------------------------------------
@@ -3357,7 +3416,7 @@ begin
                    //-------------------------------------------------------------
                    if (iCodPed <> 6) then
                     begin
-                     if not ( fCanCAP(StrToInt(gNNF_Consiste), StrToInt(edt_CodEmp.Text), iCodPed, gCodMtD) ) then
+                     if not ( fCanCAP(StrToIntDef(gNNF_Consiste, 0), StrToIntDef(edt_CodEmp.Text, 0), iCodPed, gCodMtD) ) then
                       Application.MessageBox(PWideChar('Nota denegada, mas o pedido não foi cancelado!'), 'Atenção', MB_ICONINFORMATION );
                     end
                    else
@@ -3400,6 +3459,12 @@ begin
                                 'motivo',
                                 'data_hora_recebimento',
                                 'CalcHoraNFCe',
+                                'UsuTrs',
+                                '',
+                                '',
+                                '',
+                                '',
+                                '',
                                 'codigo_loja',
                                 'demi',
                                 'nnf',
@@ -3413,6 +3478,12 @@ begin
                                 ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].xMotivo,
                                 FormatDateTime('yyyy/mm/dd hh:nn:ss', ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].dhRecbto),
                                 'N',
+                                gUsu,
+                                '',
+                                '',
+                                '',
+                                '',
+                                '',
                                 edt_CodEmp.Text,
                                 FormatDateTime('yyyy/mm/dd', DMFD.FDQuery1['nfe_demi']),
                                 DMFD.FDQuery1['nfe_nnf'],
@@ -3470,7 +3541,7 @@ begin
               if iCodPed <> 0 then
                begin
 
-                if ( fVerPAG(StrToInt(gNNF_Consiste), StrToInt(edt_CodEmp.Text), iCodPed) ) then
+                if ( fVerPAG(StrToIntDef(gNNF_Consiste, 0), StrToIntDef(edt_CodEmp.Text, 0), iCodPed) ) then
                  begin
 
                   //-------------------------------------------------------------
@@ -3478,7 +3549,7 @@ begin
                   //-------------------------------------------------------------
                   if (iCodPed <> 0) then
                    begin
-                    if not ( fCanCAP(StrToInt(gNNF_Consiste), StrToInt(edt_CodEmp.Text), iCodPed, gCodMtD) ) then
+                    if not ( fCanCAP(StrToIntDef(gNNF_Consiste, 0), StrToIntDef(edt_CodEmp.Text, 0), iCodPed, gCodMtD) ) then
                      Application.MessageBox(PWideChar('Nota denegada, mas o pedido não foi cancelado!'), 'Atenção', MB_ICONINFORMATION );
                    end
                   else
@@ -3606,11 +3677,11 @@ begin
 
     z := (Int(Length(pXml) / 8000));
     if z < 9 then
-     y := StrToInt(copy(FloatToStr(z), 1, 1))
+     y := StrToIntDef(copy(FloatToStr(z), 1, 1), 0)
     else if ( (z > 9) and (z < 100) ) then
-     y := StrToInt(copy(FloatToStr(z), 1, 2))
+     y := StrToIntDef(copy(FloatToStr(z), 1, 2), 0)
     else
-     y := StrToInt(copy(FloatToStr(z), 1, 3));
+     y := StrToIntDef(copy(FloatToStr(z), 1, 3), 0);
 
     while ( y >= 0 ) do
      begin
@@ -4323,7 +4394,7 @@ begin
     DMFD.FDQuery2.SQL.Add( ':xml_nota39,                                                ' );
     DMFD.FDQuery2.SQL.Add( ':xml_nota40)                                                ' );
     DMFD.FDQuery2.Params[0].AsString    := 'IMPORTA';
-    DMFD.FDQuery2.Params[1].AsInteger   := StrToInt(edt_CodEmp.Text);
+    DMFD.FDQuery2.Params[1].AsInteger   := StrToIntDef(edt_CodEmp.Text, 0);
     DMFD.FDQuery2.Params[2].AsString    := FormatDateTime('yyyy/mm/dd', Ide.dEmi);
     DMFD.FDQuery2.Params[3].AsString    := vartostr(Ide.nNF);
     DMFD.FDQuery2.Params[4].AsMemo      := vXml1;
@@ -4425,6 +4496,7 @@ begin
 
  /// By Edson Lima 14.9.2012 ; 10:10 - Atualiza grade
  pAtuNFe();
+
 end;
 
 procedure TFrGBNFe.RadioGroup1Click(Sender: TObject);
@@ -4500,7 +4572,7 @@ begin
    cxTL.BringToFront;
   end;
 
- 2:
+ 2:                                                                             // TRANSMITIDAS
 
   begin
    // Desabilita os botõesde envio
@@ -4526,7 +4598,7 @@ begin
    cxTL.BringToFront;
   end;
 
- 3:
+ 3:                                                                             // DENEGADAS
 
   begin
    // Desabilita os botõesde envio
@@ -4552,7 +4624,7 @@ begin
    cxTL.BringToFront;
   end;
 
- 4:
+ 4:                                                                             // CANCELADAS
 
   begin
    // Desabilita os botõesde envio
@@ -4578,7 +4650,7 @@ begin
    cxTL.BringToFront;
   end;
 
- 5:
+ 5:                                                                             // INUTILIZADAS
 
   begin
    // Desabilita os botõesde envio
@@ -4605,7 +4677,7 @@ begin
  end;
 
  // Tratamento do nível de acesso, passado pelo ERP
- case StrToInt(gNivel) of
+ case StrToIntDef(gNivel, 0) of
   0:
    begin
     { Esse nível deixa liberado tudo no GBNFe - Acesso Total                   }
@@ -4653,7 +4725,7 @@ begin
 
   5:
    begin
-    { Quando expecificado não verifica as NFe selecionadas que estão em
+    { Quando expecificado, não verifica as NFe selecionadas que estão em
       contigência e as já enviadas ha mais de um dia para seleciona            }
 
    end;
@@ -5432,7 +5504,7 @@ begin
        // Filtra os registro por data ; by Edson Lima ;  2015-5-25T0857
        DMFD.FDQuery15.Close;
         DMFD.FDQuery15.ParamByName('DatCon').AsString  := FormatDateTime('yyyy/mm/dd', gDatConB);
-        DMFD.FDQuery15.ParamByName('CodEmp').AsInteger := StrToInt(edt_CodEmp.Text);
+        DMFD.FDQuery15.ParamByName('CodEmp').AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
         DMFD.FDQuery15.ParamByName('Situac').AsString  := 'FSDA';
        DMFD.FDQuery15.Open;
 
@@ -5465,7 +5537,7 @@ begin
        // Filtra os registro por data ; by Edson Lima ;  2015-5-25T0857
        DMFD.FDQuery15.Close;
         DMFD.FDQuery15.ParamByName('DatCon').AsString  := FormatDateTime('yyyy/mm/dd', gDatConB);
-        DMFD.FDQuery15.ParamByName('CodEmp').AsInteger := StrToInt(edt_CodEmp.Text);
+        DMFD.FDQuery15.ParamByName('CodEmp').AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
         DMFD.FDQuery15.ParamByName('Situac').AsString  := 'OFFL';
        DMFD.FDQuery15.Open;
 
@@ -5506,7 +5578,7 @@ begin
        // Filtra os registro por data ; by Edson Lima ;  2015-5-25T0857
        DMFD.FDQuery15.Close;
         DMFD.FDQuery15.ParamByName('DatCon').AsString  := FormatDateTime('yyyy/mm/dd', gDatConB);
-        DMFD.FDQuery15.ParamByName('CodEmp').AsInteger := StrToInt(edt_CodEmp.Text);
+        DMFD.FDQuery15.ParamByName('CodEmp').AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
         DMFD.FDQuery15.ParamByName('Situac').AsString  := '';
        DMFD.FDQuery15.Open;
 
@@ -5618,7 +5690,7 @@ begin
 
     LerIni();
 
-    if ((gPSCert = 1) and (StrToInt(gCodEmp) = gCEIni)) then
+    if ((gPSCert = 1) and (StrToIntDef(gCodEmp, 0) = gCEIni)) then
      begin
 
       FrPar.CheckBox6.Checked := true;
@@ -5626,7 +5698,7 @@ begin
 
      end;
 
-    if ((gPSCert = 2) and (StrToInt(gCodEmp) = gCEIni)) then
+    if ((gPSCert = 2) and (StrToIntDef(gCodEmp, 0) = gCEIni)) then
      begin
 
       FrPar.CheckBox6.Checked := false;
@@ -5678,8 +5750,8 @@ begin
   end;
   //----------------------------------------------------------------------------
 
-  DMFD.FDQuery4.ParamByName('DANFE_QtdCopias').AsInteger         := StrToInt(FrPar.ed_QtdCopNFe.Text);
-  DMFD.FDQuery4.ParamByName('DANFE_QtdCopNFCe').AsInteger        := StrToInt(FrPar.ed_QtdCopNFCe.Text);
+  DMFD.FDQuery4.ParamByName('DANFE_QtdCopias').AsInteger         := StrToIntDef(FrPar.ed_QtdCopNFe.Text, 0);
+  DMFD.FDQuery4.ParamByName('DANFE_QtdCopNFCe').AsInteger        := StrToIntDef(FrPar.ed_QtdCopNFCe.Text, 0);
 
   if FrPar.CheckBox2.Checked then
    DMFD.FDQuery4.ParamByName('DANFE_Visualiza').AsString         := 'S'
@@ -5766,7 +5838,7 @@ begin
    DMFD.FDQuery4.ParamByName('Web_Visualizar').AsString          := 'N';
 
   DMFD.FDQuery4.ParamByName('Proxy_Host').AsString               := FrPar.edtProxyHost.Text;
-  DMFD.FDQuery4.ParamByName('Proxy_Porta').AsInteger             := StrToInt(FrPar.edtProxyPorta.Text);
+  DMFD.FDQuery4.ParamByName('Proxy_Porta').AsInteger             := StrToIntDef(FrPar.edtProxyPorta.Text, 0);
   DMFD.FDQuery4.ParamByName('Proxy_User').AsString               := FrPar.edtProxyUser.Text;
 
   if not ( trim(FrPar.edtProxySenha.Text) = '' ) then
@@ -5776,7 +5848,7 @@ begin
 
   DMFD.FDQuery4.ParamByName('Email_NEeMAIL').AsString            := FrPar.edtNEeMail.Text;
   DMFD.FDQuery4.ParamByName('Email_Host').AsString               := FrPar.edtSmtpHost.Text;
-  DMFD.FDQuery4.ParamByName('Email_Port').AsInteger              := StrToInt(FrPar.edtSmtpPort.Text);
+  DMFD.FDQuery4.ParamByName('Email_Port').AsInteger              := StrToIntDef(FrPar.edtSmtpPort.Text, 0);
   DMFD.FDQuery4.ParamByName('Email_User').AsString               := FrPar.edtSmtpUser.Text;
   DMFD.FDQuery4.ParamByName('Email_Pass').AsString               := FrPar.edtSmtpPass.Text;
 
@@ -5916,12 +5988,12 @@ begin
   if FileExists(gCamExe + 'GBNFe.ini') then
    begin
     LerIni();
-    if ((gPSCert = 1) and (StrToInt(gCodEmp) = gCEIni)) then
+    if ((gPSCert = 1) and (StrToIntDef(gCodEmp, 0) = gCEIni)) then
      begin
       FrPar.CheckBox6.Checked := true;
       FrPar.CheckBox7.Checked := false;
      end;
-    if ((gPSCert = 2) and (StrToInt(gCodEmp) = gCEIni)) then
+    if ((gPSCert = 2) and (StrToIntDef(gCodEmp, 0) = gCEIni)) then
      begin
       FrPar.CheckBox6.Checked := false;
       FrPar.CheckBox7.Checked := true;
@@ -6361,7 +6433,7 @@ begin
   //Grava e Ler o arquivo ini - by EL - 2014-11-19T1552
   if not FileExists(gCamCert + 'GBNFe.ini') then
    begin
-    gCEIni := StrToInt(gCodEmp);
+    gCEIni := StrToIntDef(gCodEmp, 0);
     gPSCert := 1;
     GravarIni();
    end;
@@ -6370,12 +6442,12 @@ begin
   if FileExists(gCamCert + 'GBNFe.ini') then
    begin
     LerIni();
-    if ((gPSCert = 1) and (StrToInt(gCodEmp) = gCEIni)) then
+    if ((gPSCert = 1) and (StrToIntDef(gCodEmp, 0) = gCEIni)) then
     begin
      ACBrNFe1.Configuracoes.Certificados.NumeroSerie := FrPar.edtNumSerie.Text;
      FrPar.edtNumSerie.Text := ACBrNFe1.Configuracoes.Certificados.NumeroSerie;
     end;
-   if ((gPSCert = 2) and (StrToInt(gCodEmp) = gCEIni)) then
+   if ((gPSCert = 2) and (StrToIntDef(gCodEmp, 0) = gCEIni)) then
     begin
      ACBrNFe1.Configuracoes.Certificados.NumeroSerie := FrPar.edtNumSerie2.Text;
      FrPar.edtNumSerie2.Text := ACBrNFe1.Configuracoes.Certificados.NumeroSerie;
@@ -6678,6 +6750,7 @@ begin
             nodInu.Values[cxTLsnPro.ItemIndex]  := DMFD.FDQuery7.fieldByName('nProt').AsString;
             nodInu.Values[cxTLicSta.ItemIndex]  := DMFD.FDQuery7.fieldByName('cStat').AsInteger;
             nodInu.Values[cxTLsxMot.ItemIndex]  := DMFD.FDQuery7.fieldByName('xMotivo').AsString;
+            nodInu.Values[cxTLsxInu.ItemIndex]  := DMFD.FDQuery7.fieldByName('UsuInu').AsString;
 
             DMFD.FDQuery7.Next;
            end;
@@ -6707,7 +6780,7 @@ begin
  DMFD.FDQuery4.SQL.Clear;
  DMFD.FDQuery4.SQL.Add( 'select * from emitente            ' );
  DMFD.FDQuery4.SQL.Add( ' where codigo_loja =:codigo_loja  ' );
- DMFD.FDQuery4.ParamByName('codigo_loja').AsInteger := StrToInt(gCodEmp);
+ DMFD.FDQuery4.ParamByName('codigo_loja').AsInteger := StrToIntDef(gCodEmp, 0);
  DMFD.FDQuery4.Open;
 
  DMFD.FDQuery4.Active := True;
@@ -6715,7 +6788,7 @@ begin
  if DMFD.FDQuery4.isempty then
   begin
 
-   Application.Messagebox(' Emitente não encontrado, o GBNFe será fechado!','Atenção!',MB_ICONINFORMATION+mb_ok);
+   Application.Messagebox(' Emitente não encontrado!','Atenção!',MB_ICONINFORMATION+mb_ok);
     begin
      PostMessage(FindWindow('tfrgbnfe', nil), WM_CLOSE,0,0);
      Exit;
@@ -6750,38 +6823,73 @@ begin
 
  LerBDFD();
 
-
  //-----------------------------------------------------------------------------
  // Conectar o banco de dados
 
- if not ( FileExists(gCamExe + 'GBNFe.ini') ) then Halt;
-
- DMFD.FDConNFe.LoginPrompt                := FrPar.chk_LoginPrompt_NFe.Checked;
- if ( FrPar.OSAuthent_NFe.Checked ) then
-  DMFD.FDConNFe.Params.Values['OSAuthent']:= 'Yes'
- else
-  DMFD.FDConNFe.Params.Values['OSAuthent']:= 'No';
- DMFD.FDConNFe.Params.Values['MARS']      := 'Yes';
- DMFD.FDConNFe.Params.Values['DriverID']  := FrPar.cbb_DriverID_NFe.Text;
- DMFD.FDConNFe.Params.Values['Database']  := FrPar.edt_Database_NFe.Text;
- DMFD.FDConNFe.Params.Values['Server'  ]  := FrPar.edt_Server_NFe.Text;
- if not ( FrPar.OSAuthent_NFe.Checked ) then
+ while not ( DMFD.FDConNFe.Connected ) do
   begin
-   DMFD.FDConNFe.Params.Values['UserName']:= FrPar.edt_UserName_NFe.Text;
-   DMFD.FDConNFe.Params.Values['Password']:= FrPar.edt_Password_NFe.Text;
+
+   DMFD.FDConNFe.LoginPrompt                := FrPar.chk_LoginPrompt_NFe.Checked;
+   if ( FrPar.OSAuthent_NFe.Checked ) then
+    DMFD.FDConNFe.Params.Values['OSAuthent']:= 'Yes'
+   else
+    DMFD.FDConNFe.Params.Values['OSAuthent']:= 'No';
+   DMFD.FDConNFe.Params.Values['MARS']      := 'Yes';
+   DMFD.FDConNFe.Params.Values['DriverID']  := FrPar.cbb_DriverID_NFe.Text;
+   DMFD.FDConNFe.Params.Values['Database']  := FrPar.edt_Database_NFe.Text;
+   DMFD.FDConNFe.Params.Values['Server'  ]  := FrPar.edt_Server_NFe.Text;
+   if not ( FrPar.OSAuthent_NFe.Checked ) then
+    begin
+     DMFD.FDConNFe.Params.Values['UserName']:= FrPar.edt_UserName_NFe.Text;
+     DMFD.FDConNFe.Params.Values['Password']:= FrPar.edt_Password_NFe.Text;
+    end;
+
+   try
+
+    DMFD.FDConNFe.Connected                  := FrPar.chk_Connected_NFe.Checked;
+
+    DMFD.FDQuery4.Close;
+    DMFD.FDQuery4.SQL.Clear;
+    DMFD.FDQuery4.SQL.Add( 'select * from emitente            ' );
+    DMFD.FDQuery4.SQL.Add( ' where codigo_loja =:codigo_loja  ' );
+    DMFD.FDQuery4.ParamByName('codigo_loja').AsInteger := StrToIntDef(gCodEmp, 0);
+    DMFD.FDQuery4.Open;
+
+    DMFD.FDQuery4.Active := True;
+
+    if (DMFD.FDQuery4.IsEmpty) then
+     begin
+
+      if Application.MessageBox(PWideChar( 'A empresa: ' + gCodEmp +
+                                           ', não foi encontrada na tabela de emitentes!'  + Char(13) +
+                          'Gostaria de corrigir os dados de conecção?'),
+                          PWideChar('Parâmetros FireDAC'),
+                          MB_ICONQUESTION + MB_YESNO ) = IdYes then
+       begin
+
+        if ( FrBDFD = nil ) then
+         FrBDFD := TFrBDFD.Create(Application);
+        FrBDFD.BringToFront;
+        FrBDFD.ShowModal;
+
+       end
+      else
+       Halt;
+
+     end;
+
+   except
+
+     if ( FrBDFD = nil ) then
+      FrBDFD := TFrBDFD.Create(Application);
+     FrBDFD.BringToFront;
+     FrBDFD.ShowModal;
+
+   end;
+
   end;
 
- try
-
-  DMFD.FDConNFe.Connected                  := FrPar.chk_Connected_NFe.Checked;
-
- except
-
-  Halt;
-
- end;
-
- if not DMFD.FDConNFe.Connected then
+ if ( DMFD.FDQuery4.IsEmpty ) then
   begin
 
    Halt;
@@ -6805,7 +6913,7 @@ begin
    //---------------------------------------------------------------------------
 
    edt_CodEmp.Text := gCodEmp;                                                  // Atualiza o edt_CodEmp com o gCodEmp passado por parâmetro pelo ERP
-   ilCodEmp := StrToInt(gCodEmp);
+   ilCodEmp := StrToIntDef(gCodEmp, 0);
 
    pAtrCam();                                                                   // Atribui os caminho
    LerConf2();                                                                  // Atribui dados nos parâmetros acbr
@@ -6848,7 +6956,7 @@ begin
 
    if gExpress = '1' then
     begin
-     case StrToInt(gOpcao) of
+     case StrToIntDef(gOpcao, 0) of
       1 : //** ENVIA NOTA FISCAL
        begin
         RadioGroup1.ItemIndex := 0;                                             // seta parâmetro inicial para visualizar nfe a transmitir
@@ -6857,7 +6965,7 @@ begin
         DMFD.FDQuery3.First;                                                    // vai pro inicio da tabela nfe
         while (not DMFD.FDQuery3.eof) do                                        // fica no loop até que encontre o fim
          begin
-          if (DMFD.FDQuery3['nfe_nnf'] = StrToInt(gNNF)) then                   // se a nota for igual a variavel gNNF marca registro
+          if (DMFD.FDQuery3['nfe_nnf'] = StrToIntDef(gNNF, 0)) then             // se a nota for igual a variavel gNNF marca registro
            begin
             DMFD.FDQuery3.FieldByName('Checado').ReadOnly := False;
             DMFD.FDQuery3.Edit;                                                 // edita registro
@@ -6903,7 +7011,7 @@ begin
         DMFD.FDQuery5.First;                                                    // vai pro inicio da tabela nfe
         while (not DMFD.FDQuery5.eof) do                                        // fica no loop até que encontre o fim
          begin
-          if (DMFD.FDQuery5['nfe_nnf'] = StrToInt(gNNF)) then                   // se a nota for igual a variavel gNNF marca registro
+          if (DMFD.FDQuery5['nfe_nnf'] = StrToIntDef(gNNF, 0)) then             // se a nota for igual a variavel gNNF marca registro
            begin
             DMFD.FDQuery5.FieldByName('Checado').ReadOnly := False;
             DMFD.FDQuery5.Edit;                                                 // edita registro
@@ -6967,7 +7075,7 @@ begin
         DMFD.FDQuery5.First;                                                    // vai pro inicio da tabela nfe
         while (not DMFD.FDQuery5.eof) do                                        // fica no loop até que encontre o fim
          begin
-          if (DMFD.FDQuery5['nfe_nnf'] = StrToInt(gNNF)) then                   // se a nota for igual a variavel gNNF marca registro
+          if (DMFD.FDQuery5['nfe_nnf'] = StrToIntDef(gNNF, 0)) then             // se a nota for igual a variavel gNNF marca registro
            begin
             DMFD.FDQuery5.FieldByName('Checado').ReadOnly := False;
             DMFD.FDQuery5.Edit;                                                 // edita registro
@@ -7014,7 +7122,7 @@ begin
         DMFD.FDQuery5.First;                                                    // vai pro inicio da tabela nfe
         while (not DMFD.FDQuery5.eof) do                                        // fica no loop até que encontre o fim
          begin
-          if (DMFD.FDQuery5['nfe_nnf'] = StrToInt(gNNF)) then                   // se a nota for igual a variavel gNNF marca registro
+          if (DMFD.FDQuery5['nfe_nnf'] = StrToIntDef(gNNF, 0)) then             // se a nota for igual a variavel gNNF marca registro
            begin
             DMFD.FDQuery5.FieldByName('Checado').ReadOnly := False;
             DMFD.FDQuery5.Edit;                                                 // edita registro
@@ -7123,7 +7231,7 @@ begin
 
   if not DMFD.FDQuery4.IsEmpty then
    begin
-   if StrToInt(edt_CodEmp.Text) < DMFD.FDQuery4['codigo_loja'] then
+   if StrToIntDef(edt_CodEmp.Text, 0) < DMFD.FDQuery4['codigo_loja'] then
     begin
     DMFD.FDQuery4.Last;
     edt_CodEmp.Text := IntToStr(DMFD.FDQuery4['codigo_loja']);
@@ -7136,7 +7244,7 @@ begin
    else
     begin
     DMFD.FDQuery4.Last;
-    if StrToInt(edt_CodEmp.Text) > DMFD.FDQuery4['codigo_loja'] then
+    if StrToIntDef(edt_CodEmp.Text, 0) > DMFD.FDQuery4['codigo_loja'] then
      begin
      DMFD.FDQuery4.First;
      edt_CodEmp.Text := IntToStr(DMFD.FDQuery4['codigo_loja']);
@@ -7298,7 +7406,7 @@ begin
 
  0:                                                                             // PENDENTES
 
-  begin                                                                         // fsda
+  begin
 
    if RadioButton3.Checked then                                                 // PENDENTES - CONTINGÊNCIA
 
@@ -7329,8 +7437,8 @@ begin
            begin
 
             // Filtra a nfe selecionada com select
-            pSelNfe( DMFD.FDQryGeral2, StrToInt(FrGBNFe.edt_CodEmp.Text),
-                                       StrToInt(cxTL.Items[X].Texts[cxTLlNot.ItemIndex]),
+            pSelNfe( DMFD.FDQryGeral2, StrToIntDef(FrGBNFe.edt_CodEmp.Text, 0),
+                                       StrToIntDef(cxTL.Items[X].Texts[cxTLlNot.ItemIndex], 0),
                                        StrToDateTime(cxTL.Items[X].Texts[cxTLdDem.ItemIndex]),
                                        cxTL.Items[X].Texts[cxTLsMod.ItemIndex],
                                        cxTL.Items[X].Texts[cxTLsSer.ItemIndex] );
@@ -7553,8 +7661,8 @@ begin
        begin
 
         // Filtra a nfe selecionada com select
-        pSelNfe( DMFD.FDQryGeral2, StrToInt(FrGBNFe.edt_CodEmp.Text),
-                                   StrToInt(cxTL.Items[X].Texts[cxTLlNot.ItemIndex]),
+        pSelNfe( DMFD.FDQryGeral2, StrToIntDef(FrGBNFe.edt_CodEmp.Text, 0),
+                                   StrToIntDef(cxTL.Items[X].Texts[cxTLlNot.ItemIndex], 0),
                                    StrToDateTime(cxTL.Items[X].Texts[cxTLdDem.ItemIndex]),
                                    cxTL.Items[X].Texts[cxTLsMod.ItemIndex],
                                    cxTL.Items[X].Texts[cxTLsSer.ItemIndex] );
@@ -7573,7 +7681,7 @@ begin
         gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
         gNNF_Consiste    := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
         gSerie_Consiste  := vartostr(DMFD.FDQryGeral2['nfe_serie']);
-        gSerie           := StrToInt(gSerie_Consiste);
+        gSerie           := StrToIntDef(gSerie_Consiste, 0);
         gModelo          := DMFD.FDQryGeral2['nfe_modelo'];
         gChave_Consiste  := '';                                                 // está sendo atribuida depois da sp_calcula_digito_chave
         gModelo_Consiste := vartostr(DMFD.FDQryGeral2['nfe_modelo']);
@@ -7662,7 +7770,7 @@ begin
               DMFD.FDQuery2.SQL.Add( 'and t2.chave_nfe = :parm2                                  ' );
               DMFD.FDQuery2.SQL.Add( 'and t2.situacao <> :parm3                                  ' );
               DMFD.FDQuery2.SQL.Add( 'and t2.situacao <> :parm4                                  ' );
-              DMFD.FDQuery2.Params[0].AsInteger := StrToInt(edt_CodEmp.Text);
+              DMFD.FDQuery2.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
               DMFD.FDQuery2.Params[1].AsString  := (xAux);
               DMFD.FDQuery2.Params[2].AsString  := '101';
               DMFD.FDQuery2.Params[3].AsString  := '151';
@@ -7819,6 +7927,7 @@ procedure TFrGBNFe.BitBtn8Click(Sender: TObject);
 var
  aux, vDescr, vnRec, xRet : string;
  iCodPed, X               : Integer;
+ vNomeUsu                 : string;
 
 begin
 
@@ -7845,8 +7954,8 @@ begin
     begin
 
      pSelNfe( DMFD.FDQryGeral2,
-              StrToInt(FrGBNFe.edt_CodEmp.Text),
-              StrToInt(cxTL.Items[X].Texts[cxTLlNot.ItemIndex]),
+              StrToIntDef(FrGBNFe.edt_CodEmp.Text, 0),
+              StrToIntDef(cxTL.Items[X].Texts[cxTLlNot.ItemIndex], 0),
               StrToDateTime(cxTL.Items[X].Texts[cxTLdDem.ItemIndex]),
               cxTL.Items[X].Texts[cxTLsMod.ItemIndex],
               cxTL.Items[X].Texts[cxTLsSer.ItemIndex] );
@@ -7873,7 +7982,7 @@ begin
      gModelo_Consiste := vartostr(DMFD.FDQryGeral2['nfe_modelo']);
 
      // by Edson Lima ; 2017-1-5T1027 ; Atribuição de dados nas vars do ERP
-     gCd_Emp := StrToInt(edt_CodEmp.Text);
+     gCd_Emp := StrToIntDef(edt_CodEmp.Text, 0);
 
      if not ( DMFD.FDQryGeral2['nfe_CodPed'] = null ) then
       begin
@@ -7972,7 +8081,7 @@ begin
 
       end;
 
-     if (StrToInt(DMFD.FDQryGeral2['nfe_modelo']) = 65) then
+     if (StrToIntDef(DMFD.FDQryGeral2['nfe_modelo'], 0) = 65) then
       gTN              := '\NFCe\'                                              // Global utilizado para setar o nome da pasta
      else
       gTN              := '\NFe\';
@@ -8083,6 +8192,15 @@ begin
          110, 205, 301, 302, 303 :                                              // Uso Denegado
           begin
 
+           case ACBrNFe1.WebServices.Consulta.cStat of
+
+            100, 150, 613, 539 :             vNomeUsu := 'UsuTrs';              // Autorizado o uso da NF-e
+            101, 135, 136, 151, 218, 420 :   vNomeUsu := 'UsuCnc';              // Cancelamento de NF-e homologado
+            102, 206, 256, 563 :             vNomeUsu := 'UsuInu';              // Inutilização de número homologado
+            110, 205, 301, 302, 303 :        vNomeUsu := '';                    // Uso Denegado
+
+           end;
+
            //-------------------------------------------------------------------
            // Para não inconsistir a chave no hora de salvar a nota com chave
            // que difere do retorno da sefaz
@@ -8097,33 +8215,94 @@ begin
 
            gAtuCon := True;                                                     // seta True para gAtuCon
 
-           pGravaNFe('006', 'protocolo',
-                            'data_hora_recebimento',
-                            'chave_nfe',
-                            'situacao',
-                            'motivo',
-                            '',
-                            '',
-                            'codigo_loja',
-                            'demi',
-                            'nnf',
-                            'serie',
-                            'chave_nfe',
-                            'modelo',                                           // Nome dos campos
-                            ACBrNFe1.WebServices.Consulta.Protocolo,
-                            FormatDateTime('yyyy/mm/dd hh:nn:ss', ACBrNFe1.WebServices.consulta.DhRecbto),
-                            ACBrNFe1.WebServices.Consulta.NFeChave,
-                            ACBrNFe1.WebServices.Consulta.cStat,
-                            ACBrNFe1.WebServices.Consulta.xMotivo,
-                            '',
-                            '',
-                            edt_CodEmp.Text,
-                            FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']),
-                            DMFD.FDQryGeral2['nfe_nnf'],
-                            DMFD.FDQryGeral2['nfe_serie'],
-                            ACBrNFe1.WebServices.Consulta.NFeChave,
-                            DMFD.FDQryGeral2['nfe_modelo'],                     // Conteúdo dos campos
-                            true);                                              // Consiste [true/false]
+           if (trim(vNomeUsu) <> '' ) then
+            begin
+
+             pGravaNFe('006', 'protocolo',
+                              'data_hora_recebimento',
+                              'chave_nfe',
+                              'situacao',
+                              'motivo',
+                              vNomeUsu,
+                              '',
+                              '',
+                              '',
+                              '',
+                              '',
+                              '',
+                              '',
+                              'codigo_loja',
+                              'demi',
+                              'nnf',
+                              'serie',
+                              'chave_nfe',
+                              'modelo',                                           // Nome dos campos
+                              ACBrNFe1.WebServices.Consulta.Protocolo,
+                              FormatDateTime('yyyy/mm/dd hh:nn:ss', ACBrNFe1.WebServices.consulta.DhRecbto),
+                              ACBrNFe1.WebServices.Consulta.NFeChave,
+                              ACBrNFe1.WebServices.Consulta.cStat,
+                              ACBrNFe1.WebServices.Consulta.xMotivo,
+                              gUsu,
+                              '',
+                              '',
+                              '',
+                              '',
+                              '',
+                              '',
+                              '',
+                              edt_CodEmp.Text,
+                              FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']),
+                              DMFD.FDQryGeral2['nfe_nnf'],
+                              DMFD.FDQryGeral2['nfe_serie'],
+                              ACBrNFe1.WebServices.Consulta.NFeChave,
+                              DMFD.FDQryGeral2['nfe_modelo'],                     // Conteúdo dos campos
+                              true);                                              // Consiste [true/false]
+
+            end
+           else
+            begin
+
+             pGravaNFe('006', 'protocolo',
+                              'data_hora_recebimento',
+                              'chave_nfe',
+                              'situacao',
+                              'motivo',
+                              '',
+                              '',
+                              '',
+                              '',
+                              '',
+                              '',
+                              '',
+                              '',
+                              'codigo_loja',
+                              'demi',
+                              'nnf',
+                              'serie',
+                              'chave_nfe',
+                              'modelo',                                           // Nome dos campos
+                              ACBrNFe1.WebServices.Consulta.Protocolo,
+                              FormatDateTime('yyyy/mm/dd hh:nn:ss', ACBrNFe1.WebServices.consulta.DhRecbto),
+                              ACBrNFe1.WebServices.Consulta.NFeChave,
+                              ACBrNFe1.WebServices.Consulta.cStat,
+                              ACBrNFe1.WebServices.Consulta.xMotivo,
+                              '',
+                              '',
+                              '',
+                              '',
+                              '',
+                              '',
+                              '',
+                              '',
+                              edt_CodEmp.Text,
+                              FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']),
+                              DMFD.FDQryGeral2['nfe_nnf'],
+                              DMFD.FDQryGeral2['nfe_serie'],
+                              ACBrNFe1.WebServices.Consulta.NFeChave,
+                              DMFD.FDQryGeral2['nfe_modelo'],                     // Conteúdo dos campos
+                              true);                                              // Consiste [true/false]
+
+            end;
 
            //----------------------------------------------------------------------
            // by Edson Lima ; 2017-1-5T1027 ; Atribuição de dados nas variáveis do
@@ -8221,8 +8400,8 @@ begin
         begin
 
          // Filtra a nfe selecionada com select
-         pSelNfe( DMFD.FDQryGeral2, StrToInt(FrGBNFe.edt_CodEmp.Text),
-                                    StrToInt(cxTL.Items[X].Texts[cxTLlNot.ItemIndex]),
+         pSelNfe( DMFD.FDQryGeral2, StrToIntDef(FrGBNFe.edt_CodEmp.Text, 0),
+                                    StrToIntDef(cxTL.Items[X].Texts[cxTLlNot.ItemIndex], 0),
                                     StrToDateTime(cxTL.Items[X].Texts[cxTLdDem.ItemIndex]),
                                     cxTL.Items[X].Texts[cxTLsMod.ItemIndex],
                                     cxTL.Items[X].Texts[cxTLsSer.ItemIndex] );
@@ -8460,8 +8639,8 @@ begin
         begin
 
          // Filtra a nfe selecionada com select
-         pSelNfe( DMFD.FDQryGeral2, StrToInt(FrGBNFe.edt_CodEmp.Text),
-                                    StrToInt(cxTL.Items[X].Texts[cxTLlNot.ItemIndex]),
+         pSelNfe( DMFD.FDQryGeral2, StrToIntDef(FrGBNFe.edt_CodEmp.Text, 0),
+                                    StrToIntDef(cxTL.Items[X].Texts[cxTLlNot.ItemIndex], 0),
                                     StrToDateTime(cxTL.Items[X].Texts[cxTLdDem.ItemIndex]),
                                     cxTL.Items[X].Texts[cxTLsMod.ItemIndex],
                                     cxTL.Items[X].Texts[cxTLsSer.ItemIndex] );
@@ -8713,8 +8892,8 @@ begin
       begin
 
        // Filtra a nfe selecionada com select
-       pSelNfe( DMFD.FDQryGeral2, StrToInt(FrGBNFe.edt_CodEmp.Text),
-                                  StrToInt(cxTL.Items[X].Texts[cxTLlNot.ItemIndex]),
+       pSelNfe( DMFD.FDQryGeral2, StrToIntDef(FrGBNFe.edt_CodEmp.Text, 0),
+                                  StrToIntDef(cxTL.Items[X].Texts[cxTLlNot.ItemIndex], 0),
                                   StrToDateTime(cxTL.Items[X].Texts[cxTLdDem.ItemIndex]),
                                   cxTL.Items[X].Texts[cxTLsMod.ItemIndex],
                                   cxTL.Items[X].Texts[cxTLsSer.ItemIndex] );
@@ -8732,7 +8911,7 @@ begin
        gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
        gNNF_Consiste    := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
        gSerie_Consiste  := vartostr(DMFD.FDQryGeral2['nfe_serie']);
-       gSerie           := StrToInt(gSerie_Consiste);
+       gSerie           := StrToIntDef(gSerie_Consiste, 0);
        gChave_Consiste  := '';                                                  // está sendo atribuida depois da sp_calcula_digito_chave
        gModelo_Consiste := vartostr(DMFD.FDQryGeral2['nfe_modelo']);
 
@@ -8779,8 +8958,8 @@ begin
       begin
 
        // Filtra a nfe selecionada com select
-       pSelNfe( DMFD.FDQryGeral2, StrToInt(FrGBNFe.edt_CodEmp.Text),
-                                  StrToInt(cxTL.Items[X].Texts[cxTLlNot.ItemIndex]),
+       pSelNfe( DMFD.FDQryGeral2, StrToIntDef(FrGBNFe.edt_CodEmp.Text, 0),
+                                  StrToIntDef(cxTL.Items[X].Texts[cxTLlNot.ItemIndex], 0),
                                   StrToDateTime(cxTL.Items[X].Texts[cxTLdDem.ItemIndex]),
                                   cxTL.Items[X].Texts[cxTLsMod.ItemIndex],
                                   cxTL.Items[X].Texts[cxTLsSer.ItemIndex] );
@@ -8798,7 +8977,7 @@ begin
        gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
        gNNF_Consiste    := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
        gSerie_Consiste  := vartostr(DMFD.FDQryGeral2['nfe_serie']);
-       gSerie           := StrToInt(gSerie_Consiste);
+       gSerie           := StrToIntDef(gSerie_Consiste, 0);
        gChave_Consiste  := '';                                                  // está sendo atribuida depois da sp_calcula_digito_chave
        gModelo_Consiste := vartostr(DMFD.FDQryGeral2['nfe_modelo']);
 
@@ -8876,8 +9055,8 @@ begin
      begin
 
       // Filtra a nfe selecionada com select
-      pSelNfe( DMFD.FDQryGeral2, StrToInt(FrGBNFe.edt_CodEmp.Text),
-                                 StrToInt(cxTL.Items[X].Texts[cxTLlNot.ItemIndex]),
+      pSelNfe( DMFD.FDQryGeral2, StrToIntDef(FrGBNFe.edt_CodEmp.Text, 0),
+                                 StrToIntDef(cxTL.Items[X].Texts[cxTLlNot.ItemIndex], 0),
                                  StrToDateTime(cxTL.Items[X].Texts[cxTLdDem.ItemIndex]),
                                  cxTL.Items[X].Texts[cxTLsMod.ItemIndex],
                                  cxTL.Items[X].Texts[cxTLsSer.ItemIndex] );
@@ -8906,7 +9085,7 @@ begin
       gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
       gNNF_Consiste    := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
       gSerie_Consiste  := vartostr(DMFD.FDQryGeral2['nfe_serie']);
-      gSerie           := StrToInt(gSerie_Consiste);
+      gSerie           := StrToIntDef(gSerie_Consiste, 0);
       gChave_Consiste  := '';                                                   // está sendo atribuida depois da sp_calcula_digito_chave
       gModelo_Consiste := vartostr(DMFD.FDQryGeral2['nfe_modelo']);
 
@@ -8927,7 +9106,7 @@ begin
         //----------------------------------------------------------------------
         if iCodPed <> 0 then
          begin
-          if not ( fVerPAG(StrToInt(gNNF_Consiste), StrToInt(edt_CodEmp.Text), iCodPed) ) then
+          if not ( fVerPAG(StrToIntDef(gNNF_Consiste, 0), StrToIntDef(edt_CodEmp.Text, 0), iCodPed) ) then
            Exit;
          end
         else
@@ -8960,7 +9139,7 @@ begin
 
         memoLog.Clear;
         ACBrNFe1.EventoNFe.Evento.Clear;
-        ACBrNFe1.EventoNFe.idLote  := StrToInt(idLote) ;
+        ACBrNFe1.EventoNFe.idLote  := StrToIntDef(idLote, 0) ;
 
         with ACBrNFe1.EventoNFe.Evento.Add do
         begin
@@ -8982,7 +9161,7 @@ begin
           FusHor := True;
 
 
-         CdUf := StrToInt(DMFD.FDQuery4['codigo_uf']);
+         CdUf := StrToIntDef(DMFD.FDQuery4['codigo_uf'], 0);
          CdMun := DMFD.FDQuery4['codigo_municipio'];
          vdhEve := '';
          dhEve := Now();                                                        // Antes --> dhEve := VarToDateTime(ACBrNFe1.WebServices.Consulta.protNFe.dhRecbto);
@@ -8992,7 +9171,7 @@ begin
          infEvento.tpEvento         := teCancelamento;
          infEvento.id               := 'ID' + VarToStr(infEvento.tpEvento) + vChave + '1';
          infEvento.detEvento.xJust  := vAux;
-         infEvento.cOrgao           := strtoint(DMFD.FDQuery4['codigo_uf']);
+         infEvento.cOrgao           := strtointDef(DMFD.FDQuery4['codigo_uf'], 0);
 
          //---------------------------------------------------------------------
 
@@ -9000,7 +9179,7 @@ begin
 
         //----------------------------------------------------------------------
 
-        ACBrNFe1.EnviarEvento(StrToInt(idLote));                                // trunk2 - Antes => ACBrNFe1.EnviarEventoNFe(StrToInt(idLote));
+        ACBrNFe1.EnviarEvento(StrToIntDef(idLote, 0));
         //----------------------------------------------------------------------
         ACBrNFe1.Configuracoes.WebServices.AguardarConsultaRet      := 0;
         //----------------------------------------------------------------------
@@ -9062,6 +9241,12 @@ begin
                            'motivo',
                            'cStat_CCe',
                            'xMotivo_CCe',
+                           'UsuCnc',
+                           '',
+                           '',
+                           '',
+                           '',
+                           '',
                            '',
                            'codigo_loja',
                            'demi',
@@ -9073,6 +9258,12 @@ begin
                            FormatDateTime('yyyy/mm/dd hh:nn:ss', ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.dhRegEvento),
                            ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cStat,
                            ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.xMotivo,
+                           gUsu,
+                           '',
+                           '',
+                           '',
+                           '',
+                           '',
                            '',
                            '',
                            '',
@@ -9093,6 +9284,12 @@ begin
                             '',
                             '',
                             '',
+                            '',
+                            '',
+                            '',
+                            '',
+                            '',
+                            '',
                             'codigo_loja',
                             'demi',
                             'nnf',
@@ -9105,6 +9302,12 @@ begin
                             '',
                             '580',
                             '(NFe Cancelada) - O evento exige uma NF-e autorizada',
+                            '',
+                            '',
+                            '',
+                            '',
+                            '',
+                            '',
                             '',
                             edt_CodEmp.Text,
                             FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']),
@@ -9128,7 +9331,7 @@ begin
           //--------------------------------------------------------------------
           if iCodPed <> 0 then
            begin
-            if not ( fCanCAP(StrToInt(gNNF_Consiste), StrToInt(edt_CodEmp.Text), iCodPed, gCodMtC) ) then
+            if not ( fCanCAP(StrToIntDef(gNNF_Consiste, 0), StrToIntDef(edt_CodEmp.Text, 0), iCodPed, gCodMtC) ) then
              Application.MessageBox(PWideChar('Nota cancelada, mas o pedido não!'), 'Atenção', MB_ICONINFORMATION );
            end
           else
@@ -9161,7 +9364,7 @@ begin
           DMFD.FDQuery2.SQL.Add( 'inner join nfe t2 on t2.codigo_destinatario = t1.codigo              ' );
           DMFD.FDQuery2.SQL.Add( 'where t2.codigo_loja = :parm1                                        ' );
           DMFD.FDQuery2.SQL.Add( 'and t2.chave_nfe = :parm2                                            ' );
-          DMFD.FDQuery2.Params[0].AsInteger := StrToInt(edt_CodEmp.Text);
+          DMFD.FDQuery2.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
           DMFD.FDQuery2.Params[1].AsString  := (vChave);
           DMFD.FDQuery2.Open;
           if DMFD.FDQuery2.IsEmpty then
@@ -9339,8 +9542,8 @@ begin
     begin
 
      // Filtra a nfe selecionada com select
-     pSelNfe( DMFD.FDQryGeral2, StrToInt(FrGBNFe.edt_CodEmp.Text),
-                                StrToInt(cxTL.Items[X].Texts[cxTLlNot.ItemIndex]),
+     pSelNfe( DMFD.FDQryGeral2, StrToIntDef(FrGBNFe.edt_CodEmp.Text, 0),
+                                StrToIntDef(cxTL.Items[X].Texts[cxTLlNot.ItemIndex], 0),
                                 StrToDateTime(cxTL.Items[X].Texts[cxTLdDem.ItemIndex]),
                                 cxTL.Items[X].Texts[cxTLsMod.ItemIndex],
                                 cxTL.Items[X].Texts[cxTLsSer.ItemIndex] );
@@ -9358,7 +9561,7 @@ begin
      gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
      gNNF_Consiste    := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
      gSerie_Consiste  := vartostr(DMFD.FDQryGeral2['nfe_serie']);
-     gSerie           := StrToInt(gSerie_Consiste);
+     gSerie           := StrToIntDef(gSerie_Consiste, 0);
      gModelo          := DMFD.FDQryGeral2['nfe_modelo'];
      gChave_Consiste  := '';                                                    // está sendo atribuida depois da sp_calcula_digito_chave
      gModelo_Consiste := vartostr(DMFD.FDQryGeral2['nfe_modelo']);
@@ -9570,12 +9773,24 @@ begin
                            '',
                            '',
                            '',
+                           '',
+                           '',
+                           '',
+                           '',
+                           '',
+                           '',
                            'codigo_loja',
                            'demi',
                            'nnf',
                            'serie',
                            'chave_nfe',
                            'modelo',                                            // Nome dos campos
+                           '',
+                           '',
+                           '',
+                           '',
+                           '',
+                           '',
                            '',
                            '',
                            '',
@@ -9615,6 +9830,12 @@ begin
                            'chave_nfe',
                            'situacao',
                            'motivo',
+                           'UsuTrs',
+                           '',
+                           '',
+                           '',
+                           '',
+                           '',
                            '',
                            'codigo_loja',
                            'demi',
@@ -9628,6 +9849,12 @@ begin
                            ACBrNFe1.WebServices.Consulta.NFeChave,
                            ACBrNFe1.WebServices.Consulta.cStat,
                            ACBrNFe1.WebServices.Consulta.xMotivo,
+                           gUsu,
+                           '',
+                           '',
+                           '',
+                           '',
+                           '',
                            '',
                            edt_CodEmp.Text,
                            FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']),
@@ -9656,7 +9883,7 @@ begin
           DMFD.FDQuery2.SQL.Add( 'and t2.chave_nfe = :parm2                                  ' );
           DMFD.FDQuery2.SQL.Add( 'and t2.situacao <> :parm3                                  ' );
           DMFD.FDQuery2.SQL.Add( 'and t2.situacao <> :parm4                                  ' );
-          DMFD.FDQuery2.Params[0].AsInteger := StrToInt(edt_CodEmp.Text);
+          DMFD.FDQuery2.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
           DMFD.FDQuery2.Params[1].AsString  := (xAux);
           DMFD.FDQuery2.Params[2].AsString  := '101';
           DMFD.FDQuery2.Params[3].AsString  := '151';
@@ -9784,8 +10011,8 @@ begin
      begin
 
       // Filtra a nfe selecionada com select
-      pSelNfe( DMFD.FDQryGeral2, StrToInt(FrGBNFe.edt_CodEmp.Text),
-                                 StrToInt(cxTL.Items[X].Texts[cxTLlNot.ItemIndex]),
+      pSelNfe( DMFD.FDQryGeral2, StrToIntDef(FrGBNFe.edt_CodEmp.Text, 0),
+                                 StrToIntDef(cxTL.Items[X].Texts[cxTLlNot.ItemIndex], 0),
                                  StrToDateTime(cxTL.Items[X].Texts[cxTLdDem.ItemIndex]),
                                  cxTL.Items[X].Texts[cxTLsMod.ItemIndex],
                                  cxTL.Items[X].Texts[cxTLsSer.ItemIndex] );
@@ -9803,7 +10030,7 @@ begin
       gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
       gNNF_Consiste    := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
       gSerie_Consiste  := vartostr(DMFD.FDQryGeral2['nfe_serie']);
-      gSerie           := StrToInt(gSerie_Consiste);
+      gSerie           := StrToIntDef(gSerie_Consiste, 0);
       gChave_Consiste  := '';                                                   // está sendo atribuida depois da sp_calcula_digito_chave
       gModelo_Consiste := vartostr(DMFD.FDQryGeral2['nfe_modelo']);
 
@@ -9903,6 +10130,12 @@ begin
                          'chave_nfe',
                          'situacao',
                          'motivo',
+                         'UsuTrs',
+                         '',
+                         '',
+                         '',
+                         '',
+                         '',
                          '',
                          'codigo_loja',
                          'demi',
@@ -9916,6 +10149,12 @@ begin
                          ACBrNFe1.WebServices.Consulta.NFeChave,
                          ACBrNFe1.WebServices.Consulta.cStat,
                          ACBrNFe1.WebServices.Consulta.xMotivo,
+                         gUsu,
+                         '',
+                         '',
+                         '',
+                         '',
+                         '',
                          '',
                          edt_CodEmp.Text,
                          FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']),
@@ -11212,8 +11451,8 @@ begin
     begin
 
      // Filtra a nfe selecionada com select
-     pSelNfe( DMFD.FDQryGeral2, StrToInt(FrGBNFe.edt_CodEmp.Text),
-                                StrToInt(cxTL.Items[X].Texts[cxTLlNot.ItemIndex]),
+     pSelNfe( DMFD.FDQryGeral2, StrToIntDef(FrGBNFe.edt_CodEmp.Text, 0),
+                                StrToIntDef(cxTL.Items[X].Texts[cxTLlNot.ItemIndex], 0),
                                 StrToDateTime(cxTL.Items[X].Texts[cxTLdDem.ItemIndex]),
                                 cxTL.Items[X].Texts[cxTLsMod.ItemIndex],
                                 cxTL.Items[X].Texts[cxTLsSer.ItemIndex] );
@@ -11231,7 +11470,7 @@ begin
      gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
      gNNF_Consiste    := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
      gSerie_Consiste  := vartostr(DMFD.FDQryGeral2['nfe_serie']);
-     gSerie           := StrToInt(gSerie_Consiste);
+     gSerie           := StrToIntDef(gSerie_Consiste, 0);
      gChave_Consiste  := '';                                                    // está sendo atribuida depois da sp_calcula_digito_chave
      gModelo_Consiste := vartostr(DMFD.FDQryGeral2['nfe_modelo']);
 
@@ -11310,8 +11549,8 @@ begin
     begin
 
      // Filtra a nfe selecionada com select
-     pSelNfe( DMFD.FDQryGeral2, StrToInt(FrGBNFe.edt_CodEmp.Text),
-                                StrToInt(cxTL.Items[X].Texts[cxTLlNot.ItemIndex]),
+     pSelNfe( DMFD.FDQryGeral2, StrToIntDef(FrGBNFe.edt_CodEmp.Text, 0),
+                                StrToIntDef(cxTL.Items[X].Texts[cxTLlNot.ItemIndex], 0),
                                 StrToDateTime(cxTL.Items[X].Texts[cxTLdDem.ItemIndex]),
                                 cxTL.Items[X].Texts[cxTLsMod.ItemIndex],
                                 cxTL.Items[X].Texts[cxTLsSer.ItemIndex] );
@@ -11329,7 +11568,7 @@ begin
      gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
      gNNF_Consiste    := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
      gSerie_Consiste  := vartostr(DMFD.FDQryGeral2['nfe_serie']);
-     gSerie           := StrToInt(gSerie_Consiste);
+     gSerie           := StrToIntDef(gSerie_Consiste, 0);
      gChave_Consiste  := '';                                                    // está sendo atribuida depois da sp_calcula_digito_chave
      gModelo_Consiste := vartostr(DMFD.FDQryGeral2['nfe_modelo']);
 
@@ -11345,7 +11584,7 @@ begin
        DMFD.FDQuery2.SQL.Add( 'inner join nfe t2 on t2.codigo_destinatario = t1.codigo              ' );
        DMFD.FDQuery2.SQL.Add( 'where t2.codigo_loja = :parm1                                        ' );
        DMFD.FDQuery2.SQL.Add( 'and t2.chave_nfe = :parm2                                            ' );
-       DMFD.FDQuery2.Params[0].AsInteger := StrToInt(edt_CodEmp.Text);
+       DMFD.FDQuery2.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
        DMFD.FDQuery2.Params[1].AsString  := (xAux);
        DMFD.FDQuery2.Open;
        if DMFD.FDQuery2.IsEmpty then begin
@@ -11855,8 +12094,8 @@ begin
  gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
  gNNF_Consiste    := vartostr(DMFD.FDQuery5['nfe_nnf']);
  gSerie_Consiste  := vartostr(DMFD.FDQuery5['nfe_serie']);
- gModelo          := StrToInt(DMFD.FDQuery5['nfe_Modelo']);
- gSerie           := StrToInt(gSerie_Consiste);
+ gModelo          := StrToIntDef(DMFD.FDQuery5['nfe_Modelo'], 0);
+ gSerie           := StrToIntDef(gSerie_Consiste, 0);
  gChave_Consiste  := '';                                                        // está sendo atribuida depois da sp_calcula_digito_chave
  gModelo_Consiste := vartostr(DMFD.FDQuery5['nfe_modelo']);
 
@@ -11900,7 +12139,7 @@ begin
  with ACBrNFe1.EventoNFe.Evento.Add do
   begin
    infEvento.id                  := DMFD.FDQryGeral2['CCe_id'];
-   infEvento.cOrgao              := strtoint(DMFD.FDQuery4['codigo_uf']);
+   infEvento.cOrgao              := strtointDef(DMFD.FDQuery4['codigo_uf'], 0);
    infEvento.tpAmb               := tpAmb;
    infEvento.CNPJ                := CNPJ;
    infEvento.chNFe               := Chave;
@@ -11921,7 +12160,7 @@ begin
     FusHor := True;
 
 
-   CdUf := StrToInt(DMFD.FDQuery4['codigo_uf']);
+   CdUf := StrToIntDef(DMFD.FDQuery4['codigo_uf'], 0);
    CdMun := DMFD.FDQuery4['codigo_municipio'];
    vdhEve := '';
    dhEve := Now();
@@ -11929,7 +12168,7 @@ begin
    infEvento.dhEvento  := fFusHor(HorVer, Hor_DF, FusHor, CdUf, CdMun, vdhEve, dhEve );
 
    infEvento.tpEvento            := teCCe;
-   infEvento.nSeqEvento          := StrToInt(nSeqEvento);
+   infEvento.nSeqEvento          := StrToIntDef(nSeqEvento, 0);
    infEvento.detEvento.descEvento:= c_desc_Evento;
    infEvento.detEvento.xCorrecao := DMFD.FDQryGeral2['CCe_xCorrecao'];
    //---------------------------------------------------------------------------
@@ -11939,7 +12178,7 @@ begin
  //-----------------------------------------------------------------------------
  // by
  //-----------------------------------------------------------------------------
- if ACBrNFe1.EnviarEvento(StrToInt(idLote)) then
+ if ACBrNFe1.EnviarEvento(StrToIntDef(idLote, 0)) then
   begin
 
    xAuxA := TstringList.Create;
@@ -11988,6 +12227,12 @@ begin
                       'evento_CCe',
                       'xCorrecao_CCe',
                       '',
+                      '',
+                      '',
+                      '',
+                      '',
+                      '',
+                      '',
                       'codigo_loja',
                       'demi',
                       'nnf',
@@ -11998,8 +12243,14 @@ begin
                       FormatDateTime('yyyy/mm/dd hh:nn:ss', ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.dhRegEvento),
                       ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cStat,
                       ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.xMotivo,
-                      StrToInt(nSeqEvento),
+                      StrToIntDef(nSeqEvento, 0),
                       DMFD.FDQryGeral2['CCe_xCorrecao'],
+                      '',
+                      '',
+                      '',
+                      '',
+                      '',
+                      '',
                       '',
                       edt_CodEmp.Text,
                       FormatDateTime('yyyy/mm/dd', DMFD.FDQuery5['nfe_demi']),
@@ -12018,7 +12269,7 @@ begin
      DMFD.FDQuery2.SQL.Add( 'inner join nfe t2 on t2.codigo_destinatario = t1.codigo      ' );
      DMFD.FDQuery2.SQL.Add( 'where t2.codigo_loja = :parm1                                ' );
      DMFD.FDQuery2.SQL.Add( 'and t2.chave_nfe     = :parm2                                ' );
-     DMFD.FDQuery2.Params[0].AsInteger := StrToInt(edt_CodEmp.Text);
+     DMFD.FDQuery2.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
      DMFD.FDQuery2.Params[1].AsString  := (vChave);
      DMFD.FDQuery2.Open;
      if DMFD.FDQuery2.IsEmpty then
@@ -12073,8 +12324,8 @@ begin
       DMFD.FDQuery2.ParamByName('emailDest').Value    := vemailDest;
       DMFD.FDQuery2.ParamByName('dhRegEvento').Value  := vdhRegEvento;
       DMFD.FDQuery2.ParamByName('nProt').Value        := vnProt;
-      DMFD.FDQuery2.ParamByName('Codigo_Loja').Value  := StrToInt(edt_CodEmp.Text);
-      DMFD.FDQuery2.ParamByName('nNF').Value          := StrToInt(FrCCe.Edit_Nota.Text);
+      DMFD.FDQuery2.ParamByName('Codigo_Loja').Value  := StrToIntDef(edt_CodEmp.Text, 0);
+      DMFD.FDQuery2.ParamByName('nNF').Value          := StrToIntDef(FrCCe.Edit_Nota.Text, 0);
       DMFD.FDQuery2.ParamByName('Evento').Value       := FrCCe.Edit_Evento.Text;
       DMFD.FDQuery2.ParamByName('dEmi').Value         := FormatDateTime('yyyy/mm/dd', VarToDateTime(DMFD.FDQuery5['nfe_demi']));
       DMFD.FDQuery2.ParamByName('Modelo').Value       := VarToStr(DMFD.FDQuery5['nfe_Modelo']);
@@ -12130,7 +12381,7 @@ begin
      DMFD.FDQuery2.SQL.Add( 'inner join nfe t2 on t2.codigo_destinatario = t1.codigo      ' );
      DMFD.FDQuery2.SQL.Add( 'where t2.codigo_loja = :parm1                                ' );
      DMFD.FDQuery2.SQL.Add( 'and t2.chave_nfe     = :parm2                                ' );
-     DMFD.FDQuery2.Params[0].AsInteger := StrToInt(edt_CodEmp.Text);
+     DMFD.FDQuery2.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
      DMFD.FDQuery2.Params[1].AsString  := (vChave);
      DMFD.FDQuery2.Open;
      if DMFD.FDQuery2.IsEmpty then
@@ -12308,7 +12559,7 @@ begin
  gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
  gNNF_Consiste    := vartostr(DMFD.FDQuery5['nfe_nnf']);
  gSerie_Consiste  := vartostr(DMFD.FDQuery5['nfe_serie']);
- gSerie           := StrToInt(gSerie_Consiste);
+ gSerie           := StrToIntDef(gSerie_Consiste, 0);
  gChave_Consiste  := vartostr(DMFD.FDQuery5['nfe_chave_nfe']);
  gModelo_Consiste := vartostr(DMFD.FDQuery5['nfe_modelo']);
 
@@ -12318,7 +12569,7 @@ begin
  vTpEvento     := DMFD.FDQryGeral2['CCe_TpEvento'];
  CNPJ          := copy(DMFD.FDQryGeral2['CCe_chave_nfe'], 7, 14);               //  DMFD.FDQuery4['cnpj'];
  nSeqEvento    := DMFD.FDQryGeral2['CCe_nSeqEvento'];
- nSEve         := StrToInt(nSeqEvento);
+ nSEve         := StrToIntDef(nSeqEvento, 0);
  xAux          := DMFD.FDQuery5['nfe_chave_nfe'];
  vChave        := xAux;
  xAux          := trim(gCamLog) + trim(xAux) + '-nfe.xml';
@@ -12396,6 +12647,12 @@ begin
                         'evento_CCe',
                         'xCorrecao_CCe',
                         '',
+                        '',
+                        '',
+                        '',
+                        '',
+                        '',
+                        '',
                         'codigo_loja',
                         'demi',
                         'nnf',
@@ -12406,8 +12663,14 @@ begin
                         FormatDateTime('yyyy/mm/dd hh:nn:ss', Consulta.procEventoNFe.Items[vC].RetEventoNFe.retEvento.Items[0].RetInfEvento.dhRegEvento),
                         consulta.procEventoNFe.Items[vC].RetEventoNFe.cStat,
                         consulta.procEventoNFe.Items[vC].RetEventoNFe.xMotivo,
-                        StrToInt(nSeqEvento),
+                        StrToIntDef(nSeqEvento, 0),
                         DMFD.FDQryGeral2['CCe_xCorrecao'],
+                        '',
+                        '',
+                        '',
+                        '',
+                        '',
+                        '',
                         '',
                         edt_CodEmp.Text,
                         FormatDateTime('yyyy/mm/dd', DMFD.FDQuery5['nfe_demi']),
@@ -12426,7 +12689,7 @@ begin
        DMFD.FDQuery2.SQL.Add( 'inner join nfe t2 on t2.codigo_destinatario = t1.codigo      ' );
        DMFD.FDQuery2.SQL.Add( 'where t2.codigo_loja = :parm1                                ' );
        DMFD.FDQuery2.SQL.Add( 'and t2.chave_nfe     = :parm2                                ' );
-       DMFD.FDQuery2.Params[0].AsInteger := StrToInt(edt_CodEmp.Text);
+       DMFD.FDQuery2.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
        DMFD.FDQuery2.Params[1].AsString  := (vChave);
        DMFD.FDQuery2.Open;
 
@@ -12472,8 +12735,8 @@ begin
         DMFD.FDQuery2.ParamByName('emailDest').Value    := vemailDest;
         DMFD.FDQuery2.ParamByName('dhRegEvento').Value  := vdhRegEvento;
         DMFD.FDQuery2.ParamByName('nProt').Value        := vnProt;
-        DMFD.FDQuery2.ParamByName('Codigo_Loja').Value  := StrToInt(edt_CodEmp.Text);
-        DMFD.FDQuery2.ParamByName('nNF').Value          := StrToInt(FrCCe.Edit_Nota.Text);
+        DMFD.FDQuery2.ParamByName('Codigo_Loja').Value  := StrToIntDef(edt_CodEmp.Text, 0);
+        DMFD.FDQuery2.ParamByName('nNF').Value          := StrToIntDef(FrCCe.Edit_Nota.Text, 0);
         DMFD.FDQuery2.ParamByName('Evento').Value       := FrCCe.Edit_Evento.Text;
         DMFD.FDQuery2.ParamByName('dEmi').Value         := FormatDateTime('yyyy/mm/dd', VarToDateTime(DMFD.FDQuery5['nfe_demi']));
         DMFD.FDQuery2.ParamByName('Modelo').Value       := VarToStr(DMFD.FDQuery5['nfe_Modelo']);
@@ -12540,7 +12803,7 @@ begin
  gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
  gNNF_Consiste    := vartostr(DMFD.FDQuery5['nfe_nnf']);
  gSerie_Consiste  := vartostr(DMFD.FDQuery5['nfe_serie']);
- gSerie           := StrToInt(gSerie_Consiste);
+ gSerie           := StrToIntDef(gSerie_Consiste, 0);
  gChave_Consiste  := '';                                                        // está sendo atribuida depois da sp_calcula_digito_chave
  gModelo_Consiste := vartostr(DMFD.FDQuery5['nfe_modelo']);
 
@@ -12626,7 +12889,7 @@ begin
  DMFD.FDQuery2.SQL.Add( 'inner join nfe t2 on t2.codigo_destinatario = t1.codigo      ' );
  DMFD.FDQuery2.SQL.Add( 'where t2.codigo_loja = :parm1                                ' );
  DMFD.FDQuery2.SQL.Add( 'and t2.chave_nfe     = :parm2                                ' );
- DMFD.FDQuery2.Params[0].AsInteger := StrToInt(edt_CodEmp.Text);
+ DMFD.FDQuery2.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
  DMFD.FDQuery2.Params[1].AsString  := (vChave);
  DMFD.FDQuery2.Open;
  if DMFD.FDQuery2.IsEmpty then
@@ -12850,8 +13113,8 @@ begin
       begin
 
        // Filtra a nfe selecionada com select
-       pSelNfe( DMFD.FDQryGeral2, StrToInt(FrGBNFe.edt_CodEmp.Text),
-                                  StrToInt(cxTL.Items[X].Texts[cxTLlNot.ItemIndex]),
+       pSelNfe( DMFD.FDQryGeral2, StrToIntDef(FrGBNFe.edt_CodEmp.Text, 0),
+                                  StrToIntDef(cxTL.Items[X].Texts[cxTLlNot.ItemIndex], 0),
                                   StrToDateTime(cxTL.Items[X].Texts[cxTLdDem.ItemIndex]),
                                   cxTL.Items[X].Texts[cxTLsMod.ItemIndex],
                                   cxTL.Items[X].Texts[cxTLsSer.ItemIndex] );
@@ -12869,7 +13132,7 @@ begin
        gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
        gNNF_Consiste    := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
        gSerie_Consiste  := vartostr(DMFD.FDQryGeral2['nfe_serie']);
-       gSerie           := StrToInt(gSerie_Consiste);
+       gSerie           := StrToIntDef(gSerie_Consiste, 0);
        gChave_Consiste  := vartostr(DMFD.FDQryGeral2['nfe_chave_nfe']);
        gModelo_Consiste := vartostr(DMFD.FDQryGeral2['nfe_modelo']);
 
@@ -12883,6 +13146,12 @@ begin
                           '',
                           '',
                           '',
+                          '',
+                          '',
+                          '',
+                          '',
+                          '',
+                          '',
                           'codigo_loja',
                           'demi',
                           'nnf',
@@ -12891,6 +13160,12 @@ begin
                           'modelo',                                             // Nome dos campos
                           '',
                           'Movida de Contingências',
+                          '',
+                          '',
+                          '',
+                          '',
+                          '',
+                          '',
                           '',
                           '',
                           '',
@@ -12914,24 +13189,24 @@ begin
 
          if ( (copy(vartostr(DMFD.FDQryGeral2['nfe_chave_nfe']), 35, 1) = '4') and
               (RadioGroup1.itemindex <> 1) ) then
-          pGravaNFe('016', 'situacao', 'motivo', '', '', '', '', '', 'codigo_loja', 'demi', 'nnf', 'serie', 'chave_nfe', 'modelo',
-                    AnsiUpperCase('EPEC'), 'Movida das Transmitidas', '', '', '', '', '', edt_CodEmp.Text,
+          pGravaNFe('016', 'situacao', 'motivo', '', '', '', '', '', '', '', '', '', '', '', 'codigo_loja', 'demi', 'nnf', 'serie', 'chave_nfe', 'modelo',
+                    AnsiUpperCase('EPEC'), 'Movida das Transmitidas', '', '', '', '', '', '', '', '', '', '', '', edt_CodEmp.Text,
                     FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']), DMFD.FDQryGeral2['nfe_nnf'],
                     DMFD.FDQryGeral2['nfe_serie'], DMFD.FDQryGeral2['nfe_chave_nfe'], DMFD.FDQryGeral2['nfe_modelo'], true)
          else if ( (copy(vartostr(DMFD.FDQryGeral2['nfe_chave_nfe']), 35, 1) = '5') and
               (RadioGroup1.itemindex <> 1) ) then
-          pGravaNFe('016', 'situacao', 'motivo', '', '', '', '', '', 'codigo_loja', 'demi', 'nnf', 'serie', 'chave_nfe', 'modelo',
-                    AnsiUpperCase('FSDA'), 'Movida das Transmitidas', '', '', '', '', '', edt_CodEmp.Text,
+          pGravaNFe('016', 'situacao', 'motivo', '', '', '', '', '', '', '', '', '', '', '', 'codigo_loja', 'demi', 'nnf', 'serie', 'chave_nfe', 'modelo',
+                    AnsiUpperCase('FSDA'), 'Movida das Transmitidas', '', '', '', '', '', '', '', '', '', '', '', edt_CodEmp.Text,
                     FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']), DMFD.FDQryGeral2['nfe_nnf'],
                     DMFD.FDQryGeral2['nfe_serie'], DMFD.FDQryGeral2['nfe_chave_nfe'], DMFD.FDQryGeral2['nfe_modelo'], true)
          else if (copy(vartostr(DMFD.FDQryGeral2['nfe_chave_nfe']), 35, 1) = '9') then
-          pGravaNFe('016', 'situacao', 'motivo', '', '', '', '', '', 'codigo_loja', 'demi', 'nnf', 'serie', 'chave_nfe', 'modelo',
-                    AnsiUpperCase('OFFL'), 'Movida das Transmitidas', '', '', '', '', '', edt_CodEmp.Text,
+          pGravaNFe('016', 'situacao', 'motivo', '', '', '', '', '', '', '', '', '', '', '', 'codigo_loja', 'demi', 'nnf', 'serie', 'chave_nfe', 'modelo',
+                    AnsiUpperCase('OFFL'), 'Movida das Transmitidas', '', '', '', '', '', '', '', '', '', '', '', edt_CodEmp.Text,
                     FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']), DMFD.FDQryGeral2['nfe_nnf'],
                     DMFD.FDQryGeral2['nfe_serie'], DMFD.FDQryGeral2['nfe_chave_nfe'], DMFD.FDQryGeral2['nfe_modelo'], true)
          else
-          pGravaNFe('016', 'situacao', 'motivo', '', '', '', '', '', 'codigo_loja', 'demi', 'nnf', 'serie', 'chave_nfe', 'modelo',
-                    '',                           'Movida das Transmitidas', '', '', '', '', '', edt_CodEmp.Text,
+          pGravaNFe('016', 'situacao', 'motivo', '', '', '', '', '', '', '', '', '', '', '', 'codigo_loja', 'demi', 'nnf', 'serie', 'chave_nfe', 'modelo',
+                    '',                           'Movida das Transmitidas', '', '', '', '', '', '', '', '', '', '', '', edt_CodEmp.Text,
                     FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']), DMFD.FDQryGeral2['nfe_nnf'],
                     DMFD.FDQryGeral2['nfe_serie'], DMFD.FDQryGeral2['nfe_chave_nfe'], DMFD.FDQryGeral2['nfe_modelo'], true);
 
@@ -12953,18 +13228,22 @@ end;
 // Objetivo   : Centralizar os updates em um só lugar
 // Author     : by Edson Lima ; 2013/03/11 ; 16:30
 //------------------------------------------------------------------------------
-procedure TFrGBNFe.pGravaNFe(locErr, c01, c02, c03, c04, c05, c06, c07, c08, c09, c10, c11, c12, c13: String;
-                                     p01, p02, p03, p04, p05, p06, p07, p08, p09, p10, p11, p12, p13: Variant;
-                                     Consiste                                                       : Boolean);
+procedure TFrGBNFe.pGravaNFe(locErr, c01, c02, c03, c04, c05, c06, c07, c08, c09,
+                                     c10, c11, c12, c13, c14, c15, c16, c17, c18,
+                                     c19: String;
+                                     p01, p02, p03, p04, p05, p06, p07, p08, p09,
+                                     p10, p11, p12, p13, p14, p15, p16, p17, p18,
+                                     p19: Variant;
+                                     Consiste                         : Boolean);
 begin
  // by Edson Lima ; 2013/03/13 ; 09:26 ; Função de consistência para evitar duplicidade de chave nnf
  if Consiste then
-  if not fConsiste(locErr, VarToStr(p08), gCdloja_Consiste,
-                           vartostr(p09), gdEmi_Consiste,
-                           vartostr(p10), gNNF_Consiste,
-                           vartostr(p11), gSerie_Consiste,
-                           vartostr(p12), gChave_Consiste,
-                           vartostr(p13), gModelo_Consiste) then Exit;
+  if not fConsiste(locErr, VarToStr(p14), gCdloja_Consiste,
+                           vartostr(p15), gdEmi_Consiste,
+                           vartostr(p16), gNNF_Consiste,
+                           vartostr(p17), gSerie_Consiste,
+                           vartostr(p18), gChave_Consiste,
+                           vartostr(p19), gModelo_Consiste) then Exit;
 
  try
   DMFD.FDQuery2.DisableControls;
@@ -12987,12 +13266,24 @@ begin
    DMFD.FDQuery2.SQL.Add( ',              ' + c06 + ' = :' + c06 + '         ' );
   if trim(c07) <> '' then
    DMFD.FDQuery2.SQL.Add( ',              ' + c07 + ' = :' + c07 + '         ' );
+  if trim(c08) <> '' then
+   DMFD.FDQuery2.SQL.Add( ',              ' + c08 + ' = :' + c08 + '         ' );
+  if trim(c09) <> '' then
+   DMFD.FDQuery2.SQL.Add( ',              ' + c09 + ' = :' + c09 + '         ' );
+  if trim(c10) <> '' then
+   DMFD.FDQuery2.SQL.Add( ',              ' + c10 + ' = :' + c10 + '         ' );
+  if trim(c11) <> '' then
+   DMFD.FDQuery2.SQL.Add( ',              ' + c11 + ' = :' + c11 + '         ' );
+  if trim(c12) <> '' then
+   DMFD.FDQuery2.SQL.Add( ',              ' + c12 + ' = :' + c12 + '         ' );
+  if trim(c13) <> '' then
+   DMFD.FDQuery2.SQL.Add( ',              ' + c13 + ' = :' + c13 + '         ' );
 
-  DMFD.FDQuery2.SQL.Add( '  where ' + c08 + ' = :' + c08 + '                 ' );
-  DMFD.FDQuery2.SQL.Add( '    and ' + c09 + ' = :' + c09 + '                 ' );
-  DMFD.FDQuery2.SQL.Add( '    and ' + c10 + ' = :' + c10 + '                 ' );
-  DMFD.FDQuery2.SQL.Add( '    and ' + c11 + ' = :' + c11 + '                 ' );
-  DMFD.FDQuery2.SQL.Add( '    and ' + c13 + ' = :' + c13 + '                 ' );
+  DMFD.FDQuery2.SQL.Add( '  where ' + c14 + ' = :' + c14 + '                 ' );
+  DMFD.FDQuery2.SQL.Add( '    and ' + c15 + ' = :' + c15 + '                 ' );
+  DMFD.FDQuery2.SQL.Add( '    and ' + c16 + ' = :' + c16 + '                 ' );
+  DMFD.FDQuery2.SQL.Add( '    and ' + c17 + ' = :' + c17 + '                 ' );
+  DMFD.FDQuery2.SQL.Add( '    and ' + c19 + ' = :' + c19 + '                 ' );
 
   if trim(c01) <> '' then
    DMFD.FDQuery2.ParamByName(c01).Value    := p01;
@@ -13008,12 +13299,24 @@ begin
    DMFD.FDQuery2.ParamByName(c06).Value    := p06;
   if trim(c07) <> '' then
    DMFD.FDQuery2.ParamByName(c07).Value    := p07;
+  if trim(c08) <> '' then
+   DMFD.FDQuery2.ParamByName(c08).Value    := p08;
+  if trim(c09) <> '' then
+   DMFD.FDQuery2.ParamByName(c09).Value    := p09;
+  if trim(c10) <> '' then
+   DMFD.FDQuery2.ParamByName(c10).Value    := p10;
+  if trim(c11) <> '' then
+   DMFD.FDQuery2.ParamByName(c11).Value    := p11;
+  if trim(c12) <> '' then
+   DMFD.FDQuery2.ParamByName(c12).Value    := p12;
+  if trim(c13) <> '' then
+   DMFD.FDQuery2.ParamByName(c13).Value    := p13;
 
-  DMFD.FDQuery2.ParamByName(c08).Value     := p08;
-  DMFD.FDQuery2.ParamByName(c09).Value     := p09;
-  DMFD.FDQuery2.ParamByName(c10).Value     := p10;
-  DMFD.FDQuery2.ParamByName(c11).Value     := p11;
-  DMFD.FDQuery2.ParamByName(c13).Value     := p13;
+  DMFD.FDQuery2.ParamByName(c14).Value     := p14;
+  DMFD.FDQuery2.ParamByName(c15).Value     := p15;
+  DMFD.FDQuery2.ParamByName(c16).Value     := p16;
+  DMFD.FDQuery2.ParamByName(c17).Value     := p17;
+  DMFD.FDQuery2.ParamByName(c19).Value     := p19;
   try
 
    DMFD.FDQuery2.ExecSQL;
@@ -13067,8 +13370,8 @@ begin
      begin
 
       // Filtra a nfe selecionada com select
-      pSelNfe( DMFD.FDQryGeral2, StrToInt(FrGBNFe.edt_CodEmp.Text),
-                                 StrToInt(cxTL.Items[X].Texts[cxTLlNot.ItemIndex]),
+      pSelNfe( DMFD.FDQryGeral2, StrToIntDef(FrGBNFe.edt_CodEmp.Text, 0),
+                                 StrToIntDef(cxTL.Items[X].Texts[cxTLlNot.ItemIndex], 0),
                                  StrToDateTime(cxTL.Items[X].Texts[cxTLdDem.ItemIndex]),
                                  cxTL.Items[X].Texts[cxTLsMod.ItemIndex],
                                  cxTL.Items[X].Texts[cxTLsSer.ItemIndex] );
@@ -13089,7 +13392,7 @@ begin
       gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
       gNNF_Consiste    := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
       gSerie_Consiste  := vartostr(DMFD.FDQryGeral2['nfe_serie']);
-      gSerie           := StrToInt(gSerie_Consiste);
+      gSerie           := StrToIntDef(gSerie_Consiste, 0);
       gChave_Consiste  := '';                                                   // está sendo atribuida depois da sp_calcula_digito_chave
       gModelo_Consiste := vartostr(DMFD.FDQryGeral2['nfe_modelo']);
 
@@ -13108,7 +13411,7 @@ begin
 
         memoLog.Clear;
         ACBrNFe1.EventoNFe.Evento.Clear;
-        ACBrNFe1.EventoNFe.idLote := StrToInt(idLote) ;
+        ACBrNFe1.EventoNFe.idLote := StrToIntDef(idLote, 0) ;
 
         with ACBrNFe1.EventoNFe.Evento.Add do
         begin
@@ -13175,7 +13478,7 @@ begin
         DMFD.FDQuery2.SQL.Add( 'inner join nfe t2 on t2.codigo_destinatario = t1.codigo                                               ' );
         DMFD.FDQuery2.SQL.Add( 'where t2.codigo_loja = :parm1                                  ' );
         DMFD.FDQuery2.SQL.Add( 'and t2.chave_nfe = :parm2                                  ' );
-        DMFD.FDQuery2.Params[0].AsInteger := StrToInt(edt_CodEmp.Text);
+        DMFD.FDQuery2.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
         DMFD.FDQuery2.Params[1].AsString  := (vChave);
         DMFD.FDQuery2.Open;
         if DMFD.FDQuery2.IsEmpty then
@@ -14062,7 +14365,7 @@ begin
  vDate   := gDataEmi;
 
  caminho := (gCamXml + FormatDateTime('yyyymm', vDate) + gTN);
- mascara := ('*' + M + Format('%.3d', [StrToInt(S)]) + Format('%.9d', [StrToInt(N)]) + '*.xml');
+ mascara := ('*' + M + Format('%.3d', [StrToIntDef(S, 0)]) + Format('%.9d', [StrToIntDef(N, 0)]) + '*.xml');
 
  Result:=FindFirst(caminho + mascara , faAnyFile, SearchRec);
 
@@ -14079,7 +14382,7 @@ begin
   end;
 
  caminho := (gCamLog);
- mascara := ('*' + M + Format('%.3d', [StrToInt(S)]) + Format('%.9d', [StrToInt(N)]) + '*.xml');
+ mascara := ('*' + M + Format('%.3d', [StrToIntDef(S, 0)]) + Format('%.9d', [StrToIntDef(N, 0)]) + '*.xml');
 
  Result:=FindFirst(caminho + mascara , faAnyFile, SearchRec);
 
@@ -14177,8 +14480,7 @@ function TFrGBNFe.fCancelaCCe(Codigo_loja, nNF, dEmi: String) : Boolean;
 begin
 
  //DMFD.FDQryGeral2.Close;
- // DMFD.FDQryGeral2.ParamByName('Codigo_Loja').AsInteger := StrToInt(Codigo_loja);
- // DMFD.FDQryGeral2.ParamByName('Nota').Value := StrToInt(nNF);
+ // DMFD.FDQryGeral2.ParamByName('Nota').Value := StrToIntDef(nNF, 0);
  //DMFD.FDQryGeral2.Open;
 
  if DMFD.FDQryGeral2.IsEmpty then
@@ -14199,8 +14501,8 @@ begin
   DMFD.FDQuery2.SQL.Add( '    nNF            = :nNF                            ' );
   DMFD.FDQuery2.ParamByName('cStat'      ).Value  := '580';
   DMFD.FDQuery2.ParamByName('xMotivo'    ).Value  := 'Rejeição: O evento exige uma NF-e autorizada (NF-e Cancelada)';
-  DMFD.FDQuery2.ParamByName('Codigo_Loja').Value  := StrToInt(Codigo_loja);
-  DMFD.FDQuery2.ParamByName('nNF'        ).Value  := StrToInt(nNF);
+  DMFD.FDQuery2.ParamByName('Codigo_Loja').Value  := StrToIntDef(Codigo_loja, 0);
+  DMFD.FDQuery2.ParamByName('nNF'        ).Value  := StrToIntDef(nNF, 0);
 
   DMFD.FDQuery2.ExecSQL;
  except
@@ -14222,9 +14524,9 @@ begin
   DMFD.FDQuery2.SQL.Add( '  and nnf                  = :nnf                      ' );
   DMFD.FDQuery2.ParamByName('cStat_CCe'  ).Value    := '580';
   DMFD.FDQuery2.ParamByName('xMotivo_CCe').Value    := 'Rejeição: O evento exige uma NF-e autorizada (NF-e Cancelada)';
-  DMFD.FDQuery2.ParamByName('codigo_loja').Value    := StrToInt(Codigo_loja);
+  DMFD.FDQuery2.ParamByName('codigo_loja').Value    := StrToIntDef(Codigo_loja, 0);
   DMFD.FDQuery2.ParamByName('demi'       ).Value    := gdEmi_Consiste;
-  DMFD.FDQuery2.ParamByName('nnf'        ).Value    := StrToInt(nNF);
+  DMFD.FDQuery2.ParamByName('nnf'        ).Value    := StrToIntDef(nNF, 0);
 
   try
 
@@ -14379,7 +14681,7 @@ begin
   else
    vPS := 0;
 
-  gCEIni  := Ini.ReadInteger( 'Certificado' + '-Emp' + gCodEmp,'CodEmp_Ini', StrToInt(gCodEmp)) ;
+  gCEIni  := Ini.ReadInteger( 'Certificado' + '-Emp' + gCodEmp,'CodEmp_Ini', StrToIntDef(gCodEmp, 0)) ;
   gPSCert := Ini.ReadInteger( 'Certificado' + '-Emp' + gCodEmp,'1º-2º_Cert', vPS) ;
 
  finally
@@ -14644,7 +14946,7 @@ end;
 //------------------------------------------------------------------------------
 procedure TFrGBNFe.LerBDFD();
 Var
- IniFile           : String ;
+ IniFile, Secao    : String ;
  Ini               : TIniFile ;
  Ok                : Boolean;
  vLoginPrompt_NFe,
@@ -14671,79 +14973,90 @@ begin
 
  IniFile := gCamExe + 'GBNFe.Ini';
  Ini := TIniFile.Create( IniFile );
+ Secao   := 'BD_FireDAC-EMP' + gCodEmp;
 
  try
+
   try
 
-   // NFe
-   vLoginPrompt_NFe                   := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'LoginPrompt_NFe', 'false') ;
-   vOSAuthent_NFe                     := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'OSAuthent_NFe',   'false') ;
-   vDriverID_NFe                      := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'DriverID_NFe',    '') ;
-   vDatabase_NFe                      := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'Database_NFe',    '') ;
-   vServer_NFe                        := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'Server_NFe',      '') ;
-   vUserName_NFe                      := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'UserName_NFe',    '') ;
-   vPassword_NFe                      := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'Password_NFe',    '') ;
-   vConnected_NFe                     := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'Connected_NFe',   'false') ;
-   vCamBD_NFe                         := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'CamBD_NFe',       '') ;
-
-   if ( vDriverID_NFe <> '' )  then
+   if ( Ini.SectionExists( Secao ) ) then
     begin
 
-     FrPar.chk_LoginPrompt_NFe.Checked  := StrToBool(vLoginPrompt_NFe);
-     FrPar.OSAuthent_NFe.Checked        := StrToBool(vOSAuthent_NFe);
-     if ( vDriverID_NFe <> '' )  then
-      FrPar.cbb_DriverID_NFe.Text       := vDriverID_NFe;
-     if ( vDatabase_NFe <> '' )  then
+     // NFe
+     vLoginPrompt_NFe                   := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'LoginPrompt_NFe', 'false') ;
+     vOSAuthent_NFe                     := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'OSAuthent_NFe',   'false') ;
+     vDriverID_NFe                      := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'DriverID_NFe',    '') ;
+     vDatabase_NFe                      := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'Database_NFe',    '') ;
+     vServer_NFe                        := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'Server_NFe',      '') ;
+     vUserName_NFe                      := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'UserName_NFe',    '') ;
+     vPassword_NFe                      := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'Password_NFe',    '') ;
+     vConnected_NFe                     := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'Connected_NFe',   'false') ;
+     vCamBD_NFe                         := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'CamBD_NFe',       '') ;
+
+     if ( (vDriverID_NFe <> '') and (vDatabase_NFe <> '')   and
+          (vServer_NFe <> '')   and (vUserName_NFe <> '') ) then
       begin
-       FrPar.edt_Database_NFe.Text      := vDatabase_NFe;
-       gNFe                             := trim(vDatabase_NFe);
+
+       FrPar.chk_LoginPrompt_NFe.Checked  := StrToBool(vLoginPrompt_NFe);
+       FrPar.OSAuthent_NFe.Checked        := StrToBool(vOSAuthent_NFe);
+       if ( vDriverID_NFe <> '' )  then
+        FrPar.cbb_DriverID_NFe.Text       := vDriverID_NFe;
+       if ( vDatabase_NFe <> '' )  then
+        begin
+         FrPar.edt_Database_NFe.Text      := vDatabase_NFe;
+         gNFe                             := trim(vDatabase_NFe);
+        end;
+       if ( vServer_NFe <> '' )  then
+        FrPar.edt_Server_NFe.Text         := vServer_NFe;
+       if ( vUserName_NFe <> '' )  then
+        FrPar.edt_UserName_NFe.Text       := vUserName_NFe;
+       if ( vPassword_NFe <> '' )  then
+        FrPar.edt_Password_NFe.Text       := Crypt( 'D',(vPassword_NFe) );
+       FrPar.chk_Connected_NFe.Checked    := StrToBool(vConnected_NFe);
+       FrPar.edt_CamBD_NFe.Text           := vCamBD_NFe;
+
       end;
-     if ( vServer_NFe <> '' )  then
-      FrPar.edt_Server_NFe.Text         := vServer_NFe;
-     if ( vUserName_NFe <> '' )  then
-      FrPar.edt_UserName_NFe.Text       := vUserName_NFe;
-     if ( vPassword_NFe <> '' )  then
-      FrPar.edt_Password_NFe.Text       := Crypt( 'D',(vPassword_NFe) );
-     FrPar.chk_Connected_NFe.Checked    := StrToBool(vConnected_NFe);
-     FrPar.edt_CamBD_NFe.Text           := vCamBD_NFe;
 
-    end;
+     // ERP
+     vTpERP_Ger                         := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'TpERP_Ger', '');
+     vLoginPrompt_Ger                   := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'LoginPrompt_Ger', 'false') ;
+     vOSAuthent_Ger                     := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'OSAuthent_Ger',   'false') ;
+     vDriverID_Ger                      := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'DriverID_Ger',    '') ;
+     vDatabase_Ger                      := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'Database_Ger',    '') ;
+     vServer_Ger                        := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'Server_Ger',      '') ;
+     vUserName_Ger                      := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'UserName_Ger',    '') ;
+     vPassword_Ger                      := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'Password_Ger',    '') ;
+     vConnected_Ger                     := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'Connected_Ger',   'false') ;
+     vCamBD_Ger                         := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'CamBD_Ger',       '') ;
 
-   // ERP
-   vTpERP_Ger                         := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'TpERP_Ger', '');
-   vLoginPrompt_Ger                   := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'LoginPrompt_Ger', 'false') ;
-   vOSAuthent_Ger                     := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'OSAuthent_Ger',   'false') ;
-   vDriverID_Ger                      := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'DriverID_Ger',    '') ;
-   vDatabase_Ger                      := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'Database_Ger',    '') ;
-   vServer_Ger                        := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'Server_Ger',      '') ;
-   vUserName_Ger                      := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'UserName_Ger',    '') ;
-   vPassword_Ger                      := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'Password_Ger',    '') ;
-   vConnected_Ger                     := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'Connected_Ger',   'false') ;
-   vCamBD_Ger                         := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'CamBD_Ger',       '') ;
+     if ( (vDriverID_Ger <> '') and (vDatabase_Ger <> '')   and
+          (vServer_Ger <> '')   and (vUserName_Ger <> '') ) then
+      begin
 
-   if ( vDriverID_NFe <> '' )  then
-    begin
+       FrPar.edt_TpERP_Ger.Text           := vTpERP_Ger;
+       FrPar.chk_LoginPrompt_Ger.Checked  := StrToBool(vLoginPrompt_Ger);
+       FrPar.OSAuthent_Ger.Checked        := StrToBool(vOSAuthent_Ger);
+       if ( vDriverID_Ger <> '' )  then
+        FrPar.cbb_DriverID_Ger.Text       := vDriverID_Ger;
+       if ( vDatabase_Ger <> '' )  then
+        FrPar.edt_Database_Ger.Text       := vDatabase_Ger;
+       if ( vServer_Ger <> '' )  then
+        FrPar.edt_Server_Ger.Text         := vServer_Ger;
+       if ( vUserName_Ger <> '' )  then
+        FrPar.edt_UserName_Ger.Text       := vUserName_Ger;
+       if ( vPassword_Ger <> '' )  then
+        FrPar.edt_Password_Ger.Text       := Crypt( 'D',(vPassword_Ger) );
+       FrPar.chk_Connected_Ger.Checked    := StrToBool(vConnected_Ger);
+       FrPar.edt_CamBD_Ger.Text           := vCamBD_Ger;
 
-     FrPar.edt_TpERP_Ger.Text           := vTpERP_Ger;
-     FrPar.chk_LoginPrompt_Ger.Checked  := StrToBool(vLoginPrompt_Ger);
-     FrPar.OSAuthent_Ger.Checked        := StrToBool(vOSAuthent_Ger);
-     if ( vDriverID_Ger <> '' )  then
-      FrPar.cbb_DriverID_Ger.Text       := vDriverID_Ger;
-     if ( vDatabase_Ger <> '' )  then
-      FrPar.edt_Database_Ger.Text       := vDatabase_Ger;
-     if ( vServer_Ger <> '' )  then
-      FrPar.edt_Server_Ger.Text         := vServer_Ger;
-     if ( vUserName_Ger <> '' )  then
-      FrPar.edt_UserName_Ger.Text       := vUserName_Ger;
-     if ( vPassword_Ger <> '' )  then
-      FrPar.edt_Password_Ger.Text       := Crypt( 'D',(vPassword_Ger) );
-     FrPar.chk_Connected_Ger.Checked    := StrToBool(vConnected_Ger);
-     FrPar.edt_CamBD_Ger.Text           := vCamBD_Ger;
+      end;
 
-    end;
+     gTemSqlEmp := true
 
-   if ( vDriverID_NFe <> '' )  then
-    gTemSqlEmp := true;
+    end
+   else
+
+    gTemSqlEmp := false;
 
   Except on e:Exception do
 
@@ -14767,29 +15080,56 @@ end;
 //------------------------------------------------------------------------------
 procedure TFrGBNFe.LerBDFD_E();
 Var
- IniFile           : String ;
+ IniFile, Secao    : String ;
  Ini               : TIniFile ;
  Ok                : Boolean;
- vDatabase_NFe     : string ;
 
 begin
 
  IniFile := gCamExe + 'GBNFe.Ini';
- Ini := TIniFile.Create( IniFile );
+ Ini     := TIniFile.Create( IniFile );
+ Secao   := 'BD_FireDAC-EMP' + gCodEmp;
 
  try
+
   try
 
-   // NFe
-   vDatabase_NFe                      := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'Database_NFe',    '') ;
+   if ( Ini.SectionExists( Secao ) ) then
+    begin
 
-   if ( vDatabase_NFe <> '' )  then
-    gTemSqlEmp := true;
+     // NFe
+     gLoginPrompt_NFe                      := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'LoginPrompt_NFe', 'false') ;
+     gOSAuthent_NFe                        := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'OSAuthent_NFe',   'false') ;
+     gDriverID_NFe                         := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'DriverID_NFe',    '') ;
+     gDatabase_NFe                         := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'Database_NFe',    '') ;
+     gServer_NFe                           := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'Server_NFe',      '') ;
+     gUserName_NFe                         := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'UserName_NFe',    '') ;
+     gPassword_NFe                         := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'Password_NFe',    '') ;
+     gConnected_NFe                        := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'Connected_NFe',   'false') ;
+     gCamBD_NFe                            := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'CamBD_NFe',       '') ;
+
+     // ERP
+     gTpERP_Ger                            := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'TpERP_Ger', '');
+     gLoginPrompt_Ger                      := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'LoginPrompt_Ger', 'false') ;
+     gOSAuthent_Ger                        := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'OSAuthent_Ger',   'false') ;
+     gDriverID_Ger                         := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'DriverID_Ger',    '') ;
+     gDatabase_Ger                         := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'Database_Ger',    '') ;
+     gServer_Ger                           := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'Server_Ger',      '') ;
+     gUserName_Ger                         := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'UserName_Ger',    '') ;
+     gPassword_Ger                         := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'Password_Ger',    '') ;
+     gConnected_Ger                        := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'Connected_Ger',   'false') ;
+     gCamBD_Ger                            := Ini.ReadString( 'BD_FireDAC' + '-Emp' + gCodEmp, 'CamBD_Ger',       '') ;
+
+     gTemSqlEmp := true
+
+    end
+   else
+    gTemSqlEmp := false;
 
   Except on e:Exception do
 
-   Application.Messagebox( PWideChar( 'Inconsistência na leitura do arquivo Ini (Emp)!' + chr(13) +
-                           e.Message ), PWideChar( 'Leitura do Aquivo Ini-(Emp)' ),
+   Application.Messagebox( PWideChar( 'Inconsistência na leitura do arquivo ini' + chr(13) +
+                           e.Message ), PWideChar( 'Leitura do Aquivo Ini' ),
                            MB_ICONINFORMATION + mb_ok );
 
   end;
@@ -14799,6 +15139,82 @@ begin
   Ini.Free ;
 
  end;
+
+end;
+
+//------------------------------------------------------------------------------
+// by Edson Lima - 2019-8-23T1121
+// function que verifica o acesso da EMP no Banco de Dados FareDac
+//------------------------------------------------------------------------------
+function TFrGBNFe.fAcessar() : boolean;
+Var
+ IniFile, Secao    : String ;
+ Ini               : TIniFile ;
+
+begin
+
+ IniFile := gCamExe + 'GBNFe.Ini';
+ Ini := TIniFile.Create( IniFile );
+ Secao   := 'BD_FireDAC-EMP' + gCodEmp;
+
+ result := false;
+
+ if ( Ini.SectionExists( Secao ) ) then
+  begin
+
+   // NFe
+   DMFD.FDConNFe.LoginPrompt                := StrToBool(gLoginPrompt_NFe);
+   if ( StrToBool(gOSAuthent_NFe) ) then
+    DMFD.FDConNFe.Params.Values['OSAuthent']:= 'Yes'
+   else
+    DMFD.FDConNFe.Params.Values['OSAuthent']:= 'No';
+   DMFD.FDConNFe.Params.Values['MARS']      := 'Yes';
+   DMFD.FDConNFe.Params.Values['DriverID']  := gDriverID_NFe;
+   DMFD.FDConNFe.Params.Values['Database']  := gDatabase_NFe;
+   DMFD.FDConNFe.Params.Values['Server'  ]  := gServer_NFe;
+   if not ( StrToBool(gOSAuthent_NFe) ) then
+    begin
+     DMFD.FDConNFe.Params.Values['UserName']:= gUserName_NFe;
+     DMFD.FDConNFe.Params.Values['Password']:= gPassword_NFe;
+    end;
+
+   try
+
+    DMFD.FDConNFe.Connected                 := StrToBool(gConnected_NFe);
+
+    Result := true;
+
+   except
+
+   end;
+
+   // Ger
+   DMFD.FDConGer.LoginPrompt                := StrToBool(gLoginPrompt_Ger);
+   if ( StrToBool(gOSAuthent_Ger) ) then
+    DMFD.FDConGer.Params.Values['OSAuthent']:= 'Yes'
+   else
+    DMFD.FDConGer.Params.Values['OSAuthent']:= 'No';
+   DMFD.FDConGer.Params.Values['MARS']      := 'Yes';
+   DMFD.FDConGer.Params.Values['DriverID']  := gDriverID_Ger;
+   DMFD.FDConGer.Params.Values['Database']  := gDatabase_Ger;
+   DMFD.FDConGer.Params.Values['Server'  ]  := gServer_Ger;
+   if not ( StrToBool(gOSAuthent_Ger) ) then
+    begin
+     DMFD.FDConGer.Params.Values['UserName']:= gUserName_Ger;
+     DMFD.FDConGer.Params.Values['Password']:= gPassword_Ger;
+    end;
+
+   try
+
+    DMFD.FDConGer.Connected                  := StrToBool(gConnected_Ger);
+
+    Result := true;
+
+   except
+
+   end;
+
+  end;
 
 end;
 
@@ -14940,7 +15356,7 @@ begin
    ACBrNFeDANFCeFortes1.PathPDF                    := gCamPdf;
    ACBrNFeDANFCeFortes1.Sistema                    := gSistema;
    ACBrNFeDANFCeFortes1.Usuario                    := gUsu;
-   ACBrNFeDANFCeFortes1.NumCopias                  := strtoint(FrPar.ed_QtdCopNFCe.Text);
+   ACBrNFeDANFCeFortes1.NumCopias                  := StrToIntDef(FrPar.ed_QtdCopNFCe.Text, 0);
 
    if not FrPar.CheckBox2.Checked then
     ACBrNFeDANFCeFortes1.MostraPreview             := false
@@ -14979,7 +15395,7 @@ begin
    ACBrNFeDANFeRL1.PathPDF                         := gCamPdf;
    ACBrNFeDANFeRL1.Sistema                         := gSistema;
    ACBrNFeDANFeRL1.Usuario                         := gUsu;
-   ACBrNFeDANFeRL1.NumCopias                       := strtoint(FrPar.ed_QtdCopNFe.Text);
+   ACBrNFeDANFeRL1.NumCopias                       := StrToIntDef(FrPar.ed_QtdCopNFe.Text, 0);
 
    if not FrPar.CheckBox2.Checked then
     ACBrNFeDANFERL1.MostraPreview                  := false
@@ -15096,7 +15512,7 @@ begin
    ACBrNFeDANFCeFortes1.PathPDF                      := gCamPdf;
    ACBrNFeDANFCeFortes1.Sistema                      := gSistema;
    ACBrNFeDANFCeFortes1.Usuario                      := gUsu;
-   ACBrNFeDANFCeFortes1.NumCopias                    := strtoint(FrPar.ed_QtdCopNFCe.Text);
+   ACBrNFeDANFCeFortes1.NumCopias                    := StrToIntDef(FrPar.ed_QtdCopNFCe.Text, 0);
 
    if not FrPar.CheckBox2.Checked then
     ACBrNFeDANFCeFortes1.MostraPreview               := false
@@ -15156,7 +15572,7 @@ begin
    ACBrNFeDANFeFR1.PathPDF                           := gCamPdf;
    ACBrNFeDANFeFR1.Sistema                           := gSistema;
    ACBrNFeDANFeFR1.Usuario                           := gUsu;
-   ACBrNFeDANFeFR1.NumCopias                         := strtoint(FrPar.ed_QtdCopNFe.Text);
+   ACBrNFeDANFeFR1.NumCopias                         := StrToIntDef(FrPar.ed_QtdCopNFe.Text, 0);
 
    if not FrPar.CheckBox2.Checked then
     ACBrNFeDANFEFR1.MostraPreview                    := false
@@ -15387,8 +15803,8 @@ begin
      begin
 
       // Filtra a nfe selecionada com select
-      pSelNfe( FD, StrToInt(FrGBNFe.edt_CodEmp.Text),
-                   StrToInt(cxTL.Items[X].Texts[cxTLlNot.ItemIndex]),
+      pSelNfe( FD, StrToIntDef(FrGBNFe.edt_CodEmp.Text, 0),
+                   StrToIntDef(cxTL.Items[X].Texts[cxTLlNot.ItemIndex], 0),
                    StrToDateTime(cxTL.Items[X].Texts[cxTLdDem.ItemIndex]),
                    cxTL.Items[X].Texts[cxTLsMod.ItemIndex],
                    cxTL.Items[X].Texts[cxTLsSer.ItemIndex] );
@@ -15443,8 +15859,8 @@ begin
      begin
 
       // Filtra a nfe selecionada com select
-      pSelNfe( FD, StrToInt(FrGBNFe.edt_CodEmp.Text),
-                   StrToInt(cxTL.Items[X].Texts[cxTLlNot.ItemIndex]),
+      pSelNfe( FD, StrToIntDef(FrGBNFe.edt_CodEmp.Text, 0),
+                   StrToIntDef(cxTL.Items[X].Texts[cxTLlNot.ItemIndex], 0),
                    StrToDateTime(cxTL.Items[X].Texts[cxTLdDem.ItemIndex]),
                    cxTL.Items[X].Texts[cxTLsMod.ItemIndex],
                    cxTL.Items[X].Texts[cxTLsSer.ItemIndex] );
@@ -15459,7 +15875,7 @@ begin
 
          vAux := VarToStr(FD['nfe_chave_nfe']);
 
-         if (StrToInt(FD['nfe_Modelo']) = 55) then
+         if (StrToIntDef(FD['nfe_Modelo'], 0) = 55) then
           begin
 
            if FrPar.rgTipoAmb.ItemIndex = 0 then
@@ -15747,7 +16163,7 @@ end;
 procedure TFrGBNFe.dxSpinEdit1Exit(Sender: TObject);
 begin
 
- if StrToInt(edt_CodEmp.Text) < 1 then
+ if StrToIntDef(edt_CodEmp.Text, 0) < 1 then
   begin
    edt_CodEmp.Text := '001';
   end;
@@ -15756,7 +16172,7 @@ begin
  DMFD.FDQuery4.SQL.Clear;
  DMFD.FDQuery4.SQL.Add( 'select * from emitente            ' );
  DMFD.FDQuery4.SQL.Add( ' where codigo_loja =:codigo_loja  ' );
- DMFD.FDQuery4.ParamByName('codigo_loja').AsInteger := StrToInt(edt_CodEmp.Text);
+ DMFD.FDQuery4.ParamByName('codigo_loja').AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
  DMFD.FDQuery4.Open;
 
  if DMFD.FDQuery4.IsEmpty then
@@ -15854,7 +16270,7 @@ begin
 
  if ( gCpt = 1 ) then
   begin
-   for c := 1 to ( StrToInt(FrPar.ed_QtdCopNFe.Text) ) do
+   for c := 1 to ( StrToIntDef(FrPar.ed_QtdCopNFe.Text, 0) ) do
     begin
      if ( gModelo = 55 ) then
       begin
@@ -16763,7 +17179,7 @@ end;
 procedure TFrGBNFe.edt_CodEmpExit(Sender: TObject);
 begin
 
- if StrToInt(edt_CodEmp.    Text) < 1 then
+ if StrToIntDef(edt_CodEmp.    Text, 0) < 1 then
   begin
    edt_CodEmp.Text := '001';
   end;
@@ -16772,7 +17188,7 @@ begin
  DMFD.FDQuery4.SQL.Clear;
  DMFD.FDQuery4.SQL.Add( 'select * from emitente            ' );
  DMFD.FDQuery4.SQL.Add( ' where codigo_loja =:codigo_loja  ' );
- DMFD.FDQuery4.ParamByName('codigo_loja').AsInteger := StrToInt(edt_CodEmp.Text);
+ DMFD.FDQuery4.ParamByName('codigo_loja').AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
  DMFD.FDQuery4.Open;
 
  if DMFD.FDQuery4.IsEmpty then
@@ -17290,7 +17706,7 @@ begin
 
   try
 
-   OffSet := StrToInt('$' + copy(Src,1,2));
+   OffSet := StrToIntDef('$' + copy(Src,1,2), 0);
    SrcPos := 3;
 
   except                                                                        // Caso não seja um digito hexadecimal
@@ -17304,7 +17720,7 @@ begin
 
     try
 
-     SrcAsc := StrToInt('$' + copy(Src,SrcPos,2));
+     SrcAsc := StrToIntDef('$' + copy(Src,SrcPos,2), 0);
 
      if (KeyPos < KeyLen) Then
       KeyPos := KeyPos + 1
