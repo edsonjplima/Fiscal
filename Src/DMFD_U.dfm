@@ -41,8 +41,8 @@ object DMFD: TDMFD
   end
   object DataSource17: TDataSource
     DataSet = FDQryGeral2
-    Left = 118
-    Top = 414
+    Left = 42
+    Top = 132
   end
   object DataSource3: TDataSource
     DataSet = FDQuery3
@@ -107,6 +107,8 @@ object DMFD: TDMFD
         'ento'
       ',t1.nr_dpec                             as nfe_nr_dpec'
       ',t1.CodPed                              as nfe_CodPed'
+      ',t1.UsuTrs                              as nfe_UsuTrs'
+      ',t1.UsuCnc                              as nfe_UsuCnc'
       ''
       ',t2.razao_social                        as des_razao_social'
       ',case when len(t2.cnpj) > 11 then dbo.formatarCNPJ(t2.cnpj)'
@@ -155,6 +157,8 @@ object DMFD: TDMFD
         'ento'
       ',t1.nr_dpec                             as nfe_nr_dpec'
       ',t1.CodPed                              as nfe_CodPed'
+      ',t1.UsuTrs                              as nfe_UsuTrs'
+      ',t1.UsuCnc                              as nfe_UsuCnc'
       ''
       ',t2.razao_social                        as des_razao_social'
       ',case when len(t2.cnpj) > 11 then dbo.formatarCNPJ(t2.cnpj)'
@@ -196,6 +200,8 @@ object DMFD: TDMFD
         ',t1.data_hora_recebimento               as nfe_data_hora_recebim' +
         'ento'
       ',t1.nr_dpec                             as nfe_nr_dpec'
+      ',t1.UsuTrs                              as nfe_UsuTrs'
+      ',t1.UsuCnc                              as nfe_UsuCnc'
       ''
       ',t2.razao_social                        as des_razao_social'
       ',case when len(t2.cnpj) > 11 then dbo.formatarCNPJ(t2.cnpj)'
@@ -264,6 +270,8 @@ object DMFD: TDMFD
         'ento'
       ',t1.nr_dpec                             as nfe_nr_dpec'
       ',t1.CodPed                              as nfe_CodPed'
+      ',t1.UsuTrs                              as nfe_UsuTrs'
+      ',t1.UsuCnc                              as nfe_UsuCnc'
       ''
       ',t2.razao_social                        as des_razao_social'
       ',case when len(t2.cnpj) > 11 then dbo.formatarCNPJ(t2.cnpj)'
@@ -835,8 +843,8 @@ object DMFD: TDMFD
   object FDQuery19: TFDQuery
     Connection = FDConNFe
     FetchOptions.AssignedValues = [evCursorKind]
-    Left = 472
-    Top = 460
+    Left = 468
+    Top = 466
   end
   object FDQryGeral5: TFDQuery
     Connection = FDConNFe
@@ -884,8 +892,8 @@ object DMFD: TDMFD
       '  where codigo_loja  = :codigo_loja            and'
       '        dEmi >= :dEmi_I                        and'
       '        dEmi <= :dEmi_F')
-    Left = 472
-    Top = 526
+    Left = 468
+    Top = 518
     ParamData = <
       item
         Name = 'CODIGO_LOJA'

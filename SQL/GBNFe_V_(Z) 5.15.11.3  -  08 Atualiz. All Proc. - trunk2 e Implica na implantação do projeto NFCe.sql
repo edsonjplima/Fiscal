@@ -12,94 +12,94 @@
 USE [NFe]
 GO
 
-/****** Object:  StoredProcedure [dbo].[sp_nfe_transmitidas;1]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_nfe_transmitidas;1]    Script Date: 28/08/2019 10:22:37 ******/
 DROP PROCEDURE [dbo].[sp_nfe_transmitidas;1]
 GO
-/****** Object:  StoredProcedure [dbo].[sp_nfe_transmitidas]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_nfe_transmitidas]    Script Date: 28/08/2019 10:22:37 ******/
 DROP PROCEDURE [dbo].[sp_nfe_transmitidas]
 GO
-/****** Object:  StoredProcedure [dbo].[sp_nfe_inutilizadas;1]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_nfe_inutilizadas;1]    Script Date: 28/08/2019 10:22:37 ******/
 DROP PROCEDURE [dbo].[sp_nfe_inutilizadas;1]
 GO
-/****** Object:  StoredProcedure [dbo].[sp_nfe_inutilizadas]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_nfe_inutilizadas]    Script Date: 28/08/2019 10:22:37 ******/
 DROP PROCEDURE [dbo].[sp_nfe_inutilizadas]
 GO
-/****** Object:  StoredProcedure [dbo].[sp_nfe_em_contingencia;1]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_nfe_em_contingencia;1]    Script Date: 28/08/2019 10:22:37 ******/
 DROP PROCEDURE [dbo].[sp_nfe_em_contingencia;1]
 GO
-/****** Object:  StoredProcedure [dbo].[sp_nfe_em_contingencia]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_nfe_em_contingencia]    Script Date: 28/08/2019 10:22:37 ******/
 DROP PROCEDURE [dbo].[sp_nfe_em_contingencia]
 GO
-/****** Object:  StoredProcedure [dbo].[sp_nfe_denegadas]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_nfe_denegadas]    Script Date: 28/08/2019 10:22:37 ******/
 DROP PROCEDURE [dbo].[sp_nfe_denegadas]
 GO
-/****** Object:  StoredProcedure [dbo].[sp_nfe_canceladas;1]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_nfe_canceladas;1]    Script Date: 28/08/2019 10:22:37 ******/
 DROP PROCEDURE [dbo].[sp_nfe_canceladas;1]
 GO
-/****** Object:  StoredProcedure [dbo].[sp_nfe_canceladas]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_nfe_canceladas]    Script Date: 28/08/2019 10:22:37 ******/
 DROP PROCEDURE [dbo].[sp_nfe_canceladas]
 GO
-/****** Object:  StoredProcedure [dbo].[sp_nfe_a_serem_geradas;1]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_nfe_a_serem_geradas;1]    Script Date: 28/08/2019 10:22:37 ******/
 DROP PROCEDURE [dbo].[sp_nfe_a_serem_geradas;1]
 GO
-/****** Object:  StoredProcedure [dbo].[sp_nfe_a_serem_geradas]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_nfe_a_serem_geradas]    Script Date: 28/08/2019 10:22:37 ******/
 DROP PROCEDURE [dbo].[sp_nfe_a_serem_geradas]
 GO
-/****** Object:  StoredProcedure [dbo].[sp_ler_nfe_textos;1]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_ler_nfe_textos;1]    Script Date: 28/08/2019 10:22:37 ******/
 DROP PROCEDURE [dbo].[sp_ler_nfe_textos;1]
 GO
-/****** Object:  StoredProcedure [dbo].[sp_ler_nfe_textos]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_ler_nfe_textos]    Script Date: 28/08/2019 10:22:37 ******/
 DROP PROCEDURE [dbo].[sp_ler_nfe_textos]
 GO
-/****** Object:  StoredProcedure [dbo].[sp_le_nfe;1]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_le_nfe;1]    Script Date: 28/08/2019 10:22:37 ******/
 DROP PROCEDURE [dbo].[sp_le_nfe;1]
 GO
-/****** Object:  StoredProcedure [dbo].[sp_le_nfe]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_le_nfe]    Script Date: 28/08/2019 10:22:37 ******/
 DROP PROCEDURE [dbo].[sp_le_nfe]
 GO
-/****** Object:  StoredProcedure [dbo].[sp_insere_notas_inutilizadas;1]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_insere_notas_inutilizadas;1]    Script Date: 28/08/2019 10:22:37 ******/
 DROP PROCEDURE [dbo].[sp_insere_notas_inutilizadas;1]
 GO
-/****** Object:  StoredProcedure [dbo].[sp_insere_notas_inutilizadas]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_insere_notas_inutilizadas]    Script Date: 28/08/2019 10:22:37 ******/
 DROP PROCEDURE [dbo].[sp_insere_notas_inutilizadas]
 GO
-/****** Object:  StoredProcedure [dbo].[sp_importa_nfe;1]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_importa_nfe;1]    Script Date: 28/08/2019 10:22:37 ******/
 DROP PROCEDURE [dbo].[sp_importa_nfe;1]
 GO
-/****** Object:  StoredProcedure [dbo].[sp_importa_nfe]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_importa_nfe]    Script Date: 28/08/2019 10:22:37 ******/
 DROP PROCEDURE [dbo].[sp_importa_nfe]
 GO
-/****** Object:  StoredProcedure [dbo].[sp_exclui_nfe;1]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_exclui_nfe;1]    Script Date: 28/08/2019 10:22:37 ******/
 DROP PROCEDURE [dbo].[sp_exclui_nfe;1]
 GO
-/****** Object:  StoredProcedure [dbo].[sp_exclui_nfe]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_exclui_nfe]    Script Date: 28/08/2019 10:22:37 ******/
 DROP PROCEDURE [dbo].[sp_exclui_nfe]
 GO
-/****** Object:  StoredProcedure [dbo].[sp_consulta_nfe;1]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_consulta_nfe;1]    Script Date: 28/08/2019 10:22:37 ******/
 DROP PROCEDURE [dbo].[sp_consulta_nfe;1]
 GO
-/****** Object:  StoredProcedure [dbo].[sp_consulta_nfe]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_consulta_nfe]    Script Date: 28/08/2019 10:22:37 ******/
 DROP PROCEDURE [dbo].[sp_consulta_nfe]
 GO
-/****** Object:  StoredProcedure [dbo].[sp_calcula_digito_chave;1]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_calcula_digito_chave;1]    Script Date: 28/08/2019 10:22:37 ******/
 DROP PROCEDURE [dbo].[sp_calcula_digito_chave;1]
 GO
-/****** Object:  StoredProcedure [dbo].[sp_calcula_digito_chave]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_calcula_digito_chave]    Script Date: 28/08/2019 10:22:37 ******/
 DROP PROCEDURE [dbo].[sp_calcula_digito_chave]
 GO
-/****** Object:  StoredProcedure [dbo].[sp_bkp;1]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_bkp;1]    Script Date: 28/08/2019 10:22:37 ******/
 DROP PROCEDURE [dbo].[sp_bkp;1]
 GO
-/****** Object:  StoredProcedure [dbo].[sp_bkp]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_bkp]    Script Date: 28/08/2019 10:22:37 ******/
 DROP PROCEDURE [dbo].[sp_bkp]
 GO
-/****** Object:  StoredProcedure [dbo].[s_le_arquivo_texto;1]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[s_le_arquivo_texto;1]    Script Date: 28/08/2019 10:22:37 ******/
 DROP PROCEDURE [dbo].[s_le_arquivo_texto;1]
 GO
-/****** Object:  StoredProcedure [dbo].[s_le_arquivo_texto]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[s_le_arquivo_texto]    Script Date: 28/08/2019 10:22:37 ******/
 DROP PROCEDURE [dbo].[s_le_arquivo_texto]
 GO
-/****** Object:  StoredProcedure [dbo].[s_le_arquivo_texto]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[s_le_arquivo_texto]    Script Date: 28/08/2019 10:22:37 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -358,7 +358,7 @@ return
 FIM:
 return
 GO
-/****** Object:  StoredProcedure [dbo].[s_le_arquivo_texto;1]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[s_le_arquivo_texto;1]    Script Date: 28/08/2019 10:22:37 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -621,7 +621,7 @@ return
 
 
 GO
-/****** Object:  StoredProcedure [dbo].[sp_bkp]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_bkp]    Script Date: 28/08/2019 10:22:37 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -662,7 +662,7 @@ STATS                       = 1
 
 Alter database CURRENT set multi_user
 GO
-/****** Object:  StoredProcedure [dbo].[sp_bkp;1]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_bkp;1]    Script Date: 28/08/2019 10:22:37 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -709,7 +709,7 @@ STATS = 1
 
 
 GO
-/****** Object:  StoredProcedure [dbo].[sp_calcula_digito_chave]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_calcula_digito_chave]    Script Date: 28/08/2019 10:22:37 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER OFF
@@ -820,7 +820,7 @@ set @chave = @chave + cast(@digito as varchar)
 
 select @chave as chave
 GO
-/****** Object:  StoredProcedure [dbo].[sp_calcula_digito_chave;1]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_calcula_digito_chave;1]    Script Date: 28/08/2019 10:22:37 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -929,7 +929,7 @@ select @chave as chave
 
 
 GO
-/****** Object:  StoredProcedure [dbo].[sp_consulta_nfe]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_consulta_nfe]    Script Date: 28/08/2019 10:22:37 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -959,7 +959,7 @@ and (t2.razao_social like ('%' + @razao_social + '%') or @razao_social is null)
 and (t1.demi = @demissao or @demissao is null)
 order by 1
 GO
-/****** Object:  StoredProcedure [dbo].[sp_consulta_nfe;1]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_consulta_nfe;1]    Script Date: 28/08/2019 10:22:37 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -991,7 +991,7 @@ order by 1
 
 
 GO
-/****** Object:  StoredProcedure [dbo].[sp_exclui_nfe]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_exclui_nfe]    Script Date: 28/08/2019 10:22:37 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1037,7 +1037,7 @@ where codigo_loja = @codigo_loja and nNF = @nnf and dEmi = @demissao and Modelo 
 delete from nfe
 where codigo_loja = @codigo_loja and nNF = @nnf and dEmi = @demissao and Modelo = @Modelo and Serie = @Serie
 GO
-/****** Object:  StoredProcedure [dbo].[sp_exclui_nfe;1]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_exclui_nfe;1]    Script Date: 28/08/2019 10:22:37 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1087,7 +1087,7 @@ where codigo_loja = @codigo_loja and nNF = @nnf and dEmi = @demissao
 
 
 GO
-/****** Object:  StoredProcedure [dbo].[sp_importa_nfe]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_importa_nfe]    Script Date: 28/08/2019 10:22:37 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER OFF
@@ -2202,7 +2202,7 @@ return
 VAZIO:
 return
 GO
-/****** Object:  StoredProcedure [dbo].[sp_importa_nfe;1]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_importa_nfe;1]    Script Date: 28/08/2019 10:22:37 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER OFF
@@ -3238,7 +3238,7 @@ return
 
 
 GO
-/****** Object:  StoredProcedure [dbo].[sp_insere_notas_inutilizadas]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_insere_notas_inutilizadas]    Script Date: 28/08/2019 10:22:37 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3311,7 +3311,7 @@ begin
 end
 
 GO
-/****** Object:  StoredProcedure [dbo].[sp_insere_notas_inutilizadas;1]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_insere_notas_inutilizadas;1]    Script Date: 28/08/2019 10:22:37 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3352,7 +3352,7 @@ GETDATE())
 
 
 GO
-/****** Object:  StoredProcedure [dbo].[sp_le_nfe]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_le_nfe]    Script Date: 28/08/2019 10:22:37 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3420,6 +3420,8 @@ Select distinct
 ,t1.vICMSDeson                                  as nfe_vICMSDeson          -- by Edson Lima ; 11.10.2016 ; 15:11
 ,t1.CodPed                                      as nfe_CodPed              -- by Edson Lima ; 05.01.2017 ; 10:13
 ,t1.idDest                                      as nfe_idDest              -- by Edson Lima ; 06.04.2018 ; 11:29
+,t1.UsuTrs                                      as nfe_UsuTrs              -- by Edson Lima ; 28.08.2019 ; 09:16
+,t1.UsuCnc                                      as nfe_UsuCnc              -- by Edson Lima ; 28.08.2019 ; 09:16
 
 ,t0.codigo_loja                                 as emi_codigo_loja
 ,t0.razao_social                                as emi_razao_social
@@ -3498,7 +3500,7 @@ and t1.dEmi   = @demi
 and t1.Modelo = @Modelo
 and t1.Serie  = cast(@Serie as integer)
 GO
-/****** Object:  StoredProcedure [dbo].[sp_le_nfe;1]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_le_nfe;1]    Script Date: 28/08/2019 10:22:37 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3612,7 +3614,7 @@ and t1.dEmi = @demi
 
 
 GO
-/****** Object:  StoredProcedure [dbo].[sp_ler_nfe_textos]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_ler_nfe_textos]    Script Date: 28/08/2019 10:22:37 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER OFF
@@ -3697,7 +3699,7 @@ while (@@fetch_status <> -1)
 close curI
 deallocate curI
 GO
-/****** Object:  StoredProcedure [dbo].[sp_ler_nfe_textos;1]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_ler_nfe_textos;1]    Script Date: 28/08/2019 10:22:37 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER OFF
@@ -3822,7 +3824,7 @@ while (@@fetch_status <> -1)
 close curI
 deallocate curI
 GO
-/****** Object:  StoredProcedure [dbo].[sp_nfe_a_serem_geradas]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_nfe_a_serem_geradas]    Script Date: 28/08/2019 10:22:37 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER OFF
@@ -3854,6 +3856,8 @@ Select distinct
 ,t1.indPres                                      as nfe_indPres            -- by Edson Lima ; 21.01.2016 ; 17:28
 ,t1.CodPed                                       as nfe_CodPed             -- by Edson Lima ; 05.01.2017 ; 16:00
 ,t1.idDest                                       as nfe_idDest             -- by Edson Lima ; 06.04.2018 ; 11:29
+,t1.UsuTrs                                       as nfe_UsuTrs             -- by Edson Lima ; 28.08.2019 ; 09:16
+,t1.UsuCnc                                       as nfe_UsuCnc             -- by Edson Lima ; 28.08.2019 ; 09:16
 
 ,t2.razao_social                                 as des_razao_social
 
@@ -3876,7 +3880,7 @@ or
 
 order by t1.Modelo, t1.Serie, t1.dEmi, t1.nNF                              -- By Edson Lima 11.2.2016
 GO
-/****** Object:  StoredProcedure [dbo].[sp_nfe_a_serem_geradas;1]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_nfe_a_serem_geradas;1]    Script Date: 28/08/2019 10:22:37 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER OFF
@@ -3913,7 +3917,7 @@ and ( IsNull( t1.chave_nfe, '' )  = '' or (t1.chave_nfe = '0'))    -- By Edson L
 --and t3.nota is null
 order by t1.serie, t1.dEmi, t1.nNF                          -- By Edson Lima 3.2.2012 ---> order by t2.razao_social
 GO
-/****** Object:  StoredProcedure [dbo].[sp_nfe_canceladas]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_nfe_canceladas]    Script Date: 28/08/2019 10:22:37 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER OFF
@@ -3944,6 +3948,8 @@ Select distinct
 ,t1.CalcHoraNFCe                                 as nfe_CalcHoraNFCe       -- by Edson Lima ; 20.01.2016 ; 15:370
 ,t1.indFinal                                     as nfe_indFinal           -- by Edson Lima ; 21.01.2016 ; 17:28
 ,t1.indPres                                      as nfe_indPres            -- by Edson Lima ; 21.01.2016 ; 17:28
+,t1.UsuTrs                                       as nfe_UsuTrs             -- by Edson Lima ; 28.08.2019 ; 09:16
+,t1.UsuCnc                                       as nfe_UsuCnc             -- by Edson Lima ; 28.08.2019 ; 09:16
  
 ,t2.razao_social                                 as des_razao_social
 
@@ -3965,7 +3971,7 @@ and   ( (IsNull(t1.situacao, '') = '101') or (IsNull(t1.situacao, '') = '135') o
                                                                            -- by Edson ; 2013/03/19 ; 14:49 ; o Status 101 continua somente para efeito de compatibilidade 
 order by t1.Modelo, t1.Serie, t1.dEmi, t1.nNF                              -- By Edson Lima 11.2.2016
 GO
-/****** Object:  StoredProcedure [dbo].[sp_nfe_canceladas;1]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_nfe_canceladas;1]    Script Date: 28/08/2019 10:22:37 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER OFF
@@ -4006,7 +4012,7 @@ and (t1.nnf = @nota or @nota = 0)                              -- By Edson Lima 
 and IsNull(t1.situacao, '') = '101'
 order by t1.serie, t1.dEmi, t1.nNF       -- By Edson Lima 6.2.2012 ---> order by t2.razao_social
 GO
-/****** Object:  StoredProcedure [dbo].[sp_nfe_denegadas]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_nfe_denegadas]    Script Date: 28/08/2019 10:22:37 ******/
 SET ANSI_NULLS OFF
 GO
 SET QUOTED_IDENTIFIER OFF
@@ -4036,6 +4042,8 @@ Select distinct
 ,t1.CalcHoraNFCe                                        as nfe_CalcHoraNFCe        -- by Edson Lima ; 20.01.2016 ; 15:370
 ,t1.indFinal                                            as nfe_indFinal            -- by Edson Lima ; 21.01.2016 ; 17:28
 ,t1.indPres                                             as nfe_indPres             -- by Edson Lima ; 21.01.2016 ; 17:28
+,t1.UsuTrs                                              as nfe_UsuTrs              -- by Edson Lima ; 28.08.2019 ; 09:16
+,t1.UsuCnc                                              as nfe_UsuCnc              -- by Edson Lima ; 28.08.2019 ; 09:16
  
 ,t2.razao_social                                        as des_razao_social
 
@@ -4056,7 +4064,7 @@ and ( (IsNull(t1.situacao, '') = '301')        or (IsNull(t1.situacao, '') = '30
 
 order by t1.Modelo, t1.Serie, t1.dEmi, t1.nNF                        -- By Edson Lima 11.2.2016
 GO
-/****** Object:  StoredProcedure [dbo].[sp_nfe_em_contingencia]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_nfe_em_contingencia]    Script Date: 28/08/2019 10:22:37 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER OFF
@@ -4086,6 +4094,8 @@ Select distinct
 ,t1.CalcHoraNFCe                                as nfe_CalcHoraNFCe        -- by Edson Lima ; 20.01.2016 ; 15:370
 ,t1.indFinal                                    as nfe_indFinal            -- by Edson Lima ; 21.01.2016 ; 17:28
 ,t1.indPres                                     as nfe_indPres             -- by Edson Lima ; 21.01.2016 ; 17:28
+,t1.UsuTrs                                      as nfe_UsuTrs              -- by Edson Lima ; 28.08.2019 ; 09:16
+,t1.UsuCnc                                      as nfe_UsuCnc              -- by Edson Lima ; 28.08.2019 ; 09:16
  
 ,t2.razao_social			        as des_razao_social
 
@@ -4103,7 +4113,7 @@ and ( (IsNull(t1.situacao, '') = '124')  or (IsNull(t1.situacao, '') = 'CONT') o
 
 order by t1.Modelo, t1.Serie, t1.dEmi, t1.nNF                        -- By Edson Lima 11.2.2016
 GO
-/****** Object:  StoredProcedure [dbo].[sp_nfe_em_contingencia;1]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_nfe_em_contingencia;1]    Script Date: 28/08/2019 10:22:37 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER OFF
@@ -4141,7 +4151,7 @@ and (t1.situacao = '124' or t1.situacao = 'CONT' or t1.situacao = 'FSDA')
 --and t3.nota is null
 order by t1.serie, t1.dEmi, t1.nNF       -- By Edson Lima 6.2.2012 ---> order by t2.razao_social
 GO
-/****** Object:  StoredProcedure [dbo].[sp_nfe_inutilizadas]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_nfe_inutilizadas]    Script Date: 28/08/2019 10:22:37 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER OFF
@@ -4175,7 +4185,7 @@ and   (t3.Serie       = @Serie or @Serie = 0)           -- by EL 11.02.2016 - fi
 
 order by t3.data_inclusao, t3.modelo, t3.Serie
 GO
-/****** Object:  StoredProcedure [dbo].[sp_nfe_inutilizadas;1]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_nfe_inutilizadas;1]    Script Date: 28/08/2019 10:22:37 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER OFF
@@ -4199,7 +4209,7 @@ from notas_inutilizadas t3
 where t3.codigo_loja = @codigo_loja                            -- by EL 22.2.2012 - linha incluida
 order by t3.data_inclusao
 GO
-/****** Object:  StoredProcedure [dbo].[sp_nfe_transmitidas]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_nfe_transmitidas]    Script Date: 28/08/2019 10:22:37 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER OFF
@@ -4237,6 +4247,8 @@ Select distinct
 ,t1.indFinal                                     as nfe_indFinal            -- by Edson Lima ; 21.01.2016 ; 17:28
 ,t1.indPres                                      as nfe_indPres             -- by Edson Lima ; 21.01.2016 ; 17:28
 ,t1.CodPed                                       as nfe_CodPed              -- by Edson Lima ; 05.01.2017 ; 16:12
+,t1.UsuTrs                                       as nfe_UsuTrs              -- by Edson Lima ; 28.08.2019 ; 09:16
+,t1.UsuCnc                                       as nfe_UsuCnc              -- by Edson Lima ; 28.08.2019 ; 09:16
 
 ,t2.razao_social				 as des_razao_social
 
@@ -4262,7 +4274,7 @@ and (@Chave                    = '')
 
 order by t1.Modelo, t1.Serie, t1.dEmi, t1.nNF                                                            -- By Edson Lima 11.2.2016
 GO
-/****** Object:  StoredProcedure [dbo].[sp_nfe_transmitidas;1]    Script Date: 27/08/2019 16:29:22 ******/
+/****** Object:  StoredProcedure [dbo].[sp_nfe_transmitidas;1]    Script Date: 28/08/2019 10:22:37 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER OFF

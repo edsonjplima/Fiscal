@@ -23,6 +23,7 @@ object DMFD: TDMFD
     ResourceOptions.AssignedValues = [rvAutoConnect, rvAutoReconnect]
     ResourceOptions.AutoReconnect = True
     LoginPrompt = False
+    OnError = FDConGerError
     Left = 598
     Top = 28
   end
@@ -106,6 +107,8 @@ object DMFD: TDMFD
         'ento'
       ',t1.nr_dpec                             as nfe_nr_dpec'
       ',t1.CodPed                              as nfe_CodPed'
+      ',t1.UsuTrs                              as nfe_UsuTrs'
+      ',t1.UsuCnc                              as nfe_UsuCnc'
       ''
       ',t2.razao_social                        as des_razao_social'
       ',case when len(t2.cnpj) > 11 then dbo.formatarCNPJ(t2.cnpj)'
@@ -154,6 +157,8 @@ object DMFD: TDMFD
         'ento'
       ',t1.nr_dpec                             as nfe_nr_dpec'
       ',t1.CodPed                              as nfe_CodPed'
+      ',t1.UsuTrs                              as nfe_UsuTrs'
+      ',t1.UsuCnc                              as nfe_UsuCnc'
       ''
       ',t2.razao_social                        as des_razao_social'
       ',case when len(t2.cnpj) > 11 then dbo.formatarCNPJ(t2.cnpj)'
@@ -195,6 +200,8 @@ object DMFD: TDMFD
         ',t1.data_hora_recebimento               as nfe_data_hora_recebim' +
         'ento'
       ',t1.nr_dpec                             as nfe_nr_dpec'
+      ',t1.UsuTrs                              as nfe_UsuTrs'
+      ',t1.UsuCnc                              as nfe_UsuCnc'
       ''
       ',t2.razao_social                        as des_razao_social'
       ',case when len(t2.cnpj) > 11 then dbo.formatarCNPJ(t2.cnpj)'
@@ -217,6 +224,7 @@ object DMFD: TDMFD
       ',t3.ano'
       ',t3.modelo'
       ',t3.serie'
+      ',t3.UsuInu'
       'from notas_inutilizadas t3'
       '')
     Left = 294
@@ -262,6 +270,8 @@ object DMFD: TDMFD
         'ento'
       ',t1.nr_dpec                             as nfe_nr_dpec'
       ',t1.CodPed                              as nfe_CodPed'
+      ',t1.UsuTrs                              as nfe_UsuTrs'
+      ',t1.UsuCnc                              as nfe_UsuCnc'
       ''
       ',t2.razao_social                        as des_razao_social'
       ',case when len(t2.cnpj) > 11 then dbo.formatarCNPJ(t2.cnpj)'
@@ -382,8 +392,8 @@ object DMFD: TDMFD
       '  ,codigo_loja'
       '  ,dEmi'
       '  ,nNF'
-      '  ,Serie'
       '  ,Modelo'
+      '  ,Serie'
       
         '  ,xml_nota,   xml_nota1,  xml_nota2,  xml_nota3,  xml_nota4,  x' +
         'ml_nota5'
@@ -879,9 +889,9 @@ object DMFD: TDMFD
       '  ,xml_nota36, xml_nota37, xml_nota38, xml_nota39, xml_nota40'
       ''
       ' from nfe_xml t1'
-      '  where codigo_loja                = :codigo_loja and'
-      '        ( dEmi =>  (= :dEmi_I) )                  and'
-      '        ( dEmi =<  (= :dEmi_F) )')
+      '  where codigo_loja  = :codigo_loja            and'
+      '        dEmi >= :dEmi_I                        and'
+      '        dEmi <= :dEmi_F')
     Left = 472
     Top = 526
     ParamData = <

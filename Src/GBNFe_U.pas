@@ -232,6 +232,8 @@ type
   cxTLsxMot: TcxTreeListColumn;
   lbl1: TLabel;
     cxTLsxInu: TcxTreeListColumn;
+    cxTLsTrs: TcxTreeListColumn;
+    cxTLsCnc: TcxTreeListColumn;
 
   Procedure geraenvianf(Sender: TObject);
   Procedure grava_xml_no_banco;
@@ -422,6 +424,8 @@ type
                                         cxTLdDem  :  Tcxtreelistcolumn ;
                                         cxTLlNot  :  Tcxtreelistcolumn ;
                                         cxTLcVal  :  Tcxtreelistcolumn ;
+                                        cxTLsTrs  :  Tcxtreelistcolumn ;
+                                        cxTLsCnc  :  Tcxtreelistcolumn ;
                                         cxTLsSit  :  Tcxtreelistcolumn ;
                                         cxTLsPro  :  Tcxtreelistcolumn ;
                                         cxTLsRec  :  Tcxtreelistcolumn ;
@@ -6582,9 +6586,9 @@ begin
  DMFD.FDQuery3.Open;
 
  // by Edson Lima ; 2013-7-26T1609 ; Atualiza dados das TreeLest - PENDENTES
- pAtuTL(cxTL, cxTLbSel, cxTLsDes, cxTLsCpf, cxTLsCod,  cxTLsMod, cxTLsSer,
-              cxTLdDem, cxTLlNot, cxTLcVal, cxTLsSit,  cxTLsPro, cxTLsRec,
-              cxTLsCha, DMFD.FDQuery3);
+ pAtuTL(cxTL, cxTLbSel, cxTLsDes, cxTLsCpf, cxTLsCod, cxTLsMod, cxTLsSer,
+              cxTLdDem, cxTLlNot, cxTLcVal, cxTLsTrs, cxTLsCnc, cxTLsSit,
+              cxTLsPro, cxTLsRec, cxTLsCha, DMFD.FDQuery3);
 
  // by Edson Lima ; 4.4.2012 ; 15:30 ; Linha incluida
  pAtuNFeT();
@@ -6648,9 +6652,9 @@ begin
        DMFD.FDQuery10.Open;
 
        // by Edson Lima ; 2013-7-26T1609 ; Atualiza dados das TreeLest das contingências
-       pAtuTL(cxTL, cxTLbSel, cxTLsDes, cxTLsCpf, cxTLsCod,  cxTLsMod, cxTLsSer,
-                    cxTLdDem, cxTLlNot, cxTLcVal, cxTLsSit,  cxTLsPro, cxTLsRec,
-                    cxTLsCha, DMFD.FDQuery10);
+       pAtuTL(cxTL, cxTLbSel, cxTLsDes, cxTLsCpf, cxTLsCod, cxTLsMod, cxTLsSer,
+                    cxTLdDem, cxTLlNot, cxTLcVal, cxTLsTrs, cxTLsCnc, cxTLsSit,
+                    cxTLsPro, cxTLsRec, cxTLsCha, DMFD.FDQuery10);
 
       end;
   2 :
@@ -6662,9 +6666,9 @@ begin
        DMFD.FDQuery5.Open;
 
        // by Edson Lima ; 2013-7-26T1609 ; Atualiza dados das TreeLest - TRANSMITIDAS
-       pAtuTL(cxTL, cxTLbSel, cxTLsDes, cxTLsCpf, cxTLsCod,  cxTLsMod, cxTLsSer,
-                    cxTLdDem, cxTLlNot, cxTLcVal, cxTLsSit,  cxTLsPro, cxTLsRec,
-                    cxTLsCha, DMFD.FDQuery5);
+       pAtuTL(cxTL, cxTLbSel, cxTLsDes, cxTLsCpf, cxTLsCod, cxTLsMod, cxTLsSer,
+                    cxTLdDem, cxTLlNot, cxTLcVal, cxTLsTrs, cxTLsCnc, cxTLsSit,
+                    cxTLsPro, cxTLsRec, cxTLsCha, DMFD.FDQuery5);
 
       end;
   3 :
@@ -6677,9 +6681,9 @@ begin
        DMFD.FDQryGeral1.Open;
 
        // by Edson Lima ; 2013-7-26T1609 ; Atualiza dados das TreeLest denegadas
-       pAtuTL(cxTL, cxTLbSel, cxTLsDes, cxTLsCpf, cxTLsCod,  cxTLsMod, cxTLsSer,
-                    cxTLdDem, cxTLlNot, cxTLcVal, cxTLsSit,  cxTLsPro, cxTLsRec,
-                    cxTLsCha, DMFD.FDQryGeral1);
+       pAtuTL(cxTL, cxTLbSel, cxTLsDes, cxTLsCpf, cxTLsCod, cxTLsMod, cxTLsSer,
+                    cxTLdDem, cxTLlNot, cxTLcVal, cxTLsTrs, cxTLsCnc, cxTLsSit,
+                    cxTLsPro, cxTLsRec, cxTLsCha, DMFD.FDQryGeral1);
 
       end;
   4 :
@@ -6692,9 +6696,9 @@ begin
        DMFD.FDQuery6.Open;
 
        // by Edson Lima ; 2013-7-26T1609 ; Atualiza dados das TreeLest das Canceladas
-       pAtuTL(cxTL, cxTLbSel, cxTLsDes, cxTLsCpf, cxTLsCod,  cxTLsMod, cxTLsSer,
-                    cxTLdDem, cxTLlNot, cxTLcVal, cxTLsSit,  cxTLsPro, cxTLsRec,
-                    cxTLsCha, DMFD.FDQuery6);
+       pAtuTL(cxTL, cxTLbSel, cxTLsDes, cxTLsCpf, cxTLsCod, cxTLsMod, cxTLsSer,
+                    cxTLdDem, cxTLlNot, cxTLcVal, cxTLsTrs, cxTLsCnc, cxTLsSit,
+                    cxTLsPro, cxTLsRec, cxTLsCha, DMFD.FDQuery6);
 
       end;
   5 :
@@ -13736,6 +13740,8 @@ Procedure TFrGBNFe.pAtuTL( cxTL : TcxTreeList; cxTLbSel  :  Tcxtreelistcolumn ;
                                                cxTLdDem  :  Tcxtreelistcolumn ;
                                                cxTLlNot  :  Tcxtreelistcolumn ;
                                                cxTLcVal  :  Tcxtreelistcolumn ;
+                                               cxTLsTrs  :  Tcxtreelistcolumn ;
+                                               cxTLsCnc  :  Tcxtreelistcolumn ;
                                                cxTLsSit  :  Tcxtreelistcolumn ;
                                                cxTLsPro  :  Tcxtreelistcolumn ;
                                                cxTLsRec  :  Tcxtreelistcolumn ;
@@ -13771,6 +13777,8 @@ begin
       nodPed.Values[cxTLdDem.ItemIndex] := FD.fieldByName('nfe_demi').AsDateTime;
       nodPed.Values[cxTLlNot.ItemIndex] := FD.fieldByName('nfe_nnf').AsString;
       nodPed.Values[cxTLcVal.ItemIndex] := FD.fieldByName('nfe_total_nf').AsCurrency;
+      nodPed.Values[cxTLsTrs.ItemIndex] := FD.fieldByName('nfe_UsuTrs').AsString;
+      nodPed.Values[cxTLsCnc.ItemIndex] := FD.fieldByName('nfe_UsuCnc').AsString;
       nodPed.Values[cxTLsSit.ItemIndex] := FD.fieldByName('nfe_situacao').AsString + ' ' + FD.fieldByName('nfe_motivo').AsString;
       nodPed.Values[cxTLsPro.ItemIndex] := FD.fieldByName('nfe_protocolo').AsString;
       nodPed.Values[cxTLsRec.ItemIndex] := FD.fieldByName('nfe_recibo').AsString;

@@ -1187,7 +1187,6 @@ object FrGBNFe: TFrGBNFe
         OnExit = cxTLExit
         OnKeyDown = cxTLKeyDown
         OnMouseMove = cxTLMouseMove
-        ExplicitLeft = 2
         object cxTLbSel: TcxTreeListColumn
           PropertiesClassName = 'TcxCheckBoxProperties'
           Properties.Alignment = taCenter
@@ -1440,6 +1439,36 @@ object FrGBNFe: TFrGBNFe
           Position.ColIndex = 3
           Position.RowIndex = 0
           Position.BandIndex = 3
+          Summary.FooterSummaryItems = <>
+          Summary.GroupFooterSummaryItems = <>
+        end
+        object cxTLsTrs: TcxTreeListColumn
+          PropertiesClassName = 'TcxTextEditProperties'
+          Caption.AlignHorz = taCenter
+          Caption.Text = 'Usu'#225'rio do Envio'
+          DataBinding.ValueType = 'String'
+          Options.VertSizing = False
+          Options.Editing = False
+          Options.Sorting = False
+          Width = 120
+          Position.ColIndex = 5
+          Position.RowIndex = 0
+          Position.BandIndex = 1
+          Summary.FooterSummaryItems = <>
+          Summary.GroupFooterSummaryItems = <>
+        end
+        object cxTLsCnc: TcxTreeListColumn
+          PropertiesClassName = 'TcxTextEditProperties'
+          Caption.AlignHorz = taCenter
+          Caption.Text = 'Usu'#225'rio do Canc.'
+          DataBinding.ValueType = 'String'
+          Options.VertSizing = False
+          Options.Editing = False
+          Options.Sorting = False
+          Width = 120
+          Position.ColIndex = 6
+          Position.RowIndex = 0
+          Position.BandIndex = 1
           Summary.FooterSummaryItems = <>
           Summary.GroupFooterSummaryItems = <>
         end
@@ -2361,7 +2390,7 @@ object FrGBNFe: TFrGBNFe
     Left = 312
     Top = 10
     Bitmap = {
-      494C0101CC0410064C0710001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C0101CC041006500710001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000004013000001002000000000000040
       1300000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

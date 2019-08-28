@@ -23,6 +23,7 @@ object DMFD: TDMFD
     ResourceOptions.AssignedValues = [rvAutoConnect, rvAutoReconnect]
     ResourceOptions.AutoReconnect = True
     LoginPrompt = False
+    OnError = FDConGerError
     Left = 598
     Top = 28
   end
@@ -217,6 +218,7 @@ object DMFD: TDMFD
       ',t3.ano'
       ',t3.modelo'
       ',t3.serie'
+      ',t3.UsuInu'
       'from notas_inutilizadas t3'
       '')
     Left = 294
@@ -382,8 +384,8 @@ object DMFD: TDMFD
       '  ,codigo_loja'
       '  ,dEmi'
       '  ,nNF'
-      '  ,Serie'
       '  ,Modelo'
+      '  ,Serie'
       
         '  ,xml_nota,   xml_nota1,  xml_nota2,  xml_nota3,  xml_nota4,  x' +
         'ml_nota5'
