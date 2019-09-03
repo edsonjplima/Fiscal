@@ -57,12 +57,12 @@ TabDockRightClients=DockSite2=0,DockSite4=1
 [View0]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
-CursorX=28
-CursorY=3327
-TopLine=3310
+CursorX=37
+CursorY=8463
+TopLine=8461
 LeftCol=1
 Elisions=
-Bookmarks={1,6757,60}{2,15008,1}{6,7786,1}
+Bookmarks={1,6757,60}{2,15022,1}{6,7786,1}
 EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
 
 [UndockedDesigner]
@@ -93,23 +93,22 @@ Dockable=1
 StayOnTop=0
 
 [Breakpoints]
-Count=16
+Count=15
 Breakpoint0='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',6822,'',0,1,'',1,0,0,'',1,'','','',0,''
 Breakpoint1='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe.dpr',204,'',0,1,'',1,0,0,'',1,'','','',0,''
 Breakpoint2='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',1073,'',0,1,'',1,0,0,'',1,'','','',0,''
 Breakpoint3='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',1112,'',0,1,'',1,0,0,'',1,'','','',0,''
 Breakpoint4='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',3202,'',0,1,'',1,0,0,'',1,'','','',0,''
 Breakpoint5='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',3323,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint6='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',3451,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint7='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',8174,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint8='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',9676,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint9='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',9734,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint10='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',10034,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint11='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',12130,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint12='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',12550,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint13='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',13049,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint14='D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBDFD_U.pas',225,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint15='D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\ACBrNFe.pas',691,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint6='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',8174,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint7='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',9690,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint8='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',9748,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint9='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',10048,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint10='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',12144,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint11='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',12564,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint12='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',13063,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint13='D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBDFD_U.pas',225,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint14='D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\ACBrNFe.pas',691,'',0,1,'',1,0,0,'',1,'','','',0,''
 
 [EmbarcaderoWin32Debugger_AddressBreakpoints]
 Count=0
@@ -196,11 +195,11 @@ State=0
 Left=0
 Top=0
 Width=2000
-Height=8477
+Height=9012
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=2000
-ClientHeight=8477
+ClientHeight=9012
 TBDockHeight=7151
 LRDockWidth=2000
 Dockable=1
@@ -263,11 +262,6 @@ LRDockWidth=1894
 Dockable=1
 StayOnTop=0
 SplitPos=155
-
-[PropInspDesignerSelection]
-ArrangeBy=Name
-SelectedItem=Action,
-ExpandedItems=Anchors=0,Constraints=0,Font=0,LiveBindings=0,"LiveBindings Designer=0",Margins=0,Padding=0,BorderIcons=0,GlassFrame=0,BevelEdges=0,StyleElements=0,Touch=0,HorzScrollBar=0
 
 [ClassBrowserTool]
 PercentageSizes=1
@@ -335,11 +329,11 @@ State=0
 Left=0
 Top=0
 Width=2000
-Height=8186
+Height=8721
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=2000
-ClientHeight=8186
+ClientHeight=8721
 TBDockHeight=5953
 LRDockWidth=2512
 Dockable=1
@@ -750,14 +744,14 @@ Create=1
 Visible=0
 Docked=1
 State=0
-Left=4
-Top=24
+Left=8
+Top=8
 Width=2000
-Height=8477
+Height=9012
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=2000
-ClientHeight=8477
+ClientHeight=9012
 TBDockHeight=9012
 LRDockWidth=2000
 Dockable=1
@@ -798,14 +792,14 @@ Create=1
 Visible=0
 Docked=1
 State=0
-Left=4
-Top=24
+Left=8
+Top=8
 Width=2000
-Height=8477
+Height=9012
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=2000
-ClientHeight=8477
+ClientHeight=9012
 TBDockHeight=9012
 LRDockWidth=2000
 Dockable=1

@@ -8467,8 +8467,8 @@ begin
          else
           begin
            gTN                                      := '\NFe\';
-           if not (DMFD.FDQryGeral2['nfe_demi']      = null) then
-            gDataEmi                                := (DMFD.FDQryGeral2['nfe_demi']);
+           if not (DMFD.FDQryGeral2['nfe_DatNFCe']   = null) then                          // Antes -> if not (DMFD.FDQryGeral2['nfe_demi'] = null) then
+            gDataEmi                                := (DMFD.FDQryGeral2['nfe_DatNFCe']);  // Antes -> gDataEmi := (DMFD.FDQryGeral2['nfe_demi']);
           end;
 
           if vAux <> '' then
