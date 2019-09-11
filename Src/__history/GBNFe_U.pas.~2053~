@@ -6666,9 +6666,9 @@ begin
        DMFD.FDQuery5.Open;
 
        // by Edson Lima ; 2013-7-26T1609 ; Atualiza dados das TreeLest - TRANSMITIDAS
-       pAtuTL(cxTL, cxTLbSel, cxTLsDes, cxTLsCpf, cxTLsCod,  cxTLsMod, cxTLsSer,
-                    cxTLdDem, cxTLlNot, cxTLcVal, cxTLsSit,  cxTLsPro, cxTLsRec,
-                    cxTLsCha, DMFD.FDQuery5);
+       pAtuTL(cxTL, cxTLbSel, cxTLsDes, cxTLsCpf, cxTLsCod, cxTLsMod, cxTLsSer,
+                    cxTLdDem, cxTLlNot, cxTLcVal, cxTLsTrs, cxTLsCnc, cxTLsSit,
+                    cxTLsPro, cxTLsRec, cxTLsCha, DMFD.FDQuery5);
 
       end;
   3 :
@@ -8467,8 +8467,8 @@ begin
          else
           begin
            gTN                                      := '\NFe\';
-           if not (DMFD.FDQryGeral2['nfe_demi']      = null) then
-            gDataEmi                                := (DMFD.FDQryGeral2['nfe_demi']);
+           if not (DMFD.FDQryGeral2['nfe_DatNFCe']   = null) then                          // Antes -> if not (DMFD.FDQryGeral2['nfe_demi'] = null) then
+            gDataEmi                                := (DMFD.FDQryGeral2['nfe_DatNFCe']);  // Antes -> gDataEmi := (DMFD.FDQryGeral2['nfe_demi']);
           end;
 
           if vAux <> '' then
@@ -17643,8 +17643,8 @@ begin
 
  // Este processo segue exatamente essa sequancia 1º Gera, 2º Assina e 3º Valida
  ACBrNFe1.NotasFiscais.GerarNFe;
- ACBrNFe1.NotasFiscais.Assinar;
  ACBrNFe1.NotasFiscais.Validar;
+ ACBrNFe1.NotasFiscais.Assinar;
 
 end;
 

@@ -231,6 +231,9 @@ type
   cxTLicSta: TcxTreeListColumn;
   cxTLsxMot: TcxTreeListColumn;
   lbl1: TLabel;
+    cxTLsxInu: TcxTreeListColumn;
+    cxTLsTrs: TcxTreeListColumn;
+    cxTLsCnc: TcxTreeListColumn;
 
   Procedure geraenvianf(Sender: TObject);
   Procedure grava_xml_no_banco;
@@ -421,6 +424,8 @@ type
                                         cxTLdDem  :  Tcxtreelistcolumn ;
                                         cxTLlNot  :  Tcxtreelistcolumn ;
                                         cxTLcVal  :  Tcxtreelistcolumn ;
+                                        cxTLsTrs  :  Tcxtreelistcolumn ;
+                                        cxTLsCnc  :  Tcxtreelistcolumn ;
                                         cxTLsSit  :  Tcxtreelistcolumn ;
                                         cxTLsPro  :  Tcxtreelistcolumn ;
                                         cxTLsRec  :  Tcxtreelistcolumn ;
@@ -1076,7 +1081,7 @@ begin
           pGravaNFe('001', 'situacao',
                            'motivo',
                            'data_hora_recebimento',
-                           '',
+                           'UsuTrs',
                            '',
                            '',
                            '',
@@ -1095,7 +1100,7 @@ begin
                            'ENVI',
                            'Tentativa de envio sem sucesso',
                            FormatDateTime('yyyy/mm/dd hh:nn:ss', now()),
-                           '',
+                           gUsu,
                            '',
                            '',
                            '',
@@ -1114,7 +1119,7 @@ begin
          else
           pGravaNFe('001', 'situacao',
                            'motivo',
-                           '',
+                           'UsuTrs',
                            '',
                            '',
                            '',
@@ -1133,7 +1138,7 @@ begin
                            'modelo',                                            // Nome dos campos
                            'ENVI',
                            'Tentativa de envio sem sucesso',
-                           '',
+                           gUsu,
                            '',
                            '',
                            '',
@@ -3197,7 +3202,7 @@ begin
 
          pImpr();
 
-         ACBrNFe1.NotasFiscais.GravarXML();                                     // trunk2 - Antes => ACBrNFe1.NotasFiscais.SaveToFile(); //Salva os XMLs para posterior envio do XML.
+         ACBrNFe1.NotasFiscais.GravarXML();
 
          _chave := aux;
 
@@ -4495,6 +4500,7 @@ begin
 
  /// By Edson Lima 14.9.2012 ; 10:10 - Atualiza grade
  pAtuNFe();
+
 end;
 
 procedure TFrGBNFe.RadioGroup1Click(Sender: TObject);
@@ -4570,7 +4576,7 @@ begin
    cxTL.BringToFront;
   end;
 
- 2:
+ 2:                                                                             // TRANSMITIDAS
 
   begin
    // Desabilita os botõesde envio
@@ -4596,7 +4602,7 @@ begin
    cxTL.BringToFront;
   end;
 
- 3:
+ 3:                                                                             // DENEGADAS
 
   begin
    // Desabilita os botõesde envio
@@ -4622,7 +4628,7 @@ begin
    cxTL.BringToFront;
   end;
 
- 4:
+ 4:                                                                             // CANCELADAS
 
   begin
    // Desabilita os botõesde envio
@@ -4648,7 +4654,7 @@ begin
    cxTL.BringToFront;
   end;
 
- 5:
+ 5:                                                                             // INUTILIZADAS
 
   begin
    // Desabilita os botõesde envio
@@ -4723,7 +4729,7 @@ begin
 
   5:
    begin
-    { Quando expecificado não verifica as NFe selecionadas que estão em
+    { Quando expecificado, não verifica as NFe selecionadas que estão em
       contigência e as já enviadas ha mais de um dia para seleciona            }
 
    end;
@@ -4758,7 +4764,10 @@ begin
  //-----------------------------------------------------------------------------
  // configurar para usar a WinCrypt e não a CAPICOM
  //-----------------------------------------------------------------------------
- ACBrNFe1.Configuracoes.Geral.SSLLib := libWinCrypt;
+ ACBrNFe1.Configuracoes.Geral.SSLCryptLib   := cryCapicom;
+ ACBrNFe1.Configuracoes.Geral.SSLHttpLib    := httpWinINet;
+ ACBrNFe1.Configuracoes.Geral.SSLLib        := libWinCrypt;
+ ACBrNFe1.Configuracoes.Geral.SSLXmlSignLib := xsMsXml;
 
  //-----------------------------------------------------------------------------
  // Define o tempo de showhint
@@ -6580,9 +6589,9 @@ begin
  DMFD.FDQuery3.Open;
 
  // by Edson Lima ; 2013-7-26T1609 ; Atualiza dados das TreeLest - PENDENTES
- pAtuTL(cxTL, cxTLbSel, cxTLsDes, cxTLsCpf, cxTLsCod,  cxTLsMod, cxTLsSer,
-              cxTLdDem, cxTLlNot, cxTLcVal, cxTLsSit,  cxTLsPro, cxTLsRec,
-              cxTLsCha, DMFD.FDQuery3);
+ pAtuTL(cxTL, cxTLbSel, cxTLsDes, cxTLsCpf, cxTLsCod, cxTLsMod, cxTLsSer,
+              cxTLdDem, cxTLlNot, cxTLcVal, cxTLsTrs, cxTLsCnc, cxTLsSit,
+              cxTLsPro, cxTLsRec, cxTLsCha, DMFD.FDQuery3);
 
  // by Edson Lima ; 4.4.2012 ; 15:30 ; Linha incluida
  pAtuNFeT();
@@ -6646,9 +6655,9 @@ begin
        DMFD.FDQuery10.Open;
 
        // by Edson Lima ; 2013-7-26T1609 ; Atualiza dados das TreeLest das contingências
-       pAtuTL(cxTL, cxTLbSel, cxTLsDes, cxTLsCpf, cxTLsCod,  cxTLsMod, cxTLsSer,
-                    cxTLdDem, cxTLlNot, cxTLcVal, cxTLsSit,  cxTLsPro, cxTLsRec,
-                    cxTLsCha, DMFD.FDQuery10);
+       pAtuTL(cxTL, cxTLbSel, cxTLsDes, cxTLsCpf, cxTLsCod, cxTLsMod, cxTLsSer,
+                    cxTLdDem, cxTLlNot, cxTLcVal, cxTLsTrs, cxTLsCnc, cxTLsSit,
+                    cxTLsPro, cxTLsRec, cxTLsCha, DMFD.FDQuery10);
 
       end;
   2 :
@@ -6660,9 +6669,9 @@ begin
        DMFD.FDQuery5.Open;
 
        // by Edson Lima ; 2013-7-26T1609 ; Atualiza dados das TreeLest - TRANSMITIDAS
-       pAtuTL(cxTL, cxTLbSel, cxTLsDes, cxTLsCpf, cxTLsCod,  cxTLsMod, cxTLsSer,
-                    cxTLdDem, cxTLlNot, cxTLcVal, cxTLsSit,  cxTLsPro, cxTLsRec,
-                    cxTLsCha, DMFD.FDQuery5);
+       pAtuTL(cxTL, cxTLbSel, cxTLsDes, cxTLsCpf, cxTLsCod, cxTLsMod, cxTLsSer,
+                    cxTLdDem, cxTLlNot, cxTLcVal, cxTLsTrs, cxTLsCnc, cxTLsSit,
+                    cxTLsPro, cxTLsRec, cxTLsCha, DMFD.FDQuery5);
 
       end;
   3 :
@@ -6675,9 +6684,9 @@ begin
        DMFD.FDQryGeral1.Open;
 
        // by Edson Lima ; 2013-7-26T1609 ; Atualiza dados das TreeLest denegadas
-       pAtuTL(cxTL, cxTLbSel, cxTLsDes, cxTLsCpf, cxTLsCod,  cxTLsMod, cxTLsSer,
-                    cxTLdDem, cxTLlNot, cxTLcVal, cxTLsSit,  cxTLsPro, cxTLsRec,
-                    cxTLsCha, DMFD.FDQryGeral1);
+       pAtuTL(cxTL, cxTLbSel, cxTLsDes, cxTLsCpf, cxTLsCod, cxTLsMod, cxTLsSer,
+                    cxTLdDem, cxTLlNot, cxTLcVal, cxTLsTrs, cxTLsCnc, cxTLsSit,
+                    cxTLsPro, cxTLsRec, cxTLsCha, DMFD.FDQryGeral1);
 
       end;
   4 :
@@ -6690,9 +6699,9 @@ begin
        DMFD.FDQuery6.Open;
 
        // by Edson Lima ; 2013-7-26T1609 ; Atualiza dados das TreeLest das Canceladas
-       pAtuTL(cxTL, cxTLbSel, cxTLsDes, cxTLsCpf, cxTLsCod,  cxTLsMod, cxTLsSer,
-                    cxTLdDem, cxTLlNot, cxTLcVal, cxTLsSit,  cxTLsPro, cxTLsRec,
-                    cxTLsCha, DMFD.FDQuery6);
+       pAtuTL(cxTL, cxTLbSel, cxTLsDes, cxTLsCpf, cxTLsCod, cxTLsMod, cxTLsSer,
+                    cxTLdDem, cxTLlNot, cxTLcVal, cxTLsTrs, cxTLsCnc, cxTLsSit,
+                    cxTLsPro, cxTLsRec, cxTLsCha, DMFD.FDQuery6);
 
       end;
   5 :
@@ -6748,6 +6757,7 @@ begin
             nodInu.Values[cxTLsnPro.ItemIndex]  := DMFD.FDQuery7.fieldByName('nProt').AsString;
             nodInu.Values[cxTLicSta.ItemIndex]  := DMFD.FDQuery7.fieldByName('cStat').AsInteger;
             nodInu.Values[cxTLsxMot.ItemIndex]  := DMFD.FDQuery7.fieldByName('xMotivo').AsString;
+            nodInu.Values[cxTLsxInu.ItemIndex]  := DMFD.FDQuery7.fieldByName('UsuInu').AsString;
 
             DMFD.FDQuery7.Next;
            end;
@@ -7924,6 +7934,7 @@ procedure TFrGBNFe.BitBtn8Click(Sender: TObject);
 var
  aux, vDescr, vnRec, xRet : string;
  iCodPed, X               : Integer;
+ vNomeUsu                 : string;
 
 begin
 
@@ -8188,6 +8199,15 @@ begin
          110, 205, 301, 302, 303 :                                              // Uso Denegado
           begin
 
+           case ACBrNFe1.WebServices.Consulta.cStat of
+
+            100, 150, 613, 539 :             vNomeUsu := 'UsuTrs';              // Autorizado o uso da NF-e
+            101, 135, 136, 151, 218, 420 :   vNomeUsu := 'UsuCnc';              // Cancelamento de NF-e homologado
+            102, 206, 256, 563 :             vNomeUsu := 'UsuInu';              // Inutilização de número homologado
+            110, 205, 301, 302, 303 :        vNomeUsu := '';                    // Uso Denegado
+
+           end;
+
            //-------------------------------------------------------------------
            // Para não inconsistir a chave no hora de salvar a nota com chave
            // que difere do retorno da sefaz
@@ -8202,45 +8222,94 @@ begin
 
            gAtuCon := True;                                                     // seta True para gAtuCon
 
-           pGravaNFe('006', 'protocolo',
-                            'data_hora_recebimento',
-                            'chave_nfe',
-                            'situacao',
-                            'motivo',
-                            '',
-                            '',
-                            '',
-                            '',
-                            '',
-                            '',
-                            '',
-                            '',
-                            'codigo_loja',
-                            'demi',
-                            'nnf',
-                            'serie',
-                            'chave_nfe',
-                            'modelo',                                           // Nome dos campos
-                            ACBrNFe1.WebServices.Consulta.Protocolo,
-                            FormatDateTime('yyyy/mm/dd hh:nn:ss', ACBrNFe1.WebServices.consulta.DhRecbto),
-                            ACBrNFe1.WebServices.Consulta.NFeChave,
-                            ACBrNFe1.WebServices.Consulta.cStat,
-                            ACBrNFe1.WebServices.Consulta.xMotivo,
-                            '',
-                            '',
-                            '',
-                            '',
-                            '',
-                            '',
-                            '',
-                            '',
-                            edt_CodEmp.Text,
-                            FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']),
-                            DMFD.FDQryGeral2['nfe_nnf'],
-                            DMFD.FDQryGeral2['nfe_serie'],
-                            ACBrNFe1.WebServices.Consulta.NFeChave,
-                            DMFD.FDQryGeral2['nfe_modelo'],                     // Conteúdo dos campos
-                            true);                                              // Consiste [true/false]
+           if (trim(vNomeUsu) <> '' ) then
+            begin
+
+             pGravaNFe('006', 'protocolo',
+                              'data_hora_recebimento',
+                              'chave_nfe',
+                              'situacao',
+                              'motivo',
+                              vNomeUsu,
+                              '',
+                              '',
+                              '',
+                              '',
+                              '',
+                              '',
+                              '',
+                              'codigo_loja',
+                              'demi',
+                              'nnf',
+                              'serie',
+                              'chave_nfe',
+                              'modelo',                                           // Nome dos campos
+                              ACBrNFe1.WebServices.Consulta.Protocolo,
+                              FormatDateTime('yyyy/mm/dd hh:nn:ss', ACBrNFe1.WebServices.consulta.DhRecbto),
+                              ACBrNFe1.WebServices.Consulta.NFeChave,
+                              ACBrNFe1.WebServices.Consulta.cStat,
+                              ACBrNFe1.WebServices.Consulta.xMotivo,
+                              gUsu,
+                              '',
+                              '',
+                              '',
+                              '',
+                              '',
+                              '',
+                              '',
+                              edt_CodEmp.Text,
+                              FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']),
+                              DMFD.FDQryGeral2['nfe_nnf'],
+                              DMFD.FDQryGeral2['nfe_serie'],
+                              ACBrNFe1.WebServices.Consulta.NFeChave,
+                              DMFD.FDQryGeral2['nfe_modelo'],                     // Conteúdo dos campos
+                              true);                                              // Consiste [true/false]
+
+            end
+           else
+            begin
+
+             pGravaNFe('006', 'protocolo',
+                              'data_hora_recebimento',
+                              'chave_nfe',
+                              'situacao',
+                              'motivo',
+                              '',
+                              '',
+                              '',
+                              '',
+                              '',
+                              '',
+                              '',
+                              '',
+                              'codigo_loja',
+                              'demi',
+                              'nnf',
+                              'serie',
+                              'chave_nfe',
+                              'modelo',                                           // Nome dos campos
+                              ACBrNFe1.WebServices.Consulta.Protocolo,
+                              FormatDateTime('yyyy/mm/dd hh:nn:ss', ACBrNFe1.WebServices.consulta.DhRecbto),
+                              ACBrNFe1.WebServices.Consulta.NFeChave,
+                              ACBrNFe1.WebServices.Consulta.cStat,
+                              ACBrNFe1.WebServices.Consulta.xMotivo,
+                              '',
+                              '',
+                              '',
+                              '',
+                              '',
+                              '',
+                              '',
+                              '',
+                              edt_CodEmp.Text,
+                              FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']),
+                              DMFD.FDQryGeral2['nfe_nnf'],
+                              DMFD.FDQryGeral2['nfe_serie'],
+                              ACBrNFe1.WebServices.Consulta.NFeChave,
+                              DMFD.FDQryGeral2['nfe_modelo'],                     // Conteúdo dos campos
+                              true);                                              // Consiste [true/false]
+
+            end;
 
            //----------------------------------------------------------------------
            // by Edson Lima ; 2017-1-5T1027 ; Atribuição de dados nas variáveis do
@@ -8401,8 +8470,8 @@ begin
          else
           begin
            gTN                                      := '\NFe\';
-           if not (DMFD.FDQryGeral2['nfe_demi']      = null) then
-            gDataEmi                                := (DMFD.FDQryGeral2['nfe_demi']);
+           if not (DMFD.FDQryGeral2['nfe_DatNFCe']   = null) then                          // Antes -> if not (DMFD.FDQryGeral2['nfe_demi'] = null) then
+            gDataEmi                                := (DMFD.FDQryGeral2['nfe_DatNFCe']);  // Antes -> gDataEmi := (DMFD.FDQryGeral2['nfe_demi']);
           end;
 
           if vAux <> '' then
@@ -9179,7 +9248,7 @@ begin
                            'motivo',
                            'cStat_CCe',
                            'xMotivo_CCe',
-                           '',
+                           'UsuCnc',
                            '',
                            '',
                            '',
@@ -9198,7 +9267,7 @@ begin
                            ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.xMotivo,
                            '',
                            '',
-                           '',
+                           gUsu,
                            '',
                            '',
                            '',
@@ -9768,7 +9837,7 @@ begin
                            'chave_nfe',
                            'situacao',
                            'motivo',
-                           '',
+                           'UsuTrs',
                            '',
                            '',
                            '',
@@ -9787,7 +9856,7 @@ begin
                            ACBrNFe1.WebServices.Consulta.NFeChave,
                            ACBrNFe1.WebServices.Consulta.cStat,
                            ACBrNFe1.WebServices.Consulta.xMotivo,
-                           '',
+                           gUsu,
                            '',
                            '',
                            '',
@@ -10068,7 +10137,7 @@ begin
                          'chave_nfe',
                          'situacao',
                          'motivo',
-                         '',
+                         'UsuTrs',
                          '',
                          '',
                          '',
@@ -10087,7 +10156,7 @@ begin
                          ACBrNFe1.WebServices.Consulta.NFeChave,
                          ACBrNFe1.WebServices.Consulta.cStat,
                          ACBrNFe1.WebServices.Consulta.xMotivo,
-                         '',
+                         gUsu,
                          '',
                          '',
                          '',
@@ -13674,6 +13743,8 @@ Procedure TFrGBNFe.pAtuTL( cxTL : TcxTreeList; cxTLbSel  :  Tcxtreelistcolumn ;
                                                cxTLdDem  :  Tcxtreelistcolumn ;
                                                cxTLlNot  :  Tcxtreelistcolumn ;
                                                cxTLcVal  :  Tcxtreelistcolumn ;
+                                               cxTLsTrs  :  Tcxtreelistcolumn ;
+                                               cxTLsCnc  :  Tcxtreelistcolumn ;
                                                cxTLsSit  :  Tcxtreelistcolumn ;
                                                cxTLsPro  :  Tcxtreelistcolumn ;
                                                cxTLsRec  :  Tcxtreelistcolumn ;
@@ -13709,6 +13780,8 @@ begin
       nodPed.Values[cxTLdDem.ItemIndex] := FD.fieldByName('nfe_demi').AsDateTime;
       nodPed.Values[cxTLlNot.ItemIndex] := FD.fieldByName('nfe_nnf').AsString;
       nodPed.Values[cxTLcVal.ItemIndex] := FD.fieldByName('nfe_total_nf').AsCurrency;
+      nodPed.Values[cxTLsTrs.ItemIndex] := FD.fieldByName('nfe_UsuTrs').AsString;
+      nodPed.Values[cxTLsCnc.ItemIndex] := FD.fieldByName('nfe_UsuCnc').AsString;
       nodPed.Values[cxTLsSit.ItemIndex] := FD.fieldByName('nfe_situacao').AsString + ' ' + FD.fieldByName('nfe_motivo').AsString;
       nodPed.Values[cxTLsPro.ItemIndex] := FD.fieldByName('nfe_protocolo').AsString;
       nodPed.Values[cxTLsRec.ItemIndex] := FD.fieldByName('nfe_recibo').AsString;

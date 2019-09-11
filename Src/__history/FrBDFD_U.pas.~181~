@@ -222,7 +222,8 @@ end;
 procedure TFrBDFD.btn1Click(Sender: TObject);
 begin
 
- if ( (not (FileExists(gCamExe + 'GBNFe.ini')) or (not (gNãoSalvouIni)) ) then
+ if ( (not (FileExists(gCamExe + 'GBNFe.ini'))) or (not (gNãoSalvouIni)) or
+      (fVerCamBranco()) ) then
   begin
 
    Application.MessageBox(PWideChar('Atenção, os dados não foram salvos!' + Char(13) +
@@ -335,6 +336,37 @@ begin
  grp17.Caption := ' Banco de Dados - Gertão: ERP - ' + gERP + ' (' + gDBERP + ')' + ' ';
  grp12.Caption := ' Banco de Dados - Fiscal: NFe - ' + '(' + gNFe + ')' + ' - Emp: ' + gCodEmp + ' ';
  btn1.SetFocus;
+
+ if ( FileExists(gCamExe + 'GBNFe.ini') ) then
+  begin
+   // NFe
+   FrBDFD.chk_LoginPrompt_NFe.Checked    := StrToBool(gLoginPrompt_NFe) ;
+   FrBDFD.OSAuthent_NFe.Checked          := StrToBool(gOSAuthent_NFe) ;
+   FrBDFD.cbb_DriverID_NFe.Text          := gDriverID_NFe ;
+   FrBDFD.edt_Database_NFe.Text          := gDatabase_NFe ;
+   FrBDFD.edt_Server_NFe.Text            := gServer_NFe ;
+   FrBDFD.edt_UserName_NFe.Text          := gUserName_NFe ;
+   if ( trim(gPassword_NFe) <> '' ) then
+    FrBDFD.edt_Password_NFe.Text         := FrGBNFe.Crypt( 'D',(trim(gPassword_NFe)) )
+   else
+    FrBDFD.edt_Password_NFe.Text         := '';
+   FrBDFD.chk_Connected_NFe.Checked      := StrToBool(gConnected_NFe) ;
+   FrBDFD.edt_CamBD_NFe.Text             := gCamBD_NFe ;
+
+   // Ger
+   FrBDFD.chk_LoginPrompt_Ger.Checked    := StrToBool(gLoginPrompt_Ger) ;
+   FrBDFD.OSAuthent_Ger.Checked          := StrToBool(gOSAuthent_Ger) ;
+   FrBDFD.cbb_DriverID_Ger.Text          := gDriverID_Ger ;
+   FrBDFD.edt_Database_Ger.Text          := gDatabase_Ger ;
+   FrBDFD.edt_Server_Ger.Text            := gServer_Ger ;
+   FrBDFD.edt_UserName_Ger.Text          := gUserName_Ger ;
+   if ( trim(gPassword_Ger) <> '' ) then
+    FrBDFD.edt_Password_Ger.Text         := FrGBNFe.Crypt( 'D',(trim(gPassword_Ger)) )
+   else
+    FrBDFD.edt_Password_Ger.Text         := '';
+   FrBDFD.chk_Connected_Ger.Checked      := StrToBool(gConnected_Ger) ;
+   FrBDFD.edt_CamBD_Ger.Text             := gCamBD_Ger ;
+  end;
 
 end;
 
@@ -455,7 +487,7 @@ var
 begin
 
  vMens := TStringList.Create;
- vContexto := 0; result := True;
+ vContexto := -1; result := True;
 
  vMens.clear;
  vMens.add('O campo [DriverID] do BD NFe está vazio!');
@@ -473,14 +505,12 @@ begin
 
  try
 
-  // NFe
   if      ( Trim(cbb_DriverID_NFe.Text) = '' )  then vContexto := 0
   else if ( Trim(edt_Database_NFe.Text) = '' )  then vContexto := 1
   else if ( Trim(edt_Server_NFe.Text) = '' )    then vContexto := 2
   else if ( Trim(edt_UserName_NFe.Text) = '' )  then vContexto := 3
   else if not ( chk_Connected_NFe.Checked )     then vContexto := 4
   else if ( Trim(edt_CamBD_NFe.Text) = '' )     then vContexto := 5
-  // ERP
   else if ( Trim(cbb_DriverID_Ger.Text) = '' )  then vContexto := 6
   else if ( Trim(edt_Database_Ger.Text) = '' )  then vContexto := 7
   else if ( Trim(edt_Server_Ger.Text) = '' )    then vContexto := 8
@@ -488,15 +518,16 @@ begin
   else if not ( chk_Connected_Ger.Checked )     then vContexto := 10
   else if ( Trim(edt_CamBD_Ger.Text) = '' )     then vContexto := 11;
 
-  if Application.MessageBox(PWideChar( vMens[vContexto] + Char(13) +
-                            'Deseja continuar mesmo assim?'),
-                            PWideChar('Parâmetros FireDAC'),
-                            MB_ICONQUESTION + MB_YESNO ) = IdNo then
-   begin
+  if ( vContexto <> -1 ) then
+   if Application.MessageBox(PWideChar( vMens[vContexto] + Char(13) +
+                             'Deseja continuar mesmo assim?'),
+                             PWideChar('Parâmetros FireDAC'),
+                             MB_ICONQUESTION + MB_YESNO ) = IdNo then
+    begin
 
-    result := False;
+     result := False;
 
-   end;
+    end;
 
  finally
 

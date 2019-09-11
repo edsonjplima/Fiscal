@@ -329,6 +329,10 @@ begin
 end;
 
 procedure TFrBDFD.FormShow(Sender: TObject);
+Var
+ IniFile, Secao    : String ;
+ Ini               : TIniFile ;
+
 begin
 
  // Define os captions iniciais
@@ -337,35 +341,46 @@ begin
  grp12.Caption := ' Banco de Dados - Fiscal: NFe - ' + '(' + gNFe + ')' + ' - Emp: ' + gCodEmp + ' ';
  btn1.SetFocus;
 
+ IniFile := gCamExe + 'GBNFe.Ini';
+ Ini     := TIniFile.Create( IniFile );
+ Secao   := 'BD_FireDAC-EMP' + gCodEmp;
+
  if ( FileExists(gCamExe + 'GBNFe.ini') ) then
   begin
-   // NFe
-   FrBDFD.chk_LoginPrompt_NFe.Checked    := StrToBool(gLoginPrompt_NFe) ;
-   FrBDFD.OSAuthent_NFe.Checked          := StrToBool(gOSAuthent_NFe) ;
-   FrBDFD.cbb_DriverID_NFe.Text          := gDriverID_NFe ;
-   FrBDFD.edt_Database_NFe.Text          := gDatabase_NFe ;
-   FrBDFD.edt_Server_NFe.Text            := gServer_NFe ;
-   FrBDFD.edt_UserName_NFe.Text          := gUserName_NFe ;
-   if ( trim(gPassword_NFe) <> '' ) then
-    FrBDFD.edt_Password_NFe.Text         := FrGBNFe.Crypt( 'D',(trim(gPassword_NFe)) )
-   else
-    FrBDFD.edt_Password_NFe.Text         := '';
-   FrBDFD.chk_Connected_NFe.Checked      := StrToBool(gConnected_NFe) ;
-   FrBDFD.edt_CamBD_NFe.Text             := gCamBD_NFe ;
 
-   // Ger
-   FrBDFD.chk_LoginPrompt_Ger.Checked    := StrToBool(gLoginPrompt_Ger) ;
-   FrBDFD.OSAuthent_Ger.Checked          := StrToBool(gOSAuthent_Ger) ;
-   FrBDFD.cbb_DriverID_Ger.Text          := gDriverID_Ger ;
-   FrBDFD.edt_Database_Ger.Text          := gDatabase_Ger ;
-   FrBDFD.edt_Server_Ger.Text            := gServer_Ger ;
-   FrBDFD.edt_UserName_Ger.Text          := gUserName_Ger ;
-   if ( trim(gPassword_Ger) <> '' ) then
-    FrBDFD.edt_Password_Ger.Text         := FrGBNFe.Crypt( 'D',(trim(gPassword_Ger)) )
-   else
-    FrBDFD.edt_Password_Ger.Text         := '';
-   FrBDFD.chk_Connected_Ger.Checked      := StrToBool(gConnected_Ger) ;
-   FrBDFD.edt_CamBD_Ger.Text             := gCamBD_Ger ;
+   if ( Ini.SectionExists( Secao ) ) then
+    begin
+
+     // NFe
+     FrBDFD.chk_LoginPrompt_NFe.Checked    := StrToBool(gLoginPrompt_NFe) ;
+     FrBDFD.OSAuthent_NFe.Checked          := StrToBool(gOSAuthent_NFe) ;
+     FrBDFD.cbb_DriverID_NFe.Text          := gDriverID_NFe ;
+     FrBDFD.edt_Database_NFe.Text          := gDatabase_NFe ;
+     FrBDFD.edt_Server_NFe.Text            := gServer_NFe ;
+     FrBDFD.edt_UserName_NFe.Text          := gUserName_NFe ;
+     if ( trim(gPassword_NFe) <> '' ) then
+      FrBDFD.edt_Password_NFe.Text         := FrGBNFe.Crypt( 'D',(trim(gPassword_NFe)) )
+     else
+      FrBDFD.edt_Password_NFe.Text         := '';
+     FrBDFD.chk_Connected_NFe.Checked      := StrToBool(gConnected_NFe) ;
+     FrBDFD.edt_CamBD_NFe.Text             := gCamBD_NFe ;
+
+     // Ger
+     FrBDFD.chk_LoginPrompt_Ger.Checked    := StrToBool(gLoginPrompt_Ger) ;
+     FrBDFD.OSAuthent_Ger.Checked          := StrToBool(gOSAuthent_Ger) ;
+     FrBDFD.cbb_DriverID_Ger.Text          := gDriverID_Ger ;
+     FrBDFD.edt_Database_Ger.Text          := gDatabase_Ger ;
+     FrBDFD.edt_Server_Ger.Text            := gServer_Ger ;
+     FrBDFD.edt_UserName_Ger.Text          := gUserName_Ger ;
+     if ( trim(gPassword_Ger) <> '' ) then
+      FrBDFD.edt_Password_Ger.Text         := FrGBNFe.Crypt( 'D',(trim(gPassword_Ger)) )
+     else
+      FrBDFD.edt_Password_Ger.Text         := '';
+     FrBDFD.chk_Connected_Ger.Checked      := StrToBool(gConnected_Ger) ;
+     FrBDFD.edt_CamBD_Ger.Text             := gCamBD_Ger ;
+
+    end;
+
   end;
 
 end;
