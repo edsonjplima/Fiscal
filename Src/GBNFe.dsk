@@ -18,9 +18,10 @@ File_14=TSourceModule,'D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\AC
 [Modules]
 Module0=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
 Module1=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe.dproj
-Module2=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBDFD_U.pas
-Module3=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrCCe_U.pas
-Count=4
+Module2=D:\Sistemas de Desenvolvimento\GBNFe\Src\DMFD_U.pas
+Module3=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBDFD_U.pas
+Module4=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrCCe_U.pas
+Count=5
 EditWindowCount=1
 
 [D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas]
@@ -29,6 +30,9 @@ ModuleType=TSourceModule
 [D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe.dproj]
 ModuleType=TBaseProject
 
+[D:\Sistemas de Desenvolvimento\GBNFe\Src\DMFD_U.pas]
+ModuleType=TSourceModule
+
 [D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBDFD_U.pas]
 ModuleType=TSourceModule
 
@@ -36,12 +40,13 @@ ModuleType=TSourceModule
 ModuleType=TSourceModule
 
 [EditWindow0]
-ViewCount=4
+ViewCount=5
 CurrentEditView=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
 View0=0
 View1=1
 View2=2
 View3=3
+View4=4
 PercentageSizes=1
 Create=1
 Visible=1
@@ -72,9 +77,9 @@ TabDockRightClients=DockSite2=0,DockSite4=1
 [View0]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
-CursorX=31
-CursorY=4783
-TopLine=4822
+CursorX=60
+CursorY=6898
+TopLine=6906
 LeftCol=1
 Elisions=
 Bookmarks={1,13266,1}{2,15027,1}{6,7805,1}
@@ -82,8 +87,19 @@ EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
 
 [View1]
 CustomEditViewType=TEditView
+Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\DMFD_U.pas
+CursorX=1
+CursorY=1
+TopLine=1
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=Borland.FormDesignerView
+
+[View2]
+CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrCCe_U.pas
-CursorX=27
+CursorX=5
 CursorY=300
 TopLine=288
 LeftCol=1
@@ -91,7 +107,7 @@ Elisions=
 Bookmarks={1,1256,1}{2,453,1}
 EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrCCe_U.pas
 
-[View2]
+[View3]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBDFD_U.pas
 CursorX=1
@@ -102,7 +118,7 @@ Elisions=
 Bookmarks={1,471,1}{2,251,1}
 EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBDFD_U.pas
 
-[View3]
+[View4]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe.dpr
 CursorX=30
@@ -219,12 +235,12 @@ Visible=0
 Docked=1
 State=0
 Left=1
-Top=27
-Width=9988
+Top=579
+Width=2769
 Height=2988
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=9988
+ClientWidth=2769
 ClientHeight=2988
 TBDockHeight=2988
 LRDockWidth=2769
@@ -307,11 +323,6 @@ LRDockWidth=1894
 Dockable=1
 StayOnTop=0
 SplitPos=155
-
-[PropInspDesignerSelection]
-ArrangeBy=Name
-SelectedItem=Name,
-ExpandedItems=Configuracoes=1,DANFE=0,"LiveBindings Designer=0",MAIL=0,Configuracoes.Arquivos=0,Configuracoes.Certificados=0,Configuracoes.Geral=1,"Configuracoes.LiveBindings Designer=0",Configuracoes.RespTec=0,Configuracoes.WebServices=0,"Configuracoes.Geral.LiveBindings Designer=0",Font=0,LiveBindings=0,LookAndFeel=0,Margins=0,Navigator=0,OptionsBehavior=0,OptionsCustomizing=0,OptionsData=0,OptionsSelection=0,OptionsView=0
 
 [ClassBrowserTool]
 PercentageSizes=1
