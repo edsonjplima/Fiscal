@@ -77,9 +77,9 @@ TabDockRightClients=DockSite2=0,DockSite4=1
 [View0]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
-CursorX=1
-CursorY=1531
-TopLine=1513
+CursorX=31
+CursorY=1503
+TopLine=1549
 LeftCol=1
 Elisions=
 Bookmarks={1,1501,20}{2,15062,1}{6,7840,1}
@@ -157,7 +157,7 @@ Dockable=1
 StayOnTop=0
 
 [Breakpoints]
-Count=14
+Count=11
 Breakpoint0='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',6871,'',0,1,'',1,0,0,'',1,'','','',0,''
 Breakpoint1='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',3251,'',0,1,'',1,0,0,'',1,'','','',0,''
 Breakpoint2='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',8228,'',0,1,'',1,0,0,'',1,'','','',0,''
@@ -169,9 +169,6 @@ Breakpoint7='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',12604,'',0,1,
 Breakpoint8='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',13103,'',0,1,'',1,0,0,'',1,'','','',0,''
 Breakpoint9='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',9293,'',0,1,'',1,0,0,'',1,'','','',0,''
 Breakpoint10='D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBDFD_U.pas',339,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint11='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',1492,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint12='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',1531,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint13='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',1517,'',0,1,'',1,0,0,'',1,'','','',0,''
 
 [EmbarcaderoWin32Debugger_AddressBreakpoints]
 Count=0
@@ -237,12 +234,12 @@ Visible=0
 Docked=1
 State=0
 Left=1
-Top=579
-Width=2769
+Top=27
+Width=9988
 Height=2988
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=2769
+ClientWidth=9988
 ClientHeight=2988
 TBDockHeight=2988
 LRDockWidth=2769
@@ -807,8 +804,8 @@ Create=1
 Visible=0
 Docked=1
 State=0
-Left=1255
-Top=107
+Left=8
+Top=8
 Width=2000
 Height=9012
 MaxLeft=-1
