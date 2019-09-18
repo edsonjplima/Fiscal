@@ -644,9 +644,10 @@ function IsWindows64: Boolean;
 type
   TIsWow64Process = function(AHandle:THandle; var AIsWow64: BOOL): BOOL; stdcall;
 var
-  vKernel32Handle: DWORD;
-  vIsWow64Process: TIsWow64Process;
-  vIsWow64: BOOL;
+  vKernel32Handle    : DWORD;
+  vIsWow64Process    : TIsWow64Process;
+  vIsWow64           : BOOL;
+
 begin
 
   Result := False;
@@ -677,6 +678,8 @@ var
  i, c, iCodPed        : integer;
  vCfop                : string;
  vCnpjEmit, vCnpjCert : string;
+ vAutXMLCNPJCPFALL    : string;
+ vAutXMLCNPJCPFWORD   : string;
 
 begin
 
@@ -1486,9 +1489,41 @@ begin
 
        // Aqui deve haver a leitura de fornecedores (contadoes / atores)
 
-       // autXML.Items[0].CNPJCPF = 'cnpj/cpf'                                     //Informar CNPJ ou CPF. Preencher os zeros não significativos.
-        // CNPJ CNPJ Autorizado CE GA01 N 1-1 14
-        // CPF  CPF Autorizado  CE GA01 N 1-1 11
+       autXML.Clear;
+       vAutXMLCNPJCPFWORD := '';
+
+       if ( (not(DMFD.FDQuery1['nfe_autXML'] = null))       and
+            (not(Trim(DMFD.FDQuery1['nfe_autXML']) = '')) ) then
+        begin
+
+         vAutXMLCNPJCPFALL := trim(VarToStr(DMFD.FDQuery1['nfe_autXML']));
+
+         for I := 1 to Length(vAutXMLCNPJCPFALL) do
+          begin
+
+           if vAutXMLCNPJCPFALL[I] <> ''  then
+            begin
+
+              if ( (vAutXMLCNPJCPFALL[I] <> ',')      and
+                   (vAutXMLCNPJCPFALL[I] <> ';')      or
+                   ( I = Length(vAutXMLCNPJCPFALL)) ) then
+               vAutXMLCNPJCPFWORD := (vAutXMLCNPJCPFWORD + vAutXMLCNPJCPFALL[I]);
+
+              if ( (vAutXMLCNPJCPFALL[I] = ',')       or
+                   (vAutXMLCNPJCPFALL[I] = ';')       or
+                   ( I = Length(vAutXMLCNPJCPFALL)) ) then
+               begin
+
+                autXML.Add.CNPJCPF := vAutXMLCNPJCPFWORD;                       //Informar CNPJ ou CPF. Preencher os zeros não significativos.
+                vAutXMLCNPJCPFWORD := '';
+
+               end;
+
+            end;
+
+          end;
+
+        end;
 
        (* ----------------------------------------------------------------------------------------------------------------- *)
 

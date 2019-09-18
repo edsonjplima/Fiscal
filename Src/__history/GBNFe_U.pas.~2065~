@@ -644,9 +644,10 @@ function IsWindows64: Boolean;
 type
   TIsWow64Process = function(AHandle:THandle; var AIsWow64: BOOL): BOOL; stdcall;
 var
-  vKernel32Handle: DWORD;
-  vIsWow64Process: TIsWow64Process;
-  vIsWow64: BOOL;
+  vKernel32Handle    : DWORD;
+  vIsWow64Process    : TIsWow64Process;
+  vIsWow64           : BOOL;
+
 begin
 
   Result := False;
@@ -677,6 +678,8 @@ var
  i, c, iCodPed        : integer;
  vCfop                : string;
  vCnpjEmit, vCnpjCert : string;
+ vAutXMLCNPJCPFALL    : string;
+ vAutXMLCNPJCPFWORD   : string;
 
 begin
 
@@ -1475,6 +1478,49 @@ begin
        //Entrega.cMun := 0;          // G07 - Código do município (Tabela do IBGE - '9999999' para operações com o exterior))
        //Entrega.xMun := '';         // G08 - Nome do município   ('EXTERIOR' para operações com o exterior)
        //Entrega.UF := '';           // G09 - Sigla da UF         ('EX' para operações com o exterior.)
+
+       (* ----------------------------------------------------------------------------------------------------------------- *)
+
+
+       (* ----------------------------------------------------------------------------------------------------------------- *)
+       (* TAG de grupo Pessoas autorizadas a acessar o XML da NF-e G A01 0-10                                               *)
+       (* Poderá ser implementado no futuro                                                                                 *)
+       (* ----------------------------------------------------------------------------------------------------------------- *)
+
+       // Aqui deve haver a leitura de fornecedores (contadoes / atores)
+
+       autXML.Clear;
+       vAutXMLCNPJCPFWORD := '';
+
+       if ( (not(DMFD.FDQuery1['nfe_autXML'] = null))       and
+            (not(Trim(DMFD.FDQuery1['nfe_autXML']) = '')) ) then
+        begin
+
+         vAutXMLCNPJCPFALL := trim(VarToStr(DMFD.FDQuery1['nfe_autXML']));
+
+         for I := 0 to Length(vAutXMLCNPJCPFALL)-1 do
+          begin
+
+           if vAutXMLCNPJCPFALL[I] <> ''  then
+            begin
+              if ( (vAutXMLCNPJCPFALL[I] = ',')         or
+                   (vAutXMLCNPJCPFALL[I] = ';')         or
+                   ( I = Length(vAutXMLCNPJCPFALL)-1) ) then
+               begin
+
+                autXML.Add.CNPJCPF := vAutXMLCNPJCPFWORD;                       //Informar CNPJ ou CPF. Preencher os zeros não significativos.
+                vAutXMLCNPJCPFWORD := '';
+
+               end
+              else
+
+               vAutXMLCNPJCPFWORD := (vAutXMLCNPJCPFWORD + vAutXMLCNPJCPFALL[I]);
+
+            end;
+
+          end;
+
+        end;
 
        (* ----------------------------------------------------------------------------------------------------------------- *)
 
@@ -4764,7 +4810,10 @@ begin
  //-----------------------------------------------------------------------------
  // configurar para usar a WinCrypt e não a CAPICOM
  //-----------------------------------------------------------------------------
- ACBrNFe1.Configuracoes.Geral.SSLLib := libWinCrypt;
+ ACBrNFe1.Configuracoes.Geral.SSLCryptLib   := cryCapicom;
+ ACBrNFe1.Configuracoes.Geral.SSLHttpLib    := httpWinINet;
+ ACBrNFe1.Configuracoes.Geral.SSLLib        := libWinCrypt;
+ ACBrNFe1.Configuracoes.Geral.SSLXmlSignLib := xsMsXml;
 
  //-----------------------------------------------------------------------------
  // Define o tempo de showhint
@@ -7392,6 +7441,11 @@ var
 
 begin
 
+ if ( gCpt = 1 ) then
+  pDefineRel()                                                                  // Define o tipo de Relatório FortesReport
+ else
+  pDefineRelFR();                                                               // Define o tipo de Relatório FastReport
+
  // Verifica se a logo foi encontrada, caso contrário pergunta se procegue...
  if not gTemLogo then
   begin
@@ -9262,9 +9316,9 @@ begin
                            FormatDateTime('yyyy/mm/dd hh:nn:ss', ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.dhRegEvento),
                            ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cStat,
                            ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.xMotivo,
+                           '',
+                           '',
                            gUsu,
-                           '',
-                           '',
                            '',
                            '',
                            '',

@@ -1478,6 +1478,20 @@ begin
 
        (* ----------------------------------------------------------------------------------------------------------------- *)
 
+
+       (* ----------------------------------------------------------------------------------------------------------------- *)
+       (* TAG de grupo Pessoas autorizadas a acessar o XML da NF-e G A01 0-10                                               *)
+       (* Poderá ser implementado no futuro                                                                                 *)
+       (* ----------------------------------------------------------------------------------------------------------------- *)
+
+       // Aqui deve haver a leitura de fornecedores (contadoes / atores)
+
+       // autXML.Items[0].CNPJCPF = 'cnpj/cpf'                                     //Informar CNPJ ou CPF. Preencher os zeros não significativos.
+        // CNPJ CNPJ Autorizado CE GA01 N 1-1 14
+        // CPF  CPF Autorizado  CE GA01 N 1-1 11
+
+       (* ----------------------------------------------------------------------------------------------------------------- *)
+
        // by Edson Lima ; 2016-1-22T1019 ; Indicador da Ie do Destimatário
        if not ( DMFD.FDQuery1['des_indIEDest'] = null ) then
         begin
@@ -4764,7 +4778,10 @@ begin
  //-----------------------------------------------------------------------------
  // configurar para usar a WinCrypt e não a CAPICOM
  //-----------------------------------------------------------------------------
- ACBrNFe1.Configuracoes.Geral.SSLLib := libWinCrypt;
+ ACBrNFe1.Configuracoes.Geral.SSLCryptLib   := cryCapicom;
+ ACBrNFe1.Configuracoes.Geral.SSLHttpLib    := httpWinINet;
+ ACBrNFe1.Configuracoes.Geral.SSLLib        := libWinCrypt;
+ ACBrNFe1.Configuracoes.Geral.SSLXmlSignLib := xsMsXml;
 
  //-----------------------------------------------------------------------------
  // Define o tempo de showhint
@@ -7392,6 +7409,11 @@ var
 
 begin
 
+ if ( gCpt = 1 ) then
+  pDefineRel()                                                                  // Define o tipo de Relatório FortesReport
+ else
+  pDefineRelFR();                                                               // Define o tipo de Relatório FastReport
+
  // Verifica se a logo foi encontrada, caso contrário pergunta se procegue...
  if not gTemLogo then
   begin
@@ -9262,9 +9284,9 @@ begin
                            FormatDateTime('yyyy/mm/dd hh:nn:ss', ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.dhRegEvento),
                            ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cStat,
                            ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.xMotivo,
+                           '',
+                           '',
                            gUsu,
-                           '',
-                           '',
                            '',
                            '',
                            '',
