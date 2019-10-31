@@ -516,7 +516,7 @@ object FrGBNFe: TFrGBNFe
     end
     object BitBtn11: TBitBtn
       Left = 15
-      Top = 218
+      Top = 216
       Width = 130
       Height = 25
       Cursor = crHandPoint
@@ -1096,6 +1096,20 @@ object FrGBNFe: TFrGBNFe
           Summary.FooterSummaryItems = <>
           Summary.GroupFooterSummaryItems = <>
         end
+        object cxTLsxInu: TcxTreeListColumn
+          PropertiesClassName = 'TcxTextEditProperties'
+          Caption.AlignHorz = taCenter
+          Caption.Text = 'Usu'#225'rio'
+          DataBinding.ValueType = 'String'
+          Options.Editing = False
+          Options.Sorting = False
+          Width = 150
+          Position.ColIndex = 7
+          Position.RowIndex = 0
+          Position.BandIndex = 1
+          Summary.FooterSummaryItems = <>
+          Summary.GroupFooterSummaryItems = <>
+        end
       end
       object cxTL: TcxTreeList
         Left = 1
@@ -1425,6 +1439,36 @@ object FrGBNFe: TFrGBNFe
           Position.ColIndex = 3
           Position.RowIndex = 0
           Position.BandIndex = 3
+          Summary.FooterSummaryItems = <>
+          Summary.GroupFooterSummaryItems = <>
+        end
+        object cxTLsTrs: TcxTreeListColumn
+          PropertiesClassName = 'TcxTextEditProperties'
+          Caption.AlignHorz = taCenter
+          Caption.Text = 'Usu'#225'rio do Envio'
+          DataBinding.ValueType = 'String'
+          Options.VertSizing = False
+          Options.Editing = False
+          Options.Sorting = False
+          Width = 120
+          Position.ColIndex = 5
+          Position.RowIndex = 0
+          Position.BandIndex = 1
+          Summary.FooterSummaryItems = <>
+          Summary.GroupFooterSummaryItems = <>
+        end
+        object cxTLsCnc: TcxTreeListColumn
+          PropertiesClassName = 'TcxTextEditProperties'
+          Caption.AlignHorz = taCenter
+          Caption.Text = 'Usu'#225'rio do Canc.'
+          DataBinding.ValueType = 'String'
+          Options.VertSizing = False
+          Options.Editing = False
+          Options.Sorting = False
+          Width = 120
+          Position.ColIndex = 6
+          Position.RowIndex = 0
+          Position.BandIndex = 1
           Summary.FooterSummaryItems = <>
           Summary.GroupFooterSummaryItems = <>
         end
@@ -1994,8 +2038,8 @@ object FrGBNFe: TFrGBNFe
     Align = alTop
     BevelOuter = bvNone
     BiDiMode = bdLeftToRight
-    Caption = 'N F e    &&     N F C e'
-    Color = 11249818
+    Caption = 'C T e'
+    Color = 12239278
     Font.Charset = ANSI_CHARSET
     Font.Color = 7091712
     Font.Height = -48
@@ -2320,8 +2364,9 @@ object FrGBNFe: TFrGBNFe
       Height = 17
       Anchors = [akRight, akBottom]
       BevelOuter = bvNone
-      Caption = 'NFe && NFCe v.(Z)'
-      Color = 11249818
+      Caption = 'CTe v. (FD)'
+      Color = 12239278
+      FullRepaint = False
       Font.Charset = ANSI_CHARSET
       Font.Color = 8388863
       Font.Height = -16
@@ -2346,7 +2391,7 @@ object FrGBNFe: TFrGBNFe
     Left = 312
     Top = 10
     Bitmap = {
-      494C0101CC041006440710001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C0101CC041006700710001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000004013000001002000000000000040
       1300000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -43299,8 +43344,6 @@ object FrGBNFe: TFrGBNFe
     ACBrNFe = ACBrNFe1
     EspessuraBorda = 1
     ExpandirDadosAdicionaisAuto = False
-    IncorporarBackgroundPdf = True
-    IncorporarFontesPdf = True
     BorderIcon = [biSystemMenu, biMinimize, biMaximize]
     Left = 464
     Top = 38

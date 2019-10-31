@@ -19,9 +19,10 @@ File_14=TSourceModule,'D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\AC
 Module0=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
 Module1=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe.dproj
 Module2=D:\Sistemas de Desenvolvimento\GBNFe\Src\DMFD_U.pas
-Module3=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBDFD_U.pas
-Module4=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrCCe_U.pas
-Count=5
+Module3=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrCCe_U.pas
+Module4=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBDFD_U.pas
+Module5=default.htm
+Count=6
 EditWindowCount=1
 
 [D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas]
@@ -33,20 +34,24 @@ ModuleType=TBaseProject
 [D:\Sistemas de Desenvolvimento\GBNFe\Src\DMFD_U.pas]
 ModuleType=TSourceModule
 
-[D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBDFD_U.pas]
-ModuleType=TSourceModule
-
 [D:\Sistemas de Desenvolvimento\GBNFe\Src\FrCCe_U.pas]
 ModuleType=TSourceModule
 
+[D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBDFD_U.pas]
+ModuleType=TSourceModule
+
+[default.htm]
+ModuleType=TURLModule
+
 [EditWindow0]
-ViewCount=5
+ViewCount=6
 CurrentEditView=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
 View0=0
 View1=1
 View2=2
 View3=3
 View4=4
+View5=5
 PercentageSizes=1
 Create=1
 Visible=1
@@ -75,17 +80,21 @@ TabDockBottomClients=MessageView=0,DockSite1=1
 TabDockRightClients=DockSite2=0,DockSite4=1
 
 [View0]
+CustomEditViewType=TWelcomePageView
+WelcomePageURL=bds:/default.htm
+
+[View1]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
-CursorX=1
-CursorY=1531
-TopLine=1513
+CursorX=44
+CursorY=9419
+TopLine=9398
 LeftCol=1
 Elisions=
 Bookmarks={1,1501,20}{2,15062,1}{6,7840,1}
-EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
+EditViewName=Borland.FormDesignerView
 
-[View1]
+[View2]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\DMFD_U.pas
 CursorX=1
@@ -96,7 +105,7 @@ Elisions=
 Bookmarks=
 EditViewName=Borland.FormDesignerView
 
-[View2]
+[View3]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrCCe_U.pas
 CursorX=5
@@ -107,18 +116,18 @@ Elisions=
 Bookmarks={1,1256,1}{2,453,1}
 EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrCCe_U.pas
 
-[View3]
+[View4]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBDFD_U.pas
 CursorX=1
-CursorY=339
-TopLine=336
+CursorY=251
+TopLine=347
 LeftCol=1
 Elisions=
 Bookmarks={1,471,1}{2,251,1}
 EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBDFD_U.pas
 
-[View4]
+[View5]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe.dpr
 CursorX=30
@@ -157,7 +166,7 @@ Dockable=1
 StayOnTop=0
 
 [Breakpoints]
-Count=14
+Count=10
 Breakpoint0='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',6871,'',0,1,'',1,0,0,'',1,'','','',0,''
 Breakpoint1='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',3251,'',0,1,'',1,0,0,'',1,'','','',0,''
 Breakpoint2='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',8228,'',0,1,'',1,0,0,'',1,'','','',0,''
@@ -168,10 +177,6 @@ Breakpoint6='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',12184,'',0,1,
 Breakpoint7='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',12604,'',0,1,'',1,0,0,'',1,'','','',0,''
 Breakpoint8='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',13103,'',0,1,'',1,0,0,'',1,'','','',0,''
 Breakpoint9='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',9293,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint10='D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBDFD_U.pas',339,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint11='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',1492,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint12='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',1531,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint13='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',1517,'',0,1,'',1,0,0,'',1,'','','',0,''
 
 [EmbarcaderoWin32Debugger_AddressBreakpoints]
 Count=0
@@ -236,8 +241,8 @@ Create=1
 Visible=0
 Docked=1
 State=0
-Left=1
-Top=579
+Left=0
+Top=0
 Width=2769
 Height=2988
 MaxLeft=-1
@@ -325,6 +330,11 @@ LRDockWidth=1894
 Dockable=1
 StayOnTop=0
 SplitPos=155
+
+[PropInspDesignerSelection]
+ArrangeBy=Name
+SelectedItem=Action,
+ExpandedItems=Anchors=0,Constraints=0,Font=0,LiveBindings=0,"LiveBindings Designer=0",Margins=0,Padding=0,BorderIcons=0,GlassFrame=0,BevelEdges=0,StyleElements=0,Touch=0,HorzScrollBar=0
 
 [ClassBrowserTool]
 PercentageSizes=1
@@ -807,8 +817,8 @@ Create=1
 Visible=0
 Docked=1
 State=0
-Left=1255
-Top=107
+Left=8
+Top=8
 Width=2000
 Height=9012
 MaxLeft=-1

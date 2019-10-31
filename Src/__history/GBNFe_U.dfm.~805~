@@ -1187,7 +1187,6 @@ object FrGBNFe: TFrGBNFe
         OnExit = cxTLExit
         OnKeyDown = cxTLKeyDown
         OnMouseMove = cxTLMouseMove
-        ExplicitLeft = 2
         object cxTLbSel: TcxTreeListColumn
           PropertiesClassName = 'TcxCheckBoxProperties'
           Properties.Alignment = taCenter
@@ -1443,6 +1442,36 @@ object FrGBNFe: TFrGBNFe
           Summary.FooterSummaryItems = <>
           Summary.GroupFooterSummaryItems = <>
         end
+        object cxTLsTrs: TcxTreeListColumn
+          PropertiesClassName = 'TcxTextEditProperties'
+          Caption.AlignHorz = taCenter
+          Caption.Text = 'Usu'#225'rio do Envio'
+          DataBinding.ValueType = 'String'
+          Options.VertSizing = False
+          Options.Editing = False
+          Options.Sorting = False
+          Width = 120
+          Position.ColIndex = 5
+          Position.RowIndex = 0
+          Position.BandIndex = 1
+          Summary.FooterSummaryItems = <>
+          Summary.GroupFooterSummaryItems = <>
+        end
+        object cxTLsCnc: TcxTreeListColumn
+          PropertiesClassName = 'TcxTextEditProperties'
+          Caption.AlignHorz = taCenter
+          Caption.Text = 'Usu'#225'rio do Canc.'
+          DataBinding.ValueType = 'String'
+          Options.VertSizing = False
+          Options.Editing = False
+          Options.Sorting = False
+          Width = 120
+          Position.ColIndex = 6
+          Position.RowIndex = 0
+          Position.BandIndex = 1
+          Summary.FooterSummaryItems = <>
+          Summary.GroupFooterSummaryItems = <>
+        end
       end
       object Panel10: TPanel
         Left = 1
@@ -1492,6 +1521,10 @@ object FrGBNFe: TFrGBNFe
         TabWidth = 80
         object TabSheet1: TTabSheet
           Caption = 'Respostas'
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object MemoResp: TMemo
             Left = 0
             Top = 0
@@ -1515,6 +1548,10 @@ object FrGBNFe: TFrGBNFe
         object TabSheet2: TTabSheet
           Caption = 'XML Resposta'
           ImageIndex = 1
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object WBResposta: TWebBrowser
             Left = 0
             Top = 0
@@ -1534,6 +1571,10 @@ object FrGBNFe: TFrGBNFe
         object TabSheet3: TTabSheet
           Caption = 'Log'
           ImageIndex = 2
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object MemoLog: TMemo
             Left = 0
             Top = 0
@@ -1548,6 +1589,10 @@ object FrGBNFe: TFrGBNFe
         object TabSheet4: TTabSheet
           Caption = 'NFe && NFCe'
           ImageIndex = 3
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object trvwNFe: TTreeView
             Left = 0
             Top = 0
@@ -1564,6 +1609,10 @@ object FrGBNFe: TFrGBNFe
         object TabSheet5: TTabSheet
           Caption = 'Resposta WS'
           ImageIndex = 4
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object memoRespWS: TMemo
             Left = 0
             Top = 0
@@ -2361,7 +2410,7 @@ object FrGBNFe: TFrGBNFe
     Left = 312
     Top = 10
     Bitmap = {
-      494C0101CC0410064C0710001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C0101CC0410066C0710001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000004013000001002000000000000040
       1300000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -43314,8 +43363,6 @@ object FrGBNFe: TFrGBNFe
     ACBrNFe = ACBrNFe1
     EspessuraBorda = 1
     ExpandirDadosAdicionaisAuto = False
-    IncorporarBackgroundPdf = True
-    IncorporarFontesPdf = True
     BorderIcon = [biSystemMenu, biMinimize, biMaximize]
     Left = 464
     Top = 38

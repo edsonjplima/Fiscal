@@ -1,4 +1,4 @@
-﻿unit GBNFe_U;
+﻿unit GBCTe_U;
 
 interface
 

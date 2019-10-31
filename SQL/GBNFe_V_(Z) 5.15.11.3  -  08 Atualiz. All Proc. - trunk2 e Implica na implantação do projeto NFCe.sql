@@ -4281,8 +4281,12 @@ and (t1.Modelo                 = @Modelo or @Modelo = '')                       
 and (t1.Serie                  = @Serie or @Serie = '')                                                  -- By Edson Lima ; 2016/02/11 ---> filtra por Serie
 and ( (IsNull(t1.situacao, '') = '100') or (IsNull(t1.situacao, '') = '150') )
 and (@Chave                    = '')
-    ) or
-    t1.chave_nfe               = @Chave                                                                  -- By Edson Lima ; 2017/10/17 ---> busca pela chave
+    ) 
+or
+    (
+	(t1.codigo_loja             = @codigo_loja)                                                          -- By Edson Lima ; 2019/10/30 ---> busca pelo código da empresa
+and (t1.chave_nfe               = @Chave)                                                                -- By Edson Lima ; 2017/10/17 ---> busca pela chave
+    )
 
 order by t1.Modelo, t1.Serie, t1.dEmi, t1.nNF                                                            -- By Edson Lima 11.2.2016
 GO
