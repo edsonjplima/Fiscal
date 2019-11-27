@@ -6,8 +6,8 @@ object FrGBNFe: TFrGBNFe
   Align = alBottom
   BorderIcons = []
   BorderStyle = bsSingle
-  Caption = 'NFe & NFCe'
-  ClientHeight = 674
+  Caption = 'C o n h e c i m e n t o    E l e t r '#244' n i c o'
+  ClientHeight = 551
   ClientWidth = 731
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -261,12 +261,13 @@ object FrGBNFe: TFrGBNFe
     Left = 573
     Top = 98
     Width = 158
-    Height = 510
+    Height = 387
     Align = alRight
     BevelOuter = bvNone
     ParentShowHint = False
     ShowHint = False
     TabOrder = 1
+    ExplicitHeight = 510
     object BitBtn1: TBitBtn
       Left = 15
       Top = 6
@@ -570,12 +571,13 @@ object FrGBNFe: TFrGBNFe
     end
     object Panel8: TPanel
       Left = 0
-      Top = 434
+      Top = 311
       Width = 158
       Height = 76
       Align = alBottom
       BevelOuter = bvNone
       TabOrder = 13
+      ExplicitTop = 434
       object BitBtn10: TBitBtn
         Left = 17
         Top = 9
@@ -742,12 +744,13 @@ object FrGBNFe: TFrGBNFe
   end
   object Panel2: TPanel
     Left = 0
-    Top = 608
+    Top = 485
     Width = 731
     Height = 66
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 0
+    ExplicitTop = 608
     object StatusBar1: TStatusBar
       Left = 0
       Top = 42
@@ -820,22 +823,24 @@ object FrGBNFe: TFrGBNFe
     Left = 0
     Top = 98
     Width = 573
-    Height = 510
+    Height = 387
     Align = alClient
     TabOrder = 2
+    ExplicitHeight = 510
     object Panel6: TPanel
       Left = 1
       Top = 109
       Width = 571
-      Height = 226
+      Height = 103
       Hint = ' Mostra Notas Conforme Escolha na Visualiza'#231#227'o '
       Align = alClient
       TabOrder = 0
+      ExplicitHeight = 226
       object cxTLInut: TcxTreeList
         Left = 1
         Top = 27
         Width = 569
-        Height = 198
+        Height = 75
         Align = alClient
         Bands = <
           item
@@ -891,6 +896,7 @@ object FrGBNFe: TFrGBNFe
         OnCustomDrawDataCell = cxTLInutCustomDrawDataCell
         OnExit = cxTLExit
         OnMouseMove = cxTLMouseMove
+        ExplicitHeight = 198
         object cxTLdIDem: TcxTreeListColumn
           PropertiesClassName = 'TcxDateEditProperties'
           Properties.Alignment.Horz = taCenter
@@ -1115,7 +1121,7 @@ object FrGBNFe: TFrGBNFe
         Left = 1
         Top = 27
         Width = 569
-        Height = 198
+        Height = 75
         BorderStyle = cxcbsNone
         Align = alClient
         Bands = <
@@ -1187,6 +1193,7 @@ object FrGBNFe: TFrGBNFe
         OnExit = cxTLExit
         OnKeyDown = cxTLKeyDown
         OnMouseMove = cxTLMouseMove
+        ExplicitHeight = 198
         object cxTLbSel: TcxTreeListColumn
           PropertiesClassName = 'TcxCheckBoxProperties'
           Properties.Alignment = taCenter
@@ -1493,7 +1500,7 @@ object FrGBNFe: TFrGBNFe
     end
     object Panel7: TPanel
       Left = 1
-      Top = 335
+      Top = 212
       Width = 571
       Height = 174
       Hint = ' Janelas de Resposta e Retornos da SEFAZ'#13#10
@@ -1502,6 +1509,7 @@ object FrGBNFe: TFrGBNFe
       ShowHint = False
       TabOrder = 1
       OnMouseMove = Panel7MouseMove
+      ExplicitTop = 335
       object PageControl1: TPageControl
         Left = 1
         Top = 1
@@ -1521,6 +1529,10 @@ object FrGBNFe: TFrGBNFe
         TabWidth = 80
         object TabSheet1: TTabSheet
           Caption = 'Respostas'
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object MemoResp: TMemo
             Left = 0
             Top = 0
@@ -1544,6 +1556,10 @@ object FrGBNFe: TFrGBNFe
         object TabSheet2: TTabSheet
           Caption = 'XML Resposta'
           ImageIndex = 1
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object WBResposta: TWebBrowser
             Left = 0
             Top = 0
@@ -1577,6 +1593,10 @@ object FrGBNFe: TFrGBNFe
         object TabSheet4: TTabSheet
           Caption = 'NFe && NFCe'
           ImageIndex = 3
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object trvwNFe: TTreeView
             Left = 0
             Top = 0
@@ -1593,6 +1613,10 @@ object FrGBNFe: TFrGBNFe
         object TabSheet5: TTabSheet
           Caption = 'Resposta WS'
           ImageIndex = 4
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object memoRespWS: TMemo
             Left = 0
             Top = 0
@@ -2039,7 +2063,7 @@ object FrGBNFe: TFrGBNFe
     BevelOuter = bvNone
     BiDiMode = bdLeftToRight
     Caption = 'C T e'
-    Color = 11249818
+    Color = 12239278
     Font.Charset = ANSI_CHARSET
     Font.Color = 7091712
     Font.Height = -48
@@ -2364,8 +2388,9 @@ object FrGBNFe: TFrGBNFe
       Height = 17
       Anchors = [akRight, akBottom]
       BevelOuter = bvNone
-      Caption = 'NFe && NFCe v.(Z)'
-      Color = 11249818
+      Caption = 'CTe v. (FD)'
+      Color = 12239278
+      FullRepaint = False
       Font.Charset = ANSI_CHARSET
       Font.Color = 8388863
       Font.Height = -16
@@ -2390,7 +2415,7 @@ object FrGBNFe: TFrGBNFe
     Left = 312
     Top = 10
     Bitmap = {
-      494C0101CC041006700710001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C0101CC041006740710001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000004013000001002000000000000040
       1300000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -43342,7 +43367,6 @@ object FrGBNFe: TFrGBNFe
     CasasDecimais.MaskvUnCom = ',0.00'
     ACBrNFe = ACBrNFe1
     EspessuraBorda = 1
-    ExpandirDadosAdicionaisAuto = False
     BorderIcon = [biSystemMenu, biMinimize, biMaximize]
     Left = 464
     Top = 38

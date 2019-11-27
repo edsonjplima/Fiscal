@@ -6,7 +6,7 @@ object FrGBNFe: TFrGBNFe
   Align = alBottom
   BorderIcons = []
   BorderStyle = bsSingle
-  Caption = 'NFe & NFCe'
+  Caption = 'C o n h e c i m e n t o    E l e t r '#244' n i c o'
   ClientHeight = 674
   ClientWidth = 731
   Color = clBtnFace
@@ -1521,10 +1521,6 @@ object FrGBNFe: TFrGBNFe
         TabWidth = 80
         object TabSheet1: TTabSheet
           Caption = 'Respostas'
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object MemoResp: TMemo
             Left = 0
             Top = 0
@@ -1548,10 +1544,6 @@ object FrGBNFe: TFrGBNFe
         object TabSheet2: TTabSheet
           Caption = 'XML Resposta'
           ImageIndex = 1
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object WBResposta: TWebBrowser
             Left = 0
             Top = 0
@@ -1571,10 +1563,6 @@ object FrGBNFe: TFrGBNFe
         object TabSheet3: TTabSheet
           Caption = 'Log'
           ImageIndex = 2
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object MemoLog: TMemo
             Left = 0
             Top = 0
@@ -1589,10 +1577,6 @@ object FrGBNFe: TFrGBNFe
         object TabSheet4: TTabSheet
           Caption = 'NFe && NFCe'
           ImageIndex = 3
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object trvwNFe: TTreeView
             Left = 0
             Top = 0
@@ -1609,10 +1593,6 @@ object FrGBNFe: TFrGBNFe
         object TabSheet5: TTabSheet
           Caption = 'Resposta WS'
           ImageIndex = 4
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object memoRespWS: TMemo
             Left = 0
             Top = 0
@@ -2058,8 +2038,8 @@ object FrGBNFe: TFrGBNFe
     Align = alTop
     BevelOuter = bvNone
     BiDiMode = bdLeftToRight
-    Caption = 'N F e    &&     N F C e'
-    Color = 11249818
+    Caption = 'C T e'
+    Color = 12239278
     Font.Charset = ANSI_CHARSET
     Font.Color = 7091712
     Font.Height = -48
@@ -2384,8 +2364,9 @@ object FrGBNFe: TFrGBNFe
       Height = 17
       Anchors = [akRight, akBottom]
       BevelOuter = bvNone
-      Caption = 'NFe && NFCe v.(Z)'
-      Color = 11249818
+      Caption = 'CTe v. (FD)'
+      Color = 12239278
+      FullRepaint = False
       Font.Charset = ANSI_CHARSET
       Font.Color = 8388863
       Font.Height = -16
@@ -2410,7 +2391,7 @@ object FrGBNFe: TFrGBNFe
     Left = 312
     Top = 10
     Bitmap = {
-      494C0101CC041006580710001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C0101CC041006700710001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000004013000001002000000000000040
       1300000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

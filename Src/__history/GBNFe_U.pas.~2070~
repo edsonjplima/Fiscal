@@ -1,4 +1,4 @@
-﻿unit GBNFe_U;
+﻿unit GBCTe_U;
 
 interface
 
@@ -1492,22 +1492,33 @@ begin
        autXML.Clear;
        vAutXMLCNPJCPFWORD := '';
 
-       if ( (not(DMFD.FDQuery1['autXML'] = null))       and
-            (not(Trim(DMFD.FDQuery1['autXML']) = '')) ) then
+       if ( (not(DMFD.FDQuery1['nfe_autXML'] = null))       and
+            (not(Trim(DMFD.FDQuery1['nfe_autXML']) = '')) ) then
         begin
 
-         vAutXMLCNPJCPFALL := trim(VarToStr(DMFD.FDQuery1['autXML']));
+         vAutXMLCNPJCPFALL := trim(VarToStr(DMFD.FDQuery1['nfe_autXML']));
 
-         for I := 0 to Length(vAutXMLCNPJCPFALL)-1 do
+         for I := 1 to Length(vAutXMLCNPJCPFALL) do
           begin
 
            if vAutXMLCNPJCPFALL[I] <> ''  then
             begin
-              if ( (vAutXMLCNPJCPFALL[I] = ',')   or
-                   (vAutXMLCNPJCPFALL[I] = ';') ) then
-               autXML.Add.CNPJCPF = vAutXMLCNPJCPFWORD                          //Informar CNPJ ou CPF. Preencher os zeros não significativos.
-              else
-               vAutXMLCNPJCPFWORD := (vAutXMLCNPJCPFWORD + vAutXMLCNPJCPFWORD[I]);
+
+              if ( (vAutXMLCNPJCPFALL[I] <> ',')      and
+                   (vAutXMLCNPJCPFALL[I] <> ';')      or
+                   ( I = Length(vAutXMLCNPJCPFALL)) ) then
+               vAutXMLCNPJCPFWORD := (vAutXMLCNPJCPFWORD + vAutXMLCNPJCPFALL[I]);
+
+              if ( (vAutXMLCNPJCPFALL[I] = ',')       or
+                   (vAutXMLCNPJCPFALL[I] = ';')       or
+                   ( I = Length(vAutXMLCNPJCPFALL)) ) then
+               begin
+
+                autXML.Add.CNPJCPF := vAutXMLCNPJCPFWORD;                       //Informar CNPJ ou CPF. Preencher os zeros não significativos.
+                vAutXMLCNPJCPFWORD := '';
+
+               end;
+
             end;
 
           end;
