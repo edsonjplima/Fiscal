@@ -1404,7 +1404,8 @@ begin
 
             begin
 
-             Dest.CNPJCPF           := OnlyNumber('99999999/0001-91');
+//             Dest.CNPJCPF           := OnlyNumber('99999999/0001-91');
+             Dest.CNPJCPF           := OnlyNumber('999999991-31');
 
              if ( (Trim(DMFD.FDQuery1['des_bairro']) = '') or (DMFD.FDQuery1['des_bairro'] = null) ) then
               Dest.EnderDest.xBairro := 'Centro'

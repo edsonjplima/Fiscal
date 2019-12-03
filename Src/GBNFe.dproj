@@ -129,16 +129,16 @@
     </PropertyGroup>
     <Import Project="Delphi_Xe10.1_Berlin.optset" Condition="'$(Cfg_2_Win32)'!='' And Exists('Delphi_Xe10.1_Berlin.optset')"/>
     <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
-        <VerInfo_Release>11</VerInfo_Release>
+        <VerInfo_Release>12</VerInfo_Release>
         <Debugger_RunParams>/developed_gb_informática_ltda /001 /usuário_padrão /0 /1 /0 /0 /0 /GERPA</Debugger_RunParams>
-        <VerInfo_Build>27</VerInfo_Build>
+        <VerInfo_Build>3</VerInfo_Build>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <VerInfo_MinorVer>19</VerInfo_MinorVer>
         <VerInfo_Special>true</VerInfo_Special>
         <VerInfo_PreRelease>true</VerInfo_PreRelease>
         <VerInfo_Private>true</VerInfo_Private>
         <VerInfo_DLL>true</VerInfo_DLL>
-        <VerInfo_Keys>CompanyName=GB Informática Ltda;FileDescription=Gerador de Nota Fiscal Eletrônica;FileVersion=6.19.11.27;InternalName=GBNFe;LegalCopyright=edsonjplima;LegalTrademarks=edsonjplima;OriginalFilename=ACBr;ProductName=GBNFe;ProductVersion=1.0.0.0;Comments=Desenvolvedor Edson Lima - Versão Berlin - FireDac</VerInfo_Keys>
+        <VerInfo_Keys>CompanyName=GB Informática Ltda;FileDescription=Gerador de Nota Fiscal Eletrônica;FileVersion=6.19.12.3;InternalName=GBNFe;LegalCopyright=edsonjplima;LegalTrademarks=edsonjplima;OriginalFilename=ACBr;ProductName=GBNFe;ProductVersion=1.0.0.0;Comments=Desenvolvedor Edson Lima - Versão Berlin - FireDac</VerInfo_Keys>
         <CfgDependentOn>Delphi_Xe10.1_Berlin.optset</CfgDependentOn>
     </PropertyGroup>
     <ItemGroup>
@@ -413,12 +413,27 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployClass Name="ProjectiOSDeviceResourceRules">
+                <DeployClass Name="DependencyModule">
+                    <Platform Name="Win32">
+                        <Operation>0</Operation>
+                        <Extensions>.dll;.bpl</Extensions>
+                    </Platform>
                     <Platform Name="iOSDevice64">
                         <Operation>1</Operation>
+                        <Extensions>.dylib</Extensions>
+                    </Platform>
+                    <Platform Name="OSX32">
+                        <RemoteDir>Contents\MacOS</RemoteDir>
+                        <Operation>1</Operation>
+                        <Extensions>.dylib</Extensions>
                     </Platform>
                     <Platform Name="iOSDevice32">
                         <Operation>1</Operation>
+                        <Extensions>.dylib</Extensions>
+                    </Platform>
+                    <Platform Name="iOSSimulator">
+                        <Operation>1</Operation>
+                        <Extensions>.dylib</Extensions>
                     </Platform>
                 </DeployClass>
                 <DeployClass Name="ProjectOSXResource">
@@ -769,27 +784,12 @@
                         <Operation>1</Operation>
                     </Platform>
                 </DeployClass>
-                <DeployClass Name="DependencyModule">
-                    <Platform Name="Win32">
-                        <Operation>0</Operation>
-                        <Extensions>.dll;.bpl</Extensions>
-                    </Platform>
+                <DeployClass Name="ProjectiOSDeviceResourceRules">
                     <Platform Name="iOSDevice64">
                         <Operation>1</Operation>
-                        <Extensions>.dylib</Extensions>
-                    </Platform>
-                    <Platform Name="OSX32">
-                        <RemoteDir>Contents\MacOS</RemoteDir>
-                        <Operation>1</Operation>
-                        <Extensions>.dylib</Extensions>
                     </Platform>
                     <Platform Name="iOSDevice32">
                         <Operation>1</Operation>
-                        <Extensions>.dylib</Extensions>
-                    </Platform>
-                    <Platform Name="iOSSimulator">
-                        <Operation>1</Operation>
-                        <Extensions>.dylib</Extensions>
                     </Platform>
                 </DeployClass>
                 <ProjectRoot Platform="iOSDevice64" Name="$(PROJECTNAME).app"/>
