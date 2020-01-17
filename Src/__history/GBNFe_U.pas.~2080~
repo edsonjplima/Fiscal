@@ -495,7 +495,7 @@ function fValidaEmail( e_mail, EmBrancoSN: String ): Boolean;                   
 const
 
  // by Edson Lima ; Constante para atribuição do sistema (NOME DA EMPRESA DESENVOLVEDORA) acbr by Edson Lima
- // Texto Encapsulado [ GB Informática Ltda - (62) 3998-2588 e 2383 e 7-5719 e 5-9613 ]
+ // Texto Encapsulado [ GB Informática Ltda - (62) 3998-2588 e 3998-2383 e 3997-5719 e 3995-9613 ]
  gSistema   : String = chr(71)+  // G
                        chr(66)+  // B
                        chr(32)+  //
@@ -522,7 +522,6 @@ const
                        chr(54)+  // 6
                        chr(50)+  // 2
                        chr(41)+  // )
-                       chr(32)+  //
                        chr(51)+  // 3
                        chr(57)+  // 9
                        chr(57)+  // 9
@@ -532,25 +531,30 @@ const
                        chr(53)+  // 5
                        chr(56)+  // 8
                        chr(56)+  // 8
-                       chr(32)+  //
-                       chr(101)+ // e
-                       chr(32)+  //
+                       chr(47)+  // /
+                       chr(51)+  // 3
+                       chr(57)+  // 9
+                       chr(57)+  // 9
+                       chr(56)+  // 8
+                       chr(45)+  // -
                        chr(50)+  // 2
                        chr(51)+  // 3
                        chr(56)+  // 8
                        chr(51)+  // 3
-                       chr(32)+  //
-                       chr(101)+ // e
-                       chr(32)+  //
+                       chr(47)+  // /
+                       chr(51)+  // 3
+                       chr(57)+  // 9
+                       chr(57)+  // 9
                        chr(55)+  // 7
                        chr(45)+  // -
                        chr(53)+  // 5
                        chr(55)+  // 7
                        chr(49)+  // 1
                        chr(57)+  // 9
-                       chr(32)+  //
-                       chr(101)+ // e
-                       chr(32)+  //
+                       chr(47)+  // /
+                       chr(51)+  // 3
+                       chr(57)+  // 9
+                       chr(57)+  // 9
                        chr(53)+  // 5
                        chr(45)+  // -
                        chr(57)+  // 9
@@ -1400,7 +1404,8 @@ begin
 
             begin
 
-             Dest.CNPJCPF           := OnlyNumber('99999999/0001-91');
+//             Dest.CNPJCPF           := OnlyNumber('99999999/0001-91');
+             Dest.CNPJCPF           := OnlyNumber('999999991-31');
 
              if ( (Trim(DMFD.FDQuery1['des_bairro']) = '') or (DMFD.FDQuery1['des_bairro'] = null) ) then
               Dest.EnderDest.xBairro := 'Centro'

@@ -1404,8 +1404,8 @@ begin
 
             begin
 
-             if ( (DMFD.FDQuery1['nfe_CPFNFCe']       = null) or
-                  (trim(DMFD.FDQuery1['nfe_CPFNFCe']) = '') ) then
+             if ( (DMFD.FDQuery1['nfe_CPFNFCe']      = null)   or
+                  (trim(DMFD.FDQuery1['nfe_CPFNFCe'] = '' )) ) then
               Dest.CNPJCPF           := OnlyNumber('999999991-31')
              else
               Dest.CNPJCPF           := OnlyNumber(VarToStr(DMFD.FDQuery1['nfe_CPFNFCe']));
@@ -1460,8 +1460,8 @@ begin
 
           begin
 
-           if ( (DMFD.FDQuery1['nfe_CPFNFCe']       = null) or
-                (trim(DMFD.FDQuery1['nfe_CPFNFCe']) = '') ) then
+           if ( (DMFD.FDQuery1['nfe_CPFNFCe']      = null)   or
+                (trim(DMFD.FDQuery1['nfe_CPFNFCe'] = '' )) ) then
             begin
              if ( (Trim(DMFD.FDQuery1['des_cnpj']) = '')               or
                   (Trim(DMFD.FDQuery1['des_cnpj']) = '00000000000')    or
@@ -1635,8 +1635,8 @@ begin
         if (gModelo = 65) then
          begin
 
-          if ( (DMFD.FDQuery1['nfe_NomeNFCe']       = null) or
-               (trim(DMFD.FDQuery1['nfe_NomeNFCe']) = '') ) then
+          if ( (DMFD.FDQuery1['nfe_NomeNFCe']      = null)   or
+               (trim(DMFD.FDQuery1['nfe_NomeNFCe'] = '' )) ) then
            Dest.xNome           := DMFD.FDQuery1['des_razao_social']
           else
            Dest.xNome           := DMFD.FDQuery1['nfe_NomeNFCe'];

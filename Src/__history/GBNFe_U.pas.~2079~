@@ -1,4 +1,4 @@
-﻿unit GBCTe_U;
+﻿unit GBNFe_U;
 
 interface
 
@@ -495,15 +495,72 @@ function fValidaEmail( e_mail, EmBrancoSN: String ): Boolean;                   
 const
 
  // by Edson Lima ; Constante para atribuição do sistema (NOME DA EMPRESA DESENVOLVEDORA) acbr by Edson Lima
- // Texto Encapsulado [ Desenvolvido por GB Informática Ltda - (62) 3203-6532 ]
- gSistema   : String = chr(71)+chr(66)+chr(32)+chr(73)+chr(110)+chr(102)+chr(111)+
-                       chr(114)+chr(109)+chr(225)+chr(116)+chr(105)+chr(99)+chr(97)+
-                       chr(32)+chr(76)+chr(116)+chr(100)+chr(97)+chr(32)+chr(45)+chr(32)+
-                       chr(40)+chr(54)+chr(50)+chr(41)+chr(32)+chr(51)+chr(50)+chr(48)+
-                       chr(51)+chr(45)+chr(54)+chr(53)+chr(51)+chr(50)+
-                       chr(32)+chr(101)+chr(32)+chr(49)+chr(50)+chr(55)+chr(49)+
-                       chr(32)+chr(101)+chr(32)+chr(52)+chr(53)+chr(49)+chr(53)+
-                       chr(32)+chr(101)+chr(32)+chr(52)+chr(48)+chr(57)+chr(51);
+ // Texto Encapsulado [ GB Informática Ltda - (62) 3998-2588 e 3998-2383 e 3997-5719 e 3995-9613 ]
+ gSistema   : String = chr(71)+  // G
+                       chr(66)+  // B
+                       chr(32)+  //
+                       chr(73)+  // I
+                       chr(110)+ // n
+                       chr(102)+ // f
+                       chr(111)+ // o
+                       chr(114)+ // r
+                       chr(109)+ // m
+                       chr(225)+ // á
+                       chr(116)+ // t
+                       chr(105)+ // i
+                       chr(99)+  // c
+                       chr(97)+  // a
+                       chr(32)+  //
+                       chr(76)+  // L
+                       chr(116)+ // t
+                       chr(100)+ // d
+                       chr(97)+  // a
+                       chr(32)+  //
+                       chr(45)+  // -
+                       chr(32)+  //
+                       chr(40)+  // (
+                       chr(54)+  // 6
+                       chr(50)+  // 2
+                       chr(41)+  // )
+                       chr(51)+  // 3
+                       chr(57)+  // 9
+                       chr(57)+  // 9
+                       chr(56)+  // 8
+                       chr(45)+  // -
+                       chr(50)+  // 2
+                       chr(53)+  // 5
+                       chr(56)+  // 8
+                       chr(56)+  // 8
+                       chr(47)+  // /
+                       chr(51)+  // 3
+                       chr(57)+  // 9
+                       chr(57)+  // 9
+                       chr(56)+  // 8
+                       chr(45)+  // -
+                       chr(50)+  // 2
+                       chr(51)+  // 3
+                       chr(56)+  // 8
+                       chr(51)+  // 3
+                       chr(47)+  // /
+                       chr(51)+  // 3
+                       chr(57)+  // 9
+                       chr(57)+  // 9
+                       chr(55)+  // 7
+                       chr(45)+  // -
+                       chr(53)+  // 5
+                       chr(55)+  // 7
+                       chr(49)+  // 1
+                       chr(57)+  // 9
+                       chr(47)+  // /
+                       chr(51)+  // 3
+                       chr(57)+  // 9
+                       chr(57)+  // 9
+                       chr(53)+  // 5
+                       chr(45)+  // -
+                       chr(57)+  // 9
+                       chr(54)+  // 6
+                       chr(49)+  // 1
+                       chr(51);  // 3
 
  // Dados da empresa GB Informática para impressão na NFe
 
@@ -3302,6 +3359,7 @@ begin
           MemoResp.Lines.Text   := UTF8Encode(ACBrNFe1.WebServices.Retorno.RetWS) + chr(13) + e.Message;
           MemoLog.Lines.Text    := UTF8Encode(ACBrNFe1.WebServices.Retorno.Msg);
           memoRespWS.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.Retorno.RetornoWS);
+
           LoadXML(MemoResp, WBResposta);
 
          end;
@@ -7802,7 +7860,9 @@ begin
            Application.Messagebox(PWideChar('Pronto, já foi gerado o xml da nota: [' + gNNF_Consiste + ' ]'), 'Gerar XML:',MB_ICONINFORMATION+mb_ok)
           else
            begin
-            // by Edson Lima ; 2013/03/11 ; 06:57 ; com essa nova abordágem, é possível a continuação após uma rejeição e verificado seu codigo de retorno ;
+            // by Edson Lima ; 2013/03/11 ; 06:57 ; com essa nova abordágem, é
+            // possível a continuação após uma rejeição e verificado seu codigo
+            // de retorno ;
             if (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].cStat) <> '100') and
                (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].cStat) <> '150') then exit;
 
@@ -9927,7 +9987,11 @@ begin
 
          end;
 
-        MessageDlg('DADOS DA NOTA : ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) + char(13) + '  Status=' + vartostr(ACBrNFe1.WebServices.Consulta.cStat)  + '-' +  vartostr(ACBrNFe1.WebServices.Consulta.xMotivo) + char(13) + '  Protocolo=' + ACBrNFe1.WebServices.Consulta.Protocolo + char(13) + '  Data do recebimento=' + vartostr(ACBrNFe1.WebServices.Consulta.DhRecbto) + char(13) ,mtInformation,[mbOK],0);
+        MessageDlg('DADOS DA NOTA : ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) + char(13) +
+                          '  Status=' + vartostr(ACBrNFe1.WebServices.Consulta.cStat)  +
+                          '-'         + vartostr(ACBrNFe1.WebServices.Consulta.xMotivo) + char(13) +
+                       '  Protocolo=' + ACBrNFe1.WebServices.Consulta.Protocolo + char(13) +
+             '  Data do recebimento=' + vartostr(ACBrNFe1.WebServices.Consulta.DhRecbto) + char(13) ,mtInformation,[mbOK],0);
 
         if not gDuplic then                                                     // by Edson ; 2013-11-22T1420 ; Só envia email se não der duplicidade de nota
          begin
@@ -10233,7 +10297,11 @@ begin
 
        end;
 
-      MessageDlg('DADOS DA NOTA : ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) + char(13) + '  Status=' + vartostr(ACBrNFe1.WebServices.Consulta.cStat)  + '-' +  vartostr(ACBrNFe1.WebServices.Consulta.xMotivo) + char(13) + '  Protocolo=' + ACBrNFe1.WebServices.Consulta.Protocolo + char(13) + '  Data do recebimento=' + vartostr(ACBrNFe1.WebServices.Consulta.DhRecbto) + char(13) ,mtInformation,[mbOK],0);
+      MessageDlg('DADOS DA NOTA : ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) + char(13) +
+                        '  Status=' + vartostr(ACBrNFe1.WebServices.Consulta.cStat)  +
+                                '-' +  vartostr(ACBrNFe1.WebServices.Consulta.xMotivo) + char(13) +
+                     '  Protocolo=' + ACBrNFe1.WebServices.Consulta.Protocolo + char(13) +
+           '  Data do recebimento=' + vartostr(ACBrNFe1.WebServices.Consulta.DhRecbto) + char(13) ,mtInformation,[mbOK],0);
 
       memoLog.Clear;
       MemoResp.Lines.Text   := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetWS);
@@ -10320,6 +10388,8 @@ begin
        trvwNFe.Items.AddChild(Node,'digVal= '                        + procNFe.digVal);
        trvwNFe.Items.AddChild(Node,'cStat= '                         + IntToStr(procNFe.cStat));
        trvwNFe.Items.AddChild(Node,'xMotivo= '                       + procNFe.xMotivo);
+       trvwNFe.Items.AddChild(Node,'cMsg= '                          + IntToStr(procNFe.cMsg));
+       trvwNFe.Items.AddChild(Node,'xMsg= '                          + procNFe.xMsg);
 
        Node := trvwNFe.Items.AddChild(Nota,'Ide');
        trvwNFe.Items.AddChild(Node,'cNF= '                           + IntToStr(Ide.cNF));
