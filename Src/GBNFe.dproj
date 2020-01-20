@@ -130,15 +130,15 @@
     <Import Project="Delphi_Xe10.1_Berlin.optset" Condition="'$(Cfg_2_Win32)'!='' And Exists('Delphi_Xe10.1_Berlin.optset')"/>
     <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
         <VerInfo_Release>1</VerInfo_Release>
-        <Debugger_RunParams>/developed_gb_informática_ltda /001 /usuário_padrão /0 /1 /0 /0 /0 /GERPA</Debugger_RunParams>
-        <VerInfo_Build>17</VerInfo_Build>
+        <Debugger_RunParams>/developed_gb_informática_ltda /008 /usuário_padrão /0 /1 /0 /0 /0 /GERPA</Debugger_RunParams>
+        <VerInfo_Build>20</VerInfo_Build>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <VerInfo_MinorVer>20</VerInfo_MinorVer>
         <VerInfo_Special>true</VerInfo_Special>
         <VerInfo_PreRelease>true</VerInfo_PreRelease>
         <VerInfo_Private>true</VerInfo_Private>
         <VerInfo_DLL>true</VerInfo_DLL>
-        <VerInfo_Keys>CompanyName=GB Informática Ltda;FileDescription=Gerador de Nota Fiscal Eletrônica;FileVersion=6.20.1.17;InternalName=GBNFe;LegalCopyright=edsonjplima;LegalTrademarks=edsonjplima;OriginalFilename=ACBr;ProductName=GBNFe;ProductVersion=1.0.0.0;Comments=Desenvolvedor Edson Lima - Versão Berlin - FireDac</VerInfo_Keys>
+        <VerInfo_Keys>CompanyName=GB Informática Ltda;FileDescription=Gerador de Nota Fiscal Eletrônica;FileVersion=6.20.1.20;InternalName=GBNFe;LegalCopyright=edsonjplima;LegalTrademarks=edsonjplima;OriginalFilename=ACBr;ProductName=GBNFe;ProductVersion=1.0.0.0;Comments=Desenvolvedor Edson Lima - Versão Berlin - FireDac</VerInfo_Keys>
         <CfgDependentOn>Delphi_Xe10.1_Berlin.optset</CfgDependentOn>
     </PropertyGroup>
     <ItemGroup>

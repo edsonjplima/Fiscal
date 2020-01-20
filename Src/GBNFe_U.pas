@@ -1631,19 +1631,22 @@ begin
        if Ide.tpAmb = taHomologacao then
         Dest.xNome             := 'NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL'
        else
+        begin
 
-        if (gModelo = 65) then
-         begin
+         if (gModelo = 65) then
+          begin
 
-          if ( (DMFD.FDQuery1['nfe_NomeNFCe']       = null) or
-               (trim(DMFD.FDQuery1['nfe_NomeNFCe']) = '') ) then
-           Dest.xNome           := DMFD.FDQuery1['des_razao_social']
-          else
-           Dest.xNome           := DMFD.FDQuery1['nfe_NomeNFCe'];
+           if ( (DMFD.FDQuery1['nfe_NomeNFCe']       = null) or
+                (trim(DMFD.FDQuery1['nfe_NomeNFCe']) = '') ) then
+            Dest.xNome           := DMFD.FDQuery1['des_razao_social']
+           else
+            Dest.xNome           := DMFD.FDQuery1['nfe_NomeNFCe'];
 
-         end
-        else
-         Dest.xNome             := DMFD.FDQuery1['des_razao_social'];
+          end
+         else
+          Dest.xNome             := DMFD.FDQuery1['des_razao_social'];
+
+        end;
 
        Dest.ISUF              := DMFD.FDQuery1['des_suframa'];
        Dest.EnderDest.cPais   := strtointDef(DMFD.FDQuery1['des_codigo_pais'], 0);    //1058;
