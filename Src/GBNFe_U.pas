@@ -1467,7 +1467,7 @@ begin
                   (Trim(DMFD.FDQuery1['des_cnpj']) = '00000000000')    or
                   (Trim(DMFD.FDQuery1['des_cnpj']) = '00000000000000') or
                   (DMFD.FDQuery1['des_cnpj'] = null) ) then
-              Dest.CNPJCPF         := OnlyNumber('999999991-31')
+              Dest.CNPJCPF         := OnlyNumber('')
              else
               Dest.CNPJCPF         := OnlyNumber(DMFD.FDQuery1['des_cnpj']);
             end
