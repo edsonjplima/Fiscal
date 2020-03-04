@@ -1098,6 +1098,7 @@ object FrGBNFe: TFrGBNFe
         end
         object cxTLsxInu: TcxTreeListColumn
           PropertiesClassName = 'TcxTextEditProperties'
+          Properties.Alignment.Horz = taCenter
           Caption.AlignHorz = taCenter
           Caption.Text = 'Usu'#225'rio'
           DataBinding.ValueType = 'String'
@@ -1444,6 +1445,7 @@ object FrGBNFe: TFrGBNFe
         end
         object cxTLsTrs: TcxTreeListColumn
           PropertiesClassName = 'TcxTextEditProperties'
+          Properties.Alignment.Horz = taCenter
           Caption.AlignHorz = taCenter
           Caption.Text = 'Usu'#225'rio do Envio'
           DataBinding.ValueType = 'String'
@@ -1459,6 +1461,7 @@ object FrGBNFe: TFrGBNFe
         end
         object cxTLsCnc: TcxTreeListColumn
           PropertiesClassName = 'TcxTextEditProperties'
+          Properties.Alignment.Horz = taCenter
           Caption.AlignHorz = taCenter
           Caption.Text = 'Usu'#225'rio do Canc.'
           DataBinding.ValueType = 'String'
@@ -2038,7 +2041,7 @@ object FrGBNFe: TFrGBNFe
     Align = alTop
     BevelOuter = bvNone
     BiDiMode = bdLeftToRight
-    Caption = 'N F e    &    N F C e'
+    Caption = 'N F e    &&    N F C e'
     Color = 11249818
     Font.Charset = ANSI_CHARSET
     Font.Color = 7091712
@@ -2391,7 +2394,7 @@ object FrGBNFe: TFrGBNFe
     Left = 312
     Top = 10
     Bitmap = {
-      494C0101CC041006780710001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C0101CC041006AC0710001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000004013000001002000000000000040
       1300000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -43275,10 +43278,10 @@ object FrGBNFe: TFrGBNFe
   end
   object ACBrNFeDANFeRL1: TACBrNFeDANFeRL
     Sistema = 'Projeto ACBr - www.projetoacbr.com.br'
-    MargemInferior = 0.700000000000000000
-    MargemSuperior = 0.700000000000000000
-    MargemEsquerda = 0.700000000000000000
-    MargemDireita = 0.700000000000000000
+    MargemInferior = 0.800000000000000000
+    MargemSuperior = 0.800000000000000000
+    MargemEsquerda = 0.150000000000000000
+    MargemDireita = 0.500000000000000000
     CasasDecimais.Formato = tdetInteger
     CasasDecimais.qCom = 2
     CasasDecimais.vUnCom = 2
@@ -43400,6 +43403,7 @@ object FrGBNFe: TFrGBNFe
     TamanhoPapel = tpA4
     Cancelada = False
     Encerrado = False
+    ImprimeDadosExtras = [deValorTotal, deRelacaoDFe]
     PrintDialog = False
     Left = 548
     Top = 10

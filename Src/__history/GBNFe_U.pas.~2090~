@@ -1404,8 +1404,8 @@ begin
 
             begin
 
-             if ( (DMFD.FDQuery1['nfe_CPFNFCe']      = null)   or
-                  (trim(DMFD.FDQuery1['nfe_CPFNFCe'] = '' )) ) then
+             if ( (DMFD.FDQuery1['nfe_CPFNFCe']       = null) or
+                  (trim(DMFD.FDQuery1['nfe_CPFNFCe']) = '') ) then
               Dest.CNPJCPF           := OnlyNumber('999999991-31')
              else
               Dest.CNPJCPF           := OnlyNumber(VarToStr(DMFD.FDQuery1['nfe_CPFNFCe']));
@@ -1460,14 +1460,14 @@ begin
 
           begin
 
-           if ( (DMFD.FDQuery1['nfe_CPFNFCe']      = null)   or
-                (trim(DMFD.FDQuery1['nfe_CPFNFCe'] = '' )) ) then
+           if ( (DMFD.FDQuery1['nfe_CPFNFCe']       = null) or
+                (trim(DMFD.FDQuery1['nfe_CPFNFCe']) = '') ) then
             begin
              if ( (Trim(DMFD.FDQuery1['des_cnpj']) = '')               or
                   (Trim(DMFD.FDQuery1['des_cnpj']) = '00000000000')    or
                   (Trim(DMFD.FDQuery1['des_cnpj']) = '00000000000000') or
                   (DMFD.FDQuery1['des_cnpj'] = null) ) then
-              Dest.CNPJCPF         := OnlyNumber('999999991-31')
+              Dest.CNPJCPF         := OnlyNumber('')
              else
               Dest.CNPJCPF         := OnlyNumber(DMFD.FDQuery1['des_cnpj']);
             end
@@ -1631,19 +1631,22 @@ begin
        if Ide.tpAmb = taHomologacao then
         Dest.xNome             := 'NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL'
        else
+        begin
 
-        if (gModelo = 65) then
-         begin
+         if (gModelo = 65) then
+          begin
 
-          if ( (DMFD.FDQuery1['nfe_NomeNFCe']      = null)   or
-               (trim(DMFD.FDQuery1['nfe_NomeNFCe'] = '' )) ) then
-           Dest.xNome           := DMFD.FDQuery1['des_razao_social']
-          else
-           Dest.xNome           := DMFD.FDQuery1['nfe_NomeNFCe'];
+           if ( (DMFD.FDQuery1['nfe_NomeNFCe']       = null) or
+                (trim(DMFD.FDQuery1['nfe_NomeNFCe']) = '') ) then
+            Dest.xNome           := DMFD.FDQuery1['des_razao_social']
+           else
+            Dest.xNome           := DMFD.FDQuery1['nfe_NomeNFCe'];
 
-         end
-        else
-         Dest.xNome             := DMFD.FDQuery1['des_razao_social'];
+          end
+         else
+          Dest.xNome             := DMFD.FDQuery1['des_razao_social'];
+
+        end;
 
        Dest.ISUF              := DMFD.FDQuery1['des_suframa'];
        Dest.EnderDest.cPais   := strtointDef(DMFD.FDQuery1['des_codigo_pais'], 0);    //1058;
@@ -15472,6 +15475,9 @@ Var
  Ok         : Boolean;
 begin
 
+ ACBrNFeDANFERL1.CleanupInstance;
+ ACBrNFeDANFERL1.InitInstance();
+
  ACBrNFeDANFERL1.Impressora                        := FrPar.edtImpNFe.Text;
  ACBrNFeDANFCeFortes1.Impressora                   := FrPar.edtImpNFCe.Text;
  ACBrNFe1.Configuracoes.Arquivos.AdicionarLiteral  := True;
@@ -15616,6 +15622,9 @@ procedure TFrGBNFe.pDefineRelFR();
 Var
  Ok         : Boolean;
 begin
+
+ ACBrNFeDANFEFR1.CleanupInstance;
+ ACBrNFeDANFEFR1.InitInstance();
 
  ACBrNFeDANFEFR1.Impressora                          := FrPar.edtImpNFe.Text;
  ACBrNFeDANFeESCPOS1.Impressora                      := FrPar.edtImpNFCe.Text;

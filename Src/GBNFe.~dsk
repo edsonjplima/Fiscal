@@ -83,12 +83,12 @@ WelcomePageURL=bds:/default.htm
 [View1]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
-CursorX=65
-CursorY=1409
-TopLine=1389
+CursorX=1
+CursorY=15481
+TopLine=15468
 LeftCol=1
 Elisions=
-Bookmarks={1,13925,1}{2,2501,1}{6,7727,1}
+Bookmarks={1,7529,1}{2,15625,1}{6,7727,1}
 EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
 
 [View2]
@@ -238,13 +238,13 @@ Create=1
 Visible=0
 Docked=1
 State=0
-Left=0
-Top=0
-Width=2769
+Left=1
+Top=27
+Width=9988
 Height=2988
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=2769
+ClientWidth=9988
 ClientHeight=2988
 TBDockHeight=2988
 LRDockWidth=2769
@@ -327,6 +327,11 @@ LRDockWidth=1894
 Dockable=1
 StayOnTop=0
 SplitPos=155
+
+[PropInspDesignerSelection]
+ArrangeBy=Name
+SelectedItem=Caption,
+ExpandedItems=Anchors=0,Constraints=0,Font=0,LiveBindings=0,"LiveBindings Designer=0",Margins=0,Padding=0,BorderIcons=0,GlassFrame=0,BevelEdges=0,StyleElements=0,Touch=0,HorzScrollBar=0
 
 [ClassBrowserTool]
 PercentageSizes=1
@@ -655,11 +660,11 @@ Docked=1
 State=0
 Left=0
 Top=0
-Width=3825
+Width=9988
 Height=2698
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=3825
+ClientWidth=9988
 ClientHeight=2698
 TBDockHeight=1547
 LRDockWidth=8744
@@ -785,13 +790,13 @@ Create=1
 Visible=0
 Docked=1
 State=0
-Left=8
-Top=8
-Width=3825
+Left=1
+Top=27
+Width=9988
 Height=2988
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=3825
+ClientWidth=9988
 ClientHeight=2988
 TBDockHeight=2988
 LRDockWidth=3825

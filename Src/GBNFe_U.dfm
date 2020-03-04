@@ -1524,10 +1524,6 @@ object FrGBNFe: TFrGBNFe
         TabWidth = 80
         object TabSheet1: TTabSheet
           Caption = 'Respostas'
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object MemoResp: TMemo
             Left = 0
             Top = 0
@@ -1551,10 +1547,6 @@ object FrGBNFe: TFrGBNFe
         object TabSheet2: TTabSheet
           Caption = 'XML Resposta'
           ImageIndex = 1
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object WBResposta: TWebBrowser
             Left = 0
             Top = 0
@@ -1574,10 +1566,6 @@ object FrGBNFe: TFrGBNFe
         object TabSheet3: TTabSheet
           Caption = 'Log'
           ImageIndex = 2
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object MemoLog: TMemo
             Left = 0
             Top = 0
@@ -1592,10 +1580,6 @@ object FrGBNFe: TFrGBNFe
         object TabSheet4: TTabSheet
           Caption = 'NFe && NFCe'
           ImageIndex = 3
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object trvwNFe: TTreeView
             Left = 0
             Top = 0
@@ -1612,10 +1596,6 @@ object FrGBNFe: TFrGBNFe
         object TabSheet5: TTabSheet
           Caption = 'Resposta WS'
           ImageIndex = 4
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object memoRespWS: TMemo
             Left = 0
             Top = 0
@@ -2414,7 +2394,7 @@ object FrGBNFe: TFrGBNFe
     Left = 312
     Top = 10
     Bitmap = {
-      494C0101CC041006A00710001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C0101CC041006B80710001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000004013000001002000000000000040
       1300000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -43298,10 +43278,10 @@ object FrGBNFe: TFrGBNFe
   end
   object ACBrNFeDANFeRL1: TACBrNFeDANFeRL
     Sistema = 'Projeto ACBr - www.projetoacbr.com.br'
-    MargemInferior = 0.700000000000000000
-    MargemSuperior = 0.700000000000000000
+    MargemInferior = 0.800000000000000000
+    MargemSuperior = 0.800000000000000000
     MargemEsquerda = 0.700000000000000000
-    MargemDireita = 0.700000000000000000
+    MargemDireita = 0.500000000000000000
     CasasDecimais.Formato = tdetInteger
     CasasDecimais.qCom = 2
     CasasDecimais.vUnCom = 2
@@ -43311,7 +43291,7 @@ object FrGBNFe: TFrGBNFe
     TamanhoLogoHeight = 100
     TamanhoLogoWidth = 100
     LogoemCima = True
-    Left = 464
+    Left = 466
     Top = 10
   end
   object ACBrNFeDANFCeFortes1: TACBrNFeDANFCeFortes
@@ -43656,5 +43636,19 @@ object FrGBNFe: TFrGBNFe
     PixelsPerInch = 96
     object ContentOutros2: TcxStyle
     end
+  end
+  object acbrnfdnfrl1: TACBrNFeDANFeRL
+    Sistema = 'Projeto ACBr - www.projetoacbr.com.br'
+    MargemInferior = 8.000000000000000000
+    MargemSuperior = 8.000000000000000000
+    MargemEsquerda = 6.000000000000000000
+    MargemDireita = 5.100000000000000000
+    CasasDecimais.Formato = tdetInteger
+    CasasDecimais.qCom = 2
+    CasasDecimais.vUnCom = 2
+    CasasDecimais.MaskqCom = ',0.00'
+    CasasDecimais.MaskvUnCom = ',0.00'
+    Left = 670
+    Top = 8
   end
 end

@@ -234,6 +234,7 @@ type
     cxTLsxInu: TcxTreeListColumn;
     cxTLsTrs: TcxTreeListColumn;
     cxTLsCnc: TcxTreeListColumn;
+    acbrnfdnfrl1: TACBrNFeDANFeRL;
 
   Procedure geraenvianf(Sender: TObject);
   Procedure grava_xml_no_banco;
@@ -1404,7 +1405,11 @@ begin
 
             begin
 
-             Dest.CNPJCPF           := OnlyNumber('99999999/0001-91');
+             if ( (DMFD.FDQuery1['nfe_CPFNFCe']       = null) or
+                  (trim(DMFD.FDQuery1['nfe_CPFNFCe']) = '') ) then
+              Dest.CNPJCPF           := OnlyNumber('999999991-31')
+             else
+              Dest.CNPJCPF           := OnlyNumber(VarToStr(DMFD.FDQuery1['nfe_CPFNFCe']));
 
              if ( (Trim(DMFD.FDQuery1['des_bairro']) = '') or (DMFD.FDQuery1['des_bairro'] = null) ) then
               Dest.EnderDest.xBairro := 'Centro'
@@ -1428,9 +1433,7 @@ begin
            else    // Caso 55 em homologação
 
             begin
-             Dest.CNPJCPF           := '99999999/0001-91';
-
-             Dest.CNPJCPF           := DMFD.FDQuery1['des_cnpj'];
+             Dest.CNPJCPF           := OnlyNumber(VarToStr(DMFD.FDQuery1['des_cnpj']));
              Dest.EnderDest.CEP     := strtointDef(DMFD.FDQuery1['des_cep'], 0);
              Dest.EnderDest.xLgr    := DMFD.FDQuery1['des_endereco'];
              Dest.EnderDest.nro     := DMFD.FDQuery1['des_numero'];
@@ -1457,13 +1460,20 @@ begin
          else if gModelo = 65 then
 
           begin
-           if ( (Trim(DMFD.FDQuery1['des_cnpj']) = '')               or
-                (Trim(DMFD.FDQuery1['des_cnpj']) = '00000000000')    or
-                (Trim(DMFD.FDQuery1['des_cnpj']) = '00000000000000') or
-                (DMFD.FDQuery1['des_cnpj'] = null) ) then
-            Dest.CNPJCPF           := OnlyNumber('99999999/0001-91')
+
+           if ( (DMFD.FDQuery1['nfe_CPFNFCe']       = null) or
+                (trim(DMFD.FDQuery1['nfe_CPFNFCe']) = '') ) then
+            begin
+             if ( (Trim(DMFD.FDQuery1['des_cnpj']) = '')               or
+                  (Trim(DMFD.FDQuery1['des_cnpj']) = '00000000000')    or
+                  (Trim(DMFD.FDQuery1['des_cnpj']) = '00000000000000') or
+                  (DMFD.FDQuery1['des_cnpj'] = null) ) then
+              Dest.CNPJCPF         := OnlyNumber('')
+             else
+              Dest.CNPJCPF         := OnlyNumber(DMFD.FDQuery1['des_cnpj']);
+            end
            else
-            Dest.CNPJCPF           := OnlyNumber(DMFD.FDQuery1['des_cnpj']);
+            Dest.CNPJCPF           := OnlyNumber(VarToStr(DMFD.FDQuery1['nfe_CPFNFCe']));
 
            if ( (Trim(DMFD.FDQuery1['des_bairro']) = '') or (DMFD.FDQuery1['des_bairro'] = null) ) then
             Dest.EnderDest.xBairro := 'Centro'
@@ -1487,7 +1497,7 @@ begin
           else  // Caso do Modelo = 55
 
            begin
-            Dest.CNPJCPF           := DMFD.FDQuery1['des_cnpj'];
+            Dest.CNPJCPF           := OnlyNumber(VarToStr(DMFD.FDQuery1['des_cnpj']));
             Dest.EnderDest.CEP     := strtointDef(DMFD.FDQuery1['des_cep'], 0);
             Dest.EnderDest.xLgr    := DMFD.FDQuery1['des_endereco'];
             Dest.EnderDest.nro     := DMFD.FDQuery1['des_numero'];
@@ -1622,7 +1632,22 @@ begin
        if Ide.tpAmb = taHomologacao then
         Dest.xNome             := 'NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL'
        else
-        Dest.xNome             := DMFD.FDQuery1['des_razao_social'];
+        begin
+
+         if (gModelo = 65) then
+          begin
+
+           if ( (DMFD.FDQuery1['nfe_NomeNFCe']       = null) or
+                (trim(DMFD.FDQuery1['nfe_NomeNFCe']) = '') ) then
+            Dest.xNome           := DMFD.FDQuery1['des_razao_social']
+           else
+            Dest.xNome           := DMFD.FDQuery1['nfe_NomeNFCe'];
+
+          end
+         else
+          Dest.xNome             := DMFD.FDQuery1['des_razao_social'];
+
+        end;
 
        Dest.ISUF              := DMFD.FDQuery1['des_suframa'];
        Dest.EnderDest.cPais   := strtointDef(DMFD.FDQuery1['des_codigo_pais'], 0);    //1058;
@@ -13896,6 +13921,7 @@ begin
       nodPed := cxTL.Add;
 
       nodPed.Values[cxTLbSel.ItemIndex] := 'False';
+
       nodPed.Values[cxTLsDes.ItemIndex] := FD.fieldByName('des_razao_social').AsString;
       nodPed.Values[cxTLsCpf.ItemIndex] := FD.fieldByName('des_cnpj').AsString;
       nodPed.Values[cxTLsCod.ItemIndex] := FD.fieldByName('nfe_codigo_destinatario').AsString;
@@ -15450,6 +15476,10 @@ Var
  Ok         : Boolean;
 begin
 
+ ACBrNFeDANFERL1.CleanupInstance;
+
+ ACBrNFeDANFEFR1.ExibeCampoFatura := False;
+
  ACBrNFeDANFERL1.Impressora                        := FrPar.edtImpNFe.Text;
  ACBrNFeDANFCeFortes1.Impressora                   := FrPar.edtImpNFCe.Text;
  ACBrNFe1.Configuracoes.Arquivos.AdicionarLiteral  := True;
@@ -15594,6 +15624,10 @@ procedure TFrGBNFe.pDefineRelFR();
 Var
  Ok         : Boolean;
 begin
+
+ ACBrNFeDANFEFR1.CleanupInstance;
+
+ ACBrNFeDANFEFR1.ExibeCampoFatura := False;
 
  ACBrNFeDANFEFR1.Impressora                          := FrPar.edtImpNFe.Text;
  ACBrNFeDANFeESCPOS1.Impressora                      := FrPar.edtImpNFCe.Text;

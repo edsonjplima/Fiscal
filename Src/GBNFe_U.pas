@@ -234,6 +234,7 @@ type
     cxTLsxInu: TcxTreeListColumn;
     cxTLsTrs: TcxTreeListColumn;
     cxTLsCnc: TcxTreeListColumn;
+    acbrnfdnfrl1: TACBrNFeDANFeRL;
 
   Procedure geraenvianf(Sender: TObject);
   Procedure grava_xml_no_banco;
@@ -15475,6 +15476,8 @@ Var
  Ok         : Boolean;
 begin
 
+ ACBrNFeDANFERL1.CleanupInstance;
+
  ACBrNFeDANFERL1.Impressora                        := FrPar.edtImpNFe.Text;
  ACBrNFeDANFCeFortes1.Impressora                   := FrPar.edtImpNFCe.Text;
  ACBrNFe1.Configuracoes.Arquivos.AdicionarLiteral  := True;
@@ -15619,6 +15622,10 @@ procedure TFrGBNFe.pDefineRelFR();
 Var
  Ok         : Boolean;
 begin
+
+ ACBrNFeDANFEFR1.CleanupInstance;
+
+ ACBrNFeDANFEFR1.ExibeCampoFatura := False;
 
  ACBrNFeDANFEFR1.Impressora                          := FrPar.edtImpNFe.Text;
  ACBrNFeDANFeESCPOS1.Impressora                      := FrPar.edtImpNFCe.Text;
