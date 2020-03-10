@@ -740,6 +740,11 @@ var
 
 begin
 
+ if ( gCpt = 1 ) then
+  pDefineRel()                                                                  // Define o tipo de Relatório FortesReport
+ else
+  pDefineRelFR();                                                               // Define o tipo de Relatório FastReport
+
  fMudaVersao( FrPar.cbb2.ItemIndex, gModelo );                                  // Mudança de versão
 
  vCfop := '';
@@ -7280,7 +7285,7 @@ begin
           Application.Messagebox(PWideChar('ERRO NÃO CATALOGADO: Nota Fiscal eletrônica não impressa!' + Chr(13) +
                                  e.Message),'Atenção!',MB_ICONERROR+mb_ok);
           pAtuNFe();
-        close;                                                                  // se der erro sai do sistema
+          close;                                                                // se der erro sai do sistema
 
          end;
 
@@ -9604,7 +9609,7 @@ begin
                 begin
 
                  if not FileExists(xAuxO) then
-                  ACBrNFe1.ImprimirEventoPDF;                                     // Gera Pdf da NFCe
+                  ACBrNFe1.ImprimirEventoPDF;                                   // Gera Pdf da NFCe
 
                  CopyFile(PWideChar(xAuxO), PWideChar(xAuxD), False);
 
@@ -15475,11 +15480,94 @@ Var
  Ok         : Boolean;
 begin
 
- ACBrNFeDANFERL1.Free;
- ACBrNFeDANFERL1.Create(TACBrNFeDANFERL);
+ ACBrNFeDANFERL1.CleanupInstance;
+ ACBrNFeDANFCeFortes1.CleanupInstance;
+ ACBrNFeDANFCeFortesA41.CleanupInstance;
+ acbrmdfdmdfrl1.CleanupInstance;
 
- ACBrNFeDANFERL1.Impressora                        := FrPar.edtImpNFe.Text;
- ACBrNFeDANFCeFortes1.Impressora                   := FrPar.edtImpNFCe.Text;
+ if ( gModelo = 55 ) then
+  begin
+
+   ACBrNFeDANFERL1.MargemDireita                   := 0.2;
+   ACBrNFeDANFERL1.MargemEsquerda                  := 7.0;
+   ACBrNFeDANFERL1.MargemInferior                  := 0.2;
+   ACBrNFeDANFERL1.MargemSuperior                  := 4.0;
+   ACBrNFeDANFEFR1.MargemDireita                   := 0.2;
+   ACBrNFeDANFEFR1.MargemEsquerda                  := 7.0;
+   ACBrNFeDANFEFR1.MargemInferior                  := 0.2;
+   ACBrNFeDANFEFR1.MargemSuperior                  := 4.0;
+   ACBrNFeDANFCeFortes1.MargemDireita              := 0.2;
+   ACBrNFeDANFCeFortes1.MargemEsquerda             := 7.0;
+   ACBrNFeDANFCeFortes1.MargemInferior             := 0.2;
+   ACBrNFeDANFCeFortes1.MargemSuperior             := 4.0;
+   ACBrNFeDANFeESCPOS1.MargemDireita               := 0.2;
+   ACBrNFeDANFeESCPOS1.MargemEsquerda              := 7.0;
+   ACBrNFeDANFeESCPOS1.MargemInferior              := 0.2;
+   ACBrNFeDANFeESCPOS1.MargemSuperior              := 4.0;
+   ACBrNFeDANFCeFortesA41.MargemDireita            := 0.2;
+   ACBrNFeDANFCeFortesA41.MargemEsquerda           := 7.0;
+   ACBrNFeDANFCeFortesA41.MargemInferior           := 0.2;
+   ACBrNFeDANFCeFortesA41.MargemSuperior           := 4.0;
+   acbrmdfdmdfrl1.MargemDireita                    := 0.2;
+   acbrmdfdmdfrl1.MargemEsquerda                   := 7.0;
+   acbrmdfdmdfrl1.MargemInferior                   := 0.2;
+   acbrmdfdmdfrl1.MargemSuperior                   := 4.0;
+
+   if ( Trim(FrPar.edtImpNFe.Text) <> '' ) then
+    begin
+
+     ACBrNFeDANFERL1.Impressora                    := FrPar.edtImpNFe.Text;
+     ACBrNFeDANFEFR1.Impressora                    := FrPar.edtImpNFe.Text;
+     ACBrNFeDANFCeFortes1.Impressora               := FrPar.edtImpNFe.Text;
+     ACBrNFeDANFeESCPOS1.Impressora                := FrPar.edtImpNFe.Text;
+     ACBrNFeDANFCeFortesA41.Impressora             := FrPar.edtImpNFe.Text;
+     acbrmdfdmdfrl1.Impressora                     := FrPar.edtImpNFe.Text;
+
+    end;
+
+  end
+ else
+  begin
+
+   ACBrNFeDANFERL1.MargemDireita                   := 0.2;
+   ACBrNFeDANFERL1.MargemEsquerda                  := 0.5;
+   ACBrNFeDANFERL1.MargemInferior                  := 0.2;
+   ACBrNFeDANFERL1.MargemSuperior                  := 0.5;
+   ACBrNFeDANFEFR1.MargemDireita                   := 0.2;
+   ACBrNFeDANFEFR1.MargemEsquerda                  := 0.5;
+   ACBrNFeDANFEFR1.MargemInferior                  := 0.2;
+   ACBrNFeDANFEFR1.MargemSuperior                  := 0.5;
+   ACBrNFeDANFCeFortes1.MargemDireita              := 0.2;
+   ACBrNFeDANFCeFortes1.MargemEsquerda             := 0.5;
+   ACBrNFeDANFCeFortes1.MargemInferior             := 0.2;
+   ACBrNFeDANFCeFortes1.MargemSuperior             := 0.5;
+   ACBrNFeDANFeESCPOS1.MargemDireita               := 0.2;
+   ACBrNFeDANFeESCPOS1.MargemEsquerda              := 0.5;
+   ACBrNFeDANFeESCPOS1.MargemInferior              := 0.2;
+   ACBrNFeDANFeESCPOS1.MargemSuperior              := 0.5;
+   ACBrNFeDANFCeFortesA41.MargemDireita            := 0.2;
+   ACBrNFeDANFCeFortesA41.MargemEsquerda           := 0.5;
+   ACBrNFeDANFCeFortesA41.MargemInferior           := 0.2;
+   ACBrNFeDANFCeFortesA41.MargemSuperior           := 0.5;
+   acbrmdfdmdfrl1.MargemDireita                    := 0.2;
+   acbrmdfdmdfrl1.MargemEsquerda                   := 0.5;
+   acbrmdfdmdfrl1.MargemInferior                   := 0.2;
+   acbrmdfdmdfrl1.MargemSuperior                   := 0.5;
+
+   if ( Trim(FrPar.edtImpNFCe.Text) <> '' ) then
+    begin
+
+     ACBrNFeDANFERL1.Impressora                    := FrPar.edtImpNFCe.Text;
+     ACBrNFeDANFEFR1.Impressora                    := FrPar.edtImpNFCe.Text;
+     ACBrNFeDANFCeFortes1.Impressora               := FrPar.edtImpNFCe.Text;
+     ACBrNFeDANFeESCPOS1.Impressora                := FrPar.edtImpNFCe.Text;
+     ACBrNFeDANFCeFortesA41.Impressora             := FrPar.edtImpNFCe.Text;
+     acbrmdfdmdfrl1.Impressora                     := FrPar.edtImpNFCe.Text;
+
+    end;
+
+  end;
+
  ACBrNFe1.Configuracoes.Arquivos.AdicionarLiteral  := True;
  ACBrNFe1.DANFE.PathPDF                            := gCamPdf;
  ACBrNFeDANFeRL1.CasasDecimais.qCom                := 3;
@@ -15544,11 +15632,6 @@ begin
     2: ACBrNFe1.DANFE.TipoDANFE                    := StrToTpImp(OK, '4');
     3: ACBrNFe1.DANFE.TipoDANFE                    := StrToTpImp(OK, '5');
    end;
-
-   // ACBrNFe1.DANFE.TipoDANFE                  := StrToTpImp(OK, '4');         // StrToEnumerado(ok, s, ['0', '1', '2', '3', '4', '5', '6'], [tiSemGeracao, tiRetrato, tiPaisagem, tiSimplificado, tiNFCe, tiMsgEletronica, tiNFCeA4]);
-   // TpcnTipoImpressao = (tiSemGeracao, tiRetrato, tiPais  result := StrToEnumerado(ok, s,
-   //                              ['0',          '1',       '2',        '3',            '4',    '5'],
-   //                     [tiSemGeracao, tiRetrato, tiPaisagem, tiSimplificado, tiNFCe, tiMsgEletronica]);
 
   end
  else
@@ -15623,11 +15706,19 @@ Var
  Ok         : Boolean;
 begin
 
- ACBrNFeDANFEFR1.Free;
- ACBrNFeDANFEFR1.Create(TACBrNFeDANFEFR);
+ ACBrNFeDANFEFR1.CleanupInstance;
+ ACBrNFeDANFeESCPOS1.CleanupInstance;
+ acbrmdfdmdfrl1.CleanupInstance;
+ acbrpsprntr1.CleanupInstance;
 
- ACBrNFeDANFEFR1.Impressora                          := FrPar.edtImpNFe.Text;
- ACBrNFeDANFeESCPOS1.Impressora                      := FrPar.edtImpNFCe.Text;
+ if ( (Trim(FrPar.edtImpNFe.Text) <> '') and (gModelo = 55) ) then
+   ACBrNFeDANFEFR1.Impressora                        := FrPar.edtImpNFe.Text
+ else if ( (Trim(FrPar.edtImpNFe.Text) <> '') and (gModelo = 65) ) then
+  begin
+   ACBrNFeDANFEFR1.Impressora                        := FrPar.edtImpNFCe.Text;
+   ACBrNFeDANFeESCPOS1.Impressora                    := FrPar.edtImpNFCe.Text;
+  end;
+
  ACBrNFeDANFEFR1.CasasDecimais.qCom                  := 3;
  ACBrNFeDANFEFR1.CasasDecimais.vUnCom                := 4;
 

@@ -2394,7 +2394,7 @@ object FrGBNFe: TFrGBNFe
     Left = 312
     Top = 10
     Bitmap = {
-      494C0101CC041006B80710001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C0101CC041006CC0710001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000004013000001002000000000000040
       1300000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -43078,7 +43078,7 @@ object FrGBNFe: TFrGBNFe
     Configuracoes.WebServices.TimeOut = 6000
     Configuracoes.WebServices.QuebradeLinha = '|'
     Configuracoes.RespTec.IdCSRT = 0
-    DANFE = ACBrNFeDANFEFR1
+    DANFE = ACBrNFeDANFeRL1
     Left = 439
     Top = 10
   end
@@ -43278,28 +43278,28 @@ object FrGBNFe: TFrGBNFe
   end
   object ACBrNFeDANFeRL1: TACBrNFeDANFeRL
     Sistema = 'Projeto ACBr - www.projetoacbr.com.br'
-    MargemInferior = 0.800000000000000000
-    MargemSuperior = 0.800000000000000000
-    MargemEsquerda = 0.700000000000000000
-    MargemDireita = 0.500000000000000000
+    MargemInferior = 0.200000000000000000
+    MargemSuperior = 1.000000000000000000
+    MargemEsquerda = 1.000000000000000000
+    MargemDireita = 0.200000000000000000
     CasasDecimais.Formato = tdetInteger
     CasasDecimais.qCom = 2
     CasasDecimais.vUnCom = 2
     CasasDecimais.MaskqCom = ',0.00'
     CasasDecimais.MaskvUnCom = ',0.00'
-    ExibeCampoFatura = False
+    ACBrNFe = ACBrNFe1
     TamanhoLogoHeight = 100
     TamanhoLogoWidth = 100
     LogoemCima = True
     Left = 466
-    Top = 10
+    Top = 12
   end
   object ACBrNFeDANFCeFortes1: TACBrNFeDANFCeFortes
     Sistema = 'Projeto ACBr - www.projetoacbr.com.br'
-    MargemInferior = 0.500000000000000000
-    MargemSuperior = 0.500000000000000000
-    MargemEsquerda = 0.500000000000000000
-    MargemDireita = 0.500000000000000000
+    MargemInferior = 0.200000000000000000
+    MargemSuperior = 1.000000000000000000
+    MargemEsquerda = 1.000000000000000000
+    MargemDireita = 0.200000000000000000
     ExpandeLogoMarca = True
     CasasDecimais.Formato = tdetInteger
     CasasDecimais.qCom = 2
@@ -43335,16 +43335,15 @@ object FrGBNFe: TFrGBNFe
   end
   object ACBrNFeDANFEFR1: TACBrNFeDANFEFR
     Sistema = 'Projeto ACBr - www.projetoacbr.com.br'
-    MargemInferior = 0.800000000000000000
-    MargemSuperior = 0.800000000000000000
-    MargemEsquerda = 0.600000000000000000
-    MargemDireita = 0.510000000000000000
+    MargemInferior = 0.200000000000000000
+    MargemSuperior = 1.000000000000000000
+    MargemEsquerda = 1.000000000000000000
+    MargemDireita = 0.200000000000000000
     CasasDecimais.Formato = tdetInteger
     CasasDecimais.qCom = 2
     CasasDecimais.vUnCom = 2
     CasasDecimais.MaskqCom = ',0.00'
     CasasDecimais.MaskvUnCom = ',0.00'
-    ACBrNFe = ACBrNFe1
     EspessuraBorda = 1
     BorderIcon = [biSystemMenu, biMinimize, biMaximize]
     Left = 464
@@ -43373,10 +43372,10 @@ object FrGBNFe: TFrGBNFe
   end
   object ACBrNFeDANFeESCPOS1: TACBrNFeDANFeESCPOS
     Sistema = 'Projeto ACBr - www.projetoacbr.com.br'
-    MargemInferior = 0.800000000000000000
-    MargemSuperior = 0.800000000000000000
-    MargemEsquerda = 0.600000000000000000
-    MargemDireita = 0.510000000000000000
+    MargemInferior = 0.200000000000000000
+    MargemSuperior = 1.000000000000000000
+    MargemEsquerda = 1.000000000000000000
+    MargemDireita = 0.200000000000000000
     CasasDecimais.Formato = tdetInteger
     CasasDecimais.qCom = 2
     CasasDecimais.vUnCom = 2
@@ -43389,10 +43388,10 @@ object FrGBNFe: TFrGBNFe
   end
   object acbrmdfdmdfrl1: TACBrMDFeDAMDFeRL
     Sistema = 'Projeto ACBr - www.projetoacbr.com.br'
-    MargemInferior = 0.800000000000000000
-    MargemSuperior = 0.800000000000000000
-    MargemEsquerda = 0.600000000000000000
-    MargemDireita = 0.510000000000000000
+    MargemInferior = 0.200000000000000000
+    MargemSuperior = 1.000000000000000000
+    MargemEsquerda = 1.000000000000000000
+    MargemDireita = 0.200000000000000000
     CasasDecimais.Formato = tdetInteger
     CasasDecimais.qCom = 2
     CasasDecimais.vUnCom = 2
@@ -43559,7 +43558,7 @@ object FrGBNFe: TFrGBNFe
   end
   object Content: TcxStyleRepository
     Left = 612
-    Top = 10
+    Top = 12
     PixelsPerInch = 96
     object cxContent: TcxStyle
       AssignedValues = [svColor]
@@ -43636,19 +43635,5 @@ object FrGBNFe: TFrGBNFe
     PixelsPerInch = 96
     object ContentOutros2: TcxStyle
     end
-  end
-  object acbrnfdnfrl1: TACBrNFeDANFeRL
-    Sistema = 'Projeto ACBr - www.projetoacbr.com.br'
-    MargemInferior = 8.000000000000000000
-    MargemSuperior = 8.000000000000000000
-    MargemEsquerda = 6.000000000000000000
-    MargemDireita = 5.100000000000000000
-    CasasDecimais.Formato = tdetInteger
-    CasasDecimais.qCom = 2
-    CasasDecimais.vUnCom = 2
-    CasasDecimais.MaskqCom = ',0.00'
-    CasasDecimais.MaskvUnCom = ',0.00'
-    Left = 670
-    Top = 8
   end
 end
