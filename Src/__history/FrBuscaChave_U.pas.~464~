@@ -340,7 +340,7 @@ begin
  Edit_QSel.Text := '0';
 
  // Seta caminho inicial
- FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.DownloadNFe.PathDownload        := gCamXml;
+ FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.DownloadDFe.PathDownload        := gCamXml;        // Edson Lima ; 2019-07-29
  FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.PathEvento                      := gCamXml;
  FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.PathSalvar                      := gCamXml;
  FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.PathNFe                         := gCamXml;
@@ -1227,7 +1227,16 @@ begin
           with FrGBNFe.ACBrNFe1 do
            begin
 
+//
 //            Foi isolado esse bloco por conta de erro de compilação para o novo acbr baixado em 15/02/2019
+
+            WebServices.DistribuicaoDFe.CNPJCPF      :=   DMFD.FDQuery4['cnpj'];
+
+            If FrPar.rgTipoAmb.ItemIndex = 0 then
+             Configuracoes.WebServices.Ambiente  := taProducao
+            else
+             Configuracoes.WebServices.Ambiente  := taHomologacao;
+
 //            DownloadNFe.Download.CNPJ      :=   DMFD.FDQuery4['cnpj'];
 //
 //            If FrPar.rgTipoAmb.ItemIndex = 0 then
@@ -1239,10 +1248,9 @@ begin
 //            DownloadNFe.Download.Chaves.Add;
 //            DownloadNFe.Download.Chaves.Items[DownloadNFe.Download.Chaves.Count-1].chNFe := DMFD.FDQryGeral2['MDFe_Chave_nfe'];
 
-
             //------------------------------------------------------------------
             // trunk2
-            FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.DownloadNFe.PathDownload    := gCamXml;
+            FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.DownloadDFe.PathDownload    := gCamXml;        // Edson Lima ; 2019-07-29
             FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.PathEvento                  := gCamXml;
             FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.PathSalvar                  := gCamXml;
             FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.PathNFe                     := gCamXml;
@@ -1474,20 +1482,21 @@ begin
          begin
 
 //          Bloco enibido durante a atualização do acbr do dia 15/02/2019
-//          DownloadNFe.Download.CNPJ      :=   DMFD.FDQuery4['cnpj'];
-//
-//          If FrPar.rgTipoAmb.ItemIndex = 0 then
-//           DownloadNFe.Download.tpAmb    := taProducao
-//          else
-//           DownloadNFe.Download.tpAmb    := taHomologacao;
-//
+
+            WebServices.DistribuicaoDFe.CNPJCPF      :=   DMFD.FDQuery4['cnpj'];
+
+            If FrPar.rgTipoAmb.ItemIndex = 0 then
+             Configuracoes.WebServices.Ambiente  := taProducao
+            else
+             Configuracoes.WebServices.Ambiente  := taHomologacao;
+
 //          DownloadNFe.Download.Chaves.Clear;
 //          DownloadNFe.Download.Chaves.Add;
 //          DownloadNFe.Download.Chaves.Items[DownloadNFe.Download.Chaves.Count-1].chNFe := DMFD.FDQryGeral2['MDFe_Chave_nfe'];
 
           //--------------------------------------------------------------------
           // trunk2
-          FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.DownloadNFe.PathDownload      := gCamXml;
+          FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.DownloadDFe.PathDownload      := gCamXml;        // Edson Lima ; 2019-07-29
           FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.PathEvento                    := gCamXml;
           FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.PathSalvar                    := gCamXml;
           FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.PathNFe                       := gCamXml;
@@ -4407,3 +4416,4 @@ begin
 end;
 
 end.
+

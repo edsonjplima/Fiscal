@@ -407,7 +407,7 @@ end;
 procedure TFrInut.Edit3Exit(Sender: TObject);
 begin
 
- if ( (StrToInt(Edit3.Text) > 909) and (StrToInt(Edit3.Text) < 970) ) then
+ if ( StrToInt(Edit3.Text) > 889 ) then
   begin
 
    Application.Messagebox('Série fora da faixa de inutilização!', 'Atenção!', mb_iconstop+mb_ok);

@@ -1558,7 +1558,7 @@ begin
        (* Poderá ser implementado no futuro                                                                                 *)
        (* ----------------------------------------------------------------------------------------------------------------- *)
 
-       // Aqui deve haver a leitura de fornecedores (contadoes / atores)
+       // Aqui deve haver a leitura de fornecedores (contadores / atores)
 
        autXML.Clear;
        vAutXMLCNPJCPFWORD := '';
@@ -1585,7 +1585,7 @@ begin
                    ( I = Length(vAutXMLCNPJCPFALL)) ) then
                begin
 
-                autXML.Add.CNPJCPF := vAutXMLCNPJCPFWORD;                       //Informar CNPJ ou CPF. Preencher os zeros não significativos.
+                autXML.Add.CNPJCPF := vAutXMLCNPJCPFWORD;                       // Informar CNPJ ou CPF. Preencher os zeros não significativos.
                 vAutXMLCNPJCPFWORD := '';
 
                end;
@@ -6944,7 +6944,11 @@ begin
    begin
 
     Label1.Caption := ' ' + vartostr(DMFD.FDQuery4['razao_social']) + ' - ' + vartostr(DMFD.FDQuery4['nome_fantasia']);
-    gCnpj          := DMFD.FDQuery4['cnpj'];
+
+    gCnpj          := VarToStr(DMFD.FDQuery4['cnpj']);
+
+    if ( Length(Trim(gCnpj)) = 11 ) then
+     gCnpj         := StrZero(gCnpj, 14);
 
    end;
 

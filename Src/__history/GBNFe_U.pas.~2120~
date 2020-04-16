@@ -1558,7 +1558,7 @@ begin
        (* Poderá ser implementado no futuro                                                                                 *)
        (* ----------------------------------------------------------------------------------------------------------------- *)
 
-       // Aqui deve haver a leitura de fornecedores (contadoes / atores)
+       // Aqui deve haver a leitura de fornecedores (contadores / atores)
 
        autXML.Clear;
        vAutXMLCNPJCPFWORD := '';
@@ -1585,7 +1585,7 @@ begin
                    ( I = Length(vAutXMLCNPJCPFALL)) ) then
                begin
 
-                autXML.Add.CNPJCPF := vAutXMLCNPJCPFWORD;                       //Informar CNPJ ou CPF. Preencher os zeros não significativos.
+                autXML.Add.CNPJCPF := vAutXMLCNPJCPFWORD;                       // Informar CNPJ ou CPF. Preencher os zeros não significativos.
                 vAutXMLCNPJCPFWORD := '';
 
                end;
@@ -15484,6 +15484,7 @@ begin
  ACBrNFeDANFCeFortes1.CleanupInstance;
  ACBrNFeDANFCeFortesA41.CleanupInstance;
  acbrmdfdmdfrl1.CleanupInstance;
+
  if ( gModelo = 55 ) then
   begin
 
@@ -15511,6 +15512,21 @@ begin
    acbrmdfdmdfrl1.MargemEsquerda                   := 7.0;
    acbrmdfdmdfrl1.MargemInferior                   := 0.2;
    acbrmdfdmdfrl1.MargemSuperior                   := 4.0;
+
+   if ( Trim(FrPar.edtImpNFe.Text) <> '' ) then
+    begin
+
+     ACBrNFeDANFERL1.Impressora                    := FrPar.edtImpNFe.Text;
+     ACBrNFeDANFEFR1.Impressora                    := FrPar.edtImpNFe.Text;
+     ACBrNFeDANFCeFortes1.Impressora               := FrPar.edtImpNFe.Text;
+     ACBrNFeDANFeESCPOS1.Impressora                := FrPar.edtImpNFe.Text;
+     ACBrNFeDANFCeFortesA41.Impressora             := FrPar.edtImpNFe.Text;
+     acbrmdfdmdfrl1.Impressora                     := FrPar.edtImpNFe.Text;
+     ACBrNFeDANFERL1.MostraPreview                 := False;
+     ACBrNFeDANFERL1.MostraSetup                   := False;
+     ACBrNFeDANFERL1.MostraStatus                  := False;
+
+    end;
 
   end
  else
@@ -15541,28 +15557,20 @@ begin
    acbrmdfdmdfrl1.MargemInferior                   := 0.2;
    acbrmdfdmdfrl1.MargemSuperior                   := 0.5;
 
-  end;
+   if ( Trim(FrPar.edtImpNFCe.Text) <> '' ) then
+    begin
 
- if ( (Trim(FrPar.edtImpNFe.Text) <> '') and (gModelo = 55) ) then
-  begin
+     ACBrNFeDANFERL1.Impressora                    := FrPar.edtImpNFCe.Text;
+     ACBrNFeDANFEFR1.Impressora                    := FrPar.edtImpNFCe.Text;
+     ACBrNFeDANFCeFortes1.Impressora               := FrPar.edtImpNFCe.Text;
+     ACBrNFeDANFeESCPOS1.Impressora                := FrPar.edtImpNFCe.Text;
+     ACBrNFeDANFCeFortesA41.Impressora             := FrPar.edtImpNFCe.Text;
+     acbrmdfdmdfrl1.Impressora                     := FrPar.edtImpNFCe.Text;
+     ACBrNFeDANFERL1.MostraPreview                 := True;
+     ACBrNFeDANFERL1.MostraSetup                   := False;
+     ACBrNFeDANFERL1.MostraStatus                  := True;
 
-   ACBrNFeDANFERL1.Impressora                       := FrPar.edtImpNFe.Text;
-   ACBrNFeDANFEFR1.Impressora                       := FrPar.edtImpNFe.Text;
-   ACBrNFeDANFCeFortes1.Impressora                  := FrPar.edtImpNFe.Text;
-   ACBrNFeDANFeESCPOS1.Impressora                   := FrPar.edtImpNFe.Text;
-   ACBrNFeDANFCeFortesA41.Impressora                := FrPar.edtImpNFe.Text;
-   acbrmdfdmdfrl1.Impressora                        := FrPar.edtImpNFe.Text;
-
-  end
- else if ( (Trim(FrPar.edtImpNFCe.Text) <> '') and (gModelo = 65) ) then
-  begin
-
-   ACBrNFeDANFERL1.Impressora                       := FrPar.edtImpNFCe.Text;
-   ACBrNFeDANFEFR1.Impressora                       := FrPar.edtImpNFCe.Text;
-   ACBrNFeDANFCeFortes1.Impressora                  := FrPar.edtImpNFCe.Text;
-   ACBrNFeDANFeESCPOS1.Impressora                   := FrPar.edtImpNFCe.Text;
-   ACBrNFeDANFCeFortesA41.Impressora                := FrPar.edtImpNFCe.Text;
-   acbrmdfdmdfrl1.Impressora                        := FrPar.edtImpNFCe.Text;
+    end;
 
   end;
 

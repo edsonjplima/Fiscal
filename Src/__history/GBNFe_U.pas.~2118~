@@ -15484,33 +15484,49 @@ begin
  ACBrNFeDANFCeFortes1.CleanupInstance;
  ACBrNFeDANFCeFortesA41.CleanupInstance;
  acbrmdfdmdfrl1.CleanupInstance;
+
  if ( gModelo = 55 ) then
   begin
 
    ACBrNFeDANFERL1.MargemDireita                   := 0.2;
-   ACBrNFeDANFERL1.MargemEsquerda                  := 5.0;
+   ACBrNFeDANFERL1.MargemEsquerda                  := 7.0;
    ACBrNFeDANFERL1.MargemInferior                  := 0.2;
-   ACBrNFeDANFERL1.MargemSuperior                  := 5.0;
+   ACBrNFeDANFERL1.MargemSuperior                  := 4.0;
    ACBrNFeDANFEFR1.MargemDireita                   := 0.2;
-   ACBrNFeDANFEFR1.MargemEsquerda                  := 5.0;
+   ACBrNFeDANFEFR1.MargemEsquerda                  := 7.0;
    ACBrNFeDANFEFR1.MargemInferior                  := 0.2;
-   ACBrNFeDANFEFR1.MargemSuperior                  := 5.0;
+   ACBrNFeDANFEFR1.MargemSuperior                  := 4.0;
    ACBrNFeDANFCeFortes1.MargemDireita              := 0.2;
-   ACBrNFeDANFCeFortes1.MargemEsquerda             := 5.0;
+   ACBrNFeDANFCeFortes1.MargemEsquerda             := 7.0;
    ACBrNFeDANFCeFortes1.MargemInferior             := 0.2;
-   ACBrNFeDANFCeFortes1.MargemSuperior             := 5.0;
+   ACBrNFeDANFCeFortes1.MargemSuperior             := 4.0;
    ACBrNFeDANFeESCPOS1.MargemDireita               := 0.2;
-   ACBrNFeDANFeESCPOS1.MargemEsquerda              := 5.0;
+   ACBrNFeDANFeESCPOS1.MargemEsquerda              := 7.0;
    ACBrNFeDANFeESCPOS1.MargemInferior              := 0.2;
-   ACBrNFeDANFeESCPOS1.MargemSuperior              := 5.0;
+   ACBrNFeDANFeESCPOS1.MargemSuperior              := 4.0;
    ACBrNFeDANFCeFortesA41.MargemDireita            := 0.2;
-   ACBrNFeDANFCeFortesA41.MargemEsquerda           := 5.0;
+   ACBrNFeDANFCeFortesA41.MargemEsquerda           := 7.0;
    ACBrNFeDANFCeFortesA41.MargemInferior           := 0.2;
-   ACBrNFeDANFCeFortesA41.MargemSuperior           := 5.0;
+   ACBrNFeDANFCeFortesA41.MargemSuperior           := 4.0;
    acbrmdfdmdfrl1.MargemDireita                    := 0.2;
-   acbrmdfdmdfrl1.MargemEsquerda                   := 5.0;
+   acbrmdfdmdfrl1.MargemEsquerda                   := 7.0;
    acbrmdfdmdfrl1.MargemInferior                   := 0.2;
-   acbrmdfdmdfrl1.MargemSuperior                   := 5.0;
+   acbrmdfdmdfrl1.MargemSuperior                   := 4.0;
+
+   if ( Trim(FrPar.edtImpNFe.Text) <> '' ) then
+    begin
+
+     ACBrNFeDANFERL1.Impressora                    := FrPar.edtImpNFe.Text;
+     ACBrNFeDANFEFR1.Impressora                    := FrPar.edtImpNFe.Text;
+     ACBrNFeDANFCeFortes1.Impressora               := FrPar.edtImpNFe.Text;
+     ACBrNFeDANFeESCPOS1.Impressora                := FrPar.edtImpNFe.Text;
+     ACBrNFeDANFCeFortesA41.Impressora             := FrPar.edtImpNFe.Text;
+     acbrmdfdmdfrl1.Impressora                     := FrPar.edtImpNFe.Text;
+     ACBrNFeDANFERL1.MostraPreview                 := False;
+     ACBrNFeDANFERL1.MostraSetup                   := False;
+     ACBrNFeDANFERL1.MostraStatus                  := False;
+
+    end;
 
   end
  else
@@ -15541,14 +15557,21 @@ begin
    acbrmdfdmdfrl1.MargemInferior                   := 0.2;
    acbrmdfdmdfrl1.MargemSuperior                   := 0.5;
 
-  end;
+   if ( Trim(FrPar.edtImpNFCe.Text) <> '' ) then
+    begin
 
- if ( (Trim(FrPar.edtImpNFe.Text) <> '') and (gModelo = 55) ) then
-  ACBrNFeDANFERL1.Impressora                      := FrPar.edtImpNFe.Text
- else if ( (Trim(FrPar.edtImpNFCe.Text) <> '') and (gModelo = 65) ) then
-  begin
-   ACBrNFeDANFERL1.Impressora                      := FrPar.edtImpNFe.Text;
-   ACBrNFeDANFCeFortes1.Impressora                 := FrPar.edtImpNFCe.Text;
+     ACBrNFeDANFERL1.Impressora                    := FrPar.edtImpNFCe.Text;
+     ACBrNFeDANFEFR1.Impressora                    := FrPar.edtImpNFCe.Text;
+     ACBrNFeDANFCeFortes1.Impressora               := FrPar.edtImpNFCe.Text;
+     ACBrNFeDANFeESCPOS1.Impressora                := FrPar.edtImpNFCe.Text;
+     ACBrNFeDANFCeFortesA41.Impressora             := FrPar.edtImpNFCe.Text;
+     acbrmdfdmdfrl1.Impressora                     := FrPar.edtImpNFCe.Text;
+     ACBrNFeDANFERL1.MostraPreview                 := True;
+     ACBrNFeDANFERL1.MostraSetup                   := False;
+     ACBrNFeDANFERL1.MostraStatus                  := True;
+
+    end;
+
   end;
 
  ACBrNFe1.Configuracoes.Arquivos.AdicionarLiteral  := True;
