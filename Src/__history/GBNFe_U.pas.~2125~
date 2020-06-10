@@ -1558,7 +1558,7 @@ begin
        (* Poderá ser implementado no futuro                                                                                 *)
        (* ----------------------------------------------------------------------------------------------------------------- *)
 
-       // Aqui deve haver a leitura de fornecedores (contadoes / atores)
+       // Aqui deve haver a leitura de fornecedores (contadores / atores)
 
        autXML.Clear;
        vAutXMLCNPJCPFWORD := '';
@@ -1585,7 +1585,7 @@ begin
                    ( I = Length(vAutXMLCNPJCPFALL)) ) then
                begin
 
-                autXML.Add.CNPJCPF := vAutXMLCNPJCPFWORD;                       //Informar CNPJ ou CPF. Preencher os zeros não significativos.
+                autXML.Add.CNPJCPF := vAutXMLCNPJCPFWORD;                       // Informar CNPJ ou CPF. Preencher os zeros não significativos.
                 vAutXMLCNPJCPFWORD := '';
 
                end;
@@ -6944,7 +6944,11 @@ begin
    begin
 
     Label1.Caption := ' ' + vartostr(DMFD.FDQuery4['razao_social']) + ' - ' + vartostr(DMFD.FDQuery4['nome_fantasia']);
-    gCnpj          := DMFD.FDQuery4['cnpj'];
+
+    gCnpj          := VarToStr(DMFD.FDQuery4['cnpj']);
+
+    if ( Length(Trim(gCnpj)) = 11 ) then
+     gCnpj         := StrZero(gCnpj, 14);
 
    end;
 
@@ -15484,6 +15488,7 @@ begin
  ACBrNFeDANFCeFortes1.CleanupInstance;
  ACBrNFeDANFCeFortesA41.CleanupInstance;
  acbrmdfdmdfrl1.CleanupInstance;
+
  if ( gModelo = 55 ) then
   begin
 
@@ -15521,6 +15526,9 @@ begin
      ACBrNFeDANFeESCPOS1.Impressora                := FrPar.edtImpNFe.Text;
      ACBrNFeDANFCeFortesA41.Impressora             := FrPar.edtImpNFe.Text;
      acbrmdfdmdfrl1.Impressora                     := FrPar.edtImpNFe.Text;
+     ACBrNFeDANFERL1.MostraPreview                 := False;
+     ACBrNFeDANFERL1.MostraSetup                   := False;
+     ACBrNFeDANFERL1.MostraStatus                  := False;
 
     end;
 
@@ -15562,6 +15570,9 @@ begin
      ACBrNFeDANFeESCPOS1.Impressora                := FrPar.edtImpNFCe.Text;
      ACBrNFeDANFCeFortesA41.Impressora             := FrPar.edtImpNFCe.Text;
      acbrmdfdmdfrl1.Impressora                     := FrPar.edtImpNFCe.Text;
+     ACBrNFeDANFERL1.MostraPreview                 := True;
+     ACBrNFeDANFERL1.MostraSetup                   := False;
+     ACBrNFeDANFERL1.MostraStatus                  := True;
 
     end;
 

@@ -1524,10 +1524,6 @@ object FrGBNFe: TFrGBNFe
         TabWidth = 80
         object TabSheet1: TTabSheet
           Caption = 'Respostas'
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object MemoResp: TMemo
             Left = 0
             Top = 0
@@ -1551,10 +1547,6 @@ object FrGBNFe: TFrGBNFe
         object TabSheet2: TTabSheet
           Caption = 'XML Resposta'
           ImageIndex = 1
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object WBResposta: TWebBrowser
             Left = 0
             Top = 0
@@ -1574,10 +1566,6 @@ object FrGBNFe: TFrGBNFe
         object TabSheet3: TTabSheet
           Caption = 'Log'
           ImageIndex = 2
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object MemoLog: TMemo
             Left = 0
             Top = 0
@@ -1592,10 +1580,6 @@ object FrGBNFe: TFrGBNFe
         object TabSheet4: TTabSheet
           Caption = 'NFe && NFCe'
           ImageIndex = 3
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object trvwNFe: TTreeView
             Left = 0
             Top = 0
@@ -1612,10 +1596,6 @@ object FrGBNFe: TFrGBNFe
         object TabSheet5: TTabSheet
           Caption = 'Resposta WS'
           ImageIndex = 4
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object memoRespWS: TMemo
             Left = 0
             Top = 0
@@ -2414,7 +2394,7 @@ object FrGBNFe: TFrGBNFe
     Left = 312
     Top = 10
     Bitmap = {
-      494C0101CC041006D80710001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C0101CC041006DC0710001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000004013000001002000000000000040
       1300000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -43302,6 +43282,12 @@ object FrGBNFe: TFrGBNFe
     MargemSuperior = 1.000000000000000000
     MargemEsquerda = 1.000000000000000000
     MargemDireita = 0.200000000000000000
+    ExpandeLogoMarcaConfig.Altura = 0
+    ExpandeLogoMarcaConfig.Esquerda = 0
+    ExpandeLogoMarcaConfig.Topo = 0
+    ExpandeLogoMarcaConfig.Largura = 0
+    ExpandeLogoMarcaConfig.Dimensionar = False
+    ExpandeLogoMarcaConfig.Esticar = True
     CasasDecimais.Formato = tdetInteger
     CasasDecimais.qCom = 2
     CasasDecimais.vUnCom = 2
@@ -43321,6 +43307,12 @@ object FrGBNFe: TFrGBNFe
     MargemEsquerda = 1.000000000000000000
     MargemDireita = 0.200000000000000000
     ExpandeLogoMarca = True
+    ExpandeLogoMarcaConfig.Altura = 0
+    ExpandeLogoMarcaConfig.Esquerda = 0
+    ExpandeLogoMarcaConfig.Topo = 0
+    ExpandeLogoMarcaConfig.Largura = 0
+    ExpandeLogoMarcaConfig.Dimensionar = False
+    ExpandeLogoMarcaConfig.Esticar = True
     CasasDecimais.Formato = tdetInteger
     CasasDecimais.qCom = 2
     CasasDecimais.vUnCom = 2
@@ -43328,6 +43320,7 @@ object FrGBNFe: TFrGBNFe
     CasasDecimais.MaskvUnCom = ',0.00'
     TipoDANFE = tiNFCe
     LarguraBobina = 280
+    FormularioContinuo = True
     TamanhoLogoHeight = 0
     TamanhoLogoWidth = 0
     FonteLinhaItem.Charset = DEFAULT_CHARSET
@@ -43344,12 +43337,19 @@ object FrGBNFe: TFrGBNFe
     MargemSuperior = 10.000000000000000000
     MargemEsquerda = 10.000000000000000000
     MargemDireita = 10.000000000000000000
+    ExpandeLogoMarcaConfig.Altura = 0
+    ExpandeLogoMarcaConfig.Esquerda = 0
+    ExpandeLogoMarcaConfig.Topo = 0
+    ExpandeLogoMarcaConfig.Largura = 0
+    ExpandeLogoMarcaConfig.Dimensionar = False
+    ExpandeLogoMarcaConfig.Esticar = True
     CasasDecimais.Formato = tdetInteger
     CasasDecimais.qCom = 2
     CasasDecimais.vUnCom = 2
     CasasDecimais.MaskqCom = ',0.00'
     CasasDecimais.MaskvUnCom = ',0.00'
     TipoDANFE = tiSemGeracao
+    FormularioContinuo = True
     Left = 520
     Top = 10
   end
@@ -43359,6 +43359,12 @@ object FrGBNFe: TFrGBNFe
     MargemSuperior = 1.000000000000000000
     MargemEsquerda = 1.000000000000000000
     MargemDireita = 0.200000000000000000
+    ExpandeLogoMarcaConfig.Altura = 0
+    ExpandeLogoMarcaConfig.Esquerda = 0
+    ExpandeLogoMarcaConfig.Topo = 0
+    ExpandeLogoMarcaConfig.Largura = 0
+    ExpandeLogoMarcaConfig.Dimensionar = False
+    ExpandeLogoMarcaConfig.Esticar = True
     CasasDecimais.Formato = tdetInteger
     CasasDecimais.qCom = 2
     CasasDecimais.vUnCom = 2
@@ -43396,12 +43402,19 @@ object FrGBNFe: TFrGBNFe
     MargemSuperior = 1.000000000000000000
     MargemEsquerda = 1.000000000000000000
     MargemDireita = 0.200000000000000000
+    ExpandeLogoMarcaConfig.Altura = 0
+    ExpandeLogoMarcaConfig.Esquerda = 0
+    ExpandeLogoMarcaConfig.Topo = 0
+    ExpandeLogoMarcaConfig.Largura = 0
+    ExpandeLogoMarcaConfig.Dimensionar = False
+    ExpandeLogoMarcaConfig.Esticar = True
     CasasDecimais.Formato = tdetInteger
     CasasDecimais.qCom = 2
     CasasDecimais.vUnCom = 2
     CasasDecimais.MaskqCom = ',0.00'
     CasasDecimais.MaskvUnCom = ',0.00'
     TipoDANFE = tiSemGeracao
+    FormularioContinuo = True
     PosPrinter = acbrpsprntr1
     Left = 493
     Top = 38
@@ -43412,6 +43425,12 @@ object FrGBNFe: TFrGBNFe
     MargemSuperior = 1.000000000000000000
     MargemEsquerda = 1.000000000000000000
     MargemDireita = 0.200000000000000000
+    ExpandeLogoMarcaConfig.Altura = 0
+    ExpandeLogoMarcaConfig.Esquerda = 0
+    ExpandeLogoMarcaConfig.Topo = 0
+    ExpandeLogoMarcaConfig.Largura = 0
+    ExpandeLogoMarcaConfig.Dimensionar = False
+    ExpandeLogoMarcaConfig.Esticar = True
     CasasDecimais.Formato = tdetInteger
     CasasDecimais.qCom = 2
     CasasDecimais.vUnCom = 2
@@ -43488,7 +43507,7 @@ object FrGBNFe: TFrGBNFe
   end
   object acbrpsprntr1: TACBrPosPrinter
     Modelo = ppEscBematech
-    Porta = #13#10'COM2'
+    Porta = 'COM2'
     ConfigBarras.MostrarCodigo = False
     ConfigBarras.LarguraLinha = 0
     ConfigBarras.Altura = 0

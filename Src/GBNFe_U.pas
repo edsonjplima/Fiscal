@@ -13446,8 +13446,8 @@ begin
   DMFD.FDQuery2.SQL.Add( '  where ' + c14 + ' = :' + c14 + '                 ' );
   DMFD.FDQuery2.SQL.Add( '    and ' + c15 + ' = :' + c15 + '                 ' );
   DMFD.FDQuery2.SQL.Add( '    and ' + c16 + ' = :' + c16 + '                 ' );
-  DMFD.FDQuery2.SQL.Add( '    and ' + c17 + ' = :' + c17 + '                 ' );
   DMFD.FDQuery2.SQL.Add( '    and ' + c19 + ' = :' + c19 + '                 ' );
+  DMFD.FDQuery2.SQL.Add( '    and ' + c17 + ' = :' + c17 + '                 ' );
 
   if trim(c01) <> '' then
    DMFD.FDQuery2.ParamByName(c01).Value    := p01;
@@ -13479,8 +13479,9 @@ begin
   DMFD.FDQuery2.ParamByName(c14).Value     := p14;
   DMFD.FDQuery2.ParamByName(c15).Value     := p15;
   DMFD.FDQuery2.ParamByName(c16).Value     := p16;
-  DMFD.FDQuery2.ParamByName(c17).Value     := p17;
   DMFD.FDQuery2.ParamByName(c19).Value     := p19;
+  DMFD.FDQuery2.ParamByName(c17).Value     := p17;
+
   try
 
    DMFD.FDQuery2.ExecSQL;
