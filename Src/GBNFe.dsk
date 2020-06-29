@@ -14,22 +14,15 @@ File_11=TSourceModule,'D:\Sistemas de Desenvolvimento\GBNFe\Src\FrImportXML_U.pa
 File_12=TSourceModule,'D:\Sistemas de Desenvolvimento\GBNFe\Src\FrEmail_U.pas',0,1,1,1,1,0,0,,
 
 [Modules]
-Module0=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBackup_U.pas
-Module1=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe.dproj
-Module2=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrPar_U.pas
-Module3=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
-Module4=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBuscaChave_U.pas
-Count=5
+Module0=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
+Module1=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBuscaChave_U.pas
+Module2=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe.dproj
+Module3=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBackup_U.pas
+Module4=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrPar_U.pas
+Module5=D:\Sistemas de Desenvolvimento\GBNFe\Src\ModelSupport_GBNFe\default.txvpck
+Module6=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\ACBrNFe.pas
+Count=7
 EditWindowCount=1
-
-[D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBackup_U.pas]
-ModuleType=TSourceModule
-
-[D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe.dproj]
-ModuleType=TBaseProject
-
-[D:\Sistemas de Desenvolvimento\GBNFe\Src\FrPar_U.pas]
-ModuleType=TSourceModule
 
 [D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas]
 ModuleType=TSourceModule
@@ -37,14 +30,31 @@ ModuleType=TSourceModule
 [D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBuscaChave_U.pas]
 ModuleType=TSourceModule
 
+[D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe.dproj]
+ModuleType=TBaseProject
+
+[D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBackup_U.pas]
+ModuleType=TSourceModule
+
+[D:\Sistemas de Desenvolvimento\GBNFe\Src\FrPar_U.pas]
+ModuleType=TSourceModule
+
+[D:\Sistemas de Desenvolvimento\GBNFe\Src\ModelSupport_GBNFe\default.txvpck]
+ModuleType=TSourceModule
+
+[D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\ACBrNFe.pas]
+ModuleType=TSourceModule
+
 [EditWindow0]
-ViewCount=5
-CurrentEditView=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBackup_U.pas
+ViewCount=7
+CurrentEditView=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
 View0=0
 View1=1
 View2=2
 View3=3
 View4=4
+View5=5
+View6=6
 PercentageSizes=1
 Create=1
 Visible=1
@@ -69,21 +79,43 @@ BottomPanelSize=0
 BottomMiddlePanelSize=0
 BottomMiddlePanelClients=DockSite0,GraphDrawingModel
 BottomMiddelPanelData=0000080001020200000009000000446F636B536974653010000000477261706844726177696E67566965779A1D00000000000002F206000000000000FFFFFFFF
-TabDockBottomClients=MessageView=0,DockSite1=1
+TabDockBottomClients=MessageView=1,DockSite1=0
 TabDockRightClients=DockSite2=0,DockSite4=1
 
 [View0]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
-CursorX=30
-CursorY=9
-TopLine=1
+CursorX=23
+CursorY=17227
+TopLine=17145
 LeftCol=1
 Elisions=
-Bookmarks={1,15487,1}{2,747,1}{6,7735,1}
-EditViewName=Borland.FormDesignerView
+Bookmarks={1,9336,1}{2,747,1}{3,9327,1}{6,7735,1}
+EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
 
 [View1]
+CustomEditViewType=TEditView
+Module=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\ACBrNFe.pas
+CursorX=27
+CursorY=846
+TopLine=811
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\ACBrNFe.pas
+
+[View2]
+CustomEditViewType=TEditView
+Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\ModelSupport_GBNFe\default.txvpck
+CursorX=67
+CursorY=123
+TopLine=109
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\ModelSupport_GBNFe\default.txvpck
+
+[View3]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrPar_U.pas
 CursorX=7
@@ -94,18 +126,18 @@ Elisions=
 Bookmarks={1,392,1}
 EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrPar_U.pas
 
-[View2]
+[View4]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBackup_U.pas
-CursorX=3
-CursorY=44
+CursorX=26
+CursorY=66
 TopLine=48
 LeftCol=1
 Elisions=
 Bookmarks=
-EditViewName=Borland.FormDesignerView
+EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBackup_U.pas
 
-[View3]
+[View5]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe.dpr
 CursorX=38
@@ -116,12 +148,12 @@ Elisions=
 Bookmarks={1,224,1}
 EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe.dpr
 
-[View4]
+[View6]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBuscaChave_U.pas
-CursorX=75
-CursorY=542
-TopLine=529
+CursorX=15
+CursorY=513
+TopLine=472
 LeftCol=1
 Elisions=
 Bookmarks={1,1253,1}{2,1960,1}{3,1308,1}{4,1552,1}{5,1785,1}{6,1820,1}{7,1835,1}
@@ -157,7 +189,7 @@ Dockable=1
 StayOnTop=0
 
 [Breakpoints]
-Count=11
+Count=13
 Breakpoint0='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',10344,'',0,1,'',1,0,0,'',1,'','','',0,''
 Breakpoint1='D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBuscaChave_U.pas',2072,'',0,1,'',1,0,0,'',1,'','','',0,''
 Breakpoint2='D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBuscaChave_U.pas',2787,'',0,1,'',1,0,0,'',1,'','','',0,''
@@ -169,6 +201,8 @@ Breakpoint7='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',1130,'',0,1,'
 Breakpoint8='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',7662,'',0,1,'',1,0,0,'',1,'','','',0,''
 Breakpoint9='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',8853,'',0,1,'',1,0,0,'',1,'','','',0,''
 Breakpoint10='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',9734,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint11='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',9187,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint12='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',9336,'',0,1,'',1,0,0,'',1,'','','',0,''
 
 [EmbarcaderoWin32Debugger_AddressBreakpoints]
 Count=0
@@ -233,13 +267,13 @@ Create=1
 Visible=0
 Docked=1
 State=0
-Left=0
-Top=0
-Width=2769
+Left=1
+Top=27
+Width=9988
 Height=2988
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=2769
+ClientWidth=9988
 ClientHeight=2988
 TBDockHeight=2988
 LRDockWidth=2769
@@ -325,8 +359,8 @@ SplitPos=155
 
 [PropInspDesignerSelection]
 ArrangeBy=Name
-SelectedItem=Name,
-ExpandedItems=Anchors=0,Constraints=0,Font=0,LiveBindings=0,"LiveBindings Designer=0",Margins=0,Padding=0,BorderIcons=0,GlassFrame=0,BevelEdges=0,StyleElements=0,Touch=0,HorzScrollBar=0
+SelectedItem=Caption,
+ExpandedItems=Anchors=0,Constraints=0,Font=0
 
 [ClassBrowserTool]
 PercentageSizes=1
@@ -394,11 +428,11 @@ State=0
 Left=0
 Top=0
 Width=2000
-Height=8186
+Height=8721
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=2000
-ClientHeight=8186
+ClientHeight=8721
 TBDockHeight=5953
 LRDockWidth=2512
 Dockable=1
@@ -785,8 +819,8 @@ Create=1
 Visible=0
 Docked=1
 State=0
-Left=8
-Top=8
+Left=1
+Top=579
 Width=3825
 Height=2988
 MaxLeft=-1
@@ -806,17 +840,17 @@ HostDockSite=RightTabDock
 DockSiteType=1
 PercentageSizes=1
 Create=1
-Visible=1
+Visible=0
 Docked=1
 State=0
-Left=4
-Top=24
+Left=8
+Top=8
 Width=2000
-Height=8477
+Height=9012
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=2000
-ClientHeight=8477
+ClientHeight=9012
 TBDockHeight=9012
 LRDockWidth=2000
 Dockable=1
