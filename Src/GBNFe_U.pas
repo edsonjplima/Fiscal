@@ -2884,12 +2884,12 @@ begin
 
                if ( (DMFD.FDQuery2['vBCUFDest']  > 0)   and
                     (DMFD.FDQuery2['pFCPUFDest'] > 0) ) then                    // 09-01-2019 (Renildo) foi mudado de vBCFCPUFDest para vBCUFDeste
-                vBCFCPUFDest := DMFD.FDQuery2['vBCUFDest'];
+                vBCFCPUFDest         := DMFD.FDQuery2['vBCUFDest'];
 
               end;
 
              if ( DMFD.FDQuery2['pFCPUFDest'] > 0 ) then
-              pFCPUFDest     := DMFD.FDQuery2['pFCPUFDest'];
+              pFCPUFDest           := DMFD.FDQuery2['pFCPUFDest'];
 
              if ( DMFD.FDQuery2['pICMSUFDest'] = null ) then
               pICMSUFDest    := 0
@@ -2907,7 +2907,10 @@ begin
               pICMSInterPart := DMFD.FDQuery2['pICMSInterPart'];
 
              if ( DMFD.FDQuery2['vFCPUFDest'] > 0 ) then
-              vFCPUFDest     := DMFD.FDQuery2['vFCPUFDest'];
+              if ( (DMFD.FDQuery1['nfe_idDest']    = 2)     and
+                   (DMFD.FDQuery1['nfe_indFinal']  = '1')   and
+                   (DMFD.FDQuery1['des_indIEDest'] = '9') ) then
+               vFCPUFDest     := DMFD.FDQuery2['vFCPUFDest'];
 
              if ( DMFD.FDQuery2['vICMSUFDest'] = null ) then
               vICMSUFDest    := 0
@@ -2944,11 +2947,27 @@ begin
                if ( Imposto.ICMSUFDest.vBCFCPUFDest > 0 ) then
                 begin
 
-                 vBCFCP	     := Imposto.ICMSUFDest.vBCFCPUFDest;                // Informar o valor da Base de Cálculo do FCP
+                 if not ( (DMFD.FDQuery1['nfe_idDest']    = 2)     and
+                          (DMFD.FDQuery1['nfe_indFinal']  = '1')   and
+                          (DMFD.FDQuery1['des_indIEDest'] = '9') ) then
+                  vBCFCP	 := Imposto.ICMSUFDest.vBCFCPUFDest;
+
                  vBCFCPST	   := Imposto.ICMSUFDest.vBCFCPUFDest;                // Informar o valor da Base de Cálculo do FCP
                  vBCFCPSTRet := Imposto.ICMSUFDest.vBCFCPUFDest;                // Informar o valor da Base de Cálculo do FCP retido anteriormente por ST
 
                 end;
+
+               if ( DMFD.FDQuery2['pFCPUFDest'] > 0 ) then
+                if not ( (DMFD.FDQuery1['nfe_idDest']    = 2)     and
+                         (DMFD.FDQuery1['nfe_indFinal']  = '1')   and
+                         (DMFD.FDQuery1['des_indIEDest'] = '9') ) then
+                 pFCP := Imposto.ICMSUFDest.pFCPUFDest;
+
+               if ( DMFD.FDQuery2['vFCPUFDest'] > 0 ) then
+                if not ( (DMFD.FDQuery1['nfe_idDest']    = 2)     and
+                         (DMFD.FDQuery1['nfe_indFinal']  = '1')   and
+                         (DMFD.FDQuery1['des_indIEDest'] = '9') ) then
+                 vFCP := Imposto.ICMSUFDest.vFCPUFDest;
 
                pST	        := ( DMFD.FDQuery2['pc_icms_st'] +
                                 Imposto.ICMSUFDest.pFCPUFDest );                // Deve ser informada a alíquota do cálculo do ICMS-ST, já incluso o FCP. Exemplo: alíquota da mercadoria na venda ao consumidor final = 18% e 2% de FCP. A alíquota a ser informada no campo pST deve ser 20%.
@@ -3259,9 +3278,21 @@ begin
        if not (DMFD.FDQuery1['nfe_vICMSDeson'] = null) then
         Total.ICMSTot.vICMSDeson   := DMFD.FDQuery1['nfe_vICMSDeson'];          // by Edson Lima ; 11/10/2016
 
-       // by Edson Lima ; 2016-3-22 ; partilha do icms e fundo de probreza
+       // by Edson Lima ; 2020-7-14 ; partilha do icms e fundo de probreza
        if DMFD.FDQuery1['nfe_vFCPUFDest'] > 0 then
-        Total.ICMSTot.vFCPUFDest   := DMFD.FDQuery1['nfe_vFCPUFDest'];
+        begin
+
+         if ( (DMFD.FDQuery1['nfe_idDest']    = 2)     and
+              (DMFD.FDQuery1['nfe_indFinal']  = '1')   and
+              (DMFD.FDQuery1['des_indIEDest'] = '9') ) then
+
+          Total.ICMSTot.vFCPUFDest   := DMFD.FDQuery1['nfe_vFCPUFDest']
+
+         else
+
+          Total.ICMSTot.vFCP         := DMFD.FDQuery1['nfe_vFCPUFDest'];
+
+        end;
 
        if DMFD.FDQuery1['nfe_vICMSUFDest'] = null then
         Total.ICMSTot.vICMSUFDest  := 0
@@ -18071,9 +18102,19 @@ end;
 function TFrGBNFe.fFusHor(HorVer, Hor_DF, FusHor :Boolean ; CdUf  :Integer ;
                           CdMun, vdhEve  :String ; dhEve :TDateTime ): TDateTime;
 var
- vUTC : string;
+ TimeZone   : TTimeZoneInformation;
+ vUTC, vDH  : string;
 
 begin
+
+ //-----------------------------------------------------------------------------
+
+ GetTimeZoneInformation(TimeZone);
+ vDH := FormatFloat('00', TimeZone.Bias div -60) + ':00';
+ vDH := formatDateTime( 'yyyy-mm-dd"T"hh:mm:ss', now ) +
+       FormatFloat( '00', ( TimeZone.Bias  div -60 ) ) + ':00' ;
+
+ //-----------------------------------------------------------------------------
 
  // Define o valor da UTC
  case Cduf of
@@ -18144,7 +18185,6 @@ end;
 //  for fsFiles in TDirectory.GetFiles('..\Delphi\Report\') do
 //    if Pos('.fr3', LowerCase(fsFiles)) > 0 then
 //      lstbxFR3.AddItem(fsFiles, nil);
-//
 //
 //------------------------------------------------------------------------------
 

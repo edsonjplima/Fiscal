@@ -2194,7 +2194,7 @@ begin
        Transp.Transporta.IE                := DMFD.FDQuery1['tra_insc_estadual'];
        Transp.Transporta.xNome             := DMFD.FDQuery1['tra_razao_social'];
 
-       if vartostr(DMFD.FDQuery1['nfe_tipo_frete']) = '0' then Transp.modFrete:= mfConta+Emitente;
+       if vartostr(DMFD.FDQuery1['nfe_tipo_frete']) = '0' then Transp.modFrete:= mfContaEmitente;
        if vartostr(DMFD.FDQuery1['nfe_tipo_frete']) = '1' then Transp.modFrete:= mfContaDestinatario;
        if vartostr(DMFD.FDQuery1['nfe_tipo_frete']) = '2' then Transp.modFrete:= mfContaTerceiros;
 
@@ -6944,7 +6944,11 @@ begin
    begin
 
     Label1.Caption := ' ' + vartostr(DMFD.FDQuery4['razao_social']) + ' - ' + vartostr(DMFD.FDQuery4['nome_fantasia']);
-    gCnpj          := DMFD.FDQuery4['cnpj'];
+
+    gCnpj          := VarToStr(DMFD.FDQuery4['cnpj']);
+
+    if ( Length(Trim(gCnpj)) = 11 ) then
+     gCnpj         := StrZero(gCnpj, 14);
 
    end;
 
@@ -13442,8 +13446,8 @@ begin
   DMFD.FDQuery2.SQL.Add( '  where ' + c14 + ' = :' + c14 + '                 ' );
   DMFD.FDQuery2.SQL.Add( '    and ' + c15 + ' = :' + c15 + '                 ' );
   DMFD.FDQuery2.SQL.Add( '    and ' + c16 + ' = :' + c16 + '                 ' );
-  DMFD.FDQuery2.SQL.Add( '    and ' + c17 + ' = :' + c17 + '                 ' );
   DMFD.FDQuery2.SQL.Add( '    and ' + c19 + ' = :' + c19 + '                 ' );
+  DMFD.FDQuery2.SQL.Add( '    and ' + c17 + ' = :' + c17 + '                 ' );
 
   if trim(c01) <> '' then
    DMFD.FDQuery2.ParamByName(c01).Value    := p01;
@@ -13475,8 +13479,9 @@ begin
   DMFD.FDQuery2.ParamByName(c14).Value     := p14;
   DMFD.FDQuery2.ParamByName(c15).Value     := p15;
   DMFD.FDQuery2.ParamByName(c16).Value     := p16;
-  DMFD.FDQuery2.ParamByName(c17).Value     := p17;
   DMFD.FDQuery2.ParamByName(c19).Value     := p19;
+  DMFD.FDQuery2.ParamByName(c17).Value     := p17;
+
   try
 
    DMFD.FDQuery2.ExecSQL;
@@ -18072,6 +18077,26 @@ begin
 
  // Define o valor da UTC
  case Cduf of
+
+//  Adapitando nova sistemática para essa função - By Edson Lima 03/07/2020
+//  1 - Criei uma função para pegar o time zone.
+//
+//  function PegaTimeZone: string;
+//  var
+//  TimeZone: TTimeZoneInformation;
+//  begin
+//  GetTimeZoneInformation(TimeZone);
+//
+//  Result := FormatFloat('00', TimeZone.Bias div -60) + ':00';
+//  end;
+//
+//  2 - Formatei a data e hora e incrementei com a função.
+//
+//  InfEvento.DhEvento := FormatDateTime('YYYY-MM-DD', Now) + 'T' + FormatDateTime('hh:nn:ss', Now) + PegaTimeZone;
+//
+//  ou
+//
+//  InfEvento.DhEvento := formatDateTime( 'yyyy-mm-dd"T"hh:mm:ss', now ) + FormatFloat( '00', ( fusoHorario.Bias div fusoHorario.DaylightBias ) ) + ':00' ;
 
   11, 12, 13, 14:         vUTC := '-04:00';           //Região Norte            // 11-Rondônia/RO - 12-Acre/AC - 13-Amazonas/AM - 14-Roraima/RR
 

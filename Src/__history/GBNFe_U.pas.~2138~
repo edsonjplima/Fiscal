@@ -1558,7 +1558,7 @@ begin
        (* Poderá ser implementado no futuro                                                                                 *)
        (* ----------------------------------------------------------------------------------------------------------------- *)
 
-       // Aqui deve haver a leitura de fornecedores (contadoes / atores)
+       // Aqui deve haver a leitura de fornecedores (contadores / atores)
 
        autXML.Clear;
        vAutXMLCNPJCPFWORD := '';
@@ -1585,7 +1585,7 @@ begin
                    ( I = Length(vAutXMLCNPJCPFALL)) ) then
                begin
 
-                autXML.Add.CNPJCPF := vAutXMLCNPJCPFWORD;                       //Informar CNPJ ou CPF. Preencher os zeros não significativos.
+                autXML.Add.CNPJCPF := vAutXMLCNPJCPFWORD;                       // Informar CNPJ ou CPF. Preencher os zeros não significativos.
                 vAutXMLCNPJCPFWORD := '';
 
                end;
@@ -2884,12 +2884,12 @@ begin
 
                if ( (DMFD.FDQuery2['vBCUFDest']  > 0)   and
                     (DMFD.FDQuery2['pFCPUFDest'] > 0) ) then                    // 09-01-2019 (Renildo) foi mudado de vBCFCPUFDest para vBCUFDeste
-                vBCFCPUFDest := DMFD.FDQuery2['vBCUFDest'];
+                vBCFCPUFDest         := DMFD.FDQuery2['vBCUFDest'];
 
               end;
 
              if ( DMFD.FDQuery2['pFCPUFDest'] > 0 ) then
-              pFCPUFDest     := DMFD.FDQuery2['pFCPUFDest'];
+              pFCPUFDest           := DMFD.FDQuery2['pFCPUFDest'];
 
              if ( DMFD.FDQuery2['pICMSUFDest'] = null ) then
               pICMSUFDest    := 0
@@ -2945,6 +2945,9 @@ begin
                 begin
 
                  vBCFCP	     := Imposto.ICMSUFDest.vBCFCPUFDest;                // Informar o valor da Base de Cálculo do FCP
+                 pFCP        := Imposto.ICMSUFDest.pFCPUFDest;                  // Informar o valor da Base de Cálculo do FCP
+                 vFCP        := Imposto.ICMSUFDest.vFCPUFDest;                  // Informar o valor da Base de Cálculo do FCP
+
                  vBCFCPST	   := Imposto.ICMSUFDest.vBCFCPUFDest;                // Informar o valor da Base de Cálculo do FCP
                  vBCFCPSTRet := Imposto.ICMSUFDest.vBCFCPUFDest;                // Informar o valor da Base de Cálculo do FCP retido anteriormente por ST
 
@@ -3262,6 +3265,10 @@ begin
        // by Edson Lima ; 2016-3-22 ; partilha do icms e fundo de probreza
        if DMFD.FDQuery1['nfe_vFCPUFDest'] > 0 then
         Total.ICMSTot.vFCPUFDest   := DMFD.FDQuery1['nfe_vFCPUFDest'];
+
+       // by Edson Lima ; 2020-7-14 ; partilha do icms e fundo de probreza
+       if DMFD.FDQuery1['nfe_vFCPUFDest'] > 0 then
+        Total.ICMSTot.vFCP         := DMFD.FDQuery1['nfe_vFCPUFDest'];
 
        if DMFD.FDQuery1['nfe_vICMSUFDest'] = null then
         Total.ICMSTot.vICMSUFDest  := 0
@@ -6944,7 +6951,11 @@ begin
    begin
 
     Label1.Caption := ' ' + vartostr(DMFD.FDQuery4['razao_social']) + ' - ' + vartostr(DMFD.FDQuery4['nome_fantasia']);
-    gCnpj          := DMFD.FDQuery4['cnpj'];
+
+    gCnpj          := VarToStr(DMFD.FDQuery4['cnpj']);
+
+    if ( Length(Trim(gCnpj)) = 11 ) then
+     gCnpj         := StrZero(gCnpj, 14);
 
    end;
 
@@ -13442,8 +13453,8 @@ begin
   DMFD.FDQuery2.SQL.Add( '  where ' + c14 + ' = :' + c14 + '                 ' );
   DMFD.FDQuery2.SQL.Add( '    and ' + c15 + ' = :' + c15 + '                 ' );
   DMFD.FDQuery2.SQL.Add( '    and ' + c16 + ' = :' + c16 + '                 ' );
-  DMFD.FDQuery2.SQL.Add( '    and ' + c17 + ' = :' + c17 + '                 ' );
   DMFD.FDQuery2.SQL.Add( '    and ' + c19 + ' = :' + c19 + '                 ' );
+  DMFD.FDQuery2.SQL.Add( '    and ' + c17 + ' = :' + c17 + '                 ' );
 
   if trim(c01) <> '' then
    DMFD.FDQuery2.ParamByName(c01).Value    := p01;
@@ -13475,8 +13486,9 @@ begin
   DMFD.FDQuery2.ParamByName(c14).Value     := p14;
   DMFD.FDQuery2.ParamByName(c15).Value     := p15;
   DMFD.FDQuery2.ParamByName(c16).Value     := p16;
-  DMFD.FDQuery2.ParamByName(c17).Value     := p17;
   DMFD.FDQuery2.ParamByName(c19).Value     := p19;
+  DMFD.FDQuery2.ParamByName(c17).Value     := p17;
+
   try
 
    DMFD.FDQuery2.ExecSQL;
@@ -18066,9 +18078,19 @@ end;
 function TFrGBNFe.fFusHor(HorVer, Hor_DF, FusHor :Boolean ; CdUf  :Integer ;
                           CdMun, vdhEve  :String ; dhEve :TDateTime ): TDateTime;
 var
- vUTC : string;
+ TimeZone   : TTimeZoneInformation;
+ vUTC, vDH  : string;
 
 begin
+
+ //-----------------------------------------------------------------------------
+
+ GetTimeZoneInformation(TimeZone);
+ vDH := FormatFloat('00', TimeZone.Bias div -60) + ':00';
+ vDH := formatDateTime( 'yyyy-mm-dd"T"hh:mm:ss', now ) +
+       FormatFloat( '00', ( TimeZone.Bias  div -60 ) ) + ':00' ;
+
+ //-----------------------------------------------------------------------------
 
  // Define o valor da UTC
  case Cduf of
@@ -18139,7 +18161,6 @@ end;
 //  for fsFiles in TDirectory.GetFiles('..\Delphi\Report\') do
 //    if Pos('.fr3', LowerCase(fsFiles)) > 0 then
 //      lstbxFR3.AddItem(fsFiles, nil);
-//
 //
 //------------------------------------------------------------------------------
 

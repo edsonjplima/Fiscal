@@ -7,7 +7,7 @@ object FrGBNFe: TFrGBNFe
   BorderIcons = []
   BorderStyle = bsSingle
   Caption = 'N F e    &    N F C e'
-  ClientHeight = 551
+  ClientHeight = 540
   ClientWidth = 731
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -261,7 +261,7 @@ object FrGBNFe: TFrGBNFe
     Left = 573
     Top = 98
     Width = 158
-    Height = 387
+    Height = 376
     Align = alRight
     BevelOuter = bvNone
     ParentShowHint = False
@@ -515,7 +515,7 @@ object FrGBNFe: TFrGBNFe
       OnMouseMove = BitBtn9MouseMove
     end
     object BitBtn11: TBitBtn
-      Left = 15
+      Left = 17
       Top = 216
       Width = 130
       Height = 25
@@ -544,7 +544,7 @@ object FrGBNFe: TFrGBNFe
     end
     object BitBtn13: TBitBtn
       Left = 15
-      Top = 247
+      Top = 246
       Width = 130
       Height = 25
       Cursor = crHandPoint
@@ -570,7 +570,7 @@ object FrGBNFe: TFrGBNFe
     end
     object Panel8: TPanel
       Left = 0
-      Top = 311
+      Top = 300
       Width = 158
       Height = 76
       Align = alBottom
@@ -742,7 +742,7 @@ object FrGBNFe: TFrGBNFe
   end
   object Panel2: TPanel
     Left = 0
-    Top = 485
+    Top = 474
     Width = 731
     Height = 66
     Align = alBottom
@@ -820,14 +820,14 @@ object FrGBNFe: TFrGBNFe
     Left = 0
     Top = 98
     Width = 573
-    Height = 387
+    Height = 376
     Align = alClient
     TabOrder = 2
     object Panel6: TPanel
       Left = 1
       Top = 109
       Width = 571
-      Height = 103
+      Height = 92
       Hint = ' Mostra Notas Conforme Escolha na Visualiza'#231#227'o '
       Align = alClient
       TabOrder = 0
@@ -835,7 +835,7 @@ object FrGBNFe: TFrGBNFe
         Left = 1
         Top = 27
         Width = 569
-        Height = 75
+        Height = 64
         Align = alClient
         Bands = <
           item
@@ -1116,7 +1116,7 @@ object FrGBNFe: TFrGBNFe
         Left = 1
         Top = 27
         Width = 569
-        Height = 75
+        Height = 64
         BorderStyle = cxcbsNone
         Align = alClient
         Bands = <
@@ -1496,7 +1496,7 @@ object FrGBNFe: TFrGBNFe
     end
     object Panel7: TPanel
       Left = 1
-      Top = 212
+      Top = 201
       Width = 571
       Height = 174
       Hint = ' Janelas de Resposta e Retornos da SEFAZ'#13#10
@@ -2414,7 +2414,7 @@ object FrGBNFe: TFrGBNFe
     Left = 312
     Top = 10
     Bitmap = {
-      494C0101CC041006E00710001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C0101CC041006F80710001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000004013000001002000000000000040
       1300000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
