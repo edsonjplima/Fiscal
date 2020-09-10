@@ -2414,7 +2414,7 @@ object FrGBNFe: TFrGBNFe
     Left = 312
     Top = 10
     Bitmap = {
-      494C0101CC041006F80710001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C0101CC0410060C0810001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000004013000001002000000000000040
       1300000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -43080,10 +43080,10 @@ object FrGBNFe: TFrGBNFe
   object ACBrNFe1: TACBrNFe
     MAIL = ACBrMail1
     OnStatusChange = ACBrNFe1StatusChange
-    Configuracoes.Geral.SSLLib = libCapicom
-    Configuracoes.Geral.SSLCryptLib = cryCapicom
+    Configuracoes.Geral.SSLLib = libCustom
+    Configuracoes.Geral.SSLCryptLib = cryNone
     Configuracoes.Geral.SSLHttpLib = httpWinINet
-    Configuracoes.Geral.SSLXmlSignLib = xsMsXmlCapicom
+    Configuracoes.Geral.SSLXmlSignLib = xsNone
     Configuracoes.Geral.FormatoAlerta = 'TAG:%TAGNIVEL% ID:%ID%/%TAG%(%DESCRICAO%) - %MSG%.'
     Configuracoes.Geral.ValidarDigest = False
     Configuracoes.Geral.VersaoQRCode = veqr000

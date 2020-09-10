@@ -400,7 +400,7 @@ object FrXML: TFrXML
     Top = 63
     Width = 950
     Height = 331
-    ActivePage = TabSheet1
+    ActivePage = TabSheet2
     Align = alClient
     Style = tsFlatButtons
     TabOrder = 2
@@ -408,6 +408,10 @@ object FrXML: TFrXML
     object TabSheet2: TTabSheet
       Caption = 'Consulta'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object Panel5: TPanel
         Left = 0
         Top = 0
@@ -417,6 +421,28 @@ object FrXML: TFrXML
         BevelInner = bvLowered
         TabOrder = 0
         OnMouseMove = Panel5MouseMove
+        object IWSilverlight1: TIWSilverlight
+          Left = 66
+          Top = 162
+          Width = 24
+          Height = 24
+          Cursor = crAuto
+          ParentShowHint = False
+          ShowHint = True
+          ZIndex = 0
+          RenderSize = True
+          StyleRenderOptions.RenderSize = True
+          StyleRenderOptions.RenderPosition = True
+          StyleRenderOptions.RenderFont = True
+          StyleRenderOptions.RenderZIndex = True
+          StyleRenderOptions.RenderVisibility = True
+          StyleRenderOptions.RenderStatus = True
+          StyleRenderOptions.RenderAbsolute = False
+          EnableFramerateCounter = True
+          Framerate = 24
+          BGColor = clWebWHITE
+          Windowless = False
+        end
         object GroupBox11: TGroupBox
           Left = 12
           Top = 7
@@ -701,6 +727,10 @@ object FrXML: TFrXML
     object TabSheet1: TTabSheet
       Caption = 'Extrair XML'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object pnl1: TPanel
         Left = 0
         Top = 0

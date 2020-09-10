@@ -2837,8 +2837,20 @@ begin
                    qLote         := DMFD.FDQuery19['qLote'];
                    dFab          := DMFD.FDQuery19['dFab'];
                    dVal          := DMFD.FDQuery19['dVal'];
-                   if ( cAgreg <> null ) then
+                   if ( DMFD.FDQuery19['cAgreg'] <> null ) then
                     cAgreg       := VarToStr(DMFD.FDQuery19['cAgreg']);
+//                   if ( DMFD.FDQuery19['Safra'] <> null ) then
+//                    cSafra       := DMFD.FDQuery19['Safra'];
+//                   if ( DMFD.FDQuery19['NomFor'] <> null ) then
+//                    cNomFor      := DMFD.FDQuery19['NomFor'];
+//                   if ( DMFD.FDQuery19['CNPJ'] <> null ) then
+//                    cCNPJ        := DMFD.FDQuery19['CNPJ'];
+//                   if ( DMFD.FDQuery19['InsRns'] <> null ) then
+//                    cInsRns      := DMFD.FDQuery19['InsRns'];
+//                   if ( DMFD.FDQuery19['Unidade'] <> null ) then
+//                    cUnidade     := DMFD.FDQuery19['Unidade'];
+//                   if ( DMFD.FDQuery19['Peso'] <> null ) then
+//                    qPeso        := DMFD.FDQuery19['Peso'];
 
                  end;
 
@@ -3079,6 +3091,12 @@ begin
              vBCST    := DMFD.FDQuery2['base_icms_st'];
              vICMSST  := DMFD.FDQuery2['vl_icms_st'];
              pICMSST  := DMFD.FDQuery2['pc_icms_st'];
+             if ( DMFD.FDQuery2['modBCST'] <> null ) then
+              modBCST  := DMFD.FDQuery2['modBCST'];
+             if ( DMFD.FDQuery2['pMVAST'] <> null ) then
+              pMVAST   := DMFD.FDQuery2['pMVAST'];
+             if ( DMFD.FDQuery2['pRedBCST'] <> null ) then
+              pRedBCST := DMFD.FDQuery2['pRedBCST'];
 
              if (   (FrPar.cbb2.ItemIndex = 1)                      or
                   ( (FrPar.cbb2.ItemIndex = 2) and (gModelo=55) )   or
