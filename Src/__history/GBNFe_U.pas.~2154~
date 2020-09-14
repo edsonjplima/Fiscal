@@ -2830,25 +2830,30 @@ begin
              While not DMFD.FDQuery19.eof do                                    // Enquanto não for o fim do lote
               begin
 
+               if ( DMFD.FDQuery19['Safra'] <> null ) then
+                Prod.xProd := Prod.xProd + Chr(13) + 'PNR: ' + DMFD.FDQuery19['Safra'];
+               if ( DMFD.FDQuery19['NomFor'] <> null ) then
+                Prod.xProd := Prod.xProd + Chr(13) + 'PDT: ' + DMFD.FDQuery19['NomFor'];
+               if ( DMFD.FDQuery19['CNPJ'] <> null ) then
+                Prod.xProd := Prod.xProd + Chr(13) + 'DOC: ' + DMFD.FDQuery19['CNPJ'];
+               if ( DMFD.FDQuery19['InsRns'] <> null ) then
+                Prod.xProd := Prod.xProd + Chr(13) + 'RNS: ' + DMFD.FDQuery19['InsRns'];
+               if ( DMFD.FDQuery19['Unidade'] <> null ) then
+                Prod.xProd := Prod.xProd + Chr(13) + 'UND: ' + DMFD.FDQuery19['Unidade'];
+               if ( DMFD.FDQuery19['Peso'] <> null ) then
+                Prod.xProd := Prod.xProd + ' - Peso: ' + DMFD.FDQuery19['Peso'];
+
                with Prod.rastro.Add do
-                  begin
+                begin
 
-                   nLote         := DMFD.FDQuery19['nLote'];
-                   qLote         := DMFD.FDQuery19['qLote'];
-                   dFab          := DMFD.FDQuery19['dFab'];
-                   dVal          := DMFD.FDQuery19['dVal'];
-                   if ( cAgreg <> null ) then
-                    cAgreg       := VarToStr(DMFD.FDQuery19['cAgreg']);
+                 nLote         := DMFD.FDQuery19['nLote'];
+                 qLote         := DMFD.FDQuery19['qLote'];
+                 dFab          := DMFD.FDQuery19['dFab'];
+                 dVal          := DMFD.FDQuery19['dVal'];
+                 if ( DMFD.FDQuery19['cAgreg'] <> null ) then
+                  cAgreg       := VarToStr(DMFD.FDQuery19['cAgreg']);
 
-
-//                    1. Safra Varchar(20) Null
-//                    2. NomFor Varchar(75) Null
-//                    3. CNPJ Varchar(18) Null
-//                    4. InsRns Varchar(15) Null
-//                    5. Unidade Varchar(06) Null
-//                    6. Peso Float Null
-
-                 end;
+                end;
 
                DMFD.FDQuery19.next;                                             // Avança para o próximo registro
 
@@ -3087,6 +3092,12 @@ begin
              vBCST    := DMFD.FDQuery2['base_icms_st'];
              vICMSST  := DMFD.FDQuery2['vl_icms_st'];
              pICMSST  := DMFD.FDQuery2['pc_icms_st'];
+             if ( DMFD.FDQuery2['modBCST'] <> null ) then
+              modBCST  := DMFD.FDQuery2['modBCST'];
+             if ( DMFD.FDQuery2['pMVAST'] <> null ) then
+              pMVAST   := DMFD.FDQuery2['pMVAST'];
+             if ( DMFD.FDQuery2['pRedBCST'] <> null ) then
+              pRedBCST := DMFD.FDQuery2['pRedBCST'];
 
              if (   (FrPar.cbb2.ItemIndex = 1)                      or
                   ( (FrPar.cbb2.ItemIndex = 2) and (gModelo=55) )   or

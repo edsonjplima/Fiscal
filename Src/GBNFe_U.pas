@@ -2831,28 +2831,16 @@ begin
               begin
 
                with Prod.rastro.Add do
-                  begin
+                begin
 
-                   nLote         := DMFD.FDQuery19['nLote'];
-                   qLote         := DMFD.FDQuery19['qLote'];
-                   dFab          := DMFD.FDQuery19['dFab'];
-                   dVal          := DMFD.FDQuery19['dVal'];
-                   if ( DMFD.FDQuery19['cAgreg'] <> null ) then
-                    cAgreg       := VarToStr(DMFD.FDQuery19['cAgreg']);
-//                   if ( DMFD.FDQuery19['Safra'] <> null ) then
-//                    cSafra       := DMFD.FDQuery19['Safra'];
-//                   if ( DMFD.FDQuery19['NomFor'] <> null ) then
-//                    cNomFor      := DMFD.FDQuery19['NomFor'];
-//                   if ( DMFD.FDQuery19['CNPJ'] <> null ) then
-//                    cCNPJ        := DMFD.FDQuery19['CNPJ'];
-//                   if ( DMFD.FDQuery19['InsRns'] <> null ) then
-//                    cInsRns      := DMFD.FDQuery19['InsRns'];
-//                   if ( DMFD.FDQuery19['Unidade'] <> null ) then
-//                    cUnidade     := DMFD.FDQuery19['Unidade'];
-//                   if ( DMFD.FDQuery19['Peso'] <> null ) then
-//                    qPeso        := DMFD.FDQuery19['Peso'];
+                 nLote         := DMFD.FDQuery19['nLote'];
+                 qLote         := DMFD.FDQuery19['qLote'];
+                 dFab          := DMFD.FDQuery19['dFab'];
+                 dVal          := DMFD.FDQuery19['dVal'];
+                 if ( DMFD.FDQuery19['cAgreg'] <> null ) then
+                  cAgreg       := VarToStr(DMFD.FDQuery19['cAgreg']);
 
-                 end;
+                end;
 
                DMFD.FDQuery19.next;                                             // Avança para o próximo registro
 
