@@ -1259,9 +1259,26 @@ begin
             FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.PathSchemas                 := gCamSch;
             Configuracoes.Arquivos.PathSalvar                                   := FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.PathSalvar;
 
+            // DistribuicaoDFe(cUF,cCNPJ,nUltNSU,nNSU,aChNFe)
+            // DistribuicaoDFePorChaveNFe(cUF, cCNPJ, aChNFe)
+            // DistribuicaoDFePorNSU(cUF, cCNPJ, nNSU)
+            // DistribuicaoDFePorUltNSU(cUF, cCNPJ, nUltNSU)
+
+            if not ( DistribuicaoDFe( DMFD.FDQuery4['codigo_uf'],
+                             VarToStr(DMFD.FDQuery4['cnpj']),
+                             '0',
+                             VarToStr(DMFD.FDQryGeral2['MDFe_Chave_nfe']) ) ) then
+             begin
+
+              Application.Messagebox( PWideChar('O download falhou pra chave:' +
+                                       VarToStr(DMFD.FDQryGeral2['MDFe_Chave_nfe'])), 'Download',
+                                       mb_Ok + mb_ICONINFORMATION );
+
+             end;
+
             if not ( DistribuicaoDFePorChaveNFe(DMFD.FDQuery4['codigo_uf'],
                      VarToStr(DMFD.FDQuery4['cnpj']),
-                     VarToStr(DMFD.FDQryGeral2['MDFe_Chave_nfe'])) ) then       // antes -->  Download; // Efetua o download do Xml da nota fiscal
+                     VarToStr(DMFD.FDQryGeral2['MDFe_Chave_nfe'])) ) then       // Efetua o download do Xml da nota fiscal
              begin
 
               Application.Messagebox( PWideChar('O download falhou pra chave:' +
@@ -1445,7 +1462,7 @@ begin
  vIsChecked      := false;
  vCntNotPro      := 0;
 
- if not gImportXML then // Se gImportXML for verdadeiro faz a Importação caso contrario foz donwload
+ if not gImportXML then // Se gImportXML for verdadeiro faz a Importação caso contrario faz donwload
   begin
 
    Try
@@ -1654,6 +1671,13 @@ begin
 
     if ( frmStatus <> nil ) then
      frmStatus.Hide;
+
+
+    // Rotina de verificação de downloads
+
+
+
+
 
     Application.Messagebox( PWideChar('Download finalizado!'), 'Download',
                              mb_Ok + mb_ICONINFORMATION );
@@ -4416,3 +4440,4 @@ begin
 end;
 
 end.
+

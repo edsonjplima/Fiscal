@@ -542,7 +542,7 @@ begin
       nodPed.Values[cxTLMsCpf.ItemIndex]      := FD.fieldByName('MDFe_cnpj_cpf').AsString;
       nodPed.Values[cxTLMsxNo.ItemIndex]      := FD.fieldByName('MDFe_xNome').AsString;
       nodPed.Values[cxTLMs_IE.ItemIndex]      := FD.fieldByName('MDFe_IE').AsString;
-      nodPed.Values[cxTLMdDEm.ItemIndex]      := FD.fieldByName('MDFe_dEmi').AsVariant;
+      nodPed.Values[cxTLMdDEm.ItemIndex]      := FD.fieldByName('MDFe_dEmi').AsDateTime;
 
       if FD['MDFe_tpNF'] = 0 then
        nodPed.Values[cxTLMsTpN.ItemIndex]     := '0-Entrada'
@@ -1445,7 +1445,7 @@ begin
  vIsChecked      := false;
  vCntNotPro      := 0;
 
- if not gImportXML then // Se gImportXML for verdadeiro faz a Importação caso contrario foz donwload
+ if not gImportXML then // Se gImportXML for verdadeiro faz a Importação caso contrario faz donwload
   begin
 
    Try
@@ -1654,6 +1654,13 @@ begin
 
     if ( frmStatus <> nil ) then
      frmStatus.Hide;
+
+
+    // Rotina de verificação de downloads
+
+
+
+
 
     Application.Messagebox( PWideChar('Download finalizado!'), 'Download',
                              mb_Ok + mb_ICONINFORMATION );

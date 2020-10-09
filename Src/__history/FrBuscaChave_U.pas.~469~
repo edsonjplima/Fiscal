@@ -1445,7 +1445,7 @@ begin
  vIsChecked      := false;
  vCntNotPro      := 0;
 
- if not gImportXML then // Se gImportXML for verdadeiro faz a Importação caso contrario foz donwload
+ if not gImportXML then // Se gImportXML for verdadeiro faz a Importação caso contrario faz donwload
   begin
 
    Try
@@ -1490,9 +1490,9 @@ begin
             else
              Configuracoes.WebServices.Ambiente  := taHomologacao;
 
-//          DownloadNFe.Download.Chaves.Clear;
-//          DownloadNFe.Download.Chaves.Add;
-//          DownloadNFe.Download.Chaves.Items[DownloadNFe.Download.Chaves.Count-1].chNFe := DMFD.FDQryGeral2['MDFe_Chave_nfe'];
+          DownloadNFe.Download.Chaves.Clear;
+          DownloadNFe.Download.Chaves.Add;
+          DownloadNFe.Download.Chaves.Items[DownloadNFe.Download.Chaves.Count-1].chNFe := DMFD.FDQryGeral2['MDFe_Chave_nfe'];
 
           //--------------------------------------------------------------------
           // trunk2
@@ -1654,6 +1654,13 @@ begin
 
     if ( frmStatus <> nil ) then
      frmStatus.Hide;
+
+
+    // Rotina de verificação de downloads
+
+
+
+
 
     Application.Messagebox( PWideChar('Download finalizado!'), 'Download',
                              mb_Ok + mb_ICONINFORMATION );
@@ -4416,3 +4423,4 @@ begin
 end;
 
 end.
+

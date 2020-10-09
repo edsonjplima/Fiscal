@@ -1259,9 +1259,27 @@ begin
             FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.PathSchemas                 := gCamSch;
             Configuracoes.Arquivos.PathSalvar                                   := FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.PathSalvar;
 
+            // DistribuicaoDFe(cUF,cCNPJ,nUltNSU,nNSU,aChNFe)
+            // DistribuicaoDFePorChaveNFe(cUF, cCNPJ, aChNFe)
+            // DistribuicaoDFePorNSU(cUF, cCNPJ, nNSU)
+            // DistribuicaoDFePorUltNSU(cUF, cCNPJ, nUltNSU)
+
+//            if not ( DistribuicaoDFe( DMFD.FDQuery4['codigo_uf'],
+//                             VarToStr(DMFD.FDQuery4['cnpj']),
+//                             '0',
+//                             VarToStr(DMFD.FDQryGeral2['MDFe_NSU']),
+//                             VarToStr(DMFD.FDQryGeral2['MDFe_Chave_nfe']) ) ) then
+//             begin
+//
+//              Application.Messagebox( PWideChar('O download falhou pra chave:' +
+//                                       VarToStr(DMFD.FDQryGeral2['MDFe_Chave_nfe'])), 'Download',
+//                                       mb_Ok + mb_ICONINFORMATION );
+//
+//             end;
+
             if not ( DistribuicaoDFePorChaveNFe(DMFD.FDQuery4['codigo_uf'],
                      VarToStr(DMFD.FDQuery4['cnpj']),
-                     VarToStr(DMFD.FDQryGeral2['MDFe_Chave_nfe'])) ) then       // antes -->  Download; // Efetua o download do Xml da nota fiscal
+                     VarToStr(DMFD.FDQryGeral2['MDFe_Chave_nfe'])) ) then       // Efetua o download do Xml da nota fiscal
              begin
 
               Application.Messagebox( PWideChar('O download falhou pra chave:' +
@@ -1445,7 +1463,7 @@ begin
  vIsChecked      := false;
  vCntNotPro      := 0;
 
- if not gImportXML then // Se gImportXML for verdadeiro faz a Importação caso contrario foz donwload
+ if not gImportXML then // Se gImportXML for verdadeiro faz a Importação caso contrario faz donwload
   begin
 
    Try
@@ -1490,12 +1508,9 @@ begin
             else
              Configuracoes.WebServices.Ambiente  := taHomologacao;
 
-//          DownloadNFe.Download.Chaves.Clear;
-//          DownloadNFe.Download.Chaves.Add;
-//          DownloadNFe.Download.Chaves.Items[DownloadNFe.Download.Chaves.Count-1].chNFe := DMFD.FDQryGeral2['MDFe_Chave_nfe'];
-
           //--------------------------------------------------------------------
           // trunk2
+
           FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.DownloadDFe.PathDownload      := gCamXml;        // Edson Lima ; 2019-07-29
           FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.PathEvento                    := gCamXml;
           FrGBNFe.ACBrNFe1.Configuracoes.Arquivos.PathSalvar                    := gCamXml;
@@ -1507,7 +1522,7 @@ begin
 
           if not ( DistribuicaoDFePorChaveNFe(DMFD.FDQuery4['codigo_uf'],
                    VarToStr(DMFD.FDQuery4['cnpj']),
-                   VarToStr(DMFD.FDQryGeral2['MDFe_Chave_nfe'])) ) then       // antes -->  Download; // Efetua o download do Xml da nota fiscal
+                   VarToStr(DMFD.FDQryGeral2['MDFe_Chave_nfe'])) ) then         // Efetua o download do Xml da nota fiscal
            begin
 
             Application.Messagebox( PWideChar('O download falhou pra chave:' +
@@ -1655,6 +1670,13 @@ begin
     if ( frmStatus <> nil ) then
      frmStatus.Hide;
 
+
+    // Rotina de verificação de downloads
+
+
+
+
+
     Application.Messagebox( PWideChar('Download finalizado!'), 'Download',
                              mb_Ok + mb_ICONINFORMATION );
 
@@ -1746,6 +1768,7 @@ begin
 
         if FileExists(vArI) then                                                // Caso o arquivo é importado já tenha sido importado
          begin
+
           if not vAll then
            begin
 
@@ -1756,8 +1779,10 @@ begin
             FrMens.ShowModal;
 
             case gmr of
+
              3 : // Antes --> IdCancel :
               begin
+
                HaDe(True);                                                      // Habilita ou Desabilita componentes dutante a consulta
 
                if not gDeuErrConsiste then
@@ -1770,6 +1795,7 @@ begin
                FrImportXML.DirectoryListBox1.Directory := vCam;
 
                exit;
+
               end;
 
              6, 10 :   // Se a escolha for [Sim] ou [Sim todos]
@@ -1804,7 +1830,9 @@ begin
                vIdYesNo := false;
 
               end;
+
             end;
+
            end
           else
            begin
@@ -1821,6 +1849,7 @@ begin
 
              end
             else
+
              if (gmr = 9) then
               vCntNotPro := (vCntNotPro - 1);
 
