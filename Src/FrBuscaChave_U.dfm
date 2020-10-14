@@ -4,7 +4,7 @@ object FrBuscaChave: TFrBuscaChave
   BorderIcons = []
   BorderStyle = bsSingle
   Caption = 'Manifesta'#231#227'o do Destinat'#225'rio'
-  ClientHeight = 587
+  ClientHeight = 666
   ClientWidth = 784
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -253,7 +253,7 @@ object FrBuscaChave: TFrBuscaChave
   TextHeight = 13
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 558
+    Top = 637
     Width = 784
     Height = 29
     Font.Charset = DEFAULT_CHARSET
@@ -267,6 +267,7 @@ object FrBuscaChave: TFrBuscaChave
         Width = 50
       end>
     UseSystemFont = False
+    ExplicitTop = 558
   end
   object Panel2: TPanel
     Left = 0
@@ -501,9 +502,10 @@ object FrBuscaChave: TFrBuscaChave
     Left = 665
     Top = 202
     Width = 119
-    Height = 251
+    Height = 330
     Align = alRight
     TabOrder = 4
+    ExplicitHeight = 251
     object SpeedButton7: TSpeedButton
       Left = 6
       Top = 47
@@ -674,11 +676,12 @@ object FrBuscaChave: TFrBuscaChave
   end
   object Panel1: TPanel
     Left = 0
-    Top = 453
+    Top = 532
     Width = 784
     Height = 105
     Align = alBottom
     TabOrder = 1
+    ExplicitTop = 453
     DesignSize = (
       784
       105)
@@ -1135,11 +1138,12 @@ object FrBuscaChave: TFrBuscaChave
     Left = 0
     Top = 202
     Width = 665
-    Height = 251
+    Height = 330
     Hint = ' Mostra Notas MDe Conforme Escolha na Visualiza'#231#227'o '
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 5
+    ExplicitHeight = 251
     object Panel10: TPanel
       Left = 0
       Top = 0
@@ -1161,7 +1165,7 @@ object FrBuscaChave: TFrBuscaChave
       Left = 0
       Top = 26
       Width = 665
-      Height = 225
+      Height = 304
       Align = alClient
       Bands = <
         item
@@ -1237,6 +1241,7 @@ object FrBuscaChave: TFrBuscaChave
       OnCustomDrawDataCell = cxTLMCustomDrawDataCell
       OnEditValueChanged = cxTLMEditValueChanged
       OnExit = cxTLMExit
+      ExplicitHeight = 225
       object cxTLMbSel: TcxTreeListColumn
         PropertiesClassName = 'TcxCheckBoxProperties'
         Properties.Alignment = taCenter

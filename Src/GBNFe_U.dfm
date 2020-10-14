@@ -7,7 +7,7 @@ object FrGBNFe: TFrGBNFe
   BorderIcons = []
   BorderStyle = bsSingle
   Caption = 'N F e    &    N F C e'
-  ClientHeight = 540
+  ClientHeight = 545
   ClientWidth = 731
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -261,12 +261,13 @@ object FrGBNFe: TFrGBNFe
     Left = 573
     Top = 98
     Width = 158
-    Height = 376
+    Height = 381
     Align = alRight
     BevelOuter = bvNone
     ParentShowHint = False
     ShowHint = False
     TabOrder = 1
+    ExplicitHeight = 376
     object BitBtn1: TBitBtn
       Left = 15
       Top = 6
@@ -570,12 +571,13 @@ object FrGBNFe: TFrGBNFe
     end
     object Panel8: TPanel
       Left = 0
-      Top = 300
+      Top = 305
       Width = 158
       Height = 76
       Align = alBottom
       BevelOuter = bvNone
       TabOrder = 13
+      ExplicitTop = 300
       object BitBtn10: TBitBtn
         Left = 17
         Top = 9
@@ -742,12 +744,13 @@ object FrGBNFe: TFrGBNFe
   end
   object Panel2: TPanel
     Left = 0
-    Top = 474
+    Top = 479
     Width = 731
     Height = 66
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 0
+    ExplicitTop = 474
     object StatusBar1: TStatusBar
       Left = 0
       Top = 42
@@ -820,22 +823,24 @@ object FrGBNFe: TFrGBNFe
     Left = 0
     Top = 98
     Width = 573
-    Height = 376
+    Height = 381
     Align = alClient
     TabOrder = 2
+    ExplicitHeight = 376
     object Panel6: TPanel
       Left = 1
       Top = 109
       Width = 571
-      Height = 92
+      Height = 97
       Hint = ' Mostra Notas Conforme Escolha na Visualiza'#231#227'o '
       Align = alClient
       TabOrder = 0
+      ExplicitHeight = 92
       object cxTLInut: TcxTreeList
         Left = 1
         Top = 27
         Width = 569
-        Height = 64
+        Height = 69
         Align = alClient
         Bands = <
           item
@@ -891,6 +896,7 @@ object FrGBNFe: TFrGBNFe
         OnCustomDrawDataCell = cxTLInutCustomDrawDataCell
         OnExit = cxTLExit
         OnMouseMove = cxTLMouseMove
+        ExplicitHeight = 64
         object cxTLdIDem: TcxTreeListColumn
           PropertiesClassName = 'TcxDateEditProperties'
           Properties.Alignment.Horz = taCenter
@@ -1116,7 +1122,7 @@ object FrGBNFe: TFrGBNFe
         Left = 1
         Top = 27
         Width = 569
-        Height = 64
+        Height = 69
         BorderStyle = cxcbsNone
         Align = alClient
         Bands = <
@@ -1188,6 +1194,7 @@ object FrGBNFe: TFrGBNFe
         OnExit = cxTLExit
         OnKeyDown = cxTLKeyDown
         OnMouseMove = cxTLMouseMove
+        ExplicitHeight = 64
         object cxTLbSel: TcxTreeListColumn
           PropertiesClassName = 'TcxCheckBoxProperties'
           Properties.Alignment = taCenter
@@ -1496,7 +1503,7 @@ object FrGBNFe: TFrGBNFe
     end
     object Panel7: TPanel
       Left = 1
-      Top = 201
+      Top = 206
       Width = 571
       Height = 174
       Hint = ' Janelas de Resposta e Retornos da SEFAZ'#13#10
@@ -1505,6 +1512,7 @@ object FrGBNFe: TFrGBNFe
       ShowHint = False
       TabOrder = 1
       OnMouseMove = Panel7MouseMove
+      ExplicitTop = 201
       object PageControl1: TPageControl
         Left = 1
         Top = 1
@@ -2394,7 +2402,7 @@ object FrGBNFe: TFrGBNFe
     Left = 312
     Top = 10
     Bitmap = {
-      494C0101CC041006100810001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C0101CC041006140810001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000004013000001002000000000000040
       1300000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

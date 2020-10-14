@@ -193,7 +193,7 @@ type
   public
     { Public declarations }
     function Atualiza(rep : boolean) : Boolean;                                 // Habilita ou desabilita componentes
-    function fTrataErro(Status : integer) : Boolean;                            // Mostra uma mensagem conforme o codigo de retorno
+    function fTrataErro(Status : integer; ChvCompl : string = '') : Boolean;    // Mostra uma mensagem conforme o codigo de retorno + a chave de complemento
     function SenhaMaster(SenMst : String) : boolean;                            // Função que chama a janela da senha master
     function fADAtrib( TemSel : boolean ) : boolean;                            // Ativa e Desativa Atributos dos componentes da janela
     function fTemSel(cxTLM : TcxTreeList; cxTLbSel : Tcxtreelistcolumn): Boolean;// Verifica se foi selecionado algum item na treelist (novo berlin)
@@ -1170,7 +1170,15 @@ begin
             else
              begin
 
-              fTrataErro(cStat);
+              case cStat of
+
+               137, 653, 654 :
+                fTrataErro(cStat, (' para a chave: ' + VarToStr(DMFD.FDQryGeral2['MDFe_Chave_nfe'])));
+
+               else
+                fTrataErro( cStat );
+
+              end;
 
              end;
 
@@ -1368,8 +1376,15 @@ begin
                  else
                   begin
 
-                   If (FrPar.rgTipoAmb.ItemIndex = 0) then
-                    fTrataErro(cStat);
+                   case cStat of
+
+                    137, 653, 654 :
+                     fTrataErro(cStat, (' para a chave: ' + VarToStr(DMFD.FDQryGeral2['MDFe_Chave_nfe'])));
+
+                    else
+                     fTrataErro( cStat );
+
+                   end;
 
                   end;
                end;
@@ -1604,8 +1619,15 @@ begin
                else
                 begin
 
-                 If (FrPar.rgTipoAmb.ItemIndex = 0) then
-                  fTrataErro(cStat);
+                 case cStat of
+
+                  137, 653, 654 :
+                   fTrataErro(cStat, (' para a chave: ' + VarToStr(DMFD.FDQryGeral2['MDFe_Chave_nfe'])));
+
+                  else
+                   fTrataErro( cStat );
+
+                 end;
 
                 end;
              end;
@@ -3747,12 +3769,13 @@ end;
 //         Retorna como parametros true e false
 //         by Edson Lima ; 09/07/2014T1722
 //------------------------------------------------------------------------------
-function TFrBuscaChave.fTrataErro(Status : integer) : Boolean;                                // Mostra uma mensagem conforme o codigo de retorno
+function TFrBuscaChave.fTrataErro(Status : integer; ChvCompl : string = '') : Boolean;                                // Mostra uma mensagem conforme o codigo de retorno
 var
  msn : string;
 begin
 
  case Status of
+  137 : msn := 'Nenhum documento localizado' + ChvCompl;
   489 : msn := 'CNPJ informado inválido (DV ou zeros)';
   490 : msn := 'CPF informado inválido (DV ou zeros)';
   491 : msn := 'O tpEvento informado inválido';
@@ -3787,12 +3810,14 @@ begin
   634 : msn := 'Destinatário da NF-e não tem o mesmo' + Chr(13) + 'CNPJ raiz do solicitante do download';
   650 : msn := 'Evento de "Ciência da Operação" para' + Chr(13) + 'NF-e Cancelada ou Denegada';
   651 : msn := 'Evento de "Desconhecimento da Operação"' + Chr(13) + 'para NF-e Cancelada ou Denegada';
-  653 : msn := 'NF-e Cancelada, arquivo' + Chr(13) + 'indisponível para download';
-  654 : msn := 'NF-e Denegada, arquivo' + Chr(13) + 'indisponível para download';
+
+  653 : msn := 'NF-e Cancelada, arquivo' + Chr(13) + 'indisponível para download' + ChvCompl;
+  654 : msn := 'NF-e Denegada, arquivo' + Chr(13) + 'indisponível para download' + ChvCompl;
   655 : msn := 'Evento de Ciência da Operação informado' + Chr(13) + 'após a manifestação final do destinatário';
   656 : msn := 'Consumo Indevido';
   657 : msn := 'Código do Órgão diverge do órgão autorizador';
   658 : msn := 'UF do destinatário da Chave de Acesso' + Chr(13) + 'diverge da UF autorizadora';
+
  else
   msn := 'Mensagem não catalogada !';
  end;

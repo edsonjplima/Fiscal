@@ -3079,8 +3079,9 @@ begin
              vBCST    := DMFD.FDQuery2['base_icms_st'];
              vICMSST  := DMFD.FDQuery2['vl_icms_st'];
              pICMSST  := DMFD.FDQuery2['pc_icms_st'];
-             if ( DMFD.FDQuery2['modBCST'] <> null ) then
-              modBCST  := DMFD.FDQuery2['modBCST'];
+             if ( ( DMFD.FDQuery2['modBCST'] <> null ) AND
+                  ( DMFD.FDQuery2['modBCST'] <> '' ) ) then
+              modBCST  :=  DMFD.FDQuery2['modBCST'];
              if ( DMFD.FDQuery2['pMVAST'] <> null ) then
               pMVAST   := DMFD.FDQuery2['pMVAST'];
              if ( DMFD.FDQuery2['pRedBCST'] <> null ) then
