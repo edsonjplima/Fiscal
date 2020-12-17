@@ -56,12 +56,26 @@ GO
 /****** Object:  StoredProcedure [dbo].[s_le_arquivo_texto]    Script Date: 16/01/2020 17:27:45 ******/
 DROP PROCEDURE [dbo].[s_le_arquivo_texto]
 GO
+
 /****** Object:  StoredProcedure [dbo].[s_le_arquivo_texto]    Script Date: 16/01/2020 17:27:45 ******/
+
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE    proc [dbo].[s_le_arquivo_texto] @origem varchar(255), @arquivo varchar(255), @ok bit output
+
+/*************************************************************************************
+ *
+ * Procedure...: s_le_arquivo_texto
+ * Programador.: Manoel
+ * Data........: 2017-6-9T09:30
+ * Objetivo....: Le arquivo texto para atualização do banco de dados NFe / NFCe
+ * Revisão.....: Edson Lima ; 9/6/2017 ; 09:30 ; Inclusão de novos campos
+ *               Obs: ESTA PROC NÃO ESTÁ MAIS SENDO USADA!  
+ *
+*************************************************************************************/
+ CREATE    proc [dbo].[s_le_arquivo_texto] @origem varchar(255), @arquivo varchar(255), @ok bit output
 as
 
 set nocount on
@@ -315,11 +329,24 @@ return
 FIM:
 return
 GO
+
 /****** Object:  StoredProcedure [dbo].[sp_bkp]    Script Date: 16/01/2020 17:27:45 ******/
+
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
+
+/*************************************************************************************
+ *
+ * Procedure...: sp_bkp
+ * Programador.: Manoel
+ * Data........: 
+ * Objetivo....: Efetua um backup do banco de dados NFe para a pasta de backup do SQL local
+ * Revisão.....: Edson Lima ; 5/3/2018 ; 08:10 ; Inclusão de novos campos
+ *
+*************************************************************************************/
 CREATE procedure [dbo].[sp_bkp] @gCamBak varchar(255), @gNFe varchar(30), @DT varchar(30)
 as
 
@@ -356,12 +383,27 @@ STATS                       = 1
 
 Alter database CURRENT set multi_user
 GO
+
 /****** Object:  StoredProcedure [dbo].[sp_calcula_digito_chave]    Script Date: 16/01/2020 17:27:45 ******/
+
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER OFF
 GO
-CREATE                proc [dbo].[sp_calcula_digito_chave] @codigo_loja int, @nota bigint, @tpemissao char(1),@demissao datetime, @Modelo char(2), @Serie char(3), @CodPed bigint
+
+/*************************************************************************************
+ *
+ * Procedure...: sp_calcula_digito_chave
+ * Programador.: Manoel
+ * Data........: 2017-6-9T09
+ * Objetivo....: Calcula o a chave e o digito verificar da chave
+ * Revisão.....: Edson Lima ; Pega somente 8 dígitos do número da nota
+ *
+*************************************************************************************/
+CREATE                proc [dbo].[sp_calcula_digito_chave] @codigo_loja int, @nota bigint, 
+                           @tpemissao char(1),@demissao datetime, @Modelo char(2), @Serie char(3), 
+						   @CodPed bigint
 as
 
 declare @digito int
@@ -467,11 +509,25 @@ set @chave = @chave + cast(@digito as varchar)
 
 select @chave as chave
 GO
+
 /****** Object:  StoredProcedure [dbo].[sp_consulta_nfe]    Script Date: 16/01/2020 17:27:45 ******/
+
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
+
+/*************************************************************************************
+ *
+ * Procedure...: sp_consulta_nfe
+ * Programador.: Manoel
+ * Data........: 2017-6-9T1745
+ * Objetivo....: Consulta uma nota no banco de dados NFe
+ * Revisão.....: 
+ *               Obs: ESTA PROC NÃO ESTÁ MAIS SENDO USADA!  
+ *
+ ************************************************************************************/
 CREATE      proc [dbo].[sp_consulta_nfe] @razao_social varchar(255), @demissao datetime
 as
 
@@ -502,6 +558,16 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
+/*************************************************************************************
+ *
+ * Procedure...: sp_exclui_nfe
+ * Programador.: Manoel
+ * Data........: 
+ * Objetivo....: Exclui um registro de uma nota nfe /nfce
+ * Revisão.....: Revisado by Edson Lima
+ *
+*************************************************************************************/
 CREATE       proc [dbo].[sp_exclui_nfe] @codigo_loja int, @nnf varchar(09), @_tpemissao char(1), @demissao dateTIME, @Modelo char(2), @Serie char(3), @CodPed BigInt
 as
 
@@ -543,11 +609,25 @@ where codigo_loja = @codigo_loja and nNF = @nnf and dEmi = @demissao and Modelo 
 delete from nfe
 where codigo_loja = @codigo_loja and nNF = @nnf and dEmi = @demissao and Modelo = @Modelo and Serie = @Serie
 GO
+
 /****** Object:  StoredProcedure [dbo].[sp_importa_nfe]    Script Date: 16/01/2020 17:27:45 ******/
+
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER OFF
 GO
+
+/*************************************************************************************
+ *
+ * Procedure...: sp_importa_nfe
+ * Programador.: Manoel
+ * Data........: 
+ * Objetivo....: Exclui um registro de uma nota nfe /nfce
+ * Revisão.....: Revisado by Edson Lima
+ *               Obs: NÃO ESTÁ MAIS SENDO UDADA.
+ *
+*************************************************************************************/
 CREATE              proc [dbo].[sp_importa_nfe] @origem varchar(255), @retorno varchar(100) output
 as
 
@@ -1663,6 +1743,16 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
+/*************************************************************************************
+ *
+ * Procedure...: sp_insere_notas_inutilizadas
+ * Programador.: Manoel
+ * Data........: 
+ * Objetivo....: Incluir registro das notas inutilizadas para o controle de empresa
+ * Revisão.....: by Edson Lima
+ *
+*************************************************************************************/
 CREATE    proc [dbo].[sp_insere_notas_inutilizadas] @codigo_loja int,         @nota          bigint,       @ano           int,          @modelo int, 
                                                    @serie       int,         @justificativa varchar(255), @data_inclusao datetime,     @tpAmb  char(1),
 					    						   @verAplic    varchar(30), @cStat         int,          @xMotivo       varchar(255), @cUF    int,
@@ -1736,6 +1826,17 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
+/*************************************************************************************
+ *
+ * Procedure...: sp_le_nfe
+ * Programador.: Manoel
+ * Data........: 
+ * Objetivo....: Cria uma query de acesso aos dados de várias tabelas, ligadas a nota
+ * 		     pendente, para gera a NFe / NFCe
+ * Revisão.....: by Edson Lima
+ *
+*************************************************************************************/
 CREATE                       proc [dbo].[sp_le_nfe] @codigo_loja int, @nota varchar(09),@demi as datetime, @Modelo char(2), @Serie char(3)
 as
 
@@ -1899,6 +2000,17 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER OFF
 GO
+
+/*************************************************************************************
+ *
+ * Procedure...: sp_ler_nfe_textos
+ * Programador.: Manoel
+ * Data........: 
+ * Objetivo....: Le os parâmetros do arq. txt e aciona a procedure de importação
+ * Revisão.....: by Edson Lima
+ *               Obs: NÃO ESTÁ MAIS SENDO USADA! 
+ *               
+*************************************************************************************/
 CREATE     proc [dbo].[sp_ler_nfe_textos]  @gCamTxt varchar(400)  
 as
 
@@ -1984,6 +2096,16 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER OFF
 GO
+
+/*************************************************************************************
+ *
+ * Procedure...: sp_nfe_a_serem_geradas
+ * Programador.: Manoel
+ * Data........: 
+ * Objetivo....: Gera uma query com os dados das notas pendentes a serem gerados
+ * Revisão.....: by Edson Lima
+ *
+*************************************************************************************/
 CREATE                                     proc [dbo].[sp_nfe_a_serem_geradas] @codigo_loja int, @Modelo char(2), @Serie char(3)
 as
 
@@ -2040,6 +2162,16 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER OFF
 GO
+
+/*************************************************************************************
+ *
+ * Procedure...: sp_nfe_canceladas
+ * Programador.: Manoel
+ * Data........: 
+ * Objetivo....: Gera query com as notas canceladas para serem visualizadas na gride
+ * Revisão.....: by Edson Lima
+ *
+*************************************************************************************/
 CREATE                    proc [dbo].[sp_nfe_canceladas] @codigo_loja int, @data_inicio datetime, @data_final datetime, @nota bigint, @destinatario int, @Modelo char(2), @Serie char(3)
 as
 
@@ -2094,6 +2226,16 @@ SET ANSI_NULLS OFF
 GO
 SET QUOTED_IDENTIFIER OFF
 GO
+
+/*************************************************************************************
+ *
+ * Procedure...: sp_nfe_denegadas
+ * Programador.: Manoel
+ * Data........: 
+ * Objetivo....: Gera query com notas denegadas
+ * Revisão.....: by Edson Lima
+ *
+*************************************************************************************/
 CREATE                   proc [dbo].[sp_nfe_denegadas] @codigo_loja int, @data_inicio datetime, @data_final datetime, @nota bigint, @destinatario int, @Modelo char(2), @Serie char(3)
 as
 
@@ -2146,6 +2288,16 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER OFF
 GO
+
+/**************************************************************************************
+ *
+ * Procedure...: sp_nfe_em_contingencia
+ * Programador.: Manoel
+ * Data........: 
+ * Objetivo....: Gera uma query com as notas de contingência
+ * Revisão.....: by Edson Lima
+ *
+**************************************************************************************/
 CREATE                         proc [dbo].[sp_nfe_em_contingencia] @codigo_loja int, @Modelo char(2), @Serie char(3)
 as
 
@@ -2195,6 +2347,16 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER OFF
 GO
+
+/**************************************************************************************
+ *
+ * Procedure...: sp_nfe_inutilizadas
+ * Programador.: Manoel
+ * Data........: 
+ * Objetivo....: Gera uma query com as notas inutilizadas
+ * Revisão.....: by Edson Lima
+ *
+**************************************************************************************/
 CREATE       proc [dbo].[sp_nfe_inutilizadas] @codigo_loja int, @Modelo int, @Serie int
 as
 
@@ -2229,6 +2391,16 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER OFF
 GO
+
+/**************************************************************************************
+ *
+ * Procedure...: sp_nfe_transmitidas
+ * Programador.: Manoel
+ * Data........: 
+ * Objetivo....: Gera uma query com as notas transmitidas
+ * Revisão.....: by Edson Lima
+ *
+**************************************************************************************/
 CREATE                          proc [dbo].[sp_nfe_transmitidas] @codigo_loja int, @data_inicio datetime, @data_final datetime, @nota bigint, @destinatario int, @Modelo char(2), @Serie char(3), @Chave varchar(44) = ''
 as
 

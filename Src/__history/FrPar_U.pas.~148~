@@ -121,8 +121,6 @@ type
     edtCSC: TEdit;
     GroupBox25: TGroupBox;
     edtIdCSC: TEdit;
-    btn2: TSpeedButton;
-    btn1: TSpeedButton;
     grp1: TGroupBox;
     edtImpNFe: TEdit;
     grp2: TGroupBox;
@@ -227,11 +225,11 @@ type
     grp50: TGroupBox;
     edt_TpERP_Ger: TEdit;
     grp: TGroupBox;
-    edt_CamBD_Nfe: TEdit;
+    edt_CamBD_NFe: TEdit;
     BitBtn: TBitBtn;
     grp44: TGroupBox;
-    edt_CamBD_Nfe1: TEdit;
-    edt_CamBD_Ger: TBitBtn;
+    edt_CamBD_Ger: TEdit;
+    BitBtn3: TBitBtn;
     procedure sbtnCaminhoCertClick(Sender: TObject);
     procedure sbtnGetCertClick(Sender: TObject);
     procedure btnSalvarConfigClick(Sender: TObject);
@@ -352,10 +350,10 @@ type
       Y: Integer);
     procedure grp44MouseMove(Sender: TObject; Shift: TShiftState; X,
       Y: Integer);
-    procedure edt_CamBD_GerMouseMove(Sender: TObject; Shift: TShiftState; X,
+    procedure BitBtn3MouseMove(Sender: TObject; Shift: TShiftState; X,
       Y: Integer);
     procedure BitBtnClick(Sender: TObject);
-    procedure edt_CamBD_GerClick(Sender: TObject);
+    procedure BitBtn3Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -758,40 +756,50 @@ begin
  StatusBar1.Panels[0].Text := BitBtn1.Hint;
 end;
 
-procedure TFrPar.edt_CamBD_GerClick(Sender: TObject);
+procedure TFrPar.BitBtn3Click(Sender: TObject);
 var
- vBD : string;
+ vBD, vCamBD : string;
 begin
 
  if ( Trim(edt_CamBD_Ger.Text) = '' ) then
   begin
 
+   if ( DirectoryExist('C:\Program Files\Microsoft SQL Server\MSSQL13.MSSQLSERVER\MSSQL\DATA\') ) then
+    begin
+
+    end;
+
    if ( edt_Server_Ger.Text = '(local)' ) then
     vBD := 'C:\Program Files\Microsoft SQL Server\MSSQL13.MSSQLSERVER\MSSQL\DATA\'
    else if ( edt_Server_Ger.Text <> '' ) then
-    vBD := '\\' + edt_Server_Ger.Text + '\c$\Program Files\Microsoft SQL Server\MSSQL13.MSSQLSERVER\MSSQL\DATA\'
-   else
-    Application.Messagebox(PWideChar('Campo server do banco de dados ' + edt_database_Ger.Text + ', está em branco!'), PWideChar('Parâmetros FireDAC'), MB_ICONEXCLAMATION+mb_ok)
+    vBD := '\\' + edt_Server_Ger.Text + '\c$\Program Files\Microsoft SQL Server\MSSQL13.MSSQLSERVER\MSSQL\DATA\';
 
   end
  else
   vBD := edt_CamBD_Ger.Text;
 
+ vCamBD := vBD;
  vBD := vBD + edt_Database_Ger.Text + '.mdf';
 
  if not ( FileExists(vBD) ) then
-   Application.Messagebox(PWideChar('O banco de dados ' + edt_database_Ger.Text + ', não foi encontrado!'), PWideChar('Parâmetros FireDAC'), MB_ICONEXCLAMATION+mb_ok)
+  begin
+
+   Application.Messagebox(PWideChar('O banco de dados ' + edt_database_Ger.Text + ', não foi encontrado!'), PWideChar('Parâmetros FireDAC'), MB_ICONEXCLAMATION+mb_ok);
+   if ( edt_Server_Ger.Text = '' ) then
+    Application.Messagebox(PWideChar('Campo [Server] do banco de dados ' + edt_database_Ger.Text + ', está em branco!'), PWideChar('Parâmetros FireDAC'), MB_ICONEXCLAMATION+mb_ok)
+
+  end
  else
   begin
 
    Application.Messagebox(PWideChar('O banco de dados ' + edt_database_Ger.Text + ', foi encontrado!'), PWideChar('Parâmetros FireDAC'), MB_ICONINFORMATION+mb_ok);
-   edt_CamBD_Ger.Text := vBD;
+   edt_CamBD_Ger.Text := vCamBD;
 
   end;
 
 end;
 
-procedure TFrPar.edt_CamBD_GerMouseMove(Sender: TObject; Shift: TShiftState; X,
+procedure TFrPar.BitBtn3MouseMove(Sender: TObject; Shift: TShiftState; X,
   Y: Integer);
 begin
  StatusBar1.Panels[0].Text := BitBtn3.Hint;
@@ -799,34 +807,37 @@ end;
 
 procedure TFrPar.BitBtnClick(Sender: TObject);
 var
- vBD : string;
+ vBD, vCamBD : string;
 begin
 
  if ( Trim(edt_CamBD_NFe.Text) = '' ) then
   begin
 
    if ( LowerCase(edt_Server_NFe.Text) = '(local)' ) then
-
+    vBD := 'C:\Program Files\Microsoft SQL Server\MSSQL13.MSSQLSERVER\MSSQL\DATA\'
    else if ( edt_Server_NFe.Text <> '' ) then
-    vBD := '\\' + edt_Server_NFe.Text + '\c$\Program Files\Microsoft SQL Server\MSSQL13.MSSQLSERVER\MSSQL\DATA\'
-   else
-    Application.Messagebox(PWideChar('Campo server do banco de dados ' + edt_database_NFe.Text + ', está em branco!'), PWideChar('Parâmetros FireDAC'), MB_ICONEXCLAMATION+mb_ok)
+    vBD := '\\' + edt_Server_NFe.Text + '\c$\Program Files\Microsoft SQL Server\MSSQL13.MSSQLSERVER\MSSQL\DATA\';
 
   end
  else
   vBD := edt_CamBD_NFe.Text;
 
+ vCamBD := vBD;
  vBD := vBD + edt_Database_NFe.Text + '.mdf';
 
  if not ( FileExists(vBD) ) then
+  begin
 
-   Application.Messagebox(PWideChar('O banco de dados ' + edt_database_nfe.Text + ', não foi encontrado!'), PWideChar('Parâmetros FireDAC'), MB_ICONEXCLAMATION+mb_ok)
+   Application.Messagebox(PWideChar('O banco de dados ' + edt_database_nfe.Text + ', não foi encontrado!'), PWideChar('Parâmetros FireDAC'), MB_ICONEXCLAMATION+mb_ok);
+   if ( edt_Server_NFe.Text = '' ) then
+    Application.Messagebox(PWideChar('Campo [Server] do banco de dados ' + edt_database_NFe.Text + ', está em branco!'), PWideChar('Parâmetros FireDAC'), MB_ICONEXCLAMATION+mb_ok)
 
+  end
  else
   begin
 
    Application.Messagebox(PWideChar('O banco de dados ' + edt_database_nfe.Text + ', foi encontrado!'), PWideChar('Parâmetros FireDAC'), MB_ICONINFORMATION+mb_ok);
-   edt_CamBD_NFe.Text := vBD;
+   edt_CamBD_NFe.Text := vCamBD;
 
   end;
 

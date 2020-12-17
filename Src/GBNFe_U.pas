@@ -406,6 +406,8 @@ type
   function fFusHor(HorVer, Hor_DF, FusHor :Boolean ; CdUf  :Integer ;
                            CdMun, vdhEve  :String ; dhEve :TDateTime ): TDateTime; // Redenriza o fuso horário
   function fAcessar() : boolean;                                                // function que verifica o acesso da EMP no Banco de Dados FareDac
+  function fDirExists( vBDSQLSRV2016, vBDSQLSRV2017, vBDSQLSRV2019 :
+                       string ) : string;                                       // function que verifica se existe o caminho do sql server
 
   procedure pImpr();                                                            // Chama a procedure de impressão
   procedure MarcaBloco( cxTL : TcxTreeList; blMarca : Boolean; blTodos : Boolean = False ); // Marca bloco de seleção TreeList    // xe 10.1 Berlin
@@ -3137,7 +3139,9 @@ begin
 
             end;
 
-           with Imposto.IPI do begin
+           with Imposto.IPI do
+            begin
+
              CST   := ipi00;
              // Incluido by Edson Lima ; 18/12/2012 ; 15:05 --------
              if DMFD.FDQuery2['ipi_cst'] = '00' then CST    := ipi00;
@@ -3159,49 +3163,54 @@ begin
              pIPI  := DMFD.FDQuery2['pc_ipi'];
              vIPI  := DMFD.FDQuery2['vl_ipi'];
              vBC   := DMFD.FDQuery2['base_calculo_ipi'];
-           end;
+             cEnq  := DMFD.FDQuery2['cEnc'];                                    // Novo by El - 2020-12-15
+
+            end;
+
            with Imposto.PIS do
             begin
-            // posicionado by Edson Lima ; 20/11/2012 ; 14:44
-            CST    := pis01;
-            if DMFD.FDQuery2['pis_cst'] = '01' then CST    := pis01;
-            if DMFD.FDQuery2['pis_cst'] = '02' then CST    := pis02;
-            if DMFD.FDQuery2['pis_cst'] = '03' then CST    := pis03;
-            if DMFD.FDQuery2['pis_cst'] = '04' then CST    := pis04;
-            if DMFD.FDQuery2['pis_cst'] = '05' then CST    := pis05;
-            if DMFD.FDQuery2['pis_cst'] = '06' then CST    := pis06;
-            if DMFD.FDQuery2['pis_cst'] = '07' then CST    := pis07;
-            if DMFD.FDQuery2['pis_cst'] = '08' then CST    := pis08;
-            if DMFD.FDQuery2['pis_cst'] = '09' then CST    := pis09;
-            if DMFD.FDQuery2['pis_cst'] = '49' then CST    := pis49;
-            if DMFD.FDQuery2['pis_cst'] = '50' then CST    := pis50;
-            if DMFD.FDQuery2['pis_cst'] = '51' then CST    := pis51;
-            if DMFD.FDQuery2['pis_cst'] = '52' then CST    := pis52;
-            if DMFD.FDQuery2['pis_cst'] = '53' then CST    := pis53;
-            if DMFD.FDQuery2['pis_cst'] = '54' then CST    := pis54;
-            if DMFD.FDQuery2['pis_cst'] = '55' then CST    := pis55;
-            if DMFD.FDQuery2['pis_cst'] = '56' then CST    := pis56;
-            if DMFD.FDQuery2['pis_cst'] = '60' then CST    := pis60;
-            if DMFD.FDQuery2['pis_cst'] = '61' then CST    := pis61;
-            if DMFD.FDQuery2['pis_cst'] = '62' then CST    := pis62;
-            if DMFD.FDQuery2['pis_cst'] = '63' then CST    := pis63;
-            if DMFD.FDQuery2['pis_cst'] = '64' then CST    := pis64;
-            if DMFD.FDQuery2['pis_cst'] = '65' then CST    := pis65;
-            if DMFD.FDQuery2['pis_cst'] = '66' then CST    := pis66;
-            if DMFD.FDQuery2['pis_cst'] = '67' then CST    := pis67;
-            if DMFD.FDQuery2['pis_cst'] = '70' then CST    := pis70;
-            if DMFD.FDQuery2['pis_cst'] = '71' then CST    := pis71;
-            if DMFD.FDQuery2['pis_cst'] = '72' then CST    := pis72;
-            if DMFD.FDQuery2['pis_cst'] = '73' then CST    := pis73;
-            if DMFD.FDQuery2['pis_cst'] = '74' then CST    := pis74;
-            if DMFD.FDQuery2['pis_cst'] = '75' then CST    := pis75;
-            if DMFD.FDQuery2['pis_cst'] = '98' then CST    := pis98;
-            if DMFD.FDQuery2['pis_cst'] = '99' then CST    := pis99;
 
-            vBC    := DMFD.FDQuery2['pis_base_calculo'];
-            pPis   := DMFD.FDQuery2['pis_percentual'];
-            vPis   := DMFD.FDQuery2['pis_valor'];
-           end;
+             // posicionado by Edson Lima ; 20/11/2012 ; 14:44
+             CST    := pis01;
+             if DMFD.FDQuery2['pis_cst'] = '01' then CST    := pis01;
+             if DMFD.FDQuery2['pis_cst'] = '02' then CST    := pis02;
+             if DMFD.FDQuery2['pis_cst'] = '03' then CST    := pis03;
+             if DMFD.FDQuery2['pis_cst'] = '04' then CST    := pis04;
+             if DMFD.FDQuery2['pis_cst'] = '05' then CST    := pis05;
+             if DMFD.FDQuery2['pis_cst'] = '06' then CST    := pis06;
+             if DMFD.FDQuery2['pis_cst'] = '07' then CST    := pis07;
+             if DMFD.FDQuery2['pis_cst'] = '08' then CST    := pis08;
+             if DMFD.FDQuery2['pis_cst'] = '09' then CST    := pis09;
+             if DMFD.FDQuery2['pis_cst'] = '49' then CST    := pis49;
+             if DMFD.FDQuery2['pis_cst'] = '50' then CST    := pis50;
+             if DMFD.FDQuery2['pis_cst'] = '51' then CST    := pis51;
+             if DMFD.FDQuery2['pis_cst'] = '52' then CST    := pis52;
+             if DMFD.FDQuery2['pis_cst'] = '53' then CST    := pis53;
+             if DMFD.FDQuery2['pis_cst'] = '54' then CST    := pis54;
+             if DMFD.FDQuery2['pis_cst'] = '55' then CST    := pis55;
+             if DMFD.FDQuery2['pis_cst'] = '56' then CST    := pis56;
+             if DMFD.FDQuery2['pis_cst'] = '60' then CST    := pis60;
+             if DMFD.FDQuery2['pis_cst'] = '61' then CST    := pis61;
+             if DMFD.FDQuery2['pis_cst'] = '62' then CST    := pis62;
+             if DMFD.FDQuery2['pis_cst'] = '63' then CST    := pis63;
+             if DMFD.FDQuery2['pis_cst'] = '64' then CST    := pis64;
+             if DMFD.FDQuery2['pis_cst'] = '65' then CST    := pis65;
+             if DMFD.FDQuery2['pis_cst'] = '66' then CST    := pis66;
+             if DMFD.FDQuery2['pis_cst'] = '67' then CST    := pis67;
+             if DMFD.FDQuery2['pis_cst'] = '70' then CST    := pis70;
+             if DMFD.FDQuery2['pis_cst'] = '71' then CST    := pis71;
+             if DMFD.FDQuery2['pis_cst'] = '72' then CST    := pis72;
+             if DMFD.FDQuery2['pis_cst'] = '73' then CST    := pis73;
+             if DMFD.FDQuery2['pis_cst'] = '74' then CST    := pis74;
+             if DMFD.FDQuery2['pis_cst'] = '75' then CST    := pis75;
+             if DMFD.FDQuery2['pis_cst'] = '98' then CST    := pis98;
+             if DMFD.FDQuery2['pis_cst'] = '99' then CST    := pis99;
+
+             vBC    := DMFD.FDQuery2['pis_base_calculo'];
+             pPis   := DMFD.FDQuery2['pis_percentual'];
+             vPis   := DMFD.FDQuery2['pis_valor'];
+
+            end;
 
            with Imposto.COFINS do
             begin
@@ -18171,6 +18180,25 @@ begin
  // atruibui o utc no horário do evento
  if FusHor then
   result := StrToDatetime(vdhEve + vUTC);
+
+end;
+
+//------------------------------------------------------------------------------
+// By Edson Lima ; 2020-12-16
+// Function que verifica se existe o caminho do sql server
+//------------------------------------------------------------------------------
+function TFrGBNFe.fDirExists( vBDSQLSRV2016, vBDSQLSRV2017,
+                             vBDSQLSRV2019 : string ) : string;
+begin
+
+ if DirectoryExists(vBDSQLSRV2016) then
+  Result := vBDSQLSRV2016
+ else if DirectoryExists(vBDSQLSRV2017) then
+  Result := vBDSQLSRV2017
+ else if DirectoryExists(vBDSQLSRV2019) then
+  Result := vBDSQLSRV2019
+ else
+  Result := '';
 
 end;
 

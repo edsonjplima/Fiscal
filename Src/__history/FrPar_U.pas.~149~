@@ -121,8 +121,6 @@ type
     edtCSC: TEdit;
     GroupBox25: TGroupBox;
     edtIdCSC: TEdit;
-    btn2: TSpeedButton;
-    btn1: TSpeedButton;
     grp1: TGroupBox;
     edtImpNFe: TEdit;
     grp2: TGroupBox;
@@ -227,7 +225,7 @@ type
     grp50: TGroupBox;
     edt_TpERP_Ger: TEdit;
     grp: TGroupBox;
-    edt_CamBD_Nfe: TEdit;
+    edt_CamBD_NFe: TEdit;
     BitBtn: TBitBtn;
     grp44: TGroupBox;
     edt_CamBD_Ger: TEdit;
@@ -766,6 +764,11 @@ begin
  if ( Trim(edt_CamBD_Ger.Text) = '' ) then
   begin
 
+   if ( DirectoryExist('C:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\DATA') ) then
+    begin
+
+    end;
+
    if ( edt_Server_Ger.Text = '(local)' ) then
     vBD := 'C:\Program Files\Microsoft SQL Server\MSSQL13.MSSQLSERVER\MSSQL\DATA\'
    else if ( edt_Server_Ger.Text <> '' ) then
@@ -790,7 +793,7 @@ begin
   begin
 
    Application.Messagebox(PWideChar('O banco de dados ' + edt_database_Ger.Text + ', foi encontrado!'), PWideChar('Parâmetros FireDAC'), MB_ICONINFORMATION+mb_ok);
-   edt_CamBD_Ger.Text := vBD;
+   edt_CamBD_Ger.Text := vCamBD;
 
   end;
 
@@ -834,7 +837,7 @@ begin
   begin
 
    Application.Messagebox(PWideChar('O banco de dados ' + edt_database_nfe.Text + ', foi encontrado!'), PWideChar('Parâmetros FireDAC'), MB_ICONINFORMATION+mb_ok);
-   edt_CamBD_NFe.Text := vBD;
+   edt_CamBD_NFe.Text := vCamBD;
 
   end;
 

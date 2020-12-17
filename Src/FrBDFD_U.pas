@@ -133,20 +133,32 @@ uses GBNFe_U, FrPar_U, DMFD_U;
 
 procedure TFrBDFD.BitBtn31Click(Sender: TObject);
 var
- vBD, vCamBD : string;
+ vBD, vCamBD, vBDSQLSRV2016, vBDSQLSRV2017, vBDSQLSRV2019 : string;
+
 begin
 
- if ( Trim(edt_CamBD_Ger.Text) = '' ) then
+ vBDSQLSRV2016 := '\Program Files\Microsoft SQL Server\MSSQL13.MSSQLSERVER\MSSQL\DATA\';
+ vBDSQLSRV2017 := '\Program Files\Microsoft SQL Server\MSSQL14.MSSQLSERVER\MSSQL\DATA\';
+ vBDSQLSRV2019 := '\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\DATA\';
+
+ if ( FrPar.edt_Server_Ger.Text = '(local)' ) then
   begin
 
-   if ( edt_Server_Ger.Text = '(local)' ) then
-    vBD := 'C:\Program Files\Microsoft SQL Server\MSSQL13.MSSQLSERVER\MSSQL\DATA\'
-   else if ( edt_Server_Ger.Text <> '' ) then
-    vBD := '\\' + edt_Server_Ger.Text + '\c$\Program Files\Microsoft SQL Server\MSSQL13.MSSQLSERVER\MSSQL\DATA\';
+    vBDSQLSRV2016 := 'C:' + vBDSQLSRV2016;
+    vBDSQLSRV2017 := 'C:' + vBDSQLSRV2017;
+    vBDSQLSRV2019 := 'C:' + vBDSQLSRV2019;
 
   end
  else
-  vBD := edt_CamBD_Ger.Text;
+  begin
+
+    vBDSQLSRV2016 := '\\' + FrPar.edt_Server_Ger.Text + '\c$' + vBDSQLSRV2016;
+    vBDSQLSRV2017 := '\\' + FrPar.edt_Server_Ger.Text + '\c$' + vBDSQLSRV2017;
+    vBDSQLSRV2019 := '\\' + FrPar.edt_Server_Ger.Text + '\c$' + vBDSQLSRV2019;
+
+  end;
+
+ vBD := FrGBNFe.fDirExists( vBDSQLSRV2016, vBDSQLSRV2017, vBDSQLSRV2019 );
 
  vCamBD := vBD;
  vBD := vBD + edt_Database_Ger.Text + '.mdf';
@@ -177,20 +189,32 @@ end;
 
 procedure TFrBDFD.BitBtnClick(Sender: TObject);
 var
- vBD, vCamBD : string;
+ vBD, vCamBD, vBDSQLSRV2016, vBDSQLSRV2017, vBDSQLSRV2019 : string;
+
 begin
 
- if ( Trim(edt_CamBD_NFe.Text) = '' ) then
+ vBDSQLSRV2016 := '\Program Files\Microsoft SQL Server\MSSQL13.MSSQLSERVER\MSSQL\DATA\';
+ vBDSQLSRV2017 := '\Program Files\Microsoft SQL Server\MSSQL14.MSSQLSERVER\MSSQL\DATA\';
+ vBDSQLSRV2019 := '\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\DATA\';
+
+ if ( FrPar.edt_Server_NFe.Text = '(local)' ) then
   begin
 
-   if ( LowerCase(edt_Server_NFe.Text) = '(local)' ) then
-    vBD := 'C:\Program Files\Microsoft SQL Server\MSSQL13.MSSQLSERVER\MSSQL\DATA\'
-   else if ( edt_Server_NFe.Text <> '' ) then
-    vBD := '\\' + edt_Server_NFe.Text + '\c$\Program Files\Microsoft SQL Server\MSSQL13.MSSQLSERVER\MSSQL\DATA\';
+    vBDSQLSRV2016 := 'C:' + vBDSQLSRV2016;
+    vBDSQLSRV2017 := 'C:' + vBDSQLSRV2017;
+    vBDSQLSRV2019 := 'C:' + vBDSQLSRV2019;
 
   end
  else
-  vBD := edt_CamBD_NFe.Text;
+  begin
+
+    vBDSQLSRV2016 := '\\' + FrPar.edt_Server_NFe.Text + '\c$' + vBDSQLSRV2016;
+    vBDSQLSRV2017 := '\\' + FrPar.edt_Server_NFe.Text + '\c$' + vBDSQLSRV2017;
+    vBDSQLSRV2019 := '\\' + FrPar.edt_Server_NFe.Text + '\c$' + vBDSQLSRV2019;
+
+  end;
+
+ vBD := FrGBNFe.fDirExists( vBDSQLSRV2016, vBDSQLSRV2017, vBDSQLSRV2019 );
 
  vCamBD := vBD;
  vBD := vBD + edt_Database_NFe.Text + '.mdf';

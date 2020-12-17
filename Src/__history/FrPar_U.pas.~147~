@@ -121,8 +121,6 @@ type
     edtCSC: TEdit;
     GroupBox25: TGroupBox;
     edtIdCSC: TEdit;
-    btn2: TSpeedButton;
-    btn1: TSpeedButton;
     grp1: TGroupBox;
     edtImpNFe: TEdit;
     grp2: TGroupBox;
@@ -790,7 +788,7 @@ begin
   begin
 
    Application.Messagebox(PWideChar('O banco de dados ' + edt_database_Ger.Text + ', foi encontrado!'), PWideChar('Parâmetros FireDAC'), MB_ICONINFORMATION+mb_ok);
-   edt_CamBD_Ger.Text := vBD;
+   edt_CamBD_Ger.Text := vCamBD;
 
   end;
 
@@ -834,7 +832,7 @@ begin
   begin
 
    Application.Messagebox(PWideChar('O banco de dados ' + edt_database_nfe.Text + ', foi encontrado!'), PWideChar('Parâmetros FireDAC'), MB_ICONINFORMATION+mb_ok);
-   edt_CamBD_NFe.Text := vBD;
+   edt_CamBD_NFe.Text := vCamBD;
 
   end;
 

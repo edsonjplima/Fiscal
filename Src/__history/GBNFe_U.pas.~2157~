@@ -2831,28 +2831,16 @@ begin
               begin
 
                with Prod.rastro.Add do
-                  begin
+                begin
 
-                   nLote         := DMFD.FDQuery19['nLote'];
-                   qLote         := DMFD.FDQuery19['qLote'];
-                   dFab          := DMFD.FDQuery19['dFab'];
-                   dVal          := DMFD.FDQuery19['dVal'];
-                   if ( DMFD.FDQuery19['cAgreg'] <> null ) then
-                    cAgreg       := VarToStr(DMFD.FDQuery19['cAgreg']);
-//                   if ( DMFD.FDQuery19['Safra'] <> null ) then
-//                    cSafra       := DMFD.FDQuery19['Safra'];
-//                   if ( DMFD.FDQuery19['NomFor'] <> null ) then
-//                    cNomFor      := DMFD.FDQuery19['NomFor'];
-//                   if ( DMFD.FDQuery19['CNPJ'] <> null ) then
-//                    cCNPJ        := DMFD.FDQuery19['CNPJ'];
-//                   if ( DMFD.FDQuery19['InsRns'] <> null ) then
-//                    cInsRns      := DMFD.FDQuery19['InsRns'];
-//                   if ( DMFD.FDQuery19['Unidade'] <> null ) then
-//                    cUnidade     := DMFD.FDQuery19['Unidade'];
-//                   if ( DMFD.FDQuery19['Peso'] <> null ) then
-//                    qPeso        := DMFD.FDQuery19['Peso'];
+                 nLote         := DMFD.FDQuery19['nLote'];
+                 qLote         := DMFD.FDQuery19['qLote'];
+                 dFab          := DMFD.FDQuery19['dFab'];
+                 dVal          := DMFD.FDQuery19['dVal'];
+                 if ( DMFD.FDQuery19['cAgreg'] <> null ) then
+                  cAgreg       := VarToStr(DMFD.FDQuery19['cAgreg']);
 
-                 end;
+                end;
 
                DMFD.FDQuery19.next;                                             // Avança para o próximo registro
 
@@ -3091,8 +3079,9 @@ begin
              vBCST    := DMFD.FDQuery2['base_icms_st'];
              vICMSST  := DMFD.FDQuery2['vl_icms_st'];
              pICMSST  := DMFD.FDQuery2['pc_icms_st'];
-             if ( DMFD.FDQuery2['modBCST'] <> null ) then
-              modBCST  := DMFD.FDQuery2['modBCST'];
+             if ( ( DMFD.FDQuery2['modBCST'] <> null ) AND
+                  ( DMFD.FDQuery2['modBCST'] <> '' ) ) then
+              modBCST  :=  DMFD.FDQuery2['modBCST'];
              if ( DMFD.FDQuery2['pMVAST'] <> null ) then
               pMVAST   := DMFD.FDQuery2['pMVAST'];
              if ( DMFD.FDQuery2['pRedBCST'] <> null ) then
