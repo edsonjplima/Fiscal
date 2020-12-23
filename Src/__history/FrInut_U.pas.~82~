@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   Vcl.ComCtrls, Vcl.StdCtrls, Vcl.Buttons, Vcl.ExtCtrls, Vcl.DBGrids,
-  pcnConversao, Vcl.DBCtrls;
+  pcnConversao, Vcl.DBCtrls, pcnConversaoNFe;
 
 type
   TFrInut = class(TForm)
@@ -43,6 +43,7 @@ type
     procedure rg1Click(Sender: TObject);
     procedure Edit6KeyPress(Sender: TObject; var Key: Char);
     procedure Edit4Exit(Sender: TObject);
+    procedure Edit3Exit(Sender: TObject);
   private
     { Private declarations }
   public
@@ -122,6 +123,8 @@ begin
  if Serie       = '' then begin Edit3.SetFocus; exit; end;
  if NumeroFinal = '' then begin Edit4.SetFocus; exit; end;
 
+ FrGBNFe.fMudaVersao( FrPar.cbb2.ItemIndex, StrToInt(Modelo) );                 // Mudança de versão
+
  // by Edson Lima ; 4-4-2012 ; 10:30 ; - Não tem mais necessidade de mostrar os dados
  xAux := '';
 
@@ -173,7 +176,6 @@ begin
     begin
 
      xAux := IntToStr(DMFD.FDQryGeral1['nNF']);
-     cbb1.Text := VarToStr(DMFD.FDQryGeral1['dEmi']);
 
     end
 
@@ -315,7 +317,8 @@ begin
             FrGBNFe.ACBrNFe1.WebServices.Inutilizacao.xMotivo                 + '''' + ',' + '''' +  // @xMotivo         varchar(255),
             IntToStr(FrGBNFe.ACBrNFe1.WebServices.Inutilizacao.cUF)           + '''' + ',' + '''' +  // @cUF             int,
             FrGBNFe.ACBrNFe1.WebServices.Inutilizacao.CNPJ                    + '''' + ',' + '''' +  //	@CNPJ            varchar(14),
-            FrGBNFe.ACBrNFe1.WebServices.Inutilizacao.Protocolo                            + '''';   // @nProt           varchar(20)
+            FrGBNFe.ACBrNFe1.WebServices.Inutilizacao.Protocolo               + '''' + ',' + '''' +  //	@nProt           varchar(20),
+            gUsu                                                                           + '''';   // @UsuInu          varchar(15)
 
     end;
 
@@ -347,41 +350,37 @@ begin
    try
 
     // by Edson Lima ; 2015-5-19T0904 ; Verifica se a nota que foi inutilizada e a que dever ser excluída
-    if (  cbb1.Text <> '' ) then
-     begin
+    DMFD.FDQryGeral1.Close;
+    DMFD.FDQryGeral1.SQL.Clear;
+    DMFD.FDQryGeral1.SQL.Add( 'Select * from nfe                              ' );
+    DMFD.FDQryGeral1.SQL.Add( 'where codigo_loja = :gCodEmp                   ' );
+    DMFD.FDQryGeral1.SQL.Add( 'and   nnf         = :nnf                       ' );
+    DMFD.FDQryGeral1.SQL.Add( 'and   Modelo      = :Modelo                    ' );
+    DMFD.FDQryGeral1.SQL.Add( 'and   serie       = :ser                       ' );
+    DMFD.FDQryGeral1.ParamByName('gCodEmp'   ).Value        := StrToInt(gCodEmp);
+    DMFD.FDQryGeral1.ParamByName('nNF'       ).Value        := StrToInt(NumeroFinal);
+    DMFD.FDQryGeral1.ParamByName('Modelo'    ).Value        := Modelo;
+    DMFD.FDQryGeral1.ParamByName('ser'       ).Value        := Serie;
+    DMFD.FDQryGeral1.Open;
 
-      DMFD.FDQryGeral1.Close;
-      DMFD.FDQryGeral1.SQL.Clear;
-      DMFD.FDQryGeral1.SQL.Add( 'Select * from nfe                              ' );
-      DMFD.FDQryGeral1.SQL.Add( 'where codigo_loja = :gCodEmp                   ' );
-      DMFD.FDQryGeral1.SQL.Add( 'and   nnf         = :nnf                       ' );
-      DMFD.FDQryGeral1.SQL.Add( 'and   Modelo      = :Modelo                    ' );
-      DMFD.FDQryGeral1.SQL.Add( 'and   serie       = :ser                       ' );
+    // by Edson Lima ; 2015-5-19T0904 ; Verifica se a nota que foi inutilizada e a exclui
+    if not ( DMFD.FDQryGeral1.IsEmpty ) then
+     begin
+      DMFD.FDQryGeral1.SQL.Add( 'Delete from nfe                                 ' );
+      DMFD.FDQryGeral1.SQL.Add( 'where codigo_loja   = :gCodEmp                  ' );
+      DMFD.FDQryGeral1.SQL.Add( '  and   nnf         = :nNF                      ' );
+      DMFD.FDQryGeral1.SQL.Add( '  and   Modelo      = :Modelo                   ' );
+      DMFD.FDQryGeral1.SQL.Add( '  and   serie       = :ser                      ' );
       DMFD.FDQryGeral1.ParamByName('gCodEmp'   ).Value        := StrToInt(gCodEmp);
       DMFD.FDQryGeral1.ParamByName('nNF'       ).Value        := StrToInt(NumeroFinal);
       DMFD.FDQryGeral1.ParamByName('Modelo'    ).Value        := Modelo;
-      DMFD.FDQryGeral1.ParamByName('ser'       ).Value        := Serie;
+      DMFD.FDQryGeral1.ParamByName('ser'       ).Value        := StrToInt(Serie);
       DMFD.FDQryGeral1.Open;
 
-      // by Edson Lima ; 2015-5-19T0904 ; Verifica se a nota que foi inutilizada e a exclui
-      if not ( DMFD.FDQryGeral1.IsEmpty ) then
-       begin
-        DMFD.FDQryGeral1.SQL.Add( 'Delete from nfe                                 ' );
-        DMFD.FDQryGeral1.SQL.Add( 'where codigo_loja   = :gCodEmp                  ' );
-        DMFD.FDQryGeral1.SQL.Add( '  and   nnf         = :nNF                      ' );
-        DMFD.FDQryGeral1.SQL.Add( '  and   Modelo      = :Modelo                   ' );
-        DMFD.FDQryGeral1.SQL.Add( '  and   serie       = :ser                      ' );
-        DMFD.FDQryGeral1.ParamByName('gCodEmp'   ).Value        := StrToInt(gCodEmp);
-        DMFD.FDQryGeral1.ParamByName('nNF'       ).Value        := StrToInt(NumeroFinal);
-        DMFD.FDQryGeral1.ParamByName('Modelo'    ).Value        := Modelo;
-        DMFD.FDQryGeral1.ParamByName('ser'       ).Value        := StrToInt(Serie);
-        DMFD.FDQryGeral1.Open;
-
-        Application.Messagebox(pChar('A NFe nº ' + NumeroFinal + ', foi excluida da base NFe!'),'Atenção!',mb_iconstop+mb_ok);
-
-       end;
+      Application.Messagebox(pChar('A NFe nº ' + NumeroFinal + ', foi excluida da base NFe!'),'Atenção!',mb_iconstop+mb_ok);
 
      end;
+
    except
 
     Application.Messagebox('Ocorreu um erro na exclusão da nota!','Atenção!',mb_iconstop+mb_ok);
@@ -403,6 +402,19 @@ end;
 procedure TFrInut.Edit1KeyPress(Sender: TObject; var Key: Char);
 begin
  if not (key in['0'..'9',chr(8)]) then Abort;
+end;
+
+procedure TFrInut.Edit3Exit(Sender: TObject);
+begin
+
+ if ( StrToInt(Edit3.Text) > 889 ) then
+  begin
+
+   Application.Messagebox('Série fora da faixa de inutilização!', 'Atenção!', mb_iconstop+mb_ok);
+   Edit3.SetFocus;
+
+  end;
+
 end;
 
 procedure TFrInut.Edit4Exit(Sender: TObject);

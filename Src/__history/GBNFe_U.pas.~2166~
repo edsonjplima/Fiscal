@@ -406,7 +406,8 @@ type
   function fFusHor(HorVer, Hor_DF, FusHor :Boolean ; CdUf  :Integer ;
                            CdMun, vdhEve  :String ; dhEve :TDateTime ): TDateTime; // Redenriza o fuso horário
   function fAcessar() : boolean;                                                // function que verifica o acesso da EMP no Banco de Dados FareDac
-  function fDirExists( vBDSQLSRV2016, vBDSQLSRV2019 : string ) : Boolean;       // function que verifica se existe o caminho do sql server
+  function fDirExists( vBDSQLSRV2016, vBDSQLSRV2017, vBDSQLSRV2019 :
+                       string ) : string;                                       // function que verifica se existe o caminho do sql server
 
   procedure pImpr();                                                            // Chama a procedure de impressão
   procedure MarcaBloco( cxTL : TcxTreeList; blMarca : Boolean; blTodos : Boolean = False ); // Marca bloco de seleção TreeList    // xe 10.1 Berlin
@@ -6080,7 +6081,7 @@ begin
   DMFD.FDQuery4.ParamByName('RT_fone').AsString                  := FrPar.edt_FoneResTec.Text;
 
   DMFD.FDQuery4.ParamByName('codigo_loja').AsString              := edt_CodEmp.Text;
-  DMFD.FDQuery4.ParamByName('OUTROS_DtIni').AsString             := FormatDateTime('yyyy/mm/dd', FrPar.cxdtp1.Date);
+  DMFD.FDQuery4.ParamByName('OUTROS_DtIni').Value                := FormatDateTime('yyyy/mm/dd', FrPar.cxdtp1.Date);
 
   try
 
@@ -18186,12 +18187,18 @@ end;
 // By Edson Lima ; 2020-12-16
 // Function que verifica se existe o caminho do sql server
 //------------------------------------------------------------------------------
-function fDirExists( vBDSQLSRV2016, vBDSQLSRV2019 : string ) : Boolean;
-var
-
+function TFrGBNFe.fDirExists( vBDSQLSRV2016, vBDSQLSRV2017,
+                             vBDSQLSRV2019 : string ) : string;
 begin
 
-
+ if DirectoryExists(vBDSQLSRV2016) then
+  Result := vBDSQLSRV2016
+ else if DirectoryExists(vBDSQLSRV2017) then
+  Result := vBDSQLSRV2017
+ else if DirectoryExists(vBDSQLSRV2019) then
+  Result := vBDSQLSRV2019
+ else
+  Result := '';
 
 end;
 
@@ -18215,7 +18222,6 @@ end;
 //      lstbxFR3.AddItem(fsFiles, nil);
 //
 //------------------------------------------------------------------------------
-
 
 end.
 

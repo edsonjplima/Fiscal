@@ -23,7 +23,8 @@ uses
  dxSkinValentine, dxSkinVisualStudio2013Blue, dxSkinVisualStudio2013Dark,
  dxSkinVisualStudio2013Light, dxSkinVS2010, dxSkinWhiteprint, dxSkinXmas2008Blue,
  cxInplaceContainer, cxTextEdit, cxClasses, cxCalendar, cxCheckBox,
- cxCurrencyEdit, cxMaskEdit, dxDateTimeWheelPicker, cxRichEdit;
+ cxCurrencyEdit, cxMaskEdit, dxDateTimeWheelPicker, cxRichEdit, cxContainer,
+  cxEdit, dxCore, cxDateUtils, cxDropDownEdit, cxImageComboBox;
 
 type
  TFrBuscaNota = class(TForm)
@@ -37,8 +38,6 @@ type
   GroupBox4: TGroupBox;
   GroupBox2: TGroupBox;
   cxTLBusca: TcxTreeList;
-    dtp1: TDateTimePicker;
-    dtp2: TDateTimePicker;
   edt_CodDes: TEdit;
   edt_NumNNF: TEdit;
   cxTLCBuscaStrNNf: TcxTreeListColumn;
@@ -47,6 +46,8 @@ type
   cxTLCBuscaStrMod: TcxTreeListColumn;
   cxTLCBuscaStrSer: TcxTreeListColumn;
   cxTLCBuscaStrChv: TcxTreeListColumn;
+    cxdtp1: TcxDateEdit;
+    cxdtp2: TcxDateEdit;
   procedure FormShow(Sender: TObject);
   procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   procedure BitBtn2MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
@@ -55,8 +56,11 @@ type
   procedure cxTLBuscaDblClick(Sender: TObject);
     procedure edt_CodDesChange(Sender: TObject);
     procedure edt_NumNNFChange(Sender: TObject);
-    procedure dtp1Change(Sender: TObject);
-    procedure dtp2Change(Sender: TObject);
+    procedure cxdtp1PropertiesChange(Sender: TObject);
+    procedure cxdtp2PropertiesChange(Sender: TObject);
+    procedure cxTLBuscaCustomDrawDataCell(Sender: TcxCustomTreeList;
+      ACanvas: TcxCanvas; AViewInfo: TcxTreeListEditCellViewInfo;
+      var ADone: Boolean);
  private
     { Private declarations }
  public
@@ -82,8 +86,8 @@ begin
  FrBuscaNota.Height             := 470;
  FrBuscaNota.Width              := 750;
 
- dtp1.Date := FrGBNFe.dtp1.Date;
- dtp2.Date := FrGBNFe.dtp2.Date;
+ cxdtp2.Date := FrGBNFe.cxdtp2.Date;
+ cxdtp1.Date := FrGBNFe.cxdtp1.Date;
 
  edt_CodDes.Text := FrGBNFe.edt_CodDes.Text;
  edt_NumNNF.Text := FrGBNFe.edt_NumNNF.Text;
@@ -117,6 +121,61 @@ begin
  end;
 end;
 
+procedure TFrBuscaNota.cxdtp1PropertiesChange(Sender: TObject);
+begin
+
+ // Faz a contestação da data inicial antiga
+ if cxdtp1.Date < (Date - 73000) then                                             // 73000 dias aproximadamente 200 anos
+  if Application.MessageBox('Data inicial muita antiga !', 'BUSCA - Período', mb_IconInformation + MB_OK) = IdOk then
+  begin
+   cxdtp1.SetFocus;
+   exit;
+  end;
+
+ // Faz a contestação da data final no período
+ if cxdtp2.Date < cxdtp1.Date then
+  if Application.MessageBox('A data inicial não pode ser maior que data final !', 'BUSCA - Período', mb_IconInformation + MB_OK) = IdOk then
+  begin
+   cxdtp2.SetFocus;
+   exit;
+  end;
+
+ pAtuBus();
+
+end;
+
+procedure TFrBuscaNota.cxdtp2PropertiesChange(Sender: TObject);
+begin
+
+ // Faz a contestação da data final antiga
+ if cxdtp2.Date < (Date - 73000) then                                             // 73000 dias aproximadamente 200 anos
+  if Application.MessageBox('Data final muito antiga !', 'BUSCA - Período', mb_IconInformation + MB_OK) = IdOk then
+  begin
+   cxdtp2.SetFocus;
+   exit;
+  end;
+
+ // Faz a contestação da data final no período
+ if cxdtp2.Date < cxdtp1.Date then
+  if Application.MessageBox('A data final não pode ser menor que data inicial !', 'BUSCA - Período', mb_IconInformation + MB_OK) = IdOk then
+  begin
+   cxdtp2.SetFocus;
+   exit;
+  end;
+
+ pAtuBus();
+
+end;
+
+procedure TFrBuscaNota.cxTLBuscaCustomDrawDataCell(Sender: TcxCustomTreeList;
+  ACanvas: TcxCanvas; AViewInfo: TcxTreeListEditCellViewInfo;
+  var ADone: Boolean);
+begin
+
+ ACanvas.Font.Color := $00804000;
+
+end;
+
 procedure TFrBuscaNota.cxTLBuscaDblClick(Sender: TObject);
 begin
 
@@ -124,52 +183,6 @@ begin
  FrCCe.edit_Serie.Text := cxTLBusca.Items[cxTLBusca.FocusedNode.Index].Texts[cxTLCBuscaStrSer.ItemIndex];
  gBuscaChave           := cxTLBusca.Items[cxTLBusca.FocusedNode.Index].Texts[cxTLCBuscaStrChv.ItemIndex];
  close;
-
-end;
-
-procedure TFrBuscaNota.dtp1Change(Sender: TObject);
-begin
-
- // Faz a contestação da data inicial antiga
- if dtp1.Date < (Date - 73000) then                                             // 73000 dias aproximadamente 200 anos
-  if Application.MessageBox('Data inicial muita antiga !', 'BUSCA - Período', mb_IconInformation + MB_OK) = IdOk then
-  begin
-   dtp1.SetFocus;
-   exit;
-  end;
-
- // Faz a contestação da data final no período
- if dtp2.Date < dtp1.Date then
-  if Application.MessageBox('A data inicial não pode ser maior que data final !', 'BUSCA - Período', mb_IconInformation + MB_OK) = IdOk then
-  begin
-   dtp2.SetFocus;
-   exit;
-  end;
-
- pAtuBus();
-
-end;
-
-procedure TFrBuscaNota.dtp2Change(Sender: TObject);
-begin
-
- // Faz a contestação da data final antiga
- if dtp2.Date < (Date - 73000) then                                             // 73000 dias aproximadamente 200 anos
-  if Application.MessageBox('Data final muito antiga !', 'BUSCA - Período', mb_IconInformation + MB_OK) = IdOk then
-  begin
-   dtp2.SetFocus;
-   exit;
-  end;
-
- // Faz a contestação da data final no período
- if dtp2.Date < dtp1.Date then
-  if Application.MessageBox('A data final não pode ser menor que data inicial !', 'BUSCA - Período', mb_IconInformation + MB_OK) = IdOk then
-  begin
-   dtp2.SetFocus;
-   exit;
-  end;
-
- pAtuBus();
 
 end;
 
@@ -237,8 +250,8 @@ begin
  end;
 
  aux := '';
- aux := FrGBNFe.edt_CodEmp.Text + ',' + '''' + FormatDateTime('yyyy/mm/dd', dtp1.Date) + ''''+ ',';
- aux := aux + '''' + FormatDateTime('yyyy/mm/dd', dtp2.Date) + '''' + ',';
+ aux := FrGBNFe.edt_CodEmp.Text + ',' + '''' + FormatDateTime('yyyy/mm/dd', cxdtp1.Date) + ''''+ ',';
+ aux := aux + '''' + FormatDateTime('yyyy/mm/dd', cxdtp2.Date) + '''' + ',';
  aux := aux + '''' + edt_NumNNF.Text + '''' + ',';
  aux := aux + '''' + edt_CodDes.Text + '''' + ',';
  aux := aux + '''' + vModelo + '''' + ',';

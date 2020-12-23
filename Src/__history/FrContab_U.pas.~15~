@@ -3,10 +3,10 @@ unit FrContab_U;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, Buttons, ComCtrls, ExtCtrls, Gauges, Grids, DBGrids,
-  IWControl, IWGrids, IWDBGrids, IWVCLBaseControl, IWBaseControl,
-  IWBaseHTMLControl, IWCompGrids;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
+  Vcl.StdCtrls, Vcl.Buttons, Vcl.ComCtrls, Vcl.ExtCtrls, Vcl.Samples.Gauges,
+  Vcl.Grids, Vcl.DBGrids;
 
 type
   TFrContab = class(TForm)
@@ -71,12 +71,12 @@ begin
 
  if ( dtp1.Date > Now ) then
   begin
-   Application.MessageBox(PChar('Data inicial não pode ser maior que a data atual!'), 'Atenção', MB_ICONINFORMATION );
+   Application.MessageBox(PWideChar('Data inicial não pode ser maior que a data atual!'), 'Atenção', MB_ICONINFORMATION );
    dtp1.SetFocus;
   end
  else if ( dtp1.Date > dtp2.Date ) then
   begin
-   Application.MessageBox(PChar('Data inicial não pode ser maior que a data final!'), 'Atenção', MB_ICONINFORMATION );
+   Application.MessageBox(PWideChar('Data inicial não pode ser maior que a data final!'), 'Atenção', MB_ICONINFORMATION );
    dtp1.SetFocus;
   end;
 
@@ -87,12 +87,12 @@ begin
 
  if ( dtp2.Date > Now ) then
   begin
-   Application.MessageBox(PChar('Data final não pode ser maior que a data de hoje!'), 'Atenção', MB_ICONINFORMATION );
+   Application.MessageBox(PWideChar('Data final não pode ser maior que a data de hoje!'), 'Atenção', MB_ICONINFORMATION );
    dtp2.SetFocus;
   end
  else if ( dtp2.Date < dtp1.Date ) then
   begin
-   Application.MessageBox(PChar('Data final não pode ser menor que a data inicial!'), 'Atenção', MB_ICONINFORMATION );
+   Application.MessageBox(PWideChar('Data final não pode ser menor que a data inicial!'), 'Atenção', MB_ICONINFORMATION );
    dtp2.SetFocus;
   end;
 
@@ -135,7 +135,7 @@ begin
   begin
 
    vAux := '';
-   vAux := FrGBNFe.dxSpinEdit1.text + ',' + '''' + FormatDateTime('yyyy/mm/dd', dtp1.Date) + ''''+ ',';
+   vAux := FrGBNFe.edt_CodEmp.text + ',' + '''' + FormatDateTime('yyyy/mm/dd', dtp1.Date) + ''''+ ',';
    vAux := vAux + '''' + FormatDateTime('yyyy/mm/dd', dtp1.Date) + '''' + ',';
    vAux := vAux + '''' + '0' + '''' + ',';                                      // Todas Nota
    vAux := vAux + '''' + '0' + '''' + ',';                                      // Todos Destinatario

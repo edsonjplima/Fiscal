@@ -250,8 +250,8 @@ begin
  end;
 
  aux := '';
- aux := FrGBNFe.edt_CodEmp.Text + ',' + '''' + FormatDateTime('yyyy/mm/dd', cxdtp1.Date) + ''''+ ',';
- aux := aux + '''' + FormatDateTime('yyyy/mm/dd', cxdtp2.Date) + '''' + ',';
+ aux := FrGBNFe.edt_CodEmp.Text + ',' + '''' + FormatDateTime('dd/mm/yyyy', cxdtp1.Date) + ''''+ ',';
+ aux := aux + '''' + FormatDateTime('dd/mm/yyyy', cxdtp2.Date) + '''' + ',';
  aux := aux + '''' + edt_NumNNF.Text + '''' + ',';
  aux := aux + '''' + edt_CodDes.Text + '''' + ',';
  aux := aux + '''' + vModelo + '''' + ',';

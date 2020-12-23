@@ -135,8 +135,8 @@ begin
   begin
 
    vAux := '';
-   vAux := FrGBNFe.edt_CodEmp.text + ',' + '''' + FormatDateTime('yyyy/mm/dd', dtp1.Date) + ''''+ ',';
-   vAux := vAux + '''' + FormatDateTime('yyyy/mm/dd', dtp1.Date) + '''' + ',';
+   vAux := FrGBNFe.edt_CodEmp.text + ',' + '''' + FormatDateTime('dd/mm/yyyy', dtp1.Date) + ''''+ ',';
+   vAux := vAux + '''' + FormatDateTime('dd/mm/yyyy', dtp1.Date) + '''' + ',';
    vAux := vAux + '''' + '0' + '''' + ',';                                      // Todas Nota
    vAux := vAux + '''' + '0' + '''' + ',';                                      // Todos Destinatario
    vAux := vAux + '''' + '' + '''' + ',';                                       // Todos Modelo

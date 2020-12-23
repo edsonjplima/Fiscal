@@ -753,7 +753,7 @@ begin
 
  aux := '';
  aux := edt_CodEmp.Text + ',' + '''' + _nota + '''' + ',' + '''';
- aux := aux + FormatDateTime('yyyy/mm/dd', _demi) + '''' + ',';
+ aux := aux + FormatDateTime('dd/mm/yyyy', _demi) + '''' + ',';
  aux := aux + '''' + IntToStr(gModelo) + '''' + ',';
  aux := aux + '''' + IntToStr(gSerie)  + '''';
 
@@ -839,7 +839,7 @@ begin
        xAux := '';
        xAux := edt_CodEmp.Text + ',' + '''' + VarToStr(DMFD.FDQuery1['nfe_nnf']) +
                '''' + ',' + '''' + _tpemissao + '''' + ',' + '''';
-       xAux := xAux + FormatDateTime('yyyy/mm/dd',
+       xAux := xAux + FormatDateTime('dd/mm/yyyy',
                VarToDateTime(DMFD.FDQuery1['nfe_demi'])) + '''' + ',' + '''';
        xAux := xAux + IntToStr(gModelo) + '''' + ',' + '''';
        xAux := xAux + VarToStr(DMFD.FDQuery1['nfe_Serie']) + '''' + ',' + '''';
@@ -897,7 +897,7 @@ begin
        DMFD.FDQryGeral1.SQL.Add( 'and   modelo      = :parm4                     ' );
        DMFD.FDQryGeral1.SQL.Add( 'and   serie       = :parm5                     ' );
        DMFD.FDQryGeral1.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
-       DMFD.FDQryGeral1.Params[1].AsString  := FormatDateTime('yyyy/mm/dd', DMFD.FDQuery1['nfe_demi']);
+       DMFD.FDQryGeral1.Params[1].Value     := StrToDateTime( FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']) );
        DMFD.FDQryGeral1.Params[2].AsString  := DMFD.FDQuery1['nfe_nnf'];
        DMFD.FDQryGeral1.Params[3].AsString  := DMFD.FDQuery1['nfe_modelo'];
        DMFD.FDQryGeral1.Params[4].AsString  := DMFD.FDQuery1['nfe_serie'];
@@ -1166,7 +1166,7 @@ begin
                            'modelo',                                            // Nome dos campos
                            'ENVI',
                            'Tentativa de envio sem sucesso',
-                           FormatDateTime('yyyy/mm/dd hh:nn:ss', now()),
+                           FormatDateTime('dd/mm/yyyy hh:nn:ss', now()),
                            gUsu,
                            '',
                            '',
@@ -1177,7 +1177,7 @@ begin
                            '',
                            '',
                            '',
-                           edt_CodEmp.Text, FormatDateTime('yyyy/mm/dd', DMFD.FDQuery1['nfe_demi']),
+                           edt_CodEmp.Text, FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']),
                            DMFD.FDQuery1['nfe_nnf'],
                            DMFD.FDQuery1['nfe_serie'],
                            '',
@@ -1216,7 +1216,7 @@ begin
                            '',
                            '',
                            '',
-                           edt_CodEmp.Text, FormatDateTime('yyyy/mm/dd', DMFD.FDQuery1['nfe_demi']),
+                           edt_CodEmp.Text, FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']),
                            DMFD.FDQuery1['nfe_nnf'],
                            DMFD.FDQuery1['nfe_serie'],
                            '',
@@ -1246,7 +1246,7 @@ begin
        DMFD.FDQuery2.SQL.Add( 'and   t2.modelo      = :parm4                                                                      ' );
        DMFD.FDQuery2.SQL.Add( 'and   t2.serie       = :parm5                                                                      ' );
        DMFD.FDQuery2.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
-       DMFD.FDQuery2.Params[1].AsString  := FormatDateTime('yyyy/mm/dd', DMFD.FDQuery1['nfe_demi']);
+       DMFD.FDQuery2.Params[1].Value     := StrToDateTime( FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']) );
        DMFD.FDQuery2.Params[2].AsString  := DMFD.FDQuery1['nfe_nnf'];
        DMFD.FDQuery2.Params[3].AsString  := DMFD.FDQuery1['nfe_modelo'];
        DMFD.FDQuery2.Params[4].AsString  := DMFD.FDQuery1['nfe_serie'];
@@ -1292,7 +1292,7 @@ begin
        DMFD.FDQuery2.SQL.Add( 'and   t2.modelo      = :parm4                                  ' );
        DMFD.FDQuery2.SQL.Add( 'and   t2.serie       = :parm5                                  ' );
        DMFD.FDQuery2.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
-       DMFD.FDQuery2.Params[1].AsString  := FormatDateTime('yyyy/mm/dd', DMFD.FDQuery1['nfe_demi']);
+       DMFD.FDQuery2.Params[1].Value     := StrToDateTime( FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']) );
        DMFD.FDQuery2.Params[2].AsString  := DMFD.FDQuery1['nfe_nnf'];
        DMFD.FDQuery2.Params[3].AsString  := DMFD.FDQuery1['nfe_modelo'];
        DMFD.FDQuery2.Params[4].AsString  := DMFD.FDQuery1['nfe_serie'];
@@ -1330,7 +1330,7 @@ begin
        DMFD.FDQuery2.SQL.Add( 'and   t2.modelo      = :parm4                                                                                             ' );
        DMFD.FDQuery2.SQL.Add( 'and   t2.serie       = :parm5                                                                                             ' );
        DMFD.FDQuery2.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
-       DMFD.FDQuery2.Params[1].AsString  := FormatDateTime('yyyy/mm/dd', DMFD.FDQuery1['nfe_demi']);
+       DMFD.FDQuery2.Params[1].Value             := StrToDateTime( FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']) );
        DMFD.FDQuery2.Params[2].AsString  := DMFD.FDQuery1['nfe_nnf'];
        DMFD.FDQuery2.Params[3].AsString  := DMFD.FDQuery1['nfe_modelo'];
        DMFD.FDQuery2.Params[4].AsString  := DMFD.FDQuery1['nfe_serie'];
@@ -1690,7 +1690,7 @@ begin
        DMFD.FDQuery2.SQL.Add( '  t2.serie       = :parm5                        ' );
        DMFD.FDQuery2.SQL.Add( '                                                 ' );
        DMFD.FDQuery2.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
-       DMFD.FDQuery2.Params[1].AsString  := FormatDateTime('yyyy/mm/dd', DMFD.FDQuery1['nfe_demi']);
+       DMFD.FDQuery2.Params[1].Value     := StrToDateTime( FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']) );
        DMFD.FDQuery2.Params[2].AsString  := DMFD.FDQuery1['nfe_nnf'];
        DMFD.FDQuery2.Params[3].AsString  := DMFD.FDQuery1['nfe_modelo'];
        DMFD.FDQuery2.Params[4].AsString  := DMFD.FDQuery1['nfe_serie'];
@@ -1733,7 +1733,7 @@ begin
        DMFD.FDQuery2.SQL.Add( '  t2.Serie       = :Serie                        ' );
        DMFD.FDQuery2.SQL.Add( '                                                 ' );
        DMFD.FDQuery2.ParamByName('codigo_loja').AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
-       DMFD.FDQuery2.ParamByName('demi'       ).AsString  := FormatDateTime('yyyy/mm/dd', DMFD.FDQuery1['nfe_demi']);
+       DMFD.FDQuery2.ParamByName('demi'       ).Value     := StrToDateTime( FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']) );
        DMFD.FDQuery2.ParamByName('nnf'        ).AsString  := DMFD.FDQuery1['nfe_nnf'];
        DMFD.FDQuery2.ParamByName('Modelo'     ).AsString  := DMFD.FDQuery1['nfe_modelo'];
        DMFD.FDQuery2.ParamByName('Serie'      ).AsString  := DMFD.FDQuery1['nfe_serie'];
@@ -1782,7 +1782,7 @@ begin
        DMFD.FDQuery2.SQL.Add( '  Order by t1.dvenc                                                    ' );
        DMFD.FDQuery2.SQL.Add( '                                                                       ' );
        DMFD.FDQuery2.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
-       DMFD.FDQuery2.Params[1].AsString  := FormatDateTime('yyyy/mm/dd', DMFD.FDQuery1['nfe_demi']);
+       DMFD.FDQuery2.Params[1].Value     := StrToDateTime( FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']) );
        DMFD.FDQuery2.Params[2].AsString  := DMFD.FDQuery1['nfe_nnf'];
        DMFD.FDQuery2.Params[3].AsString  := DMFD.FDQuery1['nfe_modelo'];
        DMFD.FDQuery2.Params[4].AsString  := DMFD.FDQuery1['nfe_serie'];
@@ -2300,7 +2300,7 @@ begin
        DMFD.FDQuery2.SQL.Add( 'Order by t1.sequencia                                          ' );
        DMFD.FDQuery2.SQL.Add( '                                                               ' );
        DMFD.FDQuery2.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
-       DMFD.FDQuery2.Params[1].AsString  := FormatDateTime('yyyy/mm/dd', DMFD.FDQuery1['nfe_demi']);
+       DMFD.FDQuery2.Params[1].Value     := StrToDateTime( FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']) );
        DMFD.FDQuery2.Params[2].AsString  := DMFD.FDQuery1['nfe_nnf'];
        DMFD.FDQuery2.Params[3].AsString  := DMFD.FDQuery1['nfe_modelo'];
        DMFD.FDQuery2.Params[4].AsString  := DMFD.FDQuery1['nfe_serie'];
@@ -2715,7 +2715,7 @@ begin
            DMFD.FDQuery8.SQL.Add( 'Order by t1.sequencia                                          ' );
            DMFD.FDQuery8.SQL.Add( '                                                               ' );
            DMFD.FDQuery8.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
-           DMFD.FDQuery8.Params[1].AsString  := FormatDateTime('yyyy/mm/dd', DMFD.FDQuery1['nfe_demi']);
+           DMFD.FDQuery8.Params[1].Value     := StrToDateTime( FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']) );
            DMFD.FDQuery8.Params[2].AsString  := DMFD.FDQuery1['nfe_nnf'];
            DMFD.FDQuery8.Params[3].AsInteger := DMFD.FDQuery2['sequencia'];
            DMFD.FDQuery8.Params[4].AsString  := DMFD.FDQuery1['nfe_modelo'];
@@ -2762,7 +2762,7 @@ begin
                DMFD.FDQuery9.SQL.Add( 'Order by t1.sequencia                                                    ' );
                DMFD.FDQuery9.SQL.Add( '                                                                         ' );
                DMFD.FDQuery9.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
-               DMFD.FDQuery9.Params[1].AsString  := FormatDateTime('yyyy/mm/dd', DMFD.FDQuery1['nfe_demi']);
+               DMFD.FDQuery9.Params[1].Value     := StrToDateTime( FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']) );
                DMFD.FDQuery9.Params[2].AsString  := DMFD.FDQuery1['nfe_nnf'];
                DMFD.FDQuery9.Params[3].AsInteger := DMFD.FDQuery2['sequencia'];
                DMFD.FDQuery9.Params[4].AsString  := DMFD.FDQuery8['numero_di'];
@@ -2822,7 +2822,7 @@ begin
              DMFD.FDQuery19.SQL.Add( 'Order by t1.codigo_item                   ' );
              DMFD.FDQuery19.SQL.Add( '                                          ' );
              DMFD.FDQuery19.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
-             DMFD.FDQuery19.Params[1].AsString  := FormatDateTime('yyyy/mm/dd', DMFD.FDQuery1['nfe_demi']);
+             DMFD.FDQuery19.Params[1].Value     := StrToDateTime( FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']) );
              DMFD.FDQuery19.Params[2].AsString  := DMFD.FDQuery1['nfe_nnf'];
              DMFD.FDQuery19.Params[3].AsString  := DMFD.FDQuery1['nfe_modelo'];
              DMFD.FDQuery19.Params[4].AsString  := DMFD.FDQuery1['nfe_serie'];
@@ -3338,7 +3338,7 @@ begin
 
         aux := '';
         aux := edt_CodEmp.Text + ',' + '''' + VarToStr(DMFD.FDQuery1['nfe_nnf']) + '''' + ',' + '''' + _tpemissao + '''' + ',' + '''';
-        aux := aux + FormatDateTime('yyyy/mm/dd', VarToDateTime(DMFD.FDQuery1['nfe_demi'])) + '''' + ',' + '''';
+        aux := aux + FormatDateTime('dd/mm/yyyy', VarToDateTime(DMFD.FDQuery1['nfe_demi'])) + '''' + ',' + '''';
         Aux := Aux + IntToStr(gModelo) + '''' + ',' + '''';
         Aux := Aux + VarToStr(DMFD.FDQuery1['nfe_Serie']) + '''' + ',' + '''';
         Aux := Aux + gCdPed + '''';
@@ -3408,7 +3408,7 @@ begin
                           'serie',
                           'chave_nfe',
                           'modelo',                                             // Nome dos campos
-                          FormatDateTime('yyyy/mm/dd hh:nn:ss', now()),
+                          FormatDateTime('dd/mm/yyyy hh:nn:ss', now()),
                           Aux,
                           AnsiUpperCase(_tipo_emissao),
                           ACBrNFe1.WebServices.EnvEvento.xMotivo,
@@ -3422,7 +3422,7 @@ begin
                           '',
                           '',
                           edt_CodEmp.Text,
-                          FormatDateTime('yyyy/mm/dd', DMFD.FDQuery1['nfe_demi']),
+                          FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']),
                           DMFD.FDQuery1['nfe_nnf'],
                           DMFD.FDQuery1['nfe_serie'],
                           Aux,
@@ -3458,7 +3458,7 @@ begin
 
         aux := '';
         aux := edt_CodEmp.Text + ',' + '''' + VarToStr(DMFD.FDQuery1['nfe_nnf']) + '''' + ',' + '''' + _tpemissao + '''' + ',' + '''';
-        aux := aux + FormatDateTime('yyyy/mm/dd', VarToDateTime(DMFD.FDQuery1['nfe_demi'])) + '''' + ',' + '''';
+        aux := aux + FormatDateTime('dd/mm/yyyy', VarToDateTime(DMFD.FDQuery1['nfe_demi'])) + '''' + ',' + '''';
         aux := aux + IntToStr(gModelo) + '''' + ',' + '''';
         aux := aux + VarToStr(DMFD.FDQuery1['nfe_Serie']) + '''' + ',' + '''';
         aux := aux + gCdPed + '''';
@@ -3535,7 +3535,7 @@ begin
                               ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].chDFe,
                               ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].cStat,
                               ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].xMotivo,
-                              FormatDateTime('yyyy/mm/dd hh:nn:ss', ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].dhRecbto),
+                              FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].dhRecbto),
                               'N',
                               gUsu,
                               '',
@@ -3544,7 +3544,7 @@ begin
                               '',
                               '',
                               edt_CodEmp.Text,
-                              FormatDateTime('yyyy/mm/dd', DMFD.FDQuery1['nfe_demi']),
+                              FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']),
                               DMFD.FDQuery1['nfe_nnf'],
                               DMFD.FDQuery1['nfe_serie'],
                               ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].chDFe,
@@ -3663,7 +3663,7 @@ begin
                                 ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].chDFe,
                                 ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].cStat,
                                 ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].xMotivo,
-                                FormatDateTime('yyyy/mm/dd hh:nn:ss', ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].dhRecbto),
+                                FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].dhRecbto),
                                 'N',
                                 gUsu,
                                 '',
@@ -3672,7 +3672,7 @@ begin
                                 '',
                                 '',
                                 edt_CodEmp.Text,
-                                FormatDateTime('yyyy/mm/dd', DMFD.FDQuery1['nfe_demi']),
+                                FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']),
                                 DMFD.FDQuery1['nfe_nnf'],
                                 DMFD.FDQuery1['nfe_serie'],
                                 ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].chDFe,
@@ -4582,7 +4582,7 @@ begin
     DMFD.FDQuery2.SQL.Add( ':xml_nota40)                                                ' );
     DMFD.FDQuery2.Params[0].AsString    := 'IMPORTA';
     DMFD.FDQuery2.Params[1].AsInteger   := StrToIntDef(edt_CodEmp.Text, 0);
-    DMFD.FDQuery2.Params[2].AsString    := FormatDateTime('yyyy/mm/dd', Ide.dEmi);
+    DMFD.FDQuery2.Params[2].Value       := StrToDateTime( FormatDateTime('dd/mm/yyyy', Ide.dEmi) );
     DMFD.FDQuery2.Params[3].AsString    := vartostr(Ide.nNF);
     DMFD.FDQuery2.Params[4].AsMemo      := vXml1;
     DMFD.FDQuery2.Params[5].AsMemo      := vXml2;
@@ -4694,8 +4694,8 @@ begin
  if not fIniPen() then exit;                                                    // função de coleta de dados
 
  aux := '';
- aux := edt_CodEmp.Text + ',' + '''' + FormatDateTime('yyyy/mm/dd', cxdtp1.Date) + ''''+ ',';
- aux := aux + '''' + FormatDateTime('yyyy/mm/dd', cxdtp2.Date) + '''' + ',';
+ aux := edt_CodEmp.Text + ',' + '''' + FormatDateTime('dd/mm/yyyy', cxdtp1.Date) + ''''+ ',';
+ aux := aux + '''' + FormatDateTime('dd/mm/yyyy', cxdtp2.Date) + '''' + ',';
  aux := aux + '''' + edt_NumNNF.Text + '''' + ',';
  aux := aux + '''' + edt_CodDes.Text + '''' + ',';
  aux := aux + '''' + IntToStr(RadioGroup2.ItemIndex) + '''';
@@ -5693,7 +5693,7 @@ begin
 
        // Filtra os registro por data ; by Edson Lima ;  2015-5-25T0857
        DMFD.FDQuery15.Close;
-        DMFD.FDQuery15.ParamByName('DatCon').AsString  := FormatDateTime('yyyy/mm/dd', gDatConB);
+        DMFD.FDQuery15.ParamByName('DatCon').Value     := StrToDateTime( FormatDateTime('dd/mm/yyyy', gDatConB) );
         DMFD.FDQuery15.ParamByName('CodEmp').AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
         DMFD.FDQuery15.ParamByName('Situac').AsString  := 'FSDA';
        DMFD.FDQuery15.Open;
@@ -5726,7 +5726,7 @@ begin
 
        // Filtra os registro por data ; by Edson Lima ;  2015-5-25T0857
        DMFD.FDQuery15.Close;
-        DMFD.FDQuery15.ParamByName('DatCon').AsString  := FormatDateTime('yyyy/mm/dd', gDatConB);
+        DMFD.FDQuery15.ParamByName('DatCon').Value     := StrToDateTime( FormatDateTime('dd/mm/yyyy', gDatConB) );
         DMFD.FDQuery15.ParamByName('CodEmp').AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
         DMFD.FDQuery15.ParamByName('Situac').AsString  := 'OFFL';
        DMFD.FDQuery15.Open;
@@ -5767,7 +5767,7 @@ begin
 
        // Filtra os registro por data ; by Edson Lima ;  2015-5-25T0857
        DMFD.FDQuery15.Close;
-        DMFD.FDQuery15.ParamByName('DatCon').AsString  := FormatDateTime('yyyy/mm/dd', gDatConB);
+        DMFD.FDQuery15.ParamByName('DatCon').Value     := StrToDateTime( FormatDateTime('dd/mm/yyyy', gDatConB) );
         DMFD.FDQuery15.ParamByName('CodEmp').AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
         DMFD.FDQuery15.ParamByName('Situac').AsString  := '';
        DMFD.FDQuery15.Open;
@@ -6081,7 +6081,7 @@ begin
   DMFD.FDQuery4.ParamByName('RT_fone').AsString                  := FrPar.edt_FoneResTec.Text;
 
   DMFD.FDQuery4.ParamByName('codigo_loja').AsString              := edt_CodEmp.Text;
-  DMFD.FDQuery4.ParamByName('OUTROS_DtIni').AsString             := FormatDateTime('yyyy/mm/dd', FrPar.cxdtp1.Date);
+  DMFD.FDQuery4.ParamByName('OUTROS_DtIni').Value                := StrToDateTime( FormatDateTime('dd/mm/yyyy', FrPar.cxdtp1.Date) );
 
   try
 
@@ -6812,8 +6812,8 @@ begin
  end;
 
  aux := '';
- aux := edt_CodEmp.Text + ',' + '''' + FormatDateTime('yyyy/mm/dd', cxdtp1.Date) + ''''+ ',';
- aux := aux + '''' + FormatDateTime('yyyy/mm/dd', cxdtp2.Date) + '''' + ',';
+ aux := edt_CodEmp.Text + ',' + '''' + FormatDateTime('dd/mm/yyyy', cxdtp1.Date) + ''''+ ',';
+ aux := aux + '''' + FormatDateTime('dd/mm/yyyy', cxdtp2.Date) + '''' + ',';
  aux := aux + '''' + edt_NumNNF.Text + '''' + ',';
  aux := aux + '''' + edt_CodDes.Text + '''' + ',';
  aux := aux + '''' + vModelo + '''' + ',';
@@ -7689,7 +7689,7 @@ begin
                //*******************************************************************************
                // by Edson ; 2013-03-04 ;08:41 ; Atribuição para consistir nnf na hora do update
                gCdloja_Consiste := edt_CodEmp.Text;
-               gdEmi_Consiste   := FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']);
+               gdEmi_Consiste   := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
                gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
                gNNF_Consiste    := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
                gSerie_Consiste  := vartostr(DMFD.FDQryGeral2['nfe_serie']);
@@ -7876,7 +7876,7 @@ begin
         // na hora do update
         //----------------------------------------------------------------------
         gCdloja_Consiste := edt_CodEmp.Text;
-        gdEmi_Consiste   := FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']);
+        gdEmi_Consiste   := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
         gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
         gNNF_Consiste    := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
         gSerie_Consiste  := vartostr(DMFD.FDQryGeral2['nfe_serie']);
@@ -8175,7 +8175,7 @@ begin
 
      // by Edson Lima ; 2017-1-5T1027 ; Atribui as vars globais de consistência
      gCdloja_Consiste := edt_CodEmp.Text;
-     gdEmi_Consiste   := FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']);
+     gdEmi_Consiste   := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
      gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
      gDataEmi         := DMFD.FDQryGeral2['nfe_demi'];
      gNNF_Consiste    := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
@@ -8246,7 +8246,7 @@ begin
        Aux :=
        edt_CodEmp.Text + ',' + '''' +
        VarToStr(DMFD.FDQryGeral2['nfe_nnf']) + '''' + ',' + '''' + _tpemissao + '''' + ',' + '''';
-       Aux := Aux + FormatDateTime('yyyy/mm/dd', VarToDateTime(DMFD.FDQryGeral2['nfe_demi'])) + '''' + ',' + '''';
+       Aux := Aux + FormatDateTime('dd/mm/yyyy', VarToDateTime(DMFD.FDQryGeral2['nfe_demi'])) + '''' + ',' + '''';
        Aux := Aux + IntToStr(gModelo) + '''' + ',' + '''';
        Aux := Aux + VarToStr(DMFD.FDQryGeral2['nfe_Serie']) + '''' + ',' + '''';
        Aux := Aux + IntToStr(gCodPed) + '''';
@@ -8439,7 +8439,7 @@ begin
                               'chave_nfe',
                               'modelo',                                           // Nome dos campos
                               ACBrNFe1.WebServices.Consulta.Protocolo,
-                              FormatDateTime('yyyy/mm/dd hh:nn:ss', ACBrNFe1.WebServices.consulta.DhRecbto),
+                              FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.consulta.DhRecbto),
                               ACBrNFe1.WebServices.Consulta.NFeChave,
                               ACBrNFe1.WebServices.Consulta.cStat,
                               ACBrNFe1.WebServices.Consulta.xMotivo,
@@ -8452,7 +8452,7 @@ begin
                               '',
                               '',
                               edt_CodEmp.Text,
-                              FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']),
+                              FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']),
                               DMFD.FDQryGeral2['nfe_nnf'],
                               DMFD.FDQryGeral2['nfe_serie'],
                               ACBrNFe1.WebServices.Consulta.NFeChave,
@@ -8483,7 +8483,7 @@ begin
                               'chave_nfe',
                               'modelo',                                           // Nome dos campos
                               ACBrNFe1.WebServices.Consulta.Protocolo,
-                              FormatDateTime('yyyy/mm/dd hh:nn:ss', ACBrNFe1.WebServices.consulta.DhRecbto),
+                              FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.consulta.DhRecbto),
                               ACBrNFe1.WebServices.Consulta.NFeChave,
                               ACBrNFe1.WebServices.Consulta.cStat,
                               ACBrNFe1.WebServices.Consulta.xMotivo,
@@ -8496,7 +8496,7 @@ begin
                               '',
                               '',
                               edt_CodEmp.Text,
-                              FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']),
+                              FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']),
                               DMFD.FDQryGeral2['nfe_nnf'],
                               DMFD.FDQryGeral2['nfe_serie'],
                               ACBrNFe1.WebServices.Consulta.NFeChave,
@@ -8637,7 +8637,7 @@ begin
 
          Aux := '';
          Aux := edt_CodEmp.Text + ',' + '''' + VarToStr(DMFD.FDQryGeral2['nfe_nnf']) + '''' + ',' + '''' + _tpemissao + '''' + ',' + '''';
-         Aux := Aux + FormatDateTime('yyyy/mm/dd', VarToDateTime(DMFD.FDQryGeral2['nfe_demi'])) + '''' + ',' + '''';
+         Aux := Aux + FormatDateTime('dd/mm/yyyy', VarToDateTime(DMFD.FDQryGeral2['nfe_demi'])) + '''' + ',' + '''';
          Aux := Aux + IntToStr(gModelo) + '''' + ',' + '''';
          Aux := Aux + VarToStr(DMFD.FDQryGeral2['nfe_Serie']) + '''' + ',' + '''';
          Aux := Aux + gCdPed + '''';
@@ -8876,7 +8876,7 @@ begin
 
          Aux := '';
          Aux := edt_CodEmp.Text + ',' + '''' + VarToStr(DMFD.FDQryGeral2['nfe_nnf']) + '''' + ',' + '''' + _tpemissao + '''' + ',' + '''';
-         Aux := Aux + FormatDateTime('yyyy/mm/dd', VarToDateTime(DMFD.FDQryGeral2['nfe_demi'])) + '''' + ',' + '''';
+         Aux := Aux + FormatDateTime('dd/mm/yyyy', VarToDateTime(DMFD.FDQryGeral2['nfe_demi'])) + '''' + ',' + '''';
          Aux := Aux + IntToStr(gModelo) + '''' + ',' + '''';
          Aux := Aux + VarToStr(DMFD.FDQryGeral2['nfe_Serie']) + '''' + ',' + '''';
          Aux := Aux + gCdPed + '''';
@@ -9108,7 +9108,7 @@ begin
         pDefineRelFR();                                                         // Define o tipo de Relatório FastReport
 
        gCdloja_Consiste := edt_CodEmp.Text;
-       gdEmi_Consiste   := FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']);
+       gdEmi_Consiste   := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
        gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
        gNNF_Consiste    := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
        gSerie_Consiste  := vartostr(DMFD.FDQryGeral2['nfe_serie']);
@@ -9174,7 +9174,7 @@ begin
         pDefineRelFR();                                                         // Define o tipo de Relatório FastReport
 
        gCdloja_Consiste := edt_CodEmp.Text;
-       gdEmi_Consiste   := FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']);
+       gdEmi_Consiste   := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
        gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
        gNNF_Consiste    := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
        gSerie_Consiste  := vartostr(DMFD.FDQryGeral2['nfe_serie']);
@@ -9282,7 +9282,7 @@ begin
        pDefineRelFR();                                                          // Define o tipo de Relatório FastReport
 
       gCdloja_Consiste := edt_CodEmp.Text;
-      gdEmi_Consiste   := FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']);
+      gdEmi_Consiste   := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
       gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
       gNNF_Consiste    := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
       gSerie_Consiste  := vartostr(DMFD.FDQryGeral2['nfe_serie']);
@@ -9456,7 +9456,7 @@ begin
                            'chave_nfe',
                            'modelo',                                            // Nome dos Campos
                            ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.nProt,
-                           FormatDateTime('yyyy/mm/dd hh:nn:ss', ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.dhRegEvento),
+                           FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.dhRegEvento),
                            ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cStat,
                            ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.xMotivo,
                            '',
@@ -9469,7 +9469,7 @@ begin
                            '',
                            '',
                            edt_CodEmp.Text,
-                           FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']),
+                           FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']),
                            DMFD.FDQryGeral2['nfe_nnf'],
                            DMFD.FDQryGeral2['nfe_serie'],
                            ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.chNFe,
@@ -9498,7 +9498,7 @@ begin
                             'chave_nfe',
                             'modelo',                                           // Nome dos campos
                             ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.nProt,
-                            FormatDateTime('yyyy/mm/dd hh:nn:ss', ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.dhRegEvento),
+                            FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.dhRegEvento),
                             '',
                             '',
                             '580',
@@ -9511,7 +9511,7 @@ begin
                             '',
                             '',
                             edt_CodEmp.Text,
-                            FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']),
+                            FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']),
                             DMFD.FDQryGeral2['nfe_nnf'],
                             DMFD.FDQryGeral2['nfe_serie'],
                             ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.chNFe,
@@ -9758,7 +9758,7 @@ begin
      // by Edson ; 2013-03-04 ;08:41 ; Atribuição para consistir nnf na hora do update
 
      gCdloja_Consiste := edt_CodEmp.Text;
-     gdEmi_Consiste   := FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']);
+     gdEmi_Consiste   := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
      gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
      gNNF_Consiste    := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
      gSerie_Consiste  := vartostr(DMFD.FDQryGeral2['nfe_serie']);
@@ -9826,7 +9826,7 @@ begin
 
          aux := '';
          aux := edt_CodEmp.Text + ',' + '''' + VarToStr(DMFD.FDQryGeral2['nfe_nnf']) + '''' + ',' + '''' + _tpemissao + '''' + ',' + '''';
-         aux := aux + FormatDateTime('yyyy/mm/dd', VarToDateTime(DMFD.FDQryGeral2['nfe_demi'])) + '''' + ',' + '''';
+         aux := aux + FormatDateTime('dd/mm/yyyy', VarToDateTime(DMFD.FDQryGeral2['nfe_demi'])) + '''' + ',' + '''';
          aux := aux + IntToStr(gModelo) + '''' + ',' + '''';
          aux := aux + IntToStr(gSerie) + '''' + ',' + '''';
          aux := aux + gCdPed + '''';
@@ -10000,7 +10000,7 @@ begin
                            '',
                            '',
                            edt_CodEmp.Text,
-                           FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']),
+                           FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']),
                            DMFD.FDQryGeral2['nfe_nnf'],
                            DMFD.FDQryGeral2['nfe_serie'],
                            DMFD.FDQryGeral2['nfe_chave_nfe'],
@@ -10046,7 +10046,7 @@ begin
                            'modelo',                                            // nome dos campos
                            ACBrNFe1.WebServices.Consulta.Protocolo,
                            ACBrNFe1.WebServices.Retorno.NFeRetorno.nRec,
-                           FormatDateTime('yyyy/mm/dd hh:nn:ss', ACBrNFe1.WebServices.consulta.DhRecbto),
+                           FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.consulta.DhRecbto),
                            ACBrNFe1.WebServices.Consulta.NFeChave,
                            ACBrNFe1.WebServices.Consulta.cStat,
                            ACBrNFe1.WebServices.Consulta.xMotivo,
@@ -10058,7 +10058,7 @@ begin
                            '',
                            '',
                            edt_CodEmp.Text,
-                           FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']),
+                           FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']),
                            DMFD.FDQryGeral2['nfe_nnf'],
                            DMFD.FDQryGeral2['nfe_serie'],
                            ACBrNFe1.WebServices.Consulta.NFeChave,
@@ -10231,7 +10231,7 @@ begin
        pDefineRelFR();                                                          // Define o tipo de Relatório FastReport
 
       gCdloja_Consiste := edt_CodEmp.Text;
-      gdEmi_Consiste   := FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']);
+      gdEmi_Consiste   := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
       gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
       gNNF_Consiste    := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
       gSerie_Consiste  := vartostr(DMFD.FDQryGeral2['nfe_serie']);
@@ -10251,7 +10251,7 @@ begin
 
       aux := '';
       aux := edt_CodEmp.Text + ',' + '''' + VarToStr(DMFD.FDQryGeral2['nfe_nnf']) + '''' + ',' + '''' + _tpemissao + '''' + ',' + '''';
-      aux := aux + FormatDateTime('yyyy/mm/dd', VarToDateTime(DMFD.FDQryGeral2['nfe_demi'])) + '''' + ',' + '''';
+      aux := aux + FormatDateTime('dd/mm/yyyy', VarToDateTime(DMFD.FDQryGeral2['nfe_demi'])) + '''' + ',' + '''';
       aux := aux + IntToStr(gModelo) + '''' + ',' + '''';
       aux := aux + IntToStr(gSerie) + '''' + ',' + '''';
       aux := aux + gCdPed + '''';
@@ -10282,7 +10282,7 @@ begin
 
         aux := '';
         aux := edt_CodEmp.Text + ',' + '''' + VarToStr(DMFD.FDQuery3['nfe_nnf']) + '''' + ',' + '''' + _tpemissao + '''' + ',' + '''';
-        aux := aux + FormatDateTime('yyyy/mm/dd', VarToDateTime(DMFD.FDQuery3['nfe_demi'])) + '''' + ',' + '''';
+        aux := aux + FormatDateTime('dd/mm/yyyy', VarToDateTime(DMFD.FDQuery3['nfe_demi'])) + '''' + ',' + '''';
         aux := aux + IntToStr(gModelo) + '''' + ',' + '''';
         aux := aux + IntToStr(gSerie) + '''' + ',' + '''';
         aux := aux + gCdPed + '''';
@@ -10350,7 +10350,7 @@ begin
                          'modelo',                                              // Nome dos campos
                          ACBrNFe1.WebServices.Consulta.Protocolo,
                          vnRec,
-                         FormatDateTime('yyyy/mm/dd hh:nn:ss', ACBrNFe1.WebServices.consulta.DhRecbto),
+                         FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.consulta.DhRecbto),
                          ACBrNFe1.WebServices.Consulta.NFeChave,
                          ACBrNFe1.WebServices.Consulta.cStat,
                          ACBrNFe1.WebServices.Consulta.xMotivo,
@@ -10362,7 +10362,7 @@ begin
                          '',
                          '',
                          edt_CodEmp.Text,
-                         FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']),
+                         FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']),
                          DMFD.FDQryGeral2['nfe_nnf'],
                          DMFD.FDQryGeral2['nfe_serie'],
                          ACBrNFe1.WebServices.Consulta.NFeChave,
@@ -11677,7 +11677,7 @@ begin
       pDefineRelFR();                                                           // Define o tipo de Relatório FastReport
 
      gCdloja_Consiste := edt_CodEmp.Text;
-     gdEmi_Consiste   := FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']);
+     gdEmi_Consiste   := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
      gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
      gNNF_Consiste    := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
      gSerie_Consiste  := vartostr(DMFD.FDQryGeral2['nfe_serie']);
@@ -11775,7 +11775,7 @@ begin
       pDefineRelFR();                                                           // Define o tipo de Relatório FastReport
 
      gCdloja_Consiste := edt_CodEmp.Text;
-     gdEmi_Consiste   := FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']);
+     gdEmi_Consiste   := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
      gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
      gNNF_Consiste    := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
      gSerie_Consiste  := vartostr(DMFD.FDQryGeral2['nfe_serie']);
@@ -12301,7 +12301,7 @@ begin
  //*******************************************************************************
  // by Edson ; 2013-03-04 ;08:41 ; Atribuição para consistir nnf na hora do update
  gCdloja_Consiste := edt_CodEmp.Text;
- gdEmi_Consiste   := FormatDateTime('yyyy/mm/dd', DMFD.FDQuery5['nfe_demi']);
+ gdEmi_Consiste   := FormatDateTime('dd/mm/yyyy', DMFD.FDQuery5['nfe_demi']);
  gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
  gNNF_Consiste    := vartostr(DMFD.FDQuery5['nfe_nnf']);
  gSerie_Consiste  := vartostr(DMFD.FDQuery5['nfe_serie']);
@@ -12451,7 +12451,7 @@ begin
                       '',
                       'Modelo',                                                 // Nome dos campos
                       ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.nProt,
-                      FormatDateTime('yyyy/mm/dd hh:nn:ss', ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.dhRegEvento),
+                      FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.dhRegEvento),
                       ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cStat,
                       ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.xMotivo,
                       StrToIntDef(nSeqEvento, 0),
@@ -12464,7 +12464,7 @@ begin
                       '',
                       '',
                       edt_CodEmp.Text,
-                      FormatDateTime('yyyy/mm/dd', DMFD.FDQuery5['nfe_demi']),
+                      FormatDateTime('dd/mm/yyyy', DMFD.FDQuery5['nfe_demi']),
                       DMFD.FDQuery5['nfe_nnf'],
                       DMFD.FDQuery5['nfe_serie'],
                       '',
@@ -12493,7 +12493,7 @@ begin
 
      vVer_Laiaute   :=  VarToStr(ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.verAplic);
      vcOrgao        :=  VarToStr(ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cOrgao);
-     vdhEvento      :=  FormatDateTime('yyyy/mm/dd hh:nn:ss', ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.dhRegEvento);
+     vdhEvento      :=  FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.dhRegEvento);
      vVer_CCe       :=  GetBuildInfo('GbNFe.exe');
      vcStat         :=  VarToStr(ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cStat);
      vxMotivo       :=  VarToStr(ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.xMotivo);
@@ -12501,7 +12501,7 @@ begin
       vemailDest    :=  vartostr(DMFD.FDQuery2['email'])
      else
       vemailDest    :=  '';
-     vdhRegEvento   :=  FormatDateTime('yyyy/mm/dd hh:nn:ss', ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.dhRegEvento);
+     vdhRegEvento   :=  FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.dhRegEvento);
      gdhRegEvento   :=  ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.dhRegEvento;
      vnProt         :=  VarToStr(ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.nProt);
 
@@ -12538,7 +12538,7 @@ begin
       DMFD.FDQuery2.ParamByName('Codigo_Loja').Value  := StrToIntDef(edt_CodEmp.Text, 0);
       DMFD.FDQuery2.ParamByName('nNF').Value          := StrToIntDef(FrCCe.Edit_Nota.Text, 0);
       DMFD.FDQuery2.ParamByName('Evento').Value       := FrCCe.Edit_Evento.Text;
-      DMFD.FDQuery2.ParamByName('dEmi').Value         := FormatDateTime('yyyy/mm/dd', VarToDateTime(DMFD.FDQuery5['nfe_demi']));
+      DMFD.FDQuery2.ParamByName('dEmi').Value         := StrToDateTime( FormatDateTime('dd/mm/yyyy', VarToDateTime(DMFD.FDQuery5['nfe_demi'])) );
       DMFD.FDQuery2.ParamByName('Modelo').Value       := VarToStr(DMFD.FDQuery5['nfe_Modelo']);
       DMFD.FDQuery2.ParamByName('Serie').Value        := VarToStr(DMFD.FDQuery5['nfe_Serie']);
 
@@ -12766,7 +12766,7 @@ begin
  //-----------------------------------------------------------------------------
  // by Edson ; 2013-03-04 ;08:41 ; Atribuição para consistir nnf na hora do update
  gCdloja_Consiste := edt_CodEmp.Text;
- gdEmi_Consiste   := FormatDateTime('yyyy/mm/dd', DMFD.FDQuery5['nfe_demi']);
+ gdEmi_Consiste   := FormatDateTime('dd/mm/yyyy', DMFD.FDQuery5['nfe_demi']);
  gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
  gNNF_Consiste    := vartostr(DMFD.FDQuery5['nfe_nnf']);
  gSerie_Consiste  := vartostr(DMFD.FDQuery5['nfe_serie']);
@@ -12820,7 +12820,7 @@ begin
          vctpAmb        := TpAmbToStr(consulta.procEventoNFe.Items[i].RetEventoNFe.InfEvento.tpAmb);
          vxMotivo       := VarToStr(consulta.procEventoNFe.Items[i].RetEventoNFe.xMotivo);
          vnProt         := VarToStr(Consulta.procEventoNFe.Items[i].RetEventoNFe.retEvento.Items[0].RetInfEvento.nProt);
-         vdhRegEvento   := FormatDateTime('yyyy/mm/dd hh:nn:ss', Consulta.procEventoNFe.Items[i].RetEventoNFe.retEvento.Items[0].RetInfEvento.dhRegEvento);
+         vdhRegEvento   := FormatDateTime('dd/mm/yyyy hh:nn:ss', Consulta.procEventoNFe.Items[i].RetEventoNFe.retEvento.Items[0].RetInfEvento.dhRegEvento);
          gdhRegEvento   := Consulta.procEventoNFe.Items[i].RetEventoNFe.retEvento.Items[0].RetInfEvento.dhRegEvento;
          vcChave        := VarToStr(consulta.procEventoNFe.Items[i].RetEventoNFe.InfEvento.chNFe);
 
@@ -12871,7 +12871,7 @@ begin
                         'chave_nfe',
                         'modelo',                                               // Nomes dos campos
                         Consulta.procEventoNFe.Items[vC].RetEventoNFe.retEvento.Items[0].RetInfEvento.nProt,
-                        FormatDateTime('yyyy/mm/dd hh:nn:ss', Consulta.procEventoNFe.Items[vC].RetEventoNFe.retEvento.Items[0].RetInfEvento.dhRegEvento),
+                        FormatDateTime('dd/mm/yyyy hh:nn:ss', Consulta.procEventoNFe.Items[vC].RetEventoNFe.retEvento.Items[0].RetInfEvento.dhRegEvento),
                         consulta.procEventoNFe.Items[vC].RetEventoNFe.cStat,
                         consulta.procEventoNFe.Items[vC].RetEventoNFe.xMotivo,
                         StrToIntDef(nSeqEvento, 0),
@@ -12884,7 +12884,7 @@ begin
                         '',
                         '',
                         edt_CodEmp.Text,
-                        FormatDateTime('yyyy/mm/dd', DMFD.FDQuery5['nfe_demi']),
+                        FormatDateTime('dd/mm/yyyy', DMFD.FDQuery5['nfe_demi']),
                         DMFD.FDQuery5['nfe_nnf'],
                         DMFD.FDQuery5['nfe_serie'],
                         consulta.protNFe.chNFe,
@@ -12949,7 +12949,7 @@ begin
         DMFD.FDQuery2.ParamByName('Codigo_Loja').Value  := StrToIntDef(edt_CodEmp.Text, 0);
         DMFD.FDQuery2.ParamByName('nNF').Value          := StrToIntDef(FrCCe.Edit_Nota.Text, 0);
         DMFD.FDQuery2.ParamByName('Evento').Value       := FrCCe.Edit_Evento.Text;
-        DMFD.FDQuery2.ParamByName('dEmi').Value         := FormatDateTime('yyyy/mm/dd', VarToDateTime(DMFD.FDQuery5['nfe_demi']));
+        DMFD.FDQuery2.ParamByName('dEmi').Value         := StrToDateTime( FormatDateTime('dd/mm/yyyy', VarToDateTime(DMFD.FDQuery5['nfe_demi'])) );
         DMFD.FDQuery2.ParamByName('Modelo').Value       := VarToStr(DMFD.FDQuery5['nfe_Modelo']);
         DMFD.FDQuery2.ParamByName('Serie').Value        := VarToStr(DMFD.FDQuery5['nfe_Serie']);
         try
@@ -13010,7 +13010,7 @@ begin
  //-----------------------------------------------------------------------------
  // by Edson ; 2013-03-04 ;08:41 ; Atribuição para consistir nnf na hora do update
  gCdloja_Consiste := edt_CodEmp.Text;
- gdEmi_Consiste   := FormatDateTime('yyyy/mm/dd', DMFD.FDQuery5['nfe_demi']);
+ gdEmi_Consiste   := FormatDateTime('dd/mm/yyyy', DMFD.FDQuery5['nfe_demi']);
  gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
  gNNF_Consiste    := vartostr(DMFD.FDQuery5['nfe_nnf']);
  gSerie_Consiste  := vartostr(DMFD.FDQuery5['nfe_serie']);
@@ -13339,7 +13339,7 @@ begin
         pDefineRelFR();                                                         // Define o tipo de Relatório FastReport
 
        gCdloja_Consiste := edt_CodEmp.Text;
-       gdEmi_Consiste   := FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']);
+       gdEmi_Consiste   := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
        gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
        gNNF_Consiste    := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
        gSerie_Consiste  := vartostr(DMFD.FDQryGeral2['nfe_serie']);
@@ -13382,7 +13382,7 @@ begin
                           '',
                           '',
                           '',
-                          edt_CodEmp.Text, FormatDateTime('yyyy/mm/dd',
+                          edt_CodEmp.Text, FormatDateTime('dd/mm/yyyy',
                           DMFD.FDQryGeral2['nfe_demi']),
                           DMFD.FDQryGeral2['nfe_nnf'],
                           DMFD.FDQryGeral2['nfe_serie'],
@@ -13402,23 +13402,23 @@ begin
               (RadioGroup1.itemindex <> 1) ) then
           pGravaNFe('016', 'situacao', 'motivo', '', '', '', '', '', '', '', '', '', '', '', 'codigo_loja', 'demi', 'nnf', 'serie', 'chave_nfe', 'modelo',
                     AnsiUpperCase('EPEC'), 'Movida das Transmitidas', '', '', '', '', '', '', '', '', '', '', '', edt_CodEmp.Text,
-                    FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']), DMFD.FDQryGeral2['nfe_nnf'],
+                    FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']), DMFD.FDQryGeral2['nfe_nnf'],
                     DMFD.FDQryGeral2['nfe_serie'], DMFD.FDQryGeral2['nfe_chave_nfe'], DMFD.FDQryGeral2['nfe_modelo'], true)
          else if ( (copy(vartostr(DMFD.FDQryGeral2['nfe_chave_nfe']), 35, 1) = '5') and
               (RadioGroup1.itemindex <> 1) ) then
           pGravaNFe('016', 'situacao', 'motivo', '', '', '', '', '', '', '', '', '', '', '', 'codigo_loja', 'demi', 'nnf', 'serie', 'chave_nfe', 'modelo',
                     AnsiUpperCase('FSDA'), 'Movida das Transmitidas', '', '', '', '', '', '', '', '', '', '', '', edt_CodEmp.Text,
-                    FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']), DMFD.FDQryGeral2['nfe_nnf'],
+                    FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']), DMFD.FDQryGeral2['nfe_nnf'],
                     DMFD.FDQryGeral2['nfe_serie'], DMFD.FDQryGeral2['nfe_chave_nfe'], DMFD.FDQryGeral2['nfe_modelo'], true)
          else if (copy(vartostr(DMFD.FDQryGeral2['nfe_chave_nfe']), 35, 1) = '9') then
           pGravaNFe('016', 'situacao', 'motivo', '', '', '', '', '', '', '', '', '', '', '', 'codigo_loja', 'demi', 'nnf', 'serie', 'chave_nfe', 'modelo',
                     AnsiUpperCase('OFFL'), 'Movida das Transmitidas', '', '', '', '', '', '', '', '', '', '', '', edt_CodEmp.Text,
-                    FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']), DMFD.FDQryGeral2['nfe_nnf'],
+                    FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']), DMFD.FDQryGeral2['nfe_nnf'],
                     DMFD.FDQryGeral2['nfe_serie'], DMFD.FDQryGeral2['nfe_chave_nfe'], DMFD.FDQryGeral2['nfe_modelo'], true)
          else
           pGravaNFe('016', 'situacao', 'motivo', '', '', '', '', '', '', '', '', '', '', '', 'codigo_loja', 'demi', 'nnf', 'serie', 'chave_nfe', 'modelo',
                     '',                           'Movida das Transmitidas', '', '', '', '', '', '', '', '', '', '', '', edt_CodEmp.Text,
-                    FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']), DMFD.FDQryGeral2['nfe_nnf'],
+                    FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']), DMFD.FDQryGeral2['nfe_nnf'],
                     DMFD.FDQryGeral2['nfe_serie'], DMFD.FDQryGeral2['nfe_chave_nfe'], DMFD.FDQryGeral2['nfe_modelo'], true);
 
         end;
@@ -17760,7 +17760,7 @@ begin
   FD.SQL.Add( '                                                              ' );
   FD.ParamByName('codigo_loja').AsInteger  := CN1;
   FD.ParamByName('nNF').AsInteger          := CN2;
-  FD.ParamByName('dEmi').AsString          := FormatDateTime('yyyy/mm/dd', CN3);
+  FD.ParamByName('dEmi').Value             := StrToDateTime( FormatDateTime('dd/mm/yyyy', CN3) );
   FD.ParamByName('Modelo').AsString        := CN4;
   FD.ParamByName('Serie').AsString         := CN5;
   FD.Open;
@@ -18127,7 +18127,7 @@ begin
 
  GetTimeZoneInformation(TimeZone);
  vDH := FormatFloat('00', TimeZone.Bias div -60) + ':00';
- vDH := formatDateTime( 'yyyy-mm-dd"T"hh:mm:ss', now ) +
+ vDH := formatDateTime( 'dd-mm-yyyy"T"hh:mm:ss', now ) +
        FormatFloat( '00', ( TimeZone.Bias  div -60 ) ) + ':00' ;
 
  //-----------------------------------------------------------------------------
@@ -18175,7 +18175,7 @@ begin
 
  vdhEve := DateTimeToStr(dhEve);
 
- // vdhEve := FormatDateTime('yyyy/mm/dd"T"hh:nn:ss', dhEve);
+ // vdhEve := FormatDateTime('dd/mm/yyyy"T"hh:nn:ss', dhEve);
 
  // atruibui o utc no horário do evento
  if FusHor then

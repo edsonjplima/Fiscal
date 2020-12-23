@@ -354,7 +354,7 @@ begin
    else if FrCCe.Edit_Sit.Text = '135' then
     begin
      FrCCe.BitBtn1.Enabled := True;
-     FrCCe.BitBtn2.Enabled := True; //False;
+     FrCCe.BitBtn2.Enabled := True;
      FrCCe.BitBtn3.Enabled := True;
      FrCCe.BitBtn4.Enabled := True;
     end
@@ -685,7 +685,7 @@ begin
       DMFD.FDQuery2.ParamByName('Codigo_Loja').Value  := StrToInt(FrGBNFe.edt_CodEmp.text);
       DMFD.FDQuery2.ParamByName('nNF'        ).Value  := StrToInt(FrCCe.Edit_Nota.Text);
       DMFD.FDQuery2.ParamByName('Evento'     ).Value  := FrCCe.Edit_Evento.Text;
-      DMFD.FDQuery2.ParamByName('dEmi'       ).Value  := FormatDateTime('yyyy/mm/dd', DMFD.FDQuery5['nfe_dEmi']);
+      DMFD.FDQuery2.ParamByName('dEmi'       ).Value  := StrToDateTime( FormatDateTime('dd/mm/yyyy', DMFD.FDQuery5['nfe_dEmi']) );
       DMFD.FDQuery2.ParamByName('Modelo'     ).Value  := DMFD.FDQuery5['nfe_Modelo'];
       DMFD.FDQuery2.ParamByName('Serie'      ).Value  := DMFD.FDQuery5['nfe_Serie'];
       DMFD.FDQuery2.ParamByName('Ver_Laiaute').Value  := '';
@@ -778,7 +778,7 @@ begin
       DMFD.FDQuery2.ParamByName('Codigo_Loja').Value  := StrToInt(FrGBNFe.edt_CodEmp.text);
       DMFD.FDQuery2.ParamByName('nNF'        ).Value  := StrToInt(FrCCe.Edit_Nota.Text);
       DMFD.FDQuery2.ParamByName('Evento'     ).Value  := FrCCe.Edit_Evento.Text;
-      DMFD.FDQuery2.ParamByName('dEmi'       ).Value  := FormatDateTime('yyyy/mm/dd', DMFD.FDQuery5['nfe_dEmi']);
+      DMFD.FDQuery2.ParamByName('dEmi'       ).Value  := StrToDateTime( FormatDateTime('dd/mm/yyyy', DMFD.FDQuery5['nfe_dEmi']) );
       DMFD.FDQuery2.ParamByName('Modelo'     ).Value  := DMFD.FDQuery5['nfe_Modelo'];
       DMFD.FDQuery2.ParamByName('Serie'      ).Value  := DMFD.FDQuery5['nfe_Serie'];
       DMFD.FDQuery2.ParamByName('Ver_Laiaute').Value  := '';
@@ -832,7 +832,7 @@ begin
     DMFD.FDQuery2.SQL.Add( '  and Serie                = :Serie                    ' );
     DMFD.FDQuery2.Params[0].AsString  := Edit_Evento.Text;
     DMFD.FDQuery2.Params[1].AsInteger := StrToInt(FrGBNFe.edt_CodEmp.text);
-    DMFD.FDQuery2.Params[2].AsString  := FormatDateTime('yyyy/mm/dd', DMFD.FDQuery5['nfe_demi']);
+    DMFD.FDQuery2.Params[2].Value     := StrToDateTime( FormatDateTime('dd/mm/yyyy', DMFD.FDQuery5['nfe_demi']) );
     DMFD.FDQuery2.Params[3].AsInteger := DMFD.FDQuery5['nfe_nnf'];
     DMFD.FDQuery2.Params[4].AsString  := DMFD.FDQuery5['nfe_Modelo'];
     DMFD.FDQuery2.Params[5].AsString  := DMFD.FDQuery5['nfe_Serie'];
@@ -900,8 +900,8 @@ begin
   begin
 
    v_aux := '';
-   v_aux := FrGBNFe.edt_CodEmp.text + ',' + '''' + FormatDateTime('yyyy/mm/dd', FrGBNFe.cxdtp1.Date) + ''''+ ',';
-   v_aux := v_aux + '''' + FormatDateTime('yyyy/mm/dd', FrGBNFe.cxdtp2.Date) + '''' + ',';
+   v_aux := FrGBNFe.edt_CodEmp.text + ',' + '''' + FormatDateTime('dd/mm/yyyy', FrGBNFe.cxdtp1.Date) + ''''+ ',';
+   v_aux := v_aux + '''' + FormatDateTime('dd/mm/yyyy', FrGBNFe.cxdtp2.Date) + '''' + ',';
    v_Aux := v_Aux + '''' + trim(FrCCe.Edit_Nota.Text) + '''' + ',';
    v_aux := v_aux + '''' + FrGBNFe.edt_CodDes.Text + '''' + ',';
    v_aux := v_aux + '''' + '55' + '''' + ',';
@@ -1096,8 +1096,8 @@ begin
 
  // Acha a nota fiscal em transmitida se existir permite deletar
  v_aux := '';
- v_aux := FrGBNFe.edt_CodEmp.text + ',' + '''' + FormatDateTime('yyyy/mm/dd', FrGBNFe.cxdtp1.Date) + ''''+ ',';
- v_aux := v_aux + '''' + FormatDateTime('yyyy/mm/dd', FrGBNFe.cxdtp2.Date) + '''' + ',';
+ v_aux := FrGBNFe.edt_CodEmp.text + ',' + '''' + FormatDateTime('dd/mm/yyyy', FrGBNFe.cxdtp1.Date) + ''''+ ',';
+ v_aux := v_aux + '''' + FormatDateTime('dd/mm/yyyy', FrGBNFe.cxdtp2.Date) + '''' + ',';
  v_Aux := v_Aux + '''' + trim(FrCCe.Edit_Nota.Text) + '''' + ',';
  v_aux := v_aux + '''' + FrGBNFe.edt_CodDes.Text + '''' + ',';
  v_aux := v_aux + '''' + '55' + '''' + ',';
@@ -1157,7 +1157,7 @@ begin
     else
      DMFD.FDQuery2.Params[0].AsString  := '0';
     DMFD.FDQuery2.Params[1].AsInteger := StrToInt(FrGBNFe.edt_CodEmp.text);
-    DMFD.FDQuery2.Params[2].AsString  := FormatDateTime('yyyy/mm/dd', DMFD.FDQuery5['nfe_demi']);
+    DMFD.FDQuery2.Params[2].Value     := StrToDateTime( FormatDateTime('dd/mm/yyyy', DMFD.FDQuery5['nfe_demi']) );
     DMFD.FDQuery2.Params[3].AsInteger := DMFD.FDQuery5['nfe_nnf'];
     DMFD.FDQuery2.Params[4].AsString  := DMFD.FDQuery5['nfe_Modelo'];
     DMFD.FDQuery2.Params[5].AsString  := DMFD.FDQuery5['nfe_Serie'];
@@ -1192,7 +1192,7 @@ end;
 
 procedure TFrCCe.p_ImprimeCCe();
 var
- xAux_PDF, xAux_NFe, xAux_XML             : String;
+ xAux_PDF, xAux_NFe, xAux_XML, xAux_XMLc  : String;
  Chave, idLote, CNPJ, nSeqEvento          : String;
  vEvento, vtpEvento, vn                   : String;
  vdhRegEvento                             : TDateTime;
@@ -1206,8 +1206,8 @@ begin
   begin
 
    v_aux := '';
-   v_aux := FrGBNFe.edt_CodEmp.text + ',' + '''' + FormatDateTime('yyyy/mm/dd', FrGBNFe.cxdtp1.Date) + ''''+ ',';
-   v_aux := v_aux + '''' + FormatDateTime('yyyy/mm/dd', FrGBNFe.cxdtp2.Date) + '''' + ',';
+   v_aux := FrGBNFe.edt_CodEmp.text + ',' + '''' + FormatDateTime('dd/mm/yyyy', FrGBNFe.cxdtp1.Date) + ''''+ ',';
+   v_aux := v_aux + '''' + FormatDateTime('dd/mm/yyyy', FrGBNFe.cxdtp2.Date) + '''' + ',';
    v_Aux := v_Aux + '''' + trim(FrCCe.Edit_Nota.Text) + '''' + ',';
    v_aux := v_aux + '''' + FrGBNFe.edt_CodDes.Text + '''' + ',';
    v_aux := v_aux + '''' + '55' + '''' + ',';
@@ -1224,10 +1224,12 @@ begin
  //*******************************************************************************
  // by Edson ; 2013-03-04 ;08:41 ; Atribuição para consistir nnf na hora do update
  gCdloja_Consiste := FrGBNFe.edt_CodEmp.Text;
- gdEmi_Consiste   := FormatDateTime('yyyy/mm/dd', DMFD.FDQuery5['nfe_demi']);
+ gdEmi_Consiste   := FormatDateTime('dd/mm/yyyy', DMFD.FDQuery5['nfe_demi']);
+ gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
  gNNF_Consiste    := vartostr(DMFD.FDQuery5['nfe_nnf']);
  gSerie_Consiste  := vartostr(DMFD.FDQuery5['nfe_serie']);
  gSerie           := StrToInt(gSerie_Consiste);
+ gModelo_Consiste := vartostr(DMFD.FDQuery5['nfe_modelo']);
 
  // Atribuição de variáveis que serão usadas durante a transmissão
  Chave         := DMFD.FDQuery11['CCe_chave_nfe'];
@@ -1239,13 +1241,13 @@ begin
  xAux          := DMFD.FDQuery5['nfe_chave_nfe'];
  if ( Trim(FrCCe.Edit_dtRegEvento.Text) = '' ) then
   vdhRegEvento  := Now()
- else if ( FrCCe.Edit_dtRegEvento.Text = '30/12/1899' ) then
+ else if ( Trim(FrCCe.Edit_dtRegEvento.Text) = '30/12/1899' ) then
   begin
    if ( gdhRegEvento <> 30/12/1899 ) then
     vdhRegEvento  := gdhRegEvento
    else
     begin
-     Application.Messagebox('Data de registro desatualizadas, Efetue uma consulta antes de imprimir!','Atenção!',mb_iconstop+mb_ok);
+     Application.Messagebox('Data de registro desatualizadas, Efetue uma consulta antes!','Atenção!',mb_iconstop+mb_ok);
      Exit;
     end;
   end
@@ -1265,6 +1267,8 @@ begin
              trim(xAux) +                                                       // Chave da NFe
              vn +                                                               // Sequencia do Evento com duas casas decimais
              '-procEventoNFe.xml';                                              // Final do nome + tipo (xml)
+
+ xAux_XMLc := xAux_XML;
 
  if not ( FileExists(xAux_XML) ) then
   begin
@@ -1286,6 +1290,8 @@ begin
 
    if not ( FileExists(xAux_PDF) ) then
     FrGBNFe.ACBrNFe1.ImprimirEventoPDF;
+
+   CopyFile(PWideChar(xAux_XML), PWideChar(xAux_XMLc), False);
 
   end
  else
@@ -1623,8 +1629,8 @@ begin
       begin
 
        v_aux := '';
-       v_aux := FrGBNFe.edt_CodEmp.text + ',' + '''' + FormatDateTime('yyyy/mm/dd', FrGBNFe.cxdtp1.Date) + ''''+ ',';
-       v_aux := v_aux + '''' + FormatDateTime('yyyy/mm/dd', FrGBNFe.cxdtp2.Date) + '''' + ',';
+       v_aux := FrGBNFe.edt_CodEmp.text + ',' + '''' + FormatDateTime('dd/mm/yyyy', FrGBNFe.cxdtp1.Date) + ''''+ ',';
+       v_aux := v_aux + '''' + FormatDateTime('dd/mm/yyyy', FrGBNFe.cxdtp2.Date) + '''' + ',';
        v_Aux := v_Aux + '''' + trim(FrCCe.Edit_Nota.Text) + '''' + ',';
        v_aux := v_aux + '''' + FrGBNFe.edt_CodDes.Text + '''' + ',';
        v_aux := v_aux + '''' + IntToStr(gModelo) + '''' + ',';
@@ -1894,7 +1900,7 @@ begin
   FD.SQL.Add( '                                                              ' );
   FD.ParamByName('codigo_loja').AsInteger  := CN1;
   FD.ParamByName('nNF').AsInteger          := CN2;
-  FD.ParamByName('dEmi').AsString          := FormatDateTime('yyyy/mm/dd', CN3);
+  FD.ParamByName('dEmi').AsString          := FormatDateTime('dd/mm/yyyy', CN3);
   FD.ParamByName('Modelo').AsString        := CN4;
   FD.ParamByName('Serie').AsString         := CN5;
   FD.ParamByName('Evento').AsString        := CN6;

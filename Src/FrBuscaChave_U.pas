@@ -325,15 +325,15 @@ begin
  DMFD.FDQuery14.ParamByName('cSitConf').AsString          := '0';
  if Checkbox1.Checked then
   begin
-   DMFD.FDQuery14.ParamByName('DtInicial').AsString        := FormatDateTime('yyyy/mm/dd', cxdtp1.Date);
-   DMFD.FDQuery14.ParamByName('DtFinal').AsString          := FormatDateTime('yyyy/mm/dd', cxdtp2.Date);
+   DMFD.FDQuery14.ParamByName('DtInicial').Value          := StrToDateTime( FormatDateTime('dd/mm/yyyy', cxdtp1.Date) );
+   DMFD.FDQuery14.ParamByName('DtFinal').Value            := StrToDateTime( FormatDateTime('dd/mm/yyyy', cxdtp2.Date) );
   end
  else
   begin
-   DMFD.FDQuery14.ParamByName('DtInicial').AsString        := FormatDateTime('yyyy/mm/dd', now() - 180);
-   DMFD.FDQuery14.ParamByName('DtFinal').AsString          := FormatDateTime('yyyy/mm/dd', now());
+   DMFD.FDQuery14.ParamByName('DtInicial').Value          := StrToDateTime( FormatDateTime('dd/mm/yyyy', now() - 180) );
+   DMFD.FDQuery14.ParamByName('DtFinal').Value            := StrToDateTime( FormatDateTime('dd/mm/yyyy', now()) );
   end;
- DMFD.FDQuery14.ParamByName('Chave_nfe').AsString        := FrBuscaChave.Edit_Busca_Chave.Text;
+ DMFD.FDQuery14.ParamByName('Chave_nfe').AsString         := FrBuscaChave.Edit_Busca_Chave.Text;
  DMFD.FDQuery14.Open;
 
  // Zera o contador de itens selecionados
@@ -415,15 +415,15 @@ begin
    DMFD.FDQuery14.ParamByName('Codigo_Loja2').AsInteger      := StrToInt(gCodEmp);
    if Checkbox1.Checked then
     begin
-     DMFD.FDQuery14.ParamByName('DtInicial').AsString        := FormatDateTime('yyyy/mm/dd', cxdtp1.Date);
-     DMFD.FDQuery14.ParamByName('DtFinal').AsString          := FormatDateTime('yyyy/mm/dd', cxdtp2.Date);
+     DMFD.FDQuery14.ParamByName('DtInicial').Value           := StrToDateTime( FormatDateTime('dd/mm/yyyy', cxdtp1.Date) );
+     DMFD.FDQuery14.ParamByName('DtFinal').Value             := StrToDateTime( FormatDateTime('dd/mm/yyyy', cxdtp2.Date) );
     end
    else
     begin
-     DMFD.FDQuery14.ParamByName('DtInicial').AsString        := FormatDateTime('yyyy/mm/dd', now() - 180);
-     DMFD.FDQuery14.ParamByName('DtFinal').AsString          := FormatDateTime('yyyy/mm/dd', now());
+     DMFD.FDQuery14.ParamByName('DtInicial').Value           := StrToDateTime( FormatDateTime('dd/mm/yyyy', now() - 180) );
+     DMFD.FDQuery14.ParamByName('DtFinal').Value             := StrToDateTime( FormatDateTime('dd/mm/yyyy', now()) );
     end;
-   DMFD.FDQuery14.ParamByName('Chave_nfe').AsString        := Trim(Edit_Busca_Chave.Text);
+   DMFD.FDQuery14.ParamByName('Chave_nfe').AsString          := Trim(Edit_Busca_Chave.Text);
   DMFD.FDQuery14.Open;
 
   // Zera o contador de itens selecionados
@@ -1122,7 +1122,7 @@ begin
                DMFD.FDQryGeral1.ParamByName('Ver_leiaute' ).Value  := vVer_leiaute;
                DMFD.FDQryGeral1.ParamByName('id'          ).Value  := vId;
                DMFD.FDQryGeral1.ParamByName('cOrgao'      ).Value  := cOrgao;
-               DMFD.FDQryGeral1.ParamByName('dhEvento'    ).Value  := FormatDateTime('yyyy/mm/dd', vdhEvento);
+               DMFD.FDQryGeral1.ParamByName('dhEvento'    ).Value  := StrToDateTime( FormatDateTime('dd/mm/yyyy', vdhEvento) );
                DMFD.FDQryGeral1.ParamByName('tpEvento'    ).Value  := tpEvento;
                DMFD.FDQryGeral1.ParamByName('nSeqEvento'  ).Value  := nSeqEvento;
                DMFD.FDQryGeral1.ParamByName('verEvento'   ).Value  := vVerEvento;
@@ -1130,7 +1130,7 @@ begin
                DMFD.FDQryGeral1.ParamByName('xJust'       ).Value  := Edit_xJust.Text;
                DMFD.FDQryGeral1.ParamByName('cStat'       ).Value  := IntToStr(cStat);
                DMFD.FDQryGeral1.ParamByName('xMotivo'     ).Value  := xMotivo;
-               DMFD.FDQryGeral1.ParamByName('dhRegEvento' ).Value  := FormatDateTime('yyyy/mm/dd', dhRegEvento);
+               DMFD.FDQryGeral1.ParamByName('dhRegEvento' ).Value  := StrToDateTime( FormatDateTime('dd/mm/yyyy', dhRegEvento) );
 
                // seta as notas de Ciência, Confirmação, Desconhecimento e Não Realizada
                Case RG_TpEvento.ItemIndex of
@@ -1420,13 +1420,13 @@ begin
   end;
   if Checkbox1.Checked then
    begin
-    DMFD.FDQuery14.ParamByName('DtInicial').AsString      := FormatDateTime('yyyy/mm/dd', cxdtp1.Date);
-    DMFD.FDQuery14.ParamByName('DtFinal').AsString        := FormatDateTime('yyyy/mm/dd', cxdtp2.Date);
+    DMFD.FDQuery14.ParamByName('DtInicial').Value         := StrToDateTime( FormatDateTime('dd/mm/yyyy', cxdtp1.Date) );
+    DMFD.FDQuery14.ParamByName('DtFinal').Value           := StrToDateTime( FormatDateTime('dd/mm/yyyy', cxdtp2.Date) );
    end
   else
    begin
-    DMFD.FDQuery14.ParamByName('DtInicial').AsString      := FormatDateTime('yyyy/mm/dd', now() - 180);
-    DMFD.FDQuery14.ParamByName('DtFinal').AsString        := FormatDateTime('yyyy/mm/dd', now());
+    DMFD.FDQuery14.ParamByName('DtInicial').Value         := StrToDateTime( FormatDateTime('dd/mm/yyyy', now() - 180) );
+    DMFD.FDQuery14.ParamByName('DtFinal').Value           := StrToDateTime( FormatDateTime('dd/mm/yyyy', now()) );
    end;
   DMFD.FDQuery14.ParamByName('Chave_nfe').AsString        := FrBuscaChave.Edit_Busca_Chave.Text;
   DMFD.FDQuery14.Open;
@@ -1659,13 +1659,13 @@ begin
       end;
       if Checkbox1.Checked then
        begin
-        DMFD.FDQuery14.ParamByName('DtInicial').AsString        := FormatDateTime('yyyy/mm/dd', cxdtp1.Date);
-        DMFD.FDQuery14.ParamByName('DtFinal').AsString          := FormatDateTime('yyyy/mm/dd', cxdtp2.Date);
+        DMFD.FDQuery14.ParamByName('DtInicial').Value         := StrToDateTime( FormatDateTime('dd/mm/yyyy', cxdtp1.Date) );
+        DMFD.FDQuery14.ParamByName('DtFinal').Value           := StrToDateTime( FormatDateTime('dd/mm/yyyy', cxdtp2.Date) );
        end
       else
        begin
-        DMFD.FDQuery14.ParamByName('DtInicial').AsString        := FormatDateTime('yyyy/mm/dd', now() - 180);
-        DMFD.FDQuery14.ParamByName('DtFinal').AsString          := FormatDateTime('yyyy/mm/dd', now());
+        DMFD.FDQuery14.ParamByName('DtInicial').Value         := StrToDateTime( FormatDateTime('dd/mm/yyyy', now() - 180) );
+        DMFD.FDQuery14.ParamByName('DtFinal').Value           := StrToDateTime( FormatDateTime('dd/mm/yyyy', now()) );
        end;
       DMFD.FDQuery14.ParamByName('Chave_nfe').AsString        := FrBuscaChave.Edit_Busca_Chave.Text;
       DMFD.FDQuery14.Open;
@@ -2250,7 +2250,7 @@ begin
         DMFD.FDQryGeral1.ParamByName('Modelo'      ).Value       :=  copy(IntToStr(Ide.modelo), 1, 2);
         DMFD.FDQryGeral1.ParamByName('Serie'       ).Value       :=  copy(IntToStr(Ide.serie), 1, 3);
         //DMFD.FDQryGeral1.ParamByName('SubSerie'    ).Value       :=  '';
-        DMFD.FDQryGeral1.ParamByName('DatNot'      ).Value       :=  FormatDateTime('yyyy/mm/dd hh:nn:ss', Ide.dEmi);
+        DMFD.FDQryGeral1.ParamByName('DatNot'      ).Value       :=  StrToDateTime( FormatDateTime('dd/mm/yyyy hh:nn:ss', Ide.dEmi) );
         DMFD.FDQryGeral1.ParamByName('BasIcm'      ).AsFloat     :=  Total.ICMSTot.vBC;
         DMFD.FDQryGeral1.ParamByName('ValIcm'      ).AsFloat     :=  Total.ICMSTot.vICMS;
         DMFD.FDQryGeral1.ParamByName('BasSbt'      ).AsFloat     :=  Total.ICMSTot.vBCST;
@@ -2618,8 +2618,8 @@ begin
               DMFD.FDQryGeral5.ParamByName('SeqIte'       ).Value    :=  Det.Items[I].Prod.nItem;
               DMFD.FDQryGeral5.ParamByName('CodLot'       ).Value    :=  copy(Det.Items[I].Prod.rastro[l].nLote, 1, 20);
               DMFD.FDQryGeral5.ParamByName('QtdPro'       ).Value    :=  Det.Items[I].Prod.rastro[l].qLote;
-              DMFD.FDQryGeral5.ParamByName('DatFab'       ).Value    :=  FormatDateTime('yyyy/mm/dd', Det.Items[I].Prod.rastro[l].dFab);
-              DMFD.FDQryGeral5.ParamByName('DatVld'       ).Value    :=  FormatDateTime('yyyy/mm/dd', Det.Items[I].Prod.rastro[l].dVal);
+              DMFD.FDQryGeral5.ParamByName('DatFab'       ).Value    :=  StrToDateTime( FormatDateTime('dd/mm/yyyy', Det.Items[I].Prod.rastro[l].dFab) );
+              DMFD.FDQryGeral5.ParamByName('DatVld'       ).Value    :=  StrToDateTime( FormatDateTime('dd/mm/yyyy', Det.Items[I].Prod.rastro[l].dVal) );
               DMFD.FDQryGeral5.ParamByName('cAgreg'       ).Value    :=  copy(Det.Items[I].Prod.rastro[l].cAgreg, 1, 20);
 
               DMFD.FDQryGeral5.ExecSQL;
@@ -2740,7 +2740,7 @@ begin
          DMFD.FDQryGeral1.ParamByName('Modelo'       ).Value    :=  copy(IntToStr(Ide.modelo), 1, 2);
          DMFD.FDQryGeral1.ParamByName('Serie'		      ).Value    :=  copy(IntToStr(Ide.serie), 1, 3);
          DMFD.FDQryGeral1.ParamByName('CodFat'       ).Value    :=  copy(Cobr.Dup.Items[I].nDup, 1, 15);
-         DMFD.FDQryGeral1.ParamByName('DatFat'       ).Value    :=  FormatDateTime('yyyy/mm/dd hh:nn:ss', Cobr.Dup.Items[I].dVenc);
+         DMFD.FDQryGeral1.ParamByName('DatFat'       ).Value    :=  StrToDateTime( FormatDateTime('dd/mm/yyyy hh:nn:ss', Cobr.Dup.Items[I].dVenc) );
          DMFD.FDQryGeral1.ParamByName('ValFat'       ).AsFloat  :=  Cobr.Dup.Items[I].vDup;
          DMFD.FDQryGeral1.ExecSQL;
 
@@ -3022,13 +3022,13 @@ begin
 
  if Checkbox1.Checked then
   begin
-   DMFD.FDQuery14.ParamByName('DtInicial').AsString        := FormatDateTime('yyyy/mm/dd', cxdtp1.Date);
-   DMFD.FDQuery14.ParamByName('DtFinal').AsString          := FormatDateTime('yyyy/mm/dd', cxdtp2.Date);
+   DMFD.FDQuery14.ParamByName('DtInicial').Value           := StrToDateTime( FormatDateTime('dd/mm/yyyy', cxdtp1.Date) );
+   DMFD.FDQuery14.ParamByName('DtFinal').Value             := StrToDateTime( FormatDateTime('dd/mm/yyyy', cxdtp2.Date) );
   end
  else
   begin
-   DMFD.FDQuery14.ParamByName('DtInicial').AsString        := FormatDateTime('yyyy/mm/dd', now() - 180);
-   DMFD.FDQuery14.ParamByName('DtFinal').AsString          := FormatDateTime('yyyy/mm/dd', now());
+   DMFD.FDQuery14.ParamByName('DtInicial').Value           := StrToDateTime( FormatDateTime('dd/mm/yyyy', now() - 180) );
+   DMFD.FDQuery14.ParamByName('DtFinal').Value             := StrToDateTime( FormatDateTime('dd/mm/yyyy', now()) );
   end;
 
  DMFD.FDQuery14.ParamByName('Chave_nfe').AsString        := FrBuscaChave.Edit_Busca_Chave.Text;
@@ -3491,14 +3491,14 @@ begin
            DMFD.FDQryGeral1.ParamByName('cnpj_cpf'   ).Value      := FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resDFe.CNPJCPF;
            DMFD.FDQryGeral1.ParamByName('xNome'      ).Value      := Copy(FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resDFe.xNome, 1, 60);
            DMFD.FDQryGeral1.ParamByName('IE'         ).Value      := FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resDFe.IE;
-           DMFD.FDQryGeral1.ParamByName('dEmi'       ).AsString   := FormatDateTime('yyyy/mm/dd', FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resDFe.dhEmi);
+           DMFD.FDQryGeral1.ParamByName('dEmi'       ).Value      := StrToDateTime( FormatDateTime('dd/mm/yyyy', FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resDFe.dhEmi) );
            Case FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resDFe.tpNF of
             tnEntrada : DMFD.FDQryGeral1.ParamByName('tpNF'       ).AsString  := '0';
             tnSaida   : DMFD.FDQryGeral1.ParamByName('tpNF'       ).AsString  := '1';
            end;
            DMFD.FDQryGeral1.ParamByName('vNF'        ).AsFloat    := FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resDFe.vNF;
            DMFD.FDQryGeral1.ParamByName('digVal'     ).Value      := FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resDFe.digVal;
-           DMFD.FDQryGeral1.ParamByName('dhRecbto'   ).AsString   := FormatDateTime('yyyy/mm/dd hh:nn:ss', FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resDFe.dhRecbto);
+           DMFD.FDQryGeral1.ParamByName('dhRecbto'   ).Value      := StrToDateTime( FormatDateTime('dd/mm/yyyy hh:nn:ss', FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resDFe.dhRecbto) );
            DMFD.FDQryGeral1.ParamByName('cStat'      ).Value      := FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.cStat;
            DMFD.FDQryGeral1.ParamByName('xMotivo'    ).Value      := FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.xMotivo;
            Case FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resDFe.cSitDFe of
@@ -3624,7 +3624,7 @@ begin
           // DMFD.FDQryGeral1.ParamByName('cnpj_cpf'   ).Value    := FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.CNPJCPF;
           // DMFD.FDQryGeral1.ParamByName('xNome'      ).Value    := FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.xNome;
           // DMFD.FDQryGeral1.ParamByName('IE'         ).Value    := FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.IE;
-          // //DMFD.FDQryGeral1.ParamByName('dEmi'       ).Value    := FormatDateTime('yyyy/mm/dd', FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.dEmi);
+          // //DMFD.FDQryGeral1.ParamByName('dEmi'       ).Value    := StrToDateTime( FormatDateTime('dd/mm/yyyy', FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.dEmi) );
           // Case FrGBNFe.AcbrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].resNFe.tpNF of
           //  tnEntrada : DMFD.FDQryGeral1.ParamByName('tpNF'       ).Value  := '0';
           //  tnSaida   : DMFD.FDQryGeral1.ParamByName('tpNF'       ).Value  := '1';
@@ -3690,13 +3690,13 @@ begin
         end;
         if Checkbox1.Checked then
          begin
-          DMFD.FDQuery14.ParamByName('DtInicial').AsString        := FormatDateTime('yyyy/mm/dd', cxdtp1.Date);
-          DMFD.FDQuery14.ParamByName('DtFinal').AsString          := FormatDateTime('yyyy/mm/dd', cxdtp2.Date);
+          DMFD.FDQuery14.ParamByName('DtInicial').Value         := StrToDateTime( FormatDateTime('dd/mm/yyyy', cxdtp1.Date) );
+          DMFD.FDQuery14.ParamByName('DtFinal').Value           := StrToDateTime( FormatDateTime('dd/mm/yyyy', cxdtp2.Date) );
          end
         else
          begin
-          DMFD.FDQuery14.ParamByName('DtInicial').AsString        := FormatDateTime('yyyy/mm/dd', now() - 180);
-          DMFD.FDQuery14.ParamByName('DtFinal').AsString          := FormatDateTime('yyyy/mm/dd', now());
+          DMFD.FDQuery14.ParamByName('DtInicial').Value         := StrToDateTime( FormatDateTime('dd/mm/yyyy', now() - 180) );
+          DMFD.FDQuery14.ParamByName('DtFinal').Value           := StrToDateTime( FormatDateTime('dd/mm/yyyy', now()) );
          end;
         DMFD.FDQuery14.ParamByName('Chave_nfe').AsString        := FrBuscaChave.Edit_Busca_Chave.Text;
         DMFD.FDQuery14.Open;
@@ -3904,13 +3904,13 @@ begin
  DMFD.FDQuery14.Close;
   if Checkbox1.Checked then
    begin
-    DMFD.FDQuery14.ParamByName('DtInicial').AsString        := FormatDateTime('yyyy/mm/dd', cxdtp1.Date);
-    DMFD.FDQuery14.ParamByName('DtFinal').AsString          := FormatDateTime('yyyy/mm/dd', cxdtp2.Date);
+    DMFD.FDQuery14.ParamByName('DtInicial').Value           := StrToDateTime( FormatDateTime('dd/mm/yyyy', cxdtp1.Date) );
+    DMFD.FDQuery14.ParamByName('DtFinal').Value             := StrToDateTime( FormatDateTime('dd/mm/yyyy', cxdtp2.Date) );
    end
   else
    begin
-    DMFD.FDQuery14.ParamByName('DtInicial').AsString        := FormatDateTime('yyyy/mm/dd', now() - 180);
-    DMFD.FDQuery14.ParamByName('DtFinal').AsString          := FormatDateTime('yyyy/mm/dd', now());
+    DMFD.FDQuery14.ParamByName('DtInicial').Value           := StrToDateTime( FormatDateTime('dd/mm/yyyy', now() - 180) );
+    DMFD.FDQuery14.ParamByName('DtFinal').Value             := StrToDateTime( FormatDateTime('dd/mm/yyyy', now()) );
    end;
  DMFD.FDQuery14.Open;
 
@@ -4041,15 +4041,15 @@ begin
   if Checkbox1.Checked then
    begin
 
-    DMFD.FDQuery14.ParamByName('DtInicial').AsString        := FormatDateTime('yyyy/mm/dd', cxdtp1.Date);
-    DMFD.FDQuery14.ParamByName('DtFinal').AsString          := FormatDateTime('yyyy/mm/dd', cxdtp2.Date);
+    DMFD.FDQuery14.ParamByName('DtInicial').Value           := StrToDateTime( FormatDateTime('dd/mm/yyyy', cxdtp1.Date) );
+    DMFD.FDQuery14.ParamByName('DtFinal').Value             := StrToDateTime( FormatDateTime('dd/mm/yyyy', cxdtp2.Date) );
 
    end
   else
    begin
 
-    DMFD.FDQuery14.ParamByName('DtInicial').AsString        := FormatDateTime('yyyy/mm/dd', now() - 180);
-    DMFD.FDQuery14.ParamByName('DtFinal').AsString          := FormatDateTime('yyyy/mm/dd', now());
+    DMFD.FDQuery14.ParamByName('DtInicial').Value           := StrToDateTime( FormatDateTime('dd/mm/yyyy', now() - 180) );
+    DMFD.FDQuery14.ParamByName('DtFinal').Value             := StrToDateTime( FormatDateTime('dd/mm/yyyy', now()) );
 
    end;
  DMFD.FDQuery14.Open;
@@ -4093,13 +4093,13 @@ begin
  DMFD.FDQuery14.Close;
   if Checkbox1.Checked then
    begin
-    DMFD.FDQuery14.ParamByName('DtInicial').AsString        := FormatDateTime('yyyy/mm/dd', cxdtp1.Date);
-    DMFD.FDQuery14.ParamByName('DtFinal').AsString          := FormatDateTime('yyyy/mm/dd', cxdtp2.Date);
+    DMFD.FDQuery14.ParamByName('DtInicial').Value           := StrToDateTime( FormatDateTime('dd/mm/yyyy', cxdtp1.Date) );
+    DMFD.FDQuery14.ParamByName('DtFinal').Value             := StrToDateTime( FormatDateTime('dd/mm/yyyy', cxdtp2.Date) );
    end
   else
    begin
-    DMFD.FDQuery14.ParamByName('DtInicial').AsString        := FormatDateTime('yyyy/mm/dd', now() - 180);
-    DMFD.FDQuery14.ParamByName('DtFinal').AsString          := FormatDateTime('yyyy/mm/dd', now());
+    DMFD.FDQuery14.ParamByName('DtInicial').Value           := StrToDateTime( FormatDateTime('dd/mm/yyyy', now() - 180) );
+    DMFD.FDQuery14.ParamByName('DtFinal').Value             := StrToDateTime( FormatDateTime('dd/mm/yyyy', now()) );
    end;
  DMFD.FDQuery14.Open;
 

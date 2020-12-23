@@ -406,6 +406,8 @@ type
   function fFusHor(HorVer, Hor_DF, FusHor :Boolean ; CdUf  :Integer ;
                            CdMun, vdhEve  :String ; dhEve :TDateTime ): TDateTime; // Redenriza o fuso horário
   function fAcessar() : boolean;                                                // function que verifica o acesso da EMP no Banco de Dados FareDac
+  function fDirExists( vBDSQLSRV2016, vBDSQLSRV2017, vBDSQLSRV2019 :
+                       string ) : string;                                       // function que verifica se existe o caminho do sql server
 
   procedure pImpr();                                                            // Chama a procedure de impressão
   procedure MarcaBloco( cxTL : TcxTreeList; blMarca : Boolean; blTodos : Boolean = False ); // Marca bloco de seleção TreeList    // xe 10.1 Berlin
@@ -2830,19 +2832,6 @@ begin
              While not DMFD.FDQuery19.eof do                                    // Enquanto não for o fim do lote
               begin
 
-               if ( DMFD.FDQuery19['Safra'] <> null ) then
-                Prod.xProd := Prod.xProd + Chr(13) + 'PNR: ' + DMFD.FDQuery19['Safra'];
-               if ( DMFD.FDQuery19['NomFor'] <> null ) then
-                Prod.xProd := Prod.xProd + Chr(13) + 'PDT: ' + DMFD.FDQuery19['NomFor'];
-               if ( DMFD.FDQuery19['CNPJ'] <> null ) then
-                Prod.xProd := Prod.xProd + Chr(13) + 'DOC: ' + DMFD.FDQuery19['CNPJ'];
-               if ( DMFD.FDQuery19['InsRns'] <> null ) then
-                Prod.xProd := Prod.xProd + Chr(13) + 'RNS: ' + DMFD.FDQuery19['InsRns'];
-               if ( DMFD.FDQuery19['Unidade'] <> null ) then
-                Prod.xProd := Prod.xProd + Chr(13) + 'UND: ' + DMFD.FDQuery19['Unidade'];
-               if ( DMFD.FDQuery19['Peso'] <> null ) then
-                Prod.xProd := Prod.xProd + ' - Peso: ' + VarToStr(DMFD.FDQuery19['Peso']);
-
                with Prod.rastro.Add do
                 begin
 
@@ -3092,8 +3081,9 @@ begin
              vBCST    := DMFD.FDQuery2['base_icms_st'];
              vICMSST  := DMFD.FDQuery2['vl_icms_st'];
              pICMSST  := DMFD.FDQuery2['pc_icms_st'];
-             if ( DMFD.FDQuery2['modBCST'] <> null ) then
-              modBCST  := DMFD.FDQuery2['modBCST'];
+             if ( ( DMFD.FDQuery2['modBCST'] <> null ) AND
+                  ( DMFD.FDQuery2['modBCST'] <> '' ) ) then
+              modBCST  :=  DMFD.FDQuery2['modBCST'];
              if ( DMFD.FDQuery2['pMVAST'] <> null ) then
               pMVAST   := DMFD.FDQuery2['pMVAST'];
              if ( DMFD.FDQuery2['pRedBCST'] <> null ) then
@@ -3149,7 +3139,9 @@ begin
 
             end;
 
-           with Imposto.IPI do begin
+           with Imposto.IPI do
+            begin
+
              CST   := ipi00;
              // Incluido by Edson Lima ; 18/12/2012 ; 15:05 --------
              if DMFD.FDQuery2['ipi_cst'] = '00' then CST    := ipi00;
@@ -3171,49 +3163,54 @@ begin
              pIPI  := DMFD.FDQuery2['pc_ipi'];
              vIPI  := DMFD.FDQuery2['vl_ipi'];
              vBC   := DMFD.FDQuery2['base_calculo_ipi'];
-           end;
+             cEnq  := DMFD.FDQuery2['cEnc'];                                    // Novo by El - 2020-12-15
+
+            end;
+
            with Imposto.PIS do
             begin
-            // posicionado by Edson Lima ; 20/11/2012 ; 14:44
-            CST    := pis01;
-            if DMFD.FDQuery2['pis_cst'] = '01' then CST    := pis01;
-            if DMFD.FDQuery2['pis_cst'] = '02' then CST    := pis02;
-            if DMFD.FDQuery2['pis_cst'] = '03' then CST    := pis03;
-            if DMFD.FDQuery2['pis_cst'] = '04' then CST    := pis04;
-            if DMFD.FDQuery2['pis_cst'] = '05' then CST    := pis05;
-            if DMFD.FDQuery2['pis_cst'] = '06' then CST    := pis06;
-            if DMFD.FDQuery2['pis_cst'] = '07' then CST    := pis07;
-            if DMFD.FDQuery2['pis_cst'] = '08' then CST    := pis08;
-            if DMFD.FDQuery2['pis_cst'] = '09' then CST    := pis09;
-            if DMFD.FDQuery2['pis_cst'] = '49' then CST    := pis49;
-            if DMFD.FDQuery2['pis_cst'] = '50' then CST    := pis50;
-            if DMFD.FDQuery2['pis_cst'] = '51' then CST    := pis51;
-            if DMFD.FDQuery2['pis_cst'] = '52' then CST    := pis52;
-            if DMFD.FDQuery2['pis_cst'] = '53' then CST    := pis53;
-            if DMFD.FDQuery2['pis_cst'] = '54' then CST    := pis54;
-            if DMFD.FDQuery2['pis_cst'] = '55' then CST    := pis55;
-            if DMFD.FDQuery2['pis_cst'] = '56' then CST    := pis56;
-            if DMFD.FDQuery2['pis_cst'] = '60' then CST    := pis60;
-            if DMFD.FDQuery2['pis_cst'] = '61' then CST    := pis61;
-            if DMFD.FDQuery2['pis_cst'] = '62' then CST    := pis62;
-            if DMFD.FDQuery2['pis_cst'] = '63' then CST    := pis63;
-            if DMFD.FDQuery2['pis_cst'] = '64' then CST    := pis64;
-            if DMFD.FDQuery2['pis_cst'] = '65' then CST    := pis65;
-            if DMFD.FDQuery2['pis_cst'] = '66' then CST    := pis66;
-            if DMFD.FDQuery2['pis_cst'] = '67' then CST    := pis67;
-            if DMFD.FDQuery2['pis_cst'] = '70' then CST    := pis70;
-            if DMFD.FDQuery2['pis_cst'] = '71' then CST    := pis71;
-            if DMFD.FDQuery2['pis_cst'] = '72' then CST    := pis72;
-            if DMFD.FDQuery2['pis_cst'] = '73' then CST    := pis73;
-            if DMFD.FDQuery2['pis_cst'] = '74' then CST    := pis74;
-            if DMFD.FDQuery2['pis_cst'] = '75' then CST    := pis75;
-            if DMFD.FDQuery2['pis_cst'] = '98' then CST    := pis98;
-            if DMFD.FDQuery2['pis_cst'] = '99' then CST    := pis99;
 
-            vBC    := DMFD.FDQuery2['pis_base_calculo'];
-            pPis   := DMFD.FDQuery2['pis_percentual'];
-            vPis   := DMFD.FDQuery2['pis_valor'];
-           end;
+             // posicionado by Edson Lima ; 20/11/2012 ; 14:44
+             CST    := pis01;
+             if DMFD.FDQuery2['pis_cst'] = '01' then CST    := pis01;
+             if DMFD.FDQuery2['pis_cst'] = '02' then CST    := pis02;
+             if DMFD.FDQuery2['pis_cst'] = '03' then CST    := pis03;
+             if DMFD.FDQuery2['pis_cst'] = '04' then CST    := pis04;
+             if DMFD.FDQuery2['pis_cst'] = '05' then CST    := pis05;
+             if DMFD.FDQuery2['pis_cst'] = '06' then CST    := pis06;
+             if DMFD.FDQuery2['pis_cst'] = '07' then CST    := pis07;
+             if DMFD.FDQuery2['pis_cst'] = '08' then CST    := pis08;
+             if DMFD.FDQuery2['pis_cst'] = '09' then CST    := pis09;
+             if DMFD.FDQuery2['pis_cst'] = '49' then CST    := pis49;
+             if DMFD.FDQuery2['pis_cst'] = '50' then CST    := pis50;
+             if DMFD.FDQuery2['pis_cst'] = '51' then CST    := pis51;
+             if DMFD.FDQuery2['pis_cst'] = '52' then CST    := pis52;
+             if DMFD.FDQuery2['pis_cst'] = '53' then CST    := pis53;
+             if DMFD.FDQuery2['pis_cst'] = '54' then CST    := pis54;
+             if DMFD.FDQuery2['pis_cst'] = '55' then CST    := pis55;
+             if DMFD.FDQuery2['pis_cst'] = '56' then CST    := pis56;
+             if DMFD.FDQuery2['pis_cst'] = '60' then CST    := pis60;
+             if DMFD.FDQuery2['pis_cst'] = '61' then CST    := pis61;
+             if DMFD.FDQuery2['pis_cst'] = '62' then CST    := pis62;
+             if DMFD.FDQuery2['pis_cst'] = '63' then CST    := pis63;
+             if DMFD.FDQuery2['pis_cst'] = '64' then CST    := pis64;
+             if DMFD.FDQuery2['pis_cst'] = '65' then CST    := pis65;
+             if DMFD.FDQuery2['pis_cst'] = '66' then CST    := pis66;
+             if DMFD.FDQuery2['pis_cst'] = '67' then CST    := pis67;
+             if DMFD.FDQuery2['pis_cst'] = '70' then CST    := pis70;
+             if DMFD.FDQuery2['pis_cst'] = '71' then CST    := pis71;
+             if DMFD.FDQuery2['pis_cst'] = '72' then CST    := pis72;
+             if DMFD.FDQuery2['pis_cst'] = '73' then CST    := pis73;
+             if DMFD.FDQuery2['pis_cst'] = '74' then CST    := pis74;
+             if DMFD.FDQuery2['pis_cst'] = '75' then CST    := pis75;
+             if DMFD.FDQuery2['pis_cst'] = '98' then CST    := pis98;
+             if DMFD.FDQuery2['pis_cst'] = '99' then CST    := pis99;
+
+             vBC    := DMFD.FDQuery2['pis_base_calculo'];
+             pPis   := DMFD.FDQuery2['pis_percentual'];
+             vPis   := DMFD.FDQuery2['pis_valor'];
+
+            end;
 
            with Imposto.COFINS do
             begin
@@ -6084,7 +6081,7 @@ begin
   DMFD.FDQuery4.ParamByName('RT_fone').AsString                  := FrPar.edt_FoneResTec.Text;
 
   DMFD.FDQuery4.ParamByName('codigo_loja').AsString              := edt_CodEmp.Text;
-  DMFD.FDQuery4.ParamByName('OUTROS_DtIni').AsString             := FormatDateTime('yyyy/mm/dd', FrPar.cxdtp1.Date);
+  DMFD.FDQuery4.ParamByName('OUTROS_DtIni').Value                := StrToDateTime( FormatDateTime('dd/mm/yyyy', FrPar.cxdtp1.Date) );
 
   try
 
@@ -9501,7 +9498,7 @@ begin
                             'chave_nfe',
                             'modelo',                                           // Nome dos campos
                             ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.nProt,
-                            FormatDateTime('yyyy/mm/dd hh:nn:ss', ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.dhRegEvento),
+                            FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.dhRegEvento),
                             '',
                             '',
                             '580',
@@ -9514,7 +9511,7 @@ begin
                             '',
                             '',
                             edt_CodEmp.Text,
-                            FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']),
+                            FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']),
                             DMFD.FDQryGeral2['nfe_nnf'],
                             DMFD.FDQryGeral2['nfe_serie'],
                             ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.chNFe,
@@ -10061,7 +10058,7 @@ begin
                            '',
                            '',
                            edt_CodEmp.Text,
-                           FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']),
+                           FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']),
                            DMFD.FDQryGeral2['nfe_nnf'],
                            DMFD.FDQryGeral2['nfe_serie'],
                            ACBrNFe1.WebServices.Consulta.NFeChave,
@@ -10234,7 +10231,7 @@ begin
        pDefineRelFR();                                                          // Define o tipo de Relatório FastReport
 
       gCdloja_Consiste := edt_CodEmp.Text;
-      gdEmi_Consiste   := FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']);
+      gdEmi_Consiste   := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
       gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
       gNNF_Consiste    := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
       gSerie_Consiste  := vartostr(DMFD.FDQryGeral2['nfe_serie']);
@@ -10254,7 +10251,7 @@ begin
 
       aux := '';
       aux := edt_CodEmp.Text + ',' + '''' + VarToStr(DMFD.FDQryGeral2['nfe_nnf']) + '''' + ',' + '''' + _tpemissao + '''' + ',' + '''';
-      aux := aux + FormatDateTime('yyyy/mm/dd', VarToDateTime(DMFD.FDQryGeral2['nfe_demi'])) + '''' + ',' + '''';
+      aux := aux + FormatDateTime('dd/mm/yyyy', VarToDateTime(DMFD.FDQryGeral2['nfe_demi'])) + '''' + ',' + '''';
       aux := aux + IntToStr(gModelo) + '''' + ',' + '''';
       aux := aux + IntToStr(gSerie) + '''' + ',' + '''';
       aux := aux + gCdPed + '''';
@@ -10285,7 +10282,7 @@ begin
 
         aux := '';
         aux := edt_CodEmp.Text + ',' + '''' + VarToStr(DMFD.FDQuery3['nfe_nnf']) + '''' + ',' + '''' + _tpemissao + '''' + ',' + '''';
-        aux := aux + FormatDateTime('yyyy/mm/dd', VarToDateTime(DMFD.FDQuery3['nfe_demi'])) + '''' + ',' + '''';
+        aux := aux + FormatDateTime('dd/mm/yyyy', VarToDateTime(DMFD.FDQuery3['nfe_demi'])) + '''' + ',' + '''';
         aux := aux + IntToStr(gModelo) + '''' + ',' + '''';
         aux := aux + IntToStr(gSerie) + '''' + ',' + '''';
         aux := aux + gCdPed + '''';
@@ -10353,7 +10350,7 @@ begin
                          'modelo',                                              // Nome dos campos
                          ACBrNFe1.WebServices.Consulta.Protocolo,
                          vnRec,
-                         FormatDateTime('yyyy/mm/dd hh:nn:ss', ACBrNFe1.WebServices.consulta.DhRecbto),
+                         FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.consulta.DhRecbto),
                          ACBrNFe1.WebServices.Consulta.NFeChave,
                          ACBrNFe1.WebServices.Consulta.cStat,
                          ACBrNFe1.WebServices.Consulta.xMotivo,
@@ -10365,7 +10362,7 @@ begin
                          '',
                          '',
                          edt_CodEmp.Text,
-                         FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']),
+                         FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']),
                          DMFD.FDQryGeral2['nfe_nnf'],
                          DMFD.FDQryGeral2['nfe_serie'],
                          ACBrNFe1.WebServices.Consulta.NFeChave,
@@ -11680,7 +11677,7 @@ begin
       pDefineRelFR();                                                           // Define o tipo de Relatório FastReport
 
      gCdloja_Consiste := edt_CodEmp.Text;
-     gdEmi_Consiste   := FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']);
+     gdEmi_Consiste   := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
      gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
      gNNF_Consiste    := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
      gSerie_Consiste  := vartostr(DMFD.FDQryGeral2['nfe_serie']);
@@ -11778,7 +11775,7 @@ begin
       pDefineRelFR();                                                           // Define o tipo de Relatório FastReport
 
      gCdloja_Consiste := edt_CodEmp.Text;
-     gdEmi_Consiste   := FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']);
+     gdEmi_Consiste   := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
      gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
      gNNF_Consiste    := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
      gSerie_Consiste  := vartostr(DMFD.FDQryGeral2['nfe_serie']);
@@ -12304,7 +12301,7 @@ begin
  //*******************************************************************************
  // by Edson ; 2013-03-04 ;08:41 ; Atribuição para consistir nnf na hora do update
  gCdloja_Consiste := edt_CodEmp.Text;
- gdEmi_Consiste   := FormatDateTime('yyyy/mm/dd', DMFD.FDQuery5['nfe_demi']);
+ gdEmi_Consiste   := FormatDateTime('dd/mm/yyyy', DMFD.FDQuery5['nfe_demi']);
  gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
  gNNF_Consiste    := vartostr(DMFD.FDQuery5['nfe_nnf']);
  gSerie_Consiste  := vartostr(DMFD.FDQuery5['nfe_serie']);
@@ -12454,7 +12451,7 @@ begin
                       '',
                       'Modelo',                                                 // Nome dos campos
                       ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.nProt,
-                      FormatDateTime('yyyy/mm/dd hh:nn:ss', ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.dhRegEvento),
+                      FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.dhRegEvento),
                       ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cStat,
                       ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.xMotivo,
                       StrToIntDef(nSeqEvento, 0),
@@ -12467,7 +12464,7 @@ begin
                       '',
                       '',
                       edt_CodEmp.Text,
-                      FormatDateTime('yyyy/mm/dd', DMFD.FDQuery5['nfe_demi']),
+                      FormatDateTime('dd/mm/yyyy', DMFD.FDQuery5['nfe_demi']),
                       DMFD.FDQuery5['nfe_nnf'],
                       DMFD.FDQuery5['nfe_serie'],
                       '',
@@ -12496,7 +12493,7 @@ begin
 
      vVer_Laiaute   :=  VarToStr(ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.verAplic);
      vcOrgao        :=  VarToStr(ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cOrgao);
-     vdhEvento      :=  FormatDateTime('yyyy/mm/dd hh:nn:ss', ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.dhRegEvento);
+     vdhEvento      :=  FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.dhRegEvento);
      vVer_CCe       :=  GetBuildInfo('GbNFe.exe');
      vcStat         :=  VarToStr(ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cStat);
      vxMotivo       :=  VarToStr(ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.xMotivo);
@@ -12504,7 +12501,7 @@ begin
       vemailDest    :=  vartostr(DMFD.FDQuery2['email'])
      else
       vemailDest    :=  '';
-     vdhRegEvento   :=  FormatDateTime('yyyy/mm/dd hh:nn:ss', ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.dhRegEvento);
+     vdhRegEvento   :=  FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.dhRegEvento);
      gdhRegEvento   :=  ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.dhRegEvento;
      vnProt         :=  VarToStr(ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.nProt);
 
@@ -12541,7 +12538,7 @@ begin
       DMFD.FDQuery2.ParamByName('Codigo_Loja').Value  := StrToIntDef(edt_CodEmp.Text, 0);
       DMFD.FDQuery2.ParamByName('nNF').Value          := StrToIntDef(FrCCe.Edit_Nota.Text, 0);
       DMFD.FDQuery2.ParamByName('Evento').Value       := FrCCe.Edit_Evento.Text;
-      DMFD.FDQuery2.ParamByName('dEmi').Value         := FormatDateTime('yyyy/mm/dd', VarToDateTime(DMFD.FDQuery5['nfe_demi']));
+      DMFD.FDQuery2.ParamByName('dEmi').Value         := StrToDateTime( FormatDateTime('dd/mm/yyyy', VarToDateTime(DMFD.FDQuery5['nfe_demi'])) );
       DMFD.FDQuery2.ParamByName('Modelo').Value       := VarToStr(DMFD.FDQuery5['nfe_Modelo']);
       DMFD.FDQuery2.ParamByName('Serie').Value        := VarToStr(DMFD.FDQuery5['nfe_Serie']);
 
@@ -12769,7 +12766,7 @@ begin
  //-----------------------------------------------------------------------------
  // by Edson ; 2013-03-04 ;08:41 ; Atribuição para consistir nnf na hora do update
  gCdloja_Consiste := edt_CodEmp.Text;
- gdEmi_Consiste   := FormatDateTime('yyyy/mm/dd', DMFD.FDQuery5['nfe_demi']);
+ gdEmi_Consiste   := FormatDateTime('dd/mm/yyyy', DMFD.FDQuery5['nfe_demi']);
  gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
  gNNF_Consiste    := vartostr(DMFD.FDQuery5['nfe_nnf']);
  gSerie_Consiste  := vartostr(DMFD.FDQuery5['nfe_serie']);
@@ -12823,7 +12820,7 @@ begin
          vctpAmb        := TpAmbToStr(consulta.procEventoNFe.Items[i].RetEventoNFe.InfEvento.tpAmb);
          vxMotivo       := VarToStr(consulta.procEventoNFe.Items[i].RetEventoNFe.xMotivo);
          vnProt         := VarToStr(Consulta.procEventoNFe.Items[i].RetEventoNFe.retEvento.Items[0].RetInfEvento.nProt);
-         vdhRegEvento   := FormatDateTime('yyyy/mm/dd hh:nn:ss', Consulta.procEventoNFe.Items[i].RetEventoNFe.retEvento.Items[0].RetInfEvento.dhRegEvento);
+         vdhRegEvento   := FormatDateTime('dd/mm/yyyy hh:nn:ss', Consulta.procEventoNFe.Items[i].RetEventoNFe.retEvento.Items[0].RetInfEvento.dhRegEvento);
          gdhRegEvento   := Consulta.procEventoNFe.Items[i].RetEventoNFe.retEvento.Items[0].RetInfEvento.dhRegEvento;
          vcChave        := VarToStr(consulta.procEventoNFe.Items[i].RetEventoNFe.InfEvento.chNFe);
 
@@ -12874,7 +12871,7 @@ begin
                         'chave_nfe',
                         'modelo',                                               // Nomes dos campos
                         Consulta.procEventoNFe.Items[vC].RetEventoNFe.retEvento.Items[0].RetInfEvento.nProt,
-                        FormatDateTime('yyyy/mm/dd hh:nn:ss', Consulta.procEventoNFe.Items[vC].RetEventoNFe.retEvento.Items[0].RetInfEvento.dhRegEvento),
+                        FormatDateTime('dd/mm/yyyy hh:nn:ss', Consulta.procEventoNFe.Items[vC].RetEventoNFe.retEvento.Items[0].RetInfEvento.dhRegEvento),
                         consulta.procEventoNFe.Items[vC].RetEventoNFe.cStat,
                         consulta.procEventoNFe.Items[vC].RetEventoNFe.xMotivo,
                         StrToIntDef(nSeqEvento, 0),
@@ -12887,7 +12884,7 @@ begin
                         '',
                         '',
                         edt_CodEmp.Text,
-                        FormatDateTime('yyyy/mm/dd', DMFD.FDQuery5['nfe_demi']),
+                        FormatDateTime('dd/mm/yyyy', DMFD.FDQuery5['nfe_demi']),
                         DMFD.FDQuery5['nfe_nnf'],
                         DMFD.FDQuery5['nfe_serie'],
                         consulta.protNFe.chNFe,
@@ -12952,7 +12949,7 @@ begin
         DMFD.FDQuery2.ParamByName('Codigo_Loja').Value  := StrToIntDef(edt_CodEmp.Text, 0);
         DMFD.FDQuery2.ParamByName('nNF').Value          := StrToIntDef(FrCCe.Edit_Nota.Text, 0);
         DMFD.FDQuery2.ParamByName('Evento').Value       := FrCCe.Edit_Evento.Text;
-        DMFD.FDQuery2.ParamByName('dEmi').Value         := FormatDateTime('yyyy/mm/dd', VarToDateTime(DMFD.FDQuery5['nfe_demi']));
+        DMFD.FDQuery2.ParamByName('dEmi').Value         := StrToDateTime( FormatDateTime('dd/mm/yyyy', VarToDateTime(DMFD.FDQuery5['nfe_demi'])) );
         DMFD.FDQuery2.ParamByName('Modelo').Value       := VarToStr(DMFD.FDQuery5['nfe_Modelo']);
         DMFD.FDQuery2.ParamByName('Serie').Value        := VarToStr(DMFD.FDQuery5['nfe_Serie']);
         try
@@ -13013,7 +13010,7 @@ begin
  //-----------------------------------------------------------------------------
  // by Edson ; 2013-03-04 ;08:41 ; Atribuição para consistir nnf na hora do update
  gCdloja_Consiste := edt_CodEmp.Text;
- gdEmi_Consiste   := FormatDateTime('yyyy/mm/dd', DMFD.FDQuery5['nfe_demi']);
+ gdEmi_Consiste   := FormatDateTime('dd/mm/yyyy', DMFD.FDQuery5['nfe_demi']);
  gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
  gNNF_Consiste    := vartostr(DMFD.FDQuery5['nfe_nnf']);
  gSerie_Consiste  := vartostr(DMFD.FDQuery5['nfe_serie']);
@@ -13342,7 +13339,7 @@ begin
         pDefineRelFR();                                                         // Define o tipo de Relatório FastReport
 
        gCdloja_Consiste := edt_CodEmp.Text;
-       gdEmi_Consiste   := FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']);
+       gdEmi_Consiste   := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
        gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
        gNNF_Consiste    := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
        gSerie_Consiste  := vartostr(DMFD.FDQryGeral2['nfe_serie']);
@@ -13385,7 +13382,7 @@ begin
                           '',
                           '',
                           '',
-                          edt_CodEmp.Text, FormatDateTime('yyyy/mm/dd',
+                          edt_CodEmp.Text, FormatDateTime('dd/mm/yyyy',
                           DMFD.FDQryGeral2['nfe_demi']),
                           DMFD.FDQryGeral2['nfe_nnf'],
                           DMFD.FDQryGeral2['nfe_serie'],
@@ -13405,23 +13402,23 @@ begin
               (RadioGroup1.itemindex <> 1) ) then
           pGravaNFe('016', 'situacao', 'motivo', '', '', '', '', '', '', '', '', '', '', '', 'codigo_loja', 'demi', 'nnf', 'serie', 'chave_nfe', 'modelo',
                     AnsiUpperCase('EPEC'), 'Movida das Transmitidas', '', '', '', '', '', '', '', '', '', '', '', edt_CodEmp.Text,
-                    FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']), DMFD.FDQryGeral2['nfe_nnf'],
+                    FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']), DMFD.FDQryGeral2['nfe_nnf'],
                     DMFD.FDQryGeral2['nfe_serie'], DMFD.FDQryGeral2['nfe_chave_nfe'], DMFD.FDQryGeral2['nfe_modelo'], true)
          else if ( (copy(vartostr(DMFD.FDQryGeral2['nfe_chave_nfe']), 35, 1) = '5') and
               (RadioGroup1.itemindex <> 1) ) then
           pGravaNFe('016', 'situacao', 'motivo', '', '', '', '', '', '', '', '', '', '', '', 'codigo_loja', 'demi', 'nnf', 'serie', 'chave_nfe', 'modelo',
                     AnsiUpperCase('FSDA'), 'Movida das Transmitidas', '', '', '', '', '', '', '', '', '', '', '', edt_CodEmp.Text,
-                    FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']), DMFD.FDQryGeral2['nfe_nnf'],
+                    FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']), DMFD.FDQryGeral2['nfe_nnf'],
                     DMFD.FDQryGeral2['nfe_serie'], DMFD.FDQryGeral2['nfe_chave_nfe'], DMFD.FDQryGeral2['nfe_modelo'], true)
          else if (copy(vartostr(DMFD.FDQryGeral2['nfe_chave_nfe']), 35, 1) = '9') then
           pGravaNFe('016', 'situacao', 'motivo', '', '', '', '', '', '', '', '', '', '', '', 'codigo_loja', 'demi', 'nnf', 'serie', 'chave_nfe', 'modelo',
                     AnsiUpperCase('OFFL'), 'Movida das Transmitidas', '', '', '', '', '', '', '', '', '', '', '', edt_CodEmp.Text,
-                    FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']), DMFD.FDQryGeral2['nfe_nnf'],
+                    FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']), DMFD.FDQryGeral2['nfe_nnf'],
                     DMFD.FDQryGeral2['nfe_serie'], DMFD.FDQryGeral2['nfe_chave_nfe'], DMFD.FDQryGeral2['nfe_modelo'], true)
          else
           pGravaNFe('016', 'situacao', 'motivo', '', '', '', '', '', '', '', '', '', '', '', 'codigo_loja', 'demi', 'nnf', 'serie', 'chave_nfe', 'modelo',
                     '',                           'Movida das Transmitidas', '', '', '', '', '', '', '', '', '', '', '', edt_CodEmp.Text,
-                    FormatDateTime('yyyy/mm/dd', DMFD.FDQryGeral2['nfe_demi']), DMFD.FDQryGeral2['nfe_nnf'],
+                    FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']), DMFD.FDQryGeral2['nfe_nnf'],
                     DMFD.FDQryGeral2['nfe_serie'], DMFD.FDQryGeral2['nfe_chave_nfe'], DMFD.FDQryGeral2['nfe_modelo'], true);
 
         end;
@@ -17763,7 +17760,7 @@ begin
   FD.SQL.Add( '                                                              ' );
   FD.ParamByName('codigo_loja').AsInteger  := CN1;
   FD.ParamByName('nNF').AsInteger          := CN2;
-  FD.ParamByName('dEmi').AsString          := FormatDateTime('yyyy/mm/dd', CN3);
+  FD.ParamByName('dEmi').Value             := StrToDateTime( FormatDateTime('dd/mm/yyyy', CN3) );
   FD.ParamByName('Modelo').AsString        := CN4;
   FD.ParamByName('Serie').AsString         := CN5;
   FD.Open;
@@ -18130,7 +18127,7 @@ begin
 
  GetTimeZoneInformation(TimeZone);
  vDH := FormatFloat('00', TimeZone.Bias div -60) + ':00';
- vDH := formatDateTime( 'yyyy-mm-dd"T"hh:mm:ss', now ) +
+ vDH := formatDateTime( 'dd-mm-yyyy"T"hh:mm:ss', now ) +
        FormatFloat( '00', ( TimeZone.Bias  div -60 ) ) + ':00' ;
 
  //-----------------------------------------------------------------------------
@@ -18178,11 +18175,30 @@ begin
 
  vdhEve := DateTimeToStr(dhEve);
 
- // vdhEve := FormatDateTime('yyyy/mm/dd"T"hh:nn:ss', dhEve);
+ // vdhEve := FormatDateTime('dd/mm/yyyy"T"hh:nn:ss', dhEve);
 
  // atruibui o utc no horário do evento
  if FusHor then
   result := StrToDatetime(vdhEve + vUTC);
+
+end;
+
+//------------------------------------------------------------------------------
+// By Edson Lima ; 2020-12-16
+// Function que verifica se existe o caminho do sql server
+//------------------------------------------------------------------------------
+function TFrGBNFe.fDirExists( vBDSQLSRV2016, vBDSQLSRV2017,
+                             vBDSQLSRV2019 : string ) : string;
+begin
+
+ if DirectoryExists(vBDSQLSRV2016) then
+  Result := vBDSQLSRV2016
+ else if DirectoryExists(vBDSQLSRV2017) then
+  Result := vBDSQLSRV2017
+ else if DirectoryExists(vBDSQLSRV2019) then
+  Result := vBDSQLSRV2019
+ else
+  Result := '';
 
 end;
 
