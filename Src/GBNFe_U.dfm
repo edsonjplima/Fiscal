@@ -267,7 +267,6 @@ object FrGBNFe: TFrGBNFe
     ParentShowHint = False
     ShowHint = False
     TabOrder = 1
-    ExplicitHeight = 376
     object BitBtn1: TBitBtn
       Left = 15
       Top = 6
@@ -577,7 +576,6 @@ object FrGBNFe: TFrGBNFe
       Align = alBottom
       BevelOuter = bvNone
       TabOrder = 13
-      ExplicitTop = 300
       object BitBtn10: TBitBtn
         Left = 17
         Top = 9
@@ -750,7 +748,6 @@ object FrGBNFe: TFrGBNFe
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitTop = 474
     object StatusBar1: TStatusBar
       Left = 0
       Top = 42
@@ -826,7 +823,6 @@ object FrGBNFe: TFrGBNFe
     Height = 381
     Align = alClient
     TabOrder = 2
-    ExplicitHeight = 376
     object Panel6: TPanel
       Left = 1
       Top = 109
@@ -835,7 +831,6 @@ object FrGBNFe: TFrGBNFe
       Hint = ' Mostra Notas Conforme Escolha na Visualiza'#231#227'o '
       Align = alClient
       TabOrder = 0
-      ExplicitHeight = 92
       object cxTLInut: TcxTreeList
         Left = 1
         Top = 27
@@ -896,7 +891,6 @@ object FrGBNFe: TFrGBNFe
         OnCustomDrawDataCell = cxTLInutCustomDrawDataCell
         OnExit = cxTLExit
         OnMouseMove = cxTLMouseMove
-        ExplicitHeight = 64
         object cxTLdIDem: TcxTreeListColumn
           PropertiesClassName = 'TcxDateEditProperties'
           Properties.Alignment.Horz = taCenter
@@ -1194,7 +1188,6 @@ object FrGBNFe: TFrGBNFe
         OnExit = cxTLExit
         OnKeyDown = cxTLKeyDown
         OnMouseMove = cxTLMouseMove
-        ExplicitHeight = 64
         object cxTLbSel: TcxTreeListColumn
           PropertiesClassName = 'TcxCheckBoxProperties'
           Properties.Alignment = taCenter
@@ -1512,7 +1505,6 @@ object FrGBNFe: TFrGBNFe
       ShowHint = False
       TabOrder = 1
       OnMouseMove = Panel7MouseMove
-      ExplicitTop = 201
       object PageControl1: TPageControl
         Left = 1
         Top = 1
@@ -1532,10 +1524,6 @@ object FrGBNFe: TFrGBNFe
         TabWidth = 80
         object TabSheet1: TTabSheet
           Caption = 'Respostas'
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object MemoResp: TMemo
             Left = 0
             Top = 0
@@ -1559,10 +1547,6 @@ object FrGBNFe: TFrGBNFe
         object TabSheet2: TTabSheet
           Caption = 'XML Resposta'
           ImageIndex = 1
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object WBResposta: TWebBrowser
             Left = 0
             Top = 0
@@ -1582,10 +1566,6 @@ object FrGBNFe: TFrGBNFe
         object TabSheet3: TTabSheet
           Caption = 'Log'
           ImageIndex = 2
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object MemoLog: TMemo
             Left = 0
             Top = 0
@@ -1600,10 +1580,6 @@ object FrGBNFe: TFrGBNFe
         object TabSheet4: TTabSheet
           Caption = 'NFe && NFCe'
           ImageIndex = 3
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object trvwNFe: TTreeView
             Left = 0
             Top = 0
@@ -1620,10 +1596,6 @@ object FrGBNFe: TFrGBNFe
         object TabSheet5: TTabSheet
           Caption = 'Resposta WS'
           ImageIndex = 4
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object memoRespWS: TMemo
             Left = 0
             Top = 0
@@ -2395,7 +2367,7 @@ object FrGBNFe: TFrGBNFe
       Height = 17
       Anchors = [akRight, akBottom]
       BevelOuter = bvNone
-      Caption = 'CTe v. (FD)'
+      Caption = 'NFe && NFCe v(FD): Berlin - '
       Color = 11249818
       FullRepaint = False
       Font.Charset = ANSI_CHARSET
@@ -2422,7 +2394,7 @@ object FrGBNFe: TFrGBNFe
     Left = 312
     Top = 10
     Bitmap = {
-      494C0101CC0410061C0810001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C0101CC041006300810001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000004013000001002000000000000040
       1300000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -43400,6 +43372,7 @@ object FrGBNFe: TFrGBNFe
     CasasDecimais.MaskvUnCom = ',0.00'
     EspessuraBorda = 1
     BorderIcon = [biSystemMenu, biMinimize, biMaximize]
+    ThreadSafe = False
     Left = 464
     Top = 38
   end

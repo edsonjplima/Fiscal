@@ -9,7 +9,7 @@
 
 /****** Object:  StoredProcedure [dbo].[sp_ler_nfe_textos]    Script Date: 06/13/2017 15:14:02 ******/
 
-USE [NFe]
+USE [NFe_TV]
 GO
 /****** Object:  StoredProcedure [dbo].[sp_nfe_transmitidas]    Script Date: 16/01/2020 17:27:45 ******/
 DROP PROCEDURE [dbo].[sp_nfe_transmitidas]
@@ -216,7 +216,8 @@ else
 
 ---------------------------------------------------
 -- Adiciona colunas na tabela temporaria
----------------------------------------------------
+---------------------------------------------------
+
 set @tabela = '#' + replace(@arquivo,'.txt','')
 create table #LeArquivo (id1 int)
 
@@ -250,7 +251,8 @@ set @exe = 'alter table #LeArquivo drop column id1'
 exec (@exe)
 
 
--- 	select * from #leArquivo
+-- 	select * from #leArquivo
+
 -- 	select * from #temp
 
 ------------------------------------------------------
@@ -705,10 +707,12 @@ if @ok = 0 goto vazio
 if object_id('tempdb..##nfe_referenciada_cupon') > 0 drop table ##nfe_referenciada_cupon
 exec s_le_arquivo_texto @origem, 'nfe_referenciada_cupon.txt', @ok output
 set @retorno = 'Arquivo texto vazio: nfe_referenciada_cupon'
-if @ok = 0 goto vazioif object_id('tempdb..##nfe_itens_DI') > 0 drop table ##nfe_itens_DI
+if @ok = 0 goto vazio
+if object_id('tempdb..##nfe_itens_DI') > 0 drop table ##nfe_itens_DI
 exec s_le_arquivo_texto @origem, 'nfe_itens_DI.txt', @ok output
 set @retorno = 'Arquivo texto vazio: nfe_itens_DI'
-if @ok = 0 goto vazio
+if @ok = 0 goto vazio
+
 if object_id('tempdb..##nfe_itens_DI_ADI') > 0 drop table ##nfe_itens_DI_ADI
 exec s_le_arquivo_texto @origem, 'nfe_itens_DI_ADI.txt', @ok output
 set @retorno = 'Arquivo texto vazio: nfe_itens_DI_ADI'
@@ -811,9 +815,12 @@ insert	emitente
 	,cnpj
 	,insc_estadual
 	,insc_estadual_subs
-	,suframa
-	,codigo_pais
-	,nome_pais
+	,suframa
+
+	,codigo_pais
+
+	,nome_pais
+
 	,regime_tributario
         -- by Edson Lima ; 2013/02/25 ; 09:06
 	,UFSbt
@@ -937,7 +944,8 @@ select
         -- by Edson Lima ; 2015/12/17 ; 14:48 
         ,t1.IndIEDest
 
-from ##destinatario t1
+from ##destinatario t1
+
      left join destinatario t2 on t1.codigo = t2.codigo 
     where t2.codigo is null
 
@@ -980,7 +988,8 @@ insert	transportadora
         ,bairro
         ,cep
         ,codigo_municipio
-        ,municipio        ,codigo_uf
+        ,municipio
+        ,codigo_uf
         ,uf
         ,fone
         ,cnpj
@@ -1114,7 +1123,8 @@ select
     cast(t1.vl_desconto as numeric(12,2)),
     cast(t1.vl_ipi as numeric(12,2)),
     cast(t1.vl_pis as numeric(12,2)),
-    cast(t1.vl_cofins as numeric(12,2)),    cast(t1.vl_outros as numeric(12,2)),
+    cast(t1.vl_cofins as numeric(12,2)),
+    cast(t1.vl_outros as numeric(12,2)),
     t1.tipo_frete,
     t1.inf_complementar,
     t1.inf_fisco,
@@ -1160,9 +1170,12 @@ select
 	substring(t1.inf_campo,1,20),
         t1.Modelo,
         t1.Serie,
-	substring(t1.inf_complementar,1,60)
+	substring(t1.inf_complementar,1,60)
+
 from ##nfe_informacoes t1
-left join nfe_informacoes t2 on t1.codigo_loja = t2.codigo_loja and t1.demi = t2.demi and t1.nnf = t2.nnf
+left join nfe_informacoes t2 on t1.codigo_loja = t2.codigo_loja and t1.demi = t2.demi and t1.nnf = t2.nnf
+
+
 where t2.codigo_loja is null
 
 ----------------------------------------------------------------------------------------
@@ -1476,7 +1489,10 @@ insert	nfe_faturas
         Serie,
 	vl_original,
 	vl_desconto,
-	vl_liquido)select
+	vl_liquido)
+
+select
+
     t1.codigo_loja,
 	t1.dEmi,
 	t1.nNF,
@@ -1602,9 +1618,13 @@ where t3.chave_nfe is null
 insert	nfe_veiculo
 (
     codigo_loja,
-	dEmi,
-	nNF,
-        Modelo,
+	dEmi,
+
+
+	nNF,
+
+        Modelo,
+
         Serie,
 	veiculo,
 	placa,
