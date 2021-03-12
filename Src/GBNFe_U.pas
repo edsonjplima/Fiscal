@@ -989,15 +989,48 @@ begin
 
           1 :                                                                   // ve4040
 
-           case (StrToIntDef(DMFD.FDQuery1['nfe_indPres'], 0)) of
-            0:    Ide.indPres := pcNao;
-            1:    Ide.indPres := pcPresencial;
-            2:    Ide.indPres := pcInternet;
-            3:    Ide.indPres := pcTeleatendimento;
-            4:    Ide.indPres := pcEntregaDomicilio;
-            5:    Ide.indPres := pcPresencialForaEstabelecimento;
-            9:    Ide.indPres := pcOutros;
-            else  Ide.indPres := pcOutros;
+           begin
+
+            case ( StrToIntDef(DMFD.FDQuery1['nfe_indPres'], 0) ) of             // Indicativo do Intermediador - By Edson Lima 10/03/2021
+
+             2, 3, 4, 9:
+
+              begin
+
+               if ( DMFD.FDQuery1['nfe_indIntermed'] = '1' ) then
+                begin
+
+                 if not ( DMFD.FDQuery1['nfe_cnpjIndIntermed'] = null ) then
+                  infIntermed.cnpj         := DMFD.FDQuery1['nfe_cnpjIndIntermed']
+                 else
+                  infIntermed.cnpj         := '';
+
+                 if not ( DMFD.FDQuery1['nfe_idCadIntTran'] = null ) then
+                  infIntermed.idCadIntTran := DMFD.FDQuery1['nfe_idCadIntTran']
+                 else
+                  infIntermed.idCadIntTran := '';
+
+                end;
+
+               Ide.indIntermed := DMFD.FDQuery1['nfe_infIntermed'];
+
+              end;
+
+            end;
+
+            case (StrToIntDef(DMFD.FDQuery1['nfe_indPres'], 0)) of
+
+             0:    Ide.indPres := pcNao;
+             1:    Ide.indPres := pcPresencial;
+             2:    Ide.indPres := pcInternet;
+             3:    Ide.indPres := pcTeleatendimento;
+             4:    Ide.indPres := pcEntregaDomicilio;
+             5:    Ide.indPres := pcPresencialForaEstabelecimento;
+             9:    Ide.indPres := pcOutros;
+             else  Ide.indPres := pcOutros;
+
+            end;
+
            end;
 
           2 :                                                                   // ve4031
@@ -1913,6 +1946,7 @@ begin
                   1 :                                                           // ve4040
 
                    case StrToIntDef(DMFD.FDQuery2['tPag'], 0) of
+
                     01 : tPag := fpDinheiro;
                     02 : tPag := fpCheque;
                     03 : tPag := fpCartaoCredito;
@@ -1924,8 +1958,14 @@ begin
                     13 : tPag := fpValeCombustivel;
                     14 : tPag := fpDuplicataMercantil;
                     15 : tPag := fpBoletoBancario;
+                    16 : tPag := fpDepositoBancario;
+                    17 : tPag := fpPagamentoInstantaneo;
+                    18 : tPag := fpTransfBancario;
+                    19 : tPag := fpProgramaFidelidade;
                     90 : tPag := fpSemPagamento;
+                    91 : tPag := fpRegimeEspecial;
                     99 : tPag := fpOutro;
+
                    end;
 
                   2 :                                                           // ve4031
@@ -1934,6 +1974,7 @@ begin
                     begin
 
                      case StrToIntDef(DMFD.FDQuery2['tPag'], 0) of
+
                       01 : tPag := fpDinheiro;
                       02 : tPag := fpCheque;
                       03 : tPag := fpCartaoCredito;
@@ -1945,8 +1986,14 @@ begin
                       13 : tPag := fpValeCombustivel;
                       14 : tPag := fpDuplicataMercantil;
                       15 : tPag := fpBoletoBancario;
+                      16 : tPag := fpDepositoBancario;
+                      17 : tPag := fpPagamentoInstantaneo;
+                      18 : tPag := fpTransfBancario;
+                      19 : tPag := fpProgramaFidelidade;
                       90 : tPag := fpSemPagamento;
+                      91 : tPag := fpRegimeEspecial;
                       99 : tPag := fpOutro;
+
                      end;
 
                     end
@@ -1976,6 +2023,7 @@ begin
                     begin
 
                      case StrToIntDef(DMFD.FDQuery2['tPag'], 0) of
+
                       01 : tPag := fpDinheiro;
                       02 : tPag := fpCheque;
                       03 : tPag := fpCartaoCredito;
@@ -1987,8 +2035,14 @@ begin
                       13 : tPag := fpValeCombustivel;
                       14 : tPag := fpDuplicataMercantil;
                       15 : tPag := fpBoletoBancario;
+                      16 : tPag := fpDepositoBancario;
+                      17 : tPag := fpPagamentoInstantaneo;
+                      18 : tPag := fpTransfBancario;
+                      19 : tPag := fpProgramaFidelidade;
                       90 : tPag := fpSemPagamento;
+                      91 : tPag := fpRegimeEspecial;
                       99 : tPag := fpOutro;
+
                      end;
 
                     end
