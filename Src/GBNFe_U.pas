@@ -1000,8 +1000,10 @@ begin
                if ( DMFD.FDQuery1['nfe_indIntermed'] = '1' ) then
                 begin
 
-                 if not ( DMFD.FDQuery1['nfe_cnpjIndIntermed'] = null ) then
-                  infIntermed.cnpj         := DMFD.FDQuery1['nfe_cnpjIndIntermed']
+                 Ide.indIntermed := iiOperacaoComIntermediador;
+
+                 if not ( DMFD.FDQuery1['nfe_cnpjIntermed'] = null ) then
+                  infIntermed.cnpj         := DMFD.FDQuery1['nfe_cnpjIntermed']
                  else
                   infIntermed.cnpj         := '';
 
@@ -1010,11 +1012,17 @@ begin
                  else
                   infIntermed.idCadIntTran := '';
 
-                end;
+                end
 
-               Ide.indIntermed := DMFD.FDQuery1['nfe_infIntermed'];
+               else
+
+                Ide.indIntermed := iiOperacaoSemIntermediador;
 
               end;
+
+             else
+
+              Ide.IndIntermed := iiOperacaoSemIntermediador; //iiSemOperacao;
 
             end;
 
@@ -3217,7 +3225,7 @@ begin
              pIPI  := DMFD.FDQuery2['pc_ipi'];
              vIPI  := DMFD.FDQuery2['vl_ipi'];
              vBC   := DMFD.FDQuery2['base_calculo_ipi'];
-             cEnq  := DMFD.FDQuery2['cEnc'];                                    // Novo by El - 2020-12-15
+             cEnq  := DMFD.FDQuery2['cEnq'];                                    // Novo by El - 2020-12-15
 
             end;
 
