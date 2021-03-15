@@ -57,8 +57,8 @@ TabDockRightClients=DockSite2=0,DockSite4=1
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
 CursorX=1
-CursorY=1220
-TopLine=1206
+CursorY=7080
+TopLine=7142
 LeftCol=1
 Elisions=
 Bookmarks=
@@ -73,7 +73,7 @@ TopLine=1
 LeftCol=1
 Elisions=
 Bookmarks=
-EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\DMFD_U.pas
+EditViewName=Borland.FormDesignerView
 
 [UndockedDesigner]
 Count=0
@@ -170,12 +170,12 @@ Visible=0
 Docked=1
 State=0
 Left=1
-Top=579
-Width=2769
+Top=27
+Width=9988
 Height=2988
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=2769
+ClientWidth=9988
 ClientHeight=2988
 TBDockHeight=2988
 LRDockWidth=2769
@@ -261,8 +261,8 @@ SplitPos=155
 
 [PropInspDesignerSelection]
 ArrangeBy=Name
-SelectedItem=Name,
-ExpandedItems=Anchors=0,Constraints=0,Font=0,LiveBindings=0,"LiveBindings Designer=0",Margins=0,Padding=0,BorderIcons=0,GlassFrame=0,BevelEdges=0,StyleElements=0,Touch=0,HorzScrollBar=0
+SelectedItem=FormatOptions.FmtDisplayDate,AfterCommit
+ExpandedItems=Anchors=0,BorderIcons=0,Constraints=0,LiveBindings=0,ConnectedStoredUsage=0,FetchOptions=0,FormatOptions=1,"LiveBindings Designer=0",Params=1,ResourceOptions=0,TxOptions=1,UpdateOptions=0,UpdateOptions.AssignedValues=0,TxOptions.StopOptions=1,ResourceOptions.AssignedValues=0,ResourceOptions.StoreItems=0,FormatOptions.AssignedValues=0,FormatOptions.SortOptions=0
 
 [ClassBrowserTool]
 PercentageSizes=1
@@ -721,8 +721,8 @@ Create=1
 Visible=0
 Docked=1
 State=0
-Left=1
-Top=579
+Left=8
+Top=8
 Width=3825
 Height=2988
 MaxLeft=-1

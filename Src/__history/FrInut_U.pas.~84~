@@ -368,7 +368,6 @@ begin
     // by Edson Lima ; 2015-5-19T0904 ; Verifica se a nota que foi inutilizada e a exclui
     if not ( DMFD.FDQryGeral1.IsEmpty ) then
      begin
-      DMFD.FDQryGeral1.SQL.Add( 'SET DATEFORMAT dmy                              ' );
       DMFD.FDQryGeral1.SQL.Add( 'Delete from nfe                                 ' );
       DMFD.FDQryGeral1.SQL.Add( 'where codigo_loja   = :gCodEmp                  ' );
       DMFD.FDQryGeral1.SQL.Add( '  and   nnf         = :nNF                      ' );

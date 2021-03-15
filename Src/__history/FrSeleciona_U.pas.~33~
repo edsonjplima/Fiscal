@@ -156,7 +156,6 @@ begin
  //-- Limpando Query de Pesquisa
  DMFD.FDQuery1.Close;
  DMFD.FDQuery1.SQL.Clear;
- DMFD.FDQuery1.SQL.Add( ' SET DATEFORMAT dmy  ' );
  DMFD.FDQuery1.SQL.Add( ' Select '+spCampos+' ' );
  DMFD.FDQuery1.SQL.Add( '  From  '+tpTabPsq+' ' );
 

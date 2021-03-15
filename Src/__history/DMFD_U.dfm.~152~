@@ -33,15 +33,12 @@ object DMFD: TDMFD
   end
   object FDQryGeral1: TFDQuery
     Connection = FDConNFe
-    SQL.Strings = (
-      'SET DATEFORMAT dmy')
     Left = 118
     Top = 80
   end
   object FDQryGeral2: TFDQuery
     Connection = FDConNFe
     SQL.Strings = (
-      'SET DATEFORMAT dmy'
       'select * from nfe')
     Left = 118
     Top = 132
@@ -74,16 +71,12 @@ object DMFD: TDMFD
   object FDQuery1: TFDQuery
     Connection = FDConNFe
     FetchOptions.AssignedValues = [evCursorKind]
-    SQL.Strings = (
-      'SET DATEFORMAT dmy')
     Left = 294
     Top = 26
   end
   object FDQuery2: TFDQuery
     Connection = FDConNFe
     FetchOptions.AssignedValues = [evCursorKind]
-    SQL.Strings = (
-      'SET DATEFORMAT dmy')
     Left = 294
     Top = 80
   end
@@ -91,7 +84,6 @@ object DMFD: TDMFD
     Connection = FDConNFe
     FetchOptions.AssignedValues = [evCursorKind]
     SQL.Strings = (
-      'SET DATEFORMAT dmy'
       'Select distinct'
       ''
       ' Checado='#39#39
@@ -135,16 +127,13 @@ object DMFD: TDMFD
   object FDQuery4: TFDQuery
     Connection = FDConNFe
     FetchOptions.AssignedValues = [evCursorKind]
-    SQL.Strings = (
-      'SET DATEFORMAT dmy')
-    Left = 296
+    Left = 294
     Top = 188
   end
   object FDQuery5: TFDQuery
     Connection = FDConNFe
     FetchOptions.AssignedValues = [evCursorKind]
     SQL.Strings = (
-      'SET DATEFORMAT dmy'
       'Select distinct'
       ''
       ' Checado='#39#39
@@ -189,7 +178,6 @@ object DMFD: TDMFD
     Connection = FDConNFe
     FetchOptions.AssignedValues = [evCursorKind]
     SQL.Strings = (
-      'SET DATEFORMAT dmy'
       'Select distinct'
       ''
       ' Checado='#39#39
@@ -233,7 +221,6 @@ object DMFD: TDMFD
     Connection = FDConNFe
     FetchOptions.AssignedValues = [evCursorKind]
     SQL.Strings = (
-      'SET DATEFORMAT dmy'
       'Select distinct'
       ' t3.Nota                                as nfe_nnf'
       ',t3.data_inclusao                       as nfe_demi'
@@ -250,16 +237,12 @@ object DMFD: TDMFD
   object FDQuery8: TFDQuery
     Connection = FDConNFe
     FetchOptions.AssignedValues = [evCursorKind]
-    SQL.Strings = (
-      'SET DATEFORMAT dmy')
     Left = 294
     Top = 402
   end
   object FDQuery9: TFDQuery
     Connection = FDConNFe
     FetchOptions.AssignedValues = [evCursorKind]
-    SQL.Strings = (
-      'SET DATEFORMAT dmy')
     Left = 294
     Top = 460
   end
@@ -267,7 +250,6 @@ object DMFD: TDMFD
     Connection = FDConNFe
     FetchOptions.AssignedValues = [evCursorKind]
     SQL.Strings = (
-      'SET DATEFORMAT dmy'
       'Select distinct'
       ''
       ' Checado='#39#39
@@ -309,7 +291,6 @@ object DMFD: TDMFD
     Connection = FDConNFe
     FetchOptions.AssignedValues = [evCursorKind]
     SQL.Strings = (
-      'SET DATEFORMAT dmy'
       'Select'
       ''
       ' t1.idLote                      as    CCe_idLote'
@@ -398,7 +379,6 @@ object DMFD: TDMFD
     Connection = FDConNFe
     FetchOptions.AssignedValues = [evCursorKind]
     SQL.Strings = (
-      'SET DATEFORMAT dmy'
       'select justificativa from notas_inutilizadas')
     Left = 468
     Top = 132
@@ -407,7 +387,6 @@ object DMFD: TDMFD
     Connection = FDConNFe
     FetchOptions.AssignedValues = [evCursorKind]
     SQL.Strings = (
-      'SET DATEFORMAT dmy'
       'Select'
       ''
       '   Checado='#39#39
@@ -460,7 +439,6 @@ object DMFD: TDMFD
     Connection = FDConNFe
     FetchOptions.AssignedValues = [evCursorKind]
     SQL.Strings = (
-      'SET DATEFORMAT dmy'
       'Select distinct'
       ''
       '  Checado='#39#39
@@ -579,7 +557,6 @@ object DMFD: TDMFD
     Connection = FDConNFe
     FetchOptions.AssignedValues = [evCursorKind]
     SQL.Strings = (
-      ' SET DATEFORMAT dmy'
       ' Select distinct'
       ''
       ' Checado='#39#39
@@ -637,7 +614,6 @@ object DMFD: TDMFD
     Connection = FDConNFe
     FetchOptions.AssignedValues = [evCursorKind]
     SQL.Strings = (
-      ' SET DATEFORMAT dmy'
       ' Select'
       ''
       '   Checado='#39#39
@@ -703,8 +679,6 @@ object DMFD: TDMFD
   object FDQryGer: TFDQuery
     Connection = FDConGer
     FetchOptions.AssignedValues = [evCursorKind]
-    SQL.Strings = (
-      'SET DATEFORMAT dmy')
     Left = 600
     Top = 80
   end
@@ -813,7 +787,6 @@ object DMFD: TDMFD
     Connection = FDConNFe
     FetchOptions.AssignedValues = [evCursorKind]
     SQL.Strings = (
-      'SET DATEFORMAT dmy'
       'Select distinct'
       ''
       ' Checado='#39#39
@@ -855,7 +828,6 @@ object DMFD: TDMFD
   object FDQryGeral3: TFDQuery
     Connection = FDConNFe
     SQL.Strings = (
-      'SET DATEFORMAT dmy'
       'select * from nfe')
     Left = 118
     Top = 186
@@ -863,7 +835,6 @@ object DMFD: TDMFD
   object FDQryGeral4: TFDQuery
     Connection = FDConNFe
     SQL.Strings = (
-      'SET DATEFORMAT dmy'
       'select * from nfe')
     Left = 118
     Top = 238
@@ -876,15 +847,12 @@ object DMFD: TDMFD
   object FDQuery19: TFDQuery
     Connection = FDConNFe
     FetchOptions.AssignedValues = [evCursorKind]
-    SQL.Strings = (
-      'SET DATEFORMAT dmy')
     Left = 468
     Top = 466
   end
   object FDQryGeral5: TFDQuery
     Connection = FDConNFe
     SQL.Strings = (
-      'SET DATEFORMAT dmy'
       'select * from nfe')
     Left = 118
     Top = 292
@@ -893,7 +861,6 @@ object DMFD: TDMFD
     Connection = FDConNFe
     FetchOptions.AssignedValues = [evCursorKind]
     SQL.Strings = (
-      'SET DATEFORMAT dmy'
       'Select'
       ''
       '   Checado='#39#39

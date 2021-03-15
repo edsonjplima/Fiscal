@@ -992,7 +992,7 @@ begin
 
            begin
 
-            case ( StrToIntDef(DMFD.FDQuery1['nfe_indPres'], 0) ) of            // Indicativo do Intermediador - By Edson Lima 10/03/2021
+            case ( StrToIntDef(DMFD.FDQuery1['nfe_indPres'], 0) ) of             // Indicativo do Intermediador - By Edson Lima 10/03/2021
 
              2, 3, 4, 9:
 
@@ -1364,7 +1364,6 @@ begin
        //nfe_referenciada_cupon
        DMFD.FDQuery2.Close;
        DMFD.FDQuery2.SQL.Clear;
-       DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                                                                                                        ' );
        DMFD.FDQuery2.SQL.Add( 'Select                                                                                                                    ' );
        DMFD.FDQuery2.SQL.Add( 't1.*                                                                                                                      ' );
        DMFD.FDQuery2.SQL.Add( 'from nfe_referenciada_cupon t1                                                                                            ' );
@@ -1716,7 +1715,6 @@ begin
        //informações complementares
        DMFD.FDQuery2.Close;
        DMFD.FDQuery2.SQL.Clear;
-       DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                               ' );
        DMFD.FDQuery2.SQL.Add( 'Select                                           ' );
        DMFD.FDQuery2.SQL.Add( 't1.*                                             ' );
        DMFD.FDQuery2.SQL.Add( '                                                 ' );
@@ -1759,7 +1757,6 @@ begin
        // faturas
        DMFD.FDQuery2.Close;
        DMFD.FDQuery2.SQL.Clear;
-       DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                               ' );
        DMFD.FDQuery2.SQL.Add( 'Select                                           ' );
        DMFD.FDQuery2.SQL.Add( 't1.*                                             ' );
        DMFD.FDQuery2.SQL.Add( '                                                 ' );
@@ -1809,7 +1806,6 @@ begin
        //duplicatas
        DMFD.FDQuery2.Close;
        DMFD.FDQuery2.SQL.Clear;
-       DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                                                     ' );
        DMFD.FDQuery2.SQL.Add( 'Select                                                                 ' );
        DMFD.FDQuery2.SQL.Add( 't1.num_duplicata, cast(t1.dvenc as datetime) as dvenc, t1.valor,       ' );
        DMFD.FDQuery2.SQL.Add( 't1.IndPag, t1.tPag, t1.cCnpj, t1.tBand, t1.cAut, t1.vTroco             ' );
@@ -2349,7 +2345,6 @@ begin
        //itens de notas
        DMFD.FDQuery2.Close;
        DMFD.FDQuery2.SQL.Clear;
-       DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                                             ' );
        DMFD.FDQuery2.SQL.Add( 'Select                                                         ' );
        DMFD.FDQuery2.SQL.Add( '                                                               ' );
        DMFD.FDQuery2.SQL.Add( 't1.*                                                           ' );
@@ -2763,7 +2758,6 @@ begin
            //itens de notas-DI
            DMFD.FDQuery8.Close;
            DMFD.FDQuery8.SQL.Clear;
-           DMFD.FDQuery8.SQL.Add( 'SET DATEFORMAT dmy                                             ' );
            DMFD.FDQuery8.SQL.Add( 'Select                                                         ' );
            DMFD.FDQuery8.SQL.Add( '                                                               ' );
            DMFD.FDQuery8.SQL.Add( 't1.*                                                           ' );
@@ -2809,7 +2803,6 @@ begin
                //itens de notas-ADI
                DMFD.FDQuery9.Close;
                DMFD.FDQuery9.SQL.Clear;
-               DMFD.FDQuery9.SQL.Add( 'SET DATEFORMAT dmy                                                       ' );
                DMFD.FDQuery9.SQL.Add( 'Select                                                                   ' );
                DMFD.FDQuery9.SQL.Add( '                                                                         ' );
                DMFD.FDQuery9.SQL.Add( 't1.*                                                                     ' );
@@ -2873,7 +2866,6 @@ begin
              // by Edson Lima ; 2018-5-8 ; itens do lote
              DMFD.FDQuery19.Close;
              DMFD.FDQuery19.SQL.Clear;
-             DMFD.FDQuery19.SQL.Add( 'SET DATEFORMAT dmy                        ' );
              DMFD.FDQuery19.SQL.Add( 'Select                                    ' );
              DMFD.FDQuery19.SQL.Add( 't1.*                                      ' );
              DMFD.FDQuery19.SQL.Add( 'from nfe_Lotes t1                         ' );
@@ -4561,7 +4553,6 @@ begin
     DMFD.FDQuery2.DisableControls;
     DMFD.FDQuery2.Close;
     DMFD.FDQuery2.SQL.Clear;
-    DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                                          ' );
     DMFD.FDQuery2.SQL.Add( 'insert into nfe_xml (                                       ' );
     DMFD.FDQuery2.SQL.Add( 'origem,                                                     ' );
     DMFD.FDQuery2.SQL.Add( 'codigo_loja,                                                ' );
@@ -5893,7 +5884,6 @@ begin
   DMFD.FDQuery4.DisableControls;
   DMFD.FDQuery4.Close;
   DMFD.FDQuery4.SQL.Clear;
-  DMFD.FDQuery4.SQL.Add( 'SET DATEFORMAT dmy                                ' );
   DMFD.FDQuery4.SQL.Add( 'update emitente set                               ' );
   DMFD.FDQuery4.SQL.Add( '  Certificado_NumSerie   = :Certificado_NumSerie, ' );
   DMFD.FDQuery4.SQL.Add( '  Certificado_NumSerie2  = :Certificado_NumSerie2,' );
@@ -6184,7 +6174,6 @@ begin
 
  DMFD.FDQuery4.Close;
  DMFD.FDQuery4.SQL.Clear;
- DMFD.FDQuery4.SQL.Add( 'SET DATEFORMAT dmy                                           ' );
  DMFD.FDQuery4.SQL.Add( 'select * from emitente where codigo_loja = ' + edt_CodEmp.Text );
  DMFD.FDQuery4.Open;
  //------------------------------------------------------------------------
@@ -6818,7 +6807,6 @@ begin
  //ler o retorno da critica da importação
  DMFD.FDQuery2.Close;
  DMFD.FDQuery2.SQL.Clear;
- DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy              ' );
  DMFD.FDQuery2.SQL.Add( 'select * from critica_importacao' );
  DMFD.FDQuery2.Open;
  DMFD.FDQuery2.first;
@@ -7045,7 +7033,6 @@ begin
 
  DMFD.FDQuery4.Close;
  DMFD.FDQuery4.SQL.Clear;
- DMFD.FDQuery4.SQL.Add( 'SET DATEFORMAT dmy                ' );
  DMFD.FDQuery4.SQL.Add( 'select * from emitente            ' );
  DMFD.FDQuery4.SQL.Add( ' where codigo_loja =:codigo_loja  ' );
  DMFD.FDQuery4.ParamByName('codigo_loja').AsInteger := StrToIntDef(gCodEmp, 0);
@@ -7122,7 +7109,6 @@ begin
 
     DMFD.FDQuery4.Close;
     DMFD.FDQuery4.SQL.Clear;
-    DMFD.FDQuery4.SQL.Add( 'SET DATEFORMAT dmy                ' );
     DMFD.FDQuery4.SQL.Add( 'select * from emitente            ' );
     DMFD.FDQuery4.SQL.Add( ' where codigo_loja =:codigo_loja  ' );
     DMFD.FDQuery4.ParamByName('codigo_loja').AsInteger := StrToIntDef(gCodEmp, 0);
@@ -7492,7 +7478,6 @@ begin
 
   DMFD.FDQuery4.Close;
   DMFD.FDQuery4.SQL.Clear;
-  DMFD.FDQuery4.SQL.Add( 'SET DATEFORMAT dmy                                           ' );
   DMFD.FDQuery4.SQL.Add( 'select * from emitente where codigo_loja = ' + edt_CodEmp.Text );
   DMFD.FDQuery4.Open;
 
@@ -7500,7 +7485,6 @@ begin
   begin
   DMFD.FDQuery4.Close;
   DMFD.FDQuery4.SQL.Clear;
-  DMFD.FDQuery4.SQL.Add( 'SET DATEFORMAT dmy    ');
   DMFD.FDQuery4.SQL.Add( 'select * from emitente');
   DMFD.FDQuery4.Open;
 
@@ -7513,7 +7497,6 @@ begin
     pAtuNFe;
     DMFD.FDQuery4.Close;
     DMFD.FDQuery4.SQL.Clear;
-    DMFD.FDQuery4.SQL.Add( 'SET DATEFORMAT dmy                                           ' );
     DMFD.FDQuery4.SQL.Add( 'select * from emitente where codigo_loja = ' + edt_CodEmp.Text );
     DMFD.FDQuery4.Open;
     end
@@ -7527,7 +7510,6 @@ begin
      pAtuNFe;
      DMFD.FDQuery4.Close;
      DMFD.FDQuery4.SQL.Clear;
-     DMFD.FDQuery4.SQL.Add( 'SET DATEFORMAT dmy                                           ' );
      DMFD.FDQuery4.SQL.Add( 'select * from emitente where codigo_loja = ' + edt_CodEmp.Text );
      DMFD.FDQuery4.Open;
      end
@@ -7535,7 +7517,6 @@ begin
      pAtuNFe;
      DMFD.FDQuery4.Close;
      DMFD.FDQuery4.SQL.Clear;
-     DMFD.FDQuery4.SQL.Add( 'SET DATEFORMAT dmy                                           ' );
      DMFD.FDQuery4.SQL.Add( 'select * from emitente where codigo_loja = ' + edt_CodEmp.Text );
      DMFD.FDQuery4.Open;
     end;
@@ -8047,7 +8028,6 @@ begin
               //pega os dados do destinatario
               DMFD.FDQuery2.Close;
               DMFD.FDQuery2.SQL.Clear;
-              DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                                         ' );
               DMFD.FDQuery2.SQL.Add( 'Select                                                     ' );
               DMFD.FDQuery2.SQL.Add( 't1.*                                                       ' );
               DMFD.FDQuery2.SQL.Add( 'from destinatario t1                                       ' );
@@ -9644,7 +9624,6 @@ begin
           //pega os dados do destinatario
           DMFD.FDQuery2.Close;
           DMFD.FDQuery2.SQL.Clear;
-          DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                                                   ' );
           DMFD.FDQuery2.SQL.Add( 'Select                                                               ' );
           DMFD.FDQuery2.SQL.Add( 't1.*                                                                 ' );
           DMFD.FDQuery2.SQL.Add( 'from destinatario t1                                                 ' );
@@ -10166,7 +10145,6 @@ begin
           //pega os dados do destinatario
           DMFD.FDQuery2.Close;
           DMFD.FDQuery2.SQL.Clear;
-          DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                                         ' );
           DMFD.FDQuery2.SQL.Add( 'Select                                                     ' );
           DMFD.FDQuery2.SQL.Add( 't1.*                                                       ' );
           DMFD.FDQuery2.SQL.Add( 'from destinatario t1                                       ' );
@@ -11876,7 +11854,6 @@ begin
        //pega os dados do destinatario
        DMFD.FDQuery2.Close;
        DMFD.FDQuery2.SQL.Clear;
-       DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                                                   ' );
        DMFD.FDQuery2.SQL.Add( 'Select                                                               ' );
        DMFD.FDQuery2.SQL.Add( 't1.*                                                                 ' );
        DMFD.FDQuery2.SQL.Add( 'from destinatario t1                                                 ' );
@@ -12562,7 +12539,6 @@ begin
      //pega os dados do destinatario
      DMFD.FDQuery2.Close;
      DMFD.FDQuery2.SQL.Clear;
-     DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                                                ' );
      DMFD.FDQuery2.SQL.Add( 'Select                                                       ' );
      DMFD.FDQuery2.SQL.Add( 't1.*                                                         ' );
      DMFD.FDQuery2.SQL.Add( 'from destinatario t1                                         ' );
@@ -12598,7 +12574,6 @@ begin
       DMFD.FDQuery2.DisableControls;
       DMFD.FDQuery2.Close;
       DMFD.FDQuery2.SQL.Clear;
-      DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                                   ' );
       DMFD.FDQuery2.SQL.Add( 'Update NFe_CCe Set                                   ' );
       DMFD.FDQuery2.SQL.Add( '    Ver_Laiaute    = :Ver_Laiaute                    ' );
       DMFD.FDQuery2.SQL.Add( '   ,cOrgao         = :cOrgao                         ' );
@@ -12984,7 +12959,6 @@ begin
        //pega os dados do destinatario
        DMFD.FDQuery2.Close;
        DMFD.FDQuery2.SQL.Clear;
-       DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                                           ' );
        DMFD.FDQuery2.SQL.Add( 'Select                                                       ' );
        DMFD.FDQuery2.SQL.Add( 't1.*                                                         ' );
        DMFD.FDQuery2.SQL.Add( 'from destinatario t1                                         ' );
@@ -13011,7 +12985,6 @@ begin
         DMFD.FDQuery2.DisableControls;
         DMFD.FDQuery2.Close;
         DMFD.FDQuery2.SQL.Clear;
-        DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                                   ' );
         DMFD.FDQuery2.SQL.Add( 'Update NFe_CCe Set                                   ' );
         DMFD.FDQuery2.SQL.Add( '    Ver_Laiaute    = :Ver_Laiaute                    ' );
         DMFD.FDQuery2.SQL.Add( '   ,cOrgao         = :cOrgao                         ' );
@@ -13186,7 +13159,6 @@ begin
  //pega os dados do destinatario
  DMFD.FDQuery2.Close;
  DMFD.FDQuery2.SQL.Clear;
- DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                                           ' );
  DMFD.FDQuery2.SQL.Add( 'Select                                                       ' );
  DMFD.FDQuery2.SQL.Add( 't1.*                                                         ' );
  DMFD.FDQuery2.SQL.Add( 'from destinatario t1                                         ' );
@@ -13555,7 +13527,6 @@ begin
   DMFD.FDQuery2.SQL.Clear;
 
   // Deve haver pelo menos um campo a ser gravado na tabela nfe
-  DMFD.FDQuery2.SQL.Add(  'SET DATEFORMAT dmy                                ' );
   DMFD.FDQuery2.SQL.Add(  'Update nfe set                                    ' );
   if trim(c01) <> '' then
    DMFD.FDQuery2.SQL.Add( '               ' + c01 + ' = :' + c01 + '         ' );
@@ -13778,13 +13749,12 @@ begin
         //pega os dados do destinatario
         DMFD.FDQuery2.Close;
         DMFD.FDQuery2.SQL.Clear;
-        DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                                       ' );
-        DMFD.FDQuery2.SQL.Add( 'Select                                                   ' );
-        DMFD.FDQuery2.SQL.Add( 't1.*                                                     ' );
-        DMFD.FDQuery2.SQL.Add( 'from destinatario t1                                     ' );
-        DMFD.FDQuery2.SQL.Add( 'inner join nfe t2 on t2.codigo_destinatario = t1.codigo  ' );
-        DMFD.FDQuery2.SQL.Add( 'where t2.codigo_loja = :parm1                            ' );
-        DMFD.FDQuery2.SQL.Add( 'and t2.chave_nfe = :parm2                                ' );
+        DMFD.FDQuery2.SQL.Add( 'Select                                                 ' );
+        DMFD.FDQuery2.SQL.Add( 't1.*                                                 ' );
+        DMFD.FDQuery2.SQL.Add( 'from destinatario t1                                                 ' );
+        DMFD.FDQuery2.SQL.Add( 'inner join nfe t2 on t2.codigo_destinatario = t1.codigo                                               ' );
+        DMFD.FDQuery2.SQL.Add( 'where t2.codigo_loja = :parm1                                  ' );
+        DMFD.FDQuery2.SQL.Add( 'and t2.chave_nfe = :parm2                                  ' );
         DMFD.FDQuery2.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
         DMFD.FDQuery2.Params[1].AsString  := (vChave);
         DMFD.FDQuery2.Open;
@@ -14751,7 +14721,6 @@ begin
   DMFD.FDQryGeral1.DisableControls;
   DMFD.FDQryGeral1.Close;
   DMFD.FDQryGeral1.SQL.Clear;
-  DMFD.FDQryGeral1.SQL.Add( 'SET DATEFORMAT dmy                                  ' );
   DMFD.FDQryGeral1.SQL.Add( 'Select * from NFe_CCe                               ' );
   DMFD.FDQryGeral1.SQL.Add( ' where nNF         = :nNF                           ' );
   DMFD.FDQryGeral1.ParamByName('nNF').Value     := nNF;
@@ -14763,7 +14732,6 @@ begin
 
   if not DMFD.FDQryGeral1.IsEmpty then
    begin
-    DMFD.FDQryGeral1.SQL.Add( 'SET DATEFORMAT dmy                                ' );
     DMFD.FDQryGeral1.SQL.Add( 'Update NFe_CCe Set                                ' );
     DMFD.FDQryGeral1.SQL.Add( '   ,cStat          = :cStat                       ' );
     DMFD.FDQryGeral1.SQL.Add( '   ,xMotivo        = :xMotiv                      ' );
@@ -14807,7 +14775,6 @@ begin
   DMFD.FDQuery2.DisableControls;
   DMFD.FDQuery2.Close;
   DMFD.FDQuery2.SQL.Clear;
-  DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                                   ' );
   DMFD.FDQuery2.SQL.Add( 'Update NFe_CCe Set                                   ' );
   DMFD.FDQuery2.SQL.Add( '    cStat          = :cStat                          ' );
   DMFD.FDQuery2.SQL.Add( '   ,xMotivo        = :xMotivo                        ' );
@@ -14831,7 +14798,6 @@ begin
   DMFD.FDQuery2.DisableControls;
   DMFD.FDQuery2.Close;
   DMFD.FDQuery2.SQL.Clear;
-  DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                                     ' );
   DMFD.FDQuery2.SQL.Add( 'Update nfe set                                         ' );
   DMFD.FDQuery2.SQL.Add( '  cStat_CCe                = :cStat_CCe,               ' );
   DMFD.FDQuery2.SQL.Add( '  xMotivo_CCe              = :xMotivo_CCe              ' );
@@ -16584,7 +16550,6 @@ begin
 
  DMFD.FDQuery4.Close;
  DMFD.FDQuery4.SQL.Clear;
- DMFD.FDQuery4.SQL.Add( 'SET DATEFORMAT dmy                ' );
  DMFD.FDQuery4.SQL.Add( 'select * from emitente            ' );
  DMFD.FDQuery4.SQL.Add( ' where codigo_loja =:codigo_loja  ' );
  DMFD.FDQuery4.ParamByName('codigo_loja').AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
@@ -16967,7 +16932,6 @@ begin
  // Ler o banco de dados ERP
  DMFD.FDQryGer.Close;
  DMFD.FDQryGer.SQL.Clear;
- DMFD.FDQryGer.SQL.Add( 'SET DATEFORMAT dmy                             ' );
  DMFD.FDQryGer.SQL.Add( 'Select *                                       ' );
  DMFD.FDQryGer.SQL.Add( 'from TabMot                                    ' );
  DMFD.FDQryGer.SQL.Add( 'where TipMot = ''C''                           ' );
@@ -17048,7 +17012,6 @@ begin
  // Ler o banco de dados ERP
  DMFD.FDQryGer.Close;
  DMFD.FDQryGer.SQL.Clear;
- DMFD.FDQryGer.SQL.Add( 'SET DATEFORMAT dmy                             ' );
  DMFD.FDQryGer.SQL.Add( 'Update   MovPed                                ' );
  DMFD.FDQryGer.SQL.Add( ' set     ChvNFe    = :sChvNFe                  ' );
  DMFD.FDQryGer.SQL.Add( ' where   CodEmp    = :iCodEmp  and             ' );
@@ -17603,7 +17566,6 @@ begin
 
  DMFD.FDQuery4.Close;
  DMFD.FDQuery4.SQL.Clear;
- DMFD.FDQuery4.SQL.Add( 'SET DATEFORMAT dmy                ' );
  DMFD.FDQuery4.SQL.Add( 'select * from emitente            ' );
  DMFD.FDQuery4.SQL.Add( ' where codigo_loja =:codigo_loja  ' );
  DMFD.FDQuery4.ParamByName('codigo_loja').AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
@@ -17820,7 +17782,6 @@ begin
 
   FD.Close;
   FD.SQL.Clear;
-  FD.SQL.Add( 'SET DATEFORMAT dmy                                            ' );
   FD.SQL.Add( 'Select distinct                                               ' );
   FD.SQL.Add( '                                                              ' );
   FD.SQL.Add( '  ''''                          as checado                    ' );

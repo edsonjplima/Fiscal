@@ -992,7 +992,7 @@ begin
 
            begin
 
-            case ( StrToIntDef(DMFD.FDQuery1['nfe_indPres'], 0) ) of            // Indicativo do Intermediador - By Edson Lima 10/03/2021
+            case ( StrToIntDef(DMFD.FDQuery1['nfe_indPres'], 0) ) of             // Indicativo do Intermediador - By Edson Lima 10/03/2021
 
              2, 3, 4, 9:
 

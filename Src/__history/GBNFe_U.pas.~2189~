@@ -992,7 +992,7 @@ begin
 
            begin
 
-            case ( StrToIntDef(DMFD.FDQuery1['nfe_indPres'], 0) ) of            // Indicativo do Intermediador - By Edson Lima 10/03/2021
+            case ( StrToIntDef(DMFD.FDQuery1['nfe_indPres'], 0) ) of             // Indicativo do Intermediador - By Edson Lima 10/03/2021
 
              2, 3, 4, 9:
 
@@ -4561,7 +4561,6 @@ begin
     DMFD.FDQuery2.DisableControls;
     DMFD.FDQuery2.Close;
     DMFD.FDQuery2.SQL.Clear;
-    DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                                          ' );
     DMFD.FDQuery2.SQL.Add( 'insert into nfe_xml (                                       ' );
     DMFD.FDQuery2.SQL.Add( 'origem,                                                     ' );
     DMFD.FDQuery2.SQL.Add( 'codigo_loja,                                                ' );
@@ -5893,7 +5892,6 @@ begin
   DMFD.FDQuery4.DisableControls;
   DMFD.FDQuery4.Close;
   DMFD.FDQuery4.SQL.Clear;
-  DMFD.FDQuery4.SQL.Add( 'SET DATEFORMAT dmy                                ' );
   DMFD.FDQuery4.SQL.Add( 'update emitente set                               ' );
   DMFD.FDQuery4.SQL.Add( '  Certificado_NumSerie   = :Certificado_NumSerie, ' );
   DMFD.FDQuery4.SQL.Add( '  Certificado_NumSerie2  = :Certificado_NumSerie2,' );

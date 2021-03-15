@@ -11,21 +11,41 @@ File_8=TSourceModule,'D:\Sistemas de Desenvolvimento\GBNFe\Src\FrMens_U.pas',0,1
 
 [Modules]
 Module0=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
-Module1=D:\Sistemas de Desenvolvimento\GBNFe\Src\DMFD_U.pas
-Count=2
+Module1=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrInut_U.pas
+Module2=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrCCe_U.pas
+Module3=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBuscaChave_U.pas
+Module4=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrSeleciona_U.pas
+Module5=D:\Sistemas de Desenvolvimento\GBNFe\Src\DMFD_U.pas
+Count=6
 EditWindowCount=1
 
 [D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas]
+ModuleType=TSourceModule
+
+[D:\Sistemas de Desenvolvimento\GBNFe\Src\FrInut_U.pas]
+ModuleType=TSourceModule
+
+[D:\Sistemas de Desenvolvimento\GBNFe\Src\FrCCe_U.pas]
+ModuleType=TSourceModule
+
+[D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBuscaChave_U.pas]
+ModuleType=TSourceModule
+
+[D:\Sistemas de Desenvolvimento\GBNFe\Src\FrSeleciona_U.pas]
 ModuleType=TSourceModule
 
 [D:\Sistemas de Desenvolvimento\GBNFe\Src\DMFD_U.pas]
 ModuleType=TSourceModule
 
 [EditWindow0]
-ViewCount=2
+ViewCount=6
 CurrentEditView=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
 View0=0
 View1=1
+View2=2
+View3=3
+View4=4
+View5=5
 PercentageSizes=1
 Create=1
 Visible=1
@@ -42,9 +62,9 @@ ClientHeight=9035
 DockedToMainForm=1
 BorlandEditorCodeExplorer=BorlandEditorCodeExplorer@EditWindow0
 TopPanelSize=0
-LeftPanelSize=1894
+LeftPanelSize=1900
 LeftPanelClients=PropertyInspector,DockSite3
-LeftPanelData=0000080001010000000068120000000000000166070000000000000100000000FD06000009000000446F636B53697465330100000000BA2000001100000050726F7065727479496E73706563746F72FFFFFFFF
+LeftPanelData=000008000101000000006812000000000000016C070000000000000100000000FD06000009000000446F636B53697465330100000000BA2000001100000050726F7065727479496E73706563746F72FFFFFFFF
 RightPanelSize=0
 BottomPanelSize=0
 BottomMiddlePanelSize=0
@@ -57,8 +77,8 @@ TabDockRightClients=DockSite2=0,DockSite4=1
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
 CursorX=1
-CursorY=1029
-TopLine=1015
+CursorY=1328
+TopLine=1395
 LeftCol=1
 Elisions=
 Bookmarks=
@@ -66,14 +86,58 @@ EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
 
 [View1]
 CustomEditViewType=TEditView
-Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\DMFD_U.pas
+Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBuscaChave_U.pas
+CursorX=54
+CursorY=2832
+TopLine=2818
+LeftCol=1
+Elisions=
+Bookmarks={1,1262,1}{2,2014,1}{3,1335,1}{4,1584,1}{5,1836,1}{6,1873,1}{7,1889,1}
+EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBuscaChave_U.pas
+
+[View2]
+CustomEditViewType=TEditView
+Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrCCe_U.pas
 CursorX=1
-CursorY=1
-TopLine=1
+CursorY=1126
+TopLine=1112
+LeftCol=1
+Elisions=
+Bookmarks={1,1262,1}{2,453,1}
+EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrCCe_U.pas
+
+[View3]
+CustomEditViewType=TEditView
+Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrSeleciona_U.pas
+CursorX=52
+CursorY=156
+TopLine=153
 LeftCol=1
 Elisions=
 Bookmarks=
-EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\DMFD_U.pas
+EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrSeleciona_U.pas
+
+[View4]
+CustomEditViewType=TEditView
+Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrInut_U.pas
+CursorX=52
+CursorY=371
+TopLine=357
+LeftCol=1
+Elisions=
+Bookmarks={1,417,1}
+EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrInut_U.pas
+
+[View5]
+CustomEditViewType=TEditView
+Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\DMFD_U.pas
+CursorX=1
+CursorY=86
+TopLine=86
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=Borland.FormDesignerView
 
 [UndockedDesigner]
 Count=0
@@ -103,8 +167,7 @@ Dockable=1
 StayOnTop=0
 
 [Breakpoints]
-Count=1
-Breakpoint0='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',994,'',0,1,'',1,0,0,'',1,'','','',0,''
+Count=0
 
 [EmbarcaderoWin32Debugger_AddressBreakpoints]
 Count=0
@@ -170,14 +233,14 @@ Visible=0
 Docked=1
 State=0
 Left=1
-Top=579
+Top=597
 Width=2769
 Height=2988
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=2669
 ClientHeight=2535
-TBDockHeight=2988
+TBDockHeight=2779
 LRDockWidth=2769
 Dockable=1
 StayOnTop=0
@@ -247,17 +310,22 @@ Docked=1
 State=0
 Left=0
 Top=179
-Width=1894
+Width=1900
 Height=6686
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=1894
+ClientWidth=1900
 ClientHeight=6686
 TBDockHeight=8558
-LRDockWidth=1894
+LRDockWidth=1900
 Dockable=1
 StayOnTop=0
-SplitPos=155
+SplitPos=156
+
+[PropInspDesignerSelection]
+ArrangeBy=Name
+SelectedItem=Caption,OnClick
+ExpandedItems=ConnectedStoredUsage=0,FetchOptions=0,FormatOptions=1,"LiveBindings Designer=0",Params=0,ResourceOptions=0,TxOptions=1,UpdateOptions=0,FormatOptions.AssignedValues=0,FormatOptions.SortOptions=0,FieldOptions=0,FilterChanges=0,FilterOptions=0,ActiveStoredUsage=0,Connection=0,TxOptions.StopOptions=0,FetchOptions.AssignedValues=0,FetchOptions.Cache=0,FetchOptions.Items=0,Connection.TxOptions=0,Connection.UpdateOptions=0,Connection.ConnectedStoredUsage=0,Connection.FetchOptions=0,Connection.FormatOptions=0,"Connection.LiveBindings Designer=0",Connection.Params=0,Connection.ResourceOptions=0,Anchors=0,Constraints=0,Font=0,LiveBindings=0
 
 [ClassBrowserTool]
 PercentageSizes=1
@@ -587,11 +655,11 @@ State=0
 Left=0
 Top=0
 Width=3825
-Height=2698
+Height=2488
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=3825
-ClientHeight=2698
+ClientHeight=2488
 TBDockHeight=1547
 LRDockWidth=8744
 Dockable=1
@@ -612,11 +680,11 @@ Docked=1
 State=0
 Left=0
 Top=0
-Width=1894
+Width=1900
 Height=1616
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=1894
+ClientWidth=1900
 ClientHeight=1616
 TBDockHeight=3674
 LRDockWidth=1894
@@ -716,15 +784,15 @@ Create=1
 Visible=0
 Docked=1
 State=0
-Left=8
-Top=8
+Left=1
+Top=597
 Width=3825
-Height=2988
+Height=2779
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=3825
-ClientHeight=2988
-TBDockHeight=2988
+ClientHeight=2779
+TBDockHeight=2779
 LRDockWidth=3825
 Dockable=1
 StayOnTop=0
@@ -766,14 +834,14 @@ Docked=1
 State=0
 Left=0
 Top=18
-Width=1894
+Width=1900
 Height=1616
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=1894
+ClientWidth=1900
 ClientHeight=1616
 TBDockHeight=8558
-LRDockWidth=1894
+LRDockWidth=1900
 Dockable=1
 StayOnTop=0
 TabPosition=1

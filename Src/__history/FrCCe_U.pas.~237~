@@ -655,7 +655,6 @@ begin
       DMFD.FDQuery2.DisableControls;
       DMFD.FDQuery2.Close;
       DMFD.FDQuery2.SQL.Clear;
-      DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                                   ' );
       DMFD.FDQuery2.SQL.Add( 'Update NFe_CCe Set                                   ' );
       DMFD.FDQuery2.SQL.Add( '    idLote         = :idLote                         ' );
       DMFD.FDQuery2.SQL.Add( '   ,Codigo_Loja    = :Codigo_Loja                    ' );
@@ -731,7 +730,6 @@ begin
       DMFD.FDQuery2.DisableControls;
       DMFD.FDQuery2.Close;
       DMFD.FDQuery2.SQL.Clear;
-      DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                                   ' );
       DMFD.FDQuery2.SQL.Add( 'Insert into NFe_CCe (                                ' );
       DMFD.FDQuery2.SQL.Add( '    idLote                                           ' );
       DMFD.FDQuery2.SQL.Add( '   ,Codigo_Loja                                      ' );
@@ -825,7 +823,6 @@ begin
     DMFD.FDQuery2.DisableControls;
     DMFD.FDQuery2.Close;
     DMFD.FDQuery2.SQL.Clear;
-    DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                                     ' );
     DMFD.FDQuery2.SQL.Add( 'Update nfe set                                         ' );
     DMFD.FDQuery2.SQL.Add( '  evento_CCe               = :evento_CCe               ' );
     DMFD.FDQuery2.SQL.Add( 'where codigo_loja          = :codigo_loja              ' );
@@ -1123,7 +1120,6 @@ begin
     DMFD.FDQuery2.DisableControls;
     DMFD.FDQuery2.Close;
     DMFD.FDQuery2.SQL.Clear;
-    DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                                     ' );
     DMFD.FDQuery2.SQL.Add( 'delete from NFe_CCe                                    ' );
     DMFD.FDQuery2.SQL.Add( 'where codigo_loja          = :codigo_loja              ' );
     DMFD.FDQuery2.SQL.Add( '  and nNf                  = :nNf                      ' );
@@ -1150,7 +1146,6 @@ begin
     DMFD.FDQuery2.DisableControls;
     DMFD.FDQuery2.Close;
     DMFD.FDQuery2.SQL.Clear;
-    DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                                     ' );
     DMFD.FDQuery2.SQL.Add( 'Update nfe set                                         ' );
     DMFD.FDQuery2.SQL.Add( '  evento_CCe               = :evento_CCe               ' );
     DMFD.FDQuery2.SQL.Add( 'where codigo_loja          = :codigo_loja              ' );
