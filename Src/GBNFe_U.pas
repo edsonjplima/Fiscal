@@ -593,7 +593,7 @@ var
  gExpress,       gOpcao,         gNNF,        gCdloja_Consiste, gNomXML   : String;          // Parâmetros Express, Opção, Num da Nota e Código da loja p/consistência
  gCamXmlI,       gCamCert,       gSenMst,     gSenhaBD,   gdEmiConsiste   : String;          // Recebe o caminho dos, GBNFe.Ini, e a Senha Master - gSenMst, XmlI - Importação de nfe, SenhaBD
  gdEmi_Consiste, gNNF_Consiste,  gSerie_Consiste, gChave_Consiste         : String;          // Data da emissão, número da nota, serie e chave todas p/consistência
- gModelo_Consiste                                                         : string;          // modelo p/consistência
+ gModelo_Consiste, geMailTransp                                           : string;          // modelo p/consistência
  gAtuCon                                                                  : Boolean = False; // verifica se houve atualização na consulta de exclusão
  gMostraXML                                                               : Boolean = False; // Limpa o treeview - Mostra o xml
  gVerCon                                                                  : Boolean = False; // verifica se tem nota pendente em contingência FSDA
@@ -776,6 +776,18 @@ begin
  else
 
   begin
+
+   //-----------------------------------------------------------------------
+   //-- Implementa o email da transportadora - by Edson Lima 16-3-2021    --
+   //-----------------------------------------------------------------------
+
+   if not (DMFD.FDQuery1['tra_email'] = null ) then
+    geMailTransp                       := DMFD.FDQuery1['tra_email']
+   else
+    geMailTransp                       := '';
+
+   //-----------------------------------------------------------------------
+
    DMFD.FDQuery1.First;
    While not DMFD.FDQuery1.eof do
     begin
@@ -5851,7 +5863,7 @@ begin
 
          if MessageDlg('Atenção, existe pendência de nota emitidas com mais' + chr(13) +
                        'de um dia, envie assim possível, caso de duplicidade de' + chr(13) +
-                       'nota, é só CONSULTAR! Lembre-se temos 10 dias p/enviar!' + chr(13) + chr(13) +
+                       'nota, é só CONSULTAR! Lembre-se temos 10 dias p/enviar !' + chr(13) + chr(13) +
                        'GOSTARIA DE IR PARA O ENVIO DESSA PENDENCIA AGORA ?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
           SelecionarTudo1Click(Sender);
 
@@ -8105,6 +8117,15 @@ begin
 
                 CC:=TstringList.Create;
 
+                //--------------------------------------------------------------
+                //-- Implementa o email da transp.- by Edson Lima 16-3-2021   --
+                //--------------------------------------------------------------
+
+                if not ( Trim(geMailTransp) = '' ) then
+                 FrPar.edtEnvCC.Text := FrPar.edtEnvCC.Text + ', ' + geMailTransp;
+
+                //--------------------------------------------------------------
+
                 if ( trim(FrPar.edtEnvCC.Text) <> '' ) then
                  for I := 1 to (Length(FrPar.edtEnvCC.Text)+1) do
                   begin
@@ -9695,6 +9716,15 @@ begin
 
               CC:=TstringList.Create;
 
+              //----------------------------------------------------------------
+              //-- Implementa o email da transp.- by Edson Lima 16-3-2021     --
+              //----------------------------------------------------------------
+
+              if not ( Trim(geMailTransp) = '' ) then
+               FrPar.edtEnvCC.Text := FrPar.edtEnvCC.Text + ', ' + geMailTransp;
+
+              //----------------------------------------------------------------
+
               if ( FrPar.edtEnvCC.Text <> '') then
                for I := 1 to (Length(FrPar.edtEnvCC.Text)+1) do
                 begin
@@ -10221,6 +10251,15 @@ begin
             ACBrNFe1.NotasFiscais.Clear;
             ACBrNFe1.NotasFiscais.LoadFromFile(xAux);
             CC:=TstringList.Create;
+
+            //------------------------------------------------------------------
+            //-- Implementa o email da transp.- by Edson Lima 16-3-2021       --
+            //------------------------------------------------------------------
+
+            if not ( Trim(geMailTransp) = '' ) then
+             FrPar.edtEnvCC.Text := FrPar.edtEnvCC.Text + ', ' + geMailTransp;
+
+            //------------------------------------------------------------------
 
             if ( Trim(FrPar.edtEnvCC.Text) <> '' ) then
              for I := 1 to (Length(FrPar.edtEnvCC.Text)+1) do
@@ -11925,6 +11964,15 @@ begin
        ACBrNFe1.NotasFiscais.LoadFromFile(xAux);
        CC:=TstringList.Create;
 
+       //-----------------------------------------------------------------------
+       //-- Implementa o email da transportadora - by Edson Lima 16-3-2021    --
+       //-----------------------------------------------------------------------
+
+       if not ( Trim(geMailTransp) = '' ) then
+        FrPar.edtEnvCC.Text := FrPar.edtEnvCC.Text + ', ' + geMailTransp;
+
+       //-----------------------------------------------------------------------
+
        if ( FrPar.edtEnvCC.Text <> '') then
         for I := 1 to (Length(FrPar.edtEnvCC.Text)+1) do
          begin
@@ -12723,6 +12771,15 @@ begin
 
        CC:=TstringList.Create;
 
+       //-----------------------------------------------------------------------
+       //-- Implementa o email da transportadora - by Edson Lima 16-3-2021    --
+       //-----------------------------------------------------------------------
+
+       if not ( Trim(geMailTransp) = '' ) then
+        FrPar.edtEnvCC.Text := FrPar.edtEnvCC.Text + ', ' + geMailTransp;
+
+       //-----------------------------------------------------------------------
+
        if ( FrPar.edtEnvCC.Text <> '' ) then
         begin
 
@@ -13225,6 +13282,15 @@ begin
    until ( fValidaEmail(para, 'N') );
 
   end;
+
+ //-----------------------------------------------------------------------
+ //-- Implementa o email da transportadora - by Edson Lima 16-3-2021    --
+ //-----------------------------------------------------------------------
+
+ if not ( Trim(geMailTransp) = '' ) then
+  FrPar.edtEnvCC.Text := FrPar.edtEnvCC.Text + ', ' + geMailTransp;
+
+ //-----------------------------------------------------------------------
 
  if (Para <> '') then
   begin
@@ -13829,6 +13895,15 @@ begin
            begin
 
             CC := TstringList.Create;
+
+            //------------------------------------------------------------------
+            //-- Implementa o email da transportadora - by Edson Lima 16-3-2021-
+            //------------------------------------------------------------------
+
+            if not ( Trim(geMailTransp) = '' ) then
+             FrPar.edtEnvCC.Text := FrPar.edtEnvCC.Text + ', ' + geMailTransp;
+
+            //------------------------------------------------------------------
 
             if ( FrPar.edtEnvCC.Text <> '') then
              for I := 1 to (Length(FrPar.edtEnvCC.Text)+1) do

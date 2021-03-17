@@ -9,7 +9,7 @@
 
 /****** Object:  StoredProcedure [dbo].[sp_ler_nfe_textos]    Script Date: 06/13/2017 15:14:02 ******/
 
-USE [NFe_TV]
+USE [NFe]
 GO
 /****** Object:  StoredProcedure [dbo].[sp_nfe_transmitidas]    Script Date: 16/01/2020 17:27:45 ******/
 DROP PROCEDURE [dbo].[sp_nfe_transmitidas]
@@ -1990,6 +1990,7 @@ Select distinct
 ,isnull(t3.codigo_uf,'0')                       as tra_codigo_uf
 ,isnull(t3.uf,'')                               as tra_uf
 ,isnull(t3.insc_estadual,'')                    as tra_insc_estadual
+,isnull(t3.email,'')                            as tra_email
  
 ,isnull(t4.qtd_volume,0)                        as vol_qtd_volume
 ,isnull(t4.especie,'')                          as vol_especie
