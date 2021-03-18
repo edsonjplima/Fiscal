@@ -1004,40 +1004,46 @@ begin
 
            begin
 
-            case ( StrToIntDef(DMFD.FDQuery1['nfe_indPres'], 0) ) of            // Indicativo do Intermediador - By Edson Lima 10/03/2021
+            if ( (Now() >= StrToDateTime('01/09/2021')) or
+                 (FrPar.rgTipoAmb.itemindex = 1) )  then
+             begin
 
-             2, 3, 4, 9:
+              case ( StrToIntDef(DMFD.FDQuery1['nfe_indPres'], 0) ) of            // Indicativo do Intermediador - By Edson Lima 10/03/2021
 
-              begin
+               2, 3, 4, 9:
 
-               if ( DMFD.FDQuery1['nfe_indIntermed'] = '1' ) then
                 begin
 
-                 Ide.indIntermed := iiOperacaoComIntermediador;
+                 if ( DMFD.FDQuery1['nfe_indIntermed'] = '1' ) then
+                  begin
 
-                 if not ( DMFD.FDQuery1['nfe_cnpjIntermed'] = null ) then
-                  infIntermed.cnpj         := DMFD.FDQuery1['nfe_cnpjIntermed']
+                   Ide.indIntermed := iiOperacaoComIntermediador;
+
+                   if not ( DMFD.FDQuery1['nfe_cnpjIntermed'] = null ) then
+                    infIntermed.cnpj         := DMFD.FDQuery1['nfe_cnpjIntermed']
+                   else
+                    infIntermed.cnpj         := '';
+
+                   if not ( DMFD.FDQuery1['nfe_idCadIntTran'] = null ) then
+                    infIntermed.idCadIntTran := DMFD.FDQuery1['nfe_idCadIntTran']
+                   else
+                    infIntermed.idCadIntTran := '';
+
+                  end
+
                  else
-                  infIntermed.cnpj         := '';
 
-                 if not ( DMFD.FDQuery1['nfe_idCadIntTran'] = null ) then
-                  infIntermed.idCadIntTran := DMFD.FDQuery1['nfe_idCadIntTran']
-                 else
-                  infIntermed.idCadIntTran := '';
+                  Ide.indIntermed := iiOperacaoSemIntermediador;
 
-                end
+                end;
 
                else
 
-                Ide.indIntermed := iiOperacaoSemIntermediador;
+                Ide.IndIntermed := iiOperacaoSemIntermediador; //iiSemOperacao;
 
               end;
 
-             else
-
-              Ide.IndIntermed := iiOperacaoSemIntermediador; //iiSemOperacao;
-
-            end;
+             end;
 
             case (StrToIntDef(DMFD.FDQuery1['nfe_indPres'], 0)) of
 

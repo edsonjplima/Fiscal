@@ -593,7 +593,7 @@ var
  gExpress,       gOpcao,         gNNF,        gCdloja_Consiste, gNomXML   : String;          // Parâmetros Express, Opção, Num da Nota e Código da loja p/consistência
  gCamXmlI,       gCamCert,       gSenMst,     gSenhaBD,   gdEmiConsiste   : String;          // Recebe o caminho dos, GBNFe.Ini, e a Senha Master - gSenMst, XmlI - Importação de nfe, SenhaBD
  gdEmi_Consiste, gNNF_Consiste,  gSerie_Consiste, gChave_Consiste         : String;          // Data da emissão, número da nota, serie e chave todas p/consistência
- gModelo_Consiste                                                         : string;          // modelo p/consistência
+ gModelo_Consiste, geMailTransp                                           : string;          // modelo p/consistência
  gAtuCon                                                                  : Boolean = False; // verifica se houve atualização na consulta de exclusão
  gMostraXML                                                               : Boolean = False; // Limpa o treeview - Mostra o xml
  gVerCon                                                                  : Boolean = False; // verifica se tem nota pendente em contingência FSDA
@@ -776,6 +776,18 @@ begin
  else
 
   begin
+
+   //-----------------------------------------------------------------------
+   //-- Implementa o email da transportadora - by Edson Lima 16-3-2021    --
+   //-----------------------------------------------------------------------
+
+   if not (DMFD.FDQuery1['tra_email'] = null ) then
+    geMailTransp                       := DMFD.FDQuery1['tra_email']
+   else
+    geMailTransp                       := '';
+
+   //-----------------------------------------------------------------------
+
    DMFD.FDQuery1.First;
    While not DMFD.FDQuery1.eof do
     begin
@@ -992,40 +1004,46 @@ begin
 
            begin
 
-            case ( StrToIntDef(DMFD.FDQuery1['nfe_indPres'], 0) ) of             // Indicativo do Intermediador - By Edson Lima 10/03/2021
+            if ( (Now() >= StrToDateTime('05/04/2021')) or
+                 (FrPar.rgTipoAmb.itemindex = 2) )  then
+             begin
 
-             2, 3, 4, 9:
+              case ( StrToIntDef(DMFD.FDQuery1['nfe_indPres'], 0) ) of            // Indicativo do Intermediador - By Edson Lima 10/03/2021
 
-              begin
+               2, 3, 4, 9:
 
-               if ( DMFD.FDQuery1['nfe_indIntermed'] = '1' ) then
                 begin
 
-                 Ide.indIntermed := iiOperacaoComIntermediador;
+                 if ( DMFD.FDQuery1['nfe_indIntermed'] = '1' ) then
+                  begin
 
-                 if not ( DMFD.FDQuery1['nfe_cnpjIntermed'] = null ) then
-                  infIntermed.cnpj         := DMFD.FDQuery1['nfe_cnpjIntermed']
+                   Ide.indIntermed := iiOperacaoComIntermediador;
+
+                   if not ( DMFD.FDQuery1['nfe_cnpjIntermed'] = null ) then
+                    infIntermed.cnpj         := DMFD.FDQuery1['nfe_cnpjIntermed']
+                   else
+                    infIntermed.cnpj         := '';
+
+                   if not ( DMFD.FDQuery1['nfe_idCadIntTran'] = null ) then
+                    infIntermed.idCadIntTran := DMFD.FDQuery1['nfe_idCadIntTran']
+                   else
+                    infIntermed.idCadIntTran := '';
+
+                  end
+
                  else
-                  infIntermed.cnpj         := '';
 
-                 if not ( DMFD.FDQuery1['nfe_idCadIntTran'] = null ) then
-                  infIntermed.idCadIntTran := DMFD.FDQuery1['nfe_idCadIntTran']
-                 else
-                  infIntermed.idCadIntTran := '';
+                  Ide.indIntermed := iiOperacaoSemIntermediador;
 
-                end
+                end;
 
                else
 
-                Ide.indIntermed := iiOperacaoSemIntermediador;
+                Ide.IndIntermed := iiOperacaoSemIntermediador; //iiSemOperacao;
 
               end;
 
-             else
-
-              Ide.IndIntermed := iiOperacaoSemIntermediador; //iiSemOperacao;
-
-            end;
+             end;
 
             case (StrToIntDef(DMFD.FDQuery1['nfe_indPres'], 0)) of
 
@@ -4561,6 +4579,7 @@ begin
     DMFD.FDQuery2.DisableControls;
     DMFD.FDQuery2.Close;
     DMFD.FDQuery2.SQL.Clear;
+    DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                                          ' );
     DMFD.FDQuery2.SQL.Add( 'insert into nfe_xml (                                       ' );
     DMFD.FDQuery2.SQL.Add( 'origem,                                                     ' );
     DMFD.FDQuery2.SQL.Add( 'codigo_loja,                                                ' );
@@ -5850,7 +5869,7 @@ begin
 
          if MessageDlg('Atenção, existe pendência de nota emitidas com mais' + chr(13) +
                        'de um dia, envie assim possível, caso de duplicidade de' + chr(13) +
-                       'nota, é só CONSULTAR! Lembre-se temos 10 dias p/enviar!' + chr(13) + chr(13) +
+                       'nota, é só CONSULTAR! Lembre-se temos 10 dias p/enviar !' + chr(13) + chr(13) +
                        'GOSTARIA DE IR PARA O ENVIO DESSA PENDENCIA AGORA ?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
           SelecionarTudo1Click(Sender);
 
@@ -5892,6 +5911,7 @@ begin
   DMFD.FDQuery4.DisableControls;
   DMFD.FDQuery4.Close;
   DMFD.FDQuery4.SQL.Clear;
+  DMFD.FDQuery4.SQL.Add( 'SET DATEFORMAT dmy                                ' );
   DMFD.FDQuery4.SQL.Add( 'update emitente set                               ' );
   DMFD.FDQuery4.SQL.Add( '  Certificado_NumSerie   = :Certificado_NumSerie, ' );
   DMFD.FDQuery4.SQL.Add( '  Certificado_NumSerie2  = :Certificado_NumSerie2,' );
@@ -8103,6 +8123,15 @@ begin
 
                 CC:=TstringList.Create;
 
+                //--------------------------------------------------------------
+                //-- Implementa o email da transp.- by Edson Lima 16-3-2021   --
+                //--------------------------------------------------------------
+
+                if not ( Trim(geMailTransp) = '' ) then
+                 FrPar.edtEnvCC.Text := FrPar.edtEnvCC.Text + ', ' + geMailTransp;
+
+                //--------------------------------------------------------------
+
                 if ( trim(FrPar.edtEnvCC.Text) <> '' ) then
                  for I := 1 to (Length(FrPar.edtEnvCC.Text)+1) do
                   begin
@@ -9693,6 +9722,15 @@ begin
 
               CC:=TstringList.Create;
 
+              //----------------------------------------------------------------
+              //-- Implementa o email da transp.- by Edson Lima 16-3-2021     --
+              //----------------------------------------------------------------
+
+              if not ( Trim(geMailTransp) = '' ) then
+               FrPar.edtEnvCC.Text := FrPar.edtEnvCC.Text + ', ' + geMailTransp;
+
+              //----------------------------------------------------------------
+
               if ( FrPar.edtEnvCC.Text <> '') then
                for I := 1 to (Length(FrPar.edtEnvCC.Text)+1) do
                 begin
@@ -10219,6 +10257,15 @@ begin
             ACBrNFe1.NotasFiscais.Clear;
             ACBrNFe1.NotasFiscais.LoadFromFile(xAux);
             CC:=TstringList.Create;
+
+            //------------------------------------------------------------------
+            //-- Implementa o email da transp.- by Edson Lima 16-3-2021       --
+            //------------------------------------------------------------------
+
+            if not ( Trim(geMailTransp) = '' ) then
+             FrPar.edtEnvCC.Text := FrPar.edtEnvCC.Text + ', ' + geMailTransp;
+
+            //------------------------------------------------------------------
 
             if ( Trim(FrPar.edtEnvCC.Text) <> '' ) then
              for I := 1 to (Length(FrPar.edtEnvCC.Text)+1) do
@@ -11923,6 +11970,15 @@ begin
        ACBrNFe1.NotasFiscais.LoadFromFile(xAux);
        CC:=TstringList.Create;
 
+       //-----------------------------------------------------------------------
+       //-- Implementa o email da transportadora - by Edson Lima 16-3-2021    --
+       //-----------------------------------------------------------------------
+
+       if not ( Trim(geMailTransp) = '' ) then
+        FrPar.edtEnvCC.Text := FrPar.edtEnvCC.Text + ', ' + geMailTransp;
+
+       //-----------------------------------------------------------------------
+
        if ( FrPar.edtEnvCC.Text <> '') then
         for I := 1 to (Length(FrPar.edtEnvCC.Text)+1) do
          begin
@@ -12596,6 +12652,7 @@ begin
       DMFD.FDQuery2.DisableControls;
       DMFD.FDQuery2.Close;
       DMFD.FDQuery2.SQL.Clear;
+      DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                                   ' );
       DMFD.FDQuery2.SQL.Add( 'Update NFe_CCe Set                                   ' );
       DMFD.FDQuery2.SQL.Add( '    Ver_Laiaute    = :Ver_Laiaute                    ' );
       DMFD.FDQuery2.SQL.Add( '   ,cOrgao         = :cOrgao                         ' );
@@ -12719,6 +12776,15 @@ begin
       begin
 
        CC:=TstringList.Create;
+
+       //-----------------------------------------------------------------------
+       //-- Implementa o email da transportadora - by Edson Lima 16-3-2021    --
+       //-----------------------------------------------------------------------
+
+       if not ( Trim(geMailTransp) = '' ) then
+        FrPar.edtEnvCC.Text := FrPar.edtEnvCC.Text + ', ' + geMailTransp;
+
+       //-----------------------------------------------------------------------
 
        if ( FrPar.edtEnvCC.Text <> '' ) then
         begin
@@ -13008,6 +13074,7 @@ begin
         DMFD.FDQuery2.DisableControls;
         DMFD.FDQuery2.Close;
         DMFD.FDQuery2.SQL.Clear;
+        DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                                   ' );
         DMFD.FDQuery2.SQL.Add( 'Update NFe_CCe Set                                   ' );
         DMFD.FDQuery2.SQL.Add( '    Ver_Laiaute    = :Ver_Laiaute                    ' );
         DMFD.FDQuery2.SQL.Add( '   ,cOrgao         = :cOrgao                         ' );
@@ -13221,6 +13288,15 @@ begin
    until ( fValidaEmail(para, 'N') );
 
   end;
+
+ //-----------------------------------------------------------------------
+ //-- Implementa o email da transportadora - by Edson Lima 16-3-2021    --
+ //-----------------------------------------------------------------------
+
+ if not ( Trim(geMailTransp) = '' ) then
+  FrPar.edtEnvCC.Text := FrPar.edtEnvCC.Text + ', ' + geMailTransp;
+
+ //-----------------------------------------------------------------------
 
  if (Para <> '') then
   begin
@@ -13551,6 +13627,7 @@ begin
   DMFD.FDQuery2.SQL.Clear;
 
   // Deve haver pelo menos um campo a ser gravado na tabela nfe
+  DMFD.FDQuery2.SQL.Add(  'SET DATEFORMAT dmy                                ' );
   DMFD.FDQuery2.SQL.Add(  'Update nfe set                                    ' );
   if trim(c01) <> '' then
    DMFD.FDQuery2.SQL.Add( '               ' + c01 + ' = :' + c01 + '         ' );
@@ -13824,6 +13901,15 @@ begin
            begin
 
             CC := TstringList.Create;
+
+            //------------------------------------------------------------------
+            //-- Implementa o email da transportadora - by Edson Lima 16-3-2021-
+            //------------------------------------------------------------------
+
+            if not ( Trim(geMailTransp) = '' ) then
+             FrPar.edtEnvCC.Text := FrPar.edtEnvCC.Text + ', ' + geMailTransp;
+
+            //------------------------------------------------------------------
 
             if ( FrPar.edtEnvCC.Text <> '') then
              for I := 1 to (Length(FrPar.edtEnvCC.Text)+1) do
@@ -14758,6 +14844,7 @@ begin
 
   if not DMFD.FDQryGeral1.IsEmpty then
    begin
+    DMFD.FDQryGeral1.SQL.Add( 'SET DATEFORMAT dmy                                ' );
     DMFD.FDQryGeral1.SQL.Add( 'Update NFe_CCe Set                                ' );
     DMFD.FDQryGeral1.SQL.Add( '   ,cStat          = :cStat                       ' );
     DMFD.FDQryGeral1.SQL.Add( '   ,xMotivo        = :xMotiv                      ' );
@@ -14801,6 +14888,7 @@ begin
   DMFD.FDQuery2.DisableControls;
   DMFD.FDQuery2.Close;
   DMFD.FDQuery2.SQL.Clear;
+  DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                                   ' );
   DMFD.FDQuery2.SQL.Add( 'Update NFe_CCe Set                                   ' );
   DMFD.FDQuery2.SQL.Add( '    cStat          = :cStat                          ' );
   DMFD.FDQuery2.SQL.Add( '   ,xMotivo        = :xMotivo                        ' );
@@ -14824,6 +14912,7 @@ begin
   DMFD.FDQuery2.DisableControls;
   DMFD.FDQuery2.Close;
   DMFD.FDQuery2.SQL.Clear;
+  DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                                     ' );
   DMFD.FDQuery2.SQL.Add( 'Update nfe set                                         ' );
   DMFD.FDQuery2.SQL.Add( '  cStat_CCe                = :cStat_CCe,               ' );
   DMFD.FDQuery2.SQL.Add( '  xMotivo_CCe              = :xMotivo_CCe              ' );
@@ -17040,6 +17129,7 @@ begin
  // Ler o banco de dados ERP
  DMFD.FDQryGer.Close;
  DMFD.FDQryGer.SQL.Clear;
+ DMFD.FDQryGer.SQL.Add( 'SET DATEFORMAT dmy                             ' );
  DMFD.FDQryGer.SQL.Add( 'Update   MovPed                                ' );
  DMFD.FDQryGer.SQL.Add( ' set     ChvNFe    = :sChvNFe                  ' );
  DMFD.FDQryGer.SQL.Add( ' where   CodEmp    = :iCodEmp  and             ' );
