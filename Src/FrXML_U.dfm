@@ -409,6 +409,10 @@ object FrXML: TFrXML
     object TabSheet2: TTabSheet
       Caption = 'Consulta'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object Panel5: TPanel
         Left = 0
         Top = 0
@@ -702,6 +706,10 @@ object FrXML: TFrXML
     object TabSheet1: TTabSheet
       Caption = 'Extrair XML'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object pnl1: TPanel
         Left = 0
         Top = 0

@@ -408,6 +408,7 @@ type
   function fAcessar() : boolean;                                                // function que verifica o acesso da EMP no Banco de Dados FareDac
   function fDirExists( vBDSQLSRV2016, vBDSQLSRV2017, vBDSQLSRV2019 :
                        string ) : string;                                       // function que verifica se existe o caminho do sql server
+  function fDelFileCnt( Caminho : string ) : boolean;                           // Function que deleta o arquivo criado durante o primeiro envio de contingêcia
 
   procedure pImpr();                                                            // Chama a procedure de impressão
   procedure MarcaBloco( cxTL : TcxTreeList; blMarca : Boolean; blTodos : Boolean = False ); // Marca bloco de seleção TreeList    // xe 10.1 Berlin
@@ -6752,7 +6753,7 @@ begin
    ACBrNFe1.Configuracoes.Arquivos.Salvar                        := true;
    ACBrNFe1.Configuracoes.Arquivos.EmissaoPathNFe                := true;
    ACBrNFe1.Configuracoes.Arquivos.PathNFe                       := gCamXml;
-   ACBrNFe1.Configuracoes.Arquivos.DownloadDFe.PathDownload      := gCamXml;                  // Edson Lima ; 2019-07-29
+   ACBrNFe1.Configuracoes.Arquivos.DownloadDFe.PathDownload      := gCamLog;                  // Edson Lima ; 2019-07-29
    ACBrNFe1.Configuracoes.Arquivos.PathInu                       := gCamXml;
    ACBrNFe1.Configuracoes.Arquivos.PathEvento                    := gCamXml;
    ACBrNFe1.Configuracoes.Geral.Salvar                           := true;                     // ckSalvar.Checked;
@@ -7896,10 +7897,15 @@ begin
                  if gDeuErrConsiste then Exit;
 
                  xAux := trim(gCamLog) + trim(gChave_Consiste) + '-nfe.xml';
+
                  ACBrNFe1.NotasFiscais.Clear;
                  ACBrNFe1.NotasFiscais.LoadFromFile(xAux);
 
                  grava_xml_no_banco;
+
+                 fDelFileCnt(gCamXml + Copy(gdEmiConsiste, 7, 4) +
+                                       Copy(gdEmiConsiste, 4, 2) +
+                                       '\NFe\' + gChave_Consiste + '-nfe.xml'); // Function que deleta o xml "Pedido da PQ"
 
                 end;
 
@@ -7927,9 +7933,9 @@ begin
 
       end;
 
-      pAtuNFe;                                                                  // Procedure de atualização
+     pAtuNFe;                                                                  // Procedure de atualização
 
-      exit;
+     exit;
     end;
 
    //---------------------------------------------------------------------------
@@ -10007,6 +10013,10 @@ begin
 
          except on e:Exception do
           begin
+
+           fDelFileCnt(gCamXml + Copy(gdEmiConsiste, 7, 4) +
+                                 Copy(gdEmiConsiste, 4, 2) +
+                                 '\NFe\' + gChave_Consiste + '-nfe.xml');       // Function que deleta o xml "Pedido da PQ"
 
            //consultar a nota transmitida
            ACBrNFe1.NotasFiscais.Clear;
@@ -16696,7 +16706,7 @@ begin
    ACBrNFe1.Configuracoes.Arquivos.Salvar                        := true;
    ACBrNFe1.Configuracoes.Arquivos.EmissaoPathNFe                := true;
    ACBrNFe1.Configuracoes.Arquivos.PathNFe                       := gCamXml;
-   ACBrNFe1.Configuracoes.Arquivos.DownloadDFe.PathDownload      := gCamXml;                // Edson Lima ; 2019-07-29
+   ACBrNFe1.Configuracoes.Arquivos.DownloadDFe.PathDownload      := gCamLog;                // Edson Lima ; 2019-07-29
    //ACBrNFe1.Configuracoes.Arquivos.PathCan                       := gCamXml;              // trunk2
    ACBrNFe1.Configuracoes.Arquivos.PathInu                       := gCamXml;
    //ACBrNFe1.Configuracoes.Arquivos.PathDPEC                      := gCamXml;              // trunk2
@@ -17715,7 +17725,7 @@ begin
    ACBrNFe1.Configuracoes.Arquivos.Salvar                        := true;
    ACBrNFe1.Configuracoes.Arquivos.EmissaoPathNFe                := true;
    ACBrNFe1.Configuracoes.Arquivos.PathNFe                       := gCamXml;
-   ACBrNFe1.Configuracoes.Arquivos.DownloadDFe.PathDownload      := gCamXml;                // Edson Lima ; 2019-07-29
+   ACBrNFe1.Configuracoes.Arquivos.DownloadDFe.PathDownload      := gCamLog;                // Edson Lima ; 2019-07-29
    //ACBrNFe1.Configuracoes.Arquivos.PathCan                       := gCamXml;              // trunk2
    ACBrNFe1.Configuracoes.Arquivos.PathInu                       := gCamXml;
    //ACBrNFe1.Configuracoes.Arquivos.PathDPEC                      := gCamXml;              // trunk2
@@ -18384,6 +18394,32 @@ begin
   Result := vBDSQLSRV2019
  else
   Result := '';
+
+end;
+
+//------------------------------------------------------------------------------
+// By Edson Lima ; 2021-05-11
+// Function que deleta o arquivo criado durante o primeiro envio de contingêcia
+//------------------------------------------------------------------------------
+function TFrGBNFe.fDelFileCnt(Caminho: string): boolean;
+var
+ SearchRec : TSearchRec;
+ Busca     : Integer;
+
+begin
+
+ Result := False;
+
+ Busca  := FindFirst(Caminho, faAnyFile, SearchRec);
+
+ while Busca=0 do
+  begin
+
+   DeleteFile(Caminho);
+   Busca := FindNext(SearchRec);
+   Result := True;
+
+  end;
 
 end;
 

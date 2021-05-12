@@ -1524,10 +1524,6 @@ object FrGBNFe: TFrGBNFe
         TabWidth = 80
         object TabSheet1: TTabSheet
           Caption = 'Respostas'
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object MemoResp: TMemo
             Left = 0
             Top = 0
@@ -1551,10 +1547,6 @@ object FrGBNFe: TFrGBNFe
         object TabSheet2: TTabSheet
           Caption = 'XML Resposta'
           ImageIndex = 1
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object WBResposta: TWebBrowser
             Left = 0
             Top = 0
@@ -1588,10 +1580,6 @@ object FrGBNFe: TFrGBNFe
         object TabSheet4: TTabSheet
           Caption = 'NFe && NFCe'
           ImageIndex = 3
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object trvwNFe: TTreeView
             Left = 0
             Top = 0
@@ -1608,10 +1596,6 @@ object FrGBNFe: TFrGBNFe
         object TabSheet5: TTabSheet
           Caption = 'Resposta WS'
           ImageIndex = 4
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object memoRespWS: TMemo
             Left = 0
             Top = 0
@@ -2410,7 +2394,7 @@ object FrGBNFe: TFrGBNFe
     Left = 312
     Top = 10
     Bitmap = {
-      494C0101CC041006500810001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C0101CC041006640810001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000004013000001002000000000000040
       1300000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -43083,9 +43067,13 @@ object FrGBNFe: TFrGBNFe
     Configuracoes.Geral.FormatoAlerta = 'TAG:%TAGNIVEL% ID:%ID%/%TAG%(%DESCRICAO%) - %MSG%.'
     Configuracoes.Geral.ValidarDigest = False
     Configuracoes.Geral.VersaoQRCode = veqr000
+    Configuracoes.Arquivos.Salvar = False
     Configuracoes.Arquivos.AdicionarLiteral = True
     Configuracoes.Arquivos.OrdenacaoPath = <>
     Configuracoes.Arquivos.SepararPorMes = True
+    Configuracoes.Arquivos.DownloadDFe.SepararPorNome = True
+    Configuracoes.Arquivos.SalvarEvento = True
+    Configuracoes.Arquivos.SalvarApenasNFeProcessadas = True
     Configuracoes.WebServices.UF = 'GO'
     Configuracoes.WebServices.AguardarConsultaRet = 30000
     Configuracoes.WebServices.Tentativas = 10
@@ -43095,8 +43083,8 @@ object FrGBNFe: TFrGBNFe
     Configuracoes.WebServices.QuebradeLinha = '|'
     Configuracoes.RespTec.IdCSRT = 0
     DANFE = ACBrNFeDANFeRL1
-    Left = 439
-    Top = 10
+    Left = 441
+    Top = 12
   end
   object PopupMenu2: TPopupMenu
     Images = ImageList1

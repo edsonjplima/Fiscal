@@ -386,7 +386,7 @@ begin
              begin
               if ( (vNomXML[i] = 'T') or (vNomXML[i] = '<') )  then
                begin
-                gAnoMes := Copy(vDataEmi, 1, 6);                                         // copia o ano e o mes para variável global.
+                gAnoMes := Copy(vDataEmi, 7, 4) + Copy(vDataEmi, 4, 2);         // copia o ano e o mes para variável global.
                 vDataEmi := '';
                 FrGBNFe.MemoResp.Lines.Text := UTF8Encode(DMFD.FDQuery13['xml_nota']    +// by Edson ; 2013-12-13T1555 ; acrescido as outras notas
                                                           DMFD.FDQuery13['xml_nota1']   +
@@ -646,7 +646,7 @@ begin
              begin
               if ( (vNomXML[i] = 'T') or (vNomXML[i] = '<') )  then
                begin
-                gAnoMes := Copy(vDataEmi, 1, 6);                                         // copia o ano e o mes para variável global.
+                gAnoMes := Copy(vDataEmi, 7, 4) + Copy(vDataEmi, 4, 2);         // copia o ano e o mes para variável global.
                 vDataEmi := '';
                 FrGBNFe.MemoResp.Lines.Text := UTF8Encode(DMFD.FDQuery20['xml_nota']    +// by Edson ; 2013-12-13T1555 ; acrescido as outras notas
                                                           DMFD.FDQuery20['xml_nota1']   +

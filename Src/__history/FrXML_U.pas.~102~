@@ -6,8 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, vcl.Graphics, vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   Vcl.StdCtrls, Vcl.ComCtrls, Vcl.Menus, Vcl.Buttons, Vcl.ExtCtrls,
-  IWControl, IWCompMemo, IWDBStdCtrls, Vcl.OleCtrls, SHDocVw,
-  FireDAC.Comp.Client,
+  Vcl.OleCtrls, SHDocVw, FireDAC.Comp.Client,
   DBCtrls, xmldom, XMLIntf, msxmldom, XMLDoc, cxGraphics, cxControls,
   cxLookAndFeels, cxLookAndFeelPainters, cxCustomData, cxStyles, cxTL,
   cxMaskEdit, cxTextEdit, cxCalendar, dxDateTimeWheelPicker, cxRichEdit,
@@ -183,8 +182,8 @@ begin
  TWebControl(WB_XML_Nota).ParentColor := False;
  TWebControl(WB_XML_Nota).Color := clInfoBk;
 
- //if not DMNFe.ZQuery13.Active then
- // DMNFe.ZQuery13.Open;
+ if not ( DMFD.FDQuery13.Active ) then
+  DMFD.FDQuery13.Active := True;
 
  FrXML.Edit8.Text := '';
  FrXML.Edit8.SetFocus;

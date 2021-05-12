@@ -405,6 +405,7 @@ object FrXML: TFrXML
     Style = tsFlatButtons
     TabOrder = 2
     OnChange = PageControl1Change
+    ExplicitLeft = 1
     object TabSheet2: TTabSheet
       Caption = 'Consulta'
       ImageIndex = 1

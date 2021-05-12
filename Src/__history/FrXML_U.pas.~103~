@@ -6,8 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, vcl.Graphics, vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   Vcl.StdCtrls, Vcl.ComCtrls, Vcl.Menus, Vcl.Buttons, Vcl.ExtCtrls,
-  IWControl, IWCompMemo, IWDBStdCtrls, Vcl.OleCtrls, SHDocVw,
-  FireDAC.Comp.Client,
+  Vcl.OleCtrls, SHDocVw, FireDAC.Comp.Client,
   DBCtrls, xmldom, XMLIntf, msxmldom, XMLDoc, cxGraphics, cxControls,
   cxLookAndFeels, cxLookAndFeelPainters, cxCustomData, cxStyles, cxTL,
   cxMaskEdit, cxTextEdit, cxCalendar, dxDateTimeWheelPicker, cxRichEdit,
@@ -183,8 +182,8 @@ begin
  TWebControl(WB_XML_Nota).ParentColor := False;
  TWebControl(WB_XML_Nota).Color := clInfoBk;
 
- if not DMNFe.ZQuery13.Active then
-  DMNFe.ZQuery13.Active := True;
+ if not ( DMFD.FDQuery13.Active ) then
+  DMFD.FDQuery13.Active := True;
 
  FrXML.Edit8.Text := '';
  FrXML.Edit8.SetFocus;
@@ -387,7 +386,7 @@ begin
              begin
               if ( (vNomXML[i] = 'T') or (vNomXML[i] = '<') )  then
                begin
-                gAnoMes := Copy(vDataEmi, 1, 6);                                         // copia o ano e o mes para variável global.
+                gAnoMes := Copy(vDataEmi, 7, 4) + Copy(vDataEmi, 4, 2);         // copia o ano e o mes para variável global.
                 vDataEmi := '';
                 FrGBNFe.MemoResp.Lines.Text := UTF8Encode(DMFD.FDQuery13['xml_nota']    +// by Edson ; 2013-12-13T1555 ; acrescido as outras notas
                                                           DMFD.FDQuery13['xml_nota1']   +
@@ -647,7 +646,7 @@ begin
              begin
               if ( (vNomXML[i] = 'T') or (vNomXML[i] = '<') )  then
                begin
-                gAnoMes := Copy(vDataEmi, 1, 6);                                         // copia o ano e o mes para variável global.
+                gAnoMes := Copy(vDataEmi, 7, 4) + Copy(vDataEmi, 4, 2);         // copia o ano e o mes para variável global.
                 vDataEmi := '';
                 FrGBNFe.MemoResp.Lines.Text := UTF8Encode(DMFD.FDQuery20['xml_nota']    +// by Edson ; 2013-12-13T1555 ; acrescido as outras notas
                                                           DMFD.FDQuery20['xml_nota1']   +
