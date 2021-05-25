@@ -622,7 +622,7 @@ var
  gSelField                                                                : Boolean = False; // Define a variável global de seleção de registros
  gItemSel                                                                 : Boolean = False; // Define estado inicial de item selecionado no manifesto
  gDataEmi                                                                 : tDate;           // Data usada para localizar os arquivos xml em uma operação
- gAnoMes                                                                  : String;          // String para pegar o ano e mês de uma variável qualquer
+ gAnoMes, gAnoMesGer                                                      : String;          // String para pegar o ano e mês de uma variável qualquer e o Geral ligado na data de emissão
  gTN                                                                      : String;          // Tipo de Nota
  gTcDgXml                                                                 : Boolean = False; // Tecla digitada na rotina de bd xml
  gXmlNaoEncontrado                                                        : Boolean = False; // Verifica false xml encontrado, true xml não encortrado
@@ -5662,7 +5662,6 @@ begin
     begin
      CopiaNChaveClipBoard1Click(Sender);                                        // Copia chave para área de transfer�ncia
     end
-
    else if ( (Shift = [ssCtrl, ssShift]) and (Key = Ord('P')) ) then
 
     begin
@@ -7798,7 +7797,7 @@ begin
                gSerie_Consiste  := vartostr(DMFD.FDQryGeral2['nfe_serie']);
                gChave_Consiste  := '';                                          // está sendo atribuida depois da sp_calcula_digito_chave
                gModelo_Consiste := vartostr(DMFD.FDQryGeral2['nfe_modelo']);
-
+               gAnoMesGer       := Copy(gdEmi_Consiste, 7, 4) + Copy(gdEmi_Consiste, 4, 2);
 
                gDataEmi := 0;
 
@@ -7992,6 +7991,7 @@ begin
         gModelo          := DMFD.FDQryGeral2['nfe_modelo'];
         gChave_Consiste  := '';                                                 // está sendo atribuida depois da sp_calcula_digito_chave
         gModelo_Consiste := vartostr(DMFD.FDQryGeral2['nfe_modelo']);
+        gAnoMesGer       := Copy(gdEmi_Consiste, 7, 4) + Copy(gdEmi_Consiste, 4, 2);
 
         gDataEmi := 0;
         aux := VarToStr(DMFD.FDQryGeral2['nfe_chave_nfe']);
@@ -8299,6 +8299,7 @@ begin
      gNNF_Consiste    := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
      gSerie_Consiste  := vartostr(DMFD.FDQryGeral2['nfe_serie']);
      gModelo_Consiste := vartostr(DMFD.FDQryGeral2['nfe_modelo']);
+     gAnoMesGer       := Copy(gdEmi_Consiste, 7, 4) + Copy(gdEmi_Consiste, 4, 2);
 
      // by Edson Lima ; 2017-1-5T1027 ; Atribuição de dados nas vars do ERP
      gCd_Emp := StrToIntDef(edt_CodEmp.Text, 0);
@@ -9233,6 +9234,7 @@ begin
        gSerie           := StrToIntDef(gSerie_Consiste, 0);
        gChave_Consiste  := '';                                                  // está sendo atribuida depois da sp_calcula_digito_chave
        gModelo_Consiste := vartostr(DMFD.FDQryGeral2['nfe_modelo']);
+       gAnoMesGer       := Copy(gdEmi_Consiste, 7, 4) + Copy(gdEmi_Consiste, 4, 2);
 
        xAux := trim(gCamLog) + trim(vartostr(DMFD.FDQryGeral2['nfe_chave_nfe'])) + '-nfe.xml';   /// by EL 23.2.2012 -> xAux := trim(FrPar.edtPathLogs.Text) + '\' + trim(vartostr(DMFD.FDQuery5['nfe_chave_nfe'])) + '-nfe.xml';
        vPdf := trim(gCamPdf) + trim(vartostr(DMFD.FDQryGeral2['nfe_chave_nfe'])) + '-nfe.pdf';
@@ -9299,6 +9301,7 @@ begin
        gSerie           := StrToIntDef(gSerie_Consiste, 0);
        gChave_Consiste  := '';                                                  // está sendo atribuida depois da sp_calcula_digito_chave
        gModelo_Consiste := vartostr(DMFD.FDQryGeral2['nfe_modelo']);
+       gAnoMesGer       := Copy(gdEmi_Consiste, 7, 4) + Copy(gdEmi_Consiste, 4, 2);
 
        xAux  := trim(gCamLog) + trim(vartostr(DMFD.FDQryGeral2['nfe_chave_nfe'])) + '-nfe.xml';
        vPdf := trim(gCamPdf) + trim(vartostr(DMFD.FDQryGeral2['nfe_chave_nfe'])) + '-nfe.pdf';
@@ -9407,6 +9410,7 @@ begin
       gSerie           := StrToIntDef(gSerie_Consiste, 0);
       gChave_Consiste  := '';                                                   // está sendo atribuida depois da sp_calcula_digito_chave
       gModelo_Consiste := vartostr(DMFD.FDQryGeral2['nfe_modelo']);
+      gAnoMesGer       := Copy(gdEmi_Consiste, 7, 4) + Copy(gdEmi_Consiste, 4, 2);
 
       xAux    := DMFD.FDQryGeral2['nfe_chave_nfe'];
       vChave  := xAux;
@@ -9894,6 +9898,7 @@ begin
      gModelo          := DMFD.FDQryGeral2['nfe_modelo'];
      gChave_Consiste  := '';                                                    // está sendo atribuida depois da sp_calcula_digito_chave
      gModelo_Consiste := vartostr(DMFD.FDQryGeral2['nfe_modelo']);
+     gAnoMesGer       := Copy(gdEmi_Consiste, 7, 4) + Copy(gdEmi_Consiste, 4, 2);
 
      // by Edson Lima - 2015-12-18T1559 ; verifica se a situação está null,
      // se sim elimina qualquer xml do sistema, para evitar envio de xml
@@ -10380,6 +10385,7 @@ begin
       gSerie           := StrToIntDef(gSerie_Consiste, 0);
       gChave_Consiste  := '';                                                   // está sendo atribuida depois da sp_calcula_digito_chave
       gModelo_Consiste := vartostr(DMFD.FDQryGeral2['nfe_modelo']);
+      gAnoMesGer       := Copy(gdEmi_Consiste, 7, 4) + Copy(gdEmi_Consiste, 4, 2);
 
       //procura pelo ano e mes da nota
       // ['1', '2', '3', '4', '5', '6', '7', '8', '9'], [teNormal, teContingencia, teSCAN, teDPEC, teFSDA, teSVCAN, teSVCRS, teSVCSP, teOffLine]);
@@ -11826,6 +11832,7 @@ begin
      gSerie           := StrToIntDef(gSerie_Consiste, 0);
      gChave_Consiste  := '';                                                    // está sendo atribuida depois da sp_calcula_digito_chave
      gModelo_Consiste := vartostr(DMFD.FDQryGeral2['nfe_modelo']);
+     gAnoMesGer       := Copy(gdEmi_Consiste, 7, 4) + Copy(gdEmi_Consiste, 4, 2);
 
      vAux         := DMFD.FDQryGeral2['nfe_chave_nfe'];
      if vAux <> '' then
@@ -11924,6 +11931,7 @@ begin
      gSerie           := StrToIntDef(gSerie_Consiste, 0);
      gChave_Consiste  := '';                                                    // está sendo atribuida depois da sp_calcula_digito_chave
      gModelo_Consiste := vartostr(DMFD.FDQryGeral2['nfe_modelo']);
+     gAnoMesGer       := Copy(gdEmi_Consiste, 7, 4) + Copy(gdEmi_Consiste, 4, 2);
 
      xAux := trim(vartostr(DMFD.FDQryGeral2['nfe_chave_nfe']));
      if xAux <> '' then
@@ -12461,6 +12469,7 @@ begin
  gSerie           := StrToIntDef(gSerie_Consiste, 0);
  gChave_Consiste  := '';                                                        // está sendo atribuida depois da sp_calcula_digito_chave
  gModelo_Consiste := vartostr(DMFD.FDQuery5['nfe_modelo']);
+ gAnoMesGer       := Copy(gdEmi_Consiste, 7, 4) + Copy(gdEmi_Consiste, 4, 2);
 
  fMudaVersao( FrPar.cbb2.ItemIndex, gModelo );                                  // Mudança de versão
 
@@ -12936,6 +12945,7 @@ begin
  gSerie           := StrToIntDef(gSerie_Consiste, 0);
  gChave_Consiste  := vartostr(DMFD.FDQuery5['nfe_chave_nfe']);
  gModelo_Consiste := vartostr(DMFD.FDQuery5['nfe_modelo']);
+ gAnoMesGer       := Copy(gdEmi_Consiste, 7, 4) + Copy(gdEmi_Consiste, 4, 2);
 
  // Atribuição de variáveis que serão usadas durante a transmissão
  Chave         := DMFD.FDQryGeral2['CCe_chave_nfe'];
@@ -13182,6 +13192,7 @@ begin
  gSerie           := StrToIntDef(gSerie_Consiste, 0);
  gChave_Consiste  := '';                                                        // está sendo atribuida depois da sp_calcula_digito_chave
  gModelo_Consiste := vartostr(DMFD.FDQuery5['nfe_modelo']);
+ gAnoMesGer       := Copy(gdEmi_Consiste, 7, 4) + Copy(gdEmi_Consiste, 4, 2);
 
  // Atribuição de variáveis que serão usadas durante a transmissão
  Chave         := DMFD.FDQryGeral2['CCe_chave_nfe'];
@@ -13521,6 +13532,7 @@ begin
        gSerie           := StrToIntDef(gSerie_Consiste, 0);
        gChave_Consiste  := vartostr(DMFD.FDQryGeral2['nfe_chave_nfe']);
        gModelo_Consiste := vartostr(DMFD.FDQryGeral2['nfe_modelo']);
+       gAnoMesGer       := Copy(gdEmi_Consiste, 7, 4) + Copy(gdEmi_Consiste, 4, 2);
 
        if gAtuFSD then
         begin
@@ -13776,13 +13788,14 @@ begin
        pDefineRelFR();                                                          // Define o tipo de Relatório FastReport
 
       gCdloja_Consiste := edt_CodEmp.Text;
-      gdEmi_Consiste   := vartostr(DMFD.FDQryGeral2['nfe_demi']);
+      gdEmi_Consiste   := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
       gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
       gNNF_Consiste    := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
       gSerie_Consiste  := vartostr(DMFD.FDQryGeral2['nfe_serie']);
       gSerie           := StrToIntDef(gSerie_Consiste, 0);
       gChave_Consiste  := '';                                                   // está sendo atribuida depois da sp_calcula_digito_chave
       gModelo_Consiste := vartostr(DMFD.FDQryGeral2['nfe_modelo']);
+      gAnoMesGer       := Copy(gdEmi_Consiste, 7, 4) + Copy(gdEmi_Consiste, 4, 2);
 
       xAux   := DMFD.FDQryGeral2['nfe_chave_nfe'];
       vChave := xAux;

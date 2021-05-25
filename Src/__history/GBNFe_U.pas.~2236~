@@ -7903,6 +7903,10 @@ begin
 
                  grava_xml_no_banco;
 
+                 fDelFileCnt(gCamXml + Copy(gdEmiConsiste, 7, 4) +
+                                       Copy(gdEmiConsiste, 4, 2) +
+                                       '\NFe\' + gChave_Consiste + '-nfe.xml'); // Function que deleta o xml "Pedido da PQ"
+
                 end;
 
              end
@@ -7917,8 +7921,6 @@ begin
              end;
 
            end;
-
-          fDelFileCnt(gCamXml + gChave_Consiste + '-nfe.xml');                  // Function que deleta o xml "Pedido da PQ"
 
          end;
 
@@ -9991,8 +9993,7 @@ begin
 
          Copia_Xml_PathLog(vAux, gTN);                                          // by Edson Lima 2015-10-14T1107 - trunk2 novo
 
-         fDelFileCnt(gCamXml + Copy(gdEmiConsiste, 7, 4) + Copy(gdEmiConsiste, 4, 2) + '\NFe\' + gChave_Consiste + '-nfe.xml');                        // Function que deleta o xml "Pedido da PQ"
-
+         vAux := trim(gCamLog) + trim(vAux) + '-nfe.xml';
          ACBrNFe1.NotasFiscais.Clear;
          ACBrNFe1.NotasFiscais.LoadFromFile(vAux);
 
@@ -10012,6 +10013,10 @@ begin
 
          except on e:Exception do
           begin
+
+           fDelFileCnt(gCamXml + Copy(gdEmiConsiste, 7, 4) +
+                                 Copy(gdEmiConsiste, 4, 2) +
+                                 '\NFe\' + gChave_Consiste + '-nfe.xml');       // Function que deleta o xml "Pedido da PQ"
 
            //consultar a nota transmitida
            ACBrNFe1.NotasFiscais.Clear;
@@ -18410,7 +18415,7 @@ begin
  while Busca=0 do
   begin
 
-   DeleteFile(gCamLog+SearchRec.Name);
+   DeleteFile(Caminho);
    Busca := FindNext(SearchRec);
    Result := True;
 

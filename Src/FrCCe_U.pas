@@ -1236,6 +1236,7 @@ begin
  gSerie_Consiste  := vartostr(DMFD.FDQuery5['nfe_serie']);
  gSerie           := StrToInt(gSerie_Consiste);
  gModelo_Consiste := vartostr(DMFD.FDQuery5['nfe_modelo']);
+ gAnoMesGer       := Copy(gdEmi_Consiste, 7, 4) + Copy(gdEmi_Consiste, 4, 2);
 
  // Atribuição de variáveis que serão usadas durante a transmissão
  Chave         := DMFD.FDQuery11['CCe_chave_nfe'];
