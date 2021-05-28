@@ -1,44 +1,70 @@
 ﻿[Closed Files]
-File_0=TSourceModule,'D:\Sistemas de Desenvolvimento\GBNFe\Src\ModelSupport_GBNFe\default.txvpck',0,1,55,50,72,0,0,,
-File_1=TSourceModule,'D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\PCNNFe\pcnNFe.pas',0,1,1093,41,1107,0,0,,
-File_2=TSourceModule,'D:\Sistemas de Desenvolvimento\GBNFe\Src\ufrmStatus.pas',0,1,16,5,30,0,0,,
-File_3=TSourceModule,'D:\Sistemas de Desenvolvimento\GBNFe\Src\ModelSupport_GBNFe\FrPar_U\default.txvpck',0,1,111,73,125,0,0,,
-File_4=TSourceModule,'c:\program files (x86)\embarcadero\studio\18.0\SOURCE\RTL\SYS\System.SysUtils.pas',0,1,13350,33,13358,0,0,,
-File_5=TSourceModule,'D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\ACBrNFe.pas',0,1,626,54,641,0,0,,
-File_6=TSourceModule,'D:\Sistemas de Desenvolvimento\GBNFe\Src\FrPw_U.pas',0,1,1,1,1,0,0,,
-File_7=TSourceModule,'D:\Sistemas de Desenvolvimento\GBNFe\Src\FrMens_U.pas',0,1,1,1,1,0,0,,
+File_0=TSourceModule,'D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\PCNComum\pcnRetDistDFeInt.pas',0,1,401,1,419,0,0,,
+File_1=TSourceModule,'D:\Sistemas de Desenvolvimento\GBNFe\Src\ModelSupport_GBNFe\default.txvpck',0,1,55,50,72,0,0,,
+File_2=TSourceModule,'D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\PCNNFe\pcnNFe.pas',0,1,1093,41,1107,0,0,,
+File_3=TSourceModule,'D:\Sistemas de Desenvolvimento\GBNFe\Src\ufrmStatus.pas',0,1,16,5,30,0,0,,
+File_4=TSourceModule,'D:\Sistemas de Desenvolvimento\GBNFe\Src\ModelSupport_GBNFe\FrPar_U\default.txvpck',0,1,111,73,125,0,0,,
+File_5=TSourceModule,'D:\Sistemas de Desenvolvimento\GBNFe\Src\FrPw_U.pas',0,1,1,1,1,0,0,,
+File_6=TSourceModule,'D:\Sistemas de Desenvolvimento\GBNFe\Src\FrMens_U.pas',0,1,1,1,1,0,0,,
 
 [Modules]
 Module0=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
-Module1=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe.dproj
-Module2=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrCCe_U.pas
-Module3=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrXML_U.pas
-Module4=D:\Sistemas de Desenvolvimento\GBNFe\Src\DMFD_U.pas
-Module5=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBuscaChave_U.pas
-Module6=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrImportXML_U.pas
-Module7=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrInut_U.pas
-Module8=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrPar_U.pas
-Module9=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrEmail_U.pas
-Module10=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrSeleciona_U.pas
-Count=11
+Module1=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBuscaChave_U.pas
+Module2=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrConsManif_U.pas
+Module3=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFeConfiguracoes.pas
+Module4=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\ACBrNFe.pas
+Module5=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFeWebService.pas
+Module6=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFe.pas
+Module7=c:\program files (x86)\embarcadero\studio\18.0\SOURCE\RTL\SYS\System.SysUtils.pas
+Module8=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe.dproj
+Module9=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrSeleciona_U.pas
+Module10=D:\Sistemas de Desenvolvimento\GBNFe\Src\DMFD_U.pas
+Module11=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrCCe_U.pas
+Module12=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrXML_U.pas
+Module13=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrImportXML_U.pas
+Module14=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrInut_U.pas
+Module15=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrPar_U.pas
+Module16=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrEmail_U.pas
+Count=17
 EditWindowCount=1
 
 [D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas]
 ModuleType=TSourceModule
 
+[D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBuscaChave_U.pas]
+ModuleType=TSourceModule
+
+[D:\Sistemas de Desenvolvimento\GBNFe\Src\FrConsManif_U.pas]
+ModuleType=TSourceModule
+
+[D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFeConfiguracoes.pas]
+ModuleType=TSourceModule
+
+[D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\ACBrNFe.pas]
+ModuleType=TSourceModule
+
+[D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFeWebService.pas]
+ModuleType=TSourceModule
+
+[D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFe.pas]
+ModuleType=TSourceModule
+
+[c:\program files (x86)\embarcadero\studio\18.0\SOURCE\RTL\SYS\System.SysUtils.pas]
+ModuleType=TSourceModule
+
 [D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe.dproj]
 ModuleType=TBaseProject
 
-[D:\Sistemas de Desenvolvimento\GBNFe\Src\FrCCe_U.pas]
-ModuleType=TSourceModule
-
-[D:\Sistemas de Desenvolvimento\GBNFe\Src\FrXML_U.pas]
+[D:\Sistemas de Desenvolvimento\GBNFe\Src\FrSeleciona_U.pas]
 ModuleType=TSourceModule
 
 [D:\Sistemas de Desenvolvimento\GBNFe\Src\DMFD_U.pas]
 ModuleType=TSourceModule
 
-[D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBuscaChave_U.pas]
+[D:\Sistemas de Desenvolvimento\GBNFe\Src\FrCCe_U.pas]
+ModuleType=TSourceModule
+
+[D:\Sistemas de Desenvolvimento\GBNFe\Src\FrXML_U.pas]
 ModuleType=TSourceModule
 
 [D:\Sistemas de Desenvolvimento\GBNFe\Src\FrImportXML_U.pas]
@@ -53,11 +79,8 @@ ModuleType=TSourceModule
 [D:\Sistemas de Desenvolvimento\GBNFe\Src\FrEmail_U.pas]
 ModuleType=TSourceModule
 
-[D:\Sistemas de Desenvolvimento\GBNFe\Src\FrSeleciona_U.pas]
-ModuleType=TSourceModule
-
 [EditWindow0]
-ViewCount=11
+ViewCount=17
 CurrentEditView=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
 View0=0
 View1=1
@@ -70,6 +93,12 @@ View7=7
 View8=8
 View9=9
 View10=10
+View11=11
+View12=12
+View13=13
+View14=14
+View15=15
+View16=16
 PercentageSizes=1
 Create=1
 Visible=1
@@ -100,15 +129,26 @@ TabDockRightClients=DockSite2=0,DockSite4=1
 [View0]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
-CursorX=44
-CursorY=5664
-TopLine=5650
+CursorX=1
+CursorY=18431
+TopLine=18410
 LeftCol=1
 Elisions=
 Bookmarks={0,411,2}{1,9239,1}{2,18425,1}{3,10002,1}{9,7905,1}
 EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
 
 [View1]
+CustomEditViewType=TEditView
+Module=c:\program files (x86)\embarcadero\studio\18.0\SOURCE\RTL\SYS\System.SysUtils.pas
+CursorX=19
+CursorY=9851
+TopLine=9841
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=c:\program files (x86)\embarcadero\studio\18.0\SOURCE\RTL\SYS\System.SysUtils.pas
+
+[View2]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe.dpr
 CursorX=13
@@ -119,7 +159,7 @@ Elisions=
 Bookmarks=
 EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe.dpr
 
-[View2]
+[View3]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrXML_U.pas
 CursorX=25
@@ -130,7 +170,7 @@ Elisions=
 Bookmarks=
 EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrXML_U.pas
 
-[View3]
+[View4]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrImportXML_U.pas
 CursorX=31
@@ -141,7 +181,7 @@ Elisions=
 Bookmarks=
 EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrImportXML_U.pas
 
-[View4]
+[View5]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrEmail_U.pas
 CursorX=10
@@ -152,7 +192,7 @@ Elisions=
 Bookmarks=
 EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrEmail_U.pas
 
-[View5]
+[View6]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrPar_U.pas
 CursorX=18
@@ -163,18 +203,73 @@ Elisions=
 Bookmarks=
 EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrPar_U.pas
 
-[View6]
+[View7]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBuscaChave_U.pas
-CursorX=208
-CursorY=1161
-TopLine=1152
-LeftCol=93
+CursorX=1
+CursorY=469
+TopLine=453
+LeftCol=1
 Elisions=
-Bookmarks={1,1262,1}{2,2014,1}{3,1335,1}{4,1584,1}{5,1836,1}{6,1873,1}{7,1889,1}
+Bookmarks={1,1264,1}{2,2016,1}{3,1337,1}{4,1586,1}{5,1838,1}{6,1875,1}{7,1891,1}
 EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBuscaChave_U.pas
 
-[View7]
+[View8]
+CustomEditViewType=TEditView
+Module=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\ACBrNFe.pas
+CursorX=1
+CursorY=923
+TopLine=904
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\ACBrNFe.pas
+
+[View9]
+CustomEditViewType=TEditView
+Module=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFeWebService.pas
+CursorX=1
+CursorY=226
+TopLine=208
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFeWebService.pas
+
+[View10]
+CustomEditViewType=TEditView
+Module=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFeConfiguracoes.pas
+CursorX=1
+CursorY=1232
+TopLine=1220
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFeConfiguracoes.pas
+
+[View11]
+CustomEditViewType=TEditView
+Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrConsManif_U.pas
+CursorX=1
+CursorY=179
+TopLine=163
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrConsManif_U.pas
+
+[View12]
+CustomEditViewType=TEditView
+Module=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFe.pas
+CursorX=1
+CursorY=271
+TopLine=246
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFe.pas
+
+[View13]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrCCe_U.pas
 CursorX=1
@@ -185,7 +280,7 @@ Elisions=
 Bookmarks={1,1263,1}{2,453,1}
 EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrCCe_U.pas
 
-[View8]
+[View14]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrSeleciona_U.pas
 CursorX=33
@@ -196,7 +291,7 @@ Elisions=
 Bookmarks=
 EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrSeleciona_U.pas
 
-[View9]
+[View15]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrInut_U.pas
 CursorX=13
@@ -207,7 +302,7 @@ Elisions=
 Bookmarks={1,417,1}
 EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrInut_U.pas
 
-[View10]
+[View16]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\DMFD_U.pas
 CursorX=1
@@ -222,7 +317,8 @@ EditViewName=Borland.FormDesignerView
 Count=0
 
 [Watches]
-Count=0
+Count=1
+Watch0='Caminho',256,0,18,1,0,'Watches',1
 
 [WatchWindow]
 WatchColumnWidth=120
@@ -246,7 +342,7 @@ Dockable=1
 StayOnTop=0
 
 [Breakpoints]
-Count=7
+Count=9
 Breakpoint0='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',11893,'',0,1,'',1,0,0,'',1,'','','',0,''
 Breakpoint1='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',11995,'',0,1,'',1,0,0,'',1,'','','',0,''
 Breakpoint2='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',13317,'',0,1,'',1,0,0,'',1,'','','',0,''
@@ -254,6 +350,8 @@ Breakpoint3='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',13932,'',0,1,
 Breakpoint4='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',9199,'',0,1,'',1,0,0,'',1,'','','',0,''
 Breakpoint5='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',5665,'',0,1,'',1,0,0,'',1,'','','',0,''
 Breakpoint6='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',13486,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint7='D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBuscaChave_U.pas',469,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint8='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',18426,'',0,1,'',1,0,0,'',1,'','','',0,''
 
 [EmbarcaderoWin32Debugger_AddressBreakpoints]
 Count=0
@@ -324,8 +422,8 @@ Width=2769
 Height=2988
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=2769
-ClientHeight=2988
+ClientWidth=2669
+ClientHeight=2535
 TBDockHeight=2988
 LRDockWidth=2769
 Dockable=1
@@ -474,11 +572,11 @@ State=0
 Left=0
 Top=0
 Width=2000
-Height=8721
+Height=8186
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=2000
-ClientHeight=8721
+ClientHeight=8186
 TBDockHeight=5953
 LRDockWidth=2512
 Dockable=1
@@ -865,8 +963,8 @@ Create=1
 Visible=0
 Docked=1
 State=0
-Left=8
-Top=8
+Left=1
+Top=579
 Width=3825
 Height=2988
 MaxLeft=-1
@@ -889,14 +987,14 @@ Create=1
 Visible=0
 Docked=1
 State=0
-Left=8
-Top=8
+Left=4
+Top=24
 Width=2000
-Height=9012
+Height=8477
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=2000
-ClientHeight=9012
+ClientHeight=8477
 TBDockHeight=9012
 LRDockWidth=2000
 Dockable=1

@@ -267,7 +267,6 @@ object FrBuscaChave: TFrBuscaChave
         Width = 50
       end>
     UseSystemFont = False
-    ExplicitTop = 558
   end
   object Panel2: TPanel
     Left = 0
@@ -505,7 +504,6 @@ object FrBuscaChave: TFrBuscaChave
     Height = 330
     Align = alRight
     TabOrder = 4
-    ExplicitHeight = 251
     object SpeedButton7: TSpeedButton
       Left = 6
       Top = 47
@@ -681,7 +679,6 @@ object FrBuscaChave: TFrBuscaChave
     Height = 105
     Align = alBottom
     TabOrder = 1
-    ExplicitTop = 453
     DesignSize = (
       784
       105)
@@ -1143,7 +1140,6 @@ object FrBuscaChave: TFrBuscaChave
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 5
-    ExplicitHeight = 251
     object Panel10: TPanel
       Left = 0
       Top = 0
@@ -1241,7 +1237,6 @@ object FrBuscaChave: TFrBuscaChave
       OnCustomDrawDataCell = cxTLMCustomDrawDataCell
       OnEditValueChanged = cxTLMEditValueChanged
       OnExit = cxTLMExit
-      ExplicitHeight = 225
       object cxTLMbSel: TcxTreeListColumn
         PropertiesClassName = 'TcxCheckBoxProperties'
         Properties.Alignment = taCenter

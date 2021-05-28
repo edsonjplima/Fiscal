@@ -7,7 +7,7 @@ object FrGBNFe: TFrGBNFe
   BorderIcons = []
   BorderStyle = bsSingle
   Caption = 'N F e    &    N F C e'
-  ClientHeight = 545
+  ClientHeight = 626
   ClientWidth = 731
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -261,12 +261,13 @@ object FrGBNFe: TFrGBNFe
     Left = 573
     Top = 98
     Width = 158
-    Height = 381
+    Height = 462
     Align = alRight
     BevelOuter = bvNone
     ParentShowHint = False
     ShowHint = False
     TabOrder = 1
+    ExplicitHeight = 381
     object BitBtn1: TBitBtn
       Left = 15
       Top = 6
@@ -570,12 +571,13 @@ object FrGBNFe: TFrGBNFe
     end
     object Panel8: TPanel
       Left = 0
-      Top = 305
+      Top = 386
       Width = 158
       Height = 76
       Align = alBottom
       BevelOuter = bvNone
       TabOrder = 13
+      ExplicitTop = 305
       object BitBtn10: TBitBtn
         Left = 17
         Top = 9
@@ -742,12 +744,13 @@ object FrGBNFe: TFrGBNFe
   end
   object Panel2: TPanel
     Left = 0
-    Top = 479
+    Top = 560
     Width = 731
     Height = 66
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 0
+    ExplicitTop = 479
     object StatusBar1: TStatusBar
       Left = 0
       Top = 42
@@ -820,22 +823,24 @@ object FrGBNFe: TFrGBNFe
     Left = 0
     Top = 98
     Width = 573
-    Height = 381
+    Height = 462
     Align = alClient
     TabOrder = 2
+    ExplicitHeight = 381
     object Panel6: TPanel
       Left = 1
       Top = 109
       Width = 571
-      Height = 97
+      Height = 178
       Hint = ' Mostra Notas Conforme Escolha na Visualiza'#231#227'o '
       Align = alClient
       TabOrder = 0
+      ExplicitHeight = 97
       object cxTLInut: TcxTreeList
         Left = 1
         Top = 27
         Width = 569
-        Height = 69
+        Height = 150
         Align = alClient
         Bands = <
           item
@@ -891,6 +896,7 @@ object FrGBNFe: TFrGBNFe
         OnCustomDrawDataCell = cxTLInutCustomDrawDataCell
         OnExit = cxTLExit
         OnMouseMove = cxTLMouseMove
+        ExplicitHeight = 69
         object cxTLdIDem: TcxTreeListColumn
           PropertiesClassName = 'TcxDateEditProperties'
           Properties.Alignment.Horz = taCenter
@@ -1116,7 +1122,7 @@ object FrGBNFe: TFrGBNFe
         Left = 1
         Top = 27
         Width = 569
-        Height = 69
+        Height = 150
         BorderStyle = cxcbsNone
         Align = alClient
         Bands = <
@@ -1188,6 +1194,7 @@ object FrGBNFe: TFrGBNFe
         OnExit = cxTLExit
         OnKeyDown = cxTLKeyDown
         OnMouseMove = cxTLMouseMove
+        ExplicitHeight = 69
         object cxTLbSel: TcxTreeListColumn
           PropertiesClassName = 'TcxCheckBoxProperties'
           Properties.Alignment = taCenter
@@ -1496,7 +1503,7 @@ object FrGBNFe: TFrGBNFe
     end
     object Panel7: TPanel
       Left = 1
-      Top = 206
+      Top = 287
       Width = 571
       Height = 174
       Hint = ' Janelas de Resposta e Retornos da SEFAZ'#13#10
@@ -1505,6 +1512,7 @@ object FrGBNFe: TFrGBNFe
       ShowHint = False
       TabOrder = 1
       OnMouseMove = Panel7MouseMove
+      ExplicitTop = 206
       object PageControl1: TPageControl
         Left = 1
         Top = 1
@@ -2394,7 +2402,7 @@ object FrGBNFe: TFrGBNFe
     Left = 312
     Top = 10
     Bitmap = {
-      494C0101CC041006540810001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C0101CC041006780810001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000004013000001002000000000000040
       1300000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -43070,6 +43078,7 @@ object FrGBNFe: TFrGBNFe
     Configuracoes.Arquivos.AdicionarLiteral = True
     Configuracoes.Arquivos.OrdenacaoPath = <>
     Configuracoes.Arquivos.SepararPorMes = True
+    Configuracoes.Arquivos.DownloadDFe.SepararPorNome = True
     Configuracoes.WebServices.UF = 'GO'
     Configuracoes.WebServices.AguardarConsultaRet = 30000
     Configuracoes.WebServices.Tentativas = 10
@@ -43080,7 +43089,7 @@ object FrGBNFe: TFrGBNFe
     Configuracoes.RespTec.IdCSRT = 0
     DANFE = ACBrNFeDANFeRL1
     Left = 441
-    Top = 10
+    Top = 12
   end
   object PopupMenu2: TPopupMenu
     Images = ImageList1

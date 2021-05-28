@@ -286,7 +286,7 @@ object FrConsManif: TFrConsManif
       OnMouseMove = SpeedButton4MouseMove
     end
     object SpeedButton1: TSpeedButton
-      Left = 66
+      Left = 64
       Top = 8
       Width = 102
       Height = 40

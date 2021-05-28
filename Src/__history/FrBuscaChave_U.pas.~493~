@@ -325,15 +325,15 @@ begin
  DMFD.FDQuery14.ParamByName('cSitConf').AsString          := '0';
  if Checkbox1.Checked then
   begin
-   DMFD.FDQuery14.ParamByName('DtInicial').AsString        := FormatDateTime('yyyy/mm/dd', cxdtp1.Date);
-   DMFD.FDQuery14.ParamByName('DtFinal').AsString          := FormatDateTime('yyyy/mm/dd', cxdtp2.Date);
+   DMFD.FDQuery14.ParamByName('DtInicial').Value          := StrToDateTime( FormatDateTime('dd/mm/yyyy', cxdtp1.Date) );
+   DMFD.FDQuery14.ParamByName('DtFinal').Value            := StrToDateTime( FormatDateTime('dd/mm/yyyy', cxdtp2.Date) );
   end
  else
   begin
-   DMFD.FDQuery14.ParamByName('DtInicial').AsString        := FormatDateTime('yyyy/mm/dd', now() - 180);
-   DMFD.FDQuery14.ParamByName('DtFinal').AsString          := FormatDateTime('yyyy/mm/dd', now());
+   DMFD.FDQuery14.ParamByName('DtInicial').Value          := StrToDateTime( FormatDateTime('dd/mm/yyyy', now() - 180) );
+   DMFD.FDQuery14.ParamByName('DtFinal').Value            := StrToDateTime( FormatDateTime('dd/mm/yyyy', now()) );
   end;
- DMFD.FDQuery14.ParamByName('Chave_nfe').AsString        := FrBuscaChave.Edit_Busca_Chave.Text;
+ DMFD.FDQuery14.ParamByName('Chave_nfe').AsString         := FrBuscaChave.Edit_Busca_Chave.Text;
  DMFD.FDQuery14.Open;
 
  // Zera o contador de itens selecionados
@@ -466,6 +466,13 @@ end;
 procedure TFrBuscaChave.SpeedButton4Click(Sender: TObject);
 begin
  // FrGBNFe.ACBrNFe1.Free;
+
+ FrGBNFe.fDelFileCnt(gCamXml + '*.xml');                                        // Function que deleta o xml "Arquivos temp. da pastas Xml"
+
+ FrGBNFe.fDelFileCnt(gCamXml + Copy(gdEmiConsiste, 7, 4) +
+                     Copy(gdEmiConsiste, 4, 2) +
+                     '\Down\' + '*-resNFe.xml');                                // Function que deleta o xml "Arquivos Temp. Down [*-resNFe.xml]"
+
  close;
 end;
 
@@ -1076,6 +1083,7 @@ begin
                DMFD.FDQryGeral1.DisableControls;
                DMFD.FDQryGeral1.Close;
                DMFD.FDQryGeral1.SQL.Clear;
+               DMFD.FDQryGeral1.SQL.Add( 'SET DATEFORMAT dmy                          ' );
                DMFD.FDQryGeral1.SQL.Add( 'update nfe_MDFe  set                        ' );
                DMFD.FDQryGeral1.SQL.Add( '      Xml_Aut       = :Xml_Aut              ' );
                DMFD.FDQryGeral1.SQL.Add( '   ,  Xml_Bai       = :Xml_Bai              ' );
@@ -1340,6 +1348,7 @@ begin
                      DMFD.FDQryGeral1.DisableControls;
                      DMFD.FDQryGeral1.Close;
                      DMFD.FDQryGeral1.SQL.Clear;
+                     DMFD.FDQryGeral1.SQL.Add( 'SET DATEFORMAT dmy                          ' );
                      DMFD.FDQryGeral1.SQL.Add( 'update nfe_MDFe  set                        ' );
                      DMFD.FDQryGeral1.SQL.Add( '      Xml_Bai       = :Xml_Bai              ' );
                      DMFD.FDQryGeral1.SQL.Add( '                                            ' );
@@ -1588,6 +1597,7 @@ begin
                    DMFD.FDQryGeral1.DisableControls;
                    DMFD.FDQryGeral1.Close;
                    DMFD.FDQryGeral1.SQL.Clear;
+                   DMFD.FDQryGeral1.SQL.Add( 'SET DATEFORMAT dmy                          ' );
                    DMFD.FDQryGeral1.SQL.Add( 'update nfe_MDFe  set                        ' );
                    DMFD.FDQryGeral1.SQL.Add( '      Xml_Bai       = :Xml_Bai              ' );
                    DMFD.FDQryGeral1.SQL.Add( '                                            ' );
@@ -2046,6 +2056,7 @@ begin
      DMFD.FDQryGeral1.DisableControls;
      DMFD.FDQryGeral1.Close;
      DMFD.FDQryGeral1.SQL.Clear;
+     DMFD.FDQryGeral1.SQL.Add( ' SET DATEFORMAT dmy                              ' );
      DMFD.FDQryGeral1.SQL.Add( ' Select                                          ' );
      DMFD.FDQryGeral1.SQL.Add( '  t1.CodEmp         as  Mov_CodEmp               ' );
      DMFD.FDQryGeral1.SQL.Add( ' ,t1.CnpjEmt        as  Mov_CnpjEmt              ' );
@@ -2131,6 +2142,7 @@ begin
         DMFD.FDQryGeral1.DisableControls;
         DMFD.FDQryGeral1.Close;
         DMFD.FDQryGeral1.SQL.Clear;
+        DMFD.FDQryGeral1.SQL.Add( 'SET DATEFORMAT dmy                            ' );
         DMFD.FDQryGeral1.SQL.Add( 'Insert into NFeE_Mov (                        ' );
         DMFD.FDQryGeral1.SQL.Add( '      CodEmp                                  ' );
         DMFD.FDQryGeral1.SQL.Add( '   ,  CnpjEmt                                 ' );
@@ -2324,6 +2336,7 @@ begin
       DMFD.FDQryGeral1.DisableControls;
       DMFD.FDQryGeral1.Close;
       DMFD.FDQryGeral1.SQL.Clear;
+      DMFD.FDQryGeral1.SQL.Add( ' SET DATEFORMAT dmy                             ' );
       DMFD.FDQryGeral1.SQL.Add( ' Select                                         ' );
       DMFD.FDQryGeral1.SQL.Add( '  t1.CodEmp         as  Ite_CodEmp              ' );
       DMFD.FDQryGeral1.SQL.Add( ' ,t1.CnpjEmt        as  Ite_CnpjEmt             ' );
@@ -2392,6 +2405,7 @@ begin
          DMFD.FDQryGeral1.DisableControls;
          DMFD.FDQryGeral1.Close;
          DMFD.FDQryGeral1.SQL.Clear;
+         DMFD.FDQryGeral1.SQL.Add( 'SET DATEFORMAT dmy                           ' );
          DMFD.FDQryGeral1.SQL.Add( 'Insert into NFeE_Ite (                       ' );
          DMFD.FDQryGeral1.SQL.Add( '      CodEmp                                 ' );
          DMFD.FDQryGeral1.SQL.Add( '   ,  CnpjEmt                                ' );
@@ -2530,6 +2544,7 @@ begin
            DMFD.FDQryGeral5.DisableControls;
            DMFD.FDQryGeral5.Close;
            DMFD.FDQryGeral5.SQL.Clear;
+           DMFD.FDQryGeral5.SQL.Add( ' SET DATEFORMAT dmy                       ' );
            DMFD.FDQryGeral5.SQL.Add( ' Select                                   ' );
            DMFD.FDQryGeral5.SQL.Add( '  t1.CodEmp      as  Lot_CodEmp           ' );
            DMFD.FDQryGeral5.SQL.Add( ' ,t1.CnpjEmt     as  Lot_CnpjEmt          ' );
@@ -2578,6 +2593,7 @@ begin
               DMFD.FDQryGeral5.DisableControls;
               DMFD.FDQryGeral5.Close;
               DMFD.FDQryGeral5.SQL.Clear;
+              DMFD.FDQryGeral5.SQL.Add( 'SET DATEFORMAT dmy                           ' );
               DMFD.FDQryGeral5.SQL.Add( 'Insert into NFeE_Lot (                       ' );
               DMFD.FDQryGeral5.SQL.Add( '      CodEmp                                 ' );
               DMFD.FDQryGeral5.SQL.Add( '   ,  CnpjEmt                                ' );
@@ -2669,6 +2685,7 @@ begin
       DMFD.FDQryGeral1.DisableControls;
       DMFD.FDQryGeral1.Close;
       DMFD.FDQryGeral1.SQL.Clear;
+      DMFD.FDQryGeral1.SQL.Add( ' SET DATEFORMAT dmy                             ' );
       DMFD.FDQryGeral1.SQL.Add( ' Select                                         ' );
       DMFD.FDQryGeral1.SQL.Add( '  t1.CodEmp         as  Fat_CodEmp              ' );
       DMFD.FDQryGeral1.SQL.Add( ' ,t1.CnpjEmt        as  Fat_CnpjEmt             ' );
@@ -2710,6 +2727,7 @@ begin
          DMFD.FDQryGeral1.DisableControls;
          DMFD.FDQryGeral1.Close;
          DMFD.FDQryGeral1.SQL.Clear;
+         DMFD.FDQryGeral1.SQL.Add( 'SET DATEFORMAT dmy                           ' );
          DMFD.FDQryGeral1.SQL.Add( 'Insert into NFeE_Fat (                       ' );
          DMFD.FDQryGeral1.SQL.Add( '      CodEmp                                 ' );
          DMFD.FDQryGeral1.SQL.Add( '   ,  CnpjEmt                                ' );
@@ -2818,6 +2836,7 @@ begin
      DMFD.FDQryGeral1.DisableControls;
      DMFD.FDQryGeral1.Close;
      DMFD.FDQryGeral1.SQL.Clear;
+     DMFD.FDQryGeral1.SQL.Add( ' SET DATEFORMAT dmy                              ' );
      DMFD.FDQryGeral1.SQL.Add( ' Delete from NFeE_Mov                            ' );
      DMFD.FDQryGeral1.SQL.Add( '                                                 ' );
      DMFD.FDQryGeral1.SQL.Add( '  where t1.CodEmp      = :CodEmp      and        ' );
@@ -2843,6 +2862,7 @@ begin
        DMFD.FDQryGeral1.DisableControls;
        DMFD.FDQryGeral1.Close;
        DMFD.FDQryGeral1.SQL.Clear;
+       DMFD.FDQryGeral1.SQL.Add( ' SET DATEFORMAT dmy                             ' );
        DMFD.FDQryGeral1.SQL.Add( ' Delete from NFeE_Ite                           ' );
        DMFD.FDQryGeral1.SQL.Add( '  where t1.CodEmp      = :CodEmp      and       ' );
        DMFD.FDQryGeral1.SQL.Add( '        t2.Codigo_loja = :Codigo_loja and       ' );
@@ -2876,6 +2896,7 @@ begin
        DMFD.FDQryGeral1.DisableControls;
        DMFD.FDQryGeral1.Close;
        DMFD.FDQryGeral1.SQL.Clear;
+       DMFD.FDQryGeral1.SQL.Add( ' SET DATEFORMAT dmy                             ' );
        DMFD.FDQryGeral1.SQL.Add( ' Select from NFeE_Fat                           ' );
        DMFD.FDQryGeral1.SQL.Add( '  where t1.CodEmp      = :CodEmp      and       ' );
        DMFD.FDQryGeral1.SQL.Add( '        t2.Codigo_loja = :Codigo_loja and       ' );
@@ -3065,6 +3086,7 @@ begin
  DMFD.FDQryGeral1.DisableControls;
  DMFD.FDQryGeral1.Close;
  DMFD.FDQryGeral1.SQL.Clear;
+ DMFD.FDQryGeral1.SQL.Add( 'SET DATEFORMAT dmy                               ' );
  DMFD.FDQryGeral1.SQL.Add( ' Select                                          ' );
  DMFD.FDQryGeral1.SQL.Add( '  t1.idLote        as  MDFe_idLote               ' );
  DMFD.FDQryGeral1.SQL.Add( ' ,t1.Evento        as  MDFe_Evento               ' );
@@ -3379,6 +3401,7 @@ begin
         DMFD.FDQryGeral1.DisableControls;
         DMFD.FDQryGeral1.Close;
         DMFD.FDQryGeral1.SQL.Clear;
+        DMFD.FDQryGeral1.SQL.Add( 'SET DATEFORMAT dmy                               ' );
         DMFD.FDQryGeral1.SQL.Add( ' Select                                          ' );
         DMFD.FDQryGeral1.SQL.Add( '  t1.Xml_Aut       as  MDFe_Xml_Aut              ' );
         DMFD.FDQryGeral1.SQL.Add( ' ,t1.Xml_Bai       as  MDFe_Xml_Bai              ' );
@@ -3425,6 +3448,7 @@ begin
            DMFD.FDQryGeral1.DisableControls;
            DMFD.FDQryGeral1.Close;
            DMFD.FDQryGeral1.SQL.Clear;
+           DMFD.FDQryGeral1.SQL.Add( 'SET DATEFORMAT dmy                           ' );
            DMFD.FDQryGeral1.SQL.Add( 'Insert into nfe_MDFe (                       ' );
            DMFD.FDQryGeral1.SQL.Add( '      Xml_Aut                                ' );
            DMFD.FDQryGeral1.SQL.Add( '   ,  Xml_Bai                                ' );
@@ -4359,6 +4383,7 @@ begin
 
   FD.Close;
   FD.SQL.Clear;
+  FD.SQL.Add( 'SET DATEFORMAT dmy                                            ' );
   FD.SQL.Add( 'Select distinct                                               ' );
   FD.SQL.Add( '                                                              ' );
   FD.SQL.Add( '  Checado=''''                                                ' );

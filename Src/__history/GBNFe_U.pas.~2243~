@@ -5662,7 +5662,6 @@ begin
     begin
      CopiaNChaveClipBoard1Click(Sender);                                        // Copia chave para área de transfer�ncia
     end
-
    else if ( (Shift = [ssCtrl, ssShift]) and (Key = Ord('P')) ) then
 
     begin
@@ -6753,7 +6752,7 @@ begin
    ACBrNFe1.Configuracoes.Arquivos.Salvar                        := true;
    ACBrNFe1.Configuracoes.Arquivos.EmissaoPathNFe                := true;
    ACBrNFe1.Configuracoes.Arquivos.PathNFe                       := gCamXml;
-   ACBrNFe1.Configuracoes.Arquivos.DownloadDFe.PathDownload      := gCamLog;                  // Edson Lima ; 2019-07-29
+   ACBrNFe1.Configuracoes.Arquivos.DownloadDFe.PathDownload      := gCamXml;                  // Edson Lima ; 2019-07-29
    ACBrNFe1.Configuracoes.Arquivos.PathInu                       := gCamXml;
    ACBrNFe1.Configuracoes.Arquivos.PathEvento                    := gCamXml;
    ACBrNFe1.Configuracoes.Geral.Salvar                           := true;                     // ckSalvar.Checked;
@@ -15003,7 +15002,7 @@ Begin
  FrBuscaChave.ShowModal;
 
  // By Edson Lima 14.9.2012 ; 10:10 - Atualiza grade
- pAtuNFe();
+F pAtuNFe();
 
 end;
 
@@ -16720,7 +16719,7 @@ begin
    ACBrNFe1.Configuracoes.Arquivos.Salvar                        := true;
    ACBrNFe1.Configuracoes.Arquivos.EmissaoPathNFe                := true;
    ACBrNFe1.Configuracoes.Arquivos.PathNFe                       := gCamXml;
-   ACBrNFe1.Configuracoes.Arquivos.DownloadDFe.PathDownload      := gCamLog;                // Edson Lima ; 2019-07-29
+   ACBrNFe1.Configuracoes.Arquivos.DownloadDFe.PathDownload      := gCamXml;                // Edson Lima ; 2019-07-29
    //ACBrNFe1.Configuracoes.Arquivos.PathCan                       := gCamXml;              // trunk2
    ACBrNFe1.Configuracoes.Arquivos.PathInu                       := gCamXml;
    //ACBrNFe1.Configuracoes.Arquivos.PathDPEC                      := gCamXml;              // trunk2
@@ -17739,7 +17738,7 @@ begin
    ACBrNFe1.Configuracoes.Arquivos.Salvar                        := true;
    ACBrNFe1.Configuracoes.Arquivos.EmissaoPathNFe                := true;
    ACBrNFe1.Configuracoes.Arquivos.PathNFe                       := gCamXml;
-   ACBrNFe1.Configuracoes.Arquivos.DownloadDFe.PathDownload      := gCamLog;                // Edson Lima ; 2019-07-29
+   ACBrNFe1.Configuracoes.Arquivos.DownloadDFe.PathDownload      := gCamXml;                // Edson Lima ; 2019-07-29
    //ACBrNFe1.Configuracoes.Arquivos.PathCan                       := gCamXml;              // trunk2
    ACBrNFe1.Configuracoes.Arquivos.PathInu                       := gCamXml;
    //ACBrNFe1.Configuracoes.Arquivos.PathDPEC                      := gCamXml;              // trunk2

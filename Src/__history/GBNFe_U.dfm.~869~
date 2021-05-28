@@ -2394,7 +2394,7 @@ object FrGBNFe: TFrGBNFe
     Left = 312
     Top = 10
     Bitmap = {
-      494C0101CC0410065C0810001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C0101CC041006740810001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000004013000001002000000000000040
       1300000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -43067,13 +43067,11 @@ object FrGBNFe: TFrGBNFe
     Configuracoes.Geral.FormatoAlerta = 'TAG:%TAGNIVEL% ID:%ID%/%TAG%(%DESCRICAO%) - %MSG%.'
     Configuracoes.Geral.ValidarDigest = False
     Configuracoes.Geral.VersaoQRCode = veqr000
-    Configuracoes.Arquivos.Salvar = False
     Configuracoes.Arquivos.AdicionarLiteral = True
     Configuracoes.Arquivos.OrdenacaoPath = <>
     Configuracoes.Arquivos.SepararPorMes = True
     Configuracoes.Arquivos.DownloadDFe.SepararPorNome = True
     Configuracoes.Arquivos.SalvarEvento = True
-    Configuracoes.Arquivos.SalvarApenasNFeProcessadas = True
     Configuracoes.WebServices.UF = 'GO'
     Configuracoes.WebServices.AguardarConsultaRet = 30000
     Configuracoes.WebServices.Tentativas = 10
