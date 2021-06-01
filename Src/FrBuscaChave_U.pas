@@ -879,7 +879,7 @@ var
  lMsg, vtpEvento, vdescEvento, vVerEvento, vId : string;
  TemSel, BaixaXml, vSAbortar                   : boolean;
  vdhEvento                                     : tDateTime;
- X                                             : integer;
+ X, vMDFe_Evento                               : integer;
 
 begin
 
@@ -947,7 +947,12 @@ begin
                cxTLM.Items[X].Texts[cxTLMsChv.ItemIndex],
                cxTLM.Items[X].Texts[cxTLMsEve.ItemIndex] );
 
-      if StrToInt(DMFD.FDQryGeral2['MDFe_Evento']) > 19 then                    // Veririca a qtd de evento do manifesto
+      if not (DMFD.FDQryGeral2['MDFe_Evento'] = null ) then
+       vMDFe_Evento := StrToInt(DMFD.FDQryGeral2['MDFe_Evento'])
+      else
+       vMDFe_Evento := 0;
+
+      if ( vMDFe_Evento > 19 ) then                                             // Veririca a qtd de evento do manifesto
        begin
 
         Application.Messagebox('ATT: Você já atingiu a quantidade máxima' + Chr(13) +
