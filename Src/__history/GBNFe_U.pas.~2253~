@@ -408,7 +408,7 @@ type
   function fAcessar() : boolean;                                                // function que verifica o acesso da EMP no Banco de Dados FareDac
   function fDirExists( vBDSQLSRV2016, vBDSQLSRV2017, vBDSQLSRV2019 :
                        string ) : string;                                       // function que verifica se existe o caminho do sql server
-  function fDelFileCnt( Caminho : string ) : boolean;                           // Function que deleta o arquivo criado durante o primeiro envio de contingêcia
+  function fDelFileCnt( Caminho, Mascara: string ) : boolean;                   // Function que deleta o arquivo criado durante o primeiro envio de contingêcia
 
   procedure pImpr();                                                            // Chama a procedure de impressão
   procedure MarcaBloco( cxTL : TcxTreeList; blMarca : Boolean; blTodos : Boolean = False ); // Marca bloco de seleção TreeList    // xe 10.1 Berlin
@@ -7904,7 +7904,7 @@ begin
 
                  fDelFileCnt(gCamXml + Copy(gdEmiConsiste, 7, 4) +
                                        Copy(gdEmiConsiste, 4, 2) +
-                                       '\NFe\' + gChave_Consiste + '-nfe.xml'); // Function que deleta o xml "Pedido da PQ"
+                                       '\NFe\', gChave_Consiste + '-nfe.xml');  // Function que deleta o xml "Pedido da PQ"
 
                 end;
 
@@ -10021,7 +10021,7 @@ begin
 
            fDelFileCnt(gCamXml + Copy(gdEmiConsiste, 7, 4) +
                                  Copy(gdEmiConsiste, 4, 2) +
-                                 '\NFe\' + gChave_Consiste + '-nfe.xml');       // Function que deleta o xml "Pedido da PQ"
+                                 '\NFe\', gChave_Consiste + '-nfe.xml');        // Function que deleta o xml "Pedido da PQ"
 
            //consultar a nota transmitida
            ACBrNFe1.NotasFiscais.Clear;
@@ -11982,7 +11982,7 @@ begin
 
         end;
 
-       xAux := trim(gCamLog) + trim(xAux) + '-nfe.xml';
+       xAux := trim(gCamXml) + gAnoMesGer + '\NFe\' + trim(xAux) + '-nfe.xml';  // By-EL 10-06-2021 - Antes ==> xAux := trim(gCamLog) + trim(xAux) + '-nfe.xml';
 
        ACBrNFe1.NotasFiscais.Clear;
        ACBrNFe1.NotasFiscais.LoadFromFile(xAux);
@@ -18414,7 +18414,7 @@ end;
 // By Edson Lima ; 2021-05-11
 // Function que deleta o arquivo criado durante o primeiro envio de contingêcia
 //------------------------------------------------------------------------------
-function TFrGBNFe.fDelFileCnt(Caminho: string): boolean;
+function TFrGBNFe.fDelFileCnt(Caminho, Mascara: string): boolean;
 var
  SearchRec : TSearchRec;
  Busca     : Integer;
@@ -18423,13 +18423,12 @@ begin
 
  Result := False;
 
- Busca  := FindFirst(Caminho, faAnyFile, SearchRec);
+ Busca  := FindFirst(Caminho + Mascara, faAnyFile, SearchRec);
 
  while Busca=0 do
   begin
 
-   DeleteFile(gCamXml+SearchRec.Name);
-   DeleteFile(Caminho);
+   DeleteFile(Caminho + SearchRec.Name);
    Busca := FindNext(SearchRec);
    Result := True;
 

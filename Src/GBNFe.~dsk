@@ -1,44 +1,50 @@
 ﻿[Closed Files]
-File_0=TSourceModule,'D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\PCNComum\pcnRetDistDFeInt.pas',0,1,401,1,419,0,0,,
-File_1=TSourceModule,'D:\Sistemas de Desenvolvimento\GBNFe\Src\ModelSupport_GBNFe\default.txvpck',0,1,55,50,72,0,0,,
-File_2=TSourceModule,'D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\PCNNFe\pcnNFe.pas',0,1,1093,41,1107,0,0,,
-File_3=TSourceModule,'D:\Sistemas de Desenvolvimento\GBNFe\Src\ufrmStatus.pas',0,1,16,5,30,0,0,,
-File_4=TSourceModule,'D:\Sistemas de Desenvolvimento\GBNFe\Src\ModelSupport_GBNFe\FrPar_U\default.txvpck',0,1,111,73,125,0,0,,
-File_5=TSourceModule,'D:\Sistemas de Desenvolvimento\GBNFe\Src\FrPw_U.pas',0,1,1,1,1,0,0,,
-File_6=TSourceModule,'D:\Sistemas de Desenvolvimento\GBNFe\Src\FrMens_U.pas',0,1,1,1,1,0,0,,
+File_0=TSourceModule,'c:\program files (x86)\embarcadero\studio\18.0\SOURCE\RTL\SYS\System.SysUtils.pas',0,1,9781,19,9851,0,0,,
+File_1=TSourceModule,'D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\PCNComum\pcnRetDistDFeInt.pas',0,1,401,1,419,0,0,,
+File_2=TSourceModule,'D:\Sistemas de Desenvolvimento\GBNFe\Src\ModelSupport_GBNFe\default.txvpck',0,1,55,50,72,0,0,,
+File_3=TSourceModule,'D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\PCNNFe\pcnNFe.pas',0,1,1093,41,1107,0,0,,
+File_4=TSourceModule,'D:\Sistemas de Desenvolvimento\GBNFe\Src\ufrmStatus.pas',0,1,16,5,30,0,0,,
+File_5=TSourceModule,'D:\Sistemas de Desenvolvimento\GBNFe\Src\ModelSupport_GBNFe\FrPar_U\default.txvpck',0,1,111,73,125,0,0,,
+File_6=TSourceModule,'D:\Sistemas de Desenvolvimento\GBNFe\Src\FrPw_U.pas',0,1,1,1,1,0,0,,
+File_7=TSourceModule,'D:\Sistemas de Desenvolvimento\GBNFe\Src\FrMens_U.pas',0,1,1,1,1,0,0,,
 
 [Modules]
-Module0=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBuscaChave_U.pas
-Module1=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
+Module0=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
+Module1=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe.dproj
 Module2=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrPar_U.pas
-Module3=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe.dproj
-Module4=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrConsManif_U.pas
-Module5=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFeConfiguracoes.pas
-Module6=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\ACBrNFe.pas
-Module7=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFeWebService.pas
-Module8=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFe.pas
-Module9=c:\program files (x86)\embarcadero\studio\18.0\SOURCE\RTL\SYS\System.SysUtils.pas
-Module10=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrSeleciona_U.pas
-Module11=D:\Sistemas de Desenvolvimento\GBNFe\Src\DMFD_U.pas
-Module12=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrCCe_U.pas
-Module13=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrXML_U.pas
-Module14=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrImportXML_U.pas
+Module3=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrEmail_U.pas
+Module4=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrImportXML_U.pas
+Module5=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBuscaChave_U.pas
+Module6=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrConsManif_U.pas
+Module7=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFeConfiguracoes.pas
+Module8=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\ACBrNFe.pas
+Module9=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFeWebService.pas
+Module10=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFe.pas
+Module11=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrSeleciona_U.pas
+Module12=D:\Sistemas de Desenvolvimento\GBNFe\Src\DMFD_U.pas
+Module13=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrCCe_U.pas
+Module14=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrXML_U.pas
 Module15=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrInut_U.pas
-Module16=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrEmail_U.pas
-Count=17
+Count=16
 EditWindowCount=1
-
-[D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBuscaChave_U.pas]
-ModuleType=TSourceModule
 
 [D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas]
 ModuleType=TSourceModule
 
+[D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe.dproj]
+ModuleType=TBaseProject
+
 [D:\Sistemas de Desenvolvimento\GBNFe\Src\FrPar_U.pas]
 ModuleType=TSourceModule
 
-[D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe.dproj]
-ModuleType=TBaseProject
+[D:\Sistemas de Desenvolvimento\GBNFe\Src\FrEmail_U.pas]
+ModuleType=TSourceModule
+
+[D:\Sistemas de Desenvolvimento\GBNFe\Src\FrImportXML_U.pas]
+ModuleType=TSourceModule
+
+[D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBuscaChave_U.pas]
+ModuleType=TSourceModule
 
 [D:\Sistemas de Desenvolvimento\GBNFe\Src\FrConsManif_U.pas]
 ModuleType=TSourceModule
@@ -55,9 +61,6 @@ ModuleType=TSourceModule
 [D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFe.pas]
 ModuleType=TSourceModule
 
-[c:\program files (x86)\embarcadero\studio\18.0\SOURCE\RTL\SYS\System.SysUtils.pas]
-ModuleType=TSourceModule
-
 [D:\Sistemas de Desenvolvimento\GBNFe\Src\FrSeleciona_U.pas]
 ModuleType=TSourceModule
 
@@ -70,18 +73,12 @@ ModuleType=TSourceModule
 [D:\Sistemas de Desenvolvimento\GBNFe\Src\FrXML_U.pas]
 ModuleType=TSourceModule
 
-[D:\Sistemas de Desenvolvimento\GBNFe\Src\FrImportXML_U.pas]
-ModuleType=TSourceModule
-
 [D:\Sistemas de Desenvolvimento\GBNFe\Src\FrInut_U.pas]
 ModuleType=TSourceModule
 
-[D:\Sistemas de Desenvolvimento\GBNFe\Src\FrEmail_U.pas]
-ModuleType=TSourceModule
-
 [EditWindow0]
-ViewCount=17
-CurrentEditView=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBuscaChave_U.pas
+ViewCount=16
+CurrentEditView=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
 View0=0
 View1=1
 View2=2
@@ -98,7 +95,6 @@ View12=12
 View13=13
 View14=14
 View15=15
-View16=16
 PercentageSizes=1
 Create=1
 Visible=1
@@ -129,26 +125,15 @@ TabDockRightClients=DockSite2=0,DockSite4=1
 [View0]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
-CursorX=34
-CursorY=7460
-TopLine=7444
+CursorX=1
+CursorY=13492
+TopLine=13476
 LeftCol=1
 Elisions=
-Bookmarks={0,411,2}{1,9239,1}{2,18425,1}{3,10002,1}{9,7905,1}
-EditViewName=Borland.FormDesignerView
+Bookmarks={0,7684,1}{1,9199,1}{2,18431,1}{3,10003,1}
+EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
 
 [View1]
-CustomEditViewType=TEditView
-Module=c:\program files (x86)\embarcadero\studio\18.0\SOURCE\RTL\SYS\System.SysUtils.pas
-CursorX=19
-CursorY=9851
-TopLine=9841
-LeftCol=1
-Elisions=
-Bookmarks=
-EditViewName=c:\program files (x86)\embarcadero\studio\18.0\SOURCE\RTL\SYS\System.SysUtils.pas
-
-[View2]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe.dpr
 CursorX=5
@@ -159,7 +144,7 @@ Elisions=
 Bookmarks=
 EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe.dpr
 
-[View3]
+[View2]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrXML_U.pas
 CursorX=25
@@ -170,7 +155,7 @@ Elisions=
 Bookmarks=
 EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrXML_U.pas
 
-[View4]
+[View3]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrImportXML_U.pas
 CursorX=31
@@ -181,7 +166,7 @@ Elisions=
 Bookmarks=
 EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrImportXML_U.pas
 
-[View5]
+[View4]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrEmail_U.pas
 CursorX=10
@@ -192,29 +177,29 @@ Elisions=
 Bookmarks=
 EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrEmail_U.pas
 
-[View6]
+[View5]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrPar_U.pas
 CursorX=28
 CursorY=921
-TopLine=905
+TopLine=914
 LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrPar_U.pas
 
-[View7]
+[View6]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBuscaChave_U.pas
-CursorX=25
-CursorY=936
-TopLine=1383
+CursorX=1
+CursorY=950
+TopLine=1135
 LeftCol=1
 Elisions=
-Bookmarks={1,1264,1}{2,2016,1}{3,1337,1}{4,1586,1}{5,1838,1}{6,1875,1}{7,1891,1}
+Bookmarks={1,1269,1}{2,2021,1}{3,1342,1}{4,1591,1}{5,1843,1}{6,1880,1}{7,1896,1}
 EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBuscaChave_U.pas
 
-[View8]
+[View7]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\ACBrNFe.pas
 CursorX=1
@@ -225,7 +210,7 @@ Elisions=
 Bookmarks=
 EditViewName=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\ACBrNFe.pas
 
-[View9]
+[View8]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFeWebService.pas
 CursorX=1
@@ -236,7 +221,7 @@ Elisions=
 Bookmarks=
 EditViewName=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFeWebService.pas
 
-[View10]
+[View9]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFeConfiguracoes.pas
 CursorX=1
@@ -247,7 +232,7 @@ Elisions=
 Bookmarks=
 EditViewName=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFeConfiguracoes.pas
 
-[View11]
+[View10]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrConsManif_U.pas
 CursorX=1
@@ -258,7 +243,7 @@ Elisions=
 Bookmarks=
 EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrConsManif_U.pas
 
-[View12]
+[View11]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFe.pas
 CursorX=1
@@ -269,7 +254,7 @@ Elisions=
 Bookmarks=
 EditViewName=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFe.pas
 
-[View13]
+[View12]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrCCe_U.pas
 CursorX=1
@@ -280,7 +265,7 @@ Elisions=
 Bookmarks={1,1263,1}{2,453,1}
 EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrCCe_U.pas
 
-[View14]
+[View13]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrSeleciona_U.pas
 CursorX=33
@@ -291,7 +276,7 @@ Elisions=
 Bookmarks=
 EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrSeleciona_U.pas
 
-[View15]
+[View14]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrInut_U.pas
 CursorX=13
@@ -302,7 +287,7 @@ Elisions=
 Bookmarks={1,417,1}
 EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrInut_U.pas
 
-[View16]
+[View15]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\DMFD_U.pas
 CursorX=1
@@ -342,15 +327,24 @@ Dockable=1
 StayOnTop=0
 
 [Breakpoints]
-Count=8
-Breakpoint0='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',11893,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint1='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',11995,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint2='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',13317,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint3='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',13932,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint4='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',9199,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint5='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',5665,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint6='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',13486,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint7='D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBuscaChave_U.pas',936,'',0,1,'',1,0,0,'',1,'','','',0,''
+Count=17
+Breakpoint0='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',13323,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint1='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',13938,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint2='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',9200,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint3='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',13492,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint4='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',7804,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint5='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',7800,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint6='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',11922,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint7='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',11991,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint8='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',7836,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint9='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',7899,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint10='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',7847,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint11='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',9356,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint12='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',9491,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint13='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',9493,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint14='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',11894,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint15='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',13998,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint16='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',13978,'',0,1,'',1,0,0,'',1,'','','',0,''
 
 [EmbarcaderoWin32Debugger_AddressBreakpoints]
 Count=0
@@ -504,11 +498,6 @@ LRDockWidth=1894
 Dockable=1
 StayOnTop=0
 SplitPos=155
-
-[PropInspDesignerSelection]
-ArrangeBy=Name
-SelectedItem=Caption,OnClick
-ExpandedItems=ACBrNFe=0,CasasDecimais=0,DetArmamentos=0,DetCombustiveis=0,DetMedicamentos=0,DetRastros=0,DetVeiculos=0,ExpandeLogoMarcaConfig=0,Fonte=1,"LiveBindings Designer=0","Fonte.LiveBindings Designer=0",Constraints=0,Font=0,LiveBindings=0,Margins=0
 
 [ClassBrowserTool]
 PercentageSizes=1
@@ -967,8 +956,8 @@ Create=1
 Visible=0
 Docked=1
 State=0
-Left=1
-Top=579
+Left=8
+Top=8
 Width=3825
 Height=2988
 MaxLeft=-1
