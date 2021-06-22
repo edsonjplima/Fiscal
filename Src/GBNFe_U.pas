@@ -8034,13 +8034,21 @@ begin
           _nota        := DMFD.FDQryGeral2['nfe_nnf'];
           _demi        := DMFD.FDQryGeral2['nfe_demi'];
 
+          //----------------------------
+          // Gera e envia a NF pra SEFAZ
+
           geraenvianf(FrGBNFe);
+
+          //----------------------------
 
           // Quando um simp for obrigatório e tiver vindo vazio
           if ( gSimpObg ) then
            begin
 
             gSimpObg := false;
+
+            Application.Messagebox(PWideChar('SIMP obrigatório e vazio da nota: [' + gNNF_Consiste + ' ]'), 'Atenção!',MB_ICONINFORMATION+mb_ok);
+
             exit;
 
            end;
@@ -13787,6 +13795,11 @@ begin
 
       gModelo := DMFD.FDQryGeral2['nfe_Modelo'];
       gSerie  := DMFD.FDQryGeral2['nfe_Serie'];
+
+      if (gModelo = 65) then
+       gTN              := '\NFCe\'                                             // by EL 2021-06-10 - Tipo de Nota NFCe
+      else
+       gTN              := '\NFe\';                                             // by EL 2021-06-10 - Tipo de Nota NFe
 
       if ( gCpt = 1 ) then
        pDefineRel()                                                             // Define o tipo de Relatório FortesReport

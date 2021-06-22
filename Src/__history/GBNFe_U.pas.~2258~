@@ -408,7 +408,7 @@ type
   function fAcessar() : boolean;                                                // function que verifica o acesso da EMP no Banco de Dados FareDac
   function fDirExists( vBDSQLSRV2016, vBDSQLSRV2017, vBDSQLSRV2019 :
                        string ) : string;                                       // function que verifica se existe o caminho do sql server
-  function fDelFileCnt( Caminho : string ) : boolean;                           // Function que deleta o arquivo criado durante o primeiro envio de contingêcia
+  function fDelFileCnt( Caminho, Mascara: string ) : boolean;                   // Function que deleta o arquivo criado durante o primeiro envio de contingêcia
 
   procedure pImpr();                                                            // Chama a procedure de impressão
   procedure MarcaBloco( cxTL : TcxTreeList; blMarca : Boolean; blTodos : Boolean = False ); // Marca bloco de seleção TreeList    // xe 10.1 Berlin
@@ -7808,6 +7808,7 @@ begin
                 begin
 
                  gTN                                   := '\NFCe\';
+
                  if not (DMFD.FDQryGeral2['nfe_DatNFCe']   = null) then
                   gDataEmi                             := (DMFD.FDQryGeral2['nfe_DatNFCe']);
 
@@ -7832,7 +7833,7 @@ begin
                if ( aux <> '' ) then
                 if ( (trim(DMFD.FDQryGeral2['nfe_situacao']) =  null) and ( not (gDataEmi = null))   or
                      (trim(DMFD.FDQryGeral2['nfe_situacao']) =  '')   and ( not (gDataEmi = null)) ) then
-                 pEliminaXml(aux, gTN);                                          // Elimina os xmls quando a situação for null
+                 pEliminaXml(aux, gTN);                                         // Elimina os xmls quando a situação for null
 
                //---------------------------------------------------------------
 
@@ -7904,7 +7905,7 @@ begin
 
                  fDelFileCnt(gCamXml + Copy(gdEmiConsiste, 7, 4) +
                                        Copy(gdEmiConsiste, 4, 2) +
-                                       '\NFe\' + gChave_Consiste + '-nfe.xml'); // Function que deleta o xml "Pedido da PQ"
+                                       '\NFe\', gChave_Consiste + '-nfe.xml');  // Function que deleta o xml "Pedido da PQ"
 
                 end;
 
@@ -7913,7 +7914,7 @@ begin
             else
 
              { Mostra mensagem de inconsistencia para tentativa de geração de
-               nfce (modelo 65) em contingência.                                 }
+               nfce (modelo 65) em contingência.                               }
              begin
               Application.Messagebox(PWideChar('O ENVIO DO MODELO NFCe EM CONTINGÊNCIA ESTÁ' + char(13) +
                                                'INDISPONÍVEL, ENVIE A NOTA Nº ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) + ', NO MODO NORMAL!'), 'ENVIO DE NFCe - ATENÇÃO', mb_iconstop+mb_ok);
@@ -7932,7 +7933,7 @@ begin
 
       end;
 
-     pAtuNFe;                                                                  // Procedure de atualização
+     pAtuNFe;                                                                   // Procedure de atualização
 
      exit;
     end;
@@ -10021,7 +10022,7 @@ begin
 
            fDelFileCnt(gCamXml + Copy(gdEmiConsiste, 7, 4) +
                                  Copy(gdEmiConsiste, 4, 2) +
-                                 '\NFe\' + gChave_Consiste + '-nfe.xml');       // Function que deleta o xml "Pedido da PQ"
+                                 '\NFe\', gChave_Consiste + '-nfe.xml');        // Function que deleta o xml "Pedido da PQ"
 
            //consultar a nota transmitida
            ACBrNFe1.NotasFiscais.Clear;
@@ -11918,6 +11919,11 @@ begin
      gModelo := DMFD.FDQryGeral2['nfe_Modelo'];
      gSerie  := DMFD.FDQryGeral2['nfe_Serie'];
 
+     if (gModelo = 65) then
+      gTN              := '\NFCe\'                                              // by EL 2021-06-10 - Tipo de Nota NFCe
+     else
+      gTN              := '\NFe\';                                              // by EL 2021-06-10 - Tipo de Nota NFe
+
      if ( gCpt = 1 ) then
       pDefineRel()                                                              // Define o tipo de Relatório FortesReport
      else
@@ -11982,7 +11988,7 @@ begin
 
         end;
 
-       xAux := trim(gCamLog) + trim(xAux) + '-nfe.xml';
+       xAux := trim(gCamXml) + gAnoMesGer + gTN + trim(xAux) + '-nfe.xml';      // By-EL 10-06-2021 - Antes ==> xAux := trim(gCamLog) + trim(xAux) + '-nfe.xml';
 
        ACBrNFe1.NotasFiscais.Clear;
        ACBrNFe1.NotasFiscais.LoadFromFile(xAux);
@@ -18414,7 +18420,7 @@ end;
 // By Edson Lima ; 2021-05-11
 // Function que deleta o arquivo criado durante o primeiro envio de contingêcia
 //------------------------------------------------------------------------------
-function TFrGBNFe.fDelFileCnt(Caminho: string): boolean;
+function TFrGBNFe.fDelFileCnt(Caminho, Mascara: string): boolean;
 var
  SearchRec : TSearchRec;
  Busca     : Integer;
@@ -18423,13 +18429,12 @@ begin
 
  Result := False;
 
- Busca  := FindFirst(Caminho, faAnyFile, SearchRec);
+ Busca  := FindFirst(Caminho + Mascara, faAnyFile, SearchRec);
 
  while Busca=0 do
   begin
 
-   DeleteFile(gCamXml+SearchRec.Name);
-   DeleteFile(Caminho);
+   DeleteFile(Caminho + SearchRec.Name);
    Busca := FindNext(SearchRec);
    Result := True;
 
