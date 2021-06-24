@@ -865,7 +865,7 @@ begin
 
        // by Edson Lima 2015-12-9T1007 - trunk2 novo
        xAux := '';
-       if not DMFD.FDQuery7.IsEmpty then
+        if not DMFD.FDQuery7.IsEmpty then
         xAux := vartostr(DMFD.FDQuery7['chave']);
 
        xAux := trim(gCamLog) + trim(xAux) + '-nfe.xml';
@@ -3584,7 +3584,13 @@ begin
         else
          gTN              := '\NFe\';
 
+        // Este processo segue exatamente essa sequancia
+        // 1º Gera, 2º Assina e 3º Valida
+
         pGAV();
+        Sleep(60000);                                                           // temporizador entre a geração do xml e o enviar - EL 24/06/2021
+
+        //----------------------------------------------
 
         Copia_Xml_PathLog(Aux, gTN);
 
@@ -8035,7 +8041,7 @@ begin
           _demi        := DMFD.FDQryGeral2['nfe_demi'];
 
           //----------------------------
-          // Gera e envia a NF pra SEFAZ
+          // Gera e eFnvia a NF pra SEFAZ
 
           geraenvianf(FrGBNFe);
 

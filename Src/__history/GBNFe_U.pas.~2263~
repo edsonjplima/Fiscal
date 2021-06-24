@@ -865,7 +865,7 @@ begin
 
        // by Edson Lima 2015-12-9T1007 - trunk2 novo
        xAux := '';
-       if not DMFD.FDQuery7.IsEmpty then
+        if not DMFD.FDQuery7.IsEmpty then
         xAux := vartostr(DMFD.FDQuery7['chave']);
 
        xAux := trim(gCamLog) + trim(xAux) + '-nfe.xml';
@@ -7808,6 +7808,7 @@ begin
                 begin
 
                  gTN                                   := '\NFCe\';
+
                  if not (DMFD.FDQryGeral2['nfe_DatNFCe']   = null) then
                   gDataEmi                             := (DMFD.FDQryGeral2['nfe_DatNFCe']);
 
@@ -7832,7 +7833,7 @@ begin
                if ( aux <> '' ) then
                 if ( (trim(DMFD.FDQryGeral2['nfe_situacao']) =  null) and ( not (gDataEmi = null))   or
                      (trim(DMFD.FDQryGeral2['nfe_situacao']) =  '')   and ( not (gDataEmi = null)) ) then
-                 pEliminaXml(aux, gTN);                                          // Elimina os xmls quando a situação for null
+                 pEliminaXml(aux, gTN);                                         // Elimina os xmls quando a situação for null
 
                //---------------------------------------------------------------
 
@@ -7913,7 +7914,7 @@ begin
             else
 
              { Mostra mensagem de inconsistencia para tentativa de geração de
-               nfce (modelo 65) em contingência.                                 }
+               nfce (modelo 65) em contingência.                               }
              begin
               Application.Messagebox(PWideChar('O ENVIO DO MODELO NFCe EM CONTINGÊNCIA ESTÁ' + char(13) +
                                                'INDISPONÍVEL, ENVIE A NOTA Nº ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) + ', NO MODO NORMAL!'), 'ENVIO DE NFCe - ATENÇÃO', mb_iconstop+mb_ok);
@@ -7932,7 +7933,7 @@ begin
 
       end;
 
-     pAtuNFe;                                                                  // Procedure de atualização
+     pAtuNFe;                                                                   // Procedure de atualização
 
      exit;
     end;
@@ -8033,13 +8034,21 @@ begin
           _nota        := DMFD.FDQryGeral2['nfe_nnf'];
           _demi        := DMFD.FDQryGeral2['nfe_demi'];
 
+          //----------------------------
+          // Gera e eFnvia a NF pra SEFAZ
+
           geraenvianf(FrGBNFe);
+
+          //----------------------------
 
           // Quando um simp for obrigatório e tiver vindo vazio
           if ( gSimpObg ) then
            begin
 
             gSimpObg := false;
+
+            Application.Messagebox(PWideChar('SIMP obrigatório e vazio da nota: [' + gNNF_Consiste + ' ]'), 'Atenção!',MB_ICONINFORMATION+mb_ok);
+
             exit;
 
            end;
@@ -11918,6 +11927,11 @@ begin
      gModelo := DMFD.FDQryGeral2['nfe_Modelo'];
      gSerie  := DMFD.FDQryGeral2['nfe_Serie'];
 
+     if (gModelo = 65) then
+      gTN              := '\NFCe\'                                              // by EL 2021-06-10 - Tipo de Nota NFCe
+     else
+      gTN              := '\NFe\';                                              // by EL 2021-06-10 - Tipo de Nota NFe
+
      if ( gCpt = 1 ) then
       pDefineRel()                                                              // Define o tipo de Relatório FortesReport
      else
@@ -11982,9 +11996,7 @@ begin
 
         end;
 
-       // xAux := trim(gCamLog) + trim(xAux) + '-nfe.xml';
-
-       xAux := trim(gCamXml) + gAnoMesGer + '\NFe\' + trim(xAux) + '-nfe.xml';
+       xAux := trim(gCamXml) + gAnoMesGer + gTN + trim(xAux) + '-nfe.xml';      // By-EL 10-06-2021 - Antes ==> xAux := trim(gCamLog) + trim(xAux) + '-nfe.xml';
 
        ACBrNFe1.NotasFiscais.Clear;
        ACBrNFe1.NotasFiscais.LoadFromFile(xAux);
@@ -13783,6 +13795,11 @@ begin
 
       gModelo := DMFD.FDQryGeral2['nfe_Modelo'];
       gSerie  := DMFD.FDQryGeral2['nfe_Serie'];
+
+      if (gModelo = 65) then
+       gTN              := '\NFCe\'                                             // by EL 2021-06-10 - Tipo de Nota NFCe
+      else
+       gTN              := '\NFe\';                                             // by EL 2021-06-10 - Tipo de Nota NFe
 
       if ( gCpt = 1 ) then
        pDefineRel()                                                             // Define o tipo de Relatório FortesReport
