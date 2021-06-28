@@ -267,7 +267,6 @@ object FrGBNFe: TFrGBNFe
     ParentShowHint = False
     ShowHint = False
     TabOrder = 1
-    ExplicitHeight = 381
     object BitBtn1: TBitBtn
       Left = 15
       Top = 6
@@ -577,7 +576,6 @@ object FrGBNFe: TFrGBNFe
       Align = alBottom
       BevelOuter = bvNone
       TabOrder = 13
-      ExplicitTop = 305
       object BitBtn10: TBitBtn
         Left = 17
         Top = 9
@@ -750,7 +748,6 @@ object FrGBNFe: TFrGBNFe
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitTop = 479
     object StatusBar1: TStatusBar
       Left = 0
       Top = 42
@@ -826,7 +823,6 @@ object FrGBNFe: TFrGBNFe
     Height = 371
     Align = alClient
     TabOrder = 2
-    ExplicitHeight = 381
     object Panel6: TPanel
       Left = 1
       Top = 109
@@ -835,7 +831,6 @@ object FrGBNFe: TFrGBNFe
       Hint = ' Mostra Notas Conforme Escolha na Visualiza'#231#227'o '
       Align = alClient
       TabOrder = 0
-      ExplicitHeight = 97
       object cxTLInut: TcxTreeList
         Left = 1
         Top = 27
@@ -896,7 +891,6 @@ object FrGBNFe: TFrGBNFe
         OnCustomDrawDataCell = cxTLInutCustomDrawDataCell
         OnExit = cxTLExit
         OnMouseMove = cxTLMouseMove
-        ExplicitHeight = 69
         object cxTLdIDem: TcxTreeListColumn
           PropertiesClassName = 'TcxDateEditProperties'
           Properties.Alignment.Horz = taCenter
@@ -1194,7 +1188,6 @@ object FrGBNFe: TFrGBNFe
         OnExit = cxTLExit
         OnKeyDown = cxTLKeyDown
         OnMouseMove = cxTLMouseMove
-        ExplicitHeight = 69
         object cxTLbSel: TcxTreeListColumn
           PropertiesClassName = 'TcxCheckBoxProperties'
           Properties.Alignment = taCenter
@@ -1512,7 +1505,6 @@ object FrGBNFe: TFrGBNFe
       ShowHint = False
       TabOrder = 1
       OnMouseMove = Panel7MouseMove
-      ExplicitTop = 206
       object PageControl1: TPageControl
         Left = 1
         Top = 1
@@ -1532,6 +1524,10 @@ object FrGBNFe: TFrGBNFe
         TabWidth = 80
         object TabSheet1: TTabSheet
           Caption = 'Respostas'
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object MemoResp: TMemo
             Left = 0
             Top = 0
@@ -1555,6 +1551,10 @@ object FrGBNFe: TFrGBNFe
         object TabSheet2: TTabSheet
           Caption = 'XML Resposta'
           ImageIndex = 1
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object WBResposta: TWebBrowser
             Left = 0
             Top = 0
@@ -1574,6 +1574,10 @@ object FrGBNFe: TFrGBNFe
         object TabSheet3: TTabSheet
           Caption = 'Log'
           ImageIndex = 2
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object MemoLog: TMemo
             Left = 0
             Top = 0
@@ -1588,6 +1592,10 @@ object FrGBNFe: TFrGBNFe
         object TabSheet4: TTabSheet
           Caption = 'NFe && NFCe'
           ImageIndex = 3
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object trvwNFe: TTreeView
             Left = 0
             Top = 0
@@ -1604,6 +1612,10 @@ object FrGBNFe: TFrGBNFe
         object TabSheet5: TTabSheet
           Caption = 'Resposta WS'
           ImageIndex = 4
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object memoRespWS: TMemo
             Left = 0
             Top = 0
@@ -2402,7 +2414,7 @@ object FrGBNFe: TFrGBNFe
     Left = 312
     Top = 10
     Bitmap = {
-      494C0101CC041006780810001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C0101CC041006A40810001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000004013000001002000000000000040
       1300000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -43078,13 +43090,12 @@ object FrGBNFe: TFrGBNFe
     Configuracoes.Arquivos.AdicionarLiteral = True
     Configuracoes.Arquivos.OrdenacaoPath = <>
     Configuracoes.Arquivos.SepararPorMes = True
-    Configuracoes.Arquivos.DownloadDFe.SepararPorNome = True
     Configuracoes.WebServices.UF = 'GO'
-    Configuracoes.WebServices.AguardarConsultaRet = 30000
-    Configuracoes.WebServices.Tentativas = 10
+    Configuracoes.WebServices.AguardarConsultaRet = 90000
+    Configuracoes.WebServices.Tentativas = 30
     Configuracoes.WebServices.IntervaloTentativas = 2000
     Configuracoes.WebServices.AjustaAguardaConsultaRet = True
-    Configuracoes.WebServices.TimeOut = 6000
+    Configuracoes.WebServices.TimeOut = 90000
     Configuracoes.WebServices.QuebradeLinha = '|'
     Configuracoes.RespTec.IdCSRT = 0
     DANFE = ACBrNFeDANFeRL1
@@ -43303,6 +43314,7 @@ object FrGBNFe: TFrGBNFe
     CasasDecimais.MaskqCom = ',0.00'
     CasasDecimais.MaskvUnCom = ',0.00'
     ACBrNFe = ACBrNFe1
+    Fonte.TamanhoFonteInformacoesComplementares = 7
     TamanhoLogoHeight = 100
     TamanhoLogoWidth = 100
     LogoemCima = True

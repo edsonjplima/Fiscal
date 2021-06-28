@@ -1,61 +1,46 @@
 ﻿[Closed Files]
-File_0=TSourceModule,'c:\program files (x86)\embarcadero\studio\18.0\SOURCE\RTL\SYS\System.SysUtils.pas',0,1,9781,19,9851,0,0,,
-File_1=TSourceModule,'D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\PCNComum\pcnRetDistDFeInt.pas',0,1,401,1,419,0,0,,
-File_2=TSourceModule,'D:\Sistemas de Desenvolvimento\GBNFe\Src\ModelSupport_GBNFe\default.txvpck',0,1,55,50,72,0,0,,
-File_3=TSourceModule,'D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\PCNNFe\pcnNFe.pas',0,1,1093,41,1107,0,0,,
-File_4=TSourceModule,'D:\Sistemas de Desenvolvimento\GBNFe\Src\ufrmStatus.pas',0,1,16,5,30,0,0,,
-File_5=TSourceModule,'D:\Sistemas de Desenvolvimento\GBNFe\Src\ModelSupport_GBNFe\FrPar_U\default.txvpck',0,1,111,73,125,0,0,,
-File_6=TSourceModule,'D:\Sistemas de Desenvolvimento\GBNFe\Src\FrPw_U.pas',0,1,1,1,1,0,0,,
-File_7=TSourceModule,'D:\Sistemas de Desenvolvimento\GBNFe\Src\FrMens_U.pas',0,1,1,1,1,0,0,,
+File_0=TSourceModule,'D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFe.pas',0,1,246,1,271,0,0,,
+File_1=TSourceModule,'D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFeConfiguracoes.pas',0,1,1220,1,1232,0,0,,
+File_2=TSourceModule,'D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFeWebService.pas',0,1,208,1,226,0,0,,
+File_3=TSourceModule,'D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\DANFE\NFe\Fortes\ACBrNFeDANFeRLClass.pas',0,1,271,21,285,0,0,,
+File_4=TSourceModule,'D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\ACBrNFeNotasFiscais.pas',0,1,225,1,246,0,0,,
+File_5=TSourceModule,'D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\ACBrNFe.pas',0,1,715,35,735,0,0,,
+File_6=TSourceModule,'c:\program files (x86)\embarcadero\studio\18.0\SOURCE\RTL\SYS\System.SysUtils.pas',0,1,9781,19,9851,0,0,,
+File_7=TSourceModule,'D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\PCNComum\pcnRetDistDFeInt.pas',0,1,401,1,419,0,0,,
+File_8=TSourceModule,'D:\Sistemas de Desenvolvimento\GBNFe\Src\ModelSupport_GBNFe\default.txvpck',0,1,55,50,72,0,0,,
+File_9=TSourceModule,'D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\PCNNFe\pcnNFe.pas',0,1,1093,41,1107,0,0,,
+File_10=TSourceModule,'D:\Sistemas de Desenvolvimento\GBNFe\Src\ufrmStatus.pas',0,1,16,5,30,0,0,,
+File_11=TSourceModule,'D:\Sistemas de Desenvolvimento\GBNFe\Src\ModelSupport_GBNFe\FrPar_U\default.txvpck',0,1,111,73,125,0,0,,
+File_12=TSourceModule,'D:\Sistemas de Desenvolvimento\GBNFe\Src\FrPw_U.pas',0,1,1,1,1,0,0,,
+File_13=TSourceModule,'D:\Sistemas de Desenvolvimento\GBNFe\Src\FrMens_U.pas',0,1,1,1,1,0,0,,
 
 [Modules]
-Module0=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\DANFE\NFe\Fortes\ACBrNFeDANFeRLClass.pas
-Module1=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe.dproj
-Module2=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\ACBrNFeNotasFiscais.pas
-Module3=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
-Module4=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\ACBrNFe.pas
-Module5=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrConsManif_U.pas
-Module6=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFeConfiguracoes.pas
-Module7=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFeWebService.pas
-Module8=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBuscaChave_U.pas
-Module9=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrCCe_U.pas
-Module10=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrPar_U.pas
-Module11=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrEmail_U.pas
-Module12=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrImportXML_U.pas
-Module13=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFe.pas
-Module14=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrSeleciona_U.pas
-Module15=D:\Sistemas de Desenvolvimento\GBNFe\Src\DMFD_U.pas
-Module16=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrXML_U.pas
-Module17=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrInut_U.pas
-Count=18
+Module0=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
+Module1=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrConsManif_U.pas
+Module2=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBuscaChave_U.pas
+Module3=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe.dproj
+Module4=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrCCe_U.pas
+Module5=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrPar_U.pas
+Module6=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrEmail_U.pas
+Module7=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrImportXML_U.pas
+Module8=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrSeleciona_U.pas
+Module9=D:\Sistemas de Desenvolvimento\GBNFe\Src\DMFD_U.pas
+Module10=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrXML_U.pas
+Module11=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrInut_U.pas
+Count=12
 EditWindowCount=1
 
-[D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\DANFE\NFe\Fortes\ACBrNFeDANFeRLClass.pas]
-ModuleType=TSourceModule
-
-[D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe.dproj]
-ModuleType=TBaseProject
-
-[D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\ACBrNFeNotasFiscais.pas]
-ModuleType=TSourceModule
-
 [D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas]
-ModuleType=TSourceModule
-
-[D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\ACBrNFe.pas]
 ModuleType=TSourceModule
 
 [D:\Sistemas de Desenvolvimento\GBNFe\Src\FrConsManif_U.pas]
 ModuleType=TSourceModule
 
-[D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFeConfiguracoes.pas]
-ModuleType=TSourceModule
-
-[D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFeWebService.pas]
-ModuleType=TSourceModule
-
 [D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBuscaChave_U.pas]
 ModuleType=TSourceModule
+
+[D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe.dproj]
+ModuleType=TBaseProject
 
 [D:\Sistemas de Desenvolvimento\GBNFe\Src\FrCCe_U.pas]
 ModuleType=TSourceModule
@@ -67,9 +52,6 @@ ModuleType=TSourceModule
 ModuleType=TSourceModule
 
 [D:\Sistemas de Desenvolvimento\GBNFe\Src\FrImportXML_U.pas]
-ModuleType=TSourceModule
-
-[D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFe.pas]
 ModuleType=TSourceModule
 
 [D:\Sistemas de Desenvolvimento\GBNFe\Src\FrSeleciona_U.pas]
@@ -85,8 +67,8 @@ ModuleType=TSourceModule
 ModuleType=TSourceModule
 
 [EditWindow0]
-ViewCount=18
-CurrentEditView=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\DANFE\NFe\Fortes\ACBrNFeDANFeRLClass.pas
+ViewCount=12
+CurrentEditView=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
 View0=0
 View1=1
 View2=2
@@ -99,12 +81,6 @@ View8=8
 View9=9
 View10=10
 View11=11
-View12=12
-View13=13
-View14=14
-View15=15
-View16=16
-View17=17
 PercentageSizes=1
 Create=1
 Visible=1
@@ -135,9 +111,9 @@ TabDockRightClients=DockSite2=0,DockSite4=1
 [View0]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
-CursorX=36
-CursorY=3359
-TopLine=3346
+CursorX=29
+CursorY=3675
+TopLine=3661
 LeftCol=1
 Elisions=
 Bookmarks={0,7690,1}{1,9213,1}{2,18450,1}{3,10017,1}
@@ -211,61 +187,6 @@ EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBuscaChave_U.pas
 
 [View7]
 CustomEditViewType=TEditView
-Module=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\ACBrNFe.pas
-CursorX=35
-CursorY=735
-TopLine=715
-LeftCol=1
-Elisions=
-Bookmarks=
-EditViewName=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\ACBrNFe.pas
-
-[View8]
-CustomEditViewType=TEditView
-Module=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\ACBrNFeNotasFiscais.pas
-CursorX=1
-CursorY=246
-TopLine=225
-LeftCol=1
-Elisions=
-Bookmarks=
-EditViewName=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\ACBrNFeNotasFiscais.pas
-
-[View9]
-CustomEditViewType=TEditView
-Module=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\DANFE\NFe\Fortes\ACBrNFeDANFeRLClass.pas
-CursorX=1
-CursorY=237
-TopLine=271
-LeftCol=1
-Elisions=
-Bookmarks=
-EditViewName=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\DANFE\NFe\Fortes\ACBrNFeDANFeRLClass.pas
-
-[View10]
-CustomEditViewType=TEditView
-Module=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFeWebService.pas
-CursorX=1
-CursorY=226
-TopLine=208
-LeftCol=1
-Elisions=
-Bookmarks=
-EditViewName=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFeWebService.pas
-
-[View11]
-CustomEditViewType=TEditView
-Module=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFeConfiguracoes.pas
-CursorX=1
-CursorY=1232
-TopLine=1220
-LeftCol=1
-Elisions=
-Bookmarks=
-EditViewName=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFeConfiguracoes.pas
-
-[View12]
-CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrConsManif_U.pas
 CursorX=1
 CursorY=179
@@ -275,18 +196,7 @@ Elisions=
 Bookmarks=
 EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrConsManif_U.pas
 
-[View13]
-CustomEditViewType=TEditView
-Module=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFe.pas
-CursorX=1
-CursorY=271
-TopLine=246
-LeftCol=1
-Elisions=
-Bookmarks=
-EditViewName=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFe.pas
-
-[View14]
+[View8]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrCCe_U.pas
 CursorX=32
@@ -297,7 +207,7 @@ Elisions=
 Bookmarks={1,1263,1}{2,453,1}
 EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrCCe_U.pas
 
-[View15]
+[View9]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrSeleciona_U.pas
 CursorX=33
@@ -308,7 +218,7 @@ Elisions=
 Bookmarks=
 EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrSeleciona_U.pas
 
-[View16]
+[View10]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrInut_U.pas
 CursorX=13
@@ -319,7 +229,7 @@ Elisions=
 Bookmarks={1,417,1}
 EditViewName=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrInut_U.pas
 
-[View17]
+[View11]
 CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\GBNFe\Src\DMFD_U.pas
 CursorX=1
@@ -359,7 +269,7 @@ Dockable=1
 StayOnTop=0
 
 [Breakpoints]
-Count=19
+Count=17
 Breakpoint0='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',13337,'',0,1,'',1,0,0,'',1,'','','',0,''
 Breakpoint1='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',9214,'',0,1,'',1,0,0,'',1,'','','',0,''
 Breakpoint2='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',7810,'',0,1,'',1,0,0,'',1,'','','',0,''
@@ -375,10 +285,8 @@ Breakpoint11='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',9507,'',0,1,
 Breakpoint12='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',11908,'',0,1,'',1,0,0,'',1,'','','',0,''
 Breakpoint13='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',10032,'',0,1,'',1,0,0,'',1,'','','',0,''
 Breakpoint14='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',8046,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint15='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',3479,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint16='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',3477,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint17='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',3359,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint18='D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\ACBrNFeNotasFiscais.pas',243,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint15='D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas',3359,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint16='D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\ACBrNFeNotasFiscais.pas',243,'',0,1,'',1,0,0,'',1,'','','',0,''
 
 [EmbarcaderoWin32Debugger_AddressBreakpoints]
 Count=0
@@ -443,13 +351,13 @@ Create=1
 Visible=0
 Docked=1
 State=0
-Left=0
-Top=0
-Width=2769
+Left=1
+Top=27
+Width=9988
 Height=2988
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=2769
+ClientWidth=9988
 ClientHeight=2988
 TBDockHeight=2988
 LRDockWidth=2769
@@ -533,6 +441,11 @@ Dockable=1
 StayOnTop=0
 SplitPos=155
 
+[PropInspDesignerSelection]
+ArrangeBy=Name
+SelectedItem=Action,
+ExpandedItems=Anchors=0,BorderIcons=0,Constraints=0,Font=0,GlassFrame=0
+
 [ClassBrowserTool]
 PercentageSizes=1
 Create=1
@@ -599,11 +512,11 @@ State=0
 Left=0
 Top=0
 Width=2000
-Height=8186
+Height=8721
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=2000
-ClientHeight=8186
+ClientHeight=8721
 TBDockHeight=5953
 LRDockWidth=2512
 Dockable=1
@@ -1014,14 +927,14 @@ Create=1
 Visible=0
 Docked=1
 State=0
-Left=4
-Top=24
+Left=8
+Top=8
 Width=2000
-Height=8477
+Height=9012
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=2000
-ClientHeight=8477
+ClientHeight=9012
 TBDockHeight=9012
 LRDockWidth=2000
 Dockable=1

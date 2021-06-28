@@ -3588,7 +3588,7 @@ begin
         // 1º Gera, 2º Assina e 3º Valida
 
         pGAV();
-        Sleep(60000);                                                           // temporizador entre a geração do xml e o enviar - EL 24/06/2021
+        Sleep(30000);                                                           // temporizador entre a geração do xml e o enviar - EL 24/06/2021
 
         //----------------------------------------------
 

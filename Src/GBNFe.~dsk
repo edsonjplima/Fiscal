@@ -10,13 +10,13 @@ File_7=TSourceModule,'D:\Sistemas de Desenvolvimento\GBNFe\Src\FrMens_U.pas',0,1
 
 [Modules]
 Module0=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\DANFE\NFe\Fortes\ACBrNFeDANFeRLClass.pas
-Module1=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\ACBrNFeNotasFiscais.pas
-Module2=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
-Module3=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\ACBrNFe.pas
-Module4=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrConsManif_U.pas
-Module5=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFeConfiguracoes.pas
-Module6=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFeWebService.pas
-Module7=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe.dproj
+Module1=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe.dproj
+Module2=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\ACBrNFeNotasFiscais.pas
+Module3=D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe_U.pas
+Module4=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\ACBrNFe.pas
+Module5=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrConsManif_U.pas
+Module6=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFeConfiguracoes.pas
+Module7=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFeWebService.pas
 Module8=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBuscaChave_U.pas
 Module9=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrCCe_U.pas
 Module10=D:\Sistemas de Desenvolvimento\GBNFe\Src\FrPar_U.pas
@@ -32,6 +32,9 @@ EditWindowCount=1
 
 [D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\DANFE\NFe\Fortes\ACBrNFeDANFeRLClass.pas]
 ModuleType=TSourceModule
+
+[D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe.dproj]
+ModuleType=TBaseProject
 
 [D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\ACBrNFeNotasFiscais.pas]
 ModuleType=TSourceModule
@@ -50,9 +53,6 @@ ModuleType=TSourceModule
 
 [D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrDFeWebService.pas]
 ModuleType=TSourceModule
-
-[D:\Sistemas de Desenvolvimento\GBNFe\Src\GBNFe.dproj]
-ModuleType=TBaseProject
 
 [D:\Sistemas de Desenvolvimento\GBNFe\Src\FrBuscaChave_U.pas]
 ModuleType=TSourceModule
@@ -236,7 +236,7 @@ CustomEditViewType=TEditView
 Module=D:\Sistemas de Desenvolvimento\COMPONENTES\ACBr\Fontes\ACBrDFe\ACBrNFe\DANFE\NFe\Fortes\ACBrNFeDANFeRLClass.pas
 CursorX=1
 CursorY=237
-TopLine=265
+TopLine=271
 LeftCol=1
 Elisions=
 Bookmarks=
@@ -443,8 +443,8 @@ Create=1
 Visible=0
 Docked=1
 State=0
-Left=1
-Top=579
+Left=0
+Top=0
 Width=2769
 Height=2988
 MaxLeft=-1
@@ -599,11 +599,11 @@ State=0
 Left=0
 Top=0
 Width=2000
-Height=8721
+Height=8186
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=2000
-ClientHeight=8721
+ClientHeight=8186
 TBDockHeight=5953
 LRDockWidth=2512
 Dockable=1
@@ -990,8 +990,8 @@ Create=1
 Visible=0
 Docked=1
 State=0
-Left=1
-Top=579
+Left=8
+Top=8
 Width=3825
 Height=2988
 MaxLeft=-1
@@ -1014,14 +1014,14 @@ Create=1
 Visible=0
 Docked=1
 State=0
-Left=8
-Top=8
+Left=4
+Top=24
 Width=2000
-Height=9012
+Height=8477
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=2000
-ClientHeight=9012
+ClientHeight=8477
 TBDockHeight=9012
 LRDockWidth=2000
 Dockable=1
