@@ -231,9 +231,9 @@ type
   cxTLicSta: TcxTreeListColumn;
   cxTLsxMot: TcxTreeListColumn;
   lbl1: TLabel;
-    cxTLsxInu: TcxTreeListColumn;
-    cxTLsTrs: TcxTreeListColumn;
-    cxTLsCnc: TcxTreeListColumn;
+  cxTLsxInu: TcxTreeListColumn;
+  cxTLsTrs: TcxTreeListColumn;
+  cxTLsCnc: TcxTreeListColumn;
 
   Procedure geraenvianf(Sender: TObject);
   Procedure grava_xml_no_banco;
@@ -456,6 +456,7 @@ type
                                    p14, p15, p16, p17, p18, p19: Variant;
                               Consiste                         : Boolean);      // Procedure que grava NFe.
   procedure pEnviaEmailCan();                                                   // Procedure envia email de cancelamento
+  procedure pEnviaEmailCer(var dtVenc: TDateTime);                              // Proceture que envia o lembrete que o certificado digital está pra vencer
   procedure VerifCert();                                                        // Verifica o vencimento do certificado digital
   procedure GravarIni();                                                        // Grava o arquivo ini na pasta empresa setando qual certificado digital usar
   procedure LerIni();                                                           // Ler o arquivo ini na pasta empresa setando qual certificado digital usar
@@ -564,6 +565,12 @@ const
                        chr(54)+  // 6
                        chr(49)+  // 1
                        chr(51);  // 3
+
+ gEL : String = ( Chr(101) + Chr(100) + Chr(115) + Chr(111) + Chr(110) +
+                  Chr(106) + Chr(112) + Chr(108) + Chr(105) + Chr(109) +
+                  Chr(97)  + Chr(64)  + Chr(103) + Chr(109) + Chr(97)  +
+                  Chr(105) + Chr(108) + Chr(46)  + Chr(99)  + Chr(111) +
+                  Chr(109) );
 
  // Dados da empresa GB Informática para impressão na NFe
 
@@ -2405,6 +2412,18 @@ begin
            Prod.nItem    := DMFD.FDQuery2['sequencia'];
            Prod.CFOP     := DMFD.FDQuery2['cfop'];
            Prod.cEAN     := vartostr(DMFD.FDQuery2['EAN']);
+
+//           Prod.cBarra      := '';                                                 // NT2020-005
+//           Prod.NVE         := '';                                                 // NT2020-005
+//           Prod.indEscala   := '';                                                 // NT2020-005
+//           Prod.CNPJFab     := '';                                                 // NT2020-005
+//           Prod.cBenef      := '';                                                 // NT2020-005
+//           Prod.vUnCom      := '';                                                 // NT2020-005
+//           Prod.cBarraTrib  := '';                                                 // NT2020-005
+//
+//           Prod.cBarra      := '';                                                 // NT2020-005
+
+
            Prod.cEANtrib := vartostr(DMFD.FDQuery2['cEANtrib']);
 
            if ((DMFD.FDQuery2['xPed'] <> null) and ( DMFD.FDQuery2['xPed'] <> '')) then
@@ -3588,7 +3607,6 @@ begin
         // 1º Gera, 2º Assina e 3º Valida
 
         pGAV();
-        Sleep(30000);                                                           // temporizador entre a geração do xml e o enviar - EL 24/06/2021
 
         //----------------------------------------------
 
@@ -15038,6 +15056,8 @@ end;
 procedure TFrGBNFe.VerifCert();                                                 // Verifica o vencimento do certificado digital
 var
  vQtdDias : Integer;
+ vDTVenCD : TDateTime;
+
 begin
 
  if not ACBrNFe1.Configuracoes.Certificados.VerificarValidade then              // trunk2 - Antes => if not ACBrNFe1.Configuracoes.Certificados.GetCertificado.IsValid.Result then
@@ -15045,31 +15065,53 @@ begin
 
  if (trim( ACBrNFe1.Configuracoes.Certificados.NumeroSerie ) <> '' ) then
   begin
+
    if ACBrNFe1.Configuracoes.Certificados.VerificarValidade then                // trunk2 - Antes => if ACBrNFe1.Configuracoes.Certificados.GetCertificado.IsValid.Result then
     begin
+
      vQtdDias := DaysBetween( now(), ACBrNFe1.SSL.CertDataVenc ) - 1;
+     vDTVenCD := ACBrNFe1.SSL.CertDataVenc;
+
+     if ( vQtdDias < 0 ) then vQtdDias := 0;
+
      if ( vQtdDias <= 10 ) then
-      if gVerifCert then
-       if vQtdDias > 1 then
+      begin
 
-        Application.Messagebox( PWideChar(
-         'Faltam ' + IntToStr(vQtdDias) + ' dias para CERTIFICADO DIGITAL VENCER!' + chr(13) +
-         'Providencie um novo para substuir o existente!' + chr(13) +
-         'GB INFORMÁTICA!'), 'Atenção!', MB_ICONASTERISK + mb_ok )
+       if gVerifCert then
+        begin
 
-       else if (vQtdDias = 1) then
+         case vQtdDias of
 
-        Application.Messagebox( 'HOJE É O ÚLTIMO DIA DO SEU CERTIFICADO!' + chr(13) +
-                                'INSTALE O NOVO CERTIFICADO DIGIAL! ' + chr(13) +
-                                'GB INFORMÁTICA!', 'Atenção!', MB_ICONASTERISK + mb_ok )
+          1:
 
-       else if (vQtdDias = 0) then
+          Application.Messagebox( 'HOJE É O ÚLTIMO DIA DO SEU CERTIFICADO!' + chr(13) +
+                                  'INSTALE O NOVO CERTIFICADO DIGIAL! ' + chr(13) +
+                                  'GB INFORMÁTICA!', 'Atenção!', MB_ICONASTERISK + mb_ok );
 
-        Application.Messagebox( 'O SEU CERTIFICADO ESTÁ VENCIDO !' + chr(13) +
-                                'INSTALE O NOVO CERTIFICADO DIGIAL! ' + chr(13) +
-                                'GB INFORMÁTICA!', 'Atenção!', MB_ICONASTERISK + mb_ok );
+          0:
+
+           Application.Messagebox( 'O SEU CERTIFICADO ESTÁ VENCIDO !' + chr(13) +
+                                   'INSTALE O NOVO CERTIFICADO DIGIAL! ' + chr(13) +
+                                   'GB INFORMÁTICA!', 'Atenção!', MB_ICONASTERISK + mb_ok );
+
+         else
+
+           Application.Messagebox( PWideChar(
+            'Faltam ' + IntToStr(vQtdDias) + ' dias para CERTIFICADO DIGITAL VENCER!' + chr(13) +
+            'Providencie um novo para substuir o existente!' + chr(13) +
+            'GB INFORMÁTICA!'), 'Atenção!', MB_ICONASTERISK + mb_ok );
+
+         end;
+
+        end;
+
+      end
+
+     else if ( (vQtdDias > 15) and (vQtdDias < 20) ) then
+      pEnviaEmailCer( vDTVenCD );
 
     end;
+
   end;
 
 end;
@@ -18458,6 +18500,52 @@ begin
    Result := True;
 
   end;
+
+end;
+
+//------------------------------------------------------------------------------
+// By Edson Lima ; 2021-06-30
+// Procedure que envia o lembrete que o certificado digital está pra vencer
+//------------------------------------------------------------------------------
+procedure TFrGBNFe.pEnviaEmailCer(var dtVenc: TDateTime );
+var
+ vAssunto            : string;
+ vEmailMsg           : TStrings;
+
+begin
+
+ pLerEmp();
+
+ vEmailMsg := TstringList.Create;
+ vEmailMsg.Add( 'CNPJ: '        + VarToStr(DMFD.FDQuery4['cnpj'])          + chr(13) );
+ vEmailMsg.Add( 'Empresa: '     + VarToStr(DMFD.FDQuery4['razao_social'])  + chr(13) );
+ vEmailMsg.Add( 'Dt Venc. CD: ' + FormatDateTime('dd/mm/yyyy', dtVenc)     + chr(13) );
+ vEmailMsg.Add( 'IE: '          + VarToStr(DMFD.FDQuery4['insc_estadual']) + chr(13) );
+ vEmailMsg.Add( 'UF: '          + VarToStr(DMFD.FDQuery4['uf'])            + chr(13) );
+ vEmailMsg.Add( 'Telefone: '    + VarToStr(DMFD.FDQuery4['fone'])          + chr(13) );
+ vEmailMsg.Add( 'e-Mail: '      + VarToStr(DMFD.FDQuery4['Email_User']) );
+
+ vAssunto  := 'Vencimento do Certificado Digital';
+
+ try
+
+  ACBrNFe1.EnviarEmail(
+           gEL                                                                  // email do destinatário
+          ,vAssunto                                                             // Asunto
+          ,vEmailMsg                                                            // Mensagem
+          ,nil                                                                  // Lista com emails que reberão cópias - TStrings
+          ,nil                                                                  // Anexos
+          ,nil              );                                                  // sReplyTo - "Responder para..."
+
+
+ except on e:exception do
+
+   Application.Messagebox( pWideChar( 'Inconsistência no envio dos dados do Certificado Digital!' + chr(13) +
+                           e.Message ), 'Atenção!', MB_ICONERROR+mb_ok);
+
+ end;
+
+ vEmailMsg.Free;
 
 end;
 

@@ -2394,7 +2394,7 @@ object FrGBNFe: TFrGBNFe
     Left = 312
     Top = 10
     Bitmap = {
-      494C0101CC0410069C0810001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C0101CC041006C40810001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000004013000001002000000000000040
       1300000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -43072,10 +43072,10 @@ object FrGBNFe: TFrGBNFe
     Configuracoes.Arquivos.SepararPorMes = True
     Configuracoes.WebServices.UF = 'GO'
     Configuracoes.WebServices.AguardarConsultaRet = 30000
-    Configuracoes.WebServices.Tentativas = 10
+    Configuracoes.WebServices.Tentativas = 20
     Configuracoes.WebServices.IntervaloTentativas = 2000
     Configuracoes.WebServices.AjustaAguardaConsultaRet = True
-    Configuracoes.WebServices.TimeOut = 6000
+    Configuracoes.WebServices.TimeOut = 30000
     Configuracoes.WebServices.QuebradeLinha = '|'
     Configuracoes.RespTec.IdCSRT = 0
     DANFE = ACBrNFeDANFeRL1

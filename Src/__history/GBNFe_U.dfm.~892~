@@ -1,14 +1,14 @@
 object FrGBNFe: TFrGBNFe
   Left = 171
   Top = 129
+  Width = 737
+  Height = 564
   HelpType = htKeyword
   HelpKeyword = 'Introdu'#231#227'o'
   Align = alBottom
   BorderIcons = []
   BorderStyle = bsSingle
   Caption = 'N F e    &    N F C e'
-  ClientHeight = 535
-  ClientWidth = 731
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -1524,6 +1524,10 @@ object FrGBNFe: TFrGBNFe
         TabWidth = 80
         object TabSheet1: TTabSheet
           Caption = 'Respostas'
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object MemoResp: TMemo
             Left = 0
             Top = 0
@@ -1584,6 +1588,10 @@ object FrGBNFe: TFrGBNFe
         object TabSheet4: TTabSheet
           Caption = 'NFe && NFCe'
           ImageIndex = 3
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object trvwNFe: TTreeView
             Left = 0
             Top = 0
@@ -2402,7 +2410,7 @@ object FrGBNFe: TFrGBNFe
     Left = 312
     Top = 10
     Bitmap = {
-      494C0101CC0410068C0810001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C0101CC041006C80810001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000004013000001002000000000000040
       1300000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -43080,10 +43088,10 @@ object FrGBNFe: TFrGBNFe
     Configuracoes.Arquivos.SepararPorMes = True
     Configuracoes.WebServices.UF = 'GO'
     Configuracoes.WebServices.AguardarConsultaRet = 30000
-    Configuracoes.WebServices.Tentativas = 10
+    Configuracoes.WebServices.Tentativas = 20
     Configuracoes.WebServices.IntervaloTentativas = 2000
     Configuracoes.WebServices.AjustaAguardaConsultaRet = True
-    Configuracoes.WebServices.TimeOut = 6000
+    Configuracoes.WebServices.TimeOut = 30000
     Configuracoes.WebServices.QuebradeLinha = '|'
     Configuracoes.RespTec.IdCSRT = 0
     DANFE = ACBrNFeDANFeRL1
