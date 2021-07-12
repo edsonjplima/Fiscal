@@ -255,6 +255,8 @@ object FrGBNFe: TFrGBNFe
   OnKeyDown = FormKeyDown
   OnResize = FormResize
   OnShow = FormShow
+  ExplicitWidth = 320
+  ExplicitHeight = 240
   PixelsPerInch = 96
   TextHeight = 13
   object Panel3: TPanel
@@ -267,8 +269,6 @@ object FrGBNFe: TFrGBNFe
     ParentShowHint = False
     ShowHint = False
     TabOrder = 1
-    ExplicitLeft = -158
-    ExplicitHeight = 371
     object BitBtn1: TBitBtn
       Left = 15
       Top = 6
@@ -578,7 +578,6 @@ object FrGBNFe: TFrGBNFe
       Align = alBottom
       BevelOuter = bvNone
       TabOrder = 13
-      ExplicitTop = 295
       object BitBtn10: TBitBtn
         Left = 17
         Top = 9
@@ -751,8 +750,6 @@ object FrGBNFe: TFrGBNFe
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitTop = -66
-    ExplicitWidth = 0
     object StatusBar1: TStatusBar
       Left = 0
       Top = 42
@@ -780,7 +777,6 @@ object FrGBNFe: TFrGBNFe
           Width = 100
         end>
       UseSystemFont = False
-      ExplicitWidth = 0
     end
     object Panel9: TPanel
       Left = 570
@@ -790,7 +786,6 @@ object FrGBNFe: TFrGBNFe
       Align = alRight
       BevelOuter = bvNone
       TabOrder = 1
-      ExplicitLeft = -157
       object BitBtn12: TBitBtn
         Left = 15
         Top = 10
@@ -830,8 +825,6 @@ object FrGBNFe: TFrGBNFe
     Height = 391
     Align = alClient
     TabOrder = 2
-    ExplicitWidth = 573
-    ExplicitHeight = 371
     object Panel6: TPanel
       Left = 1
       Top = 109
@@ -840,8 +833,6 @@ object FrGBNFe: TFrGBNFe
       Hint = ' Mostra Notas Conforme Escolha na Visualiza'#231#227'o '
       Align = alClient
       TabOrder = 0
-      ExplicitWidth = 571
-      ExplicitHeight = 87
       object cxTLInut: TcxTreeList
         Left = 1
         Top = 27
@@ -902,8 +893,6 @@ object FrGBNFe: TFrGBNFe
         OnCustomDrawDataCell = cxTLInutCustomDrawDataCell
         OnExit = cxTLExit
         OnMouseMove = cxTLMouseMove
-        ExplicitWidth = 569
-        ExplicitHeight = 59
         object cxTLdIDem: TcxTreeListColumn
           PropertiesClassName = 'TcxDateEditProperties'
           Properties.Alignment.Horz = taCenter
@@ -1201,8 +1190,6 @@ object FrGBNFe: TFrGBNFe
         OnExit = cxTLExit
         OnKeyDown = cxTLKeyDown
         OnMouseMove = cxTLMouseMove
-        ExplicitWidth = 569
-        ExplicitHeight = 59
         object cxTLbSel: TcxTreeListColumn
           PropertiesClassName = 'TcxCheckBoxProperties'
           Properties.Alignment = taCenter
@@ -1507,7 +1494,6 @@ object FrGBNFe: TFrGBNFe
         ParentBackground = False
         ParentFont = False
         TabOrder = 0
-        ExplicitWidth = 569
       end
     end
     object Panel7: TPanel
@@ -1521,8 +1507,6 @@ object FrGBNFe: TFrGBNFe
       ShowHint = False
       TabOrder = 1
       OnMouseMove = Panel7MouseMove
-      ExplicitTop = 196
-      ExplicitWidth = 571
       object PageControl1: TPageControl
         Left = 1
         Top = 1
@@ -1540,9 +1524,12 @@ object FrGBNFe: TFrGBNFe
         TabOrder = 0
         TabStop = False
         TabWidth = 80
-        ExplicitWidth = 569
         object TabSheet1: TTabSheet
           Caption = 'Respostas'
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object MemoResp: TMemo
             Left = 0
             Top = 0
@@ -1566,6 +1553,10 @@ object FrGBNFe: TFrGBNFe
         object TabSheet2: TTabSheet
           Caption = 'XML Resposta'
           ImageIndex = 1
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object WBResposta: TWebBrowser
             Left = 0
             Top = 0
@@ -1585,7 +1576,10 @@ object FrGBNFe: TFrGBNFe
         object TabSheet3: TTabSheet
           Caption = 'Log'
           ImageIndex = 2
-          ExplicitWidth = 561
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object MemoLog: TMemo
             Left = 0
             Top = 0
@@ -1595,12 +1589,15 @@ object FrGBNFe: TFrGBNFe
             BorderStyle = bsNone
             Color = 14544639
             TabOrder = 0
-            ExplicitWidth = 561
           end
         end
         object TabSheet4: TTabSheet
           Caption = 'NFe && NFCe'
           ImageIndex = 3
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object trvwNFe: TTreeView
             Left = 0
             Top = 0
@@ -1617,6 +1614,10 @@ object FrGBNFe: TFrGBNFe
         object TabSheet5: TTabSheet
           Caption = 'Resposta WS'
           ImageIndex = 4
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object memoRespWS: TMemo
             Left = 0
             Top = 0
@@ -1638,7 +1639,6 @@ object FrGBNFe: TFrGBNFe
       Align = alTop
       BevelOuter = bvLowered
       TabOrder = 2
-      ExplicitWidth = 571
       DesignSize = (
         567
         108)
@@ -1661,7 +1661,6 @@ object FrGBNFe: TFrGBNFe
         ParentFont = False
         TabOrder = 2
         OnMouseMove = GroupBox1MouseMove
-        ExplicitLeft = 452
         object edt_NumNNF: TEdit
           Left = 10
           Top = 16
@@ -1691,7 +1690,6 @@ object FrGBNFe: TFrGBNFe
         ParentFont = False
         TabOrder = 5
         OnMouseMove = GroupBox9MouseMove
-        ExplicitLeft = 166
         DesignSize = (
           157
           44)
@@ -1753,7 +1751,6 @@ object FrGBNFe: TFrGBNFe
         ShowHint = True
         TabOrder = 4
         OnClick = RadioGroup1Click
-        ExplicitWidth = 38
       end
       object GroupBox2: TGroupBox
         Left = 10
@@ -1804,7 +1801,6 @@ object FrGBNFe: TFrGBNFe
         ParentFont = False
         TabOrder = 1
         OnMouseMove = GroupBox3MouseMove
-        ExplicitWidth = 38
         DesignSize = (
           34
           44)
@@ -1846,7 +1842,6 @@ object FrGBNFe: TFrGBNFe
         ParentFont = False
         TabOrder = 3
         OnMouseMove = GroupBox7MouseMove
-        ExplicitLeft = 333
         DesignSize = (
           227
           44)
@@ -1932,7 +1927,6 @@ object FrGBNFe: TFrGBNFe
         ParentFont = False
         TabOrder = 6
         OnMouseMove = GroupBox4MouseMove
-        ExplicitLeft = 333
         object edt_CodDes: TEdit
           Left = 10
           Top = 16
@@ -1966,7 +1960,6 @@ object FrGBNFe: TFrGBNFe
         ShowHint = True
         TabOrder = 7
         OnClick = RadioGroup2Click
-        ExplicitLeft = 166
       end
       object grp1: TGroupBox
         Left = 10
@@ -2061,7 +2054,6 @@ object FrGBNFe: TFrGBNFe
     Height = 17
     HelpType = htKeyword
     Sections = <>
-    ExplicitWidth = 0
   end
   object Panel1: TPanel
     Left = 0
@@ -2082,7 +2074,6 @@ object FrGBNFe: TFrGBNFe
     ParentBackground = False
     ParentFont = False
     TabOrder = 4
-    ExplicitWidth = 0
     DesignSize = (
       727
       81)
@@ -2425,7 +2416,7 @@ object FrGBNFe: TFrGBNFe
     Left = 312
     Top = 10
     Bitmap = {
-      494C0101CC041006D00810001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C0101CC041006D80810001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000004013000001002000000000000040
       1300000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -43325,7 +43316,9 @@ object FrGBNFe: TFrGBNFe
     CasasDecimais.MaskqCom = ',0.00'
     CasasDecimais.MaskvUnCom = ',0.00'
     ACBrNFe = ACBrNFe1
-    Fonte.TamanhoFonteInformacoesComplementares = 7
+    Fonte.TamanhoFonteRazaoSocial = 7
+    Fonte.TamanhoFonteInformacoesComplementares = 6
+    Fonte.TamanhoFonteDemaisCampos = 7
     TamanhoLogoHeight = 100
     TamanhoLogoWidth = 100
     LogoemCima = True

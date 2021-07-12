@@ -2412,6 +2412,23 @@ begin
            Prod.nItem    := DMFD.FDQuery2['sequencia'];
            Prod.CFOP     := DMFD.FDQuery2['cfop'];
            Prod.cEAN     := vartostr(DMFD.FDQuery2['EAN']);
+
+//           Prod.cBarra      := '';                                                 // NT2020-005
+//           Prod.NVE         := '';                                                 // NT2020-005
+//           Prod.indEscala   := '';                                                 // NT2020-005
+//           Prod.CNPJFab     := '';                                                 // NT2020-005
+//           Prod.cBenef      := '';                                                 // NT2020-005
+//           Prod.vUnCom      := '';                                                 // NT2020-005
+//           Prod.cBarraTrib  := '';                                                 // NT2020-005
+//           Prod.uTrib       := '';                                                 // NT2020-005
+//           Prod.qTrib       := '';                                                 // NT2020-005
+//           Prod.vUnTrib     := '';                                                 // NT2020-005
+//           Prod.vFrete      := '';                                                 // NT2020-005
+//           Prod.vSeg        := '';                                                 // NT2020-005
+//           Prod.vDesc       := '';                                                 // NT2020-005
+//           Prod.vOutro      := '';                                                 // NT2020-005
+
+
            Prod.cEANtrib := vartostr(DMFD.FDQuery2['cEANtrib']);
 
            if ((DMFD.FDQuery2['xPed'] <> null) and ( DMFD.FDQuery2['xPed'] <> '')) then
@@ -3595,7 +3612,6 @@ begin
         // 1º Gera, 2º Assina e 3º Valida
 
         pGAV();
-        Sleep(30000);                                                           // temporizador entre a geração do xml e o enviar - EL 24/06/2021
 
         //----------------------------------------------
 
@@ -15885,29 +15901,31 @@ begin
 
   end;
 
- ACBrNFe1.Configuracoes.Arquivos.AdicionarLiteral  := True;
- ACBrNFe1.DANFE.PathPDF                            := gCamPdf;
- ACBrNFeDANFeRL1.CasasDecimais.qCom                := 3;
- ACBrNFeDANFeRL1.CasasDecimais.vUnCom              := 4;
- ACBrNFeDANFEFR1.CasasDecimais.qCom                := 3;
- ACBrNFeDANFEFR1.CasasDecimais.vUnCom              := 4;
+ ACBrNFe1.Configuracoes.Arquivos.AdicionarLiteral            := True;
+ ACBrNFe1.DANFE.PathPDF                                      := gCamPdf;
+ ACBrNFeDANFeRL1.CasasDecimais.qCom                          := 3;
+ ACBrNFeDANFEFR1.CasasDecimais.vUnCom                        := 4;
+ ACBrNFeDANFERL1.Fonte.TamanhoFonteDemaisCampos              := 7;
+ ACBrNFeDANFERL1.Fonte.TamanhoFonteInformacoesComplementares := 6;
+ ACBrNFeDANFERL1.Fonte.TamanhoFonteRazaoSocial               := 8;
+
 
  case FrPar.cbb1.ItemIndex of
   0 : begin
        if ( FrPar.cbbTipoDANF.ItemIndex = 1 ) then
         ACBrNFeDANFERL1.Fonte.TamanhoFonteEndereco := 6
        else
-        ACBrNFeDANFERL1.Fonte.TamanhoFonteEndereco := 8;
+        ACBrNFeDANFERL1.Fonte.TamanhoFonteEndereco := 6;                        // antes de jul/2021 = 8
        ACBrNFeDANFERL1.LogoemCima                  := True;
        ACBrNFeDANFERL1.ExpandeLogoMarca            := False;
       end;
   1 : begin
-       ACBrNFeDANFERL1.Fonte.TamanhoFonteEndereco  := 8;
+       ACBrNFeDANFERL1.Fonte.TamanhoFonteEndereco  := 6;                        // antes de jul/2021 = 8
        ACBrNFeDANFERL1.LogoemCima                  := False;
        ACBrNFeDANFERL1.ExpandeLogoMarca            := True;
       end;
   2 : begin
-       ACBrNFeDANFERL1.Fonte.TamanhoFonteEndereco  := 8;
+       ACBrNFeDANFERL1.Fonte.TamanhoFonteEndereco  := 6;                        // antes de jul/2021 = 8
        ACBrNFeDANFERL1.LogoemCima                  := False;
        ACBrNFeDANFERL1.ExpandeLogoMarca            := False;
       end;
@@ -16036,25 +16054,28 @@ begin
    ACBrNFeDANFeESCPOS1.Impressora                    := FrPar.edtImpNFCe.Text;
   end;
 
- ACBrNFeDANFEFR1.CasasDecimais.qCom                  := 3;
- ACBrNFeDANFEFR1.CasasDecimais.vUnCom                := 4;
+ ACBrNFeDANFEFR1.CasasDecimais.qCom                          := 3;
+ ACBrNFeDANFEFR1.CasasDecimais.vUnCom                        := 4;
+ ACBrNFeDANFERL1.Fonte.TamanhoFonteDemaisCampos              := 7;
+ ACBrNFeDANFERL1.Fonte.TamanhoFonteInformacoesComplementares := 6;
+ ACBrNFeDANFERL1.Fonte.TamanhoFonteRazaoSocial               := 8;
 
  case FrPar.cbb1.ItemIndex of
   0 : begin
        if ( FrPar.cbbTipoDANF.ItemIndex = 1 ) then
         ACBrNFeDANFeRL1.Fonte.TamanhoFonteEndereco   := 6
        else
-        ACBrNFeDANFeRL1.Fonte.TamanhoFonteEndereco   := 8;
+        ACBrNFeDANFeRL1.Fonte.TamanhoFonteEndereco   := 6;                      // antes de jul/2021 = 8
        ACBrNFeDANFeRL1.LogoemCima                    := True;
        ACBrNFeDANFeRL1.ExpandeLogoMarca              := False;
       end;
   1 : begin
-       ACBrNFeDANFeRL1.Fonte.TamanhoFonteEndereco    := 8;
+       ACBrNFeDANFeRL1.Fonte.TamanhoFonteEndereco    := 6;                      // antes de jul/2021 = 8
        ACBrNFeDANFeRL1.LogoemCima                    := False;
        ACBrNFeDANFeRL1.ExpandeLogoMarca              := True;
       end;
   2 : begin
-       ACBrNFeDANFeRL1.Fonte.TamanhoFonteEndereco    := 8;
+       ACBrNFeDANFeRL1.Fonte.TamanhoFonteEndereco    := 6;                      // antes de jul/2021 = 8
        ACBrNFeDANFeRL1.LogoemCima                    := False;
        ACBrNFeDANFeRL1.ExpandeLogoMarca              := False;
       end;
@@ -16103,17 +16124,17 @@ begin
          if ( FrPar.cbbTipoDANF.ItemIndex = 1 ) then
           ACBrNFeDANFeRL1.Fonte.TamanhoFonteEndereco := 6
          else
-          ACBrNFeDANFeRL1.Fonte.TamanhoFonteEndereco := 8;
+          ACBrNFeDANFeRL1.Fonte.TamanhoFonteEndereco := 6;                      // antes de jul/2021 = 8
          ACBrNFeDANFeRL1.LogoemCima                  := True;
          ACBrNFeDANFeRL1.ExpandeLogoMarca            := False;
         end;
     1 : begin
-         ACBrNFeDANFeRL1.Fonte.TamanhoFonteEndereco  := 8;
+         ACBrNFeDANFeRL1.Fonte.TamanhoFonteEndereco  := 6;                      // antes de jul/2021 = 8
          ACBrNFeDANFeRL1.LogoemCima                  := False;
          ACBrNFeDANFeRL1.ExpandeLogoMarca            := True;
         end;
     2 : begin
-         ACBrNFeDANFeRL1.Fonte.TamanhoFonteEndereco  := 8;
+         ACBrNFeDANFeRL1.Fonte.TamanhoFonteEndereco  := 6;                      // antes de jul/2021 = 8
          ACBrNFeDANFeRL1.LogoemCima                  := False;
          ACBrNFeDANFeRL1.ExpandeLogoMarca            := False;
         end;
@@ -18500,28 +18521,18 @@ procedure TFrGBNFe.pEnviaEmailCer(var dtVenc: TDateTime );
 var
  vAssunto            : string;
  vEmailMsg           : TStrings;
- vEMsg               : TMemo;
 
 begin
 
  pLerEmp();
 
- vEMsg.Lines.Clear;
- vEMsg.Lines.Add( 'CNPJ: '        + VarToStr(DMFD.FDQuery4['cnpj'])          + chr(13)+chr(10) );
- vEMsg.Lines.Add( 'Empresa: '     + VarToStr(DMFD.FDQuery4['razao_social'])  + chr(13)+chr(10) );
- vEMsg.Lines.Add( 'Dt Venc. CD: ' + FormatDateTime('dd/mm/yyyy', dtVenc)     + chr(13)+chr(10) );
- vEMsg.Lines.Add( 'IE: '          + VarToStr(DMFD.FDQuery4['insc_estadual']) + chr(13)+chr(10) );
- vEMsg.Lines.Add( 'UF: '          + VarToStr(DMFD.FDQuery4['uf'])            + chr(13)+chr(10) );
- vEMsg.Lines.Add( 'Telefone: '    + VarToStr(DMFD.FDQuery4['fone'])          + chr(13)+chr(10) );
- vEMsg.Lines.Add( 'e-Mail: '      + VarToStr(DMFD.FDQuery4['Email_User']) );
-
  vEmailMsg := TstringList.Create;
- vEmailMsg.Add( 'CNPJ: '        + VarToStr(DMFD.FDQuery4['cnpj'])          + chr(13)+chr(10) );
- vEmailMsg.Add( 'Empresa: '     + VarToStr(DMFD.FDQuery4['razao_social'])  + chr(13)+chr(10) );
- vEmailMsg.Add( 'Dt Venc. CD: ' + FormatDateTime('dd/mm/yyyy', dtVenc)     + chr(13)+chr(10) );
- vEmailMsg.Add( 'IE: '          + VarToStr(DMFD.FDQuery4['insc_estadual']) + chr(13)+chr(10) );
- vEmailMsg.Add( 'UF: '          + VarToStr(DMFD.FDQuery4['uf'])            + chr(13)+chr(10) );
- vEmailMsg.Add( 'Telefone: '    + VarToStr(DMFD.FDQuery4['fone'])          + chr(13)+chr(10) );
+ vEmailMsg.Add( 'CNPJ: '        + VarToStr(DMFD.FDQuery4['cnpj'])          + chr(13) );
+ vEmailMsg.Add( 'Empresa: '     + VarToStr(DMFD.FDQuery4['razao_social'])  + chr(13) );
+ vEmailMsg.Add( 'Dt Venc. CD: ' + FormatDateTime('dd/mm/yyyy', dtVenc)     + chr(13) );
+ vEmailMsg.Add( 'IE: '          + VarToStr(DMFD.FDQuery4['insc_estadual']) + chr(13) );
+ vEmailMsg.Add( 'UF: '          + VarToStr(DMFD.FDQuery4['uf'])            + chr(13) );
+ vEmailMsg.Add( 'Telefone: '    + VarToStr(DMFD.FDQuery4['fone'])          + chr(13) );
  vEmailMsg.Add( 'e-Mail: '      + VarToStr(DMFD.FDQuery4['Email_User']) );
 
  vAssunto  := 'Vencimento do Certificado Digital';
@@ -18531,7 +18542,7 @@ begin
   ACBrNFe1.EnviarEmail(
            gEL                                                                  // email do destinatário
           ,vAssunto                                                             // Asunto
-          ,vEMsg.Text                                                           // Mensagem
+          ,vEmailMsg                                                            // Mensagem
           ,nil                                                                  // Lista com emails que reberão cópias - TStrings
           ,nil                                                                  // Anexos
           ,nil              );                                                  // sReplyTo - "Responder para..."

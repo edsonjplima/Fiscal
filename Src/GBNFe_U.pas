@@ -872,7 +872,7 @@ begin
 
        // by Edson Lima 2015-12-9T1007 - trunk2 novo
        xAux := '';
-        if not DMFD.FDQuery7.IsEmpty then
+       if not DMFD.FDQuery7.IsEmpty then
         xAux := vartostr(DMFD.FDQuery7['chave']);
 
        xAux := trim(gCamLog) + trim(xAux) + '-nfe.xml';
@@ -2420,8 +2420,13 @@ begin
 //           Prod.cBenef      := '';                                                 // NT2020-005
 //           Prod.vUnCom      := '';                                                 // NT2020-005
 //           Prod.cBarraTrib  := '';                                                 // NT2020-005
-//
-//           Prod.cBarra      := '';                                                 // NT2020-005
+//           Prod.uTrib       := '';                                                 // NT2020-005
+//           Prod.qTrib       := '';                                                 // NT2020-005
+//           Prod.vUnTrib     := '';                                                 // NT2020-005
+//           Prod.vFrete      := '';                                                 // NT2020-005
+//           Prod.vSeg        := '';                                                 // NT2020-005
+//           Prod.vDesc       := '';                                                 // NT2020-005
+//           Prod.vOutro      := '';                                                 // NT2020-005
 
 
            Prod.cEANtrib := vartostr(DMFD.FDQuery2['cEANtrib']);
@@ -5686,6 +5691,7 @@ begin
     begin
      CopiaNChaveClipBoard1Click(Sender);                                        // Copia chave para área de transfer�ncia
     end
+
    else if ( (Shift = [ssCtrl, ssShift]) and (Key = Ord('P')) ) then
 
     begin
@@ -15896,29 +15902,31 @@ begin
 
   end;
 
- ACBrNFe1.Configuracoes.Arquivos.AdicionarLiteral  := True;
- ACBrNFe1.DANFE.PathPDF                            := gCamPdf;
- ACBrNFeDANFeRL1.CasasDecimais.qCom                := 3;
- ACBrNFeDANFeRL1.CasasDecimais.vUnCom              := 4;
- ACBrNFeDANFEFR1.CasasDecimais.qCom                := 3;
- ACBrNFeDANFEFR1.CasasDecimais.vUnCom              := 4;
+ ACBrNFe1.Configuracoes.Arquivos.AdicionarLiteral            := True;
+ ACBrNFe1.DANFE.PathPDF                                      := gCamPdf;
+ ACBrNFeDANFeRL1.CasasDecimais.qCom                          := 3;
+ ACBrNFeDANFEFR1.CasasDecimais.vUnCom                        := 4;
+ ACBrNFeDANFERL1.Fonte.TamanhoFonteDemaisCampos              := 7;
+ ACBrNFeDANFERL1.Fonte.TamanhoFonteInformacoesComplementares := 6;
+ ACBrNFeDANFERL1.Fonte.TamanhoFonteRazaoSocial               := 8;
+
 
  case FrPar.cbb1.ItemIndex of
   0 : begin
        if ( FrPar.cbbTipoDANF.ItemIndex = 1 ) then
         ACBrNFeDANFERL1.Fonte.TamanhoFonteEndereco := 6
        else
-        ACBrNFeDANFERL1.Fonte.TamanhoFonteEndereco := 8;
+        ACBrNFeDANFERL1.Fonte.TamanhoFonteEndereco := 6;                        // antes de jul/2021 = 8
        ACBrNFeDANFERL1.LogoemCima                  := True;
        ACBrNFeDANFERL1.ExpandeLogoMarca            := False;
       end;
   1 : begin
-       ACBrNFeDANFERL1.Fonte.TamanhoFonteEndereco  := 8;
+       ACBrNFeDANFERL1.Fonte.TamanhoFonteEndereco  := 6;                        // antes de jul/2021 = 8
        ACBrNFeDANFERL1.LogoemCima                  := False;
        ACBrNFeDANFERL1.ExpandeLogoMarca            := True;
       end;
   2 : begin
-       ACBrNFeDANFERL1.Fonte.TamanhoFonteEndereco  := 8;
+       ACBrNFeDANFERL1.Fonte.TamanhoFonteEndereco  := 6;                        // antes de jul/2021 = 8
        ACBrNFeDANFERL1.LogoemCima                  := False;
        ACBrNFeDANFERL1.ExpandeLogoMarca            := False;
       end;
@@ -16047,25 +16055,28 @@ begin
    ACBrNFeDANFeESCPOS1.Impressora                    := FrPar.edtImpNFCe.Text;
   end;
 
- ACBrNFeDANFEFR1.CasasDecimais.qCom                  := 3;
- ACBrNFeDANFEFR1.CasasDecimais.vUnCom                := 4;
+ ACBrNFeDANFEFR1.CasasDecimais.qCom                          := 3;
+ ACBrNFeDANFEFR1.CasasDecimais.vUnCom                        := 4;
+ ACBrNFeDANFERL1.Fonte.TamanhoFonteDemaisCampos              := 7;
+ ACBrNFeDANFERL1.Fonte.TamanhoFonteInformacoesComplementares := 6;
+ ACBrNFeDANFERL1.Fonte.TamanhoFonteRazaoSocial               := 8;
 
  case FrPar.cbb1.ItemIndex of
   0 : begin
        if ( FrPar.cbbTipoDANF.ItemIndex = 1 ) then
         ACBrNFeDANFeRL1.Fonte.TamanhoFonteEndereco   := 6
        else
-        ACBrNFeDANFeRL1.Fonte.TamanhoFonteEndereco   := 8;
+        ACBrNFeDANFeRL1.Fonte.TamanhoFonteEndereco   := 6;                      // antes de jul/2021 = 8
        ACBrNFeDANFeRL1.LogoemCima                    := True;
        ACBrNFeDANFeRL1.ExpandeLogoMarca              := False;
       end;
   1 : begin
-       ACBrNFeDANFeRL1.Fonte.TamanhoFonteEndereco    := 8;
+       ACBrNFeDANFeRL1.Fonte.TamanhoFonteEndereco    := 6;                      // antes de jul/2021 = 8
        ACBrNFeDANFeRL1.LogoemCima                    := False;
        ACBrNFeDANFeRL1.ExpandeLogoMarca              := True;
       end;
   2 : begin
-       ACBrNFeDANFeRL1.Fonte.TamanhoFonteEndereco    := 8;
+       ACBrNFeDANFeRL1.Fonte.TamanhoFonteEndereco    := 6;                      // antes de jul/2021 = 8
        ACBrNFeDANFeRL1.LogoemCima                    := False;
        ACBrNFeDANFeRL1.ExpandeLogoMarca              := False;
       end;
@@ -16114,17 +16125,17 @@ begin
          if ( FrPar.cbbTipoDANF.ItemIndex = 1 ) then
           ACBrNFeDANFeRL1.Fonte.TamanhoFonteEndereco := 6
          else
-          ACBrNFeDANFeRL1.Fonte.TamanhoFonteEndereco := 8;
+          ACBrNFeDANFeRL1.Fonte.TamanhoFonteEndereco := 6;                      // antes de jul/2021 = 8
          ACBrNFeDANFeRL1.LogoemCima                  := True;
          ACBrNFeDANFeRL1.ExpandeLogoMarca            := False;
         end;
     1 : begin
-         ACBrNFeDANFeRL1.Fonte.TamanhoFonteEndereco  := 8;
+         ACBrNFeDANFeRL1.Fonte.TamanhoFonteEndereco  := 6;                      // antes de jul/2021 = 8
          ACBrNFeDANFeRL1.LogoemCima                  := False;
          ACBrNFeDANFeRL1.ExpandeLogoMarca            := True;
         end;
     2 : begin
-         ACBrNFeDANFeRL1.Fonte.TamanhoFonteEndereco  := 8;
+         ACBrNFeDANFeRL1.Fonte.TamanhoFonteEndereco  := 6;                      // antes de jul/2021 = 8
          ACBrNFeDANFeRL1.LogoemCima                  := False;
          ACBrNFeDANFeRL1.ExpandeLogoMarca            := False;
         end;

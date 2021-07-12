@@ -2412,6 +2412,18 @@ begin
            Prod.nItem    := DMFD.FDQuery2['sequencia'];
            Prod.CFOP     := DMFD.FDQuery2['cfop'];
            Prod.cEAN     := vartostr(DMFD.FDQuery2['EAN']);
+
+//           Prod.cBarra      := '';                                                 // NT2020-005
+//           Prod.NVE         := '';                                                 // NT2020-005
+//           Prod.indEscala   := '';                                                 // NT2020-005
+//           Prod.CNPJFab     := '';                                                 // NT2020-005
+//           Prod.cBenef      := '';                                                 // NT2020-005
+//           Prod.vUnCom      := '';                                                 // NT2020-005
+//           Prod.cBarraTrib  := '';                                                 // NT2020-005
+//
+//           Prod.cBarra      := '';                                                 // NT2020-005
+
+
            Prod.cEANtrib := vartostr(DMFD.FDQuery2['cEANtrib']);
 
            if ((DMFD.FDQuery2['xPed'] <> null) and ( DMFD.FDQuery2['xPed'] <> '')) then
@@ -3595,7 +3607,6 @@ begin
         // 1º Gera, 2º Assina e 3º Valida
 
         pGAV();
-        Sleep(30000);                                                           // temporizador entre a geração do xml e o enviar - EL 24/06/2021
 
         //----------------------------------------------
 

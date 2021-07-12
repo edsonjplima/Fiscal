@@ -373,7 +373,7 @@ object FrPar: TFrPar
       Top = 1
       Width = 677
       Height = 310
-      ActivePage = TabSheet7
+      ActivePage = TabSheet1
       Align = alClient
       TabOrder = 0
       OnChange = PageControl1Change
