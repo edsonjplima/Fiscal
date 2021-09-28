@@ -2,7 +2,7 @@ object FrCCe: TFrCCe
   Left = 514
   Top = 111
   BorderIcons = []
-  Caption = '-'
+  Caption = 'Carta de Corre'#231#227'o do NFe'
   ClientHeight = 551
   ClientWidth = 732
   Color = clBtnFace
@@ -307,8 +307,8 @@ object FrCCe: TFrCCe
         720
         40)
       object BitBtn12: TBitBtn
-        Left = 580
-        Top = 9
+        Left = 584
+        Top = 15
         Width = 129
         Height = 25
         Anchors = [akTop, akRight]
@@ -723,7 +723,7 @@ object FrCCe: TFrCCe
     Width = 547
     Height = 421
     Hint = 'Abas de edi'#231#227'o e consulta de CCe'
-    ActivePage = TabSheet1
+    ActivePage = TabSheet2
     Align = alClient
     Style = tsFlatButtons
     TabOrder = 3
@@ -731,10 +731,6 @@ object FrCCe: TFrCCe
     OnMouseMove = PageControl1MouseMove
     object TabSheet1: TTabSheet
       Caption = 'CCe'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Panel3: TPanel
         Left = 0
         Top = 0
@@ -1396,10 +1392,6 @@ object FrCCe: TFrCCe
     object TabSheet2: TTabSheet
       Caption = 'Consulta'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Panel5: TPanel
         Left = 0
         Top = 0

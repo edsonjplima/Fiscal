@@ -3,11 +3,11 @@
         <ProjectGuid>{EC1A8179-C546-4772-94B8-4B9132638118}</ProjectGuid>
         <MainSource>GBNFe.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Debug</Config>
+        <Config Condition="'$(Config)'==''">Release</Config>
         <TargetedPlatforms>1025</TargetedPlatforms>
         <AppType>Application</AppType>
         <FrameworkType>VCL</FrameworkType>
-        <ProjectVersion>18.1</ProjectVersion>
+        <ProjectVersion>18.2</ProjectVersion>
         <Platform Condition="'$(Platform)'==''">Win32</Platform>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
@@ -26,6 +26,12 @@
     <PropertyGroup Condition="'$(Config)'=='Release' or '$(Cfg_1)'!=''">
         <Cfg_1>true</Cfg_1>
         <CfgParent>Base</CfgParent>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='iOSDevice64' and '$(Cfg_1)'=='true') or '$(Cfg_1_iOSDevice64)'!=''">
+        <Cfg_1_iOSDevice64>true</Cfg_1_iOSDevice64>
+        <CfgParent>Cfg_1</CfgParent>
+        <Cfg_1>true</Cfg_1>
         <Base>true</Base>
     </PropertyGroup>
     <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Cfg_1)'=='true') or '$(Cfg_1_Win32)'!=''">
@@ -52,6 +58,7 @@
         <Base>true</Base>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
+        <Custom_Styles>&quot;Amethyst Kamri|VCLSTYLE|$(BDSCOMMONDIR)\Styles\AmethystKamri.vsf&quot;</Custom_Styles>
         <DCC_ShowGeneralMessages>true</DCC_ShowGeneralMessages>
         <DCC_UNSAFE_TYPE>true</DCC_UNSAFE_TYPE>
         <DCC_UNSAFE_CAST>true</DCC_UNSAFE_CAST>
@@ -81,6 +88,8 @@
         <DCC_UsePackage>vcl;rtl;vclx;indy;inet;xmlrtl;vclie;inetdbbde;inetdbxpress;dbrtl;dsnap;dsnapcon;vcldb;soaprtl;VclSmp;dbexpress;dbxcds;webdsnap;websnap;adortl;ibxpress;bdertl;dss;teeui;teedb;tee;vcldbx;visualclx;visualdbclx;vclactnband;vclshlctrls;IntrawebDB_50_70;Intraweb_50_70;dclOfficeXP;dxEdtrD7;dxComnD7;EQTLD7;ECQDBCD7;EQDBTLD7;EQGridD7;dxGrEdD7;dxExELD7;dxELibD7;fs7;frx7;frxcs7;fsDB7;frxDB7;fsBDE7;frxBDE7;fsADO7;frxADO7;fsIBX7;frxIBX7;frxDBX7;frxe7;fsTee7;frxTee7;rxctl7;rxbde7;rxdb7;Rave50CLX;Rave50VCL;ACBr_TEFD;ACBr_SPED;ACBr_PAF;inetdb;$(DCC_UsePackage)</DCC_UsePackage>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
+        <UWP_DelphiLogo44>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_44.png</UWP_DelphiLogo44>
+        <UWP_DelphiLogo150>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_150.png</UWP_DelphiLogo150>
         <VerInfo_AutoGenVersion>false</VerInfo_AutoGenVersion>
         <VerInfo_Special>true</VerInfo_Special>
         <VerInfo_Private>true</VerInfo_Private>
@@ -96,9 +105,11 @@
         <VerInfo_Locale>1033</VerInfo_Locale>
         <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
         <Icon_MainIcon>GBNFe_Icon.ico</Icon_MainIcon>
-        <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=6.17.8.11;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=;SpecialBuild=;PrivateBuild=</VerInfo_Keys>
+        <VerInfo_Keys>CompanyName=;FileVersion=6.17.8.11;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductVersion=1.0.0.0;Comments=;SpecialBuild=;PrivateBuild=;ProgramID=com.embarcadero.$(ModuleName);FileDescription=$(ModuleName);ProductName=$(ModuleName)</VerInfo_Keys>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win64)'!=''">
+        <UWP_DelphiLogo150>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_150.png</UWP_DelphiLogo150>
+        <UWP_DelphiLogo44>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_44.png</UWP_DelphiLogo44>
         <Icon_MainIcon>GBNFe_Icon.ico</Icon_MainIcon>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1)'!=''">
@@ -107,14 +118,22 @@
         <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
         <DCC_DebugInformation>0</DCC_DebugInformation>
     </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_1_iOSDevice64)'!=''">
+        <BT_BuildType>Debug</BT_BuildType>
+    </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
-        <VerInfo_Release>0</VerInfo_Release>
+        <VerInfo_DLL>true</VerInfo_DLL>
+        <VerInfo_PreRelease>true</VerInfo_PreRelease>
+        <VerInfo_AutoGenVersion>false</VerInfo_AutoGenVersion>
+        <VerInfo_Special>true</VerInfo_Special>
+        <VerInfo_Private>true</VerInfo_Private>
+        <VerInfo_Release>8</VerInfo_Release>
         <Debugger_RunParams>/developed_gb_informática_ltda &quot;/001&quot; /usuário_padrão &quot;/0&quot; &quot;/1&quot; &quot;/0&quot;</Debugger_RunParams>
-        <VerInfo_Build>0</VerInfo_Build>
+        <VerInfo_Build>31</VerInfo_Build>
         <VerInfo_Locale>1033</VerInfo_Locale>
-        <VerInfo_MinorVer>0</VerInfo_MinorVer>
-        <VerInfo_MajorVer>1</VerInfo_MajorVer>
-        <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
+        <VerInfo_MinorVer>21</VerInfo_MinorVer>
+        <VerInfo_MajorVer>6</VerInfo_MajorVer>
+        <VerInfo_Keys>CompanyName=;FileVersion=6.21.8.31;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductVersion=1.0.0.0;Comments=;ProgramID=com.embarcadero.$(ModuleName);FileDescription=$(ModuleName);ProductName=$(ModuleName)</VerInfo_Keys>
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
         <AppEnableHighDPI>true</AppEnableHighDPI>
     </PropertyGroup>
@@ -129,16 +148,17 @@
     </PropertyGroup>
     <Import Project="Delphi_Xe10.1_Berlin.optset" Condition="'$(Cfg_2_Win32)'!='' And Exists('Delphi_Xe10.1_Berlin.optset')"/>
     <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
-        <VerInfo_Release>7</VerInfo_Release>
-        <VerInfo_Build>12</VerInfo_Build>
-        <Debugger_RunParams>/developed_gb_informática_ltda /004 /usuário_padrão /0 /1 /0 /0 /0 /GERPA</Debugger_RunParams>
         <VerInfo_Locale>1033</VerInfo_Locale>
+        <BT_BuildType>Debug</BT_BuildType>
+        <VerInfo_Release>9</VerInfo_Release>
+        <VerInfo_Build>28</VerInfo_Build>
+        <Debugger_RunParams>/developed_gb_informática_ltda /001 /usuário_padrão /0 /1 /0 /0 /0 /GERPA</Debugger_RunParams>
         <VerInfo_MinorVer>21</VerInfo_MinorVer>
         <VerInfo_Special>true</VerInfo_Special>
         <VerInfo_PreRelease>true</VerInfo_PreRelease>
         <VerInfo_Private>true</VerInfo_Private>
         <VerInfo_DLL>true</VerInfo_DLL>
-        <VerInfo_Keys>CompanyName=GB Informática Ltda;FileDescription=Gerador de Nota Fiscal Eletrônica;FileVersion=6.21.7.12;InternalName=GBNFe;LegalCopyright=edsonjplima;LegalTrademarks=edsonjplima;OriginalFilename=ACBr;ProductName=GBNFe;ProductVersion=1.0.0.0;Comments=Desenvolvedor Edson Lima - Versão Berlin - FireDac</VerInfo_Keys>
+        <VerInfo_Keys>CompanyName=GB Informática Ltda;FileDescription=Gerador de Nota Fiscal Eletrônica;FileVersion=6.21.9.28;InternalName=GBNFe;LegalCopyright=GB Informática Ltda;LegalTrademarks=Edson Lima - DevGrowth - edsonjplima@gmail.com;OriginalFilename=ACBr;ProductName=GBNFe;ProductVersion=6.21.9.29;Comments=Desenvolvedor Edson Lima - Versão Berlin - FireDac;ProgramID=com.embarcadero.$(MSBuildProjectName)</VerInfo_Keys>
         <CfgDependentOn>Delphi_Xe10.1_Berlin.optset</CfgDependentOn>
     </PropertyGroup>
     <ItemGroup>
@@ -503,6 +523,14 @@
                         <Extensions>.framework</Extensions>
                     </Platform>
                 </DeployClass>
+                <DeployClass Name="ProjectUWPManifest">
+                    <Platform Name="Win32">
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="Win64">
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
                 <DeployClass Name="iPhone_Launch640">
                     <Platform Name="iOSSimulator">
                         <Operation>1</Operation>
@@ -615,6 +643,16 @@
                         <Operation>1</Operation>
                     </Platform>
                 </DeployClass>
+                <DeployClass Name="UWP_DelphiLogo44">
+                    <Platform Name="Win32">
+                        <RemoteDir>Assets</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="Win64">
+                        <RemoteDir>Assets</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
                 <DeployClass Name="ProjectiOSEntitlements">
                     <Platform Name="iOSDevice64">
                         <RemoteDir>..\</RemoteDir>
@@ -646,6 +684,16 @@
                 <DeployClass Name="ProjectOSXEntitlements">
                     <Platform Name="OSX32">
                         <RemoteDir>..\</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="UWP_DelphiLogo150">
+                    <Platform Name="Win32">
+                        <RemoteDir>Assets</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="Win64">
+                        <RemoteDir>Assets</RemoteDir>
                         <Operation>1</Operation>
                     </Platform>
                 </DeployClass>

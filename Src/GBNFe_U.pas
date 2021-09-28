@@ -3,7 +3,7 @@
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, MidasLib,
+  Windows, Winapi.Messages, System.SysUtils, System.Variants, MidasLib,
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   Winapi.ShellAPi, System.IniFiles, Vcl.DBGrids, Vcl.StdCtrls, Vcl.ExtCtrls,
   Vcl.Buttons, Vcl.ComCtrls, Vcl.OleCtrls, SHDocVw, Data.DB, Vcl.Grids,
@@ -409,6 +409,7 @@ type
   function fDirExists( vBDSQLSRV2016, vBDSQLSRV2017, vBDSQLSRV2019 :
                        string ) : string;                                       // function que verifica se existe o caminho do sql server
   function fDelFileCnt( Caminho, Mascara: string ) : boolean;                   // Function que deleta o arquivo criado durante o primeiro envio de contingêcia
+  function fxPag(): string;                                                     // Preenche o campo de Descrição do Meio de Pagamento
 
   procedure pImpr();                                                            // Chama a procedure de impressão
   procedure MarcaBloco( cxTL : TcxTreeList; blMarca : Boolean; blTodos : Boolean = False ); // Marca bloco de seleção TreeList    // xe 10.1 Berlin
@@ -743,10 +744,11 @@ procedure TFrGBNFe.geraenvianf(Sender: TObject);
 var
  aux, xAux, vCon      : string;
  i, c, iCodPed        : integer;
- vCfop                : string;
+ vCfop, xPg           : string;
  vCnpjEmit, vCnpjCert : string;
  vAutXMLCNPJCPFALL    : string;
  vAutXMLCNPJCPFWORD   : string;
+ Sincrona_Assincrona  : Boolean;
 
 begin
 
@@ -1981,7 +1983,14 @@ begin
                     11 : tPag := fpValeRefeicao;
                     12 : tPag := fpValePresente;
                     13 : tPag := fpValeCombustivel;
-                    99 : tPag := fpOutro;
+                    99 :
+                     begin
+
+                      tPag := fpOutro;
+                      xPag := fxPag();
+
+                     end;
+
                    end;
 
                   1 :                                                           // ve4040
@@ -2005,7 +2014,13 @@ begin
                     19 : tPag := fpProgramaFidelidade;
                     90 : tPag := fpSemPagamento;
                     91 : tPag := fpRegimeEspecial;
-                    99 : tPag := fpOutro;
+                    99 :
+                     begin
+
+                      tPag := fpOutro;
+                      xPag := fxPag();
+
+                     end;
 
                    end;
 
@@ -2033,7 +2048,13 @@ begin
                       19 : tPag := fpProgramaFidelidade;
                       90 : tPag := fpSemPagamento;
                       91 : tPag := fpRegimeEspecial;
-                      99 : tPag := fpOutro;
+                      99 :
+                       begin
+
+                        tPag := fpOutro;
+                        xPag := fxPag();
+
+                       end;
 
                      end;
 
@@ -2053,7 +2074,13 @@ begin
                       11 : tPag := fpValeRefeicao;
                       12 : tPag := fpValePresente;
                       13 : tPag := fpValeCombustivel;
-                      99 : tPag := fpOutro;
+                      99 :
+                       begin
+
+                        tPag := fpOutro;
+                        xPag := fxPag();
+
+                       end;
                      end;
 
                     end;
@@ -2082,7 +2109,13 @@ begin
                       19 : tPag := fpProgramaFidelidade;
                       90 : tPag := fpSemPagamento;
                       91 : tPag := fpRegimeEspecial;
-                      99 : tPag := fpOutro;
+                      99 :
+                       begin
+
+                        tPag := fpOutro;
+                        xPag := fxPag();
+
+                       end;
 
                      end;
 
@@ -2102,7 +2135,14 @@ begin
                       11 : tPag := fpValeRefeicao;
                       12 : tPag := fpValePresente;
                       13 : tPag := fpValeCombustivel;
-                      99 : tPag := fpOutro;
+                      99 :
+                       begin
+
+                        tPag := fpOutro;
+                        xPag := fxPag();
+
+                       end;
+
                      end;
 
                     end;
@@ -2408,25 +2448,18 @@ begin
          with Det.Add do
           begin
 
-           infAdProd     := vartostr(DMFD.FDQuery2['inf_adicional']);
-           Prod.nItem    := DMFD.FDQuery2['sequencia'];
-           Prod.CFOP     := DMFD.FDQuery2['cfop'];
-           Prod.cEAN     := vartostr(DMFD.FDQuery2['EAN']);
+           infAdProd        := vartostr(DMFD.FDQuery2['inf_adicional']);
+           Prod.nItem       := DMFD.FDQuery2['sequencia'];
+           Prod.CFOP        := DMFD.FDQuery2['cfop'];
+           Prod.cEAN        := vartostr(DMFD.FDQuery2['EAN']);
+//           Prod.cBarra      := DMFD.FDQuery2['cBarra'];                         // NT2020-005
+//           Prod.cBarraTrib  := DMFD.FDQuery2['cBarraTrib'];                     // NT2020-005
 
-//           Prod.cBarra      := '';                                                 // NT2020-005
-//           Prod.NVE         := '';                                                 // NT2020-005
-//           Prod.indEscala   := '';                                                 // NT2020-005
-//           Prod.CNPJFab     := '';                                                 // NT2020-005
-//           Prod.cBenef      := '';                                                 // NT2020-005
-//           Prod.vUnCom      := '';                                                 // NT2020-005
-//           Prod.cBarraTrib  := '';                                                 // NT2020-005
-//           Prod.uTrib       := '';                                                 // NT2020-005
-//           Prod.qTrib       := '';                                                 // NT2020-005
-//           Prod.vUnTrib     := '';                                                 // NT2020-005
-//           Prod.vFrete      := '';                                                 // NT2020-005
-//           Prod.vSeg        := '';                                                 // NT2020-005
-//           Prod.vDesc       := '';                                                 // NT2020-005
-//           Prod.vOutro      := '';                                                 // NT2020-005
+
+
+
+
+
 
 
            Prod.cEANtrib := vartostr(DMFD.FDQuery2['cEANtrib']);
@@ -2793,6 +2826,7 @@ begin
 
            //-------------------------------------------------------------------
            Prod.NCM      := DMFD.FDQuery2['ncm'];
+           //Prod.NVE      := DMFD.FDQuery2['nve'];                             // novo 30/08/2021
            Prod.vDesc    := DMFD.FDQuery2['vl_desconto'];
 
            // by Edson Lima ; 2013/03/15 ; 10:36 ; condição incluida "o tipo desta classe deve ter sido modificada de ACBr"
@@ -3161,7 +3195,7 @@ begin
 
                  else                                                           // Ve310
 
-                  if copy(vartostr(DMFD.FDQuery2['cst']),2,2) = '60' then CST    := cst60;
+                  if copy(vartostr(DMFD.FDQuery2['cst']),2,2) = '60' then CST   := cst60;
 
 
                  if copy(vartostr(DMFD.FDQuery2['cst']),2,2) = '70' then CST    := cst70;
@@ -3622,60 +3656,94 @@ begin
         else
          pDefineRelFR();                                                        // Define o tipo de Relatório FastReport
 
-        //grava o numero do protocolo e o numero do recibo
+        // grava o numero do protocolo e o numero do recibo
         if not gGeraXml then
          begin
 
+          //--------------------------------------------------------------------
+          // Modo de emissão Assíncrono não será mais permitido para lotes
+          // contendo uma única NFCe
+          //--------------------------------------------------------------------
+          //
+          //------------------ Exemplo Componente ACBrNFe ----------------------
+
+          {
+            O método Enviar possui 4 parametros a saber:
+
+            ALote = se refere ao numero do lote de notas que esta sendo enviado
+            Imprimir = defini se o DANFE vai ser impresso automaticamente
+                       (True = Padrão) ou não (False)
+            Sincrono = defini se o envio vai ser no modo sincrono (True) ou
+                       assincrono (False = Padrão)   <------ AQUI ------
+            Zipado   = defini se o Xml vai ser enviado zipado (True) ou
+                       não (False = Padrão)
+
+            Sincrono só pode ser True se o envio é unitario, ou seja, é
+            enviado uma nota por vez.
+            Muito usado para o envio da NFC-e, quanto a NF-e não são todas
+            as UF que aceitam esse modo de envio.
+
+            Zipado não são todas as UF que aceitam que o Xml seja enviado zipado.
+          }
+
           try // by Edson Lima ; 2013/02/26 ; 08:26 ; try inserido para obter retorno de erros abortado no ACBR
 
-           if (ACBrNFe1.Enviar(0)) then
+           if gModelo = 65 then
+            Sincrona_Assincrona := true
+           else
+            Sincrona_Assincrona := false;
+
+           // Sempre enviamos lotes com somente uma nota tanto NFe como NFCe
+
+           if (ACBrNFe1.Enviar('0', true, Sincrona_Assincrona)) then
             begin
 
              // by Edson Lima ; 2013/03/12 ; 14:23 ; Atualiza a nfe no update centralizado
-             pGravaNFe('004', 'protocolo',
-                              'recibo',
-                              'chave_nfe',
-                              'situacao',
-                              'motivo',
-                              'data_hora_recebimento',
-                              'CalcHoraNFCe',
-                              'UsuTrs',
-                              '',
-                              '',
-                              '',
-                              '',
-                              '',
-                              'codigo_loja',
-                              'demi',
-                              'nnf',
-                              'serie',
-                              'chave_nfe',
-                              'modelo',                                         // Nome dos campos
-                              ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].nProt,
-                              ACBrNFe1.WebServices.Retorno.NFeRetorno.nRec,
-                              ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].chDFe,
-                              ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].cStat,
-                              ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].xMotivo,
-                              FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].dhRecbto),
-                              'N',
-                              gUsu,
-                              '',
-                              '',
-                              '',
-                              '',
-                              '',
-                              edt_CodEmp.Text,
-                              FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']),
-                              DMFD.FDQuery1['nfe_nnf'],
-                              DMFD.FDQuery1['nfe_serie'],
-                              ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].chDFe,
-                              DMFD.FDQuery1['nfe_modelo'],                      // Conteúdo dos campos
-                              true);                                            // Consiste [true/false]
+             pGravaNFe('004',
+              'protocolo',
+              'recibo',
+              'chave_nfe',
+              'situacao',
+              'motivo',
+              'data_hora_recebimento',
+              'CalcHoraNFCe',
+              'UsuTrs',
+              '',
+              '',
+              '',
+              '',
+              '',
+              'codigo_loja',
+              'demi',
+              'nnf',
+              'serie',
+              'chave_nfe',
+              'modelo',                                                         // Nome dos campos
+              ACBrNFe1.WebServices.Retorno.Protocolo,
+              ACBrNFe1.WebServices.Retorno.Recibo,
+              ACBrNFe1.WebServices.Retorno.ChaveNFe,
+              VarToStr(ACBrNFe1.WebServices.Retorno.cStat),
+              ACBrNFe1.WebServices.Retorno.xMotivo,
+              FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.StatusServico.dhRetorno),         // Antes -> FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].dhRecbto),
+              'N',
+              gUsu,
+              '',
+              '',
+              '',
+              '',
+              '',
+              edt_CodEmp.Text,
+              FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']),
+              DMFD.FDQuery1['nfe_nnf'],
+              DMFD.FDQuery1['nfe_serie'],
+              ACBrNFe1.WebServices.Retorno.ChaveNFe,
+              DMFD.FDQuery1['nfe_modelo'],                                      // Conteúdo dos campos
+              true);                                                            // Consiste [true/false]
 
              //-----------------------------------------------------------------
              // by Edson Lima ; 2017-1-5T1054 ; Grava a chave no pedido do gerente
-             if ( (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].cStat) = '100') or
-                  (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].cStat) = '150') ) then
+             if ( (VarToStr(ACBrNFe1.WebServices.Retorno.cStat) = '100') or
+                  (VarToStr(ACBrNFe1.WebServices.Retorno.cStat) = '150') ) then
               fGraGer( gChvNFe, gCd_Emp, gCodPed );
              //-----------------------------------------------------------------
 
@@ -3684,15 +3752,15 @@ begin
              //-----------------------------------------------------------------
              // Caso a exceção seja por denegação
              //-----------------------------------------------------------------
-             if (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].xMotivo) =
+             if (ACBrNFe1.WebServices.Retorno.xMotivo =
                 'Rejeicao: NF-e esta denegada na base de dados da Secretaria de Fazenda Estadual')  or
-                (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].xMotivo) =
+                (ACBrNFe1.WebServices.Retorno.xMotivo =
                 'Uso Denegado : Irregularidade fiscal do destinatario')                             or
-                (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].cStat) = '301')  or
-                (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].cStat) = '302')  or
-                (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].cStat) = '303')  or
-                (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].cStat) = '110')  or
-                (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].cStat) = '205')  then
+                (VarToStr(ACBrNFe1.WebServices.Retorno.cStat) = '301')  or
+                (VarToStr(ACBrNFe1.WebServices.Retorno.cStat) = '302')  or
+                (vartostr(ACBrNFe1.WebServices.Retorno.cStat) = '303')  or
+                (vartostr(ACBrNFe1.WebServices.Retorno.cStat) = '110')  or
+                (vartostr(ACBrNFe1.WebServices.Retorno.cStat) = '205')  then
               begin
 
                //---------------------------------------------------------------
@@ -9892,11 +9960,12 @@ end;
 
 procedure TFrGBNFe.MenuItem2Click(Sender: TObject);
 var
- aux : string;
- I,vC, X      : Integer;
- Para, vI, vP : String;
- CC           : Tstrings;
- vZerSen      : Boolean;
+ aux                 : string;
+ I,vC, X             : Integer;
+ Para, vI, vP        : String;
+ CC                  : Tstrings;
+ vZerSen             : Boolean;
+ Sincrona_Assincrona : Boolean;
 
 begin
 
@@ -10053,7 +10122,12 @@ begin
 
          try
 
-          ACBrNFe1.Enviar(0);
+          if gModelo = 65 then
+           Sincrona_Assincrona := true
+          else
+           Sincrona_Assincrona := false;
+
+          ACBrNFe1.Enviar('0', true, Sincrona_Assincrona);
 
          except on e:Exception do
           begin
@@ -10814,8 +10888,11 @@ begin
             trvwNFe.Items.AddChild(NodeItem,'nItem='                 + IntToStr(Prod.nItem) );
             trvwNFe.Items.AddChild(NodeItem,'cProd='                 + Prod.cProd );
             trvwNFe.Items.AddChild(NodeItem,'cEAN='                  + Prod.cEAN);
+//            trvwNFe.Items.AddChild(NodeItem,'cBarra='                + Prod.cBarra);
+//            trvwNFe.Items.AddChild(NodeItem,'cBarraTrib='            + Prod.cBarraTrib);
             trvwNFe.Items.AddChild(NodeItem,'xProd='                 + Prod.xProd);
             trvwNFe.Items.AddChild(NodeItem,'NCM='                   + Prod.NCM);
+            //trvwNFe.Items.AddChild(NodeItem,'NVE='                   + Prod.NVE);    // nono 30/08/2021
             trvwNFe.Items.AddChild(NodeItem,'EXTIPI='                + Prod.EXTIPI);
             //trvwNFe.Items.AddChild(NodeItem,'genero='                 +IntToStr(Prod.genero));
             trvwNFe.Items.AddChild(NodeItem,'CFOP='                  + Prod.CFOP);
@@ -12901,7 +12978,9 @@ begin
            ACBrNFe1.EventoNFe.LerXML(xAuxC);
            ACBrNFe1.EnviarEmailEvento(
                       Para                                                      // email do destinatário
-                    , vEmailCancAssunto                                         // Asunto
+                    , 'Carta de Correção ref a NFe:[ ' + vNnf + ' ]' + ' - ' +
+                      'Protocolo: ' + DMFD.FDQryGeral2['CCe_nProt']             // Asunto
+                   // , vEmailCancAssunto                                         // Asunto
                     , FrPar.mmEmailMsg.Lines                                    // Mensagem
                     , CC                                                        // Lista com emails que serÃ£o enviado cÃ³pias - TStrings
                     , xAuxA                                                     // Anexos
@@ -18515,7 +18594,7 @@ begin
 end;
 
 //------------------------------------------------------------------------------
-// By Edson Lima ; 2021-06-30
+// By Edson Lima ; 2021-06-30 - Rotina de deste antes da implantação definitiva
 // Procedure que envia o lembrete que o certificado digital está pra vencer
 //------------------------------------------------------------------------------
 procedure TFrGBNFe.pEnviaEmailCer(var dtVenc: TDateTime );
@@ -18561,6 +18640,29 @@ begin
 end;
 
 //------------------------------------------------------------------------------
+//-- function fxPag
+//-- Preenche o campo de Descrição do Meio de Pagamento
+//------------------------------------------------------------------------------
+function TFrGBNFe.fxPag(): string;
+var
+ xPg : string;
+begin
+
+ while ( (length(trim(xPg)) < 2) or (length(trim(xPg)) > 60) ) do
+  begin
+
+   if not(InputQuery('Descrição do Meio de Pagamento', 'Meio de Pagamento', xPg)) then exit;
+
+   if ( (length(trim(xPg)) < 2) or (length(trim(xPg)) > 60) ) then
+    MessageDlg('Descrição fora da faixa, < 2 ou > 60 caractéres!', mtInformation, [mbOK],0);
+
+  end;
+
+ Result := xPg;
+
+end;
+
+//------------------------------------------------------------------------------
 //
 //
 //------------------------------------------------------------------------------
@@ -18582,4 +18684,3 @@ end;
 //------------------------------------------------------------------------------
 
 end.
-

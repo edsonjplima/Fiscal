@@ -110,7 +110,6 @@ type
     CheckBox4: TCheckBox;
     GroupBox21: TGroupBox;
     CheckBox5: TCheckBox;
-    GroupBox22: TGroupBox;
     ragLocSrv: TRadioGroup;
     GroupBox24: TGroupBox;
     edtNumSerie2: TEdit;
@@ -300,8 +299,6 @@ type
     procedure grp3MouseMove(Sender: TObject; Shift: TShiftState; X,
       Y: Integer);
     procedure grp5MouseMove(Sender: TObject; Shift: TShiftState; X,
-      Y: Integer);
-    procedure GroupBox22MouseMove(Sender: TObject; Shift: TShiftState; X,
       Y: Integer);
     procedure grp1Click(Sender: TObject);
     procedure lst2MouseMove(Sender: TObject; Shift: TShiftState; X,
@@ -1189,12 +1186,6 @@ procedure TFrPar.grp5MouseMove(Sender: TObject; Shift: TShiftState; X,
   Y: Integer);
 begin
  StatusBar1.Panels[0].Text := Grp5.Hint;
-end;
-
-procedure TFrPar.GroupBox22MouseMove(Sender: TObject; Shift: TShiftState;
-  X, Y: Integer);
-begin
- StatusBar1.Panels[0].Text := GroupBox22.Hint;
 end;
 
 procedure TFrPar.grp1Click(Sender: TObject);

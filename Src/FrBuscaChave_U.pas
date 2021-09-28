@@ -2348,11 +2348,14 @@ begin
       DMFD.FDQryGeral1.SQL.Add( ' ,t1.NomPro         as  Ite_NomPro              ' );
       DMFD.FDQryGeral1.SQL.Add( ' ,t1.SeqIte         as  Ite_SeqIte              ' );
       DMFD.FDQryGeral1.SQL.Add( ' ,t1.CodNCM         as  Ite_CodNCM              ' );
+      //DMFD.FDQryGeral1.SQL.Add( ' ,t1.CodNVE         as  Ite_CodNVE              ' ); // novo 30/08/2021
       DMFD.FDQryGeral1.SQL.Add( ' ,t1.SitTri         as  Ite_SitTri              ' );
       DMFD.FDQryGeral1.SQL.Add( ' ,t1.CodCfo         as  Ite_CodCfo              ' );
       DMFD.FDQryGeral1.SQL.Add( ' ,t1.Unidade        as  Ite_Unidade             ' );
       DMFD.FDQryGeral1.SQL.Add( ' ,t1.EAN13          as  Ite_EAN13               ' );
       DMFD.FDQryGeral1.SQL.Add( ' ,t1.cEAN           as  Ite_cEAN                ' );
+//      DMFD.FDQryGeral1.SQL.Add( ' ,t1.cBarra         as  Ite_cBarra              ' );
+//      DMFD.FDQryGeral1.SQL.Add( ' ,t1.cBarraTrib     as  Ite_cBarraTrib          ' );
       DMFD.FDQryGeral1.SQL.Add( ' ,t1.QtdPro         as  Ite_QtdPro              ' );
       DMFD.FDQryGeral1.SQL.Add( ' ,t1.ValPro         as  Ite_ValPro              ' );
       DMFD.FDQryGeral1.SQL.Add( ' ,t1.ValDes         as  Ite_ValDes              ' );
@@ -2367,11 +2370,11 @@ begin
       DMFD.FDQryGeral1.SQL.Add( ' ,t1.ValSbt         as  Ite_ValSbt              ' );
       DMFD.FDQryGeral1.SQL.Add( ' ,t1.ValSeg         as  Ite_ValSeg              ' );
       DMFD.FDQryGeral1.SQL.Add( ' ,t1.ValFre         as  Ite_ValFre              ' );
-      DMFD.FDQryGeral1.SQL.Add( ' ,t1.ValOut 	       as  Ite_ValOut              ' );
+      DMFD.FDQryGeral1.SQL.Add( ' ,t1.ValOut         as  Ite_ValOut              ' );
       DMFD.FDQryGeral1.SQL.Add( ' ,t1.ValPis         as  Ite_ValPis              ' );
-      DMFD.FDQryGeral1.SQL.Add( ' ,t1.ValCfs    	    as  Ite_ValCfs              ' );
-      DMFD.FDQryGeral1.SQL.Add( ' ,t1.ValDsn    	    as  Ite_ValDsn              ' );
-      DMFD.FDQryGeral1.SQL.Add( ' ,t1.MotDsn    	    as  Ite_MotDsn              ' );
+      DMFD.FDQryGeral1.SQL.Add( ' ,t1.ValCfs         as  Ite_ValCfs              ' );
+      DMFD.FDQryGeral1.SQL.Add( ' ,t1.ValDsn         as  Ite_ValDsn              ' );
+      DMFD.FDQryGeral1.SQL.Add( ' ,t1.MotDsn         as  Ite_MotDsn              ' );
       DMFD.FDQryGeral1.SQL.Add( '                                                ' );
       DMFD.FDQryGeral1.SQL.Add( ' from NFeE_Ite t1 join emitente t2 on t1.CodEmp = t2.Codigo_loja ' );
       DMFD.FDQryGeral1.SQL.Add( '                                                ' );
@@ -2417,11 +2420,13 @@ begin
          DMFD.FDQryGeral1.SQL.Add( '   ,  SeqIte                                 ' );
          DMFD.FDQryGeral1.SQL.Add( '   ,  NomPro                                 ' );
          DMFD.FDQryGeral1.SQL.Add( '   ,  CodNCM                                 ' );
+         //DMFD.FDQryGeral1.SQL.Add( '   ,  CodNVE                                 ' ); // novo 30/08/2021
          DMFD.FDQryGeral1.SQL.Add( '   ,  SitTri                                 ' );
          DMFD.FDQryGeral1.SQL.Add( '   ,  CodCfo                                 ' );
          DMFD.FDQryGeral1.SQL.Add( '   ,  Unidade                                ' );
-         //DMFD.FDQryGeral1.SQL.Add( '   ,  EAN13                                  ' );
          DMFD.FDQryGeral1.SQL.Add( '   ,  cEAN                                   ' );
+//         DMFD.FDQryGeral1.SQL.Add( '   ,  cBarra                                 ' );
+//         DMFD.FDQryGeral1.SQL.Add( '   ,  cBarraTrib                             ' );
          DMFD.FDQryGeral1.SQL.Add( '   ,  QtdPro                                 ' );
          DMFD.FDQryGeral1.SQL.Add( '   ,  ValPro                                 ' );
          DMFD.FDQryGeral1.SQL.Add( '   ,  ValDes                                 ' );
@@ -2436,11 +2441,11 @@ begin
          DMFD.FDQryGeral1.SQL.Add( '   ,  ValSbt                                 ' );
          DMFD.FDQryGeral1.SQL.Add( '   ,  ValSeg                                 ' );
          DMFD.FDQryGeral1.SQL.Add( '   ,  ValFre                                 ' );
-         DMFD.FDQryGeral1.SQL.Add( '   ,  ValOut 	  	                            ' );
+         DMFD.FDQryGeral1.SQL.Add( '   ,  ValOut                                 ' );
          DMFD.FDQryGeral1.SQL.Add( '   ,  ValPis                                 ' );
-         DMFD.FDQryGeral1.SQL.Add( '   ,  ValCfs    	                            ' );
-         DMFD.FDQryGeral1.SQL.Add( '   ,  ValDsn    	                            ' );
-         DMFD.FDQryGeral1.SQL.Add( '   ,  MotDsn    	                            ' );
+         DMFD.FDQryGeral1.SQL.Add( '   ,  ValCfs                                 ' );
+         DMFD.FDQryGeral1.SQL.Add( '   ,  ValDsn                                 ' );
+         DMFD.FDQryGeral1.SQL.Add( '   ,  MotDsn                                 ' );
          DMFD.FDQryGeral1.SQL.Add( '                     )                       ' );
          DMFD.FDQryGeral1.SQL.Add( '  Values            (                        ' );
          DMFD.FDQryGeral1.SQL.Add( '     :CodEmp                                 ' );
@@ -2453,11 +2458,13 @@ begin
          DMFD.FDQryGeral1.SQL.Add( '   , :SeqIte                                 ' );
          DMFD.FDQryGeral1.SQL.Add( '   , :NomPro                                 ' );
          DMFD.FDQryGeral1.SQL.Add( '   , :CodNCM                                 ' );
+         //DMFD.FDQryGeral1.SQL.Add( '   , :CodNVE                                 ' ); // novo 30/08/2021
          DMFD.FDQryGeral1.SQL.Add( '   , :SitTri                                 ' );
          DMFD.FDQryGeral1.SQL.Add( '   , :CodCfo                                 ' );
          DMFD.FDQryGeral1.SQL.Add( '   , :Unidade                                ' );
-         //DMFD.FDQryGeral1.SQL.Add( '   , :EAN13                                  ' );
          DMFD.FDQryGeral1.SQL.Add( '   , :cEAN                                   ' );
+//         DMFD.FDQryGeral1.SQL.Add( '   , :cBarra                                 ' );
+//         DMFD.FDQryGeral1.SQL.Add( '   , :cBarraTrib                             ' );
          DMFD.FDQryGeral1.SQL.Add( '   , :QtdPro                                 ' );
          DMFD.FDQryGeral1.SQL.Add( '   , :ValPro                                 ' );
          DMFD.FDQryGeral1.SQL.Add( '   , :ValDes                                 ' );
@@ -2472,22 +2479,23 @@ begin
          DMFD.FDQryGeral1.SQL.Add( '   , :ValSbt                                 ' );
          DMFD.FDQryGeral1.SQL.Add( '   , :ValSeg                                 ' );
          DMFD.FDQryGeral1.SQL.Add( '   , :ValFre                                 ' );
-         DMFD.FDQryGeral1.SQL.Add( '   , :ValOut 	                               ' );
+         DMFD.FDQryGeral1.SQL.Add( '   , :ValOut                                 ' );
          DMFD.FDQryGeral1.SQL.Add( '   , :ValPis                                 ' );
-         DMFD.FDQryGeral1.SQL.Add( '   , :ValCfs    	                            ' );
-         DMFD.FDQryGeral1.SQL.Add( '   , :ValDsn    	                            ' );
-         DMFD.FDQryGeral1.SQL.Add( '   , :MotDsn    	                            ' );
+         DMFD.FDQryGeral1.SQL.Add( '   , :ValCfs                                 ' );
+         DMFD.FDQryGeral1.SQL.Add( '   , :ValDsn                                 ' );
+         DMFD.FDQryGeral1.SQL.Add( '   , :MotDsn                                 ' );
          DMFD.FDQryGeral1.SQL.Add( '                    )                        ' );
          DMFD.FDQryGeral1.ParamByName('CodEmp'       ).Value    :=  StrToInt(gCodEmp);
          DMFD.FDQryGeral1.ParamByName('CnpjEmt'      ).Value    :=  copy(Emit.CNPJCPF, 1, 18);
          DMFD.FDQryGeral1.ParamByName('InsEstEmt'    ).Value    :=  copy(Emit.IE, 1, 25);
          DMFD.FDQryGeral1.ParamByName('CodNot'       ).Value    :=  Ide.nNF;
          DMFD.FDQryGeral1.ParamByName('Modelo'       ).Value    :=  copy(IntToStr(Ide.modelo), 1, 2);
-         DMFD.FDQryGeral1.ParamByName('Serie'	    ).Value    :=  copy(IntToStr(Ide.serie), 1, 3);
+         DMFD.FDQryGeral1.ParamByName('Serie'        ).Value    :=  copy(IntToStr(Ide.serie), 1, 3);
          DMFD.FDQryGeral1.ParamByName('CodPro'       ).Value    :=  copy(Det.Items[I].Prod.cProd, 1, 60);
          DMFD.FDQryGeral1.ParamByName('SeqIte'       ).Value    :=  Det.Items[I].Prod.nItem;
          DMFD.FDQryGeral1.ParamByName('NomPro'       ).Value    :=  copy(Det.Items[I].Prod.xProd, 1, 100);
          DMFD.FDQryGeral1.ParamByName('CodNCM'       ).Value    :=  copy(Det.Items[I].Prod.NCM, 1, 8);
+         //DMFD.FDQryGeral1.ParamByName('CodNVE'       ).Value    :=  copy(Det.Items[I].Prod.NVE, 1, 6); // novo 30/08/2021
 
          // by Edson Lima ; 2014-10-11T1129 ; Alterado para adequar ao ERP nesta data
          if ( length(CSOSNICMSToStr(Det.Items[I].Imposto.ICMS.CSOSN)) = 3 ) then
@@ -2509,8 +2517,9 @@ begin
 
          DMFD.FDQryGeral1.ParamByName('CodCfo'       ).Value    :=  copy(Det.Items[I].Prod.CFOP, 1, 4);
          DMFD.FDQryGeral1.ParamByName('Unidade'      ).Value    :=  copy(Det.Items[I].Prod.uCom, 1, 6);
-         //DMFD.FDQryGeral1.ParamByName('EAN13'	      ).Value    :=  0;
-         DMFD.FDQryGeral1.ParamByName('cEAN'	        ).Value    :=  copy(Det.Items[I].Prod.cEAN, 1, 13);
+         DMFD.FDQryGeral1.ParamByName('cEAN'         ).Value    :=  copy(Det.Items[I].Prod.cEAN, 1, 13);
+//         DMFD.FDQryGeral1.ParamByName('cBarra'       ).Value    :=  Det.Items[I].Prod.cBarra;
+//         DMFD.FDQryGeral1.ParamByName('cBarraTrib'   ).Value    :=  Det.Items[I].Prod.cBarraTrib;
          DMFD.FDQryGeral1.ParamByName('QtdPro'       ).AsFloat  :=  Det.Items[I].Prod.qCom;
          DMFD.FDQryGeral1.ParamByName('ValPro'       ).AsFloat  :=  Det.Items[I].Prod.vUnCom;
          DMFD.FDQryGeral1.ParamByName('ValDes'       ).AsFloat  :=  Det.Items[I].Prod.vDesc;

@@ -227,6 +227,7 @@ begin
   end;
 
   Application.Initialize;
+  TStyleManager.TrySetStyle('Amethyst Kamri');
   Application.HelpFile := 'C:\Sistemas de Desenvolvimento\GBNFe\Exe\Help\Manual Sistema GBNFe.chm';
   Application.CreateForm(TFrGBNFe, FrGBNFe);
   Application.CreateForm(TFrPar, FrPar);

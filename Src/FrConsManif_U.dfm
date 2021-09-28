@@ -408,7 +408,7 @@ object FrConsManif: TFrConsManif
         44)
       object ComboBox1: TComboBox
         Left = 12
-        Top = 14
+        Top = 16
         Width = 161
         Height = 21
         BevelKind = bkSoft
@@ -424,14 +424,14 @@ object FrConsManif: TFrConsManif
       end
     end
     object GroupBox5: TGroupBox
-      Left = 202
+      Left = 203
       Top = 6
       Width = 182
       Height = 44
       Hint = 'Indicador do Emissor NF-e consultada na base SEFAZ'
       Align = alCustom
       Anchors = [akTop, akRight]
-      Caption = '  '
+      Caption = '                                                  _ '
       Color = 14544639
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clMaroon
@@ -448,7 +448,7 @@ object FrConsManif: TFrConsManif
         44)
       object ComboBox2: TComboBox
         Left = 12
-        Top = 14
+        Top = 17
         Width = 159
         Height = 21
         BevelKind = bkSoft
@@ -461,12 +461,12 @@ object FrConsManif: TFrConsManif
           '1 - Somente NFe de Terceiros')
       end
       object CheckBox2: TCheckBox
-        Left = 12
-        Top = -3
+        Left = 15
+        Top = -1
         Width = 159
-        Height = 17
+        Height = 15
         Hint = 'Salva a altera'#231#227'o manual da caixa de sele'#231#227'o EMI!'
-        Caption = 'Indicador Emissor - Padr'#227'o 0  '
+        Caption = 'Indicador Emissor - Padr'#227'o 0 '
         Color = 14544639
         ParentColor = False
         TabOrder = 1
@@ -484,7 +484,7 @@ object FrConsManif: TFrConsManif
         ' dos 15 ultimos dias'
       Align = alCustom
       Anchors = [akTop, akRight]
-      Caption = '    '
+      Caption = '                                        o '
       Color = 14544639
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clMaroon
@@ -501,7 +501,7 @@ object FrConsManif: TFrConsManif
         44)
       object SpeedButton3: TSpeedButton
         Left = 124
-        Top = 14
+        Top = 17
         Width = 23
         Height = 20
         Cursor = crHandPoint
@@ -526,7 +526,7 @@ object FrConsManif: TFrConsManif
       end
       object Edit_NSU_nfe: TEdit
         Left = 11
-        Top = 14
+        Top = 17
         Width = 110
         Height = 21
         Anchors = [akLeft, akTop, akRight]
@@ -545,13 +545,13 @@ object FrConsManif: TFrConsManif
         OnKeyPress = Edit_NSU_nfeKeyPress
       end
       object CheckBox1: TCheckBox
-        Left = 11
-        Top = -2
+        Left = 15
+        Top = 0
         Width = 132
-        Height = 15
+        Height = 14
         Hint = 'Salva a altera'#231#227'o manual do caixa de sele'#231#227'o e a  NSU!'
         Anchors = [akLeft, akTop, akRight]
-        Caption = ' Ultimo NSU Recebido '
+        Caption = 'Ultimo NSU Recebid '
         Color = 14544639
         ParentColor = False
         TabOrder = 1
@@ -631,7 +631,7 @@ object FrConsManif: TFrConsManif
         Left = 11
         Top = 14
         Width = 104
-        Height = 21
+        Height = 20
         Anchors = [akLeft, akTop, akRight]
         BevelKind = bkSoft
         BiDiMode = bdLeftToRight
@@ -677,7 +677,7 @@ object FrConsManif: TFrConsManif
         Left = 11
         Top = 14
         Width = 106
-        Height = 21
+        Height = 20
         Anchors = [akLeft, akTop, akRight]
         BevelKind = bkSoft
         BorderStyle = bsNone
@@ -723,7 +723,7 @@ object FrConsManif: TFrConsManif
         Left = 11
         Top = 14
         Width = 106
-        Height = 21
+        Height = 20
         Anchors = [akLeft, akTop, akRight]
         BevelKind = bkSoft
         BorderStyle = bsNone
@@ -769,7 +769,7 @@ object FrConsManif: TFrConsManif
         Left = 11
         Top = 14
         Width = 105
-        Height = 21
+        Height = 20
         Anchors = [akLeft, akTop, akRight]
         BevelKind = bkSoft
         BorderStyle = bsNone

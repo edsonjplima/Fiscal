@@ -584,9 +584,9 @@ object FrPar: TFrPar
             end
           end
           object GroupBox3: TGroupBox
-            Left = 215
+            Left = 230
             Top = 134
-            Width = 342
+            Width = 327
             Height = 47
             Hint = 
               'Caminho do servidor SQL (\\192.168.0.10\Sistemas) ou (C:\Srv\Sis' +
@@ -603,15 +603,15 @@ object FrPar: TFrPar
             ParentBackground = False
             ParentColor = False
             ParentFont = False
-            TabOrder = 8
+            TabOrder = 7
             OnMouseMove = GroupBox3MouseMove
             DesignSize = (
-              342
+              327
               47)
             object edtCamSrv: TEdit
               Left = 12
               Top = 18
-              Width = 323
+              Width = 308
               Height = 21
               Hint = 
                 'Caminho do servidor que ser'#225' mapeado (ex: \\192.168.0.10\Sistema' +
@@ -629,6 +629,7 @@ object FrPar: TFrPar
               ParentFont = False
               TabOrder = 0
               OnExit = edtCamSrvExit
+              ExplicitWidth = 323
             end
           end
           object GroupBox18: TGroupBox
@@ -743,47 +744,6 @@ object FrPar: TFrPar
               TabOrder = 0
             end
           end
-          object GroupBox22: TGroupBox
-            Left = 7
-            Top = 134
-            Width = 199
-            Height = 47
-            Hint = 'Seleciona o tipo de maquina se Esta'#231#227'o ou Servudir(TS)'
-            Caption = ' Selecione o Local do Executavel '
-            Color = 14544639
-            Font.Charset = DEFAULT_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -11
-            Font.Name = 'MS Sans Serif'
-            Font.Style = []
-            ParentBackground = False
-            ParentColor = False
-            ParentFont = False
-            TabOrder = 7
-            OnMouseMove = GroupBox22MouseMove
-            object ragLocSrv: TRadioGroup
-              Left = 12
-              Top = 12
-              Width = 177
-              Height = 29
-              Color = clBtnFace
-              Columns = 2
-              Font.Charset = DEFAULT_CHARSET
-              Font.Color = clWindowText
-              Font.Height = -11
-              Font.Name = 'MS Sans Serif'
-              Font.Style = []
-              ItemIndex = 0
-              Items.Strings = (
-                'Esta'#231#227'o'
-                'Servidor (TS)')
-              ParentColor = False
-              ParentFont = False
-              TabOrder = 0
-              OnClick = ragLocSrvClick
-              OnExit = ragLocSrvExit
-            end
-          end
           object grp1: TGroupBox
             Left = 6
             Top = 182
@@ -803,7 +763,7 @@ object FrPar: TFrPar
             ParentBackground = False
             ParentColor = False
             ParentFont = False
-            TabOrder = 9
+            TabOrder = 8
             OnClick = grp1Click
             OnMouseMove = grp1MouseMove
             DesignSize = (
@@ -850,7 +810,7 @@ object FrPar: TFrPar
             ParentBackground = False
             ParentColor = False
             ParentFont = False
-            TabOrder = 10
+            TabOrder = 9
             OnMouseMove = grp2MouseMove
             DesignSize = (
               295
@@ -895,7 +855,7 @@ object FrPar: TFrPar
             Items.Strings = (
               '')
             ParentFont = False
-            TabOrder = 11
+            TabOrder = 10
             Visible = False
             OnDblClick = lst1DblClick
             OnExit = lst1Exit
@@ -919,7 +879,7 @@ object FrPar: TFrPar
             Items.Strings = (
               '')
             ParentFont = False
-            TabOrder = 12
+            TabOrder = 11
             Visible = False
             OnDblClick = lst2DblClick
             OnExit = lst2Exit
@@ -942,7 +902,7 @@ object FrPar: TFrPar
             ParentBackground = False
             ParentColor = False
             ParentFont = False
-            TabOrder = 13
+            TabOrder = 12
             OnMouseMove = grp3MouseMove
             object CheckBox8: TCheckBox
               Left = 47
@@ -969,7 +929,7 @@ object FrPar: TFrPar
             ParentBackground = False
             ParentColor = False
             ParentFont = False
-            TabOrder = 14
+            TabOrder = 13
             OnMouseMove = grp4MouseMove
             object cbb1: TComboBox
               Left = 8
@@ -1002,7 +962,7 @@ object FrPar: TFrPar
             ParentBackground = False
             ParentColor = False
             ParentFont = False
-            TabOrder = 15
+            TabOrder = 14
             OnMouseMove = grp6MouseMove
             object cbbTipoDANF: TComboBox
               Left = 10
@@ -1037,7 +997,7 @@ object FrPar: TFrPar
             ParentBackground = False
             ParentColor = False
             ParentFont = False
-            TabOrder = 16
+            TabOrder = 15
             OnMouseMove = grp7MouseMove
             object cbbTipoDANFCE: TComboBox
               Left = 8
@@ -1071,7 +1031,7 @@ object FrPar: TFrPar
             ParentBackground = False
             ParentColor = False
             ParentFont = False
-            TabOrder = 17
+            TabOrder = 16
             OnMouseMove = grp5MouseMove
             DesignSize = (
               101
@@ -1115,7 +1075,7 @@ object FrPar: TFrPar
             ParentBackground = False
             ParentColor = False
             ParentFont = False
-            TabOrder = 18
+            TabOrder = 17
             OnMouseMove = grp8MouseMove
             object CheckBox10: TCheckBox
               Left = 47
@@ -1142,7 +1102,7 @@ object FrPar: TFrPar
             ParentBackground = False
             ParentColor = False
             ParentFont = False
-            TabOrder = 19
+            TabOrder = 18
             OnMouseMove = grp6MouseMove
             object cbb2: TComboBox
               Left = 8
@@ -1183,7 +1143,7 @@ object FrPar: TFrPar
             ParentBackground = False
             ParentColor = False
             ParentFont = False
-            TabOrder = 20
+            TabOrder = 19
             OnMouseMove = grp8MouseMove
             object CkB_ForSai: TCheckBox
               Left = 45
@@ -1192,6 +1152,33 @@ object FrPar: TFrPar
               Height = 17
               TabOrder = 0
             end
+          end
+          object ragLocSrv: TRadioGroup
+            Left = 8
+            Top = 134
+            Width = 213
+            Height = 47
+            Hint = 'Seleciona o tipo de maquina se Esta'#231#227'o ou Servudir(TS)'
+            Caption = ' Selecione o Local do Executavel '
+            Color = 14544639
+            Columns = 2
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'MS Sans Serif'
+            Font.Style = []
+            ItemIndex = 0
+            Items.Strings = (
+              'Esta'#231#227'o'
+              'Servidor (TS)')
+            ParentBackground = False
+            ParentColor = False
+            ParentFont = False
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 20
+            OnClick = ragLocSrvClick
+            OnExit = ragLocSrvExit
           end
         end
       end
@@ -1209,7 +1196,7 @@ object FrPar: TFrPar
             282)
           object sbtnGetCert: TSpeedButton
             Left = 639
-            Top = 95
+            Top = 126
             Width = 23
             Height = 24
             Anchors = [akTop, akRight]
@@ -1229,15 +1216,9 @@ object FrPar: TFrPar
             NumGlyphs = 2
             OnClick = sbtnGetCertClick
           end
-          object Label1: TLabel
-            Left = 14
-            Top = 144
-            Width = 3
-            Height = 13
-          end
           object SpeedButton1: TSpeedButton
             Left = 639
-            Top = 139
+            Top = 170
             Width = 23
             Height = 24
             Anchors = [akTop, akRight]
@@ -1257,9 +1238,16 @@ object FrPar: TFrPar
             NumGlyphs = 2
             OnClick = SpeedButton1Click
           end
+          object Label1: TLabel
+            Left = 17
+            Top = 84
+            Width = 44
+            Height = 26
+            Caption = 'Informe...'#13#10'Informe...'
+          end
           object GroupBox8: TGroupBox
             Left = 6
-            Top = 84
+            Top = 115
             Width = 609
             Height = 41
             Hint = 'Principal certificado digital v'#225'lido na empresa.'
@@ -1294,7 +1282,7 @@ object FrPar: TFrPar
           end
           object GroupBox16: TGroupBox
             Left = 6
-            Top = 4
+            Top = 6
             Width = 661
             Height = 78
             Anchors = [akLeft, akTop, akRight]
@@ -1383,7 +1371,7 @@ object FrPar: TFrPar
           end
           object GroupBox24: TGroupBox
             Left = 6
-            Top = 128
+            Top = 159
             Width = 609
             Height = 41
             Hint = 
@@ -1420,7 +1408,7 @@ object FrPar: TFrPar
           end
           object CheckBox6: TCheckBox
             Left = 623
-            Top = 100
+            Top = 131
             Width = 17
             Height = 17
             Anchors = [akTop, akRight]
@@ -1429,7 +1417,7 @@ object FrPar: TFrPar
           end
           object CheckBox7: TCheckBox
             Left = 623
-            Top = 144
+            Top = 175
             Width = 17
             Height = 17
             Anchors = [akTop, akRight]
@@ -1438,8 +1426,8 @@ object FrPar: TFrPar
           end
           object GroupBox23: TGroupBox
             Left = 6
-            Top = 172
-            Width = 437
+            Top = 203
+            Width = 423
             Height = 41
             Hint = 
               'Segundo certificado digital - Para o caso que exista dois certif' +
@@ -1459,12 +1447,12 @@ object FrPar: TFrPar
             ParentFont = False
             TabOrder = 3
             DesignSize = (
-              437
+              423
               41)
             object edtCSC: TEdit
               Left = 8
               Top = 14
-              Width = 419
+              Width = 405
               Height = 21
               Hint = 'N'#250'mero de s'#233'rie do certificado digital'
               Anchors = [akLeft, akTop, akRight]
@@ -1484,7 +1472,7 @@ object FrPar: TFrPar
           end
           object GroupBox25: TGroupBox
             Left = 440
-            Top = 172
+            Top = 203
             Width = 175
             Height = 41
             Hint = 
@@ -2855,7 +2843,7 @@ object FrPar: TFrPar
               object CheckBox: TCheckBox
                 Left = 42
                 Top = 16
-                Width = 13
+                Width = 17
                 Height = 17
                 Anchors = [akLeft, akRight]
                 Color = 12906751
@@ -2937,7 +2925,7 @@ object FrPar: TFrPar
               object chk_BakAuto: TCheckBox
                 Left = 32
                 Top = 17
-                Width = 13
+                Width = 16
                 Height = 17
                 Anchors = [akLeft, akRight]
                 Color = 12906751
@@ -2993,7 +2981,7 @@ object FrPar: TFrPar
               object chk_BakAuto_NFe: TCheckBox
                 Left = 32
                 Top = 18
-                Width = 17
+                Width = 18
                 Height = 17
                 Anchors = [akLeft, akRight]
                 Color = 12906751
@@ -3024,7 +3012,7 @@ object FrPar: TFrPar
               object chk_BakAuto_ERP: TCheckBox
                 Left = 32
                 Top = 19
-                Width = 13
+                Width = 18
                 Height = 17
                 Anchors = [akLeft, akRight]
                 Color = 12906751
@@ -3233,7 +3221,7 @@ object FrPar: TFrPar
               object chk_RespTec: TCheckBox
                 Left = 12
                 Top = 14
-                Width = 15
+                Width = 19
                 Height = 17
                 Anchors = [akLeft, akRight]
                 Color = 12906751

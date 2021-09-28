@@ -306,9 +306,9 @@ object FrBuscaChave: TFrBuscaChave
         44)
       object Edit_Busca_Chave: TEdit
         Left = 11
-        Top = 14
+        Top = 17
         Width = 170
-        Height = 21
+        Height = 20
         Anchors = [akLeft, akTop, akRight]
         BevelKind = bkSoft
         BorderStyle = bsNone
@@ -326,15 +326,15 @@ object FrBuscaChave: TFrBuscaChave
       end
     end
     object GroupBox12: TGroupBox
-      Left = 572
-      Top = 50
+      Left = 571
+      Top = 52
       Width = 204
       Height = 44
       Hint = 
         ' Filtra notas de manifesta'#231#227'o pela data de edmiss'#227'o. Inicia most' +
         'rando as notas dos ultimos 90 dias.'
       Anchors = [akTop, akRight]
-      Caption = '   '
+      Caption = '                                                  o '
       Color = 14544639
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clMaroon
@@ -350,30 +350,16 @@ object FrBuscaChave: TFrBuscaChave
         204
         44)
       object Label12: TLabel
-        Left = 98
+        Left = 97
         Top = 20
         Width = 6
         Height = 13
         Anchors = [akLeft, akTop, akRight]
         Caption = 'a'
       end
-      object CheckBox1: TCheckBox
-        Left = 13
-        Top = -2
-        Width = 157
-        Height = 17
-        Anchors = [akTop, akRight]
-        Caption = ' Filtra Pela Data da Emiss'#227'o '
-        Checked = True
-        Color = 14544639
-        ParentColor = False
-        State = cbChecked
-        TabOrder = 0
-        OnClick = CheckBox1Click
-      end
       object cxdtp1: TcxDateEdit
         Left = 10
-        Top = 15
+        Top = 16
         Anchors = [akTop, akRight]
         EditValue = 0d
         Properties.Alignment.Horz = taLeftJustify
@@ -386,7 +372,7 @@ object FrBuscaChave: TFrBuscaChave
       end
       object cxdtp2: TcxDateEdit
         Left = 108
-        Top = 15
+        Top = 16
         Anchors = [akTop, akRight]
         BiDiMode = bdLeftToRight
         EditValue = 0d
@@ -398,6 +384,20 @@ object FrBuscaChave: TFrBuscaChave
         Style.ButtonStyle = btsUltraFlat
         TabOrder = 2
         Width = 82
+      end
+      object CheckBox1: TCheckBox
+        Left = 15
+        Top = -1
+        Width = 157
+        Height = 16
+        Anchors = [akTop, akRight]
+        Caption = ' Filtra Pela Data da Emiss'#227
+        Checked = True
+        Color = 14544639
+        ParentColor = False
+        State = cbChecked
+        TabOrder = 0
+        OnClick = CheckBox1Click
       end
     end
     object RadioGroup1: TRadioGroup
