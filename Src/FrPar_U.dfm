@@ -373,7 +373,7 @@ object FrPar: TFrPar
       Top = 1
       Width = 677
       Height = 310
-      ActivePage = TabSheet1
+      ActivePage = TabSheet8
       Align = alClient
       TabOrder = 0
       OnChange = PageControl1Change
@@ -629,7 +629,6 @@ object FrPar: TFrPar
               ParentFont = False
               TabOrder = 0
               OnExit = edtCamSrvExit
-              ExplicitWidth = 323
             end
           end
           object GroupBox18: TGroupBox
@@ -1730,10 +1729,10 @@ object FrPar: TFrPar
             669
             282)
           object GroupBox10: TGroupBox
-            Left = 6
-            Top = 2
+            Left = 7
+            Top = 4
             Width = 650
-            Height = 258
+            Height = 269
             Anchors = [akLeft, akTop, akRight, akBottom]
             Caption = 'Email'
             Color = 14544639
@@ -1748,14 +1747,7 @@ object FrPar: TFrPar
             TabOrder = 0
             DesignSize = (
               650
-              258)
-            object Label28: TLabel
-              Left = 8
-              Top = 184
-              Width = 95
-              Height = 13
-              Caption = 'Mensagem do Email'
-            end
+              269)
             object cbEmailSSL: TCheckBox
               Left = 479
               Top = 61
@@ -1764,22 +1756,7 @@ object FrPar: TFrPar
               Hint = 'Servi'#231'o SMTP exige conex'#227'o segura '
               Anchors = [akTop, akRight]
               Caption = 'SSL - Secure Sockets Layer'
-              TabOrder = 10
-            end
-            object mmEmailMsg: TMemo
-              Left = 8
-              Top = 198
-              Width = 636
-              Height = 53
-              Hint = 'Texto livre descritivo que '#233' a parte principal do e-mail'
-              Anchors = [akLeft, akTop, akRight, akBottom]
-              BevelKind = bkSoft
-              BorderStyle = bsNone
-              Color = 15792383
-              MaxLength = 250
               TabOrder = 9
-              OnEnter = mmEmailMsgEnter
-              OnExit = mmEmailMsgExit
             end
             object GroupBox2: TGroupBox
               Left = 8
@@ -1793,7 +1770,7 @@ object FrPar: TFrPar
                 362
                 41)
               object edtNEeMail: TEdit
-                Left = 12
+                Left = 10
                 Top = 14
                 Width = 340
                 Height = 21
@@ -1809,13 +1786,13 @@ object FrPar: TFrPar
             object GroupBox5: TGroupBox
               Left = 379
               Top = 14
-              Width = 263
+              Width = 262
               Height = 41
               Anchors = [akTop, akRight]
               Caption = ' Servidor SMTP '
               TabOrder = 1
               DesignSize = (
-                263
+                262
                 41)
               object edtSmtpHost: TEdit
                 Left = 10
@@ -1842,7 +1819,7 @@ object FrPar: TFrPar
                 73
                 41)
               object edtSmtpPort: TEdit
-                Left = 12
+                Left = 10
                 Top = 14
                 Width = 51
                 Height = 21
@@ -1885,8 +1862,8 @@ object FrPar: TFrPar
               end
             end
             object GroupBox12: TGroupBox
-              Left = 337
-              Top = 56
+              Left = 344
+              Top = 55
               Width = 129
               Height = 41
               Anchors = [akTop, akRight]
@@ -1949,7 +1926,7 @@ object FrPar: TFrPar
               object edtEmailCancAssunto: TEdit
                 Left = 12
                 Top = 14
-                Width = 272
+                Width = 273
                 Height = 21
                 Hint = 'O assunto que vai aparece no e-Mail de cancelamento'
                 Anchors = [akLeft, akTop, akRight]
@@ -1974,7 +1951,7 @@ object FrPar: TFrPar
               object edtEnvCC: TEdit
                 Left = 10
                 Top = 14
-                Width = 276
+                Width = 275
                 Height = 21
                 Hint = 
                   'Lista dos e-Mail que receber'#227'o c'#243'pias de emails, separados por (' +
@@ -2021,7 +1998,36 @@ object FrPar: TFrPar
               Hint = 'Servi'#231'o SMTP exige conex'#227'o segura '
               Anchors = [akTop, akRight]
               Caption = 'TLS - Transport Layer Security'
+              TabOrder = 10
+            end
+            object grp51: TGroupBox
+              Left = 8
+              Top = 181
+              Width = 633
+              Height = 82
+              Anchors = [akLeft, akTop, akRight]
+              Caption = ' Mensagem do e-Mail '
               TabOrder = 11
+              DesignSize = (
+                633
+                82)
+              object mmEmailMsg: TMemo
+                Left = 10
+                Top = 14
+                Width = 614
+                Height = 62
+                Hint = 'Texto livre descritivo que '#233' a parte principal do e-mail'
+                Margins.Left = 6
+                Margins.Top = 6
+                Margins.Right = 6
+                Margins.Bottom = 6
+                Anchors = [akLeft, akTop, akRight, akBottom]
+                BevelKind = bkSoft
+                Color = 15792383
+                TabOrder = 0
+                OnEnter = mmEmailMsgEnter
+                OnExit = mmEmailMsgExit
+              end
             end
           end
         end

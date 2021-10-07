@@ -3,7 +3,7 @@
         <ProjectGuid>{EC1A8179-C546-4772-94B8-4B9132638118}</ProjectGuid>
         <MainSource>GBNFe.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>1025</TargetedPlatforms>
         <AppType>Application</AppType>
         <FrameworkType>VCL</FrameworkType>
@@ -122,18 +122,19 @@
         <BT_BuildType>Debug</BT_BuildType>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
+        <BT_BuildType>Debug</BT_BuildType>
         <VerInfo_DLL>true</VerInfo_DLL>
         <VerInfo_PreRelease>true</VerInfo_PreRelease>
         <VerInfo_AutoGenVersion>false</VerInfo_AutoGenVersion>
         <VerInfo_Special>true</VerInfo_Special>
         <VerInfo_Private>true</VerInfo_Private>
-        <VerInfo_Release>8</VerInfo_Release>
-        <Debugger_RunParams>/developed_gb_informática_ltda &quot;/001&quot; /usuário_padrão &quot;/0&quot; &quot;/1&quot; &quot;/0&quot;</Debugger_RunParams>
-        <VerInfo_Build>31</VerInfo_Build>
+        <VerInfo_Release>10</VerInfo_Release>
+        <Debugger_RunParams>/developed_gb_informática_ltda &quot;/008&quot; /usuário_padrão &quot;/0&quot; &quot;/1&quot; &quot;/0&quot;</Debugger_RunParams>
+        <VerInfo_Build>3</VerInfo_Build>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <VerInfo_MinorVer>21</VerInfo_MinorVer>
         <VerInfo_MajorVer>6</VerInfo_MajorVer>
-        <VerInfo_Keys>CompanyName=;FileVersion=6.21.8.31;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductVersion=1.0.0.0;Comments=;ProgramID=com.embarcadero.$(ModuleName);FileDescription=$(ModuleName);ProductName=$(ModuleName)</VerInfo_Keys>
+        <VerInfo_Keys>CompanyName=;FileVersion=6.21.10.3;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductVersion=1.0.0.0;Comments=;ProgramID=com.embarcadero.$(MSBuildProjectName);FileDescription=$(MSBuildProjectName);ProductName=$(MSBuildProjectName)</VerInfo_Keys>
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
         <AppEnableHighDPI>true</AppEnableHighDPI>
     </PropertyGroup>
@@ -152,7 +153,7 @@
         <BT_BuildType>Debug</BT_BuildType>
         <VerInfo_Release>9</VerInfo_Release>
         <VerInfo_Build>28</VerInfo_Build>
-        <Debugger_RunParams>/developed_gb_informática_ltda /001 /usuário_padrão /0 /1 /0 /0 /0 /GERPA</Debugger_RunParams>
+        <Debugger_RunParams>/developed_gb_informática_ltda /008 /usuário_padrão /0 /1 /0 /0 /0 /GERPA</Debugger_RunParams>
         <VerInfo_MinorVer>21</VerInfo_MinorVer>
         <VerInfo_Special>true</VerInfo_Special>
         <VerInfo_PreRelease>true</VerInfo_PreRelease>

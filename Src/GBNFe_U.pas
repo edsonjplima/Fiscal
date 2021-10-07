@@ -2452,8 +2452,18 @@ begin
            Prod.nItem       := DMFD.FDQuery2['sequencia'];
            Prod.CFOP        := DMFD.FDQuery2['cfop'];
            Prod.cEAN        := vartostr(DMFD.FDQuery2['EAN']);
-//           Prod.cBarra      := DMFD.FDQuery2['cBarra'];                         // NT2020-005
-//           Prod.cBarraTrib  := DMFD.FDQuery2['cBarraTrib'];                     // NT2020-005
+
+           if (DMFD.FDQuery2['cBarra'] <> null ) then                           // Opcional - Preencher com o Código de Barras próprio ou de terceiros que seja diferente do padrão GTIN - por exemplo: código de barras de catálogo, partnumber, etc
+            Prod.cBarra      := DMFD.FDQuery2['cBarra'];
+
+           if (DMFD.FDQuery2['cBarraTrib'] <> null ) then                       // Opcional - Preencher com o Código de Barras próprio ou de terceiros que seja diferente do padrão GTIN correspondente àquele da menor unidade comercializável identificado por Código de Barras por exemplo: código de barras de catálogo, partnumber, etc
+            Prod.cBarraTrib  := DMFD.FDQuery2['cBarraTrib'];
+
+
+
+
+
+
 
 
 
@@ -2826,7 +2836,10 @@ begin
 
            //-------------------------------------------------------------------
            Prod.NCM      := DMFD.FDQuery2['ncm'];
-           //Prod.NVE      := DMFD.FDQuery2['nve'];                             // novo 30/08/2021
+
+//           if (DMFD.FDQuery2['CodNVE'] <> null ) then                           // Codificação opcional que detalha alguns NCM. Formato: duas letras maiúsculas e 4 algarismos. Se a mercadoria se enquadrar em mais de uma codificação, informar até 8 codificações principais. Vide: Anexo XII.03 – Identificador NVE
+//            Prod.NVE  := DMFD.FDQuery2['CodNVE'];
+
            Prod.vDesc    := DMFD.FDQuery2['vl_desconto'];
 
            // by Edson Lima ; 2013/03/15 ; 10:36 ; condição incluida "o tipo desta classe deve ter sido modificada de ACBr"
@@ -2876,12 +2889,18 @@ begin
              with Prod.DI.Add do
               begin
 
-               cExportador   := DMFD.FDQuery8['codigo_exportador'];
-               dDesemb       := DMFD.FDQuery8['data_desembaraco'];
-               UFDesemb      := DMFD.FDQuery8['uf_desembaraco'];
-               xLocDesemb    := DMFD.FDQuery8['local_desembaraco'];
-               dDi           := DMFD.FDQuery8['data_DI'];
                nDi           := DMFD.FDQuery8['numero_di'];
+               dDi           := DMFD.FDQuery8['data_DI'];
+               xLocDesemb    := DMFD.FDQuery8['local_desembaraco'];
+               UFDesemb      := DMFD.FDQuery8['uf_desembaraco'];
+               dDesemb       := DMFD.FDQuery8['data_desembaraco'];
+
+               cExportador   := DMFD.FDQuery8['codigo_exportador'];
+
+               if (DMFD.FDQuery8['tpViaTransp'] <> null ) then
+                tpViaTransp   := DMFD.FDQuery8['tpViaTransp']
+               else
+                tpViaTransp   := tvRodoviaria;
 
                //itens de notas-ADI
                DMFD.FDQuery9.Close;
@@ -3010,11 +3029,19 @@ begin
            with Imposto.ICMS do
             begin
 
-             if not (DMFD.FDQuery2['vICMSDeson'] = null) then
+             if (DMFD.FDQuery2['vICMSDeson'] <> null) then
               begin
 
                vICMSDeson     := DMFD.FDQuery2['vICMSDeson'];
                motDesICMS     := DMFD.FDQuery2['motDesICMS'];
+
+              end;
+
+             if (DMFD.FDQuery2['vICMSSTDeson'] <> null) then
+              begin
+
+               vICMSSTDeson     := DMFD.FDQuery2['vICMSSTDeson'];
+               motDesICMSST     := DMFD.FDQuery2['motDesICMSST'];
 
               end;
 
@@ -3441,7 +3468,7 @@ begin
         Total.ICMSTot.vTotTrib := DMFD.FDQuery1['vTotTrib'];                    // Nota
 
        // by Edson Lima ; 2016-10-11 ; valor do ICMS Desonerado
-       if not (DMFD.FDQuery1['nfe_vICMSDeson'] = null) then
+       if (DMFD.FDQuery1['nfe_vICMSDeson'] <> null) then
         Total.ICMSTot.vICMSDeson   := DMFD.FDQuery1['nfe_vICMSDeson'];          // by Edson Lima ; 11/10/2016
 
        // by Edson Lima ; 2020-7-14 ; partilha do icms e fundo de probreza
@@ -3698,124 +3725,135 @@ begin
            if (ACBrNFe1.Enviar('0', true, Sincrona_Assincrona)) then
             begin
 
-             // by Edson Lima ; 2013/03/12 ; 14:23 ; Atualiza a nfe no update centralizado
-             pGravaNFe('004',
-              'protocolo',
-              'recibo',
-              'chave_nfe',
-              'situacao',
-              'motivo',
-              'data_hora_recebimento',
-              'CalcHoraNFCe',
-              'UsuTrs',
-              '',
-              '',
-              '',
-              '',
-              '',
-              'codigo_loja',
-              'demi',
-              'nnf',
-              'serie',
-              'chave_nfe',
-              'modelo',                                                         // Nome dos campos
-              ACBrNFe1.WebServices.Retorno.Protocolo,
-              ACBrNFe1.WebServices.Retorno.Recibo,
-              ACBrNFe1.WebServices.Retorno.ChaveNFe,
-              VarToStr(ACBrNFe1.WebServices.Retorno.cStat),
-              ACBrNFe1.WebServices.Retorno.xMotivo,
-              FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.StatusServico.dhRetorno),         // Antes -> FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].dhRecbto),
-              'N',
-              gUsu,
-              '',
-              '',
-              '',
-              '',
-              '',
-              edt_CodEmp.Text,
-              FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']),
-              DMFD.FDQuery1['nfe_nnf'],
-              DMFD.FDQuery1['nfe_serie'],
-              ACBrNFe1.WebServices.Retorno.ChaveNFe,
-              DMFD.FDQuery1['nfe_modelo'],                                      // Conteúdo dos campos
-              true);                                                            // Consiste [true/false]
-
-             //-----------------------------------------------------------------
-             // by Edson Lima ; 2017-1-5T1054 ; Grava a chave no pedido do gerente
-             if ( (VarToStr(ACBrNFe1.WebServices.Retorno.cStat) = '100') or
-                  (VarToStr(ACBrNFe1.WebServices.Retorno.cStat) = '150') ) then
-              fGraGer( gChvNFe, gCd_Emp, gCodPed );
-             //-----------------------------------------------------------------
-
-             //-----------------------------------------------------------------
-             // by Edson Lima ; 2017-9-27
-             //-----------------------------------------------------------------
-             // Caso a exceção seja por denegação
-             //-----------------------------------------------------------------
-             if (ACBrNFe1.WebServices.Retorno.xMotivo =
-                'Rejeicao: NF-e esta denegada na base de dados da Secretaria de Fazenda Estadual')  or
-                (ACBrNFe1.WebServices.Retorno.xMotivo =
-                'Uso Denegado : Irregularidade fiscal do destinatario')                             or
-                (VarToStr(ACBrNFe1.WebServices.Retorno.cStat) = '301')  or
-                (VarToStr(ACBrNFe1.WebServices.Retorno.cStat) = '302')  or
-                (vartostr(ACBrNFe1.WebServices.Retorno.cStat) = '303')  or
-                (vartostr(ACBrNFe1.WebServices.Retorno.cStat) = '110')  or
-                (vartostr(ACBrNFe1.WebServices.Retorno.cStat) = '205')  then
+             if Sincrona_Assincrona then
               begin
 
-               //---------------------------------------------------------------
-               // by Edson Lima ; 2017-1-5 ; Grava a chave no pedido do gerente
-               fGraGer( gChvNFe, gCd_Emp, gCodPed );
-               //---------------------------------------------------------------
+               BitBtn8Click(Sender);
 
-               gExcluir  := True;
-               gConsiste := false;                                              // Depende da consistência
-               BitBtn8Click(Sender);                                            // Força um click na consulta
-               gExcluir  := False;                                              // Seta variável global para ler vários registros
-               iCodPed   := gCodPed;
+              end
+             else
+              begin
 
-               //---------------------------------------------------------------
-               // by Edson Lima ; 2017-1-13T1358
-               // Cancelamento do pedido no gerente da nota denegada
-               //---------------------------------------------------------------
-               // Verifica a precisão administrativa do gerente para cancelamento
-               // de nota denegada
-               //---------------------------------------------------------------
-               if iCodPed <> 0 then
+               // by Edson Lima ; 2013/03/12 ; 14:23 ; Atualiza a nfe no update centralizado
+               pGravaNFe('004',
+               'protocolo',
+               'recibo',
+               'chave_nfe',
+               'situacao',
+               'motivo',
+               'data_hora_recebimento',
+               'CalcHoraNFCe',
+               'UsuTrs',
+               '',
+               '',
+               '',
+               '',
+               '',
+               'codigo_loja',
+               'demi',
+               'nnf',
+               'serie',
+               'chave_nfe',
+               'modelo',                                                         // Nome dos campos
+               ACBrNFe1.WebServices.Retorno.Protocolo,
+               ACBrNFe1.WebServices.Retorno.Recibo,
+               ACBrNFe1.WebServices.Retorno.ChaveNFe,
+               IntToStr(ACBrNFe1.WebServices.Retorno.cStat),
+               ACBrNFe1.WebServices.Retorno.xMotivo,
+               FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.StatusServico.dhRetorno),         // Antes -> FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].dhRecbto),
+               'N',
+               gUsu,
+               '',
+               '',
+               '',
+               '',
+               '',
+               edt_CodEmp.Text,
+               FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']),
+               DMFD.FDQuery1['nfe_nnf'],
+               DMFD.FDQuery1['nfe_serie'],
+               ACBrNFe1.WebServices.Retorno.ChaveNFe,
+               DMFD.FDQuery1['nfe_modelo'],                                      // Conteúdo dos campos
+               true);                                                            // Consiste [true/false]
+
+               //-----------------------------------------------------------------
+               // by Edson Lima ; 2017-1-5T1054 ; Grava a chave no pedido do gerente
+               if ( (VarToStr(ACBrNFe1.WebServices.Retorno.cStat) = '100') or
+                    (VarToStr(ACBrNFe1.WebServices.Retorno.cStat) = '150') ) then
+                fGraGer( gChvNFe, gCd_Emp, gCodPed );
+               //-----------------------------------------------------------------
+
+               //-----------------------------------------------------------------
+               // by Edson Lima ; 2017-9-27
+               //-----------------------------------------------------------------
+               // Caso a exceção seja por denegação
+               //-----------------------------------------------------------------
+               if (ACBrNFe1.WebServices.Retorno.xMotivo =
+                  'Rejeicao: NF-e esta denegada na base de dados da Secretaria de Fazenda Estadual')  or
+                  (ACBrNFe1.WebServices.Retorno.xMotivo =
+                  'Uso Denegado : Irregularidade fiscal do destinatario')                             or
+                  (VarToStr(ACBrNFe1.WebServices.Retorno.cStat) = '301')  or
+                  (VarToStr(ACBrNFe1.WebServices.Retorno.cStat) = '302')  or
+                  (vartostr(ACBrNFe1.WebServices.Retorno.cStat) = '303')  or
+                  (vartostr(ACBrNFe1.WebServices.Retorno.cStat) = '110')  or
+                  (vartostr(ACBrNFe1.WebServices.Retorno.cStat) = '205')  then
                 begin
 
-                 if ( fVerPAG(StrToIntDef(gNNF_Consiste, 0), StrToIntDef(edt_CodEmp.Text, 0), iCodPed) ) then
+                 //---------------------------------------------------------------
+                 // by Edson Lima ; 2017-1-5 ; Grava a chave no pedido do gerente
+                 fGraGer( gChvNFe, gCd_Emp, gCodPed );
+                 //---------------------------------------------------------------
+
+                 gExcluir  := True;
+                 gConsiste := false;                                              // Depende da consistência
+                 BitBtn8Click(Sender);                                            // Força um click na consulta
+                 gExcluir  := False;                                              // Seta variável global para ler vários registros
+                 iCodPed   := gCodPed;
+
+                 //---------------------------------------------------------------
+                 // by Edson Lima ; 2017-1-13T1358
+                 // Cancelamento do pedido no gerente da nota denegada
+                 //---------------------------------------------------------------
+                 // Verifica a precisão administrativa do gerente para cancelamento
+                 // de nota denegada
+                 //---------------------------------------------------------------
+                 if iCodPed <> 0 then
                   begin
 
-                   //-------------------------------------------------------------
-                   // Efetua o Cancelamento Administrativo do PEDIDO da nota Denegada
-                   //-------------------------------------------------------------
-                   if (iCodPed <> 6) then
+                   if ( fVerPAG(StrToIntDef(gNNF_Consiste, 0), StrToIntDef(edt_CodEmp.Text, 0), iCodPed) ) then
                     begin
-                     if not ( fCanCAP(StrToIntDef(gNNF_Consiste, 0), StrToIntDef(edt_CodEmp.Text, 0), iCodPed, gCodMtD) ) then
-                      Application.MessageBox(PWideChar('Nota denegada, mas o pedido não foi cancelado!'), 'Atenção', MB_ICONINFORMATION );
+
+                     //-------------------------------------------------------------
+                     // Efetua o Cancelamento Administrativo do PEDIDO da nota Denegada
+                     //-------------------------------------------------------------
+                     if (iCodPed <> 6) then
+                      begin
+                       if not ( fCanCAP(StrToIntDef(gNNF_Consiste, 0), StrToIntDef(edt_CodEmp.Text, 0), iCodPed, gCodMtD) ) then
+                        Application.MessageBox(PWideChar('Nota denegada, mas o pedido não foi cancelado!'), 'Atenção', MB_ICONINFORMATION );
+                      end
+                     else
+                      Application.MessageBox(PWideChar('Número do pedido não informado! Nota cancelada, mas Pedido não!'), 'Atenção', MB_ICONINFORMATION );
+                     //-------------------------------------------------------------
+
                     end
                    else
-                    Application.MessageBox(PWideChar('Número do pedido não informado! Nota cancelada, mas Pedido não!'), 'Atenção', MB_ICONINFORMATION );
-                   //-------------------------------------------------------------
+                    Application.MessageBox(PWideChar('Nota denegada, mas o pedido não foi cancelado!'), 'Atenção', MB_ICONINFORMATION );
 
                   end
                  else
-                  Application.MessageBox(PWideChar('Nota denegada, mas o pedido não foi cancelado!'), 'Atenção', MB_ICONINFORMATION );
+                  Application.MessageBox(PWideChar('Número do pedido não informado!'), 'Atenção', MB_ICONINFORMATION );
+                 //-----------------------------------------------------------------
 
-                end
-               else
-                Application.MessageBox(PWideChar('Número do pedido não informado!'), 'Atenção', MB_ICONINFORMATION );
-               //-----------------------------------------------------------------
+                end;
+
+
+               memoLog.Clear;
+               MemoResp.Lines.Text   := UTF8Encode(ACBrNFe1.WebServices.Retorno.RetWS);
+               MemoLog.Lines.Text    := UTF8Encode(ACBrNFe1.WebServices.Retorno.Msg);
+               memoRespWS.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.Retorno.RetornoWS);
+               LoadXML(MemoResp, WBResposta);
 
               end;
-
-
-             memoLog.Clear;
-             MemoResp.Lines.Text   := UTF8Encode(ACBrNFe1.WebServices.Retorno.RetWS);
-             MemoLog.Lines.Text    := UTF8Encode(ACBrNFe1.WebServices.Retorno.Msg);
-             memoRespWS.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.Retorno.RetornoWS);
-             LoadXML(MemoResp, WBResposta);
 
             end
 
@@ -10888,11 +10926,11 @@ begin
             trvwNFe.Items.AddChild(NodeItem,'nItem='                 + IntToStr(Prod.nItem) );
             trvwNFe.Items.AddChild(NodeItem,'cProd='                 + Prod.cProd );
             trvwNFe.Items.AddChild(NodeItem,'cEAN='                  + Prod.cEAN);
-//            trvwNFe.Items.AddChild(NodeItem,'cBarra='                + Prod.cBarra);
-//            trvwNFe.Items.AddChild(NodeItem,'cBarraTrib='            + Prod.cBarraTrib);
+            trvwNFe.Items.AddChild(NodeItem,'cBarra='                + Prod.cBarra);
+            trvwNFe.Items.AddChild(NodeItem,'cBarraTrib='            + Prod.cBarraTrib);
             trvwNFe.Items.AddChild(NodeItem,'xProd='                 + Prod.xProd);
             trvwNFe.Items.AddChild(NodeItem,'NCM='                   + Prod.NCM);
-            //trvwNFe.Items.AddChild(NodeItem,'NVE='                   + Prod.NVE);    // nono 30/08/2021
+//            trvwNFe.Items.AddChild(NodeItem,'NVE='                   + Prod.NVE);
             trvwNFe.Items.AddChild(NodeItem,'EXTIPI='                + Prod.EXTIPI);
             //trvwNFe.Items.AddChild(NodeItem,'genero='                 +IntToStr(Prod.genero));
             trvwNFe.Items.AddChild(NodeItem,'CFOP='                  + Prod.CFOP);
