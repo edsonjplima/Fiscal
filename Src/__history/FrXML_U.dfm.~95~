@@ -540,8 +540,6 @@ object FrXML: TFrXML
             Styles.ColumnHeader = FrGBNFe.cxColumnHeader
             TabOrder = 0
             OnCustomDrawDataCell = cxTLXCustomDrawDataCell
-            ExplicitLeft = 0
-            ExplicitTop = 14
             object cxTLXbSel: TcxTreeListColumn
               PropertiesClassName = 'TcxCheckBoxProperties'
               Properties.Alignment = taCenter

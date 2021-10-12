@@ -612,7 +612,7 @@ var
  gDatConA                                                                 : tDate;           // Data da ultima contigência fsda
  gDatConB                                                                 : tDate;           // Data da ultima contigência fsda
  gCntTmp                                                                  : Integer;         // Contador de tempo pra limpar a Mensagem da StatusBar
- gExcluir                                                                 : Boolean = False; // Excluir durante consulta
+ gSoUmaConsulta                                                           : Boolean = False; // Excluir durante consulta
  gDeuErrConsiste                                                          : Boolean = False; // Responde se deu erro na consistência
  gDeuErrXml                                                               : Boolean = False; // Responde se deu erro no xml
  gReConsulta                                                              : Boolean = False; // Re Consulta a nfe em fsda movida das transmitidas
@@ -2837,8 +2837,8 @@ begin
            //-------------------------------------------------------------------
            Prod.NCM      := DMFD.FDQuery2['ncm'];
 
-           if (DMFD.FDQuery2['CodNVE'] <> null ) then                           // Codificação opcional que detalha alguns NCM. Formato: duas letras maiúsculas e 4 algarismos. Se a mercadoria se enquadrar em mais de uma codificação, informar até 8 codificações principais. Vide: Anexo XII.03 – Identificador NVE
-            Prod.NVE  := DMFD.FDQuery2['CodNVE'];
+//           if (DMFD.FDQuery2['CodNVE'] <> null ) then                           // Codificação opcional que detalha alguns NCM. Formato: duas letras maiúsculas e 4 algarismos. Se a mercadoria se enquadrar em mais de uma codificação, informar até 8 codificações principais. Vide: Anexo XII.03 – Identificador NVE
+//            Prod.NVE  := DMFD.FDQuery2['CodNVE'];
 
            Prod.vDesc    := DMFD.FDQuery2['vl_desconto'];
 
@@ -3725,58 +3725,127 @@ begin
            if (ACBrNFe1.Enviar('0', true, Sincrona_Assincrona)) then
             begin
 
-             // by Edson Lima ; 2013/03/12 ; 14:23 ; Atualiza a nfe no update centralizado
-             pGravaNFe('004',
-              'protocolo',
-              'recibo',
-              'chave_nfe',
-              'situacao',
-              'motivo',
-              'data_hora_recebimento',
-              'CalcHoraNFCe',
-              'UsuTrs',
-              '',
-              '',
-              '',
-              '',
-              '',
-              'codigo_loja',
-              'demi',
-              'nnf',
-              'serie',
-              'chave_nfe',
-              'modelo',                                                         // Nome dos campos
-              ACBrNFe1.WebServices.Retorno.Protocolo,
-              ACBrNFe1.WebServices.Retorno.Recibo,
-              ACBrNFe1.WebServices.Retorno.ChaveNFe,
-              VarToStr(ACBrNFe1.WebServices.Retorno.cStat),
-              ACBrNFe1.WebServices.Retorno.xMotivo,
-              FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.StatusServico.dhRetorno),         // Antes -> FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].dhRecbto),
-              'N',
-              gUsu,
-              '',
-              '',
-              '',
-              '',
-              '',
-              edt_CodEmp.Text,
-              FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']),
-              DMFD.FDQuery1['nfe_nnf'],
-              DMFD.FDQuery1['nfe_serie'],
-              ACBrNFe1.WebServices.Retorno.ChaveNFe,
-              DMFD.FDQuery1['nfe_modelo'],                                      // Conteúdo dos campos
-              true);                                                            // Consiste [true/false]
+             if Sincrona_Assincrona then
+              begin
+
+               ACBrNFe1.WebServices.Consulta.NFeChave := Aux;
+
+               if ACBrNFe1.WebServices.Consulta.Executar then
+                begin
+
+                 //-------------------------------------------------------------
+                 // by Edson Lima ; 2013/03/12 ; 14:23
+                 // Atualiza a nfe no update centralizado para nfe
+                 //-------------------------------------------------------------
+                 pGravaNFe('004',
+                 'protocolo',
+                 'recibo',
+                 'chave_nfe',
+                 'situacao',
+                 'motivo',
+                 'data_hora_recebimento',
+                 'CalcHoraNFCe',
+                 'UsuTrs',
+                 '',
+                 '',
+                 '',
+                 '',
+                 '',
+                 'codigo_loja',
+                 'demi',
+                 'nnf',
+                 'serie',
+                 'chave_nfe',
+                 'modelo',                                                      // Nome dos campos
+                 ACBrNFe1.WebServices.Consulta.Protocolo,
+                 '',
+                 Aux,
+                 IntToStr(ACBrNFe1.WebServices.Consulta.cStat),
+                 ACBrNFe1.WebServices.Consulta.xMotivo,
+                 FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.Consulta.DhRecbto),
+                 'N',
+                 gUsu,
+                 '',
+                 '',
+                 '',
+                 '',
+                 '',
+                 edt_CodEmp.Text,
+                 FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']),
+                 DMFD.FDQuery1['nfe_nnf'],
+                 DMFD.FDQuery1['nfe_serie'],
+                 Aux,
+                 DMFD.FDQuery1['nfe_modelo'],                                   // Conteúdo dos campos
+                 true);                                                         // Consiste [true/false]
+
+                end;
+
+//               gSoUmaConsulta := True;
+//               BitBtn8Click(Sender);                                            // Consulta NFCe e atualiza tabela
+//               gSoUmaConsulta := False;
+
+              end
+             else
+              begin
+
+               //---------------------------------------------------------------
+               // by Edson Lima ; 2013/03/12 ; 14:23 ; Atualiza a nfe no update
+               //                                      centralizado para nfe
+               //---------------------------------------------------------------
+
+               pGravaNFe('004',
+               'protocolo',
+               'recibo',
+               'chave_nfe',
+               'situacao',
+               'motivo',
+               'data_hora_recebimento',
+               'CalcHoraNFCe',
+               'UsuTrs',
+               '',
+               '',
+               '',
+               '',
+               '',
+               'codigo_loja',
+               'demi',
+               'nnf',
+               'serie',
+               'chave_nfe',
+               'modelo',                                                        // Nome dos campos
+               ACBrNFe1.WebServices.Retorno.Protocolo,
+               ACBrNFe1.WebServices.Retorno.Recibo,
+               ACBrNFe1.WebServices.Retorno.ChaveNFe,
+               IntToStr(ACBrNFe1.WebServices.Retorno.cStat),
+               ACBrNFe1.WebServices.Retorno.xMotivo,
+               FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.StatusServico.dhRetorno),         // Antes -> FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].dhRecbto),
+               'N',
+               gUsu,
+               '',
+               '',
+               '',
+               '',
+               '',
+               edt_CodEmp.Text,
+               FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']),
+               DMFD.FDQuery1['nfe_nnf'],
+               DMFD.FDQuery1['nfe_serie'],
+               ACBrNFe1.WebServices.Retorno.ChaveNFe,
+               DMFD.FDQuery1['nfe_modelo'],                                     // Conteúdo dos campos
+               true);                                                           // Consiste [true/false]
+
+              end;
 
              //-----------------------------------------------------------------
-             // by Edson Lima ; 2017-1-5T1054 ; Grava a chave no pedido do gerente
+             // by Edson Lima ; 2017-1-5 ; Grava a chave no pedido do gerente
+             //-----------------------------------------------------------------
+
              if ( (VarToStr(ACBrNFe1.WebServices.Retorno.cStat) = '100') or
                   (VarToStr(ACBrNFe1.WebServices.Retorno.cStat) = '150') ) then
               fGraGer( gChvNFe, gCd_Emp, gCodPed );
-             //-----------------------------------------------------------------
 
              //-----------------------------------------------------------------
              // by Edson Lima ; 2017-9-27
-             //-----------------------------------------------------------------
              // Caso a exceção seja por denegação
              //-----------------------------------------------------------------
              if (ACBrNFe1.WebServices.Retorno.xMotivo =
@@ -3792,39 +3861,51 @@ begin
 
                //---------------------------------------------------------------
                // by Edson Lima ; 2017-1-5 ; Grava a chave no pedido do gerente
-               fGraGer( gChvNFe, gCd_Emp, gCodPed );
                //---------------------------------------------------------------
 
-               gExcluir  := True;
-               gConsiste := false;                                              // Depende da consistência
+               fGraGer( gChvNFe, gCd_Emp, gCodPed );
+
+               //---------------------------------------------------------------
+
+               gSoUmaConsulta  := True;
+               gConsiste       := false;                                        // Depende da consistência
                BitBtn8Click(Sender);                                            // Força um click na consulta
-               gExcluir  := False;                                              // Seta variável global para ler vários registros
-               iCodPed   := gCodPed;
+               gSoUmaConsulta  := False;                                        // Seta variável global para ler vários registros
+               iCodPed         := gCodPed;
 
                //---------------------------------------------------------------
                // by Edson Lima ; 2017-1-13T1358
                // Cancelamento do pedido no gerente da nota denegada
                //---------------------------------------------------------------
-               // Verifica a precisão administrativa do gerente para cancelamento
-               // de nota denegada
+               // Verifica a precisão administrativa do gerente para
+               // cancelamento de nota denegada
                //---------------------------------------------------------------
                if iCodPed <> 0 then
                 begin
 
-                 if ( fVerPAG(StrToIntDef(gNNF_Consiste, 0), StrToIntDef(edt_CodEmp.Text, 0), iCodPed) ) then
+                 if ( fVerPAG(StrToIntDef(gNNF_Consiste, 0),
+                      StrToIntDef(edt_CodEmp.Text, 0), iCodPed) ) then
                   begin
 
-                   //-------------------------------------------------------------
-                   // Efetua o Cancelamento Administrativo do PEDIDO da nota Denegada
-                   //-------------------------------------------------------------
+                   //-----------------------------------------------------------
+                   // Efetua o Cancelamento Administrativo do PEDIDO
+                   // da nota Denegada
+                   //-----------------------------------------------------------
+
                    if (iCodPed <> 6) then
                     begin
-                     if not ( fCanCAP(StrToIntDef(gNNF_Consiste, 0), StrToIntDef(edt_CodEmp.Text, 0), iCodPed, gCodMtD) ) then
+
+                     if not ( fCanCAP(StrToIntDef(gNNF_Consiste, 0),
+                              StrToIntDef(edt_CodEmp.Text, 0),
+                              iCodPed, gCodMtD) ) then
                       Application.MessageBox(PWideChar('Nota denegada, mas o pedido não foi cancelado!'), 'Atenção', MB_ICONINFORMATION );
+
                     end
                    else
+
                     Application.MessageBox(PWideChar('Número do pedido não informado! Nota cancelada, mas Pedido não!'), 'Atenção', MB_ICONINFORMATION );
-                   //-------------------------------------------------------------
+
+                   //-----------------------------------------------------------
 
                   end
                  else
@@ -3832,8 +3913,10 @@ begin
 
                 end
                else
+
                 Application.MessageBox(PWideChar('Número do pedido não informado!'), 'Atenção', MB_ICONINFORMATION );
-               //-----------------------------------------------------------------
+
+               //---------------------------------------------------------------
 
               end;
 
@@ -3854,7 +3937,11 @@ begin
              ACBrNFe1.WebServices.Retorno.Executar;
              for i := 0 to ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Count-1 do
               begin
-               // by Edson Lima ; 2013/03/12 ; 14:23 ; Atualiza a nfe no update centralizado
+
+               //---------------------------------------------------------------
+               // by Edson Lima ; 2013/03/12 ; 14:23 ; Atualiza a nfe no
+               //                                      update centralizado
+               //---------------------------------------------------------------
                pGravaNFe('005', 'protocolo',
                                 'recibo',
                                 'chave_nfe',
@@ -3928,11 +4015,11 @@ begin
               fGraGer( gChvNFe, gCd_Emp, gCodPed );
               //----------------------------------------------------------------
 
-              gExcluir := True;                                                 // Seta variável global para ler somente um registro
-              gConsiste := false;                                               // Depende da consistência
+              gSoUmaConsulta := True;                                           // Seta variável global para ler somente um registro
+              gConsiste      := false;                                          // Depende da consistência
               BitBtn8Click(Sender);                                             // Força um click na consulta
-              gExcluir := False;                                                // Seta variável global para ler vários registros
-              iCodPed := gCodPed;
+              gSoUmaConsulta := False;                                          // Seta variável global para ler vários registros
+              iCodPed        := gCodPed;
 
               //-----------------------------------------------------------------
               // by Edson Lima ; 2017-1-13T1358
@@ -7503,9 +7590,9 @@ begin
 
         try
 
-         gExcluir := True;                                                      // Seta variável global para ler somente um registro
+         gSoUmaConsulta := True;                                                // Seta variável global para ler somente um registro
          BitBtn8Click(Sender);                                                  // força um clic no botão "consulta nota fiscal"
-         gExcluir := False;                                                     // Seta variável global para ler vários registros
+         gSoUmaConsulta := False;                                               // Seta variável global para ler vários registros
 
          if gDeuErrConsiste then Exit;                                          // Aborta no caso de erro
 
@@ -7976,10 +8063,10 @@ begin
 
                  vMens := 'Verificando a existencia da NFe Nº' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) + ' na SEFAZ !';
 
-                 gExcluir := True;                                              // Seta variável global para ler somente um registro
-                 gConsiste := false;                                            // Depende da consistência
+                 gSoUmaConsulta := True;                                        // Seta variável global para ler somente um registro
+                 gConsiste      := false;                                       // Depende da consistência
                  BitBtn8Click(Sender);                                          // Força um click na consulta
-                 gExcluir := False;                                             // Seta variável global para ler varios registros
+                 gSoUmaConsulta := False;                                       // Seta variável global para ler varios registros
 
                  if gDeuErrConsiste then Exit;                                  // Aborta no caso de erro
 
@@ -8793,11 +8880,11 @@ begin
 
       end;
 
-     //------------ Fim da consulta no item selecionado da TL -------------------
+     //------------ Fim da consulta no item selecionado da TL ------------------
 
      // pGAV();
 
-     if gExcluir then Exit;
+     if gSoUmaConsulta then Exit;
 
     end;
 
@@ -10301,6 +10388,7 @@ begin
         if (trim(vartostr(ACBrNFe1.WebServices.Consulta.cStat)) = '100') or
            (trim(vartostr(ACBrNFe1.WebServices.Consulta.cStat)) = '150') then
          begin
+
           // by Edson Lima ; 2013/03/12 ; 14:23 ; Atualiza a nfe no update centralizado
           pGravaNFe('010', 'protocolo',
                            'recibo',
@@ -10352,6 +10440,7 @@ begin
 
         if not gDuplic then                                                     // by Edson ; 2013-11-22T1420 ; Só envia email se não der duplicidade de nota
          begin
+
           //---------------------enviar email
           xAux := vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].chDFe);
           //pega os dados do destinatario
@@ -10391,8 +10480,10 @@ begin
 
               if not InputQuery(vartostr(DMFD.FDQuery2['razao_social']), 'Email de destino:', Para) then
                begin
+
                 pAtuNFe;                                                        // Procedure de atualização
                 Exit;
+
                end;
 
               para := LowerCase(para);
@@ -10408,6 +10499,7 @@ begin
 
           if (trim(para) <> '') then
            begin
+
             xAux := trim(gCamLog) + trim(xAux) + '-nfe.xml';                    /// by EL - 23.2.2012 -> xAux := trim(FrPar.edtPathLogs.Text) + '\' + trim(xAux) + '-nfe.xml';
             ACBrNFe1.NotasFiscais.Clear;
             ACBrNFe1.NotasFiscais.LoadFromFile(xAux);
@@ -10919,7 +11011,7 @@ begin
             trvwNFe.Items.AddChild(NodeItem,'cBarraTrib='            + Prod.cBarraTrib);
             trvwNFe.Items.AddChild(NodeItem,'xProd='                 + Prod.xProd);
             trvwNFe.Items.AddChild(NodeItem,'NCM='                   + Prod.NCM);
-            trvwNFe.Items.AddChild(NodeItem,'NVE='                   + Prod.NVE);
+//            trvwNFe.Items.AddChild(NodeItem,'NVE='                   + Prod.NVE);
             trvwNFe.Items.AddChild(NodeItem,'EXTIPI='                + Prod.EXTIPI);
             //trvwNFe.Items.AddChild(NodeItem,'genero='                 +IntToStr(Prod.genero));
             trvwNFe.Items.AddChild(NodeItem,'CFOP='                  + Prod.CFOP);

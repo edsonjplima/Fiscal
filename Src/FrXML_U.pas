@@ -292,10 +292,10 @@ begin
 
 //           vMens := 'Verificando a existencia da NFe Nº' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) + ' na SEFAZ !';
 
-//           gExcluir := True;                                              // Seta variável global para ler somente um registro
-//           gConsiste := false;                                            // Depende da consistência
-//           BitBtn8Click(Sender);                                          // Força um click na consulta
-//           gExcluir := False;                                             // Seta variável global para ler varios registros
+//           gSoUmaConsulta := True;                                            // Seta variável global para ler somente um registro
+//           gConsiste      := false;                                           // Depende da consistência
+//           BitBtn8Click(Sender);                                              // Força um click na consulta
+//           gSoUmaConsulta := False;                                           // Seta variável global para ler varios registros
 
            if gDeuErrConsiste then Exit;                                  // Aborta no caso de erro
 

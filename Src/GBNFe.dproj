@@ -151,15 +151,15 @@
     <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
         <VerInfo_Locale>1033</VerInfo_Locale>
         <BT_BuildType>Debug</BT_BuildType>
-        <VerInfo_Release>9</VerInfo_Release>
-        <VerInfo_Build>28</VerInfo_Build>
+        <VerInfo_Release>10</VerInfo_Release>
+        <VerInfo_Build>12</VerInfo_Build>
         <Debugger_RunParams>/developed_gb_informática_ltda /008 /usuário_padrão /0 /1 /0 /0 /0 /GERPA</Debugger_RunParams>
         <VerInfo_MinorVer>21</VerInfo_MinorVer>
         <VerInfo_Special>true</VerInfo_Special>
         <VerInfo_PreRelease>true</VerInfo_PreRelease>
         <VerInfo_Private>true</VerInfo_Private>
         <VerInfo_DLL>true</VerInfo_DLL>
-        <VerInfo_Keys>CompanyName=GB Informática Ltda;FileDescription=Gerador de Nota Fiscal Eletrônica;FileVersion=6.21.9.28;InternalName=GBNFe;LegalCopyright=GB Informática Ltda;LegalTrademarks=Edson Lima - DevGrowth - edsonjplima@gmail.com;OriginalFilename=ACBr;ProductName=GBNFe;ProductVersion=6.21.9.29;Comments=Desenvolvedor Edson Lima - Versão Berlin - FireDac;ProgramID=com.embarcadero.$(MSBuildProjectName)</VerInfo_Keys>
+        <VerInfo_Keys>CompanyName=GB Informática Ltda;FileDescription=Gerador de Nota Fiscal Eletrônica;FileVersion=6.21.10.12;InternalName=GBNFe;LegalCopyright=GB Informática Ltda;LegalTrademarks=Edson Lima - DevGrowth - edsonjplima@gmail.com;OriginalFilename=ACBr;ProductName=GBNFe;ProductVersion=6.21.9.29;Comments=Desenvolvedor Edson Lima - Versão Berlin - FireDac;ProgramID=com.embarcadero.$(MSBuildProjectName)</VerInfo_Keys>
         <CfgDependentOn>Delphi_Xe10.1_Berlin.optset</CfgDependentOn>
     </PropertyGroup>
     <ItemGroup>

@@ -6,9 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, vcl.Graphics, vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   Vcl.StdCtrls, Vcl.ComCtrls, Vcl.Menus, Vcl.Buttons, Vcl.ExtCtrls,
-  IWControl, IWCompMemo, IWDBStdCtrls,
-  Vcl.OleCtrls, SHDocVw,
-  FireDAC.Comp.Client,
+  Vcl.OleCtrls, SHDocVw, FireDAC.Comp.Client,
   DBCtrls, xmldom, XMLIntf, msxmldom, XMLDoc, cxGraphics, cxControls,
   cxLookAndFeels, cxLookAndFeelPainters, cxCustomData, cxStyles, cxTL,
   cxMaskEdit, cxTextEdit, cxCalendar, dxDateTimeWheelPicker, cxRichEdit,
@@ -171,6 +169,10 @@ begin
 end;
 
 procedure TFrXML.FormShow(Sender: TObject);
+var
+ x : Integer;
+ aux : String;
+
 begin
 
  PageControl1.TabIndex := 0;
@@ -200,6 +202,178 @@ begin
    Bitbtn1.Enabled := False;
    Bitbtn4.Enabled := False;
   end;
+
+ //-----------------------------------------------------------------------------
+ // Rotina que faz a varedura dos registros selecionados para regravar os xmls
+ //-----------------------------------------------------------------------------
+
+ if not( FrGBNFe.fTemSel( FrGBNFe.cxTL, FrGBNFe.cxTLbSel ) ) then exit;         // verifica se tem item selecionado na treelist lá das notas
+
+ for X := 0 to FrGBNFe.cxTL.Count -1 do                                         // Percorre a treelist
+
+  begin
+
+   if ( FrGBNFe.cxTL.Items[X].Texts[FrGBNFe.cxTLbSel.ItemIndex] = 'True' ) then // Verifica se o item está selecionado
+
+    with FrGBNFe do
+     begin
+
+      // Filtra a nfe selecionada com select
+      pSelNfe( DMFD.FDQryGeral2, StrToIntDef(edt_CodEmp.Text, 0),
+                                 StrToIntDef(cxTL.Items[X].Texts[cxTLlNot.ItemIndex], 0),
+                                 StrToDateTime(cxTL.Items[X].Texts[cxTLdDem.ItemIndex]),
+                                 cxTL.Items[X].Texts[cxTLsMod.ItemIndex],
+                                 cxTL.Items[X].Texts[cxTLsSer.ItemIndex] );
+
+      gModelo := DMFD.FDQryGeral2['nfe_Modelo'];
+      gSerie  := DMFD.FDQryGeral2['nfe_Serie'];
+
+      if ( (gModelo = 55) or  ((gModelo = 65) and (gSenhaBD <> '')) ) then
+       begin
+
+        gCdloja_Consiste := edt_CodEmp.Text;
+        gdEmi_Consiste   := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
+        gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
+        gNNF_Consiste    := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
+        gSerie_Consiste  := vartostr(DMFD.FDQryGeral2['nfe_serie']);
+        gChave_Consiste  := '';
+        gModelo_Consiste := vartostr(DMFD.FDQryGeral2['nfe_modelo']);
+        gAnoMesGer       := Copy(gdEmi_Consiste, 7, 4) + Copy(gdEmi_Consiste, 4, 2);
+
+        gDataEmi := 0;
+
+         aux := VarToStr(DMFD.FDQryGeral2['nfe_chave_nfe']);
+
+//         if (gModelo = 65) then
+//
+//          begin
+//
+//           gTN                                   := '\NFCe\';
+//
+//           if not (DMFD.FDQryGeral2['nfe_DatNFCe']   = null) then
+//            gDataEmi                             := (DMFD.FDQryGeral2['nfe_DatNFCe']);
+//
+//          end
+//
+//         else
+//
+//          begin
+//
+//           gTN                                   := '\NFe\';
+//
+//           if not (DMFD.FDQryGeral2['nfe_demi']   = null) then
+//            gDataEmi                             := (DMFD.FDQryGeral2['nfe_demi']);
+//
+//          end;
+
+         //---------------------------------------------------------------
+         // by Edson Lima - 2015-12-18T1559 ; verifica se a situação está null,
+         // se sim elimina qualquer xml do sistema, para evitar envio de xml
+         // depois de correção e exclusão---------------------------------
+
+//         if ( aux <> '' ) then
+//          if ( (trim(DMFD.FDQryGeral2['nfe_situacao']) =  null) and ( not (gDataEmi = null))   or
+//               (trim(DMFD.FDQryGeral2['nfe_situacao']) =  '')   and ( not (gDataEmi = null)) ) then
+//           pEliminaXml(aux, gTN);                                               // Elimina os xmls quando a situação for null
+
+         //---------------------------------------------------------------
+
+         //---------------------------------------------------------------
+         // by Edson ; 04/12/2012 ; 10:22 ; Testa se a NFe já foi enviada e
+         //                                 aguarda retorno da SEFAZ
+         //---------------------------------------------------------------
+         // 2016-1-20T1415 - Implementado para resolber mensagem de não
+         // envio para sefaz
+         //---------------------------------------------------------------
+//         vCon := trim(gCamLog) + trim(Aux) + '-nfe.xml';
+//         if ( (FileExists(vCon)) and ( DMFD.FDQryGeral2['nfe_situacao'] <>  null ) ) then
+
+          begin
+
+//           vMens := 'Verificando a existencia da NFe Nº' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) + ' na SEFAZ !';
+
+//           gExcluir := True;                                              // Seta variável global para ler somente um registro
+//           gConsiste := false;                                            // Depende da consistência
+//           BitBtn8Click(Sender);                                          // Força um click na consulta
+//           gExcluir := False;                                             // Seta variável global para ler varios registros
+
+           if gDeuErrConsiste then Exit;                                  // Aborta no caso de erro
+
+//           // Caso não exista na base sefaz permite excluir ; by Edson Lima ; 17-9-2012 ; 14:00
+//           if ( (ACBrNFe1.WebServices.Consulta.cStat > 0) and
+//                (vartostr(ACBrNFe1.WebServices.Consulta.cStat) <> '217') ) then
+//
+//            begin
+//
+//             MessageDlg('Esta nota: ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) + ' consta na base SEFAZ' + chr(13) + 'não pode ser gerada em contingência ' + AnsiUpperCase(_tipo_emissao) + '!', mtInformation,[mbOK],0);
+//             exit;
+//
+//            end;
+//
+//           vMens := '';
+
+          end;
+
+         //***************************************************************
+
+         if ((copy(vartostr(DMFD.FDQryGeral2['nfe_situacao']),1,4) = 'FSDA') or
+             (copy(vartostr(DMFD.FDQryGeral2['nfe_situacao']),1,4) = 'OFFL')) then
+
+          begin
+
+//           MessageDlg('Esta nota: ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) + ' foi gerada em contingência, não será gerada novamente', mtInformation,[mbOK],0);
+
+          end
+
+         else
+
+          begin
+
+//           vAux         :=   DMFD.FDQryGeral2['nfe_nnf'];
+//           _nota        :=   DMFD.FDQryGeral2['nfe_nnf'];
+//           _demi        :=   DMFD.FDQryGeral2['nfe_demi'];
+//
+//           geraenvianf(FrGBNFe);
+//
+//           if gDeuErrConsiste then Exit;
+//
+//           xAux := trim(gCamLog) + trim(gChave_Consiste) + '-nfe.xml';
+//
+//           ACBrNFe1.NotasFiscais.Clear;
+//           ACBrNFe1.NotasFiscais.LoadFromFile(xAux);
+//
+//           grava_xml_no_banco;
+//
+//           fDelFileCnt(gCamXml + Copy(gdEmiConsiste, 7, 4) +
+//                                 Copy(gdEmiConsiste, 4, 2) +
+//                                 '\NFe\', gChave_Consiste + '-nfe.xml');  // Function que deleta o xml "Pedido da PQ"
+
+          end;
+
+       end
+
+      else
+
+       { Mostra mensagem de inconsistencia para tentativa de geração de
+         nfce (modelo 65) em contingência.                               }
+       begin
+        Application.Messagebox(PWideChar('O ENVIO DO MODELO NFCe EM CONTINGÊNCIA ESTÁ' + char(13) +
+                                         'INDISPONÍVEL, ENVIE A NOTA Nº ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) + ', NO MODO NORMAL!'), 'ENVIO DE NFCe - ATENÇÃO', mb_iconstop+mb_ok);
+       end;
+
+     end;
+
+  end;
+
+
+
+
+
+
+
+
+
+
 
 end;
 
@@ -388,7 +562,7 @@ begin
              begin
               if ( (vNomXML[i] = 'T') or (vNomXML[i] = '<') )  then
                begin
-                gAnoMes := Copy(vDataEmi, 1, 6);                                         // copia o ano e o mes para variável global.
+                gAnoMes := Copy(vDataEmi, 1, 4) + Copy(vDataEmi, 6, 2);         // copia o ano e o mes para variável global.
                 vDataEmi := '';
                 FrGBNFe.MemoResp.Lines.Text := UTF8Encode(DMFD.FDQuery13['xml_nota']    +// by Edson ; 2013-12-13T1555 ; acrescido as outras notas
                                                           DMFD.FDQuery13['xml_nota1']   +
@@ -648,7 +822,7 @@ begin
              begin
               if ( (vNomXML[i] = 'T') or (vNomXML[i] = '<') )  then
                begin
-                gAnoMes := Copy(vDataEmi, 1, 6);                                         // copia o ano e o mes para variável global.
+                gAnoMes := Copy(vDataEmi, 7, 4) + Copy(vDataEmi, 4, 2);         // copia o ano e o mes para variável global.
                 vDataEmi := '';
                 FrGBNFe.MemoResp.Lines.Text := UTF8Encode(DMFD.FDQuery20['xml_nota']    +// by Edson ; 2013-12-13T1555 ; acrescido as outras notas
                                                           DMFD.FDQuery20['xml_nota1']   +
