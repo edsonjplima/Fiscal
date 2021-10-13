@@ -2,11 +2,6 @@
     <PropertyGroup>
         <ProjectGuid>{4C2F74F4-991F-474B-A332-CA6C54658C5F}</ProjectGuid>
     </PropertyGroup>
-    <ItemGroup>
-        <Projects Include="GBNFe.dproj">
-            <Dependencies/>
-        </Projects>
-    </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
         <Borland.ProjectType/>
@@ -14,23 +9,14 @@
             <Default.Personality/>
         </BorlandProject>
     </ProjectExtensions>
-    <Target Name="GBNFe">
-        <MSBuild Projects="GBNFe.dproj"/>
-    </Target>
-    <Target Name="GBNFe:Clean">
-        <MSBuild Projects="GBNFe.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="GBNFe:Make">
-        <MSBuild Projects="GBNFe.dproj" Targets="Make"/>
-    </Target>
     <Target Name="Build">
-        <CallTarget Targets="GBNFe"/>
+        <CallTarget/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="GBNFe:Clean"/>
+        <CallTarget/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="GBNFe:Make"/>
+        <CallTarget/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
