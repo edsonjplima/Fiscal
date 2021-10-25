@@ -68,7 +68,6 @@ type
     ckVisualizar: TCheckBox;
     rgTipoAmb: TRadioGroup;
     GroupBox10: TGroupBox;
-    Label28: TLabel;
     cbEmailSSL: TCheckBox;
     mmEmailMsg: TMemo;
     GroupBox11: TGroupBox;
@@ -110,7 +109,6 @@ type
     CheckBox4: TCheckBox;
     GroupBox21: TGroupBox;
     CheckBox5: TCheckBox;
-    GroupBox22: TGroupBox;
     ragLocSrv: TRadioGroup;
     GroupBox24: TGroupBox;
     edtNumSerie2: TEdit;
@@ -230,6 +228,7 @@ type
     grp44: TGroupBox;
     edt_CamBD_Ger: TEdit;
     BitBtn3: TBitBtn;
+    grp51: TGroupBox;
     procedure sbtnCaminhoCertClick(Sender: TObject);
     procedure sbtnGetCertClick(Sender: TObject);
     procedure btnSalvarConfigClick(Sender: TObject);
@@ -300,8 +299,6 @@ type
     procedure grp3MouseMove(Sender: TObject; Shift: TShiftState; X,
       Y: Integer);
     procedure grp5MouseMove(Sender: TObject; Shift: TShiftState; X,
-      Y: Integer);
-    procedure GroupBox22MouseMove(Sender: TObject; Shift: TShiftState; X,
       Y: Integer);
     procedure grp1Click(Sender: TObject);
     procedure lst2MouseMove(Sender: TObject; Shift: TShiftState; X,
@@ -578,12 +575,21 @@ end;
 
 procedure TFrPar.mmEmailMsgEnter(Sender: TObject);
 begin
+
  FrPar.KeyPreview := False;
+
 end;
 
 procedure TFrPar.mmEmailMsgExit(Sender: TObject);
 begin
+
+// grp51.Height := 82;
+// grp51.Left   := 8;
+// grp51.Top    := 181;
+// grp51.Width  := 633;
+
  FrPar.KeyPreview := True;
+
 end;
 
 procedure TFrPar.ed_QtdCopNFeKeyPress(Sender: TObject; var Key: Char);
@@ -822,7 +828,7 @@ begin
  vBDSQLSRV2017 := '\Program Files\Microsoft SQL Server\MSSQL14.MSSQLSERVER\MSSQL\DATA\';
  vBDSQLSRV2019 := '\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\DATA\';
 
- if ( FrPar.edt_Server_Ger.Text = '(local)' ) then
+ if ( FrPar.edt_Server_NFe.Text = '(local)' ) then
   begin
 
     vBDSQLSRV2016 := 'C:' + vBDSQLSRV2016;
@@ -833,9 +839,9 @@ begin
  else
   begin
 
-    vBDSQLSRV2016 := '\\' + FrPar.edt_Server_Ger.Text + '\c$' + vBDSQLSRV2016;
-    vBDSQLSRV2017 := '\\' + FrPar.edt_Server_Ger.Text + '\c$' + vBDSQLSRV2017;
-    vBDSQLSRV2019 := '\\' + FrPar.edt_Server_Ger.Text + '\c$' + vBDSQLSRV2019;
+    vBDSQLSRV2016 := '\\' + FrPar.edt_Server_NFe.Text + '\c$' + vBDSQLSRV2016;
+    vBDSQLSRV2017 := '\\' + FrPar.edt_Server_NFe.Text + '\c$' + vBDSQLSRV2017;
+    vBDSQLSRV2019 := '\\' + FrPar.edt_Server_NFe.Text + '\c$' + vBDSQLSRV2019;
 
   end;
 
@@ -1189,12 +1195,6 @@ procedure TFrPar.grp5MouseMove(Sender: TObject; Shift: TShiftState; X,
   Y: Integer);
 begin
  StatusBar1.Panels[0].Text := Grp5.Hint;
-end;
-
-procedure TFrPar.GroupBox22MouseMove(Sender: TObject; Shift: TShiftState;
-  X, Y: Integer);
-begin
- StatusBar1.Panels[0].Text := GroupBox22.Hint;
 end;
 
 procedure TFrPar.grp1Click(Sender: TObject);

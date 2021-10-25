@@ -799,7 +799,7 @@ begin
    //-----------------------------------------------------------------------
 
    DMFD.FDQuery1.First;
-   While not DMFD.FDQuery1.eof do
+   While ( not DMFD.FDQuery1.eof ) and ( not gAbortar ) do
     begin
      ACBrNFe1.NotasFiscais.Clear;
 
@@ -1736,6 +1736,7 @@ begin
        if not fValidaEmail(DMFD.FDQuery1['des_email'], 'S') then
         begin
          Application.Messagebox('Campo de email do destinatário inválido! ','Atenção!',mb_iconstop+mb_ok);
+         gAbortar := True;
          exit;
         end;
 
@@ -2991,6 +2992,30 @@ begin
                with Prod.rastro.Add do
                 begin
 
+                 if ( DMFD.FDQuery19['dFab'] > gDataEmi ) then
+                  begin
+
+                   Application.Messagebox('Data de fabricação de rastro do produto' + Chr(13) +
+                                          'está maior que a data de processamento!' + Chr(13) +
+                                          'Corrija a data, então envie novamente!',
+                                          'Atenção evite a rejeição 877!',mb_iconstop+mb_ok);
+                   gAbortar := True;
+                   Exit;
+
+                  end;
+
+                 if ( DMFD.FDQuery19['dVal'] < DMFD.FDQuery19['dFab'] ) then
+                  begin
+
+                   Application.Messagebox('Data de validade de rastro do produto está' + Chr(13) +
+                                          'incompatível com a data de fabricação!' + Chr(13) +
+                                          'Corrija a data, então envie novamente!',
+                                          'Atenção evite a rejeição 870!',mb_iconstop+mb_ok);
+                   gAbortar := True;
+                   Exit;
+
+                  end;
+
                  nLote         := DMFD.FDQuery19['nLote'];
                  qLote         := DMFD.FDQuery19['qLote'];
                  dFab          := DMFD.FDQuery19['dFab'];
@@ -3004,7 +3029,11 @@ begin
 
               end;
 
+             if gAbortar then exit;
+
             end;
+
+           if gAbortar then exit;
 
            // by Edson Lima ; lei da transparencia de impostos
            if DMFD.FDQuery2['vTotTrib'] = null then
@@ -3426,6 +3455,8 @@ begin
          DMFD.FDQuery2.next;
 
         end;
+
+       if gAbortar then exit;
 
        // ACBrNFe1.NotasFiscais.Add.NFe.Det.Add.imposto.pis.CST
        Total.ICMSTot.vBC        := DMFD.FDQuery1['nfe_base_calculo_icms'];
@@ -7476,6 +7507,7 @@ end;
 procedure TFrGBNFe.FormShow(Sender: TObject);
 var
  vNNFenc : boolean;
+  I: Integer;
 
 begin
 
@@ -7845,7 +7877,6 @@ begin
 
      BitBtn12Click(Sender);
     end;
-
    //---------------------------------------------------------------------------
 
    if (DMFD.FDQuery4['Versao']      = 've3131') then
@@ -8268,7 +8299,10 @@ begin
                  _nota        :=   DMFD.FDQryGeral2['nfe_nnf'];
                  _demi        :=   DMFD.FDQryGeral2['nfe_demi'];
 
+                 gAbortar := False;
                  geraenvianf(FrGBNFe);
+
+                 if gAbortar then exit;
 
                  if gDeuErrConsiste then Exit;
 
@@ -8413,7 +8447,10 @@ begin
           //----------------------------
           // Gera e eFnvia a NF pra SEFAZ
 
+          gAbortar := False;
           geraenvianf(FrGBNFe);
+
+          if gAbortar then exit;
 
           //----------------------------
 

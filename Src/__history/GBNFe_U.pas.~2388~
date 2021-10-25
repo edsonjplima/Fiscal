@@ -2459,19 +2459,6 @@ begin
            if (DMFD.FDQuery2['cBarraTrib'] <> null ) then                       // Opcional - Preencher com o Código de Barras próprio ou de terceiros que seja diferente do padrão GTIN correspondente àquele da menor unidade comercializável identificado por Código de Barras por exemplo: código de barras de catálogo, partnumber, etc
             Prod.cBarraTrib  := DMFD.FDQuery2['cBarraTrib'];
 
-
-
-
-
-
-
-
-
-
-
-
-
-
            Prod.cEANtrib := vartostr(DMFD.FDQuery2['cEANtrib']);
 
            if ((DMFD.FDQuery2['xPed'] <> null) and ( DMFD.FDQuery2['xPed'] <> '')) then
@@ -8490,7 +8477,19 @@ begin
               grava_xml_no_banco;
 
               //---------------------enviar email
-              xAux := vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].chDFe);
+              if gSincrona_Assincrona then
+               begin
+
+                xAux := vartostr(ACBrNFe1.WebServices.Consulta.NFeChave);
+
+               end
+              else
+               begin
+
+                xAux := vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].chDFe);
+
+               end;
+
               //pega os dados do destinatario
               DMFD.FDQuery2.Close;
               DMFD.FDQuery2.SQL.Clear;

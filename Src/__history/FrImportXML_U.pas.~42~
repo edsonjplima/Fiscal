@@ -108,8 +108,11 @@ end;
 procedure TFrImportXML.SpeedButton5Click(Sender: TObject);
 begin
 
-  DriveComboBox1.Text := '';
-  DirectoryListBox1.Directory := FrPar.edtCamSrv.Text;
+ if ( FrPar.ragLocSrv.ItemIndex = 0 )  then
+  begin
+   DriveComboBox1.Text := '';
+   DirectoryListBox1.Directory := FrPar.edtCamSrv.Text;
+  end;
 
 end;
 
@@ -188,7 +191,9 @@ begin
 
  for x := 0 to Pred(FileListBox1.Items.Count) do
   begin
+
    FileListBox1.Selected[x] := True;
+
   end;
 
 end;
@@ -200,13 +205,17 @@ begin
 
  for x := 0 to Pred(FilterComboBox1.Items.Count) do
   begin
+
    if FilterComboBox1.ItemIndex = x then
     begin
+
      if x = 0 then
       FileListBox1.Mask := '????????????????????????????????????????????-nfe.xml'
      else
       FileListBox1.Mask := '*.*';
+
     end;
+
   end;
 
 end;

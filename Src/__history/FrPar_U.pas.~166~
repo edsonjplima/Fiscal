@@ -68,7 +68,6 @@ type
     ckVisualizar: TCheckBox;
     rgTipoAmb: TRadioGroup;
     GroupBox10: TGroupBox;
-    Label28: TLabel;
     cbEmailSSL: TCheckBox;
     mmEmailMsg: TMemo;
     GroupBox11: TGroupBox;
@@ -110,7 +109,6 @@ type
     CheckBox4: TCheckBox;
     GroupBox21: TGroupBox;
     CheckBox5: TCheckBox;
-    GroupBox22: TGroupBox;
     ragLocSrv: TRadioGroup;
     GroupBox24: TGroupBox;
     edtNumSerie2: TEdit;
@@ -230,6 +228,8 @@ type
     grp44: TGroupBox;
     edt_CamBD_Ger: TEdit;
     BitBtn3: TBitBtn;
+    grp51: TGroupBox;
+    btnTestarEmail: TBitBtn;
     procedure sbtnCaminhoCertClick(Sender: TObject);
     procedure sbtnGetCertClick(Sender: TObject);
     procedure btnSalvarConfigClick(Sender: TObject);
@@ -301,8 +301,6 @@ type
       Y: Integer);
     procedure grp5MouseMove(Sender: TObject; Shift: TShiftState; X,
       Y: Integer);
-    procedure GroupBox22MouseMove(Sender: TObject; Shift: TShiftState; X,
-      Y: Integer);
     procedure grp1Click(Sender: TObject);
     procedure lst2MouseMove(Sender: TObject; Shift: TShiftState; X,
       Y: Integer);
@@ -354,6 +352,9 @@ type
       Y: Integer);
     procedure BitBtnClick(Sender: TObject);
     procedure BitBtn3Click(Sender: TObject);
+    procedure btnTestarEmailMouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure btnTestarEmailClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -578,12 +579,21 @@ end;
 
 procedure TFrPar.mmEmailMsgEnter(Sender: TObject);
 begin
+
  FrPar.KeyPreview := False;
+
 end;
 
 procedure TFrPar.mmEmailMsgExit(Sender: TObject);
 begin
+
+// grp51.Height := 82;
+// grp51.Left   := 8;
+// grp51.Top    := 181;
+// grp51.Width  := 633;
+
  FrPar.KeyPreview := True;
+
 end;
 
 procedure TFrPar.ed_QtdCopNFeKeyPress(Sender: TObject; var Key: Char);
@@ -756,19 +766,104 @@ begin
  StatusBar1.Panels[0].Text := BitBtn1.Hint;
 end;
 
+procedure TFrPar.btnTestarEmailClick(Sender: TObject);
+var
+  Teste: string;
+
+begin
+//  if (Trim(edtEnvCC.Text) = '') or not FDoEmail.ValidarEmail(edtEnvCC.Text) then
+//  begin
+//    MessageDlg('Atenção',
+//      'O endereço de E-mail informado não é Válido ou não foi Preenchido',
+//      mtWarning, [mbOK], '');
+//    edtEnvCC.SetFocus;
+//    Exit;
+//  end;
+//
+//  if Trim(edEmailHost.Text) = '' then
+//  begin
+//    MessageDlg('Atenção', 'Host SMTP não informado', mtWarning, [mbOK], '');
+//    edEmailHost.SetFocus;
+//    Exit;
+//  end;
+//
+//  if (edEmailPorta.Value = 0) then
+//  begin
+//    MessageDlg('Atenção', 'A Porta SMTP informada não é Válida', mtWarning, [mbOK], '');
+//    edEmailPorta.SetFocus;
+//    Exit;
+//  end;
+//
+//  Application.ProcessMessages;
+//
+//  with ACBrMail1 do
+//  begin
+//    Attempts := 1;
+//    FromName := edEmailNome.Text;
+//    From := edEmailEndereco.Text;
+//    Username := edEmailUsuario.Text;
+//    Password := edEmailSenha.Text;
+//    Host := edEmailHost.Text;
+//    Teste := IntToStr(edEmailPorta.Value);
+//    Port := Teste;
+//    SetSSL := cbEmailSsl.Checked;
+//    SetTLS := cbEmailTls.Checked;
+//    ReadingConfirmation := cbEmailConfirmation.Checked;
+//    UseThread := cbEmailThread.Checked;
+//    DefaultCharset := TMailCharset(GetEnumValue(TypeInfo(TMailCharset),
+//      cbEmailCodificacao.Text));
+//
+//    AddAddress(edEmailEndereco.Text);
+//    Subject := 'ACBrMonitor : Teste de Configuração de Email';
+//
+//    Body.Add('Se você consegue ler esta mensagem, significa que suas configurações');
+//    Body.Add('de SMTP estão corretas.');
+//    Body.Add('');
+//    Body.Add('ACBrMonitor');
+//    Body.Add('http://www.projetoacbr.com.br/');
+//
+//    bEmailTestarConf.Enabled := False;
+//    bCancelar.Enabled := False;
+//    bConfig.Enabled := False;
+//    pbEmailTeste.Visible := True;
+//    pbEmailTeste.Position := 1;
+//    Screen.Cursor := crHourGlass;
+//    IsHTML := True;
+//    Application.ProcessMessages;
+//    try
+//      Send(False);
+//      MessageDlg('EMAIL','Email enviado com sucesso',mtInformation,[mbOK],0);
+//    except
+//      bEmailTestarConf.Enabled := True;
+//      bCancelar.Enabled := True;
+//      bConfig.Enabled := True;
+//      pbEmailTeste.Visible := False;
+//      Screen.Cursor := crDefault;
+//    end;
+//  end;
+end;
+
+procedure TFrPar.btnTestarEmailMouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := btnTestarEmail.Hint;
+end;
+
 procedure TFrPar.BitBtn3Click(Sender: TObject);
 var
- vBD, vCamBD, vBDSQLSRV2019, vBDSQLSRV2016 : string;
+ vBD, vCamBD, vBDSQLSRV2016, vBDSQLSRV2017, vBDSQLSRV2019 : string;
 
 begin
 
  vBDSQLSRV2016 := '\Program Files\Microsoft SQL Server\MSSQL13.MSSQLSERVER\MSSQL\DATA\';
- vBDSQLSRV2019 := '\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\DATA';
+ vBDSQLSRV2017 := '\Program Files\Microsoft SQL Server\MSSQL14.MSSQLSERVER\MSSQL\DATA\';
+ vBDSQLSRV2019 := '\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\DATA\';
 
  if ( FrPar.edt_Server_Ger.Text = '(local)' ) then
   begin
 
     vBDSQLSRV2016 := 'C:' + vBDSQLSRV2016;
+    vBDSQLSRV2017 := 'C:' + vBDSQLSRV2017;
     vBDSQLSRV2019 := 'C:' + vBDSQLSRV2019;
 
   end
@@ -776,11 +871,12 @@ begin
   begin
 
     vBDSQLSRV2016 := '\\' + FrPar.edt_Server_Ger.Text + '\c$' + vBDSQLSRV2016;
+    vBDSQLSRV2017 := '\\' + FrPar.edt_Server_Ger.Text + '\c$' + vBDSQLSRV2017;
     vBDSQLSRV2019 := '\\' + FrPar.edt_Server_Ger.Text + '\c$' + vBDSQLSRV2019;
 
   end;
 
- vBD := FrGBNFe.fDirExists( vBDSQLSRV2016, vBDSQLSRV2019 );
+ vBD := FrGBNFe.fDirExists( vBDSQLSRV2016, vBDSQLSRV2017, vBDSQLSRV2019 );
 
  vCamBD := vBD;
  vBD := vBD + edt_Database_Ger.Text + '.mdf';
@@ -811,17 +907,19 @@ end;
 
 procedure TFrPar.BitBtnClick(Sender: TObject);
 var
- vBD, vCamBD, vBDSQLSRV2019, vBDSQLSRV2016 : string;
+ vBD, vCamBD, vBDSQLSRV2016, vBDSQLSRV2017, vBDSQLSRV2019 : string;
 
 begin
 
  vBDSQLSRV2016 := '\Program Files\Microsoft SQL Server\MSSQL13.MSSQLSERVER\MSSQL\DATA\';
- vBDSQLSRV2019 := '\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\DATA';
+ vBDSQLSRV2017 := '\Program Files\Microsoft SQL Server\MSSQL14.MSSQLSERVER\MSSQL\DATA\';
+ vBDSQLSRV2019 := '\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\DATA\';
 
  if ( FrPar.edt_Server_NFe.Text = '(local)' ) then
   begin
 
     vBDSQLSRV2016 := 'C:' + vBDSQLSRV2016;
+    vBDSQLSRV2017 := 'C:' + vBDSQLSRV2017;
     vBDSQLSRV2019 := 'C:' + vBDSQLSRV2019;
 
   end
@@ -829,11 +927,12 @@ begin
   begin
 
     vBDSQLSRV2016 := '\\' + FrPar.edt_Server_NFe.Text + '\c$' + vBDSQLSRV2016;
+    vBDSQLSRV2017 := '\\' + FrPar.edt_Server_NFe.Text + '\c$' + vBDSQLSRV2017;
     vBDSQLSRV2019 := '\\' + FrPar.edt_Server_NFe.Text + '\c$' + vBDSQLSRV2019;
 
   end;
 
- vBD := FrGBNFe.fDirExists( vBDSQLSRV2016, vBDSQLSRV2019 );
+ vBD := FrGBNFe.fDirExists( vBDSQLSRV2016, vBDSQLSRV2017, vBDSQLSRV2019 );
 
  vCamBD := vBD;
  vBD := vBD + edt_Database_NFe.Text + '.mdf';
@@ -1183,12 +1282,6 @@ procedure TFrPar.grp5MouseMove(Sender: TObject; Shift: TShiftState; X,
   Y: Integer);
 begin
  StatusBar1.Panels[0].Text := Grp5.Hint;
-end;
-
-procedure TFrPar.GroupBox22MouseMove(Sender: TObject; Shift: TShiftState;
-  X, Y: Integer);
-begin
- StatusBar1.Panels[0].Text := GroupBox22.Hint;
 end;
 
 procedure TFrPar.grp1Click(Sender: TObject);

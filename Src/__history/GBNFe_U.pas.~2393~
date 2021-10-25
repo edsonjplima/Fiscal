@@ -663,6 +663,7 @@ var
  gTpERP_Ger, gLoginPrompt_Ger, gOSAuthent_Ger, gDriverID_Ger,
  gDatabase_Ger, gServer_Ger, gUserName_Ger, gPassword_Ger,
  gConnected_Ger, gCamBD_Ger                                               : String;
+ gSincrona_Assincrona                                                     : Boolean;
 
  // Variáveis migradas
  _nota                                                                    : ShortString;    //String[15];
@@ -748,7 +749,6 @@ var
  vCnpjEmit, vCnpjCert : string;
  vAutXMLCNPJCPFALL    : string;
  vAutXMLCNPJCPFWORD   : string;
- Sincrona_Assincrona  : Boolean;
 
 begin
 
@@ -799,7 +799,7 @@ begin
    //-----------------------------------------------------------------------
 
    DMFD.FDQuery1.First;
-   While not DMFD.FDQuery1.eof do
+   While ( not DMFD.FDQuery1.eof ) and ( not gAbortar ) do
     begin
      ACBrNFe1.NotasFiscais.Clear;
 
@@ -1736,6 +1736,7 @@ begin
        if not fValidaEmail(DMFD.FDQuery1['des_email'], 'S') then
         begin
          Application.Messagebox('Campo de email do destinatário inválido! ','Atenção!',mb_iconstop+mb_ok);
+         gAbortar := True;
          exit;
         end;
 
@@ -2459,19 +2460,6 @@ begin
            if (DMFD.FDQuery2['cBarraTrib'] <> null ) then                       // Opcional - Preencher com o Código de Barras próprio ou de terceiros que seja diferente do padrão GTIN correspondente àquele da menor unidade comercializável identificado por Código de Barras por exemplo: código de barras de catálogo, partnumber, etc
             Prod.cBarraTrib  := DMFD.FDQuery2['cBarraTrib'];
 
-
-
-
-
-
-
-
-
-
-
-
-
-
            Prod.cEANtrib := vartostr(DMFD.FDQuery2['cEANtrib']);
 
            if ((DMFD.FDQuery2['xPed'] <> null) and ( DMFD.FDQuery2['xPed'] <> '')) then
@@ -3004,6 +2992,30 @@ begin
                with Prod.rastro.Add do
                 begin
 
+                 if ( DMFD.FDQuery19['dFab'] > gDataEmi ) then
+                  begin
+
+                   Application.Messagebox('Data de fabricação de rastro do produto' + Chr(13) +
+                                          'está maior que a data de processamento!' + Chr(13) +
+                                          'Corrija a data, então envie novamente!',
+                                          'Atenção evite a rejeição 877!',mb_iconstop+mb_ok);
+                   gAbortar := True;
+                   Exit;
+
+                  end;
+
+                 if ( DMFD.FDQuery19['dVal'] > DMFD.FDQuery19['dFab'] ) then
+                  begin
+
+                   Application.Messagebox('Data de validade de rastro do produto' + Chr(13) +
+                                          'incompatível com a data de fabricação!' + Chr(13) +
+                                          'Corrija a data, então envie novamente!',
+                                          'Atenção evite a rejeição 870!',mb_iconstop+mb_ok);
+                   gAbortar := True;
+                   Exit;
+
+                  end;
+
                  nLote         := DMFD.FDQuery19['nLote'];
                  qLote         := DMFD.FDQuery19['qLote'];
                  dFab          := DMFD.FDQuery19['dFab'];
@@ -3017,7 +3029,11 @@ begin
 
               end;
 
+             if gAbortar then exit;
+
             end;
+
+           if gAbortar then exit;
 
            // by Edson Lima ; lei da transparencia de impostos
            if DMFD.FDQuery2['vTotTrib'] = null then
@@ -3440,6 +3456,8 @@ begin
 
         end;
 
+       if gAbortar then exit;
+
        // ACBrNFe1.NotasFiscais.Add.NFe.Det.Add.imposto.pis.CST
        Total.ICMSTot.vBC        := DMFD.FDQuery1['nfe_base_calculo_icms'];
        Total.ICMSTot.vICMS      := DMFD.FDQuery1['nfe_vl_icms'];
@@ -3690,16 +3708,16 @@ begin
           try // by Edson Lima ; 2013/02/26 ; 08:26 ; try inserido para obter retorno de erros abortado no ACBR
 
            if gModelo = 65 then
-            Sincrona_Assincrona := true
+            gSincrona_Assincrona := true
            else
-            Sincrona_Assincrona := false;
+            gSincrona_Assincrona := false;
 
            // Sempre enviamos lotes com somente uma nota tanto NFe como NFCe
 
-           if (ACBrNFe1.Enviar('0', true, Sincrona_Assincrona)) then
+           if (ACBrNFe1.Enviar('0', true, gSincrona_Assincrona)) then
             begin
 
-             if Sincrona_Assincrona then
+             if gSincrona_Assincrona then
               begin
 
                ACBrNFe1.WebServices.Consulta.NFeChave := Aux;
@@ -3975,7 +3993,7 @@ begin
 
               end;
 
-             if Sincrona_Assincrona then
+             if gSincrona_Assincrona then
               begin
 
                memoLog.Clear;
@@ -4002,69 +4020,7 @@ begin
 
             begin
 
-             if Sincrona_Assincrona then
-              begin
-
-               ACBrNFe1.WebServices.Retorno.Recibo := ACBrNFe1.WebServices.Enviar.Recibo;
-               ACBrNFe1.WebServices.Retorno.Executar;
-
-               for i := 0 to ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Count-1 do
-                begin
-
-                 //---------------------------------------------------------------
-                 // by Edson Lima ; 2013/03/12 ; 14:23 ; Atualiza a nfe no
-                 //                                      update centralizado
-                 //---------------------------------------------------------------
-                 pGravaNFe('005', 'protocolo',
-                                  'recibo',
-                                  'chave_nfe',
-                                  'situacao',
-                                  'motivo',
-                                  'data_hora_recebimento',
-                                  'CalcHoraNFCe',
-                                  'UsuTrs',
-                                  '',
-                                  '',
-                                  '',
-                                  '',
-                                  '',
-                                  'codigo_loja',
-                                  'demi',
-                                  'nnf',
-                                  'serie',
-                                  'chave_nfe',
-                                  'modelo',                                       // Nome dos campos
-                                  ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].nProt,
-                                  ACBrNFe1.WebServices.Retorno.NFeRetorno.nRec,
-                                  ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].chDFe,
-                                  ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].cStat,
-                                  ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].xMotivo,
-                                  FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].dhRecbto),
-                                  'N',
-                                  gUsu,
-                                  '',
-                                  '',
-                                  '',
-                                  '',
-                                  '',
-                                  edt_CodEmp.Text,
-                                  FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']),
-                                  DMFD.FDQuery1['nfe_nnf'],
-                                  DMFD.FDQuery1['nfe_serie'],
-                                  ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].chDFe,
-                                  DMFD.FDQuery1['nfe_modelo'],                    // Conteúdo dos campos
-                                  true);                                          // Consiste [true/false]
-
-                end;
-
-               memoLog.Clear;
-               MemoResp.Lines.Text   := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetWS);
-               MemoLog.Lines.Text    := UTF8Encode(ACBrNFe1.WebServices.Consulta.Msg);
-               memoRespWS.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetornoWS);
-               LoadXML(MemoResp, WBResposta);
-
-              end
-             else
+             if not gSincrona_Assincrona then
               begin
 
                ACBrNFe1.WebServices.Retorno.Recibo := ACBrNFe1.WebServices.Enviar.Recibo;
@@ -4133,7 +4089,7 @@ begin
 
            begin
 
-            if Sincrona_Assincrona then
+            if gSincrona_Assincrona then
              begin
 
               //-------------------------------------------------------------------
@@ -4302,7 +4258,7 @@ begin
 
           end;
 
-          if Sincrona_Assincrona then
+          if gSincrona_Assincrona then
            begin
 
             memoLog.Clear;
@@ -7551,6 +7507,7 @@ end;
 procedure TFrGBNFe.FormShow(Sender: TObject);
 var
  vNNFenc : boolean;
+  I: Integer;
 
 begin
 
@@ -7920,7 +7877,6 @@ begin
 
      BitBtn12Click(Sender);
     end;
-
    //---------------------------------------------------------------------------
 
    if (DMFD.FDQuery4['Versao']      = 've3131') then
@@ -8343,7 +8299,10 @@ begin
                  _nota        :=   DMFD.FDQryGeral2['nfe_nnf'];
                  _demi        :=   DMFD.FDQryGeral2['nfe_demi'];
 
+                 gAbortar := False;
                  geraenvianf(FrGBNFe);
+
+                 if gAbortar then exit;
 
                  if gDeuErrConsiste then Exit;
 
@@ -8488,7 +8447,10 @@ begin
           //----------------------------
           // Gera e eFnvia a NF pra SEFAZ
 
+          gAbortar := False;
           geraenvianf(FrGBNFe);
+
+          if gAbortar then exit;
 
           //----------------------------
 
@@ -8511,12 +8473,37 @@ begin
             // by Edson Lima ; 2013/03/11 ; 06:57 ; com essa nova abordágem, é
             // possível a continuação após uma rejeição e verificado seu codigo
             // de retorno ;
-            if (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].cStat) <> '100') and
-               (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].cStat) <> '150') then exit;
+
+             if gSincrona_Assincrona then
+              begin
+
+               if (vartostr(ACBrNFe1.WebServices.Consulta.cStat) <> '100') and
+                  (vartostr(ACBrNFe1.WebServices.Consulta.cStat) <> '150') then exit;
+
+              end
+             else
+              begin
+
+               if (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].cStat) <> '100') and
+                  (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].cStat) <> '150') then exit;
+
+              end;
 
             if gDeuErrConsiste then Exit;
 
-            xAux := vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].chDFe);
+            if gSincrona_Assincrona then
+             begin
+
+              xAux := vartostr(ACBrNFe1.WebServices.Consulta.NFeChave);
+
+             end
+            else
+             begin
+
+              xAux := vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].chDFe);
+
+             end;
+
             if xAux <> '' then
              begin
 
@@ -8527,7 +8514,19 @@ begin
               grava_xml_no_banco;
 
               //---------------------enviar email
-              xAux := vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].chDFe);
+              if gSincrona_Assincrona then
+               begin
+
+                xAux := vartostr(ACBrNFe1.WebServices.Consulta.NFeChave);
+
+               end
+              else
+               begin
+
+                xAux := vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].chDFe);
+
+               end;
+
               //pega os dados do destinatario
               DMFD.FDQuery2.Close;
               DMFD.FDQuery2.SQL.Clear;
@@ -10318,7 +10317,6 @@ var
  Para, vI, vP        : String;
  CC                  : Tstrings;
  vZerSen             : Boolean;
- Sincrona_Assincrona : Boolean;
 
 begin
 
@@ -10476,11 +10474,11 @@ begin
          try
 
           if gModelo = 65 then
-           Sincrona_Assincrona := true
+           gSincrona_Assincrona := true
           else
-           Sincrona_Assincrona := false;
+           gSincrona_Assincrona := false;
 
-          ACBrNFe1.Enviar('0', true, Sincrona_Assincrona);
+          ACBrNFe1.Enviar('0', true, gSincrona_Assincrona);
 
          except on e:Exception do
           begin

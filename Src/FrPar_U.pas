@@ -229,6 +229,7 @@ type
     edt_CamBD_Ger: TEdit;
     BitBtn3: TBitBtn;
     grp51: TGroupBox;
+    btnTestarEmail: TBitBtn;
     procedure sbtnCaminhoCertClick(Sender: TObject);
     procedure sbtnGetCertClick(Sender: TObject);
     procedure btnSalvarConfigClick(Sender: TObject);
@@ -351,6 +352,9 @@ type
       Y: Integer);
     procedure BitBtnClick(Sender: TObject);
     procedure BitBtn3Click(Sender: TObject);
+    procedure btnTestarEmailMouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure btnTestarEmailClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -760,6 +764,89 @@ procedure TFrPar.BitBtn1MouseMove(Sender: TObject; Shift: TShiftState; X,
   Y: Integer);
 begin
  StatusBar1.Panels[0].Text := BitBtn1.Hint;
+end;
+
+procedure TFrPar.btnTestarEmailClick(Sender: TObject);
+var
+  Teste: string;
+
+begin
+//  if (Trim(edtEnvCC.Text) = '') or not FDoEmail.ValidarEmail(edtEnvCC.Text) then
+//  begin
+//    MessageDlg('Atenção',
+//      'O endereço de E-mail informado não é Válido ou não foi Preenchido',
+//      mtWarning, [mbOK], '');
+//    edtEnvCC.SetFocus;
+//    Exit;
+//  end;
+//
+//  if Trim(edEmailHost.Text) = '' then
+//  begin
+//    MessageDlg('Atenção', 'Host SMTP não informado', mtWarning, [mbOK], '');
+//    edEmailHost.SetFocus;
+//    Exit;
+//  end;
+//
+//  if (edEmailPorta.Value = 0) then
+//  begin
+//    MessageDlg('Atenção', 'A Porta SMTP informada não é Válida', mtWarning, [mbOK], '');
+//    edEmailPorta.SetFocus;
+//    Exit;
+//  end;
+//
+//  Application.ProcessMessages;
+//
+//  with ACBrMail1 do
+//  begin
+//    Attempts := 1;
+//    FromName := edEmailNome.Text;
+//    From := edEmailEndereco.Text;
+//    Username := edEmailUsuario.Text;
+//    Password := edEmailSenha.Text;
+//    Host := edEmailHost.Text;
+//    Teste := IntToStr(edEmailPorta.Value);
+//    Port := Teste;
+//    SetSSL := cbEmailSsl.Checked;
+//    SetTLS := cbEmailTls.Checked;
+//    ReadingConfirmation := cbEmailConfirmation.Checked;
+//    UseThread := cbEmailThread.Checked;
+//    DefaultCharset := TMailCharset(GetEnumValue(TypeInfo(TMailCharset),
+//      cbEmailCodificacao.Text));
+//
+//    AddAddress(edEmailEndereco.Text);
+//    Subject := 'ACBrMonitor : Teste de Configuração de Email';
+//
+//    Body.Add('Se você consegue ler esta mensagem, significa que suas configurações');
+//    Body.Add('de SMTP estão corretas.');
+//    Body.Add('');
+//    Body.Add('ACBrMonitor');
+//    Body.Add('http://www.projetoacbr.com.br/');
+//
+//    bEmailTestarConf.Enabled := False;
+//    bCancelar.Enabled := False;
+//    bConfig.Enabled := False;
+//    pbEmailTeste.Visible := True;
+//    pbEmailTeste.Position := 1;
+//    Screen.Cursor := crHourGlass;
+//    IsHTML := True;
+//    Application.ProcessMessages;
+//    try
+//      Send(False);
+//      MessageDlg('EMAIL','Email enviado com sucesso',mtInformation,[mbOK],0);
+//    except
+//      bEmailTestarConf.Enabled := True;
+//      bCancelar.Enabled := True;
+//      bConfig.Enabled := True;
+//      pbEmailTeste.Visible := False;
+//      Screen.Cursor := crDefault;
+//    end;
+//  end;
+end;
+
+procedure TFrPar.btnTestarEmailMouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ StatusBar1.Panels[0].Text := btnTestarEmail.Hint;
 end;
 
 procedure TFrPar.BitBtn3Click(Sender: TObject);
