@@ -410,6 +410,7 @@ type
                        string ) : string;                                       // function que verifica se existe o caminho do sql server
   function fDelFileCnt( Caminho, Mascara: string ) : boolean;                   // Function que deleta o arquivo criado durante o primeiro envio de contingêcia
   function fxPag(): string;                                                     // Preenche o campo de Descrição do Meio de Pagamento
+  function fTrataRejeicao( iCdRej, iMod: integer; sDesc: string ): boolean;     // Function que trata as rejeição de retorno da SEFAZ se retornar False=Segue, True=Aborta
 
   procedure pImpr();                                                            // Chama a procedure de impressão
   procedure MarcaBloco( cxTL : TcxTreeList; blMarca : Boolean; blTodos : Boolean = False ); // Marca bloco de seleção TreeList    // xe 10.1 Berlin
@@ -744,8 +745,8 @@ end;
 procedure TFrGBNFe.geraenvianf(Sender: TObject);
 var
  aux, xAux, vCon, vtx : string;
- i, c, iCodPed        : integer;
- vCfop, xPg           : string;
+ i, c, iCodPed, vPri  : integer;
+ vCfop, xPg, vDescRej : string;
  vCnpjEmit, vCnpjCert : string;
  vAutXMLCNPJCPFALL    : string;
  vAutXMLCNPJCPFWORD   : string;
@@ -799,7 +800,7 @@ begin
    //-----------------------------------------------------------------------
 
    DMFD.FDQuery1.First;
-   While not DMFD.FDQuery1.eof do
+   While ( not DMFD.FDQuery1.eof ) and ( not gAbortar ) do
     begin
      ACBrNFe1.NotasFiscais.Clear;
 
@@ -1736,6 +1737,7 @@ begin
        if not fValidaEmail(DMFD.FDQuery1['des_email'], 'S') then
         begin
          Application.Messagebox('Campo de email do destinatário inválido! ','Atenção!',mb_iconstop+mb_ok);
+         gAbortar := True;
          exit;
         end;
 
@@ -2985,8 +2987,25 @@ begin
              DMFD.FDQuery19.Params[5].AsString  := DMFD.FDQuery2['codigo_item'];;
              DMFD.FDQuery19.Open;
 
+             vPri := 0;
+
              While not DMFD.FDQuery19.eof do                                    // Enquanto não for o fim do lote
               begin
+
+               if ( DMFD.FDQuery19['dFab'] > gDataEmi ) then
+                begin
+
+                 if ( vPri > 0 ) then
+                   gDescRej := gDescRej + ', '
+                 else
+                  begin
+                   gTemRej  := True;
+                   vPri := 1;
+                  end;
+
+                 gDescRej := gDescRej + VarToStr(DMFD.FDQuery19[codigo_item']);
+
+                end;
 
                with Prod.rastro.Add do
                 begin
@@ -2995,6 +3014,7 @@ begin
                  qLote         := DMFD.FDQuery19['qLote'];
                  dFab          := DMFD.FDQuery19['dFab'];
                  dVal          := DMFD.FDQuery19['dVal'];
+
                  if ( DMFD.FDQuery19['cAgreg'] <> null ) then
                   cAgreg       := VarToStr(DMFD.FDQuery19['cAgreg']);
 
@@ -3004,7 +3024,19 @@ begin
 
               end;
 
+
+             if gConsiste then
+              begin
+               gAbortar := fTrataRejeicao( 877, gModelo,
+                           DMFD.FDQuery1['nfe_NNf'],
+                           '                       ');
+              end;
+
+             if gAbortar then exit;
+
             end;
+
+           if gAbortar then exit;
 
            // by Edson Lima ; lei da transparencia de impostos
            if DMFD.FDQuery2['vTotTrib'] = null then
@@ -3426,6 +3458,8 @@ begin
          DMFD.FDQuery2.next;
 
         end;
+
+       if gAbortar then exit;
 
        // ACBrNFe1.NotasFiscais.Add.NFe.Det.Add.imposto.pis.CST
        Total.ICMSTot.vBC        := DMFD.FDQuery1['nfe_base_calculo_icms'];
@@ -7476,6 +7510,7 @@ end;
 procedure TFrGBNFe.FormShow(Sender: TObject);
 var
  vNNFenc : boolean;
+  I: Integer;
 
 begin
 
@@ -7845,7 +7880,6 @@ begin
 
      BitBtn12Click(Sender);
     end;
-
    //---------------------------------------------------------------------------
 
    if (DMFD.FDQuery4['Versao']      = 've3131') then
@@ -8268,7 +8302,10 @@ begin
                  _nota        :=   DMFD.FDQryGeral2['nfe_nnf'];
                  _demi        :=   DMFD.FDQryGeral2['nfe_demi'];
 
+                 gAbortar := False;
                  geraenvianf(FrGBNFe);
+
+                 if gAbortar then exit;
 
                  if gDeuErrConsiste then Exit;
 
@@ -8413,7 +8450,10 @@ begin
           //----------------------------
           // Gera e eFnvia a NF pra SEFAZ
 
+          gAbortar := False;
           geraenvianf(FrGBNFe);
+
+          if gAbortar then exit;
 
           //----------------------------
 
@@ -18978,6 +19018,80 @@ begin
   end;
 
  Result := xPg;
+
+end;
+
+//------------------------------------------------------------------------------
+// function fTrataRejeicao
+// Function que trata as rejeição de retorno da SEFAZ se retornar False=Segue,
+// True=Aborta.
+//------------------------------------------------------------------------------
+function TFrGBNFe.fTrataRejeicao( iCdRej, iMod, nNF: integer; sDesc: string ): boolean;
+var
+ vMod : string;
+
+begin
+
+ Result := True;
+
+ case iMod of
+
+  55 : vMod := 'NF-e';
+  65 : vMod := 'NFC-e';
+
+ end;
+
+ case iCdRej of
+
+  877 : // Data de fabricação maior que a data de processamento [nItem:nnn]
+   begin
+
+    Application.Messagebox('Data de fabricação de rastro do produto' + Chr(13) +
+                           'está maior que a data de processamento!' + Chr(13) +
+                           'Corrija a data, então envie novamente!'  + Chr(13) +
+                           sDesc,
+                           vMod + 'Atenção rejeição: ' + IntToStr(iCdRej) + '!',
+                           mb_iconstop+mb_ok);
+
+   end;
+
+  870 :
+   begin
+
+    Application.Messagebox('Data de fabricação de rastro do produto' + Chr(13) +
+                           'está maior que a data de processamento!' + Chr(13) +
+                           'Corrija a data, então envie novamente!',
+                           'Atenção evite a rejeição 877!',mb_iconstop+mb_ok);
+
+
+   end;
+
+                 if ( DMFD.FDQuery19['dFab'] > gDataEmi ) then
+                  begin
+
+                   gAbortar := True;
+                   Exit;
+
+                  end;
+
+                 if ( DMFD.FDQuery19['dVal'] < DMFD.FDQuery19['dFab'] ) then
+                  begin
+
+                   Application.Messagebox('Data de validade de rastro do produto está' + Chr(13) +
+                                          'incompatível com a data de fabricação!' + Chr(13) +
+                                          'Corrija a data, então envie novamente!',
+                                          'Atenção evite a rejeição 870!',mb_iconstop+mb_ok);
+                   gAbortar := True;
+                   Exit;
+
+                  end;
+
+
+
+ end;
+
+
+
 
 end;
 

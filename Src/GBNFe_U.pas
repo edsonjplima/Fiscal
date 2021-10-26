@@ -410,6 +410,7 @@ type
                        string ) : string;                                       // function que verifica se existe o caminho do sql server
   function fDelFileCnt( Caminho, Mascara: string ) : boolean;                   // Function que deleta o arquivo criado durante o primeiro envio de contingêcia
   function fxPag(): string;                                                     // Preenche o campo de Descrição do Meio de Pagamento
+  function fTrataRejeicao( iCdRej, iMod: integer; nNF, sDesc: string ): boolean;// Function que trata as rejeição de retorno da SEFAZ se retornar False=Segue, True=Aborta
 
   procedure pImpr();                                                            // Chama a procedure de impressão
   procedure MarcaBloco( cxTL : TcxTreeList; blMarca : Boolean; blTodos : Boolean = False ); // Marca bloco de seleção TreeList    // xe 10.1 Berlin
@@ -663,7 +664,9 @@ var
  gTpERP_Ger, gLoginPrompt_Ger, gOSAuthent_Ger, gDriverID_Ger,
  gDatabase_Ger, gServer_Ger, gUserName_Ger, gPassword_Ger,
  gConnected_Ger, gCamBD_Ger                                               : String;
- gSincrona_Assincrona                                                     : Boolean;
+ gSincrona_Assincrona, gTemRej                                            : Boolean;
+ gDescRej                                                                 : String;
+
 
  // Variáveis migradas
  _nota                                                                    : ShortString;    //String[15];
@@ -744,7 +747,7 @@ end;
 procedure TFrGBNFe.geraenvianf(Sender: TObject);
 var
  aux, xAux, vCon, vtx : string;
- i, c, iCodPed        : integer;
+ i, c, iCodPed, nPri  : integer;
  vCfop, xPg           : string;
  vCnpjEmit, vCnpjCert : string;
  vAutXMLCNPJCPFALL    : string;
@@ -2986,50 +2989,89 @@ begin
              DMFD.FDQuery19.Params[5].AsString  := DMFD.FDQuery2['codigo_item'];;
              DMFD.FDQuery19.Open;
 
+             //-----------------------------------------------------------------
+
+             nPri     := 0;
+             gDescRej := '';
+             gTemRej  := false;
+             gNNF     := VarToStr(DMFD.FDQuery1['nfe_nnf']);
+
+             While not DMFD.FDQuery19.eof do
+              begin
+
+               if ( DMFD.FDQuery19['dFab'] > gDataEmi ) then
+                begin
+
+                 if ( nPri > 0 ) then
+                   gDescRej := gDescRej + ', '
+                 else
+                  begin
+                   gTemRej  := true;
+                   nPri := (nPri + 1);
+                  end;
+
+                 gDescRej := gDescRej + VarToStr(DMFD.FDQuery19['codigo_item']);
+
+                end;
+
+               DMFD.FDQuery19.next;
+
+              end;
+
+             // Rejeição 877
+             if gTemRej then
+              gAbortar := fTrataRejeicao( 877, gModelo, gNNF, gDescRej );
+
+             if gAbortar then exit;
+             //-----------------------------------------------------------------
+
+             nPri     := 0;
+             gDescRej := '';
+             gTemRej  := false;
+             DMFD.FDQuery19.First;
+
              While not DMFD.FDQuery19.eof do                                    // Enquanto não for o fim do lote
               begin
 
-               with Prod.rastro.Add do
+               if ( DMFD.FDQuery19['dVal'] < DMFD.FDQuery19['dFab'] ) then
                 begin
 
-                 if ( DMFD.FDQuery19['dFab'] > gDataEmi ) then
+                 if ( nPri > 0 ) then
+                   gDescRej := gDescRej + ', '
+                 else
                   begin
-
-                   Application.Messagebox('Data de fabricação de rastro do produto' + Chr(13) +
-                                          'está maior que a data de processamento!' + Chr(13) +
-                                          'Corrija a data, então envie novamente!',
-                                          'Atenção evite a rejeição 877!',mb_iconstop+mb_ok);
-                   gAbortar := True;
-                   Exit;
-
+                   gTemRej  := true;
+                   nPri := (nPri + 1);
                   end;
 
-                 if ( DMFD.FDQuery19['dVal'] < DMFD.FDQuery19['dFab'] ) then
-                  begin
+                 gDescRej := gDescRej + VarToStr(DMFD.FDQuery19['codigo_item']);
 
-                   Application.Messagebox('Data de validade de rastro do produto está' + Chr(13) +
-                                          'incompatível com a data de fabricação!' + Chr(13) +
-                                          'Corrija a data, então envie novamente!',
-                                          'Atenção evite a rejeição 870!',mb_iconstop+mb_ok);
-                   gAbortar := True;
-                   Exit;
+                end;
 
-                  end;
+               with Prod.rastro.Add do
+                begin
 
                  nLote         := DMFD.FDQuery19['nLote'];
                  qLote         := DMFD.FDQuery19['qLote'];
                  dFab          := DMFD.FDQuery19['dFab'];
                  dVal          := DMFD.FDQuery19['dVal'];
+
                  if ( DMFD.FDQuery19['cAgreg'] <> null ) then
                   cAgreg       := VarToStr(DMFD.FDQuery19['cAgreg']);
 
                 end;
 
-               DMFD.FDQuery19.next;                                             // Avança para o próximo registro
+               DMFD.FDQuery19.next;
 
               end;
 
+             // Rejeição 870
+             if gTemRej then
+              gAbortar := fTrataRejeicao( 870, gModelo, gNNF, gDescRej );
+
              if gAbortar then exit;
+
+             //-----------------------------------------------------------------
 
             end;
 
@@ -19015,6 +19057,57 @@ begin
   end;
 
  Result := xPg;
+
+end;
+
+//------------------------------------------------------------------------------
+// function fTrataRejeicao
+// Function que trata as rejeição de retorno da SEFAZ se retornar False=Segue,
+// True=Aborta.
+//------------------------------------------------------------------------------
+function TFrGBNFe.fTrataRejeicao( iCdRej, iMod: integer; nNF, sDesc: string ): boolean;
+var
+ vMod : string;
+
+begin
+
+ Result := True;
+
+ case iMod of
+
+  55 : vMod := 'NF-e';
+  65 : vMod := 'NFC-e';
+
+ end;
+
+ case iCdRej of
+
+  877 : // Data de fabricação maior que a data de processamento [nItem:nnn]
+   begin
+
+    Application.Messagebox(PWideChar('Data de fabricação de rastro do produto' + Chr(13) +
+                           'está maior que a data de processamento!' + Chr(13) +
+                           'Corrija a data, então envie novamente!'  + Chr(13) +
+                           'NF:' + nNF + ' Itens: ' + sDesc),
+                           PWideChar('Atenção rejeição ' + IntToStr(iCdRej) + ' na ' + vMod + '!'),
+                           mb_iconstop+mb_ok);
+
+   end;
+
+  870 : // Data de validade incompatível com data de fabricação [nItem:nnn]
+   begin
+
+    Application.Messagebox(pWideChar(
+                           'Data de validade de rastro do produto' + Chr(13) +
+                           'está incompatível com a data de fabricação!' + Chr(13) +
+                           'Corrija a data, então envie novamente!'  + Chr(13) +
+                           'NF:' + nNF + ' Itens: ' + sDesc),
+                           pWideChar('Atenção rejeição ' + IntToStr(iCdRej) + ' na ' + vMod + '!'),
+                           mb_iconstop+mb_ok);
+
+   end;
+
+ end;
 
 end;
 
