@@ -45,7 +45,10 @@ uses
   cxInplaceContainer, cxImageComboBox, cxMemo, IdIOHandler, IdIOHandlerSocket,
   IdIOHandlerStack, IdSSL, TypInfo, ACBrSMSClass, ACBrSMS, dxActivityIndicator,
   cxContainer, cxEdit, cxDropDownEdit, RLPreviewForm, blcksock, ACBrDFeReport,
-  ACBrDFeDANFeReport;
+  ACBrDFeDANFeReport, dxSkinBasic, dxSkinOffice2019Black,
+  dxSkinOffice2019Colorful, dxSkinOffice2019DarkGray, dxSkinOffice2019White,
+  dxSkinTheBezier, dxScrollbarAnnotations, IdUDPBase, IdUDPServer,
+  IdEchoUDPServer;
 
 type
  TWebControl = class(TWebBrowser)
@@ -234,6 +237,7 @@ type
   cxTLsxInu: TcxTreeListColumn;
   cxTLsTrs: TcxTreeListColumn;
   cxTLsCnc: TcxTreeListColumn;
+    IdEchoUDPServer1: TIdEchoUDPServer;
 
   Procedure geraenvianf(Sender: TObject);
   Procedure grava_xml_no_banco;
@@ -489,14 +493,14 @@ type
 
  end;
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // by Edson Lima - 2016-6-30T1142
 // Funções e procedures globais
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 function fValidaEmail( e_mail, EmBrancoSN: String ): Boolean;                   // Valida o campo de email com o '@' e o '.', valida em branco
 
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 const
 
@@ -684,61 +688,83 @@ var
 implementation
 
 uses
-{$IFNDEF ACBrNFeOpenSSL} ACBrCAPICOM_TLB, JwaWinCrypt, ACBrMSXML2_TLB,  {$ENDIF}
-     FrPar_U, FrInut_U, DMFD_U, ufrmStatus, ACBrNFeNotasFiscais,
-     FrBackup_U, FrCCe_U, FrBuscaNota_U, FrXML_U, FrBuscaChave_U, FrConsManif_U,
-     FrImportXML_U, ACBrDFeSSL, FrConWeb_U, pcnNFe, FrContab_U,
-     ACBrNFeWebServices, pcnRetConsSitNFe, pcnRetEnvEventoNFe, pcnEventoNFe,
-     FrEmail_U, FrBDFD_U, BDFD_U;
+{$IFNDEF ACBrNFeOpenSSL}
+
+//ACBrCAPICOM_TLB,
+ACBrMSXML2_TLB,
+
+{$ENDIF}
+
+ FrPar_U, FrInut_U, DMFD_U, ufrmStatus, ACBrNFeNotasFiscais,
+ FrBackup_U, FrCCe_U, FrBuscaNota_U, FrXML_U, FrBuscaChave_U, FrConsManif_U,
+ FrImportXML_U, ACBrDFeSSL, FrConWeb_U, pcnNFe, FrContab_U,
+ ACBrNFeWebServices, pcnRetConsSitNFe, pcnRetEnvEventoNFe, pcnEventoNFe,
+ FrEmail_U, FrBDFD_U, BDFD_U;
 
 {$R *.dfm}
 
 function Is64Bits: Boolean;
 const
-  PROCESSOR_ARCHITECTURE_INTEL = $0000;
-  PROCESSOR_ARCHITECTURE_IA64 = $0006;
-  PROCESSOR_ARCHITECTURE_AMD64 = $0009;
-  PROCESSOR_ARCHITECTURE_UNKNOWN = $FFFF;
+ PROCESSOR_ARCHITECTURE_INTEL   = $0000;
+ PROCESSOR_ARCHITECTURE_IA64    = $0006;
+ PROCESSOR_ARCHITECTURE_AMD64   = $0009;
+ PROCESSOR_ARCHITECTURE_UNKNOWN = $FFFF;
+
 var
-  xSysInfo: TSystemInfo;
+ xSysInfo: TSystemInfo;
+
 begin
-  GetNativeSystemInfo(xSysInfo);
-  case xSysInfo.wProcessorArchitecture of
-    PROCESSOR_ARCHITECTURE_AMD64, PROCESSOR_ARCHITECTURE_IA64:
-      Result := True;
-  else
-    Result := False;
-  end;
+
+ GetNativeSystemInfo(xSysInfo);
+
+ case xSysInfo.wProcessorArchitecture of
+
+  PROCESSOR_ARCHITECTURE_AMD64, PROCESSOR_ARCHITECTURE_IA64:
+  Result := True;
+
+ else
+
+  Result := False;
+
+ end;
+
 end;
 
 function IsWindows64: Boolean;
 
 type
-  TIsWow64Process = function(AHandle:THandle; var AIsWow64: BOOL): BOOL; stdcall;
+ TIsWow64Process = function(AHandle:THandle; var AIsWow64: BOOL): BOOL; stdcall;
+
 var
-  vKernel32Handle    : DWORD;
-  vIsWow64Process    : TIsWow64Process;
-  vIsWow64           : BOOL;
+ vKernel32Handle    : DWORD;
+ vIsWow64Process    : TIsWow64Process;
+ vIsWow64           : BOOL;
 
 begin
 
-  Result := False;
+ Result := False;
 
-  vKernel32Handle := LoadLibrary('kernel32.dll');
-  if (vKernel32Handle = 0) then Exit;
+ vKernel32Handle := LoadLibrary('kernel32.dll');
 
-  try
+ if (vKernel32Handle = 0) then Exit;
+
+ try
 
   @vIsWow64Process := GetProcAddress(vKernel32Handle, 'IsWow64Process');
+
   if not Assigned(vIsWow64Process) then Exit;
 
   vIsWow64 := False;
-  if (vIsWow64Process(GetCurrentProcess, vIsWow64)) then
-    Result := vIsWow64;
 
-  finally
-    FreeLibrary(vKernel32Handle);
-  end;
+  if (vIsWow64Process(GetCurrentProcess, vIsWow64)) then
+   Result := vIsWow64;
+
+ finally
+
+  FreeLibrary(vKernel32Handle);
+
+ end;
+
 end;
 
 //------------------------------------------------------------------------------
@@ -779,2861 +805,3363 @@ begin
 
  // Verificando se não foi localizada nenhuma nota
  if DMFD.FDQuery1.IsEmpty then
-  begin
+ begin
 
-   Application.Messagebox('Não foi encontrado nenhuma nota!','Atenção!',mb_iconstop+mb_ok);
-   Exit;
+  Application.Messagebox('Não foi encontrado nenhuma nota!','Atenção!',mb_iconstop+mb_ok);
+  Exit;
 
-  end
-
+ end
  else
+ begin
 
+  //----------------------------------------------------------------------------
+  //-- Implementa o email da transportadora - by Edson Lima 16-3-2021         --
+  //----------------------------------------------------------------------------
+
+  if not (DMFD.FDQuery1['tra_email'] = null ) then
+
+   geMailTransp                       := DMFD.FDQuery1['tra_email']
+
+  else
+   geMailTransp                       := '';
+
+  //----------------------------------------------------------------------------
+
+  DMFD.FDQuery1.First;
+  While ( not DMFD.FDQuery1.eof ) and ( not gAbortar ) do
   begin
 
-   //-----------------------------------------------------------------------
-   //-- Implementa o email da transportadora - by Edson Lima 16-3-2021    --
-   //-----------------------------------------------------------------------
+   ACBrNFe1.NotasFiscais.Clear;
 
-   if not (DMFD.FDQuery1['tra_email'] = null ) then
-    geMailTransp                       := DMFD.FDQuery1['tra_email']
-   else
-    geMailTransp                       := '';
+   with ACBrNFe1.NotasFiscais.Add.NFe do
+   begin
 
-   //-----------------------------------------------------------------------
+    vAux := _nota;
 
-   DMFD.FDQuery1.First;
-   While ( not DMFD.FDQuery1.eof ) and ( not gAbortar ) do
+    //--------------------------------------------------------------------------
+    // Informações do Responsável Técnico pelo NF-e NFC-e - insert dos dados
+    //--------------------------------------------------------------------------
+    if ( FrPar.chk_RespTec.Checked ) then
     begin
-     ACBrNFe1.NotasFiscais.Clear;
 
-     with ACBrNFe1.NotasFiscais.Add.NFe do
+     ACBrNFe1.Configuracoes.RespTec.IdCSRT := StrToIntDef(FrPar.edt_IdResTec.Text, 0);
+     ACBrNFe1.Configuracoes.RespTec.CSRT   := Trim(FrPar.edt_CSRTResTec.Text);
+
+     infRespTec.CNPJ     := FrPar.edt_CNPJResTec.Text;
+     infRespTec.xContato := Trim(FrPar.edt_NomeResTec.Text);
+     infRespTec.email    := Trim(FrPar.edt_emaildResTec.Text);
+     infRespTec.fone     := Trim(FrPar.edt_FoneResTec.Text);
+
+    end;
+
+    //--------------------------------------------------------------------------
+    // by Edson Lima ; 2017-6-9T0949 ; Define quem será usado como cNF
+    //--------------------------------------------------------------------------
+    if ( (DMFD.FDQuery1['nfe_CodPed'] = null) or
+         (DMFD.FDQuery1['nfe_CodPed'] = 0) )  then
+     gCdPed := VarToStr(DMFD.FDQuery1['nfe_NNf'])
+
+    else
+    begin
+
+     if ( Length( VarToStr(DMFD.FDQuery1['nfe_CodPed'])) > 8 ) then
+      gCdPed := ( Copy(VarToStr(DMFD.FDQuery1['nfe_CodPed']),
+                  Length(VarToStr(DMFD.FDQuery1['nfe_CodPed'])) - 8 + 1, 8) )
+
+     else
+      gCdPed := VarToStr(DMFD.FDQuery1['nfe_CodPed']);
+
+    end;
+
+    //infNFe.ID     := vAux;
+    Ide.natOp     := DMFD.FDQuery1['nfe_natOp'];
+    Ide.nNF       := StrToIntDef(DMFD.FDQuery1['nfe_nnf'], 0);
+    Ide.cNF       := StrToIntDef(gCdPed, 0);
+    Ide.modelo    := StrToIntDef(DMFD.FDQuery1['nfe_Modelo'], 0);
+    gModelo       := StrToIntDef(DMFD.FDQuery1['nfe_Modelo'], 0);
+    gSerie        := StrToIntDef(DMFD.FDQuery1['nfe_Serie'], 0);
+
+    if ( (Trim(DMFD.FDQuery1['nfe_serie']) = '') or (DMFD.FDQuery1['nfe_serie'] = null) ) then
+    begin
+
+     Ide.serie        :=  1;
+     gSerie_Consiste  := '1';
+     gSerie           := 1;
+
+    end
+    else
+     Ide.serie     := StrToIntDef(DMFD.FDQuery1['nfe_serie'], 0);
+
+    xAux := '';
+    xAux := edt_CodEmp.Text + ',' + '''' + VarToStr(DMFD.FDQuery1['nfe_nnf']) +
+            '''' + ',' + '''' + _tpemissao + '''' + ',' + '''';
+    xAux := xAux + FormatDateTime('dd/mm/yyyy',
+            VarToDateTime(DMFD.FDQuery1['nfe_demi'])) + '''' + ',' + '''';
+    xAux := xAux + IntToStr(gModelo) + '''' + ',' + '''';
+    xAux := xAux + VarToStr(DMFD.FDQuery1['nfe_Serie']) + '''' + ',' + '''';
+    xAux := xAux + gCdPed + '''';
+
+    DMFD.FDQuery7.Close;
+    DMFD.FDQuery7.SQL.Clear;
+    DMFD.FDQuery7.SQL.Add( 'exec sp_calcula_digito_chave ' + xAux );
+    DMFD.FDQuery7.open;
+
+    // by Edson Lima 2015-12-9T1007 - trunk2 novo
+    xAux := '';
+
+    if not DMFD.FDQuery7.IsEmpty then
+     xAux := vartostr(DMFD.FDQuery7['chave']);
+
+    xAux := trim(gCamLog) + trim(xAux) + '-nfe.xml';
+
+    if (gModelo = 65) then
+     Ide.dEmi := (DMFD.FDQuery1['nfe_DatNFCe'])
+    else
+     Ide.dEmi := (DMFD.FDQuery1['nfe_demi']);
+
+    gDataEmi := Ide.dEmi;                                                       // by Edson Lima 2015-10-14T1107 - trunk2 novo
+
+    if ( gCpt = 1 ) then
+     pDefineRel()                                                               // Define o tipo de Relatório FortesReport
+    else
+     pDefineRelFR();                                                            // Define o tipo de Relatório FastReport
+
+    if ((vartostr(DMFD.FDQuery1['nfe_dSaiEnt']) <> '') and
+        (DMFD.FDQuery1['nfe_dSaiEnt'] > StrToDateTime('31/12/2012'))) then
+     Ide.dSaiEnt := DMFD.FDQuery1['nfe_dSaiEnt']
+    else
+     Ide.dSaiEnt   := now();                                                    // By Edson ; 2014/3/7T1405 ; Inserido nesta data referente a implementação da ver3.10
+
+    If FrPar.rgTipoAmb.ItemIndex = 0 then
+     Ide.tpAmb := taProducao
+    else
+     Ide.tpAmb := taHomologacao;
+
+    Ide.tpNF       := tnSaida;
+
+    if vartostr(DMFD.FDQuery1['nfe_tpNF']) = '0' then
+     Ide.tpNF      := tnEntrada;
+
+    // by Edson Lima ; 2015-4-1T1251 ; [ idDest ]-------------------------------
+    DMFD.FDQryGeral1.Close;
+    DMFD.FDQryGeral1.SQL.Clear;
+    DMFD.FDQryGeral1.SQL.Add( 'SET DATEFORMAT dmy                             ' );
+    DMFD.FDQryGeral1.SQL.Add( 'Select top 1 cfop                              ' );
+    DMFD.FDQryGeral1.SQL.Add( 'from nfe_itens                                 ' );
+    DMFD.FDQryGeral1.SQL.Add( 'where cfop >= 5000 and  cfop <= 7501           ' );
+    DMFD.FDQryGeral1.SQL.Add( 'and   codigo_loja = :parm1                     ' );
+    DMFD.FDQryGeral1.SQL.Add( 'and   demi        = :parm2                     ' );
+    DMFD.FDQryGeral1.SQL.Add( 'and   nnf         = :parm3                     ' );
+    DMFD.FDQryGeral1.SQL.Add( 'and   modelo      = :parm4                     ' );
+    DMFD.FDQryGeral1.SQL.Add( 'and   serie       = :parm5                     ' );
+    DMFD.FDQryGeral1.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
+    DMFD.FDQryGeral1.Params[1].Value     := StrToDateTime( FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']) );
+    DMFD.FDQryGeral1.Params[2].AsString  := DMFD.FDQuery1['nfe_nnf'];
+    DMFD.FDQryGeral1.Params[3].AsString  := DMFD.FDQuery1['nfe_modelo'];
+    DMFD.FDQryGeral1.Params[4].AsString  := DMFD.FDQuery1['nfe_serie'];
+    DMFD.FDQryGeral1.Open;
+
+    if (DMFD.FDQryGeral1['cfop'] <> null) then
+     vCfop := DMFD.FDQryGeral1['cfop']
+    else
+     vCfop := '0';
+
+    //--------------------------------------------------------------------------
+    // Verifica se idDest é nulo, casos onde o gerpa ainda não foi atualizado
+    //--------------------------------------------------------------------------
+    if ( (DMFD.FDQuery1['nfe_idDest'] = null) or (DMFD.FDQuery1['nfe_idDest'] = '0') ) then
+    begin
+
+     if ( ((StrToIntDef(vCfop, 0) >= 5000) and (StrToIntDef(vCfop, 0) <= 7501)) and
+           (DMFD.FDQuery4['uf'] <> DMFD.FDQuery1['des_uf']) ) then
+      Ide.idDest := doInterna
+
+     else if ( DMFD.FDQuery1['des_uf'] = 'EX' ) then
+      Ide.idDest := doExterior
+
+     else if ( DMFD.FDQuery4['uf'] <> DMFD.FDQuery1['des_uf'] ) then
+      Ide.idDest := doInterestadual
+
+     else
+      Ide.idDest := doInterna;
+
+    end
+    else
+    begin
+
+     //-------------------------------------------------------------------------
+     // Verificando se o cfop é especifico para combustivel para op. interna
+     // p/ clientes interestadual
+     //-------------------------------------------------------------------------
+     if ( vCfop = '5667' ) and ( DMFD.FDQuery4['uf'] <> DMFD.FDQuery1['des_uf'] ) then
+      Ide.idDest := doInterna
+     else
+     begin
+
+      case DMFD.FDQuery1.FieldByName('nfe_idDest').AsString[1]  of
+
+       '1' :  Ide.idDest := doInterna;
+       '2' :  Ide.idDest := doInterestadual;
+       '3' :  Ide.idDest := doExterior;
+
+       end;
+
+     end;
+
+    end;
+
+    //-----------------------------------------------------------------------
+    // by Edson Lima ; 2016-1-22T1019 ; Indica operação com Consumidor Final
+    // e do Indicador de presença do comprador no estabelecimento comercial
+    // ou no momento da operação e o indicador da forma de pagamento
+    //-----------------------------------------------------------------------
+    // indFinal
+    case ( StrToIntDef(DMFD.FDQuery1['nfe_indFinal'], 0) ) of
+
+     1:    Ide.indFinal := cfConsumidorFinal;
+
+    else   Ide.indFinal := cfNao;
+
+    end;
+
+    // indPres
+    if not ( DMFD.FDQuery1['nfe_indPres'] = null ) then
+    begin
+
+     case FrPar.cbb2.ItemIndex of
+
+      0 :                                                                       // ve3131
+      case (StrToIntDef(DMFD.FDQuery1['nfe_indPres'], 0)) of
+
+       0:    Ide.indPres := pcNao;
+       1:    Ide.indPres := pcPresencial;
+       2:    Ide.indPres := pcInternet;
+       3:    Ide.indPres := pcTeleatendimento;
+       4:    Ide.indPres := pcEntregaDomicilio;
+       9:    Ide.indPres := pcOutros;
+       else  Ide.indPres := pcOutros;
+
+      end;
+
+      1 :                                                                       // ve4040
       begin
 
-       vAux := _nota;
+       if ( (Now() >= StrToDateTime('01/09/2021')) or
+            (FrPar.rgTipoAmb.itemindex = 1) )  then
+       begin
 
-       //-----------------------------------------------------------------------
-       // Informações do Responsável Técnico pelo NF-e NFC-e - insert dos dados
-       if ( FrPar.chk_RespTec.Checked ) then
-        begin
+        case ( StrToIntDef(DMFD.FDQuery1['nfe_indPres'], 0) ) of                // Indicativo do Intermediador - By Edson Lima 10/03/2021
 
-         ACBrNFe1.Configuracoes.RespTec.IdCSRT := StrToIntDef(FrPar.edt_IdResTec.Text, 0);
-         ACBrNFe1.Configuracoes.RespTec.CSRT   := Trim(FrPar.edt_CSRTResTec.Text);
-
-         infRespTec.CNPJ     := FrPar.edt_CNPJResTec.Text;
-         infRespTec.xContato := Trim(FrPar.edt_NomeResTec.Text);
-         infRespTec.email    := Trim(FrPar.edt_emaildResTec.Text);
-         infRespTec.fone     := Trim(FrPar.edt_FoneResTec.Text);
-
-        end;
-
-       //-----------------------------------------------------------------------
-
-       // by Edson Lima ; 2017-6-9T0949 ; Define quem será usado como cNF
-       if ( (DMFD.FDQuery1['nfe_CodPed'] = null) or
-            (DMFD.FDQuery1['nfe_CodPed'] = 0) )  then
-        gCdPed := VarToStr(DMFD.FDQuery1['nfe_NNf'])
-       else
-        begin
-         if ( Length( VarToStr(DMFD.FDQuery1['nfe_CodPed'])) > 8 ) then
-          gCdPed := ( Copy(VarToStr(DMFD.FDQuery1['nfe_CodPed']),
-                    Length(VarToStr(DMFD.FDQuery1['nfe_CodPed'])) - 8 + 1, 8) )
-         else
-          gCdPed := VarToStr(DMFD.FDQuery1['nfe_CodPed']);
-        end;
-
-       //infNFe.ID     := vAux;
-       Ide.natOp     := DMFD.FDQuery1['nfe_natOp'];
-       Ide.nNF       := StrToIntDef(DMFD.FDQuery1['nfe_nnf'], 0);
-       Ide.cNF       := StrToIntDef(gCdPed, 0);
-       Ide.modelo    := StrToIntDef(DMFD.FDQuery1['nfe_Modelo'], 0);
-       gModelo       := StrToIntDef(DMFD.FDQuery1['nfe_Modelo'], 0);
-       gSerie        := StrToIntDef(DMFD.FDQuery1['nfe_Serie'], 0);
-
-       if ( (Trim(DMFD.FDQuery1['nfe_serie']) = '') or (DMFD.FDQuery1['nfe_serie'] = null) ) then
-        begin
-         Ide.serie        :=  1;
-         gSerie_Consiste  := '1';
-         gSerie           := 1;
-        end
-       else
-        Ide.serie     := StrToIntDef(DMFD.FDQuery1['nfe_serie'], 0);
-
-       // by Edson Lima ; 2017-6-9T0949 ; Define quem será usado como cNF
-       gCdPed := VarToStr(DMFD.FDQuery1['nfe_CodPed']);
-
-       xAux := '';
-       xAux := edt_CodEmp.Text + ',' + '''' + VarToStr(DMFD.FDQuery1['nfe_nnf']) +
-               '''' + ',' + '''' + _tpemissao + '''' + ',' + '''';
-       xAux := xAux + FormatDateTime('dd/mm/yyyy',
-               VarToDateTime(DMFD.FDQuery1['nfe_demi'])) + '''' + ',' + '''';
-       xAux := xAux + IntToStr(gModelo) + '''' + ',' + '''';
-       xAux := xAux + VarToStr(DMFD.FDQuery1['nfe_Serie']) + '''' + ',' + '''';
-       xAux := xAux + gCdPed + '''';
-
-       DMFD.FDQuery7.Close;
-       DMFD.FDQuery7.SQL.Clear;
-       DMFD.FDQuery7.SQL.Add( 'exec sp_calcula_digito_chave ' + xAux );
-       DMFD.FDQuery7.open;
-
-       // by Edson Lima 2015-12-9T1007 - trunk2 novo
-       xAux := '';
-       if not DMFD.FDQuery7.IsEmpty then
-        xAux := vartostr(DMFD.FDQuery7['chave']);
-
-       xAux := trim(gCamLog) + trim(xAux) + '-nfe.xml';
-
-       if (gModelo = 65) then
-        Ide.dEmi := (DMFD.FDQuery1['nfe_DatNFCe'])
-       else
-        Ide.dEmi := (DMFD.FDQuery1['nfe_demi']);
-
-       gDataEmi := Ide.dEmi;                                                    // by Edson Lima 2015-10-14T1107 - trunk2 novo
-
-       if ( gCpt = 1 ) then
-        pDefineRel()                                                            // Define o tipo de Relatório FortesReport
-       else
-        pDefineRelFR();                                                         // Define o tipo de Relatório FastReport
-
-       if ((vartostr(DMFD.FDQuery1['nfe_dSaiEnt']) <> '') and
-           (DMFD.FDQuery1['nfe_dSaiEnt'] > StrToDateTime('31/12/2012'))) then
-        Ide.dSaiEnt := DMFD.FDQuery1['nfe_dSaiEnt']
-       else
-        Ide.dSaiEnt   := now();                                                 // By Edson ; 2014/3/7T1405 ; Inserido nesta data referente a implementação da ver3.10
-
-       If FrPar.rgTipoAmb.ItemIndex = 0 then
-        Ide.tpAmb := taProducao
-       else
-        Ide.tpAmb := taHomologacao;
-
-       Ide.tpNF       := tnSaida;
-
-       if vartostr(DMFD.FDQuery1['nfe_tpNF']) = '0' then
-        Ide.tpNF      := tnEntrada;
-
-       // by Edson Lima ; 2015-4-1T1251 ; [ idDest ]----------------------------
-       DMFD.FDQryGeral1.Close;
-       DMFD.FDQryGeral1.SQL.Clear;
-       DMFD.FDQryGeral1.SQL.Add( 'SET DATEFORMAT dmy                             ' );
-       DMFD.FDQryGeral1.SQL.Add( 'Select top 1 cfop                              ' );
-       DMFD.FDQryGeral1.SQL.Add( 'from nfe_itens                                 ' );
-       DMFD.FDQryGeral1.SQL.Add( 'where cfop > ''4999'' and  cfop < 6000         ' );
-       DMFD.FDQryGeral1.SQL.Add( 'and   codigo_loja = :parm1                     ' );
-       DMFD.FDQryGeral1.SQL.Add( 'and   demi        = :parm2                     ' );
-       DMFD.FDQryGeral1.SQL.Add( 'and   nnf         = :parm3                     ' );
-       DMFD.FDQryGeral1.SQL.Add( 'and   modelo      = :parm4                     ' );
-       DMFD.FDQryGeral1.SQL.Add( 'and   serie       = :parm5                     ' );
-       DMFD.FDQryGeral1.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
-       DMFD.FDQryGeral1.Params[1].Value     := StrToDateTime( FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']) );
-       DMFD.FDQryGeral1.Params[2].AsString  := DMFD.FDQuery1['nfe_nnf'];
-       DMFD.FDQryGeral1.Params[3].AsString  := DMFD.FDQuery1['nfe_modelo'];
-       DMFD.FDQryGeral1.Params[4].AsString  := DMFD.FDQuery1['nfe_serie'];
-       DMFD.FDQryGeral1.Open;
-
-       if (DMFD.FDQryGeral1['cfop'] <> null) then
-        vCfop := DMFD.FDQryGeral1['cfop']
-       else
-        vCfop := '0';
-
-       //-----------------------------------------------------------------------
-       // Verifica se idDest é nulo, casos onde o gerpa ainda não foi atualizado
-
-       if ( (DMFD.FDQuery1['nfe_idDest'] = null) or (DMFD.FDQuery1['nfe_idDest'] = 0) ) then
-        begin
-
-         if ( ((StrToIntDef(vCfop, 0) > 4999) and (StrToIntDef(vCfop, 0) < 6000)) and
-                   (DMFD.FDQuery4['uf'] <> DMFD.FDQuery1['des_uf']) ) then
-           Ide.idDest := doInterna
-
-         else if ( DMFD.FDQuery1['des_uf'] = 'EX' ) then
-          Ide.idDest := doExterior
-
-         else if ( DMFD.FDQuery4['uf'] <> DMFD.FDQuery1['des_uf'] ) then
-          Ide.idDest := doInterestadual
-
-         else
-          Ide.idDest := doInterna;
-
-        end
-       else
-        begin
-
-         // Verificando se o cfop é especifico para combustivel para op. interna p/ clientes interestadual
-         if ( vCfop = '5667' ) and ( DMFD.FDQuery4['uf'] <> DMFD.FDQuery1['des_uf'] ) then
-
-           Ide.idDest := doInterna
-
-         else
-          begin
-
-           case DMFD.FDQuery1.FieldByName('nfe_idDest').AsString[1]  of
-
-            '1' :  Ide.idDest := doInterna;
-            '2' :  Ide.idDest := doInterestadual;
-            '3' :  Ide.idDest := doExterior;
-
-           end;
-
-          end;
-
-        end;
-
-       //-----------------------------------------------------------------------
-       // by Edson Lima ; 2016-1-22T1019 ; Indica operação com Consumidor Final
-       // e do Indicador de presença do comprador no estabelecimento comercial
-       // ou no momento da operação e o indicador da forma de pagamento
-       //-----------------------------------------------------------------------
-
-       // indFinal
-//       if not ( DMFD.FDQuery1['nfe_indFinal'] = null ) then
-//        begin
-
-         case ( StrToIntDef(DMFD.FDQuery1['nfe_indFinal'], 0) ) of
-          0:    Ide.indFinal := cfNao;
-          1:    Ide.indFinal := cfConsumidorFinal;
-          else  Ide.indFinal := cfNao;
-         end;
-
-//        end;
-
-       // indPres
-       if not ( DMFD.FDQuery1['nfe_indPres'] = null ) then
-        begin
-
-         case FrPar.cbb2.ItemIndex of
-
-          0 :                                                                   // ve3131
-
-           case (StrToIntDef(DMFD.FDQuery1['nfe_indPres'], 0)) of
-            0:    Ide.indPres := pcNao;
-            1:    Ide.indPres := pcPresencial;
-            2:    Ide.indPres := pcInternet;
-            3:    Ide.indPres := pcTeleatendimento;
-            4:    Ide.indPres := pcEntregaDomicilio;
-            9:    Ide.indPres := pcOutros;
-            else  Ide.indPres := pcOutros;
-           end;
-
-          1 :                                                                   // ve4040
-
-           begin
-
-            if ( (Now() >= StrToDateTime('01/09/2021')) or
-                 (FrPar.rgTipoAmb.itemindex = 1) )  then
-             begin
-
-              case ( StrToIntDef(DMFD.FDQuery1['nfe_indPres'], 0) ) of            // Indicativo do Intermediador - By Edson Lima 10/03/2021
-
-               2, 3, 4, 9:
-
-                begin
-
-                 if ( DMFD.FDQuery1['nfe_indIntermed'] = '1' ) then
-                  begin
-
-                   Ide.indIntermed := iiOperacaoComIntermediador;
-
-                   if not ( DMFD.FDQuery1['nfe_cnpjIntermed'] = null ) then
-                    infIntermed.cnpj         := DMFD.FDQuery1['nfe_cnpjIntermed']
-                   else
-                    infIntermed.cnpj         := '';
-
-                   if not ( DMFD.FDQuery1['nfe_idCadIntTran'] = null ) then
-                    infIntermed.idCadIntTran := DMFD.FDQuery1['nfe_idCadIntTran']
-                   else
-                    infIntermed.idCadIntTran := '';
-
-                  end
-
-                 else
-
-                  Ide.indIntermed := iiOperacaoSemIntermediador;
-
-                end;
-
-               else
-
-                Ide.IndIntermed := iiOperacaoSemIntermediador; //iiSemOperacao;
-
-              end;
-
-             end;
-
-            case (StrToIntDef(DMFD.FDQuery1['nfe_indPres'], 0)) of
-
-             0:    Ide.indPres := pcNao;
-             1:    Ide.indPres := pcPresencial;
-             2:    Ide.indPres := pcInternet;
-             3:    Ide.indPres := pcTeleatendimento;
-             4:    Ide.indPres := pcEntregaDomicilio;
-             5:    Ide.indPres := pcPresencialForaEstabelecimento;
-             9:    Ide.indPres := pcOutros;
-             else  Ide.indPres := pcOutros;
-
-            end;
-
-           end;
-
-          2 :                                                                   // ve4031
-
-           begin
-
-            if ( gModelo = 55 ) then
-             begin
-
-              case (StrToIntDef(DMFD.FDQuery1['nfe_indPres'], 0)) of
-               0:    Ide.indPres := pcNao;
-               1:    Ide.indPres := pcPresencial;
-               2:    Ide.indPres := pcInternet;
-               3:    Ide.indPres := pcTeleatendimento;
-               4:    Ide.indPres := pcEntregaDomicilio;
-               5:    Ide.indPres := pcPresencialForaEstabelecimento;
-               9:    Ide.indPres := pcOutros;
-               else  Ide.indPres := pcOutros;
-              end;
-
-             end
-
-            else
-
-             begin
-
-              case (StrToIntDef(DMFD.FDQuery1['nfe_indPres'], 0)) of
-               0:    Ide.indPres := pcNao;
-               1:    Ide.indPres := pcPresencial;
-               2:    Ide.indPres := pcInternet;
-               3:    Ide.indPres := pcTeleatendimento;
-               4:    Ide.indPres := pcEntregaDomicilio;
-               9:    Ide.indPres := pcOutros;
-               else  Ide.indPres := pcOutros;
-              end;
-
-             end;
-
-           end;
-
-          3 :                                                                   // ve3140
-
-           begin
-
-            if ( gModelo = 55 ) then
-             begin
-
-              case (StrToIntDef(DMFD.FDQuery1['nfe_indPres'], 0)) of
-               0:    Ide.indPres := pcNao;
-               1:    Ide.indPres := pcPresencial;
-               2:    Ide.indPres := pcInternet;
-               3:    Ide.indPres := pcTeleatendimento;
-               4:    Ide.indPres := pcEntregaDomicilio;
-               9:    Ide.indPres := pcOutros;
-               else  Ide.indPres := pcOutros;
-              end;
-
-             end
-
-            else
-
-             begin
-
-              case (StrToIntDef(DMFD.FDQuery1['nfe_indPres'], 0)) of
-               0:    Ide.indPres := pcNao;
-               1:    Ide.indPres := pcPresencial;
-               2:    Ide.indPres := pcInternet;
-               3:    Ide.indPres := pcTeleatendimento;
-               4:    Ide.indPres := pcEntregaDomicilio;
-               5:    Ide.indPres := pcPresencialForaEstabelecimento;
-               9:    Ide.indPres := pcOutros;
-               else  Ide.indPres := pcOutros;
-              end;
-
-             end;
-
-           end;
-
-         end;
-
-        end;
-
-       //-----------------------------------------------------------------------
-
-       if (gModelo = 65) then
-        begin
-         Ide.tpImp     := tiNFCe;
-         Ide.indFinal  := cfConsumidorFinal;
-         Ide.indPres   := pcPresencial;
-
-         case ( FrPar.cbb2.ItemIndex) of
-
-          0 : Ide.indPag    := ipVista;                                         // ve310
-
-          1 : ;// Retirado a partir da ve400;                                   // ve400
-
-          2 : Ide.indPag    := ipVista;                                         // ve310
-
-          3 : ;// Retirado a partir da ve400;                                   // ve400
-
-         end;
-
-        end
-       else if (gModelo = 55) then
-        begin
-
-         Ide.tpImp     := tiRetrato;
-
-        end;
-
-       Ide.tpEmis    := teNORMAL;
-
-       ACBrNFe1.Configuracoes.Geral.FormaEmissao := teNORMAL;
-
-       if ((_tipo_emissao = 'fsda') and (gModelo = 55)) then
-        begin
-         ACBrNFe1.Configuracoes.Geral.FormaEmissao := teFSDA;
-         Ide.tpEmis                                := teFSDA;
-
-         if vartostr(DMFD.FDQuery1['nfe_demi']) <> '' then
-          Ide.dhCont                               := DMFD.FDQuery1['nfe_demi']
-         else
-          Ide.dhCont := now();
-
-         Ide.xJust                                 := xJustificativa;
-        end
-       else if ((_tipo_emissao = 'OffL') and (gModelo = 65)) then
-        begin
-         ACBrNFe1.Configuracoes.Geral.FormaEmissao := teOffLine;
-         Ide.tpEmis                                := teOffLine;
-
-         if vartostr(DMFD.FDQuery1['nfe_DatNFCe']) <> '' then
-          Ide.dhCont                             := DMFD.FDQuery1['nfe_DatNFCe']
-         else
-          Ide.dhCont := now();
-
-         Ide.xJust                                 := xJustificativa;
-
-        end;
-
-       //**********************************************************************
-       // by Edson ; 20/6/2012 ; 08:45 ; Marca a nota com ENVI antes de enviar*
-       if _tipo_emissao = 'normal' then
-        begin
-         // by Edson Lima ; 2013/03/12 ; 14:23 ; Se não tiver data_hora_recebimento
-         // grava a data atual, caso contrario mantém: Centralizar os updates em um só lugar
-         if (VarToStr(DMFD.FDQuery1['nfe_data_hora_recebimento']) = '') then
-          pGravaNFe('001', 'situacao',
-                           'motivo',
-                           'data_hora_recebimento',
-                           'UsuTrs',
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           'codigo_loja',
-                           'demi',
-                           'nnf',
-                           'serie',
-                           'chave_nfe',
-                           'modelo',                                            // Nome dos campos
-                           'ENVI',
-                           'Tentativa de envio sem sucesso',
-                           FormatDateTime('dd/mm/yyyy hh:nn:ss', now()),
-                           gUsu,
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           edt_CodEmp.Text, FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']),
-                           DMFD.FDQuery1['nfe_nnf'],
-                           DMFD.FDQuery1['nfe_serie'],
-                           '',
-                           gModelo,                                             // Conteúdo dos campos
-                           true)                                                // Consiste [true/false]
-         else
-          pGravaNFe('001', 'situacao',
-                           'motivo',
-                           'UsuTrs',
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           'codigo_loja',
-                           'demi',
-                           'nnf',
-                           'serie',
-                           'chave_nfe',
-                           'modelo',                                            // Nome dos campos
-                           'ENVI',
-                           'Tentativa de envio sem sucesso',
-                           gUsu,
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           edt_CodEmp.Text, FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']),
-                           DMFD.FDQuery1['nfe_nnf'],
-                           DMFD.FDQuery1['nfe_serie'],
-                           '',
-                           gModelo,                                             // Conteúdo dos campos
-                           true);                                               // Consiste [true/false]
-        end;
-       //**********************************************************************
-
-       Ide.cUF       := strtointDef(DMFD.FDQuery4['codigo_uf'], 0);
-       Ide.cMunFG    := StrToIntDef(DMFD.FDQuery4['codigo_municipio'], 0);
-
-       if DMFD.FDQuery1['nfe_finalidade'] = 1 then Ide.finNFe := fnNormal;
-       if DMFD.FDQuery1['nfe_finalidade'] = 2 then Ide.finNFe := fnComplementar;
-       if DMFD.FDQuery1['nfe_finalidade'] = 3 then Ide.finNFe := fnAjuste;
-       if DMFD.FDQuery1['nfe_finalidade'] = 4 then Ide.finNFe := fnDevolucao;   // by Edson Lima ; 2015-4-1T1328 ; linha imcluida para Devolução
-
-       DMFD.FDQuery2.Close;
-       DMFD.FDQuery2.SQL.Clear;
-       DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                                                                                 ' );
-       DMFD.FDQuery2.SQL.Add( 'Select                                                                                             ' );
-       DMFD.FDQuery2.SQL.Add( 't1.*                                                                                               ' );
-       DMFD.FDQuery2.SQL.Add( 'from nfe_referenciada_mod1 t1                                                                      ' );
-       DMFD.FDQuery2.SQL.Add( 'inner join nfe t2 on t1.codigo_loja = t2.codigo_loja and t1.nnf = t2.nnf and t1.demi = t2.demi and ' );
-       DMFD.FDQuery2.SQL.Add( '                     t1.modelo = t2.modelo                                                         ' );
-       DMFD.FDQuery2.SQL.Add( 'and   t2.codigo_loja = :parm1                                                                      ' );
-       DMFD.FDQuery2.SQL.Add( 'and   t2.demi        = :parm2                                                                      ' );
-       DMFD.FDQuery2.SQL.Add( 'and   t2.nnf         = :parm3                                                                      ' );
-       DMFD.FDQuery2.SQL.Add( 'and   t2.modelo      = :parm4                                                                      ' );
-       DMFD.FDQuery2.SQL.Add( 'and   t2.serie       = :parm5                                                                      ' );
-       DMFD.FDQuery2.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
-       DMFD.FDQuery2.Params[1].Value     := StrToDateTime( FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']) );
-       DMFD.FDQuery2.Params[2].AsString  := DMFD.FDQuery1['nfe_nnf'];
-       DMFD.FDQuery2.Params[3].AsString  := DMFD.FDQuery1['nfe_modelo'];
-       DMFD.FDQuery2.Params[4].AsString  := DMFD.FDQuery1['nfe_serie'];
-       DMFD.FDQuery2.Open;
-       if not DMFD.FDQuery2.IsEmpty then
-        begin
-         DMFD.FDQuery2.First;
-         While not DMFD.FDQuery2.eof do
-          begin
-           with Ide.NFref.Add do
-            begin
-
-             // By Edson Lima ; 2015-4-2T0938 ; linha incluida
-             if ( (strtointDef(DMFD.FDQuery2['mod'], 0) = 55) or
-                  (strtointDef(DMFD.FDQuery2['mod'], 0) = 65) ) then
-               RefNFe         := DMFD.FDQuery2['chave_nfe']
-             else             // Mod 1/1A
-              begin
-               RefNF.cUF      := strtointDef(DMFD.FDQuery2['uf'], 0);
-               RefNF.AAMM     := DMFD.FDQuery2['aamm'];
-               RefNF.CNPJ     := DMFD.FDQuery2['cnpj'];
-               RefNF.modelo   := strtointDef(DMFD.FDQuery2['mod'], 0);
-               RefNF.serie    := strtointDef(DMFD.FDQuery2['Ser'], 0);
-               RefNF.nNF      := strtointDef(DMFD.FDQuery2['r_nnf'], 0);
-              end;
-
-            end;
-
-         DMFD.FDQuery2.next;
-        end;
-       end;
-
-       //nfe_referenciada_prural
-       DMFD.FDQuery2.Close;
-       DMFD.FDQuery2.SQL.Clear;
-       DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                                             ' );
-       DMFD.FDQuery2.SQL.Add( 'Select                                                         ' );
-       DMFD.FDQuery2.SQL.Add( 't1.*                                                           ' );
-       DMFD.FDQuery2.SQL.Add( 'from nfe_referenciada_prural t1                                ' );
-       DMFD.FDQuery2.SQL.Add( 'inner join nfe t2 on t1.codigo_loja = t2.codigo_loja and t1.nnf = t2.nnf and t1.demi = t2.demi and t1.modelo = t2.modelo ' );
-       DMFD.FDQuery2.SQL.Add( 'and   t2.codigo_loja = :parm1                                  ' );
-       DMFD.FDQuery2.SQL.Add( 'and   t2.demi        = :parm2                                  ' );
-       DMFD.FDQuery2.SQL.Add( 'and   t2.nnf         = :parm3                                  ' );
-       DMFD.FDQuery2.SQL.Add( 'and   t2.modelo      = :parm4                                  ' );
-       DMFD.FDQuery2.SQL.Add( 'and   t2.serie       = :parm5                                  ' );
-       DMFD.FDQuery2.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
-       DMFD.FDQuery2.Params[1].Value     := StrToDateTime( FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']) );
-       DMFD.FDQuery2.Params[2].AsString  := DMFD.FDQuery1['nfe_nnf'];
-       DMFD.FDQuery2.Params[3].AsString  := DMFD.FDQuery1['nfe_modelo'];
-       DMFD.FDQuery2.Params[4].AsString  := DMFD.FDQuery1['nfe_serie'];
-       DMFD.FDQuery2.Open;
-       if not DMFD.FDQuery2.IsEmpty then begin
-         DMFD.FDQuery2.First;
-         While not DMFD.FDQuery2.eof do begin
-          with Ide.NFref.Add do
-           begin
-
-            RefNFP.cUF     := strtointDef(DMFD.FDQuery2['uf'], 0);
-            RefNFP.AAMM    := DMFD.FDQuery2['aamm'];
-            RefNFP.CNPJCPF := DMFD.FDQuery2['cnpj'];
-            RefNFP.IE      := DMFD.FDQuery2['insc_estadual'];
-            RefNFP.modelo  := DMFD.FDQuery2['mod'];
-            RefNFP.serie   := strtointDef(DMFD.FDQuery2['Ser'], 0);
-            RefNFP.nNF     := strtointDef(DMFD.FDQuery2['r_nnf'], 0);
-
-           end;
-
-          DMFD.FDQuery2.next;
-         end;
-       end;
-
-       //nfe_referenciada_cupon
-       DMFD.FDQuery2.Close;
-       DMFD.FDQuery2.SQL.Clear;
-       DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                                                                                                        ' );
-       DMFD.FDQuery2.SQL.Add( 'Select                                                                                                                    ' );
-       DMFD.FDQuery2.SQL.Add( 't1.*                                                                                                                      ' );
-       DMFD.FDQuery2.SQL.Add( 'from nfe_referenciada_cupon t1                                                                                            ' );
-       DMFD.FDQuery2.SQL.Add( 'inner join nfe t2 on t1.codigo_loja = t2.codigo_loja and t1.nnf = t2.nnf and t1.demi = t2.demi and t1.modelo = t2.modelo  ' );
-       DMFD.FDQuery2.SQL.Add( 'and   t2.codigo_loja = :parm1                                                                                             ' );
-       DMFD.FDQuery2.SQL.Add( 'and   t2.demi        = :parm2                                                                                             ' );
-       DMFD.FDQuery2.SQL.Add( 'and   t2.nnf         = :parm3                                                                                             ' );
-       DMFD.FDQuery2.SQL.Add( 'and   t2.modelo      = :parm4                                                                                             ' );
-       DMFD.FDQuery2.SQL.Add( 'and   t2.serie       = :parm5                                                                                             ' );
-       DMFD.FDQuery2.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
-       DMFD.FDQuery2.Params[1].Value             := StrToDateTime( FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']) );
-       DMFD.FDQuery2.Params[2].AsString  := DMFD.FDQuery1['nfe_nnf'];
-       DMFD.FDQuery2.Params[3].AsString  := DMFD.FDQuery1['nfe_modelo'];
-       DMFD.FDQuery2.Params[4].AsString  := DMFD.FDQuery1['nfe_serie'];
-       DMFD.FDQuery2.Open;
-       if not DMFD.FDQuery2.IsEmpty then begin
-         DMFD.FDQuery2.First;
-         While not DMFD.FDQuery2.eof do begin
-           with Ide.NFref.Add do
-             begin
-               if DMFD.FDQuery2['mod'] = ''   then RefECF.modelo  := ECFModRefVazio;
-               if DMFD.FDQuery2['mod'] = '2B' then RefECF.modelo  := ECFModRef2B;
-               if DMFD.FDQuery2['mod'] = '2C' then RefECF.modelo  := ECFModRef2C;
-               if DMFD.FDQuery2['mod'] = '2D' then RefECF.modelo  := ECFModRef2D;
-               RefECF.nECF    := DMFD.FDQuery2['ecf'];
-               RefECF.ncoo    := DMFD.FDQuery2['coo'];
-             end;
-
-           DMFD.FDQuery2.next;
-         end;
-       end;
-
-       Emit.CNPJCPF           := DMFD.FDQuery1['emi_cnpj'];
-       Emit.IE                := DMFD.FDQuery1['emi_insc_estadual'];
-       FrGBNFe.ACBrNFe1.SSL.NumeroSerie := DMFD.FDQuery1['emi_Certificado_NumSerie'];
-       FrGBNFe.ACBrNFe1.SSL.CarregarCertificado;
-
-       vCnpjEmit := ( Copy(Trim(DMFD.FDQuery4['cnpj']), 1, 8) );
-       vCnpjCert := ( Copy(Trim(FrGBNFe.ACBrNFe1.SSL.CertCNPJ), 1, 8) );
-       if ( vCnpjEmit <> vCnpjCert ) then
-        Application.Messagebox('Obs: O CNPJ do emitente está diferente do' + chr(13) +
-                               'CNPJ do certificado digital que foi setado' + chr(13) +
-                               'no parametros do emissor!','Atenção!',mb_iconstop+mb_ok);
-
-       // by Edson Lima ; 2013/02/25 ; 09:48 - Condição criada nesta data
-       if (DMFD.FDQuery1['des_uf'] = DMFD.FDQuery4['ufSbt']) then
-        if ( vCfop <> '5667' ) then
-         Emit.IEST             := vartostr(DMFD.FDQuery4['insc_estadual_subs']);
-
-       Emit.xNome             := DMFD.FDQuery4['razao_social'];
-       Emit.xFant             := DMFD.FDQuery4['nome_fantasia'];
-       Emit.EnderEmit.fone    := DMFD.FDQuery4['fone'];
-       Emit.EnderEmit.CEP     := StrToIntDef(DMFD.FDQuery4['cep'], 0);
-       Emit.EnderEmit.xLgr    := DMFD.FDQuery4['endereco'];
-       if ((DMFD.FDQuery4['numero'] = null) or (DMFD.FDQuery4['numero'] = '')) then
-        Emit.EnderEmit.nro     := '0'
-       else
-        Emit.EnderEmit.nro     := DMFD.FDQuery4['numero'];
-       if (DMFD.FDQuery4['complemento'] = null) then
-        Emit.EnderEmit.xCpl    := ''
-       else
-        Emit.EnderEmit.xCpl    := DMFD.FDQuery4['complemento'];
-       Emit.EnderEmit.xBairro := DMFD.FDQuery4['bairro'];
-       Emit.EnderEmit.cMun    := StrToIntDef(DMFD.FDQuery4['codigo_municipio'], 0);
-       Emit.EnderEmit.xMun    := DMFD.FDQuery4['municipio'];
-       Emit.EnderEmit.UF      := DMFD.FDQuery4['uf'];
-       Emit.enderEmit.cPais   := strtointDef(DMFD.FDQuery4['codigo_pais'], 0);//1058;
-       Emit.enderEmit.xPais   := DMFD.FDQuery4['nome_pais'];//'BRASIL';
-
-       if DMFD.FDQuery4['regime_tributario'] = 1 then
-        Emit.CRT  := crtSimplesNacional;
-       if DMFD.FDQuery4['regime_tributario'] = 2 then
-        Emit.CRT  := crtSimplesExcessoReceita;
-       if DMFD.FDQuery4['regime_tributario'] = 3 then
-        Emit.CRT  := crtRegimeNormal;
-
-       if Ide.tpAmb = taHomologacao then
-
-        begin
-         if (DMFD.FDQuery1['des_uf'] = 'EX') then
-
-          Dest.CNPJCPF           := ''
-
-         else
-
-          begin
-
-           if gModelo = 65 then
-
-            begin
-
-             if ( (DMFD.FDQuery1['nfe_CPFNFCe']       = null) or
-                  (trim(DMFD.FDQuery1['nfe_CPFNFCe']) = '') ) then
-              Dest.CNPJCPF           := OnlyNumber('999999991-31')
-             else
-              Dest.CNPJCPF           := OnlyNumber(VarToStr(DMFD.FDQuery1['nfe_CPFNFCe']));
-
-             if ( (Trim(DMFD.FDQuery1['des_bairro']) = '') or (DMFD.FDQuery1['des_bairro'] = null) ) then
-              Dest.EnderDest.xBairro := 'Centro'
-             else
-              Dest.EnderDest.xBairro := DMFD.FDQuery1['des_bairro'];
-
-             if ( (Trim(DMFD.FDQuery1['des_endereco']) = '') or (DMFD.FDQuery1['des_endereco'] = null) ) then
-              begin
-               Dest.EnderDest.CEP     := strtointDef(DMFD.FDQuery1['des_cep'], 0);
-               Dest.EnderDest.xLgr    := 'Rua';
-               Dest.EnderDest.nro     := '';
-               Dest.EnderDest.xCpl    := '';
-               Dest.EnderDest.cMun    := strtointDef(DMFD.FDQuery1['des_codigo_municipio'], 0);
-               Dest.EnderDest.xMun    := DMFD.FDQuery1['des_municipio'];
-               Dest.EnderDest.UF      := DMFD.FDQuery1['des_uf'];
-               Dest.EnderDest.Fone    := DMFD.FDQuery1['des_fone'];;
-              end;
-
-            end
-
-           else    // Caso 55 em homologação
-
-            begin
-             Dest.CNPJCPF           := OnlyNumber(VarToStr(DMFD.FDQuery1['des_cnpj']));
-             Dest.EnderDest.CEP     := strtointDef(DMFD.FDQuery1['des_cep'], 0);
-             Dest.EnderDest.xLgr    := DMFD.FDQuery1['des_endereco'];
-             Dest.EnderDest.nro     := DMFD.FDQuery1['des_numero'];
-             Dest.EnderDest.xCpl    := '';
-             Dest.EnderDest.xBairro := DMFD.FDQuery1['des_bairro'];
-             Dest.EnderDest.cMun    := strtointDef(DMFD.FDQuery1['des_codigo_municipio'], 0);
-             Dest.EnderDest.xMun    := DMFD.FDQuery1['des_municipio'];
-             Dest.EnderDest.UF      := DMFD.FDQuery1['des_uf'];
-             Dest.EnderDest.Fone    := DMFD.FDQuery1['des_fone'];
-            end;
-
-          end;
-
-        end
-
-       else     // Caso Produção
-
-        begin
-
-         if (DMFD.FDQuery1['des_uf'] = 'EX') then
-
-           Dest.CNPJCPF           := ''
-
-         else if gModelo = 65 then
-
-          begin
-
-           if ( (DMFD.FDQuery1['nfe_CPFNFCe']       = null) or
-                (trim(DMFD.FDQuery1['nfe_CPFNFCe']) = '') ) then
-            begin
-             if ( (Trim(DMFD.FDQuery1['des_cnpj']) = '')               or
-                  (Trim(DMFD.FDQuery1['des_cnpj']) = '00000000000')    or
-                  (Trim(DMFD.FDQuery1['des_cnpj']) = '00000000000000') or
-                  (DMFD.FDQuery1['des_cnpj'] = null) ) then
-              Dest.CNPJCPF         := OnlyNumber('')
-             else
-              Dest.CNPJCPF         := OnlyNumber(DMFD.FDQuery1['des_cnpj']);
-            end
-           else
-            Dest.CNPJCPF           := OnlyNumber(VarToStr(DMFD.FDQuery1['nfe_CPFNFCe']));
-
-           if ( (Trim(DMFD.FDQuery1['des_bairro']) = '') or (DMFD.FDQuery1['des_bairro'] = null) ) then
-            Dest.EnderDest.xBairro := 'Centro'
-           else
-            Dest.EnderDest.xBairro := DMFD.FDQuery1['des_bairro'];
-
-           if ( (Trim(DMFD.FDQuery1['des_endereco']) = '') or (DMFD.FDQuery1['des_endereco'] = null) ) then
-            begin
-             Dest.EnderDest.CEP     := strtointDef(DMFD.FDQuery1['des_cep'], 0);
-             Dest.EnderDest.xLgr    := 'Rua';
-             Dest.EnderDest.nro     := '';
-             Dest.EnderDest.xCpl    := '';
-             Dest.EnderDest.cMun    := strtointDef(DMFD.FDQuery1['des_codigo_municipio'], 0);
-             Dest.EnderDest.xMun    := DMFD.FDQuery1['des_municipio'];
-             Dest.EnderDest.UF      := DMFD.FDQuery1['des_uf'];
-             Dest.EnderDest.Fone    := DMFD.FDQuery1['des_fone'];;
-            end;
-
-          end
-
-          else  // Caso do Modelo = 55
-
-           begin
-            Dest.CNPJCPF           := OnlyNumber(VarToStr(DMFD.FDQuery1['des_cnpj']));
-            Dest.EnderDest.CEP     := strtointDef(DMFD.FDQuery1['des_cep'], 0);
-            Dest.EnderDest.xLgr    := DMFD.FDQuery1['des_endereco'];
-            Dest.EnderDest.nro     := DMFD.FDQuery1['des_numero'];
-            Dest.EnderDest.xCpl    := '';
-            Dest.EnderDest.xBairro := DMFD.FDQuery1['des_bairro'];
-            Dest.EnderDest.cMun    := strtointDef(DMFD.FDQuery1['des_codigo_municipio'], 0);
-            Dest.EnderDest.xMun    := DMFD.FDQuery1['des_municipio'];
-            Dest.EnderDest.UF      := DMFD.FDQuery1['des_uf'];
-            Dest.EnderDest.Fone    := DMFD.FDQuery1['des_fone'];
-           end
-         end;
-
-       (* ----------------------------------------------------------------------------------------------------------------- *)
-       (* TAG de grupo de identificação do Local de retirada - <retirada> - Ocorrência 0-N                                  *)
-       (* Poderá ser implementado no futuro                                                                                 *)
-       (* ----------------------------------------------------------------------------------------------------------------- *)
-
-                                   // Informar os valores desse grupo somente se o  endereço de
-                                   // retirada for diferente do endereço do remetente.
-                                   // Assim se retirada.xLgr <> '' o gerador grava o grupo no XML
-
-       //Retirada.CNPJCPF := '';     // F02 - CNPJ
-       //Retirada.xLgr := '';        // F03 - Logradouro
-       //Retirada.nro := '';         // F04 - Número
-       //Retirada.xCpl := '';        // F05 - Complemento
-       //Retirada.xBairro := '';     // F06 - Bairro
-       //Retirada.cMun := 0;         // F07 - Código do município (Tabela do IBGE - '9999999' para operações com o exterior))
-       //Retirada.xMun := '';        // F08 - Nome do município   ('EXTERIOR' para operações com o exterior)
-       //Retirada.UF := '';          // F09 - Sigla da UF         ('EX' para operações com o exterior.)
-
-       (* ----------------------------------------------------------------------------------------------------------------- *)
-       (* TAG de grupo de identificação do Local de entrega - <entrega> - Ocorrência 0-N                                    *)
-       (* Poderá ser implementado no futuro                                                                                 *)
-       (* ----------------------------------------------------------------------------------------------------------------- *)
-
-                                   // Informar os valores desse grupo somente se o
-                                   // endereço de entrega for diferente do endereço do destinatario.
-                                   // Assim se entrega.xLgr <> '' o gerador grava o grupo no XML
-
-       //Entrega.CNPJCPF := '';      // G02 - CNPJ
-       //Entrega.xLgr := '';         // G03 - Logradouro
-       //Entrega.nro := '';          // G04 - Número
-       //Entrega.xCpl := '';         // G05 - Complemento
-       //Entrega.xBairro := '';      // G06 - Bairro
-       //Entrega.cMun := 0;          // G07 - Código do município (Tabela do IBGE - '9999999' para operações com o exterior))
-       //Entrega.xMun := '';         // G08 - Nome do município   ('EXTERIOR' para operações com o exterior)
-       //Entrega.UF := '';           // G09 - Sigla da UF         ('EX' para operações com o exterior.)
-
-       (* ----------------------------------------------------------------------------------------------------------------- *)
-
-
-       (* ----------------------------------------------------------------------------------------------------------------- *)
-       (* TAG de grupo Pessoas autorizadas a acessar o XML da NF-e G A01 0-10                                               *)
-       (* Poderá ser implementado no futuro                                                                                 *)
-       (* ----------------------------------------------------------------------------------------------------------------- *)
-
-       // Aqui deve haver a leitura de fornecedores (contadores / atores)
-
-       autXML.Clear;
-       vAutXMLCNPJCPFWORD := '';
-
-       if ( (not(DMFD.FDQuery1['nfe_autXML'] = null))       and
-            (not(Trim(DMFD.FDQuery1['nfe_autXML']) = '')) ) then
-        begin
-
-         vAutXMLCNPJCPFALL := trim(VarToStr(DMFD.FDQuery1['nfe_autXML']));
-
-         for I := 1 to Length(vAutXMLCNPJCPFALL) do
-          begin
-
-           if vAutXMLCNPJCPFALL[I] <> ''  then
-            begin
-
-              if ( (vAutXMLCNPJCPFALL[I] <> ',')      and
-                   (vAutXMLCNPJCPFALL[I] <> ';')      or
-                   ( I = Length(vAutXMLCNPJCPFALL)) ) then
-               vAutXMLCNPJCPFWORD := (vAutXMLCNPJCPFWORD + vAutXMLCNPJCPFALL[I]);
-
-              if ( (vAutXMLCNPJCPFALL[I] = ',')       or
-                   (vAutXMLCNPJCPFALL[I] = ';')       or
-                   ( I = Length(vAutXMLCNPJCPFALL)) ) then
-               begin
-
-                autXML.Add.CNPJCPF := vAutXMLCNPJCPFWORD;                       // Informar CNPJ ou CPF. Preencher os zeros não significativos.
-                vAutXMLCNPJCPFWORD := '';
-
-               end;
-
-            end;
-
-          end;
-
-        end;
-
-       (* ----------------------------------------------------------------------------------------------------------------- *)
-
-       // by Edson Lima ; 2016-1-22T1019 ; Indicador da Ie do Destimatário
-       if not ( DMFD.FDQuery1['des_indIEDest'] = null ) then
-        begin
-
-         case (StrToIntDef(DMFD.FDQuery1['des_indIEDest'], 0)) of
-          1:   // Contribuinte normal
-           begin
-
-            Dest.IE := DMFD.FDQuery1['des_insc_estadual'];
-            Dest.indIEDest := inContribuinte;
-
-           end;
-          2:   // Contribuinte isento - CNPJ e IE isento
-           begin
-
-            Dest.IE := '';
-            Dest.indIEDest := inIsento;
-
-           end;
-          9:  // Não Contribuinte - CPF ou CNPJ sem IE
-           begin
-
-            if (gModelo = 65) then
-             Dest.IE := ''
-            else if ((gModelo = 55) and (Trim(DMFD.FDQuery1['des_insc_estadual']) = 'ISENTO') ) then
-             Dest.IE := ''
-            else
-             Dest.IE := DMFD.FDQuery1['des_insc_estadual'];
-
-            Dest.indIEDest := inNaoContribuinte;
-
-           end;
-         end;
-        end;
-
-       if Ide.tpAmb = taHomologacao then
-        Dest.xNome             := 'NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL'
-       else
-        begin
-
-         if (gModelo = 65) then
-          begin
-
-           if ( (DMFD.FDQuery1['nfe_NomeNFCe']       = null) or
-                (trim(DMFD.FDQuery1['nfe_NomeNFCe']) = '') ) then
-            Dest.xNome           := DMFD.FDQuery1['des_razao_social']
-           else
-            Dest.xNome           := DMFD.FDQuery1['nfe_NomeNFCe'];
-
-          end
-         else
-          Dest.xNome             := DMFD.FDQuery1['des_razao_social'];
-
-        end;
-
-       Dest.ISUF              := DMFD.FDQuery1['des_suframa'];
-       Dest.EnderDest.cPais   := strtointDef(DMFD.FDQuery1['des_codigo_pais'], 0);    //1058;
-       Dest.EnderDest.xPais   := DMFD.FDQuery1['des_nome_pais'];                //'BRASIL';
-
-       // By Edson Lima - 2016-6-30T1143 - Verifica o email do destinatário
-       if not fValidaEmail(DMFD.FDQuery1['des_email'], 'S') then
-        begin
-         Application.Messagebox('Campo de email do destinatário inválido! ','Atenção!',mb_iconstop+mb_ok);
-         gAbortar := True;
-         exit;
-        end;
-
-       Dest.Email             := DMFD.FDQuery1['des_email'];                    // by Edson ; 2013/03/19 ; 08:37 ; Implementado nesta dada
-
-       //informações complementares
-       DMFD.FDQuery2.Close;
-       DMFD.FDQuery2.SQL.Clear;
-       DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                               ' );
-       DMFD.FDQuery2.SQL.Add( 'Select                                           ' );
-       DMFD.FDQuery2.SQL.Add( 't1.*                                             ' );
-       DMFD.FDQuery2.SQL.Add( '                                                 ' );
-       DMFD.FDQuery2.SQL.Add( 'from nfe_informacoes t1                          ' );
-       DMFD.FDQuery2.SQL.Add( '                                                 ' );
-       DMFD.FDQuery2.SQL.Add( 'inner join nfe t2 on                             ' );
-       DMFD.FDQuery2.SQL.Add( '  t1.codigo_loja = t2.codigo_loja and            ' );
-       DMFD.FDQuery2.SQL.Add( '  t1.nnf         = t2.nnf         and            ' );
-       DMFD.FDQuery2.SQL.Add( '  t1.demi        = t2.demi        and            ' );
-       DMFD.FDQuery2.SQL.Add( '  t1.modelo      = t2.modelo                     ' );
-       DMFD.FDQuery2.SQL.Add( '                                                 ' );
-       DMFD.FDQuery2.SQL.Add( 'where                                            ' );
-       DMFD.FDQuery2.SQL.Add( '  t2.codigo_loja = :parm1 and                    ' );
-       DMFD.FDQuery2.SQL.Add( '  t2.demi        = :parm2 and                    ' );
-       DMFD.FDQuery2.SQL.Add( '  t2.nnf         = :parm3 and                    ' );
-       DMFD.FDQuery2.SQL.Add( '  t2.modelo      = :parm4 and                    ' );
-       DMFD.FDQuery2.SQL.Add( '  t2.serie       = :parm5                        ' );
-       DMFD.FDQuery2.SQL.Add( '                                                 ' );
-       DMFD.FDQuery2.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
-       DMFD.FDQuery2.Params[1].Value     := StrToDateTime( FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']) );
-       DMFD.FDQuery2.Params[2].AsString  := DMFD.FDQuery1['nfe_nnf'];
-       DMFD.FDQuery2.Params[3].AsString  := DMFD.FDQuery1['nfe_modelo'];
-       DMFD.FDQuery2.Params[4].AsString  := DMFD.FDQuery1['nfe_serie'];
-       DMFD.FDQuery2.Open;
-       if not DMFD.FDQuery2.IsEmpty then begin
-         DMFD.FDQuery2.First;
-         While not DMFD.FDQuery2.eof do begin
-           with InfAdic.obsCont.Add do
-             begin
-               xCampo     := trim( vartostr(DMFD.FDQuery2['inf_campo']) );
-               xTexto     := trim( vartostr(DMFD.FDQuery2['inf_complementar']) );
-             end;
-           DMFD.FDQuery2.next;
-         end;
-       end;
-
-       InfAdic.infCpl := trim(vartostr(DMFD.FDQuery1['nfe_inf_complementar']));
-       InfAdic.infAdFisco := trim(vartostr(DMFD.FDQuery1['nfe_inf_fisco']));
-
-       // faturas
-       DMFD.FDQuery2.Close;
-       DMFD.FDQuery2.SQL.Clear;
-       DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                               ' );
-       DMFD.FDQuery2.SQL.Add( 'Select                                           ' );
-       DMFD.FDQuery2.SQL.Add( 't1.*                                             ' );
-       DMFD.FDQuery2.SQL.Add( '                                                 ' );
-       DMFD.FDQuery2.SQL.Add( 'from nfe_faturas t1                              ' );
-       DMFD.FDQuery2.SQL.Add( '                                                 ' );
-       DMFD.FDQuery2.SQL.Add( 'inner join nfe t2 on                             ' );
-       DMFD.FDQuery2.SQL.Add( '  t1.codigo_loja = t2.codigo_loja and            ' );
-       DMFD.FDQuery2.SQL.Add( '  t1.nnf         = t2.nnf         and            ' );
-       DMFD.FDQuery2.SQL.Add( '  t1.demi        = t2.demi        and            ' );
-       DMFD.FDQuery2.SQL.Add( '  t1.Modelo      = t2.Modelo      and            ' );
-       DMFD.FDQuery2.SQL.Add( '  t1.Serie       = t2.Serie                      ' );
-       DMFD.FDQuery2.SQL.Add( '                                                 ' );
-       DMFD.FDQuery2.SQL.Add( 'where                                            ' );
-       DMFD.FDQuery2.SQL.Add( '  t2.codigo_loja = :codigo_loja and              ' );
-       DMFD.FDQuery2.SQL.Add( '  t2.demi        = :demi        and              ' );
-       DMFD.FDQuery2.SQL.Add( '  t2.nnf         = :nnf         and              ' );
-       DMFD.FDQuery2.SQL.Add( '  t2.Modelo      = :Modelo      and              ' );
-       DMFD.FDQuery2.SQL.Add( '  t2.Serie       = :Serie                        ' );
-       DMFD.FDQuery2.SQL.Add( '                                                 ' );
-       DMFD.FDQuery2.ParamByName('codigo_loja').AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
-       DMFD.FDQuery2.ParamByName('demi'       ).Value     := StrToDateTime( FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']) );
-       DMFD.FDQuery2.ParamByName('nnf'        ).AsString  := DMFD.FDQuery1['nfe_nnf'];
-       DMFD.FDQuery2.ParamByName('Modelo'     ).AsString  := DMFD.FDQuery1['nfe_modelo'];
-       DMFD.FDQuery2.ParamByName('Serie'      ).AsString  := DMFD.FDQuery1['nfe_serie'];
-       DMFD.FDQuery2.Open;
-
-       if not DMFD.FDQuery2.IsEmpty then
-        begin
-
-         if (gModelo = 55) then
-          begin
-
-           with cobr.Fat do
-            begin
-
-             nFat  := DMFD.FDQuery2['num_fatura'];
-             vOrig := DMFD.FDQuery2['vl_original'];
-             vDesc := DMFD.FDQuery2['vl_desconto'];
-             vLiq  := DMFD.FDQuery2['vl_liquido'];
-
-            end;
-
-          end;
-
-        end;
-
-       //duplicatas
-       DMFD.FDQuery2.Close;
-       DMFD.FDQuery2.SQL.Clear;
-       DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                                                     ' );
-       DMFD.FDQuery2.SQL.Add( 'Select                                                                 ' );
-       DMFD.FDQuery2.SQL.Add( 't1.num_duplicata, cast(t1.dvenc as datetime) as dvenc, t1.valor,       ' );
-       DMFD.FDQuery2.SQL.Add( 't1.IndPag, t1.tPag, t1.cCnpj, t1.tBand, t1.cAut, t1.vTroco             ' );
-       DMFD.FDQuery2.SQL.Add( 'from nfe_duplicatas t1                                                 ' );
-       DMFD.FDQuery2.SQL.Add( '                                                                       ' );
-       DMFD.FDQuery2.SQL.Add( 'inner join nfe t2 on                                                   ' );
-       DMFD.FDQuery2.SQL.Add( '      t1.codigo_loja = t2.codigo_loja and                              ' );
-       DMFD.FDQuery2.SQL.Add( '      t1.nnf         = t2.nnf         and                              ' );
-       DMFD.FDQuery2.SQL.Add( '      t1.demi        = t2.demi        and                              ' );
-       DMFD.FDQuery2.SQL.Add( '      t1.modelo      = t2.modelo      and                              ' );
-       DMFD.FDQuery2.SQL.Add( '                                                                       ' );
-       DMFD.FDQuery2.SQL.Add( '      t2.codigo_loja = :parm1         and                              ' );
-       DMFD.FDQuery2.SQL.Add( '      t2.demi        = :parm2         and                              ' );
-       DMFD.FDQuery2.SQL.Add( '      t2.nnf         = :parm3         and                              ' );
-       DMFD.FDQuery2.SQL.Add( '      t2.modelo      = :parm4         and                              ' );
-       DMFD.FDQuery2.SQL.Add( '      t2.serie       = :parm5                                          ' );
-       DMFD.FDQuery2.SQL.Add( '                                                                       ' );
-       DMFD.FDQuery2.SQL.Add( '  Order by t1.dvenc                                                    ' );
-       DMFD.FDQuery2.SQL.Add( '                                                                       ' );
-       DMFD.FDQuery2.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
-       DMFD.FDQuery2.Params[1].Value     := StrToDateTime( FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']) );
-       DMFD.FDQuery2.Params[2].AsString  := DMFD.FDQuery1['nfe_nnf'];
-       DMFD.FDQuery2.Params[3].AsString  := DMFD.FDQuery1['nfe_modelo'];
-       DMFD.FDQuery2.Params[4].AsString  := DMFD.FDQuery1['nfe_serie'];
-       DMFD.FDQuery2.Open;
-
-       if not DMFD.FDQuery2.IsEmpty then
-        begin
-
-         While not DMFD.FDQuery2.eof do
-          begin
-
-           if (gModelo = 55) then
-            begin
-
-             with Cobr.Dup.Add do
-              begin
-               nDup    := DMFD.FDQuery2['num_duplicata'];
-
-               if ( DMFD.FDQuery2['dvenc'] < date() ) then
-
-                dVenc   := date()
-
-               else
-
-                dVenc   := DMFD.FDQuery2['dvenc'];
-
-               vDup    := DMFD.FDQuery2['valor'];
-
-               if vDup = 0 then
-                vDup := DMFD.FDQuery1['nfe_total_nf'];                          // Provisório até corrigir no ERP ; by Edson ; 04-10-2012 ; 08:30
-
-              end;
-            end;
-
-           //for I := 1 to qPag do    // caso for adotado a quantidade pagamentos no gerpa
-
-           //if (gModelo = 65) then                                             // antes da ve400
-
-            begin
-
-             with pag.Add do                                                    // A critério de cada UF poderá ser exigido o preenchimento do Grupo Informações de Pagamento para NF-e e/ou NFC-e.
-              begin                                                             // PAGAMENTOS apenas para NFC-e
-
-               // indPag
-               case FrPar.cbb2.ItemIndex of                                     // Tratamento de Versões
-
-                1 :                                                             // ve40
-
-                 if not ( DMFD.FDQuery2['IndPag'] = null ) then
-                  begin
-
-                   case (StrToIntDef(DMFD.FDQuery2['IndPag'], 0)) of
-                    1:    IndPag := ipVista;
-                    2:    IndPag := ipPrazo;
-                    3:    IndPag := ipOutras;
-                    else  IndPag := ipNenhum;
-                   end;
-
-                  end;
-
-                2 :                                                             // ve40
-
-                 if ( gModelo = 55 ) then
-                  begin
-
-                   if not ( DMFD.FDQuery2['IndPag'] = null ) then
-                    begin
-
-                     case (StrToIntDef(DMFD.FDQuery2['IndPag'], 0)) of
-                      1:    IndPag := ipVista;
-                      2:    IndPag := ipPrazo;
-                      3:    IndPag := ipOutras;
-                      else  IndPag := ipNenhum;
-                     end;
-
-                    end;
-
-                  end;
-
-                3 :                                                             // ve40
-
-                 if ( gModelo = 65 ) then
-                  begin
-
-                   if not ( DMFD.FDQuery2['IndPag'] = null ) then
-                    begin
-
-                     case (StrToIntDef(DMFD.FDQuery2['IndPag'], 0)) of
-                      1:    IndPag := ipVista;
-                      2:    IndPag := ipPrazo;
-                      3:    IndPag := ipOutras;
-                      else  IndPag := ipNenhum;
-                     end;
-
-                    end;
-
-                  end;
-
-               end;
-
-               if (DMFD.FDQuery2['tPag'] = null) then
-
-                if (gModelo = 55) then
-                 tPag := fpDuplicataMercantil
-                else
-                 tPag := fpDinheiro
-
-               else
-                begin
-
-                 case ( FrPar.cbb2.ItemIndex ) of
-
-                  0 :                                                           // ve3131
-
-                   case StrToIntDef(DMFD.FDQuery2['tPag'], 0) of
-                    01 : tPag := fpDinheiro;
-                    02 : tPag := fpCheque;
-                    03 : tPag := fpCartaoCredito;
-                    04 : tPag := fpCartaoDebito;
-                    05 : tPag := fpCreditoLoja;
-                    10 : tPag := fpValeAlimentacao;
-                    11 : tPag := fpValeRefeicao;
-                    12 : tPag := fpValePresente;
-                    13 : tPag := fpValeCombustivel;
-                    99 :
-                     begin
-
-                      tPag := fpOutro;
-                      xPag := fxPag();
-
-                     end;
-
-                   end;
-
-                  1 :                                                           // ve4040
-
-                   case StrToIntDef(DMFD.FDQuery2['tPag'], 0) of
-
-                    01 : tPag := fpDinheiro;
-                    02 : tPag := fpCheque;
-                    03 : tPag := fpCartaoCredito;
-                    04 : tPag := fpCartaoDebito;
-                    05 : tPag := fpCreditoLoja;
-                    10 : tPag := fpValeAlimentacao;
-                    11 : tPag := fpValeRefeicao;
-                    12 : tPag := fpValePresente;
-                    13 : tPag := fpValeCombustivel;
-                    14 : tPag := fpDuplicataMercantil;
-                    15 : tPag := fpBoletoBancario;
-                    16 : tPag := fpDepositoBancario;
-                    17 : tPag := fpPagamentoInstantaneo;
-                    18 : tPag := fpTransfBancario;
-                    19 : tPag := fpProgramaFidelidade;
-                    90 : tPag := fpSemPagamento;
-                    91 : tPag := fpRegimeEspecial;
-                    99 :
-                     begin
-
-                      tPag := fpOutro;
-                      xPag := fxPag();
-
-                     end;
-
-                   end;
-
-                  2 :                                                           // ve4031
-
-                   if ( gModelo = 55 ) then                                     // ve40
-                    begin
-
-                     case StrToIntDef(DMFD.FDQuery2['tPag'], 0) of
-
-                      01 : tPag := fpDinheiro;
-                      02 : tPag := fpCheque;
-                      03 : tPag := fpCartaoCredito;
-                      04 : tPag := fpCartaoDebito;
-                      05 : tPag := fpCreditoLoja;
-                      10 : tPag := fpValeAlimentacao;
-                      11 : tPag := fpValeRefeicao;
-                      12 : tPag := fpValePresente;
-                      13 : tPag := fpValeCombustivel;
-                      14 : tPag := fpDuplicataMercantil;
-                      15 : tPag := fpBoletoBancario;
-                      16 : tPag := fpDepositoBancario;
-                      17 : tPag := fpPagamentoInstantaneo;
-                      18 : tPag := fpTransfBancario;
-                      19 : tPag := fpProgramaFidelidade;
-                      90 : tPag := fpSemPagamento;
-                      91 : tPag := fpRegimeEspecial;
-                      99 :
-                       begin
-
-                        tPag := fpOutro;
-                        xPag := fxPag();
-
-                       end;
-
-                     end;
-
-                    end
-
-                   else                                                         // ve31
-
-                    begin
-
-                     case StrToIntDef(DMFD.FDQuery2['tPag'], 0) of
-                      01 : tPag := fpDinheiro;
-                      02 : tPag := fpCheque;
-                      03 : tPag := fpCartaoCredito;
-                      04 : tPag := fpCartaoDebito;
-                      05 : tPag := fpCreditoLoja;
-                      10 : tPag := fpValeAlimentacao;
-                      11 : tPag := fpValeRefeicao;
-                      12 : tPag := fpValePresente;
-                      13 : tPag := fpValeCombustivel;
-                      99 :
-                       begin
-
-                        tPag := fpOutro;
-                        xPag := fxPag();
-
-                       end;
-                     end;
-
-                    end;
-
-                  3 :                                                           // ve3140
-
-                   if ( gModelo = 65 ) then                                     // ve40
-                    begin
-
-                     case StrToIntDef(DMFD.FDQuery2['tPag'], 0) of
-
-                      01 : tPag := fpDinheiro;
-                      02 : tPag := fpCheque;
-                      03 : tPag := fpCartaoCredito;
-                      04 : tPag := fpCartaoDebito;
-                      05 : tPag := fpCreditoLoja;
-                      10 : tPag := fpValeAlimentacao;
-                      11 : tPag := fpValeRefeicao;
-                      12 : tPag := fpValePresente;
-                      13 : tPag := fpValeCombustivel;
-                      14 : tPag := fpDuplicataMercantil;
-                      15 : tPag := fpBoletoBancario;
-                      16 : tPag := fpDepositoBancario;
-                      17 : tPag := fpPagamentoInstantaneo;
-                      18 : tPag := fpTransfBancario;
-                      19 : tPag := fpProgramaFidelidade;
-                      90 : tPag := fpSemPagamento;
-                      91 : tPag := fpRegimeEspecial;
-                      99 :
-                       begin
-
-                        tPag := fpOutro;
-                        xPag := fxPag();
-
-                       end;
-
-                     end;
-
-                    end
-
-                   else                                                         // ve31
-
-                    begin
-
-                     case StrToIntDef(DMFD.FDQuery2['tPag'], 0) of
-                      01 : tPag := fpDinheiro;
-                      02 : tPag := fpCheque;
-                      03 : tPag := fpCartaoCredito;
-                      04 : tPag := fpCartaoDebito;
-                      05 : tPag := fpCreditoLoja;
-                      10 : tPag := fpValeAlimentacao;
-                      11 : tPag := fpValeRefeicao;
-                      12 : tPag := fpValePresente;
-                      13 : tPag := fpValeCombustivel;
-                      99 :
-                       begin
-
-                        tPag := fpOutro;
-                        xPag := fxPag();
-
-                       end;
-
-                     end;
-
-                    end;
-
-                 end;
-
-                end;
-
-               vPag  := DMFD.FDQuery2['valor'];
-
-               if ((DMFD.FDQuery2['tPag'] = '03') or (DMFD.FDQuery2['tPag'] = '04')) then
-                begin
-
-                 cnpj  := DMFD.FDQuery2['cCnpj'];
-
-                 case ( FrPar.cbb2.ItemIndex ) of
-
-                  0 :                                                           // ve3131
-
-                   case StrToIntDef(DMFD.FDQuery2['tBand'], 0) of
-                    01 : tBand := bcVisa;
-                    02 : tBand := bcMasterCard;
-                    03 : tBand := bcAmericanExpress;
-                    04 : tBand := bcSorocred;
-                    99 : tBand := bcOutros;
-                   end;
-
-                  1 :                                                           // ve4040
-
-                   case StrToIntDef(DMFD.FDQuery2['tBand'], 0) of
-                    01 : tBand := bcVisa;
-                    02 : tBand := bcMasterCard;
-                    03 : tBand := bcAmericanExpress;
-                    04 : tBand := bcSorocred;
-                    05 : tBand := bcDinersClub;
-                    06 : tBand := bcElo;
-                    07 : tBand := bcHipercard;
-                    08 : tBand := bcAura;
-                    09 : tBand := bcCabal;
-                    99 : tBand := bcOutros;
-                   end;
-
-                  2 :                                                           // ve4031
-
-                   if ( gModelo = 55 ) then                                     // ve40
-
-                    begin
-
-                     case StrToIntDef(DMFD.FDQuery2['tBand'], 0) of
-                      01 : tBand := bcVisa;
-                      02 : tBand := bcMasterCard;
-                      03 : tBand := bcAmericanExpress;
-                      04 : tBand := bcSorocred;
-                      05 : tBand := bcDinersClub;
-                      06 : tBand := bcElo;
-                      07 : tBand := bcHipercard;
-                      08 : tBand := bcAura;
-                      09 : tBand := bcCabal;
-                      99 : tBand := bcOutros;
-                     end;
-
-                    end
-
-                   else                                                         // ve31
-
-                    begin
-
-                     case StrToIntDef(DMFD.FDQuery2['tBand'], 0) of
-                      01 : tBand := bcVisa;
-                      02 : tBand := bcMasterCard;
-                      03 : tBand := bcAmericanExpress;
-                      04 : tBand := bcSorocred;
-                      99 : tBand := bcOutros;
-                     end;
-
-                    end;
-
-                  3 :                                                           // ve3140
-
-                   if ( gModelo = 65 ) then                                     // ve40
-
-                    begin
-
-                     case StrToIntDef(DMFD.FDQuery2['tBand'], 0) of
-                      01 : tBand := bcVisa;
-                      02 : tBand := bcMasterCard;
-                      03 : tBand := bcAmericanExpress;
-                      04 : tBand := bcSorocred;
-                      05 : tBand := bcDinersClub;
-                      06 : tBand := bcElo;
-                      07 : tBand := bcHipercard;
-                      08 : tBand := bcAura;
-                      09 : tBand := bcCabal;
-                      99 : tBand := bcOutros;
-                     end;
-
-                    end
-
-                   else                                                         // ve31
-
-                    begin
-
-                     case StrToIntDef(DMFD.FDQuery2['tBand'], 0) of
-                      01 : tBand := bcVisa;
-                      02 : tBand := bcMasterCard;
-                      03 : tBand := bcAmericanExpress;
-                      04 : tBand := bcSorocred;
-                      99 : tBand := bcOutros;
-                     end;
-
-                    end;
-
-                 end;
-
-                 cAut   := DMFD.FDQuery2['cAut'];
-
-                 // Esta rotina da variável vtroco não faz nada, está a espera de definição pela sefaz
-                 case ( FrPar.cbb2.ItemIndex ) of
-
-                  0 : ;// implementado a partir da ve400                        // ve3131
-
-                  1 : ;//vtroco := DMFD.FDQuery2['vTroco'];                     // ve4040
-
-                  2 :                                                           // ve4031
-
-                   if ( gModelo = 55 ) then
-                     //vtroco := DMFD.FDQuery2['vTroco'];                       // ve40
-                   else
-                    ;// implementado a partir da ve400                          // ve31
-
-                  3 :                                                           // ve3140
-
-                   if ( gModelo = 65 ) then
-                     //vtroco := DMFD.FDQuery2['vTroco'];                       // ve40
-                   else
-                    ;// implementado a partir da ve400                          // ve31
-
-                 end;
-
-                end;
-
-               end;
-
-            end;
-
-           DMFD.FDQuery2.next;
-
-          end;
-
-        end
-
-       else
-
-        begin
-
-         with pag.Add do                                                        // A critério de cada UF poderá ser exigido o preenchimento do Grupo Informações de Pagamento para NF-e e/ou NFC-e.
-          begin                                                                 // PAGAMENTOS apenas para NFC-e
-
-           case ( FrPar.cbb2.ItemIndex ) of
-
-            1 : tPag := fpSemPagamento;                                         // ve4040
-
-            2 :                                                                 // ve4031
-
-             if ( gModelo = 55 ) then                                           // ve40
-              tPag := fpSemPagamento;
-
-            3 :                                                                 // ve3140
-
-             if ( gModelo = 65 ) then                                           // ve40
-              tPag := fpSemPagamento;
-
-           end;
-
-           vPag := 0;
-
-          end;
-
-        end;
-
-       //transportador
-       Transp.Transporta.CNPJCPF           := DMFD.FDQuery1['tra_cnpj'];
-       Transp.Transporta.xEnder            := DMFD.FDQuery1['tra_endereco'];
-       Transp.Transporta.xMun              := DMFD.FDQuery1['tra_municipio'];
-       Transp.Transporta.UF                := DMFD.FDQuery1['tra_uf'];
-       Transp.Transporta.IE                := DMFD.FDQuery1['tra_insc_estadual'];
-       Transp.Transporta.xNome             := DMFD.FDQuery1['tra_razao_social'];
-
-       if vartostr(DMFD.FDQuery1['nfe_tipo_frete']) = '0' then Transp.modFrete:= mfContaEmitente;
-       if vartostr(DMFD.FDQuery1['nfe_tipo_frete']) = '1' then Transp.modFrete:= mfContaDestinatario;
-       if vartostr(DMFD.FDQuery1['nfe_tipo_frete']) = '2' then Transp.modFrete:= mfContaTerceiros;
-
-       case ( FrPar.cbb2.ItemIndex ) of                                         // ve400
-
-        0 : ;// Implementado a partir da ve400                                  // ve3131
-
-        1 :                                                                     // ve4040
-
+         2, 3, 4, 9:
          begin
 
-          if vartostr(DMFD.FDQuery1['nfe_tipo_frete']) = '3' then
-           Transp.modFrete:= mfProprioRemetente;
-          if vartostr(DMFD.FDQuery1['nfe_tipo_frete']) = '4' then
-           Transp.modFrete:= mfProprioDestinatario;
+          if ( DMFD.FDQuery1['nfe_indIntermed'] = '1' ) then
+          begin
+
+           Ide.indIntermed := iiOperacaoComIntermediador;
+
+           if not ( DMFD.FDQuery1['nfe_cnpjIntermed'] = null ) then
+            infIntermed.cnpj         := DMFD.FDQuery1['nfe_cnpjIntermed']
+           else
+            infIntermed.cnpj         := '';
+
+           if not ( DMFD.FDQuery1['nfe_idCadIntTran'] = null ) then
+            infIntermed.idCadIntTran := DMFD.FDQuery1['nfe_idCadIntTran']
+           else
+            infIntermed.idCadIntTran := '';
+
+          end
+          else
+           Ide.indIntermed := iiOperacaoSemIntermediador;
 
          end;
 
-        2 :                                                                     // ve4031
-
-         if ( gModelo = 55 ) then                                               // ve40
-          begin
-
-           if vartostr(DMFD.FDQuery1['nfe_tipo_frete']) = '3' then
-            Transp.modFrete:= mfProprioRemetente;
-           if vartostr(DMFD.FDQuery1['nfe_tipo_frete']) = '4' then
-            Transp.modFrete:= mfProprioDestinatario;
-
-          end
-
-         else                                                                   // ve31
-
-          begin
-           // Implementado a partir da ve400
-          end;
-
-        3 :
-
-         if ( gModelo = 65 ) then                                               // ve40
-          begin
-
-           if vartostr(DMFD.FDQuery1['nfe_tipo_frete']) = '3' then
-            Transp.modFrete:= mfProprioRemetente;
-           if vartostr(DMFD.FDQuery1['nfe_tipo_frete']) = '4' then
-            Transp.modFrete:= mfProprioDestinatario;
-
-          end
-
-         else                                                                   // ve31
-
-          begin
-           // Implementado a partir da ve400
-          end;
-
-       end;
-
-       if vartostr(DMFD.FDQuery1['nfe_tipo_frete']) = '9' then Transp.modFrete:= mfSemFrete;
-
-       //volume
-       with Transp.Vol.Add do
-        begin
-         qVol               := DMFD.FDQuery1['vol_qtd_volume'];
-         if qVol = 0 then   // Provisório até corrigir no ERP ; by Edson ; 04-10-2012 ; 08:30
-          qVol              := 1;
-         Esp                := DMFD.FDQuery1['vol_especie'];
-         Marca              := DMFD.FDQuery1['vol_marca'];
-         nVol               := DMFD.FDQuery1['vol_numero_volume'];
-         PesoL              := DMFD.FDQuery1['vol_peso_liquido'];
-         PesoB              := DMFD.FDQuery1['vol_peso_bruto'];
-       end;
-
-       //veículo
-       Transp.veicTransp.placa           := trim(DMFD.FDQuery1['vei_placa']);
-       Transp.veicTransp.uf              := DMFD.FDQuery1['vei_uf'];
-       Transp.veicTransp.rntc            := DMFD.FDQuery1['vei_rntc'];
-
-       //***********************************************************************
-       // ITENS
-       //***********************************************************************
-
-       //itens de notas
-       DMFD.FDQuery2.Close;
-       DMFD.FDQuery2.SQL.Clear;
-       DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                                             ' );
-       DMFD.FDQuery2.SQL.Add( 'Select                                                         ' );
-       DMFD.FDQuery2.SQL.Add( '                                                               ' );
-       DMFD.FDQuery2.SQL.Add( 't1.*                                                           ' );
-       DMFD.FDQuery2.SQL.Add( '                                                               ' );
-       DMFD.FDQuery2.SQL.Add( 'from nfe_itens t1                                              ' );
-       DMFD.FDQuery2.SQL.Add( '                                                               ' );
-       DMFD.FDQuery2.SQL.Add( 'inner join nfe t2 on t1.codigo_loja = t2.codigo_loja and       ' );
-       DMFD.FDQuery2.SQL.Add( '                     t1.nnf         = t2.nnf         and       ' );
-       DMFD.FDQuery2.SQL.Add( '                     t1.demi        = t2.demi        and       ' );
-       DMFD.FDQuery2.SQL.Add( '                     t1.modelo      = t2.modelo                ' );
-       DMFD.FDQuery2.SQL.Add( '                                                               ' );
-       DMFD.FDQuery2.SQL.Add( 'where t2.codigo_loja = :parm1                                  ' );
-       DMFD.FDQuery2.SQL.Add( 'and   t2.demi        = :parm2                                  ' );
-       DMFD.FDQuery2.SQL.Add( 'and   t2.nnf         = :parm3                                  ' );
-       DMFD.FDQuery2.SQL.Add( 'and   t2.modelo      = :parm4                                  ' );
-       DMFD.FDQuery2.SQL.Add( 'and   t2.serie       = :parm5                                  ' );
-       DMFD.FDQuery2.SQL.Add( '                                                               ' );
-       DMFD.FDQuery2.SQL.Add( 'Order by t1.sequencia                                          ' );
-       DMFD.FDQuery2.SQL.Add( '                                                               ' );
-       DMFD.FDQuery2.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
-       DMFD.FDQuery2.Params[1].Value     := StrToDateTime( FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']) );
-       DMFD.FDQuery2.Params[2].AsString  := DMFD.FDQuery1['nfe_nnf'];
-       DMFD.FDQuery2.Params[3].AsString  := DMFD.FDQuery1['nfe_modelo'];
-       DMFD.FDQuery2.Params[4].AsString  := DMFD.FDQuery1['nfe_serie'];
-       DMFD.FDQuery2.Open;
-
-       While not DMFD.FDQuery2.eof do
-        begin
-
-         with Det.Add do
-          begin
-
-           infAdProd        := vartostr(DMFD.FDQuery2['inf_adicional']);
-           Prod.nItem       := DMFD.FDQuery2['sequencia'];
-           Prod.CFOP        := DMFD.FDQuery2['cfop'];
-           Prod.cEAN        := vartostr(DMFD.FDQuery2['EAN']);
-
-           if (DMFD.FDQuery2['cBarra'] <> null ) then                           // Opcional - Preencher com o Código de Barras próprio ou de terceiros que seja diferente do padrão GTIN - por exemplo: código de barras de catálogo, partnumber, etc
-            Prod.cBarra      := DMFD.FDQuery2['cBarra'];
-
-           if (DMFD.FDQuery2['cBarraTrib'] <> null ) then                       // Opcional - Preencher com o Código de Barras próprio ou de terceiros que seja diferente do padrão GTIN correspondente àquele da menor unidade comercializável identificado por Código de Barras por exemplo: código de barras de catálogo, partnumber, etc
-            Prod.cBarraTrib  := DMFD.FDQuery2['cBarraTrib'];
-
-           Prod.cEANtrib := vartostr(DMFD.FDQuery2['cEANtrib']);
-
-           if ((DMFD.FDQuery2['xPed'] <> null) and ( DMFD.FDQuery2['xPed'] <> '')) then
-            Prod.xPed     := VarToStr(DMFD.FDQuery2['xPed']);
-
-           if ((DMFD.FDQuery2['nItemPed'] <> null) and ( DMFD.FDQuery2['nItemPed'] <> '')) then
-            Prod.nItemPed := VarToStr(DMFD.FDQuery2['nItemPed']);
-
-           if vartostr(DMFD.FDQuery2['vl_ii']) <> '' then
-            begin
-             Imposto.II.vII := DMFD.FDQuery2['vl_ii'];
-            end
-           else
-            Imposto.II.vII := 0;
-
-           //-------------------------------------------------------------------
-           // by Edson Lima ; 2018-05-08 ; Detalhamento específico de medicamen-
-           //                              to e de matérias-primas farmaceuticas
-           //-------------------------------------------------------------------
-           case ( FrPar.cbb2.ItemIndex ) of                                     // ve400
-
-            0 : ;// Implementado a partir da ve400                              // ve3131
-
-            1 :                                                                 // ve4040
-
-             begin
-
-              if not ( DMFD.FDQuery2['cProdANVISA'] = null ) then
-               begin
-                Prod.med.Add.cProdANVISA     := DMFD.FDQuery2['cProdANVISA'];
-                Prod.med.Add.xMotivoIsencao  := DMFD.FDQuery2['xMotivoIsencao'];
-                Prod.med.Add.vPMC            := DMFD.FDQuery2['vPMC'];
-               end;
-
-             end;
-
-            2 :                                                                 // ve4031
-
-             if ( gModelo = 55 ) then                                           // ve40
-              begin
-
-               if not ( DMFD.FDQuery2['cProdANVISA'] = null ) then
-                begin
-                 Prod.med.Add.cProdANVISA     := DMFD.FDQuery2['cProdANVISA'];
-                 Prod.med.Add.xMotivoIsencao  := DMFD.FDQuery2['xMotivoIsencao'];
-                 Prod.med.Add.vPMC            := DMFD.FDQuery2['vPMC'];
-                end;
-
-              end
-
-             else                                                               // ve31
-
-              begin
-
-               // Implementado a partir da ve400
-
-              end;
-
-            3 :                                                                 // ve3140
-
-             if ( gModelo = 65 ) then                                           // ve40
-              begin
-
-               if not ( DMFD.FDQuery2['cProdANVISA'] = null ) then
-                begin
-                 Prod.med.Add.cProdANVISA     := DMFD.FDQuery2['cProdANVISA'];
-                 Prod.med.Add.xMotivoIsencao  := DMFD.FDQuery2['xMotivoIsencao'];
-                 Prod.med.Add.vPMC            := DMFD.FDQuery2['vPMC'];
-                end;
-
-              end
-
-             else                                                               // ve31
-
-              begin
-
-               // Implementado a partir da ve400
-
-              end;
-
-           end;
-           //-------------------------------------------------------------------
-
-           if (DMFD.FDQuery2['cfop'] = '1651') or (DMFD.FDQuery2['cfop'] = '1652') or
-              (DMFD.FDQuery2['cfop'] = '1653') or (DMFD.FDQuery2['cfop'] = '1658') or
-              (DMFD.FDQuery2['cfop'] = '1659') or (DMFD.FDQuery2['cfop'] = '1660') or
-              (DMFD.FDQuery2['cfop'] = '1661') or (DMFD.FDQuery2['cfop'] = '1662') or
-              (DMFD.FDQuery2['cfop'] = '1663') or (DMFD.FDQuery2['cfop'] = '1664') or
-              (DMFD.FDQuery2['cfop'] = '2651') or (DMFD.FDQuery2['cfop'] = '2652') or
-              (DMFD.FDQuery2['cfop'] = '2653') or (DMFD.FDQuery2['cfop'] = '2658') or
-              (DMFD.FDQuery2['cfop'] = '2659') or (DMFD.FDQuery2['cfop'] = '2660') or
-              (DMFD.FDQuery2['cfop'] = '2661') or (DMFD.FDQuery2['cfop'] = '2662') or
-              (DMFD.FDQuery2['cfop'] = '2663') or (DMFD.FDQuery2['cfop'] = '2664') or
-              (DMFD.FDQuery2['cfop'] = '3651') or (DMFD.FDQuery2['cfop'] = '3652') or
-              (DMFD.FDQuery2['cfop'] = '3653') or (DMFD.FDQuery2['cfop'] = '5651') or
-              (DMFD.FDQuery2['cfop'] = '5652') or (DMFD.FDQuery2['cfop'] = '5653') or
-              (DMFD.FDQuery2['cfop'] = '5654') or (DMFD.FDQuery2['cfop'] = '5655') or
-              (DMFD.FDQuery2['cfop'] = '5656') or (DMFD.FDQuery2['cfop'] = '5657') or
-              (DMFD.FDQuery2['cfop'] = '5658') or (DMFD.FDQuery2['cfop'] = '5659') or
-              (DMFD.FDQuery2['cfop'] = '5660') or (DMFD.FDQuery2['cfop'] = '5661') or
-              (DMFD.FDQuery2['cfop'] = '5662') or (DMFD.FDQuery2['cfop'] = '5663') or
-              (DMFD.FDQuery2['cfop'] = '5664') or (DMFD.FDQuery2['cfop'] = '5665') or
-              (DMFD.FDQuery2['cfop'] = '5666') or (DMFD.FDQuery2['cfop'] = '5667') or
-              (DMFD.FDQuery2['cfop'] = '6651') or (DMFD.FDQuery2['cfop'] = '6652') or
-              (DMFD.FDQuery2['cfop'] = '6653') or (DMFD.FDQuery2['cfop'] = '6654') or
-              (DMFD.FDQuery2['cfop'] = '6655') or (DMFD.FDQuery2['cfop'] = '6656') or
-              (DMFD.FDQuery2['cfop'] = '6657') or (DMFD.FDQuery2['cfop'] = '6658') or
-              (DMFD.FDQuery2['cfop'] = '6659') or (DMFD.FDQuery2['cfop'] = '6660') or
-              (DMFD.FDQuery2['cfop'] = '6661') or (DMFD.FDQuery2['cfop'] = '6662') or
-              (DMFD.FDQuery2['cfop'] = '6663') or (DMFD.FDQuery2['cfop'] = '6664') or
-              (DMFD.FDQuery2['cfop'] = '6665') or (DMFD.FDQuery2['cfop'] = '6666') or
-              (DMFD.FDQuery2['cfop'] = '6667') or (DMFD.FDQuery2['cfop'] = '7651') or
-              (DMFD.FDQuery2['cfop'] = '7654') or (DMFD.FDQuery2['cfop'] = '7667') then
-            begin
-
-             with Prod.comb do
-              begin
-
-               case ( FrPar.cbb2.ItemIndex ) of                                 // ve400
-
-                0 :                                                             // ve3131
-
-                 begin
-
-                  if (VarToStr(DMFD.FDQuery2['CodSIMP']) <> '') then
-                   begin
-
-                    cProdANP := StrToIntDef(VarToStr(DMFD.FDQuery2['CodSIMP']), 0);
-                    if (vCfop = '5667') then
-                     UFcons     := DMFD.FDQuery4['uf']
-                    else
-                     UFcons   := DMFD.FDQuery1['des_uf'];
-
-                   end
-                  else
-                   begin
-                    cProdANP := 999999999;
-                    UFcons   := DMFD.FDQuery1['des_uf'];
-                   end;
-
-                 end;
-
-                1 :                                                             // ve4040
-
-                 begin
-
-                  if (VarToStr(DMFD.FDQuery2['CodSIMP']) = '') then
-                   begin
-
-                    Application.Messagebox(PWideChar('Para o CFOP ' +
-                      VarToStr(DMFD.FDQuery2['cfop']) +
-                      ', O código SIMP é necessário!' + chr(13) + 'No ítem ' +
-                      VarToStr(DMFD.FDQuery2['codigo_item']) + '-' +
-                      VarToStr(DMFD.FDQuery2['descricao']) + '.'),
-                      PWideChar('Atenção!'), mb_iconstop+mb_ok);
-
-                    gSimpObg := true;
-                    exit;
-
-                   end
-                  else
-                   cProdANP := StrToIntDef(VarToStr(DMFD.FDQuery2['CodSIMP']), 0); // E LA01 N 1-1 9 Utilizar a codificação de produtos do Sistema de Informações de Movimentação de Produtos - SIMP (http://www.anp.gov.br/simp/). (NT 2012/003)
-
-                  if ( (     DMFD.FDQuery2['descANP']  = null)   or
-                       (trim(DMFD.FDQuery2['descANP']) = ''  ) ) then
-                   descANP  := VarToStr(DMFD.FDQuery2['descricao'])             // E LA01 N 1-1 2-95 Utilizar a descrição de produtos do Sistema de Informações de Movimentação de Produtos - SIMP (http://www.anp.gov.br/simp/).
-                  else
-                   descANP  := VarToStr(DMFD.FDQuery2['descANP']);              // E LA01 N 1-1 2-95 Utilizar a descrição de produtos do Sistema de Informações de Movimentação de Produtos - SIMP (http://www.anp.gov.br/simp/).
-                  if ( DMFD.FDQuery2['pGLP'] <> null ) then
-                   pGLP     := DMFD.FDQuery2['pGLP'];                           // E LA01 N 0-1 3v4 Percentual do GLP derivado do petróleo no produto GLP (cProdANP=210203001) - Informar em número decimal o percentual do GLP derivado de petróleo no produto GLP. Valores de 0 a 1.
-                  if ( DMFD.FDQuery2['pGNn'] <> null ) then
-                   pGNn     := DMFD.FDQuery2['pGNn'];                           // E LA01 N 0-1 3v4 Percentual de Gás Natural Nacional – GLGNn para o produto GLP (cProdANP=210203001) - Informar em número decimal o percentual do Gás Natural Nacional – GLGNn para o produto GLP. Valores de 0 a 1.
-                  if ( DMFD.FDQuery2['pGNi'] <> null ) then
-                   pGNi     := DMFD.FDQuery2['pGNi'];                           // E LA01 N 0-1 3v4 Percentual de Gás Natural Importado – GLGNi para o produto GLP (cProdANP=210203001) - Informar em número decimal o percentual do Gás Natural Importado – GLGNi para o produto GLP. Valores de 0 a 1.
-                  if ( DMFD.FDQuery2['vPart'] <> null ) then
-                   vPart    := DMFD.FDQuery2['vPart'];                          // E LA01 N 0-1 13v2 Valor de partida (cProdANP=210203001) - Deve ser informado neste campo o valor por quilograma sem ICMS.
-                  if ( DMFD.FDQuery2['CODIF'] <> null ) then
-                   CODIF    := DMFD.FDQuery2['CODIF'];                          // E LA01 N 0-1 1-21 Código de autorização / registro do CODIF - Informar apenas quando a UF utilizar o CODIF (Sistema de Controle do Diferimento do Imposto nas Operações com AEAC
-                  if ( DMFD.FDQuery2['qTemp'] <> null ) then
-                   CODIF    := DMFD.FDQuery2['qTemp'];                          // E LA01 N 0-1 1-21 Informar apenas quando a UF utilizar o CODIF (Sistema de Controle do Diferimento do Imposto nas Operações com AEAC - Álcool Etílico Anidro Combustível).
-
-                  if (vCfop = '5667') then
-                   UFcons   := DMFD.FDQuery4['uf']
-                  else
-                   UFcons   := DMFD.FDQuery1['des_uf'];
-
-                 end;
-
-                2 :                                                             // ve4031
-
-                 if ( gModelo = 55 ) then                                       // ve40
-
-                  begin
-
-                   if (VarToStr(DMFD.FDQuery2['CodSIMP']) = '') then
-                    begin
-
-                     Application.Messagebox(PWideChar('Para o CFOP ' +
-                       VarToStr(DMFD.FDQuery2['cfop']) +
-                       ', O código SIMP é necessário!' + chr(13) + 'No ítem ' +
-                       VarToStr(DMFD.FDQuery2['codigo_item']) + '-' +
-                       VarToStr(DMFD.FDQuery2['descricao']) + '.'),
-                       PWideChar('Atenção!'), mb_iconstop+mb_ok);
-
-                     gSimpObg := true;
-                     exit;
-
-                    end
-                   else
-                    cProdANP := StrToIntDef(VarToStr(DMFD.FDQuery2['CodSIMP']), 0); // E LA01 N 1-1 9 Utilizar a codificação de produtos do Sistema de Informações de Movimentação de Produtos - SIMP (http://www.anp.gov.br/simp/). (NT 2012/003)
-
-                   if ( (     DMFD.FDQuery2['descANP']  = null)   or
-                        (trim(DMFD.FDQuery2['descANP']) = ''  ) ) then
-                    descANP  := VarToStr(DMFD.FDQuery2['descricao'])             // E LA01 N 1-1 2-95 Utilizar a descrição de produtos do Sistema de Informações de Movimentação de Produtos - SIMP (http://www.anp.gov.br/simp/).
-                   else
-                    descANP  := VarToStr(DMFD.FDQuery2['descANP']);              // E LA01 N 1-1 2-95 Utilizar a descrição de produtos do Sistema de Informações de Movimentação de Produtos - SIMP (http://www.anp.gov.br/simp/).
-                   if ( DMFD.FDQuery2['pGLP'] <> null ) then
-                    pGLP     := DMFD.FDQuery2['pGLP'];                          // E LA01 N 0-1 3v4 Percentual do GLP derivado do petróleo no produto GLP (cProdANP=210203001) - Informar em número decimal o percentual do GLP derivado de petróleo no produto GLP. Valores de 0 a 1.
-                   if ( DMFD.FDQuery2['pGNn'] <> null ) then
-                    pGNn     := DMFD.FDQuery2['pGNn'];                          // E LA01 N 0-1 3v4 Percentual de Gás Natural Nacional – GLGNn para o produto GLP (cProdANP=210203001) - Informar em número decimal o percentual do Gás Natural Nacional – GLGNn para o produto GLP. Valores de 0 a 1.
-                   if ( DMFD.FDQuery2['pGNi'] <> null ) then
-                    pGNi     := DMFD.FDQuery2['pGNi'];                          // E LA01 N 0-1 3v4 Percentual de Gás Natural Importado – GLGNi para o produto GLP (cProdANP=210203001) - Informar em número decimal o percentual do Gás Natural Importado – GLGNi para o produto GLP. Valores de 0 a 1.
-                   if ( DMFD.FDQuery2['vPart'] <> null ) then
-                    vPart    := DMFD.FDQuery2['vPart'];                         // E LA01 N 0-1 13v2 Valor de partida (cProdANP=210203001) - Deve ser informado neste campo o valor por quilograma sem ICMS.
-                   if ( DMFD.FDQuery2['CODIF'] <> null ) then
-                    CODIF    := DMFD.FDQuery2['CODIF'];                         // E LA01 N 0-1 1-21 Código de autorização / registro do CODIF - Informar apenas quando a UF utilizar o CODIF (Sistema de Controle do Diferimento do Imposto nas Operações com AEAC
-                   if ( DMFD.FDQuery2['qTemp'] <> null ) then
-                    CODIF    := DMFD.FDQuery2['qTemp'];                         // E LA01 N 0-1 1-21 Informar apenas quando a UF utilizar o CODIF (Sistema de Controle do Diferimento do Imposto nas Operações com AEAC - Álcool Etílico Anidro Combustível).
-
-                   if (vCfop = '5667') then
-                    UFcons   := DMFD.FDQuery4['uf']
-                   else
-                    UFcons   := DMFD.FDQuery1['des_uf'];
-
-                  end
-
-                 else                                                           // ve31
-
-                  begin
-
-                   if (VarToStr(DMFD.FDQuery2['CodSIMP']) <> '') then
-                    begin
-
-                     cProdANP := StrToIntDef(VarToStr(DMFD.FDQuery2['CodSIMP']), 0);
-                     if (vCfop = '5667') then
-                      UFcons     := DMFD.FDQuery4['uf']
-                     else
-                      UFcons   := DMFD.FDQuery1['des_uf'];
-
-                    end
-                   else
-                    begin
-                     cProdANP := 999999999;
-                     UFcons   := DMFD.FDQuery1['des_uf'];
-                    end;
-
-                  end;
-
-                3 :                                                             // ve3140
-
-                 if ( gModelo = 65 ) then                                       // ve40
-
-                  begin
-
-                   if (VarToStr(DMFD.FDQuery2['CodSIMP']) = '') then
-                    begin
-
-                     Application.Messagebox(PWideChar('Para o CFOP ' +
-                       VarToStr(DMFD.FDQuery2['cfop']) +
-                       ', O código SIMP é necessário!' + chr(13) + 'No ítem ' +
-                       VarToStr(DMFD.FDQuery2['codigo_item']) + '-' +
-                       VarToStr(DMFD.FDQuery2['descricao']) + '.'),
-                       PWideChar('Atenção!'), mb_iconstop+mb_ok);
-
-                     gSimpObg := true;
-                     exit;
-
-                    end
-                   else
-                    cProdANP := StrToIntDef(VarToStr(DMFD.FDQuery2['CodSIMP']), 0); // E LA01 N 1-1 9 Utilizar a codificação de produtos do Sistema de Informações de Movimentação de Produtos - SIMP (http://www.anp.gov.br/simp/). (NT 2012/003)
-
-                   if ( (     DMFD.FDQuery2['descANP']  = null)   or
-                        (trim(DMFD.FDQuery2['descANP']) = ''  ) ) then
-                    descANP  := VarToStr(DMFD.FDQuery2['descricao'])             // E LA01 N 1-1 2-95 Utilizar a descrição de produtos do Sistema de Informações de Movimentação de Produtos - SIMP (http://www.anp.gov.br/simp/).
-                   else
-                    descANP  := VarToStr(DMFD.FDQuery2['descANP']);              // E LA01 N 1-1 2-95 Utilizar a descrição de produtos do Sistema de Informações de Movimentação de Produtos - SIMP (http://www.anp.gov.br/simp/).
-                   if ( DMFD.FDQuery2['pGLP'] <> null ) then
-                    pGLP     := DMFD.FDQuery2['pGLP'];                          // E LA01 N 0-1 3v4 Percentual do GLP derivado do petróleo no produto GLP (cProdANP=210203001) - Informar em número decimal o percentual do GLP derivado de petróleo no produto GLP. Valores de 0 a 1.
-                   if ( DMFD.FDQuery2['pGNn'] <> null ) then
-                    pGNn     := DMFD.FDQuery2['pGNn'];                          // E LA01 N 0-1 3v4 Percentual de Gás Natural Nacional – GLGNn para o produto GLP (cProdANP=210203001) - Informar em número decimal o percentual do Gás Natural Nacional – GLGNn para o produto GLP. Valores de 0 a 1.
-                   if ( DMFD.FDQuery2['pGNi'] <> null ) then
-                    pGNi     := DMFD.FDQuery2['pGNi'];                          // E LA01 N 0-1 3v4 Percentual de Gás Natural Importado – GLGNi para o produto GLP (cProdANP=210203001) - Informar em número decimal o percentual do Gás Natural Importado – GLGNi para o produto GLP. Valores de 0 a 1.
-                   if ( DMFD.FDQuery2['vPart'] <> null ) then
-                    vPart    := DMFD.FDQuery2['vPart'];                         // E LA01 N 0-1 13v2 Valor de partida (cProdANP=210203001) - Deve ser informado neste campo o valor por quilograma sem ICMS.
-                   if ( DMFD.FDQuery2['CODIF'] <> null ) then
-                    CODIF    := DMFD.FDQuery2['CODIF'];                         // E LA01 N 0-1 1-21 Código de autorização / registro do CODIF - Informar apenas quando a UF utilizar o CODIF (Sistema de Controle do Diferimento do Imposto nas Operações com AEAC
-                   if ( DMFD.FDQuery2['qTemp'] <> null ) then
-                    CODIF    := DMFD.FDQuery2['qTemp'];                         // E LA01 N 0-1 1-21 Informar apenas quando a UF utilizar o CODIF (Sistema de Controle do Diferimento do Imposto nas Operações com AEAC - Álcool Etílico Anidro Combustível).
-
-                   if (vCfop = '5667') then
-                    UFcons   := DMFD.FDQuery4['uf']
-                   else
-                    UFcons   := DMFD.FDQuery1['des_uf'];
-
-                  end
-
-                 else                                                           // ve31
-
-                  begin
-
-                   if (VarToStr(DMFD.FDQuery2['CodSIMP']) <> '') then
-                    begin
-
-                     cProdANP := StrToIntDef(VarToStr(DMFD.FDQuery2['CodSIMP']), 0);
-                     if (vCfop = '5667') then
-                      UFcons     := DMFD.FDQuery4['uf']
-                     else
-                      UFcons   := DMFD.FDQuery1['des_uf'];
-
-                    end
-                   else
-                    begin
-                     cProdANP := 999999999;
-                     UFcons   := DMFD.FDQuery1['des_uf'];
-                    end;
-
-                  end;
-
-               end;
-
-              end;
-
-            end;
-
-           Prod.cProd    := DMFD.FDQuery2['codigo_item'];
-           Prod.xProd    := DMFD.FDQuery2['descricao'];
-           Prod.uCom     := DMFD.FDQuery2['unidade'];
-           Prod.qCom     := strtofloat(DMFD.FDQuery2['qtd']);
-           Prod.vUnCom   := DMFD.FDQuery2['pr_unitario'];
-           if ( DMFD.FDQuery2['CEST'] <> null ) then
-            Prod.CEST    := DMFD.FDQuery2['CEST'];
-           Prod.vProd    := DMFD.FDQuery2['pr_total'];
-           //-------------------------------------------------------------------
-
-           if ( (DMFD.FDQuery2['uTrib'] = null) or
-                (trim(DMFD.FDQuery2['uTrib']) = '') ) then
-            Prod.uTrib   := DMFD.FDQuery2['unidade']
-           else
-            Prod.uTrib   := DMFD.FDQuery2['uTrib'];                             // E 101 C 1-6 1-6 Unidade Tributável
-
-           if ( (DMFD.FDQuery2['qTrib'] = null) or
-                (DMFD.FDQuery2['qTrib'] = 0)  ) then
-            Prod.qTrib   := DMFD.FDQuery2['qtd']
-           else
-            Prod.qTrib   := DMFD.FDQuery2['qTrib'];                             // E I01 N 1-1 11v0-4 Informar a quantidade de tributação do produto (v2.0)
-
-           if ( (DMFD.FDQuery2['vUnTrib'] = null) or
-                (DMFD.FDQuery2['vUnTrib'] = 0)  )  then
-            Prod.vUnTrib := DMFD.FDQuery2['pr_unitario']
-           else
-            Prod.vUnTrib := DMFD.FDQuery2['vUnTrib'];                           // E I01 N 1-1 11v0-10 Informar o valor unitário de tributação do produto, campo meramente informativo, o contribuinte pode utilizar a precisão desejada (0-10 decimais). Para efeitos de cálculo, o valor unitário será obtido pela divisão do valor do produto pela quantidade tributável (NT 2013/003)
-
-           //-------------------------------------------------------------------
-           Prod.NCM      := DMFD.FDQuery2['ncm'];
-
-//           if (DMFD.FDQuery2['CodNVE'] <> null ) then                           // Codificação opcional que detalha alguns NCM. Formato: duas letras maiúsculas e 4 algarismos. Se a mercadoria se enquadrar em mais de uma codificação, informar até 8 codificações principais. Vide: Anexo XII.03 – Identificador NVE
-//            Prod.NVE  := DMFD.FDQuery2['CodNVE'];
-
-           Prod.vDesc    := DMFD.FDQuery2['vl_desconto'];
-
-           // by Edson Lima ; 2013/03/15 ; 10:36 ; condição incluida "o tipo desta classe deve ter sido modificada de ACBr"
-           if (VarToStr(DMFD.FDQuery2['ind_total']) <> '') then
-            Prod.IndTot   := DMFD.FDQuery2['ind_total'];
-
-           Prod.vFrete   := DMFD.FDQuery2['vl_frete'];
-           Prod.vSeg     := DMFD.FDQuery2['vl_seguro'];
-           Prod.vOutro   := DMFD.FDQuery2['vl_outros'];
-
-           //itens de notas-DI
-           DMFD.FDQuery8.Close;
-           DMFD.FDQuery8.SQL.Clear;
-           DMFD.FDQuery8.SQL.Add( 'SET DATEFORMAT dmy                                             ' );
-           DMFD.FDQuery8.SQL.Add( 'Select                                                         ' );
-           DMFD.FDQuery8.SQL.Add( '                                                               ' );
-           DMFD.FDQuery8.SQL.Add( 't1.*                                                           ' );
-           DMFD.FDQuery8.SQL.Add( '                                                               ' );
-           DMFD.FDQuery8.SQL.Add( 'from nfe_itens_DI t1                                           ' );
-           DMFD.FDQuery8.SQL.Add( '                                                               ' );
-           DMFD.FDQuery8.SQL.Add( 'inner join nfe_itens t2 on t1.codigo_loja = t2.codigo_loja and ' );
-           DMFD.FDQuery8.SQL.Add( '                           t1.nnf         = t2.nnf         and ' );
-           DMFD.FDQuery8.SQL.Add( '                           t1.demi        = t2.demi        and ' );
-           DMFD.FDQuery8.SQL.Add( '                           t1.sequencia   = t2.sequencia   and ' );
-           DMFD.FDQuery8.SQL.Add( '                           t1.modelo      = t2.modelo          ' );
-           DMFD.FDQuery8.SQL.Add( '                                                               ' );
-           DMFD.FDQuery8.SQL.Add( 'where t2.codigo_loja = :parm1                                  ' );
-           DMFD.FDQuery8.SQL.Add( 'and   t2.demi        = :parm2                                  ' );
-           DMFD.FDQuery8.SQL.Add( 'and   t2.nnf         = :parm3                                  ' );
-           DMFD.FDQuery8.SQL.Add( 'and   t2.sequencia   = :parm4                                  ' );
-           DMFD.FDQuery8.SQL.Add( 'and   t2.modelo      = :parm5                                  ' );
-           DMFD.FDQuery8.SQL.Add( 'and   t2.serie       = :parm6                                  ' );
-           DMFD.FDQuery8.SQL.Add( '                                                               ' );
-           DMFD.FDQuery8.SQL.Add( 'Order by t1.sequencia                                          ' );
-           DMFD.FDQuery8.SQL.Add( '                                                               ' );
-           DMFD.FDQuery8.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
-           DMFD.FDQuery8.Params[1].Value     := StrToDateTime( FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']) );
-           DMFD.FDQuery8.Params[2].AsString  := DMFD.FDQuery1['nfe_nnf'];
-           DMFD.FDQuery8.Params[3].AsInteger := DMFD.FDQuery2['sequencia'];
-           DMFD.FDQuery8.Params[4].AsString  := DMFD.FDQuery1['nfe_modelo'];
-           DMFD.FDQuery8.Params[5].AsString  := DMFD.FDQuery1['nfe_serie'];
-           DMFD.FDQuery8.Open;
-
-           While not DMFD.FDQuery8.eof do
-            begin
-
-             with Prod.DI.Add do
-              begin
-
-               nDi           := DMFD.FDQuery8['numero_di'];
-               dDi           := DMFD.FDQuery8['data_DI'];
-               xLocDesemb    := DMFD.FDQuery8['local_desembaraco'];
-               UFDesemb      := DMFD.FDQuery8['uf_desembaraco'];
-               dDesemb       := DMFD.FDQuery8['data_desembaraco'];
-
-               cExportador   := DMFD.FDQuery8['codigo_exportador'];
-
-               if (DMFD.FDQuery8['tpViaTransp'] <> null ) then
-                tpViaTransp   := DMFD.FDQuery8['tpViaTransp']
-               else
-                tpViaTransp   := tvRodoviaria;
-
-               //itens de notas-ADI
-               DMFD.FDQuery9.Close;
-               DMFD.FDQuery9.SQL.Clear;
-               DMFD.FDQuery9.SQL.Add( 'SET DATEFORMAT dmy                                                       ' );
-               DMFD.FDQuery9.SQL.Add( 'Select                                                                   ' );
-               DMFD.FDQuery9.SQL.Add( '                                                                         ' );
-               DMFD.FDQuery9.SQL.Add( 't1.*                                                                     ' );
-               DMFD.FDQuery9.SQL.Add( '                                                                         ' );
-               DMFD.FDQuery9.SQL.Add( 'from nfe_itens_DI_ADI t1                                                 ' );
-               DMFD.FDQuery9.SQL.Add( '                                                                         ' );
-               DMFD.FDQuery9.SQL.Add( 'inner join nfe_itens_DI t2 on t1.codigo_loja = t2.codigo_loja and        ' );
-               DMFD.FDQuery9.SQL.Add( '                              t1.nnf         = t2.nnf         and        ' );
-               DMFD.FDQuery9.SQL.Add( '                              t1.demi        = t2.demi        and        ' );
-               DMFD.FDQuery9.SQL.Add( '                              t1.sequencia   = t2.sequencia   and        ' );
-               DMFD.FDQuery9.SQL.Add( '                              t1.numero_di   = t2.numero_di   and        ' );
-               DMFD.FDQuery9.SQL.Add( '                              t1.modelo      = t2.modelo                 ' );
-               DMFD.FDQuery9.SQL.Add( '                                                                         ' );
-               DMFD.FDQuery9.SQL.Add( 'where       t2.codigo_loja = :parm1                                      ' );
-               DMFD.FDQuery9.SQL.Add( '      and   t2.demi        = :parm2                                      ' );
-               DMFD.FDQuery9.SQL.Add( '      and   t2.nnf         = :parm3                                      ' );
-               DMFD.FDQuery9.SQL.Add( '      and   t2.sequencia   = :parm4                                      ' );
-               DMFD.FDQuery9.SQL.Add( '      and   t2.numero_di   = :parm5                                      ' );
-               DMFD.FDQuery9.SQL.Add( '      and   t2.modelo      = :parm6                                      ' );
-               DMFD.FDQuery9.SQL.Add( '      and   t2.serie       = :parm7                                      ' );
-               DMFD.FDQuery9.SQL.Add( '                                                                         ' );
-               DMFD.FDQuery9.SQL.Add( 'Order by t1.sequencia                                                    ' );
-               DMFD.FDQuery9.SQL.Add( '                                                                         ' );
-               DMFD.FDQuery9.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
-               DMFD.FDQuery9.Params[1].Value     := StrToDateTime( FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']) );
-               DMFD.FDQuery9.Params[2].AsString  := DMFD.FDQuery1['nfe_nnf'];
-               DMFD.FDQuery9.Params[3].AsInteger := DMFD.FDQuery2['sequencia'];
-               DMFD.FDQuery9.Params[4].AsString  := DMFD.FDQuery8['numero_di'];
-               DMFD.FDQuery9.Params[5].AsString  := DMFD.FDQuery1['nfe_modelo'];
-               DMFD.FDQuery9.Params[6].AsString  := DMFD.FDQuery1['nfe_serie'];
-               DMFD.FDQuery9.Open;
-
-               While not DMFD.FDQuery9.eof do
-                begin
-
-                 with adi.Add do
-                  begin
-
-                   vDescDI       := DMFD.FDQuery9['valor_desconto'];
-                   cFabricante   := DMFD.FDQuery9['codigo_fabricante'];
-                   nSeqAdi       := DMFD.FDQuery9['sequencia_ADI'];
-                   nAdicao       := DMFD.FDQuery9['numero_ADI'];
-
-                  end;
-
-                 DMFD.FDQuery9.next;
-
-                end;
-
-              end;
-
-             DMFD.FDQuery8.next;
-
-            end;
-
-           if (   (FrPar.cbb2.ItemIndex = 1)                      or
-                ( (FrPar.cbb2.ItemIndex = 2) and (gModelo=55) )   or
-                ( (FrPar.cbb2.ItemIndex = 3) and (gModelo=65) ) ) then          // ve400
-            begin
-
-             // by Edson Lima ; 2018-5-8 ; itens do lote
-             DMFD.FDQuery19.Close;
-             DMFD.FDQuery19.SQL.Clear;
-             DMFD.FDQuery19.SQL.Add( 'SET DATEFORMAT dmy                        ' );
-             DMFD.FDQuery19.SQL.Add( 'Select                                    ' );
-             DMFD.FDQuery19.SQL.Add( 't1.*                                      ' );
-             DMFD.FDQuery19.SQL.Add( 'from nfe_Lotes t1                         ' );
-             DMFD.FDQuery19.SQL.Add( 'inner join nfe_itens t2 on                ' );
-             DMFD.FDQuery19.SQL.Add( '      t1.codigo_loja = t2.codigo_loja and ' );
-             DMFD.FDQuery19.SQL.Add( '      t1.demi        = t2.demi        and ' );
-             DMFD.FDQuery19.SQL.Add( '      t1.nnf         = t2.nnf         and ' );
-             DMFD.FDQuery19.SQL.Add( '      t1.modelo      = t2.modelo      and ' );
-             DMFD.FDQuery19.SQL.Add( '      t1.serie       = t2.serie       and ' );
-             DMFD.FDQuery19.SQL.Add( '      t1.codigo_item = t2.codigo_item     ' );
-             DMFD.FDQuery19.SQL.Add( '                                          ' );
-             DMFD.FDQuery19.SQL.Add( 'where t2.codigo_loja = :parm0         and ' );
-             DMFD.FDQuery19.SQL.Add( '      t2.demi        = :parm1         and ' );
-             DMFD.FDQuery19.SQL.Add( '      t2.nnf         = :parm2         and ' );
-             DMFD.FDQuery19.SQL.Add( '      t2.modelo      = :parm3         and ' );
-             DMFD.FDQuery19.SQL.Add( '      t2.serie       = :parm4         and ' );
-             DMFD.FDQuery19.SQL.Add( '      t2.codigo_item = :parm5             ' );
-             DMFD.FDQuery19.SQL.Add( '                                          ' );
-             DMFD.FDQuery19.SQL.Add( 'Order by t1.codigo_item                   ' );
-             DMFD.FDQuery19.SQL.Add( '                                          ' );
-             DMFD.FDQuery19.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
-             DMFD.FDQuery19.Params[1].Value     := StrToDateTime( FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']) );
-             DMFD.FDQuery19.Params[2].AsString  := DMFD.FDQuery1['nfe_nnf'];
-             DMFD.FDQuery19.Params[3].AsString  := DMFD.FDQuery1['nfe_modelo'];
-             DMFD.FDQuery19.Params[4].AsString  := DMFD.FDQuery1['nfe_serie'];
-             DMFD.FDQuery19.Params[5].AsString  := DMFD.FDQuery2['codigo_item'];;
-             DMFD.FDQuery19.Open;
-
-             //-----------------------------------------------------------------
-
-             nPri     := 0;
-             gDescRej := '';
-             gTemRej  := false;
-             gNNF     := VarToStr(DMFD.FDQuery1['nfe_nnf']);
-
-             While not DMFD.FDQuery19.eof do
-              begin
-
-               if ( DMFD.FDQuery19['dFab'] > gDataEmi ) then
-                begin
-
-                 if ( nPri > 0 ) then
-                   gDescRej := gDescRej + ', '
-                 else
-                  begin
-                   gTemRej  := true;
-                   nPri := (nPri + 1);
-                  end;
-
-                 gDescRej := gDescRej + VarToStr(DMFD.FDQuery19['codigo_item']);
-
-                end;
-
-               DMFD.FDQuery19.next;
-
-              end;
-
-             // Rejeição 877
-             if gTemRej then
-              gAbortar := fTrataRejeicao( 877, gModelo, gNNF, gDescRej );
-
-             if gAbortar then exit;
-             //-----------------------------------------------------------------
-
-             nPri     := 0;
-             gDescRej := '';
-             gTemRej  := false;
-             DMFD.FDQuery19.First;
-
-             While not DMFD.FDQuery19.eof do                                    // Enquanto não for o fim do lote
-              begin
-
-               if ( DMFD.FDQuery19['dVal'] < DMFD.FDQuery19['dFab'] ) then
-                begin
-
-                 if ( nPri > 0 ) then
-                   gDescRej := gDescRej + ', '
-                 else
-                  begin
-                   gTemRej  := true;
-                   nPri := (nPri + 1);
-                  end;
-
-                 gDescRej := gDescRej + VarToStr(DMFD.FDQuery19['codigo_item']);
-
-                end;
-
-               with Prod.rastro.Add do
-                begin
-
-                 nLote         := DMFD.FDQuery19['nLote'];
-                 qLote         := DMFD.FDQuery19['qLote'];
-                 dFab          := DMFD.FDQuery19['dFab'];
-                 dVal          := DMFD.FDQuery19['dVal'];
-
-                 if ( DMFD.FDQuery19['cAgreg'] <> null ) then
-                  cAgreg       := VarToStr(DMFD.FDQuery19['cAgreg']);
-
-                end;
-
-               DMFD.FDQuery19.next;
-
-              end;
-
-             // Rejeição 870
-             if gTemRej then
-              gAbortar := fTrataRejeicao( 870, gModelo, gNNF, gDescRej );
-
-             if gAbortar then exit;
-
-             //-----------------------------------------------------------------
-
-            end;
-
-           if gAbortar then exit;
-
-           // by Edson Lima ; lei da transparencia de impostos
-           if DMFD.FDQuery2['vTotTrib'] = null then
-            Imposto.vTotTrib := 0
-           else
-            Imposto.vTotTrib := DMFD.FDQuery2['vTotTrib'];                      // Produtos
-
-           // by Edson Lima ; 2016-10-11 ; Valor do ICMS desonerado
-           with Imposto.ICMS do
-            begin
-
-             if (DMFD.FDQuery2['vICMSDeson'] <> null) then
-              begin
-
-               vICMSDeson     := DMFD.FDQuery2['vICMSDeson'];
-               motDesICMS     := DMFD.FDQuery2['motDesICMS'];
-
-              end;
-
-             if (DMFD.FDQuery2['vICMSSTDeson'] <> null) then
-              begin
-
-               vICMSSTDeson     := DMFD.FDQuery2['vICMSSTDeson'];
-               motDesICMSST     := DMFD.FDQuery2['motDesICMSST'];
-
-              end;
-
-            end;
-
-           // by Edson Lima ; 2016-10-11 ; partilha do ICMS e fundo de probreza
-           with Imposto.ICMSUFDest do
-            begin
-
-             if (DMFD.FDQuery2['vBCUFDest'] = null) then
-              vBCUFDest      := 0
-             else
-              vBCUFDest      := DMFD.FDQuery2['vBCUFDest'];
-
-             if (   (FrPar.cbb2.ItemIndex = 1)                      or
-                  ( (FrPar.cbb2.ItemIndex = 2) and (gModelo=55) )   or
-                  ( (FrPar.cbb2.ItemIndex = 3) and (gModelo=65) ) ) then        // ve400
-              begin
-
-               if ( (DMFD.FDQuery2['vBCUFDest']  > 0)   and
-                    (DMFD.FDQuery2['pFCPUFDest'] > 0) ) then                    // 09-01-2019 (Renildo) foi mudado de vBCFCPUFDest para vBCUFDeste
-                vBCFCPUFDest         := DMFD.FDQuery2['vBCUFDest'];
-
-              end;
-
-             if ( DMFD.FDQuery2['pFCPUFDest'] > 0 ) then
-              pFCPUFDest           := DMFD.FDQuery2['pFCPUFDest'];
-
-             if ( DMFD.FDQuery2['pICMSUFDest'] = null ) then
-              pICMSUFDest    := 0
-             else
-              pICMSUFDest    := DMFD.FDQuery2['pICMSUFDest'];
-
-             if ( DMFD.FDQuery2['pICMSInter'] = null ) then
-              pICMSInter     := 0
-             else
-              pICMSInter     := DMFD.FDQuery2['pICMSInter'];
-
-             if ( DMFD.FDQuery2['pICMSInterPart'] = null ) then
-              pICMSInterPart := 0
-             else
-              pICMSInterPart := DMFD.FDQuery2['pICMSInterPart'];
-
-             if ( DMFD.FDQuery2['vFCPUFDest'] > 0 ) then
-              if ( (DMFD.FDQuery1['nfe_idDest']    = 2)     and
-                   (DMFD.FDQuery1['nfe_indFinal']  = '1')   and
-                   (DMFD.FDQuery1['des_indIEDest'] = '9') ) then
-               vFCPUFDest     := DMFD.FDQuery2['vFCPUFDest'];
-
-             if ( DMFD.FDQuery2['vICMSUFDest'] = null ) then
-              vICMSUFDest    := 0
-             else
-              vICMSUFDest    := DMFD.FDQuery2['vICMSUFDest'];
-
-             if ( DMFD.FDQuery2['vICMSUFRemet'] = null ) then
-              vICMSUFRemet   := 0
-             else
-              vICMSUFRemet   := DMFD.FDQuery2['vICMSUFRemet'];
-
-            end;
-
-           with Imposto.ICMS do
-            begin
-
-             // Fundo de combate a pobresa (FCP)
-             if (   (FrPar.cbb2.ItemIndex = 1)                      or
-                  ( (FrPar.cbb2.ItemIndex = 2) and (gModelo=55) )   or
-                  ( (FrPar.cbb2.ItemIndex = 3) and (gModelo=65) ) ) then        // ve400
-              begin
-
-               if ( Imposto.ICMSUFDest.pFCPUFDest > 0 ) then
-                begin
-
-                 pFCPST	     := Imposto.ICMSUFDest.pFCPUFDest;                  // Percentual relativo ao Fundo de Combate à Pobreza (FCP). Nota: Percentual máximo de 2%, conforme a legislação.
-                 pFCPSTRet	  := Imposto.ICMSUFDest.pFCPUFDest;                  // Percentual relativo ao Fundo de Combate à Pobreza (FCP). Nota: Percentual máximo de 2%, conforme a legislação.
-
-                 vFCPST	     := Imposto.ICMSUFDest.vFCPUFDest;                  // Valor do ICMS relativo ao Fundo de Combate à Pobreza (FCP) retido por substituição tributária.
-                 vFCPSTRet	  := Imposto.ICMSUFDest.vFCPUFDest;                  // Valor do ICMS relativo ao Fundo de Combate à Pobreza (FCP) retido por substituição tributária.
-
-                end;
-
-               if ( Imposto.ICMSUFDest.vBCFCPUFDest > 0 ) then
-                begin
-
-                 if not ( (DMFD.FDQuery1['nfe_idDest']    = 2)     and
-                          (DMFD.FDQuery1['nfe_indFinal']  = '1')   and
-                          (DMFD.FDQuery1['des_indIEDest'] = '9') ) then
-                  vBCFCP	 := Imposto.ICMSUFDest.vBCFCPUFDest;
-
-                 vBCFCPST	   := Imposto.ICMSUFDest.vBCFCPUFDest;                // Informar o valor da Base de Cálculo do FCP
-                 vBCFCPSTRet := Imposto.ICMSUFDest.vBCFCPUFDest;                // Informar o valor da Base de Cálculo do FCP retido anteriormente por ST
-
-                end;
-
-               if ( DMFD.FDQuery2['pFCPUFDest'] > 0 ) then
-                if not ( (DMFD.FDQuery1['nfe_idDest']    = 2)     and
-                         (DMFD.FDQuery1['nfe_indFinal']  = '1')   and
-                         (DMFD.FDQuery1['des_indIEDest'] = '9') ) then
-                 pFCP := Imposto.ICMSUFDest.pFCPUFDest;
-
-               if ( DMFD.FDQuery2['vFCPUFDest'] > 0 ) then
-                if not ( (DMFD.FDQuery1['nfe_idDest']    = 2)     and
-                         (DMFD.FDQuery1['nfe_indFinal']  = '1')   and
-                         (DMFD.FDQuery1['des_indIEDest'] = '9') ) then
-                 vFCP := Imposto.ICMSUFDest.vFCPUFDest;
-
-               pST	        := ( DMFD.FDQuery2['pc_icms_st'] +
-                                Imposto.ICMSUFDest.pFCPUFDest );                // Deve ser informada a alíquota do cálculo do ICMS-ST, já incluso o FCP. Exemplo: alíquota da mercadoria na venda ao consumidor final = 18% e 2% de FCP. A alíquota a ser informada no campo pST deve ser 20%.
-
-              end;
-
-             orig   := oeNacional;
-
-             if DMFD.FDQuery4['regime_tributario'] <> 1 then
-              begin
-
-               if length(trim(DMFD.FDQuery2['cst'])) = 3 then
-                begin
-                 if copy(vartostr(DMFD.FDQuery2['cst']),1,1) = '1' then orig   := oeEstrangeiraImportacaoDireta;
-                 if copy(vartostr(DMFD.FDQuery2['cst']),1,1) = '2' then orig   := oeEstrangeiraAdquiridaBrasil;
-                 // linhas inseridas by Edson Lima ; 2015-2-26T1046
-                 if copy(vartostr(DMFD.FDQuery2['cst']),1,1) = '3' then orig   := oeNacionalConteudoImportacaoSuperior40;
-                 if copy(vartostr(DMFD.FDQuery2['cst']),1,1) = '4' then orig   := oeNacionalProcessosBasicos;
-                 if copy(vartostr(DMFD.FDQuery2['cst']),1,1) = '5' then orig   := oeNacionalConteudoImportacaoInferiorIgual40;
-                 if copy(vartostr(DMFD.FDQuery2['cst']),1,1) = '6' then orig   := oeEstrangeiraImportacaoDiretaSemSimilar;
-                 if copy(vartostr(DMFD.FDQuery2['cst']),1,1) = '7' then orig   := oeEstrangeiraAdquiridaBrasilSemSimilar;
-                 if copy(vartostr(DMFD.FDQuery2['cst']),1,1) = '8' then orig   := oeNacionalConteudoImportacaoSuperior70;
-                 //------------------------------------------------
-                end;
-
-               CST    := cst00;
-
-               if length(trim(DMFD.FDQuery2['cst'])) = 3 then
-                begin
-                 if copy(vartostr(DMFD.FDQuery2['cst']),2,2) = '10' then CST    := cst10;
-                 if copy(vartostr(DMFD.FDQuery2['cst']),2,2) = '20' then CST    := cst20;
-                 if copy(vartostr(DMFD.FDQuery2['cst']),2,2) = '30' then CST    := cst30;
-                 if copy(vartostr(DMFD.FDQuery2['cst']),2,2) = '40' then CST    := cst40;
-                 if copy(vartostr(DMFD.FDQuery2['cst']),2,2) = '41' then CST    := cst41;
-                 if copy(vartostr(DMFD.FDQuery2['cst']),2,2) = '50' then CST    := cst50;
-                 if copy(vartostr(DMFD.FDQuery2['cst']),2,2) = '51' then CST    := cst51;
-
-                 if (   (FrPar.cbb2.ItemIndex = 1)                      or
-                      ( (FrPar.cbb2.ItemIndex = 2) and (gModelo=55) )   or
-                      ( (FrPar.cbb2.ItemIndex = 3) and (gModelo=65) ) ) then    // ve400
-                  begin
-
-                   if copy(vartostr(DMFD.FDQuery2['cst']),2,2) = '60' then
-                    begin
-
-                     case Prod.comb.cProdANP of
-
-                      210203001, 320101001, 320101002, 320102002, 320102001,
-                      320102003, 820101032, 820101027, 820101004, 820101005,
-                      820101022, 820101031, 820101030, 820101018, 820101020,
-                      820101021, 420105001, 420101005, 420101004, 420102005,
-                      820101003, 820101012, 420106002, 830101001, 420301004,
-                      420202001, 420301001, 510101002, 510102002, 510201001,
-                      510201003, 510301003, 510103001, 510301001, 820101026,
-                      320102005, 320201001, 320103001, 220102001, 320301001,
-                      320103002, 820101019, 820101014, 820101006, 820101016,
-                      820101015, 820101025, 820101017, 820101013, 420102004,
-                      420104001, 820101033, 820101034, 420106001, 820101011,
-                      510102001, 420301002, 410103001, 410101001, 410102001,
-                      430101004, 510101001
-
-                      : CST    := cstRep60
-
-                     else
-
-                      CST    := cst60;
-
-                     end;
-
-                    end;
-
-                  end
-
-                 else                                                           // Ve310
-
-                  if copy(vartostr(DMFD.FDQuery2['cst']),2,2) = '60' then CST   := cst60;
-
-
-                 if copy(vartostr(DMFD.FDQuery2['cst']),2,2) = '70' then CST    := cst70;
-                 if copy(vartostr(DMFD.FDQuery2['cst']),2,2) = '80' then CST    := cst80;
-                 if copy(vartostr(DMFD.FDQuery2['cst']),2,2) = '81' then CST    := cst81;
-                 if copy(vartostr(DMFD.FDQuery2['cst']),2,2) = '90' then CST    := cst90;
-                 if copy(vartostr(DMFD.FDQuery2['cst']),2,2) = '91' then CST    := cstICMSOutraUF;
-                 if copy(vartostr(DMFD.FDQuery2['cst']),2,2) = '92' then CST    := cstICMSSN;
-                end;
-              end
-             else
-              begin
-
-               CST    := cst41;
-
-               if DMFD.FDQuery2['cst'] = '101' then CSOSN    := csosn101;
-               if DMFD.FDQuery2['cst'] = '102' then CSOSN    := csosn102;
-               if DMFD.FDQuery2['cst'] = '103' then CSOSN    := csosn103;
-               if DMFD.FDQuery2['cst'] = '201' then CSOSN    := csosn201;
-               if DMFD.FDQuery2['cst'] = '202' then CSOSN    := csosn202;
-               if DMFD.FDQuery2['cst'] = '203' then CSOSN    := csosn203;
-               if DMFD.FDQuery2['cst'] = '300' then CSOSN    := csosn300;
-               if DMFD.FDQuery2['cst'] = '400' then CSOSN    := csosn400;
-               if DMFD.FDQuery2['cst'] = '500' then CSOSN    := csosn500;
-               if DMFD.FDQuery2['cst'] = '900' then CSOSN    := csosn900;
-              end;
-
-             modBC    := dbiValorOperacao;
-             pICMS    := DMFD.FDQuery2['pc_icms'];
-             vICMS    := DMFD.FDQuery2['vl_icms'];
-             vBC      := DMFD.FDQuery2['base_calculo_icms'];
-             pRedBC   := DMFD.FDQuery2['reducao_icms'];
-             vBCST    := DMFD.FDQuery2['base_icms_st'];
-             vICMSST  := DMFD.FDQuery2['vl_icms_st'];
-             pICMSST  := DMFD.FDQuery2['pc_icms_st'];
-             if ( ( DMFD.FDQuery2['modBCST'] <> null ) AND
-                  ( DMFD.FDQuery2['modBCST'] <> '' ) ) then
-              modBCST  :=  DMFD.FDQuery2['modBCST'];
-             if ( DMFD.FDQuery2['pMVAST'] <> null ) then
-              pMVAST   := DMFD.FDQuery2['pMVAST'];
-             if ( DMFD.FDQuery2['pRedBCST'] <> null ) then
-              pRedBCST := DMFD.FDQuery2['pRedBCST'];
-
-             if (   (FrPar.cbb2.ItemIndex = 1)                      or
-                  ( (FrPar.cbb2.ItemIndex = 2) and (gModelo=55) )   or
-                  ( (FrPar.cbb2.ItemIndex = 3) and (gModelo=65) ) ) then        // ve400
-              begin
-
-               // Quando o CST = CST60
-               if ( CST = cstRep60 ) then
-                begin
-
-                 if ( DMFD.FDQuery2['vBCSTRet'] <> null ) then
-                  vBCSTRet    := DMFD.FDQuery2['vBCSTRet']
-                 else
-                  vBCSTRet    := 0;
-
-                 if ( DMFD.FDQuery2['vICMSSTRet'] <> null ) then
-                  vICMSSTRet  := DMFD.FDQuery2['vICMSSTRet']
-                 else
-                  vICMSSTRet  := 0;
-
-                 if ( DMFD.FDQuery2['vBCSTDest'] <> null ) then
-                  vBCSTDest  := DMFD.FDQuery2['vBCSTDest']
-                 else
-                  vBCSTDest  := 0;
-
-                 if ( DMFD.FDQuery2['vICMSSTDest'] <> null ) then
-                  vICMSSTDest  := DMFD.FDQuery2['vICMSSTDest']
-                 else
-                  vICMSSTDest  := 0;
-
-                end;
-
-
-               // Quando o CSOSN = csosn101
-               if ( CSOSN = csosn101 ) then
-                begin
-
-                 if ( DMFD.FDQuery2['pCredSN'] <> null ) then
-                  pCredSN     := DMFD.FDQuery2['pCredSN'];
-
-                 if ( DMFD.FDQuery2['vCredICMSSN'] <> null ) then
-                  vCredICMSSN := DMFD.FDQuery2['vCredICMSSN'];
-
-                end;
-
-              end;
-
-             //showmessage(vartostr(query2['base_calculo_icms']));
-
-            end;
-
-           with Imposto.IPI do
-            begin
-
-             CST   := ipi00;
-             // Incluido by Edson Lima ; 18/12/2012 ; 15:05 --------
-             if DMFD.FDQuery2['ipi_cst'] = '00' then CST    := ipi00;
-             if DMFD.FDQuery2['ipi_cst'] = '01' then CST    := ipi01;
-             if DMFD.FDQuery2['ipi_cst'] = '02' then CST    := ipi02;
-             if DMFD.FDQuery2['ipi_cst'] = '03' then CST    := ipi03;
-             if DMFD.FDQuery2['ipi_cst'] = '04' then CST    := ipi04;
-             if DMFD.FDQuery2['ipi_cst'] = '05' then CST    := ipi05;
-             if DMFD.FDQuery2['ipi_cst'] = '49' then CST    := ipi49;
-             if DMFD.FDQuery2['ipi_cst'] = '50' then CST    := ipi50;
-             if DMFD.FDQuery2['ipi_cst'] = '51' then CST    := ipi51;
-             if DMFD.FDQuery2['ipi_cst'] = '52' then CST    := ipi52;
-             if DMFD.FDQuery2['ipi_cst'] = '53' then CST    := ipi53;
-             if DMFD.FDQuery2['ipi_cst'] = '54' then CST    := ipi54;
-             if DMFD.FDQuery2['ipi_cst'] = '55' then CST    := ipi55;
-             if DMFD.FDQuery2['ipi_cst'] = '99' then CST    := ipi99;
-             //-----------------------------------------------------
-
-             pIPI  := DMFD.FDQuery2['pc_ipi'];
-             vIPI  := DMFD.FDQuery2['vl_ipi'];
-             vBC   := DMFD.FDQuery2['base_calculo_ipi'];
-             cEnq  := DMFD.FDQuery2['cEnq'];                                    // Novo by El - 2020-12-15
-
-            end;
-
-           with Imposto.PIS do
-            begin
-
-             // posicionado by Edson Lima ; 20/11/2012 ; 14:44
-             CST    := pis01;
-             if DMFD.FDQuery2['pis_cst'] = '01' then CST    := pis01;
-             if DMFD.FDQuery2['pis_cst'] = '02' then CST    := pis02;
-             if DMFD.FDQuery2['pis_cst'] = '03' then CST    := pis03;
-             if DMFD.FDQuery2['pis_cst'] = '04' then CST    := pis04;
-             if DMFD.FDQuery2['pis_cst'] = '05' then CST    := pis05;
-             if DMFD.FDQuery2['pis_cst'] = '06' then CST    := pis06;
-             if DMFD.FDQuery2['pis_cst'] = '07' then CST    := pis07;
-             if DMFD.FDQuery2['pis_cst'] = '08' then CST    := pis08;
-             if DMFD.FDQuery2['pis_cst'] = '09' then CST    := pis09;
-             if DMFD.FDQuery2['pis_cst'] = '49' then CST    := pis49;
-             if DMFD.FDQuery2['pis_cst'] = '50' then CST    := pis50;
-             if DMFD.FDQuery2['pis_cst'] = '51' then CST    := pis51;
-             if DMFD.FDQuery2['pis_cst'] = '52' then CST    := pis52;
-             if DMFD.FDQuery2['pis_cst'] = '53' then CST    := pis53;
-             if DMFD.FDQuery2['pis_cst'] = '54' then CST    := pis54;
-             if DMFD.FDQuery2['pis_cst'] = '55' then CST    := pis55;
-             if DMFD.FDQuery2['pis_cst'] = '56' then CST    := pis56;
-             if DMFD.FDQuery2['pis_cst'] = '60' then CST    := pis60;
-             if DMFD.FDQuery2['pis_cst'] = '61' then CST    := pis61;
-             if DMFD.FDQuery2['pis_cst'] = '62' then CST    := pis62;
-             if DMFD.FDQuery2['pis_cst'] = '63' then CST    := pis63;
-             if DMFD.FDQuery2['pis_cst'] = '64' then CST    := pis64;
-             if DMFD.FDQuery2['pis_cst'] = '65' then CST    := pis65;
-             if DMFD.FDQuery2['pis_cst'] = '66' then CST    := pis66;
-             if DMFD.FDQuery2['pis_cst'] = '67' then CST    := pis67;
-             if DMFD.FDQuery2['pis_cst'] = '70' then CST    := pis70;
-             if DMFD.FDQuery2['pis_cst'] = '71' then CST    := pis71;
-             if DMFD.FDQuery2['pis_cst'] = '72' then CST    := pis72;
-             if DMFD.FDQuery2['pis_cst'] = '73' then CST    := pis73;
-             if DMFD.FDQuery2['pis_cst'] = '74' then CST    := pis74;
-             if DMFD.FDQuery2['pis_cst'] = '75' then CST    := pis75;
-             if DMFD.FDQuery2['pis_cst'] = '98' then CST    := pis98;
-             if DMFD.FDQuery2['pis_cst'] = '99' then CST    := pis99;
-
-             vBC    := DMFD.FDQuery2['pis_base_calculo'];
-             pPis   := DMFD.FDQuery2['pis_percentual'];
-             vPis   := DMFD.FDQuery2['pis_valor'];
-
-            end;
-
-           with Imposto.COFINS do
-            begin
-
-             // posicionado by Edson Lima ; 20/11/2012 ; 14:44
-             CST    := cof01;
-             if DMFD.FDQuery2['cofins_cst'] = '01' then CST    := cof01;
-             if DMFD.FDQuery2['cofins_cst'] = '02' then CST    := cof02;
-             if DMFD.FDQuery2['cofins_cst'] = '03' then CST    := cof03;
-             if DMFD.FDQuery2['cofins_cst'] = '04' then CST    := cof04;
-             if DMFD.FDQuery2['cofins_cst'] = '05' then CST    := cof05;
-             if DMFD.FDQuery2['cofins_cst'] = '06' then CST    := cof06;
-             if DMFD.FDQuery2['cofins_cst'] = '07' then CST    := cof07;
-             if DMFD.FDQuery2['cofins_cst'] = '08' then CST    := cof08;
-             if DMFD.FDQuery2['cofins_cst'] = '09' then CST    := cof09;
-             if DMFD.FDQuery2['cofins_cst'] = '49' then CST    := cof49;
-             if DMFD.FDQuery2['cofins_cst'] = '50' then CST    := cof50;
-             if DMFD.FDQuery2['cofins_cst'] = '51' then CST    := cof51;
-             if DMFD.FDQuery2['cofins_cst'] = '52' then CST    := cof52;
-             if DMFD.FDQuery2['cofins_cst'] = '53' then CST    := cof53;
-             if DMFD.FDQuery2['cofins_cst'] = '54' then CST    := cof54;
-             if DMFD.FDQuery2['cofins_cst'] = '55' then CST    := cof55;
-             if DMFD.FDQuery2['cofins_cst'] = '56' then CST    := cof56;
-             if DMFD.FDQuery2['cofins_cst'] = '60' then CST    := cof60;
-             if DMFD.FDQuery2['cofins_cst'] = '61' then CST    := cof61;
-             if DMFD.FDQuery2['cofins_cst'] = '62' then CST    := cof62;
-             if DMFD.FDQuery2['cofins_cst'] = '63' then CST    := cof63;
-             if DMFD.FDQuery2['cofins_cst'] = '64' then CST    := cof64;
-             if DMFD.FDQuery2['cofins_cst'] = '65' then CST    := cof65;
-             if DMFD.FDQuery2['cofins_cst'] = '66' then CST    := cof66;
-             if DMFD.FDQuery2['cofins_cst'] = '67' then CST    := cof67;
-             if DMFD.FDQuery2['cofins_cst'] = '70' then CST    := cof70;
-             if DMFD.FDQuery2['cofins_cst'] = '71' then CST    := cof71;
-             if DMFD.FDQuery2['cofins_cst'] = '72' then CST    := cof72;
-             if DMFD.FDQuery2['cofins_cst'] = '73' then CST    := cof73;
-             if DMFD.FDQuery2['cofins_cst'] = '74' then CST    := cof74;
-             if DMFD.FDQuery2['cofins_cst'] = '75' then CST    := cof75;
-             if DMFD.FDQuery2['cofins_cst'] = '98' then CST    := cof98;
-             if DMFD.FDQuery2['cofins_cst'] = '99' then CST    := cof99;
-
-             vBC       := DMFD.FDQuery2['cofins_base_calculo'];
-             pCofins   := DMFD.FDQuery2['cofins_percentual'];
-             vCofins   := DMFD.FDQuery2['cofins_valor'];
-
-           end;
-
-          end;
-
-         DMFD.FDQuery2.next;
+        else
+         Ide.IndIntermed := iiOperacaoSemIntermediador; //iiSemOperacao;
 
         end;
 
-       if gAbortar then exit;
+       end;
 
-       // ACBrNFe1.NotasFiscais.Add.NFe.Det.Add.imposto.pis.CST
-       Total.ICMSTot.vBC        := DMFD.FDQuery1['nfe_base_calculo_icms'];
-       Total.ICMSTot.vICMS      := DMFD.FDQuery1['nfe_vl_icms'];
-       Total.ICMSTot.vNF        := DMFD.FDQuery1['nfe_total_nf'];
-       Total.ICMSTot.vProd      := DMFD.FDQuery1['nfe_total_produtos'];
-       total.icmstot.vBCST      := DMFD.FDQuery1['nfe_base_calculo_st'];
-       total.icmstot.vST        := DMFD.FDQuery1['nfe_vl_st'];
-       total.icmstot.vFrete     := DMFD.FDQuery1['nfe_vl_frete'];
-       total.icmstot.vSeg       := DMFD.FDQuery1['nfe_vl_seguro'];
-       total.icmstot.vDesc      := DMFD.FDQuery1['nfe_vl_desconto'];
-       total.icmstot.vIpi       := DMFD.FDQuery1['nfe_vl_ipi'];
-       total.icmstot.vPis       := DMFD.FDQuery1['nfe_vl_pis'];
-       total.icmstot.vCofins    := DMFD.FDQuery1['nfe_vl_cofins'];
-       total.icmstot.vOutro     := DMFD.FDQuery1['nfe_vl_outros'];
+       case (StrToIntDef(DMFD.FDQuery1['nfe_indPres'], 0)) of
 
-       // by Edson Lima
-       if vartostr(DMFD.FDQuery1['nfe_vl_ii']) <> '' then                       // Nota
-        begin
-         total.ICMSTot.vII      := DMFD.FDQuery1['nfe_vl_ii'];
+        0:    Ide.indPres := pcNao;
+        1:    Ide.indPres := pcPresencial;
+        2:    Ide.indPres := pcInternet;
+        3:    Ide.indPres := pcTeleatendimento;
+        4:    Ide.indPres := pcEntregaDomicilio;
+        5:    Ide.indPres := pcPresencialForaEstabelecimento;
+        9:    Ide.indPres := pcOutros;
+        else  Ide.indPres := pcOutros;
+
+       end;
+
+      end;
+
+      2 :                                                                       // ve4031
+      begin
+
+       if ( gModelo = 55 ) then
+       begin
+
+        case (StrToIntDef(DMFD.FDQuery1['nfe_indPres'], 0)) of
+
+         0:    Ide.indPres := pcNao;
+         1:    Ide.indPres := pcPresencial;
+         2:    Ide.indPres := pcInternet;
+         3:    Ide.indPres := pcTeleatendimento;
+         4:    Ide.indPres := pcEntregaDomicilio;
+         5:    Ide.indPres := pcPresencialForaEstabelecimento;
+         9:    Ide.indPres := pcOutros;
+         else  Ide.indPres := pcOutros;
+
         end;
 
-       // by Edson Lima ; 2016-3-22 ; lei da transparencia de impostos
-       if DMFD.FDQuery1['vTotTrib'] = null then
-        Total.ICMSTot.vTotTrib := 0
+       end
        else
-        Total.ICMSTot.vTotTrib := DMFD.FDQuery1['vTotTrib'];                    // Nota
+       begin
 
-       // by Edson Lima ; 2016-10-11 ; valor do ICMS Desonerado
-       if (DMFD.FDQuery1['nfe_vICMSDeson'] <> null) then
-        Total.ICMSTot.vICMSDeson   := DMFD.FDQuery1['nfe_vICMSDeson'];          // by Edson Lima ; 11/10/2016
+        case (StrToIntDef(DMFD.FDQuery1['nfe_indPres'], 0)) of
 
-       // by Edson Lima ; 2020-7-14 ; partilha do icms e fundo de probreza
-       if DMFD.FDQuery1['nfe_vFCPUFDest'] > 0 then
-        begin
+         0:    Ide.indPres := pcNao;
+         1:    Ide.indPres := pcPresencial;
+         2:    Ide.indPres := pcInternet;
+         3:    Ide.indPres := pcTeleatendimento;
+         4:    Ide.indPres := pcEntregaDomicilio;
+         9:    Ide.indPres := pcOutros;
+         else  Ide.indPres := pcOutros;
 
-         if ( (DMFD.FDQuery1['nfe_idDest']    = 2)     and
-              (DMFD.FDQuery1['nfe_indFinal']  = '1')   and
-              (DMFD.FDQuery1['des_indIEDest'] = '9') ) then
+        end;
 
-          Total.ICMSTot.vFCPUFDest   := DMFD.FDQuery1['nfe_vFCPUFDest']
+       end;
 
+      end;
+
+      3 :                                                                       // ve3140
+      begin
+
+       if ( gModelo = 55 ) then
+       begin
+
+        case (StrToIntDef(DMFD.FDQuery1['nfe_indPres'], 0)) of
+
+         0:    Ide.indPres := pcNao;
+         1:    Ide.indPres := pcPresencial;
+         2:    Ide.indPres := pcInternet;
+         3:    Ide.indPres := pcTeleatendimento;
+         4:    Ide.indPres := pcEntregaDomicilio;
+         9:    Ide.indPres := pcOutros;
+         else  Ide.indPres := pcOutros;
+
+        end;
+
+       end
+       else
+       begin
+
+        case (StrToIntDef(DMFD.FDQuery1['nfe_indPres'], 0)) of
+
+         0:    Ide.indPres := pcNao;
+         1:    Ide.indPres := pcPresencial;
+         2:    Ide.indPres := pcInternet;
+         3:    Ide.indPres := pcTeleatendimento;
+         4:    Ide.indPres := pcEntregaDomicilio;
+         5:    Ide.indPres := pcPresencialForaEstabelecimento;
+         9:    Ide.indPres := pcOutros;
+         else  Ide.indPres := pcOutros;
+
+        end;
+
+       end;
+
+      end;
+
+     end;
+
+    end;
+
+    //--------------------------------------------------------------------------
+
+    if (gModelo = 65) then
+    begin
+
+     Ide.tpImp     := tiNFCe;
+     Ide.indFinal  := cfConsumidorFinal;
+     Ide.indPres   := pcPresencial;
+
+     case ( FrPar.cbb2.ItemIndex) of
+
+      0 : Ide.indPag    := ipVista;                                             // ve310
+
+      1 : ;// Retirado a partir da ve400;                                       // ve400
+
+      2 : Ide.indPag    := ipVista;                                             // ve310
+
+      3 : ;// Retirado a partir da ve400;                                       // ve400
+
+     end;
+
+    end
+    else if (gModelo = 55) then
+     Ide.tpImp     := tiRetrato;
+
+    Ide.tpEmis    := teNORMAL;
+
+    ACBrNFe1.Configuracoes.Geral.FormaEmissao := teNORMAL;
+
+    if ((_tipo_emissao = 'fsda') and (gModelo = 55)) then
+    begin
+
+     ACBrNFe1.Configuracoes.Geral.FormaEmissao := teFSDA;
+     Ide.tpEmis                                := teFSDA;
+
+     if vartostr(DMFD.FDQuery1['nfe_demi']) <> '' then
+      Ide.dhCont                               := DMFD.FDQuery1['nfe_demi']
+     else
+      Ide.dhCont := now();
+
+     Ide.xJust                                 := xJustificativa;
+
+    end
+    else if ((_tipo_emissao = 'OffL') and (gModelo = 65)) then
+    begin
+
+     ACBrNFe1.Configuracoes.Geral.FormaEmissao := teOffLine;
+     Ide.tpEmis                                := teOffLine;
+
+     if vartostr(DMFD.FDQuery1['nfe_DatNFCe']) <> '' then
+      Ide.dhCont                             := DMFD.FDQuery1['nfe_DatNFCe']
+     else
+      Ide.dhCont := now();
+
+     Ide.xJust                                 := xJustificativa;
+
+    end;
+
+    //--------------------------------------------------------------------------
+    // by Edson ; 20/6/2012 ; 08:45 ; Marca a nota com ENVI antes de enviar*
+    //--------------------------------------------------------------------------
+    if _tipo_emissao = 'normal' then
+    begin
+
+     // by Edson Lima ; 2013/03/12 ; 14:23 ; Se não tiver data_hora_recebimento
+     // grava a data atual, caso contrario mantém: Centralizar os updates em um só lugar
+     if (VarToStr(DMFD.FDQuery1['nfe_data_hora_recebimento']) = '') then
+      pGravaNFe('001', 'situacao',
+                       'motivo',
+                       'data_hora_recebimento',
+                       'UsuTrs',
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       'codigo_loja',
+                       'demi',
+                       'nnf',
+                       'serie',
+                       'chave_nfe',
+                       'modelo',                                                // Nome dos campos
+                       'ENVI',
+                       'Tentativa de envio sem sucesso',
+                       FormatDateTime('dd/mm/yyyy hh:nn:ss', now()),
+                       gUsu,
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       edt_CodEmp.Text, FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']),
+                       DMFD.FDQuery1['nfe_nnf'],
+                       DMFD.FDQuery1['nfe_serie'],
+                       '',
+                       gModelo,                                                 // Conteúdo dos campos
+                       true)                                                    // Consiste [true/false]
+     else
+      pGravaNFe('001', 'situacao',
+                       'motivo',
+                       'UsuTrs',
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       'codigo_loja',
+                       'demi',
+                       'nnf',
+                       'serie',
+                       'chave_nfe',
+                       'modelo',                                                // Nome dos campos
+                       'ENVI',
+                       'Tentativa de envio sem sucesso',
+                       gUsu,
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       edt_CodEmp.Text, FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']),
+                       DMFD.FDQuery1['nfe_nnf'],
+                       DMFD.FDQuery1['nfe_serie'],
+                       '',
+                       gModelo,                                                 // Conteúdo dos campos
+                       true);                                                   // Consiste [true/false]
+    end;
+
+    //--------------------------------------------------------------------------
+
+    Ide.cUF       := strtointDef(DMFD.FDQuery4['codigo_uf'], 0);
+    Ide.cMunFG    := StrToIntDef(DMFD.FDQuery4['codigo_municipio'], 0);
+
+    if DMFD.FDQuery1['nfe_finalidade'] = 1 then Ide.finNFe := fnNormal;
+    if DMFD.FDQuery1['nfe_finalidade'] = 2 then Ide.finNFe := fnComplementar;
+    if DMFD.FDQuery1['nfe_finalidade'] = 3 then Ide.finNFe := fnAjuste;
+    if DMFD.FDQuery1['nfe_finalidade'] = 4 then Ide.finNFe := fnDevolucao;      // by Edson Lima ; 2015-4-1T1328 ; linha imcluida para Devolução
+
+    DMFD.FDQuery2.Close;
+    DMFD.FDQuery2.SQL.Clear;
+    DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                                                                                 ' );
+    DMFD.FDQuery2.SQL.Add( 'Select                                                                                             ' );
+    DMFD.FDQuery2.SQL.Add( 't1.*                                                                                               ' );
+    DMFD.FDQuery2.SQL.Add( 'from nfe_referenciada_mod1 t1                                                                      ' );
+    DMFD.FDQuery2.SQL.Add( 'inner join nfe t2 on t1.codigo_loja = t2.codigo_loja and t1.nnf = t2.nnf and t1.demi = t2.demi and ' );
+    DMFD.FDQuery2.SQL.Add( '                     t1.modelo = t2.modelo                                                         ' );
+    DMFD.FDQuery2.SQL.Add( 'and   t2.codigo_loja = :parm1                                                                      ' );
+    DMFD.FDQuery2.SQL.Add( 'and   t2.demi        = :parm2                                                                      ' );
+    DMFD.FDQuery2.SQL.Add( 'and   t2.nnf         = :parm3                                                                      ' );
+    DMFD.FDQuery2.SQL.Add( 'and   t2.modelo      = :parm4                                                                      ' );
+    DMFD.FDQuery2.SQL.Add( 'and   t2.serie       = :parm5                                                                      ' );
+    DMFD.FDQuery2.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
+    DMFD.FDQuery2.Params[1].Value     := StrToDateTime( FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']) );
+    DMFD.FDQuery2.Params[2].AsString  := DMFD.FDQuery1['nfe_nnf'];
+    DMFD.FDQuery2.Params[3].AsString  := DMFD.FDQuery1['nfe_modelo'];
+    DMFD.FDQuery2.Params[4].AsString  := DMFD.FDQuery1['nfe_serie'];
+    DMFD.FDQuery2.Open;
+
+    if not DMFD.FDQuery2.IsEmpty then
+    begin
+
+     DMFD.FDQuery2.First;
+     While not DMFD.FDQuery2.eof do
+     begin
+
+      with Ide.NFref.Add do
+      begin
+
+       // By Edson Lima ; 2015-4-2T0938 ; linha incluida
+       if ( (strtointDef(DMFD.FDQuery2['mod'], 0) = 55) or
+            (strtointDef(DMFD.FDQuery2['mod'], 0) = 65) ) then
+        RefNFe         := DMFD.FDQuery2['chave_nfe']
+
+       else             // Mod 1/1A
+       begin
+
+        RefNF.cUF      := strtointDef(DMFD.FDQuery2['uf'], 0);
+        RefNF.AAMM     := DMFD.FDQuery2['aamm'];
+        RefNF.CNPJ     := DMFD.FDQuery2['cnpj'];
+        RefNF.modelo   := strtointDef(DMFD.FDQuery2['mod'], 0);
+        RefNF.serie    := strtointDef(DMFD.FDQuery2['Ser'], 0);
+        RefNF.nNF      := strtointDef(DMFD.FDQuery2['r_nnf'], 0);
+       end;
+
+      end;
+
+      DMFD.FDQuery2.next;
+
+     end;
+
+    end;
+
+    //nfe_referenciada_prural
+    DMFD.FDQuery2.Close;
+    DMFD.FDQuery2.SQL.Clear;
+    DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                                             ' );
+    DMFD.FDQuery2.SQL.Add( 'Select                                                         ' );
+    DMFD.FDQuery2.SQL.Add( 't1.*                                                           ' );
+    DMFD.FDQuery2.SQL.Add( 'from nfe_referenciada_prural t1                                ' );
+    DMFD.FDQuery2.SQL.Add( 'inner join nfe t2 on t1.codigo_loja = t2.codigo_loja and t1.nnf = t2.nnf and t1.demi = t2.demi and t1.modelo = t2.modelo ' );
+    DMFD.FDQuery2.SQL.Add( 'and   t2.codigo_loja = :parm1                                  ' );
+    DMFD.FDQuery2.SQL.Add( 'and   t2.demi        = :parm2                                  ' );
+    DMFD.FDQuery2.SQL.Add( 'and   t2.nnf         = :parm3                                  ' );
+    DMFD.FDQuery2.SQL.Add( 'and   t2.modelo      = :parm4                                  ' );
+    DMFD.FDQuery2.SQL.Add( 'and   t2.serie       = :parm5                                  ' );
+    DMFD.FDQuery2.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
+    DMFD.FDQuery2.Params[1].Value     := StrToDateTime( FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']) );
+    DMFD.FDQuery2.Params[2].AsString  := DMFD.FDQuery1['nfe_nnf'];
+    DMFD.FDQuery2.Params[3].AsString  := DMFD.FDQuery1['nfe_modelo'];
+    DMFD.FDQuery2.Params[4].AsString  := DMFD.FDQuery1['nfe_serie'];
+    DMFD.FDQuery2.Open;
+
+    if not DMFD.FDQuery2.IsEmpty then
+    begin
+
+     DMFD.FDQuery2.First;
+     While not DMFD.FDQuery2.eof do
+     begin
+
+      with Ide.NFref.Add do
+      begin
+
+       RefNFP.cUF     := strtointDef(DMFD.FDQuery2['uf'], 0);
+       RefNFP.AAMM    := DMFD.FDQuery2['aamm'];
+       RefNFP.CNPJCPF := DMFD.FDQuery2['cnpj'];
+       RefNFP.IE      := DMFD.FDQuery2['insc_estadual'];
+       RefNFP.modelo  := DMFD.FDQuery2['mod'];
+       RefNFP.serie   := strtointDef(DMFD.FDQuery2['Ser'], 0);
+       RefNFP.nNF     := strtointDef(DMFD.FDQuery2['r_nnf'], 0);
+
+      end;
+
+      DMFD.FDQuery2.next;
+
+     end;
+
+    end;
+
+    //nfe_referenciada_cupon
+    DMFD.FDQuery2.Close;
+    DMFD.FDQuery2.SQL.Clear;
+    DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                                                                                                        ' );
+    DMFD.FDQuery2.SQL.Add( 'Select                                                                                                                    ' );
+    DMFD.FDQuery2.SQL.Add( 't1.*                                                                                                                      ' );
+    DMFD.FDQuery2.SQL.Add( 'from nfe_referenciada_cupon t1                                                                                            ' );
+    DMFD.FDQuery2.SQL.Add( 'inner join nfe t2 on t1.codigo_loja = t2.codigo_loja and t1.nnf = t2.nnf and t1.demi = t2.demi and t1.modelo = t2.modelo  ' );
+    DMFD.FDQuery2.SQL.Add( 'and   t2.codigo_loja = :parm1                                                                                             ' );
+    DMFD.FDQuery2.SQL.Add( 'and   t2.demi        = :parm2                                                                                             ' );
+    DMFD.FDQuery2.SQL.Add( 'and   t2.nnf         = :parm3                                                                                             ' );
+    DMFD.FDQuery2.SQL.Add( 'and   t2.modelo      = :parm4                                                                                             ' );
+    DMFD.FDQuery2.SQL.Add( 'and   t2.serie       = :parm5                                                                                             ' );
+    DMFD.FDQuery2.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
+    DMFD.FDQuery2.Params[1].Value             := StrToDateTime( FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']) );
+    DMFD.FDQuery2.Params[2].AsString  := DMFD.FDQuery1['nfe_nnf'];
+    DMFD.FDQuery2.Params[3].AsString  := DMFD.FDQuery1['nfe_modelo'];
+    DMFD.FDQuery2.Params[4].AsString  := DMFD.FDQuery1['nfe_serie'];
+    DMFD.FDQuery2.Open;
+
+    if not DMFD.FDQuery2.IsEmpty then
+    begin
+
+     DMFD.FDQuery2.First;
+     While not DMFD.FDQuery2.eof do
+     begin
+
+      with Ide.NFref.Add do
+      begin
+
+        if DMFD.FDQuery2['mod'] = ''   then RefECF.modelo  := ECFModRefVazio;
+        if DMFD.FDQuery2['mod'] = '2B' then RefECF.modelo  := ECFModRef2B;
+        if DMFD.FDQuery2['mod'] = '2C' then RefECF.modelo  := ECFModRef2C;
+        if DMFD.FDQuery2['mod'] = '2D' then RefECF.modelo  := ECFModRef2D;
+        RefECF.nECF    := DMFD.FDQuery2['ecf'];
+        RefECF.ncoo    := DMFD.FDQuery2['coo'];
+
+      end;
+
+      DMFD.FDQuery2.next;
+
+     end;
+
+    end;
+
+    Emit.CNPJCPF           := DMFD.FDQuery1['emi_cnpj'];
+    Emit.IE                := DMFD.FDQuery1['emi_insc_estadual'];
+    FrGBNFe.ACBrNFe1.SSL.NumeroSerie := DMFD.FDQuery1['emi_Certificado_NumSerie'];
+    FrGBNFe.ACBrNFe1.SSL.CarregarCertificado;
+
+    vCnpjEmit := ( Copy(Trim(DMFD.FDQuery4['cnpj']), 1, 8) );
+    vCnpjCert := ( Copy(Trim(FrGBNFe.ACBrNFe1.SSL.CertCNPJ), 1, 8) );
+    if ( vCnpjEmit <> vCnpjCert ) then
+     Application.Messagebox('Obs: O CNPJ do emitente está diferente do' + chr(13) +
+                            'CNPJ do certificado digital que foi setado' + chr(13) +
+                            'no parametros do emissor!','Atenção!',mb_iconstop+mb_ok);
+
+    // by Edson Lima ; 2013/02/25 ; 09:48 - Condição criada nesta data
+    if (DMFD.FDQuery1['des_uf'] = DMFD.FDQuery4['ufSbt']) then
+     if ( vCfop <> '5667' ) then
+      Emit.IEST             := vartostr(DMFD.FDQuery4['insc_estadual_subs']);
+
+    Emit.xNome             := DMFD.FDQuery4['razao_social'];
+    Emit.xFant             := DMFD.FDQuery4['nome_fantasia'];
+    Emit.EnderEmit.fone    := DMFD.FDQuery4['fone'];
+    Emit.EnderEmit.CEP     := StrToIntDef(DMFD.FDQuery4['cep'], 0);
+    Emit.EnderEmit.xLgr    := DMFD.FDQuery4['endereco'];
+    if ((DMFD.FDQuery4['numero'] = null) or (DMFD.FDQuery4['numero'] = '')) then
+     Emit.EnderEmit.nro     := '0'
+    else
+     Emit.EnderEmit.nro     := DMFD.FDQuery4['numero'];
+    if (DMFD.FDQuery4['complemento'] = null) then
+     Emit.EnderEmit.xCpl    := ''
+    else
+     Emit.EnderEmit.xCpl    := DMFD.FDQuery4['complemento'];
+    Emit.EnderEmit.xBairro := DMFD.FDQuery4['bairro'];
+    Emit.EnderEmit.cMun    := StrToIntDef(DMFD.FDQuery4['codigo_municipio'], 0);
+    Emit.EnderEmit.xMun    := DMFD.FDQuery4['municipio'];
+    Emit.EnderEmit.UF      := DMFD.FDQuery4['uf'];
+    Emit.enderEmit.cPais   := strtointDef(DMFD.FDQuery4['codigo_pais'], 0);//1058;
+    Emit.enderEmit.xPais   := DMFD.FDQuery4['nome_pais'];//'BRASIL';
+
+    if DMFD.FDQuery4['regime_tributario'] = 1 then
+     Emit.CRT  := crtSimplesNacional;
+    if DMFD.FDQuery4['regime_tributario'] = 2 then
+     Emit.CRT  := crtSimplesExcessoReceita;
+    if DMFD.FDQuery4['regime_tributario'] = 3 then
+     Emit.CRT  := crtRegimeNormal;
+
+    if Ide.tpAmb = taHomologacao then
+    begin
+
+     if (DMFD.FDQuery1['des_uf'] = 'EX') then
+      Dest.CNPJCPF           := ''
+
+     else
+     begin
+
+      if gModelo = 65 then
+      begin
+
+       if ( (DMFD.FDQuery1['nfe_CPFNFCe']       = null) or
+            (trim(DMFD.FDQuery1['nfe_CPFNFCe']) = '') ) then
+        Dest.CNPJCPF           := OnlyNumber('999999991-31')
+       else
+        Dest.CNPJCPF           := OnlyNumber(VarToStr(DMFD.FDQuery1['nfe_CPFNFCe']));
+
+       if ( (Trim(DMFD.FDQuery1['des_bairro']) = '') or (DMFD.FDQuery1['des_bairro'] = null) ) then
+        Dest.EnderDest.xBairro := 'Centro'
+       else
+        Dest.EnderDest.xBairro := DMFD.FDQuery1['des_bairro'];
+
+       if ( (Trim(DMFD.FDQuery1['des_endereco']) = '') or (DMFD.FDQuery1['des_endereco'] = null) ) then
+       begin
+
+        Dest.EnderDest.CEP     := strtointDef(DMFD.FDQuery1['des_cep'], 0);
+        Dest.EnderDest.xLgr    := 'Rua';
+        Dest.EnderDest.nro     := '';
+        Dest.EnderDest.xCpl    := '';
+        Dest.EnderDest.cMun    := strtointDef(DMFD.FDQuery1['des_codigo_municipio'], 0);
+        Dest.EnderDest.xMun    := DMFD.FDQuery1['des_municipio'];
+        Dest.EnderDest.UF      := DMFD.FDQuery1['des_uf'];
+        Dest.EnderDest.Fone    := DMFD.FDQuery1['des_fone'];;
+
+       end;
+
+      end
+      else    // Caso 55 em homologação
+      begin
+
+       Dest.CNPJCPF           := OnlyNumber(VarToStr(DMFD.FDQuery1['des_cnpj']));
+       Dest.EnderDest.CEP     := strtointDef(DMFD.FDQuery1['des_cep'], 0);
+       Dest.EnderDest.xLgr    := DMFD.FDQuery1['des_endereco'];
+       Dest.EnderDest.nro     := DMFD.FDQuery1['des_numero'];
+       Dest.EnderDest.xCpl    := '';
+       Dest.EnderDest.xBairro := DMFD.FDQuery1['des_bairro'];
+       Dest.EnderDest.cMun    := strtointDef(DMFD.FDQuery1['des_codigo_municipio'], 0);
+       Dest.EnderDest.xMun    := DMFD.FDQuery1['des_municipio'];
+       Dest.EnderDest.UF      := DMFD.FDQuery1['des_uf'];
+       Dest.EnderDest.Fone    := DMFD.FDQuery1['des_fone'];
+      end;
+
+     end;
+
+    end
+    else     // Caso Produção
+    begin
+
+     if (DMFD.FDQuery1['des_uf'] = 'EX') then
+      Dest.CNPJCPF           := ''
+
+     else if gModelo = 65 then
+     begin
+
+      if ( (DMFD.FDQuery1['nfe_CPFNFCe']       = null) or
+           (trim(DMFD.FDQuery1['nfe_CPFNFCe']) = '') ) then
+      begin
+
+       if ( (Trim(DMFD.FDQuery1['des_cnpj']) = '')               or
+            (Trim(DMFD.FDQuery1['des_cnpj']) = '00000000000')    or
+            (Trim(DMFD.FDQuery1['des_cnpj']) = '00000000000000') or
+            (DMFD.FDQuery1['des_cnpj'] = null) ) then
+        Dest.CNPJCPF         := OnlyNumber('')
+       else
+        Dest.CNPJCPF         := OnlyNumber(DMFD.FDQuery1['des_cnpj']);
+
+      end
+      else
+       Dest.CNPJCPF           := OnlyNumber(VarToStr(DMFD.FDQuery1['nfe_CPFNFCe']));
+
+      if ( (Trim(DMFD.FDQuery1['des_bairro']) = '') or (DMFD.FDQuery1['des_bairro'] = null) ) then
+       Dest.EnderDest.xBairro := 'Centro'
+      else
+       Dest.EnderDest.xBairro := DMFD.FDQuery1['des_bairro'];
+
+      if ( (Trim(DMFD.FDQuery1['des_endereco']) = '') or (DMFD.FDQuery1['des_endereco'] = null) ) then
+      begin
+       Dest.EnderDest.CEP     := strtointDef(DMFD.FDQuery1['des_cep'], 0);
+       Dest.EnderDest.xLgr    := 'Rua';
+       Dest.EnderDest.nro     := '';
+       Dest.EnderDest.xCpl    := '';
+       Dest.EnderDest.cMun    := strtointDef(DMFD.FDQuery1['des_codigo_municipio'], 0);
+       Dest.EnderDest.xMun    := DMFD.FDQuery1['des_municipio'];
+       Dest.EnderDest.UF      := DMFD.FDQuery1['des_uf'];
+       Dest.EnderDest.Fone    := DMFD.FDQuery1['des_fone'];;
+      end;
+
+     end
+     else  // Caso do Modelo = 55
+     begin
+
+      Dest.CNPJCPF           := OnlyNumber(VarToStr(DMFD.FDQuery1['des_cnpj']));
+      Dest.EnderDest.CEP     := strtointDef(DMFD.FDQuery1['des_cep'], 0);
+      Dest.EnderDest.xLgr    := DMFD.FDQuery1['des_endereco'];
+      Dest.EnderDest.nro     := DMFD.FDQuery1['des_numero'];
+      Dest.EnderDest.xCpl    := '';
+      Dest.EnderDest.xBairro := DMFD.FDQuery1['des_bairro'];
+      Dest.EnderDest.cMun    := strtointDef(DMFD.FDQuery1['des_codigo_municipio'], 0);
+      Dest.EnderDest.xMun    := DMFD.FDQuery1['des_municipio'];
+      Dest.EnderDest.UF      := DMFD.FDQuery1['des_uf'];
+      Dest.EnderDest.Fone    := DMFD.FDQuery1['des_fone'];
+
+     end
+
+    end;
+
+    (* ---------------------------------------------------------------------- *)
+    (* TAG de grupo de identificação do Local de retirada - <retirada> - Ocorrência 0-N                                  *)
+    (* Poderá ser implementado no futuro                                                                                 *)
+    (* ---------------------------------------------------------------------- *)
+
+    // Informar os valores desse grupo somente se o  endereço de
+    // retirada for diferente do endereço do remetente.
+    // Assim se retirada.xLgr <> '' o gerador grava o grupo no XML
+
+    //Retirada.CNPJCPF := '';     // F02 - CNPJ
+    //Retirada.xLgr := '';        // F03 - Logradouro
+    //Retirada.nro := '';         // F04 - Número
+    //Retirada.xCpl := '';        // F05 - Complemento
+    //Retirada.xBairro := '';     // F06 - Bairro
+    //Retirada.cMun := 0;         // F07 - Código do município (Tabela do IBGE - '9999999' para operações com o exterior))
+    //Retirada.xMun := '';        // F08 - Nome do município   ('EXTERIOR' para operações com o exterior)
+    //Retirada.UF := '';          // F09 - Sigla da UF         ('EX' para operações com o exterior.)
+
+    (* ---------------------------------------------------------------------- *)
+    (* TAG de grupo de identificação do Local de entrega - <entrega> - Ocorrência 0-N                                    *)
+    (* Poderá ser implementado no futuro                                                                                 *)
+    (* ---------------------------------------------------------------------- *)
+
+    // Informar os valores desse grupo somente se o
+    // endereço de entrega for diferente do endereço do destinatario.
+    // Assim se entrega.xLgr <> '' o gerador grava o grupo no XML
+
+    //Entrega.CNPJCPF := '';      // G02 - CNPJ
+    //Entrega.xLgr := '';         // G03 - Logradouro
+    //Entrega.nro := '';          // G04 - Número
+    //Entrega.xCpl := '';         // G05 - Complemento
+    //Entrega.xBairro := '';      // G06 - Bairro
+    //Entrega.cMun := 0;          // G07 - Código do município (Tabela do IBGE - '9999999' para operações com o exterior))
+    //Entrega.xMun := '';         // G08 - Nome do município   ('EXTERIOR' para operações com o exterior)
+    //Entrega.UF := '';           // G09 - Sigla da UF         ('EX' para operações com o exterior.)
+
+    (* ---------------------------------------------------------------------- *)
+
+
+    (* ---------------------------------------------------------------------- *)
+    (* TAG de grupo Pessoas autorizadas a acessar o XML da NF-e G A01 0-10                                               *)
+    (* Poderá ser implementado no futuro                                                                                 *)
+    (* ---------------------------------------------------------------------- *)
+
+    // Aqui deve haver a leitura de fornecedores (contadores / atores)
+
+    autXML.Clear;
+    vAutXMLCNPJCPFWORD := '';
+
+    if ( (not(DMFD.FDQuery1['nfe_autXML'] = null))       and
+         (not(Trim(DMFD.FDQuery1['nfe_autXML']) = '')) ) then
+    begin
+
+     vAutXMLCNPJCPFALL := trim(VarToStr(DMFD.FDQuery1['nfe_autXML']));
+
+     for I := 1 to Length(vAutXMLCNPJCPFALL) do
+     begin
+
+      if vAutXMLCNPJCPFALL[I] <> ''  then
+      begin
+
+       if ( (vAutXMLCNPJCPFALL[I] <> ',')      and
+            (vAutXMLCNPJCPFALL[I] <> ';')      or
+            ( I = Length(vAutXMLCNPJCPFALL)) ) then
+        vAutXMLCNPJCPFWORD := (vAutXMLCNPJCPFWORD + vAutXMLCNPJCPFALL[I]);
+
+       if ( (vAutXMLCNPJCPFALL[I] = ',')       or
+            (vAutXMLCNPJCPFALL[I] = ';')       or
+            ( I = Length(vAutXMLCNPJCPFALL)) ) then
+       begin
+
+        autXML.Add.CNPJCPF := vAutXMLCNPJCPFWORD;                               // Informar CNPJ ou CPF. Preencher os zeros não significativos.
+        vAutXMLCNPJCPFWORD := '';
+
+       end;
+
+      end;
+
+     end;
+
+    end;
+
+    (* ---------------------------------------------------------------------- *)
+
+    // by Edson Lima ; 2016-1-22T1019 ; Indicador da Ie do Destimatário
+    if not ( DMFD.FDQuery1['des_indIEDest'] = null ) then
+    begin
+
+     case (StrToIntDef(DMFD.FDQuery1['des_indIEDest'], 0)) of
+
+      1:   // Contribuinte normal
+      begin
+
+       Dest.IE := DMFD.FDQuery1['des_insc_estadual'];
+       Dest.indIEDest := inContribuinte;
+
+      end;
+
+      2:   // Contribuinte isento - CNPJ e IE isento
+      begin
+
+       Dest.IE := '';
+       Dest.indIEDest := inIsento;
+
+      end;
+
+      9:  // Não Contribuinte - CPF ou CNPJ sem IE
+      begin
+
+       if (gModelo = 65) then
+        Dest.IE := ''
+       else if ((gModelo = 55) and (Trim(DMFD.FDQuery1['des_insc_estadual']) = 'ISENTO') ) then
+        Dest.IE := ''
+       else
+        Dest.IE := DMFD.FDQuery1['des_insc_estadual'];
+
+       Dest.indIEDest := inNaoContribuinte;
+
+      end;
+
+     end;
+    end;
+
+    if Ide.tpAmb = taHomologacao then
+     Dest.xNome             := 'NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL'
+
+    else
+    begin
+
+     if (gModelo = 65) then
+     begin
+
+      if ( (DMFD.FDQuery1['nfe_NomeNFCe']       = null) or
+           (trim(DMFD.FDQuery1['nfe_NomeNFCe']) = '') ) then
+       Dest.xNome           := DMFD.FDQuery1['des_razao_social']
+
+      else
+       Dest.xNome           := DMFD.FDQuery1['nfe_NomeNFCe'];
+
+     end
+     else
+      Dest.xNome             := DMFD.FDQuery1['des_razao_social'];
+
+    end;
+
+    Dest.ISUF              := DMFD.FDQuery1['des_suframa'];
+    Dest.EnderDest.cPais   := strtointDef(DMFD.FDQuery1['des_codigo_pais'], 0); //1058;
+    Dest.EnderDest.xPais   := DMFD.FDQuery1['des_nome_pais'];                   //'BRASIL';
+
+    // By Edson Lima - 2016-6-30T1143 - Verifica o email do destinatário
+    if not fValidaEmail(DMFD.FDQuery1['des_email'], 'S') then
+    begin
+
+     Application.Messagebox('Campo de email do destinatário inválido! ','Atenção!',mb_iconstop+mb_ok);
+     gAbortar := True;
+     exit;
+
+    end;
+
+    Dest.Email             := DMFD.FDQuery1['des_email'];                       // by Edson ; 2013/03/19 ; 08:37 ; Implementado nesta dada
+
+    //informações complementares
+    DMFD.FDQuery2.Close;
+    DMFD.FDQuery2.SQL.Clear;
+    DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                               ' );
+    DMFD.FDQuery2.SQL.Add( 'Select                                           ' );
+    DMFD.FDQuery2.SQL.Add( 't1.*                                             ' );
+    DMFD.FDQuery2.SQL.Add( '                                                 ' );
+    DMFD.FDQuery2.SQL.Add( 'from nfe_informacoes t1                          ' );
+    DMFD.FDQuery2.SQL.Add( '                                                 ' );
+    DMFD.FDQuery2.SQL.Add( 'inner join nfe t2 on                             ' );
+    DMFD.FDQuery2.SQL.Add( '  t1.codigo_loja = t2.codigo_loja and            ' );
+    DMFD.FDQuery2.SQL.Add( '  t1.nnf         = t2.nnf         and            ' );
+    DMFD.FDQuery2.SQL.Add( '  t1.demi        = t2.demi        and            ' );
+    DMFD.FDQuery2.SQL.Add( '  t1.modelo      = t2.modelo                     ' );
+    DMFD.FDQuery2.SQL.Add( '                                                 ' );
+    DMFD.FDQuery2.SQL.Add( 'where                                            ' );
+    DMFD.FDQuery2.SQL.Add( '  t2.codigo_loja = :parm1 and                    ' );
+    DMFD.FDQuery2.SQL.Add( '  t2.demi        = :parm2 and                    ' );
+    DMFD.FDQuery2.SQL.Add( '  t2.nnf         = :parm3 and                    ' );
+    DMFD.FDQuery2.SQL.Add( '  t2.modelo      = :parm4 and                    ' );
+    DMFD.FDQuery2.SQL.Add( '  t2.serie       = :parm5                        ' );
+    DMFD.FDQuery2.SQL.Add( '                                                 ' );
+    DMFD.FDQuery2.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
+    DMFD.FDQuery2.Params[1].Value     := StrToDateTime( FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']) );
+    DMFD.FDQuery2.Params[2].AsString  := DMFD.FDQuery1['nfe_nnf'];
+    DMFD.FDQuery2.Params[3].AsString  := DMFD.FDQuery1['nfe_modelo'];
+    DMFD.FDQuery2.Params[4].AsString  := DMFD.FDQuery1['nfe_serie'];
+    DMFD.FDQuery2.Open;
+
+    if not DMFD.FDQuery2.IsEmpty then
+    begin
+
+     DMFD.FDQuery2.First;
+     While not DMFD.FDQuery2.eof do
+     begin
+
+      with InfAdic.obsCont.Add do
+      begin
+
+       xCampo     := trim( vartostr(DMFD.FDQuery2['inf_campo']) );
+       xTexto     := trim( vartostr(DMFD.FDQuery2['inf_complementar']) );
+
+      end;
+       DMFD.FDQuery2.next;
+
+     end;
+
+    end;
+
+    InfAdic.infCpl := trim(vartostr(DMFD.FDQuery1['nfe_inf_complementar']));
+    InfAdic.infAdFisco := trim(vartostr(DMFD.FDQuery1['nfe_inf_fisco']));
+
+    // faturas
+    DMFD.FDQuery2.Close;
+    DMFD.FDQuery2.SQL.Clear;
+    DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                               ' );
+    DMFD.FDQuery2.SQL.Add( 'Select                                           ' );
+    DMFD.FDQuery2.SQL.Add( 't1.*                                             ' );
+    DMFD.FDQuery2.SQL.Add( '                                                 ' );
+    DMFD.FDQuery2.SQL.Add( 'from nfe_faturas t1                              ' );
+    DMFD.FDQuery2.SQL.Add( '                                                 ' );
+    DMFD.FDQuery2.SQL.Add( 'inner join nfe t2 on                             ' );
+    DMFD.FDQuery2.SQL.Add( '  t1.codigo_loja = t2.codigo_loja and            ' );
+    DMFD.FDQuery2.SQL.Add( '  t1.nnf         = t2.nnf         and            ' );
+    DMFD.FDQuery2.SQL.Add( '  t1.demi        = t2.demi        and            ' );
+    DMFD.FDQuery2.SQL.Add( '  t1.Modelo      = t2.Modelo      and            ' );
+    DMFD.FDQuery2.SQL.Add( '  t1.Serie       = t2.Serie                      ' );
+    DMFD.FDQuery2.SQL.Add( '                                                 ' );
+    DMFD.FDQuery2.SQL.Add( 'where                                            ' );
+    DMFD.FDQuery2.SQL.Add( '  t2.codigo_loja = :codigo_loja and              ' );
+    DMFD.FDQuery2.SQL.Add( '  t2.demi        = :demi        and              ' );
+    DMFD.FDQuery2.SQL.Add( '  t2.nnf         = :nnf         and              ' );
+    DMFD.FDQuery2.SQL.Add( '  t2.Modelo      = :Modelo      and              ' );
+    DMFD.FDQuery2.SQL.Add( '  t2.Serie       = :Serie                        ' );
+    DMFD.FDQuery2.SQL.Add( '                                                 ' );
+    DMFD.FDQuery2.ParamByName('codigo_loja').AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
+    DMFD.FDQuery2.ParamByName('demi'       ).Value     := StrToDateTime( FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']) );
+    DMFD.FDQuery2.ParamByName('nnf'        ).AsString  := DMFD.FDQuery1['nfe_nnf'];
+    DMFD.FDQuery2.ParamByName('Modelo'     ).AsString  := DMFD.FDQuery1['nfe_modelo'];
+    DMFD.FDQuery2.ParamByName('Serie'      ).AsString  := DMFD.FDQuery1['nfe_serie'];
+    DMFD.FDQuery2.Open;
+
+    if not DMFD.FDQuery2.IsEmpty then
+    begin
+
+     if (gModelo = 55) then
+     begin
+
+      with cobr.Fat do
+      begin
+
+       nFat  := DMFD.FDQuery2['num_fatura'];
+       vOrig := DMFD.FDQuery2['vl_original'];
+       vDesc := DMFD.FDQuery2['vl_desconto'];
+       vLiq  := DMFD.FDQuery2['vl_liquido'];
+
+      end;
+
+     end;
+
+    end;
+
+    //duplicatas
+    DMFD.FDQuery2.Close;
+    DMFD.FDQuery2.SQL.Clear;
+    DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                                                     ' );
+    DMFD.FDQuery2.SQL.Add( 'Select                                                                 ' );
+    DMFD.FDQuery2.SQL.Add( 't1.num_duplicata, cast(t1.dvenc as datetime) as dvenc, t1.valor,       ' );
+    DMFD.FDQuery2.SQL.Add( 't1.IndPag, t1.tPag, t1.cCnpj, t1.tBand, t1.cAut, t1.vTroco             ' );
+    DMFD.FDQuery2.SQL.Add( 'from nfe_duplicatas t1                                                 ' );
+    DMFD.FDQuery2.SQL.Add( '                                                                       ' );
+    DMFD.FDQuery2.SQL.Add( 'inner join nfe t2 on                                                   ' );
+    DMFD.FDQuery2.SQL.Add( '      t1.codigo_loja = t2.codigo_loja and                              ' );
+    DMFD.FDQuery2.SQL.Add( '      t1.nnf         = t2.nnf         and                              ' );
+    DMFD.FDQuery2.SQL.Add( '      t1.demi        = t2.demi        and                              ' );
+    DMFD.FDQuery2.SQL.Add( '      t1.modelo      = t2.modelo      and                              ' );
+    DMFD.FDQuery2.SQL.Add( '                                                                       ' );
+    DMFD.FDQuery2.SQL.Add( '      t2.codigo_loja = :parm1         and                              ' );
+    DMFD.FDQuery2.SQL.Add( '      t2.demi        = :parm2         and                              ' );
+    DMFD.FDQuery2.SQL.Add( '      t2.nnf         = :parm3         and                              ' );
+    DMFD.FDQuery2.SQL.Add( '      t2.modelo      = :parm4         and                              ' );
+    DMFD.FDQuery2.SQL.Add( '      t2.serie       = :parm5                                          ' );
+    DMFD.FDQuery2.SQL.Add( '                                                                       ' );
+    DMFD.FDQuery2.SQL.Add( '  Order by t1.dvenc                                                    ' );
+    DMFD.FDQuery2.SQL.Add( '                                                                       ' );
+    DMFD.FDQuery2.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
+    DMFD.FDQuery2.Params[1].Value     := StrToDateTime( FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']) );
+    DMFD.FDQuery2.Params[2].AsString  := DMFD.FDQuery1['nfe_nnf'];
+    DMFD.FDQuery2.Params[3].AsString  := DMFD.FDQuery1['nfe_modelo'];
+    DMFD.FDQuery2.Params[4].AsString  := DMFD.FDQuery1['nfe_serie'];
+    DMFD.FDQuery2.Open;
+
+    if not DMFD.FDQuery2.IsEmpty then
+    begin
+
+     While not DMFD.FDQuery2.eof do
+     begin
+
+      if (gModelo = 55) then
+      begin
+
+       with Cobr.Dup.Add do
+       begin
+
+        nDup    := DMFD.FDQuery2['num_duplicata'];
+
+        if ( DMFD.FDQuery2['dvenc'] < date() ) then
+         dVenc   := date()
+        else
+         dVenc   := DMFD.FDQuery2['dvenc'];
+
+        vDup    := DMFD.FDQuery2['valor'];
+
+        if vDup = 0 then
+         vDup := DMFD.FDQuery1['nfe_total_nf'];                                 // Provisório até corrigir no ERP ; by Edson ; 04-10-2012 ; 08:30
+
+       end;
+
+      end;
+
+      //for I := 1 to qPag do    // caso for adotado a quantidade pagamentos no gerpa
+
+      //if (gModelo = 65) then                                                  // antes da ve400
+      begin
+
+       with pag.Add do                                                          // A critério de cada UF poderá ser exigido o preenchimento do Grupo Informações de Pagamento para NF-e e/ou NFC-e.
+       begin                                                                    // PAGAMENTOS apenas para NFC-e
+
+        // indPag
+        case FrPar.cbb2.ItemIndex of                                            // Tratamento de Versões
+
+         1 :                                                                    // ve40
+         if not ( DMFD.FDQuery2['IndPag'] = null ) then
+         begin
+
+          case (StrToIntDef(DMFD.FDQuery2['IndPag'], 0)) of
+
+           1:    IndPag := ipVista;
+           2:    IndPag := ipPrazo;
+           3:    IndPag := ipOutras;
+           else  IndPag := ipNenhum;
+
+          end;
+
+         end;
+
+         2 :                                                                    // ve40
+         if ( gModelo = 55 ) then
+         begin
+
+          if not ( DMFD.FDQuery2['IndPag'] = null ) then
+          begin
+
+           case (StrToIntDef(DMFD.FDQuery2['IndPag'], 0)) of
+
+            1:    IndPag := ipVista;
+            2:    IndPag := ipPrazo;
+            3:    IndPag := ipOutras;
+            else  IndPag := ipNenhum;
+
+           end;
+
+          end;
+
+         end;
+
+         3 :                                                                    // ve40
+         if ( gModelo = 65 ) then
+         begin
+
+          if not ( DMFD.FDQuery2['IndPag'] = null ) then
+          begin
+
+           case (StrToIntDef(DMFD.FDQuery2['IndPag'], 0)) of
+
+            1:    IndPag := ipVista;
+            2:    IndPag := ipPrazo;
+            3:    IndPag := ipOutras;
+            else  IndPag := ipNenhum;
+
+           end;
+
+          end;
+
+         end;
+
+        end;
+
+        if (DMFD.FDQuery2['tPag'] = null) then
+
+         if (gModelo = 55) then
+          tPag := fpDuplicataMercantil
          else
+          tPag := fpDinheiro
 
-          Total.ICMSTot.vFCP         := DMFD.FDQuery1['nfe_vFCPUFDest'];
+        else
+        begin
+
+         case ( FrPar.cbb2.ItemIndex ) of
+
+          0 :                                                                   // ve3131
+          case StrToIntDef(DMFD.FDQuery2['tPag'], 0) of
+
+           01 : tPag := fpDinheiro;
+           02 : tPag := fpCheque;
+           03 : tPag := fpCartaoCredito;
+           04 : tPag := fpCartaoDebito;
+           05 : tPag := fpCreditoLoja;
+           10 : tPag := fpValeAlimentacao;
+           11 : tPag := fpValeRefeicao;
+           12 : tPag := fpValePresente;
+           13 : tPag := fpValeCombustivel;
+           99 :
+           begin
+
+            tPag := fpOutro;
+            xPag := fxPag();
+
+           end;
+
+          end;
+
+          1 :                                                                   // ve4040
+          case StrToIntDef(DMFD.FDQuery2['tPag'], 0) of
+
+           01 : tPag := fpDinheiro;
+           02 : tPag := fpCheque;
+           03 : tPag := fpCartaoCredito;
+           04 : tPag := fpCartaoDebito;
+           05 : tPag := fpCreditoLoja;
+           10 : tPag := fpValeAlimentacao;
+           11 : tPag := fpValeRefeicao;
+           12 : tPag := fpValePresente;
+           13 : tPag := fpValeCombustivel;
+           14 : tPag := fpDuplicataMercantil;
+           15 : tPag := fpBoletoBancario;
+           16 : tPag := fpDepositoBancario;
+           17 : tPag := fpPagamentoInstantaneo;
+           18 : tPag := fpTransfBancario;
+           19 : tPag := fpProgramaFidelidade;
+           90 : tPag := fpSemPagamento;
+           91 : tPag := fpRegimeEspecial;
+           99 :
+           begin
+
+            tPag := fpOutro;
+            xPag := fxPag();
+
+           end;
+
+          end;
+
+          2 :                                                                   // ve4031
+          if ( gModelo = 55 ) then                                              // ve40
+          begin
+
+           case StrToIntDef(DMFD.FDQuery2['tPag'], 0) of
+
+            01 : tPag := fpDinheiro;
+            02 : tPag := fpCheque;
+            03 : tPag := fpCartaoCredito;
+            04 : tPag := fpCartaoDebito;
+            05 : tPag := fpCreditoLoja;
+            10 : tPag := fpValeAlimentacao;
+            11 : tPag := fpValeRefeicao;
+            12 : tPag := fpValePresente;
+            13 : tPag := fpValeCombustivel;
+            14 : tPag := fpDuplicataMercantil;
+            15 : tPag := fpBoletoBancario;
+            16 : tPag := fpDepositoBancario;
+            17 : tPag := fpPagamentoInstantaneo;
+            18 : tPag := fpTransfBancario;
+            19 : tPag := fpProgramaFidelidade;
+            90 : tPag := fpSemPagamento;
+            91 : tPag := fpRegimeEspecial;
+            99 :
+            begin
+
+             tPag := fpOutro;
+             xPag := fxPag();
+
+            end;
+
+           end;
+
+          end
+          else                                                                  // ve31
+          begin
+
+           case StrToIntDef(DMFD.FDQuery2['tPag'], 0) of
+
+            01 : tPag := fpDinheiro;
+            02 : tPag := fpCheque;
+            03 : tPag := fpCartaoCredito;
+            04 : tPag := fpCartaoDebito;
+            05 : tPag := fpCreditoLoja;
+            10 : tPag := fpValeAlimentacao;
+            11 : tPag := fpValeRefeicao;
+            12 : tPag := fpValePresente;
+            13 : tPag := fpValeCombustivel;
+            99 :
+            begin
+
+             tPag := fpOutro;
+             xPag := fxPag();
+
+            end;
+
+           end;
+
+          end;
+
+          3 :                                                                   // ve3140
+          if ( gModelo = 65 ) then                                              // ve40
+          begin
+
+           case StrToIntDef(DMFD.FDQuery2['tPag'], 0) of
+
+            01 : tPag := fpDinheiro;
+            02 : tPag := fpCheque;
+            03 : tPag := fpCartaoCredito;
+            04 : tPag := fpCartaoDebito;
+            05 : tPag := fpCreditoLoja;
+            10 : tPag := fpValeAlimentacao;
+            11 : tPag := fpValeRefeicao;
+            12 : tPag := fpValePresente;
+            13 : tPag := fpValeCombustivel;
+            14 : tPag := fpDuplicataMercantil;
+            15 : tPag := fpBoletoBancario;
+            16 : tPag := fpDepositoBancario;
+            17 : tPag := fpPagamentoInstantaneo;
+            18 : tPag := fpTransfBancario;
+            19 : tPag := fpProgramaFidelidade;
+            90 : tPag := fpSemPagamento;
+            91 : tPag := fpRegimeEspecial;
+            99 :
+            begin
+
+             tPag := fpOutro;
+             xPag := fxPag();
+
+            end;
+
+           end;
+
+          end
+          else                                                                  // ve31
+          begin
+
+           case StrToIntDef(DMFD.FDQuery2['tPag'], 0) of
+
+            01 : tPag := fpDinheiro;
+            02 : tPag := fpCheque;
+            03 : tPag := fpCartaoCredito;
+            04 : tPag := fpCartaoDebito;
+            05 : tPag := fpCreditoLoja;
+            10 : tPag := fpValeAlimentacao;
+            11 : tPag := fpValeRefeicao;
+            12 : tPag := fpValePresente;
+            13 : tPag := fpValeCombustivel;
+            99 :
+            begin
+
+             tPag := fpOutro;
+             xPag := fxPag();
+
+            end;
+
+           end;
+
+           end;
+
+         end;
 
         end;
 
-       if DMFD.FDQuery1['nfe_vICMSUFDest'] = null then
-        Total.ICMSTot.vICMSUFDest  := 0
-       else
-        Total.ICMSTot.vICMSUFDest  := DMFD.FDQuery1['nfe_vICMSUFDest'];
+        vPag  := DMFD.FDQuery2['valor'];
 
-       if DMFD.FDQuery1['nfe_vICMSUFRemet'] = null then
-        Total.ICMSTot.vICMSUFRemet := 0
-       else
-        Total.ICMSTot.vICMSUFRemet := DMFD.FDQuery1['nfe_vICMSUFRemet'];
+        if ((DMFD.FDQuery2['tPag'] = '03') or (DMFD.FDQuery2['tPag'] = '04')) then
+        begin
+
+         cnpj  := DMFD.FDQuery2['cCnpj'];
+
+         case ( FrPar.cbb2.ItemIndex ) of
+
+          0 :                                                                   // ve3131
+          case StrToIntDef(DMFD.FDQuery2['tBand'], 0) of
+
+           01 : tBand := bcVisa;
+           02 : tBand := bcMasterCard;
+           03 : tBand := bcAmericanExpress;
+           04 : tBand := bcSorocred;
+           99 : tBand := bcOutros;
+
+          end;
+
+          1 :                                                                   // ve4040
+          case StrToIntDef(DMFD.FDQuery2['tBand'], 0) of
+           01 : tBand := bcVisa;
+           02 : tBand := bcMasterCard;
+           03 : tBand := bcAmericanExpress;
+           04 : tBand := bcSorocred;
+           05 : tBand := bcDinersClub;
+           06 : tBand := bcElo;
+           07 : tBand := bcHipercard;
+           08 : tBand := bcAura;
+           09 : tBand := bcCabal;
+           99 : tBand := bcOutros;
+          end;
+
+          2 :                                                                   // ve4031
+          if ( gModelo = 55 ) then                                              // ve40
+          begin
+
+           case StrToIntDef(DMFD.FDQuery2['tBand'], 0) of
+
+            01 : tBand := bcVisa;
+            02 : tBand := bcMasterCard;
+            03 : tBand := bcAmericanExpress;
+            04 : tBand := bcSorocred;
+            05 : tBand := bcDinersClub;
+            06 : tBand := bcElo;
+            07 : tBand := bcHipercard;
+            08 : tBand := bcAura;
+            09 : tBand := bcCabal;
+            99 : tBand := bcOutros;
+
+           end;
+
+          end
+          else                                                                  // ve31
+          begin
+
+           case StrToIntDef(DMFD.FDQuery2['tBand'], 0) of
+
+            01 : tBand := bcVisa;
+            02 : tBand := bcMasterCard;
+            03 : tBand := bcAmericanExpress;
+            04 : tBand := bcSorocred;
+            99 : tBand := bcOutros;
+
+           end;
+
+          end;
+
+          3 :                                                                   // ve3140
+          if ( gModelo = 65 ) then                                              // ve40
+          begin
+
+           case StrToIntDef(DMFD.FDQuery2['tBand'], 0) of
+
+            01 : tBand := bcVisa;
+            02 : tBand := bcMasterCard;
+            03 : tBand := bcAmericanExpress;
+            04 : tBand := bcSorocred;
+            05 : tBand := bcDinersClub;
+            06 : tBand := bcElo;
+            07 : tBand := bcHipercard;
+            08 : tBand := bcAura;
+            09 : tBand := bcCabal;
+            99 : tBand := bcOutros;
+
+           end;
+
+          end
+          else                                                                  // ve31
+          begin
+
+           case StrToIntDef(DMFD.FDQuery2['tBand'], 0) of
+
+            01 : tBand := bcVisa;
+            02 : tBand := bcMasterCard;
+            03 : tBand := bcAmericanExpress;
+            04 : tBand := bcSorocred;
+            99 : tBand := bcOutros;
+
+           end;
+
+          end;
+
+         end;
+
+         cAut   := DMFD.FDQuery2['cAut'];
+
+         // Esta rotina da variável vtroco não faz nada, está a espera de definição pela sefaz
+         case ( FrPar.cbb2.ItemIndex ) of
+
+          0 : ;// implementado a partir da ve400                                // ve3131
+
+          1 : ;// vtroco := DMFD.FDQuery2['vTroco'];                            // ve4040
+
+          2 :                                                                   // ve4031
+          if ( gModelo = 55 ) then
+           //vtroco := DMFD.FDQuery2['vTroco'];                                 // ve40
+          else
+          ;// implementado a partir da ve400                                    // ve31
+
+          3 :                                                                   // ve3140
+          if ( gModelo = 65 ) then
+           //vtroco := DMFD.FDQuery2['vTroco'];                                 // ve40
+          else
+          ;// implementado a partir da ve400                                    // ve31
+
+         end;
+
+        end;
+
+       end;
+
+      end;
+
+      DMFD.FDQuery2.next;
+
+     end;
+
+    end
+    else
+    begin
+
+     with pag.Add do                                                            // A critério de cada UF poderá ser exigido o preenchimento do Grupo Informações de Pagamento para NF-e e/ou NFC-e.
+     begin                                                                      // PAGAMENTOS apenas para NFC-e
+
+      case ( FrPar.cbb2.ItemIndex ) of
+
+       1 : tPag := fpSemPagamento;                                              // ve4040
+
+       2 :                                                                      // ve4031
+       if ( gModelo = 55 ) then                                                 // ve40
+        tPag := fpSemPagamento;
+
+       3 :                                                                      // ve3140
+       if ( gModelo = 65 ) then                                                 // ve40
+        tPag := fpSemPagamento;
+
+      end;
+
+      vPag := 0;
+
+     end;
+
+    end;
+
+    //transportador
+    Transp.Transporta.CNPJCPF           := DMFD.FDQuery1['tra_cnpj'];
+    Transp.Transporta.xEnder            := DMFD.FDQuery1['tra_endereco'];
+    Transp.Transporta.xMun              := DMFD.FDQuery1['tra_municipio'];
+    Transp.Transporta.UF                := DMFD.FDQuery1['tra_uf'];
+    Transp.Transporta.IE                := DMFD.FDQuery1['tra_insc_estadual'];
+    Transp.Transporta.xNome             := DMFD.FDQuery1['tra_razao_social'];
+
+    if vartostr(DMFD.FDQuery1['nfe_tipo_frete']) = '0' then Transp.modFrete:= mfContaEmitente;
+    if vartostr(DMFD.FDQuery1['nfe_tipo_frete']) = '1' then Transp.modFrete:= mfContaDestinatario;
+    if vartostr(DMFD.FDQuery1['nfe_tipo_frete']) = '2' then Transp.modFrete:= mfContaTerceiros;
+
+    case ( FrPar.cbb2.ItemIndex ) of                                            // ve400
+
+     0 : ;// Implementado a partir da ve400                                     // ve3131
+
+     1 :                                                                        // ve4040
+     begin
+
+      if vartostr(DMFD.FDQuery1['nfe_tipo_frete']) = '3' then
+       Transp.modFrete:= mfProprioRemetente;
+      if vartostr(DMFD.FDQuery1['nfe_tipo_frete']) = '4' then
+       Transp.modFrete:= mfProprioDestinatario;
+
+     end;
+
+     2 :                                                                        // ve4031
+     if ( gModelo = 55 ) then                                                   // ve40
+     begin
+
+      if vartostr(DMFD.FDQuery1['nfe_tipo_frete']) = '3' then
+       Transp.modFrete:= mfProprioRemetente;
+      if vartostr(DMFD.FDQuery1['nfe_tipo_frete']) = '4' then
+       Transp.modFrete:= mfProprioDestinatario;
+
+     end
+     else                                                                       // ve31
+     begin
+
+        // Implementado a partir da ve400
+
+     end;
+
+     3 :
+     if ( gModelo = 65 ) then                                                   // ve40
+     begin
+
+      if vartostr(DMFD.FDQuery1['nfe_tipo_frete']) = '3' then
+       Transp.modFrete:= mfProprioRemetente;
+      if vartostr(DMFD.FDQuery1['nfe_tipo_frete']) = '4' then
+       Transp.modFrete:= mfProprioDestinatario;
+
+     end
+     else                                                                       // ve31
+     begin
+
+      // Implementado a partir da ve400
+
+     end;
+
+    end;
+
+    if vartostr(DMFD.FDQuery1['nfe_tipo_frete']) = '9' then
+     Transp.modFrete:= mfSemFrete;
+
+    //volume
+    with Transp.Vol.Add do
+    begin
+
+     qVol               := DMFD.FDQuery1['vol_qtd_volume'];
+     if qVol = 0 then   // Provisório até corrigir no ERP ; by Edson ; 04-10-2012 ; 08:30
+      qVol              := 1;
+     Esp                := DMFD.FDQuery1['vol_especie'];
+     Marca              := DMFD.FDQuery1['vol_marca'];
+     nVol               := DMFD.FDQuery1['vol_numero_volume'];
+     PesoL              := DMFD.FDQuery1['vol_peso_liquido'];
+     PesoB              := DMFD.FDQuery1['vol_peso_bruto'];
+
+    end;
+
+    //veículo
+    Transp.veicTransp.placa           := trim(DMFD.FDQuery1['vei_placa']);
+    Transp.veicTransp.uf              := DMFD.FDQuery1['vei_uf'];
+    Transp.veicTransp.rntc            := DMFD.FDQuery1['vei_rntc'];
+
+    //--------------------------------------------------------------------------
+    // ITENS
+    //--------------------------------------------------------------------------
+    //itens de notas
+    DMFD.FDQuery2.Close;
+    DMFD.FDQuery2.SQL.Clear;
+    DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                                             ' );
+    DMFD.FDQuery2.SQL.Add( 'Select                                                         ' );
+    DMFD.FDQuery2.SQL.Add( '                                                               ' );
+    DMFD.FDQuery2.SQL.Add( 't1.*                                                           ' );
+    DMFD.FDQuery2.SQL.Add( '                                                               ' );
+    DMFD.FDQuery2.SQL.Add( 'from nfe_itens t1                                              ' );
+    DMFD.FDQuery2.SQL.Add( '                                                               ' );
+    DMFD.FDQuery2.SQL.Add( 'inner join nfe t2 on t1.codigo_loja = t2.codigo_loja and       ' );
+    DMFD.FDQuery2.SQL.Add( '                     t1.nnf         = t2.nnf         and       ' );
+    DMFD.FDQuery2.SQL.Add( '                     t1.demi        = t2.demi        and       ' );
+    DMFD.FDQuery2.SQL.Add( '                     t1.modelo      = t2.modelo                ' );
+    DMFD.FDQuery2.SQL.Add( '                                                               ' );
+    DMFD.FDQuery2.SQL.Add( 'where t2.codigo_loja = :parm1                                  ' );
+    DMFD.FDQuery2.SQL.Add( 'and   t2.demi        = :parm2                                  ' );
+    DMFD.FDQuery2.SQL.Add( 'and   t2.nnf         = :parm3                                  ' );
+    DMFD.FDQuery2.SQL.Add( 'and   t2.modelo      = :parm4                                  ' );
+    DMFD.FDQuery2.SQL.Add( 'and   t2.serie       = :parm5                                  ' );
+    DMFD.FDQuery2.SQL.Add( '                                                               ' );
+    DMFD.FDQuery2.SQL.Add( 'Order by t1.sequencia                                          ' );
+    DMFD.FDQuery2.SQL.Add( '                                                               ' );
+    DMFD.FDQuery2.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
+    DMFD.FDQuery2.Params[1].Value     := StrToDateTime( FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']) );
+    DMFD.FDQuery2.Params[2].AsString  := DMFD.FDQuery1['nfe_nnf'];
+    DMFD.FDQuery2.Params[3].AsString  := DMFD.FDQuery1['nfe_modelo'];
+    DMFD.FDQuery2.Params[4].AsString  := DMFD.FDQuery1['nfe_serie'];
+    DMFD.FDQuery2.Open;
+
+    While not DMFD.FDQuery2.eof do
+    begin
+
+     with Det.Add do
+     begin
+
+      infAdProd        := vartostr(DMFD.FDQuery2['inf_adicional']);
+      Prod.nItem       := DMFD.FDQuery2['sequencia'];
+      Prod.CFOP        := DMFD.FDQuery2['cfop'];
+      Prod.cEAN        := vartostr(DMFD.FDQuery2['EAN']);
+
+      if (DMFD.FDQuery2['cBarra'] <> null ) then                                // Opcional - Preencher com o Código de Barras próprio ou de terceiros que seja diferente do padrão GTIN - por exemplo: código de barras de catálogo, partnumber, etc
+       Prod.cBarra      := DMFD.FDQuery2['cBarra'];
+
+      if (DMFD.FDQuery2['cBarraTrib'] <> null ) then                            // Opcional - Preencher com o Código de Barras próprio ou de terceiros que seja diferente do padrão GTIN correspondente àquele da menor unidade comercializável identificado por Código de Barras por exemplo: código de barras de catálogo, partnumber, etc
+       Prod.cBarraTrib  := DMFD.FDQuery2['cBarraTrib'];
+
+      Prod.cEANtrib := vartostr(DMFD.FDQuery2['cEANtrib']);
+
+      if ((DMFD.FDQuery2['xPed'] <> null) and ( DMFD.FDQuery2['xPed'] <> '')) then
+       Prod.xPed     := VarToStr(DMFD.FDQuery2['xPed']);
+
+      if ((DMFD.FDQuery2['nItemPed'] <> null) and ( DMFD.FDQuery2['nItemPed'] <> '')) then
+       Prod.nItemPed := VarToStr(DMFD.FDQuery2['nItemPed']);
+
+      if vartostr(DMFD.FDQuery2['vl_ii']) <> '' then
+       Imposto.II.vII := DMFD.FDQuery2['vl_ii']
+      else
+       Imposto.II.vII := 0;
+
+      //------------------------------------------------------------------------
+      // by Edson Lima ; 2018-05-08 ; Detalhamento específico de medicamento
+      //                              e de matérias-primas farmaceuticas
+      //------------------------------------------------------------------------
+      case ( FrPar.cbb2.ItemIndex ) of                                          // ve400
+
+       0 : ;// Implementado a partir da ve400                                   // ve3131
+
+       1 :                                                                      // ve4040
+       begin
+
+        if not ( DMFD.FDQuery2['cProdANVISA'] = null ) then
+        begin
+
+         Prod.med.Add.cProdANVISA     := DMFD.FDQuery2['cProdANVISA'];
+         Prod.med.Add.xMotivoIsencao  := DMFD.FDQuery2['xMotivoIsencao'];
+         Prod.med.Add.vPMC            := DMFD.FDQuery2['vPMC'];
+
+        end;
+
+       end;
+
+       2 :                                                                      // ve4031
+
+       if ( gModelo = 55 ) then                                                 // ve40
+       begin
+
+        if not ( DMFD.FDQuery2['cProdANVISA'] = null ) then
+        begin
+
+         Prod.med.Add.cProdANVISA     := DMFD.FDQuery2['cProdANVISA'];
+         Prod.med.Add.xMotivoIsencao  := DMFD.FDQuery2['xMotivoIsencao'];
+         Prod.med.Add.vPMC            := DMFD.FDQuery2['vPMC'];
+
+        end;
+
+       end
+       else                                                                     // ve31
+       begin
+
+        // Implementado a partir da ve400
+
+       end;
+
+       3 :                                                                      // ve3140
+       if ( gModelo = 65 ) then                                                 // ve40
+       begin
+
+        if not ( DMFD.FDQuery2['cProdANVISA'] = null ) then
+        begin
+
+          Prod.med.Add.cProdANVISA     := DMFD.FDQuery2['cProdANVISA'];
+          Prod.med.Add.xMotivoIsencao  := DMFD.FDQuery2['xMotivoIsencao'];
+          Prod.med.Add.vPMC            := DMFD.FDQuery2['vPMC'];
+
+        end;
+
+       end
+       else                                                                     // ve31
+       begin
+
+        // Implementado a partir da ve400
+
+       end;
 
       end;
 
       //------------------------------------------------------------------------
-      // CONTINGÊNCIA
-      //------------------------------------------------------------------------
-      if ((_tipo_emissao = 'fsda') or (_tipo_emissao = 'OffL')) then            //1- Normal, 2-Contingência FS, 3-Contingência SCAN, 4-EPEC e 5-Contingência FSDA. 9-OFFL
+
+      if (DMFD.FDQuery2['cfop'] = '1651') or (DMFD.FDQuery2['cfop'] = '1652') or
+         (DMFD.FDQuery2['cfop'] = '1653') or (DMFD.FDQuery2['cfop'] = '1658') or
+         (DMFD.FDQuery2['cfop'] = '1659') or (DMFD.FDQuery2['cfop'] = '1660') or
+         (DMFD.FDQuery2['cfop'] = '1661') or (DMFD.FDQuery2['cfop'] = '1662') or
+         (DMFD.FDQuery2['cfop'] = '1663') or (DMFD.FDQuery2['cfop'] = '1664') or
+         (DMFD.FDQuery2['cfop'] = '2651') or (DMFD.FDQuery2['cfop'] = '2652') or
+         (DMFD.FDQuery2['cfop'] = '2653') or (DMFD.FDQuery2['cfop'] = '2658') or
+         (DMFD.FDQuery2['cfop'] = '2659') or (DMFD.FDQuery2['cfop'] = '2660') or
+         (DMFD.FDQuery2['cfop'] = '2661') or (DMFD.FDQuery2['cfop'] = '2662') or
+         (DMFD.FDQuery2['cfop'] = '2663') or (DMFD.FDQuery2['cfop'] = '2664') or
+         (DMFD.FDQuery2['cfop'] = '3651') or (DMFD.FDQuery2['cfop'] = '3652') or
+         (DMFD.FDQuery2['cfop'] = '3653') or (DMFD.FDQuery2['cfop'] = '5651') or
+         (DMFD.FDQuery2['cfop'] = '5652') or (DMFD.FDQuery2['cfop'] = '5653') or
+         (DMFD.FDQuery2['cfop'] = '5654') or (DMFD.FDQuery2['cfop'] = '5655') or
+         (DMFD.FDQuery2['cfop'] = '5656') or (DMFD.FDQuery2['cfop'] = '5657') or
+         (DMFD.FDQuery2['cfop'] = '5658') or (DMFD.FDQuery2['cfop'] = '5659') or
+         (DMFD.FDQuery2['cfop'] = '5660') or (DMFD.FDQuery2['cfop'] = '5661') or
+         (DMFD.FDQuery2['cfop'] = '5662') or (DMFD.FDQuery2['cfop'] = '5663') or
+         (DMFD.FDQuery2['cfop'] = '5664') or (DMFD.FDQuery2['cfop'] = '5665') or
+         (DMFD.FDQuery2['cfop'] = '5666') or (DMFD.FDQuery2['cfop'] = '5667') or
+         (DMFD.FDQuery2['cfop'] = '6651') or (DMFD.FDQuery2['cfop'] = '6652') or
+         (DMFD.FDQuery2['cfop'] = '6653') or (DMFD.FDQuery2['cfop'] = '6654') or
+         (DMFD.FDQuery2['cfop'] = '6655') or (DMFD.FDQuery2['cfop'] = '6656') or
+         (DMFD.FDQuery2['cfop'] = '6657') or (DMFD.FDQuery2['cfop'] = '6658') or
+         (DMFD.FDQuery2['cfop'] = '6659') or (DMFD.FDQuery2['cfop'] = '6660') or
+         (DMFD.FDQuery2['cfop'] = '6661') or (DMFD.FDQuery2['cfop'] = '6662') or
+         (DMFD.FDQuery2['cfop'] = '6663') or (DMFD.FDQuery2['cfop'] = '6664') or
+         (DMFD.FDQuery2['cfop'] = '6665') or (DMFD.FDQuery2['cfop'] = '6666') or
+         (DMFD.FDQuery2['cfop'] = '6667') or (DMFD.FDQuery2['cfop'] = '7651') or
+         (DMFD.FDQuery2['cfop'] = '7654') or (DMFD.FDQuery2['cfop'] = '7667') then
+      begin
+
+       with Prod.comb do
        begin
 
-        if (gModelo = 55) then
-         _tpemissao := '5'
-        else if (gModelo = 65) then
-         _tpemissao := '9';
+        case ( FrPar.cbb2.ItemIndex ) of                                        // ve400
 
-        // by Edson Lima ; 2017-6-9T0949 ; Define quem será usado como cNF
-        gCdPed := VarToStr(DMFD.FDQuery1['nfe_CodPed']);
+         0 :                                                                    // ve3131
+         begin
 
-        aux := '';
-        aux := edt_CodEmp.Text + ',' + '''' + VarToStr(DMFD.FDQuery1['nfe_nnf']) + '''' + ',' + '''' + _tpemissao + '''' + ',' + '''';
-        aux := aux + FormatDateTime('dd/mm/yyyy', VarToDateTime(DMFD.FDQuery1['nfe_demi'])) + '''' + ',' + '''';
-        Aux := Aux + IntToStr(gModelo) + '''' + ',' + '''';
-        Aux := Aux + VarToStr(DMFD.FDQuery1['nfe_Serie']) + '''' + ',' + '''';
-        Aux := Aux + gCdPed + '''';
+          if (VarToStr(DMFD.FDQuery2['CodSIMP']) <> '') then
+          begin
 
-        DMFD.FDQuery7.Close;
-        DMFD.FDQuery7.SQL.Clear;
-        DMFD.FDQuery7.SQL.Add( 'exec sp_calcula_digito_chave ' + aux );
-        DMFD.FDQuery7.open;
+           cProdANP := StrToIntDef(VarToStr(DMFD.FDQuery2['CodSIMP']), 0);
+           if (vCfop = '5667') then
+            UFcons     := DMFD.FDQuery4['uf']
+           else
+            UFcons   := DMFD.FDQuery1['des_uf'];
 
-        Aux := '';
-        if not DMFD.FDQuery7.IsEmpty then
-         Aux := vartostr(DMFD.FDQuery7['chave']);
+          end
+          else
+          begin
 
-        //----------------------------------------------------------------------
-        // by Edson Lima ; 2017-1-5T1027 ; Atribuição de dados nas variáveis do
-        //                                 gerente
-        //----------------------------------------------------------------------
-        gChvNFe := aux;
-        gCd_Emp := DMFD.FDQuery1['nfe_codigo_loja'];
-        if ( DMFD.FDQuery1['nfe_CodPed'] <> null ) then
-         gCodPed := DMFD.FDQuery1['nfe_CodPed']
+           cProdANP := 999999999;
+           UFcons   := DMFD.FDQuery1['des_uf'];
+
+          end;
+
+         end;
+
+         1 :                                                                    // ve4040
+         begin
+
+          if (VarToStr(DMFD.FDQuery2['CodSIMP']) = '') then
+          begin
+
+           Application.Messagebox(PWideChar('Para o CFOP '                    +
+                       VarToStr(DMFD.FDQuery2['cfop'])                        +
+                       ', O código SIMP é necessário!' + chr(13) + 'No ítem ' +
+                       VarToStr(DMFD.FDQuery2['codigo_item']) + '-'           +
+                       VarToStr(DMFD.FDQuery2['descricao']) + '.'),
+                       PWideChar('Atenção!'), mb_iconstop+mb_ok);
+
+           gSimpObg := true;
+           exit;
+
+          end
+          else
+           cProdANP := StrToIntDef(VarToStr(DMFD.FDQuery2['CodSIMP']), 0);      // E LA01 N 1-1 9 Utilizar a codificação de produtos do Sistema de Informações de Movimentação de Produtos - SIMP (http://www.anp.gov.br/simp/). (NT 2012/003)
+
+          if ( (     DMFD.FDQuery2['descANP']  = null)   or
+               (trim(DMFD.FDQuery2['descANP']) = ''  ) ) then
+           descANP  := VarToStr(DMFD.FDQuery2['descricao'])                     // E LA01 N 1-1 2-95 Utilizar a descrição de produtos do Sistema de Informações de Movimentação de Produtos - SIMP (http://www.anp.gov.br/simp/).
+          else
+           descANP  := VarToStr(DMFD.FDQuery2['descANP']);                      // E LA01 N 1-1 2-95 Utilizar a descrição de produtos do Sistema de Informações de Movimentação de Produtos - SIMP (http://www.anp.gov.br/simp/).
+
+          if ( DMFD.FDQuery2['pGLP'] <> null ) then
+           pGLP     := DMFD.FDQuery2['pGLP'];                                   // E LA01 N 0-1 3v4 Percentual do GLP derivado do petróleo no produto GLP (cProdANP=210203001) - Informar em número decimal o percentual do GLP derivado de petróleo no produto GLP. Valores de 0 a 1.
+
+          if ( DMFD.FDQuery2['pGNn'] <> null ) then
+           pGNn     := DMFD.FDQuery2['pGNn'];                                   // E LA01 N 0-1 3v4 Percentual de Gás Natural Nacional – GLGNn para o produto GLP (cProdANP=210203001) - Informar em número decimal o percentual do Gás Natural Nacional – GLGNn para o produto GLP. Valores de 0 a 1.
+
+          if ( DMFD.FDQuery2['pGNi'] <> null ) then
+           pGNi     := DMFD.FDQuery2['pGNi'];                                   // E LA01 N 0-1 3v4 Percentual de Gás Natural Importado – GLGNi para o produto GLP (cProdANP=210203001) - Informar em número decimal o percentual do Gás Natural Importado – GLGNi para o produto GLP. Valores de 0 a 1.
+
+          if ( DMFD.FDQuery2['vPart'] <> null ) then
+           vPart    := DMFD.FDQuery2['vPart'];                                  // E LA01 N 0-1 13v2 Valor de partida (cProdANP=210203001) - Deve ser informado neste campo o valor por quilograma sem ICMS.
+
+          if ( DMFD.FDQuery2['CODIF'] <> null ) then
+           CODIF    := DMFD.FDQuery2['CODIF'];                                  // E LA01 N 0-1 1-21 Código de autorização / registro do CODIF - Informar apenas quando a UF utilizar o CODIF (Sistema de Controle do Diferimento do Imposto nas Operações com AEAC
+
+          if ( DMFD.FDQuery2['qTemp'] <> null ) then
+           CODIF    := DMFD.FDQuery2['qTemp'];                                  // E LA01 N 0-1 1-21 Informar apenas quando a UF utilizar o CODIF (Sistema de Controle do Diferimento do Imposto nas Operações com AEAC - Álcool Etílico Anidro Combustível).
+
+          if (vCfop = '5667') then
+           UFcons   := DMFD.FDQuery4['uf']
+          else
+          UFcons   := DMFD.FDQuery1['des_uf'];
+
+         end;
+
+         2 :                                                                    // ve4031
+         if ( gModelo = 55 ) then                                               // ve40
+         begin
+
+          if (VarToStr(DMFD.FDQuery2['CodSIMP']) = '') then
+          begin
+
+           Application.Messagebox(PWideChar('Para o CFOP '                    +
+                       VarToStr(DMFD.FDQuery2['cfop'])                        +
+                       ', O código SIMP é necessário!' + chr(13) + 'No ítem ' +
+                       VarToStr(DMFD.FDQuery2['codigo_item']) + '-'           +
+                       VarToStr(DMFD.FDQuery2['descricao']) + '.'),
+                       PWideChar('Atenção!'), mb_iconstop+mb_ok);
+
+           gSimpObg := true;
+           exit;
+
+          end
+          else
+           cProdANP := StrToIntDef(VarToStr(DMFD.FDQuery2['CodSIMP']), 0);      // E LA01 N 1-1 9 Utilizar a codificação de produtos do Sistema de Informações de Movimentação de Produtos - SIMP (http://www.anp.gov.br/simp/). (NT 2012/003)
+
+          if ( (     DMFD.FDQuery2['descANP']  = null)   or
+               (trim(DMFD.FDQuery2['descANP']) = ''  ) ) then
+           descANP  := VarToStr(DMFD.FDQuery2['descricao'])                     // E LA01 N 1-1 2-95 Utilizar a descrição de produtos do Sistema de Informações de Movimentação de Produtos - SIMP (http://www.anp.gov.br/simp/).
+          else
+           descANP  := VarToStr(DMFD.FDQuery2['descANP']);                      // E LA01 N 1-1 2-95 Utilizar a descrição de produtos do Sistema de Informações de Movimentação de Produtos - SIMP (http://www.anp.gov.br/simp/).
+
+          if ( DMFD.FDQuery2['pGLP'] <> null ) then
+           pGLP     := DMFD.FDQuery2['pGLP'];                                   // E LA01 N 0-1 3v4 Percentual do GLP derivado do petróleo no produto GLP (cProdANP=210203001) - Informar em número decimal o percentual do GLP derivado de petróleo no produto GLP. Valores de 0 a 1.
+
+          if ( DMFD.FDQuery2['pGNn'] <> null ) then
+           pGNn     := DMFD.FDQuery2['pGNn'];                                   // E LA01 N 0-1 3v4 Percentual de Gás Natural Nacional – GLGNn para o produto GLP (cProdANP=210203001) - Informar em número decimal o percentual do Gás Natural Nacional – GLGNn para o produto GLP. Valores de 0 a 1.
+
+          if ( DMFD.FDQuery2['pGNi'] <> null ) then
+           pGNi     := DMFD.FDQuery2['pGNi'];                                   // E LA01 N 0-1 3v4 Percentual de Gás Natural Importado – GLGNi para o produto GLP (cProdANP=210203001) - Informar em número decimal o percentual do Gás Natural Importado – GLGNi para o produto GLP. Valores de 0 a 1.
+
+          if ( DMFD.FDQuery2['vPart'] <> null ) then
+           vPart    := DMFD.FDQuery2['vPart'];                                  // E LA01 N 0-1 13v2 Valor de partida (cProdANP=210203001) - Deve ser informado neste campo o valor por quilograma sem ICMS.
+
+          if ( DMFD.FDQuery2['CODIF'] <> null ) then
+           CODIF    := DMFD.FDQuery2['CODIF'];                                  // E LA01 N 0-1 1-21 Código de autorização / registro do CODIF - Informar apenas quando a UF utilizar o CODIF (Sistema de Controle do Diferimento do Imposto nas Operações com AEAC
+
+          if ( DMFD.FDQuery2['qTemp'] <> null ) then
+           CODIF    := DMFD.FDQuery2['qTemp'];                                  // E LA01 N 0-1 1-21 Informar apenas quando a UF utilizar o CODIF (Sistema de Controle do Diferimento do Imposto nas Operações com AEAC - Álcool Etílico Anidro Combustível).
+
+          if (vCfop = '5667') then
+           UFcons   := DMFD.FDQuery4['uf']
+          else
+           UFcons   := DMFD.FDQuery1['des_uf'];
+
+         end
+         else                                                                   // ve31
+         begin
+
+          if (VarToStr(DMFD.FDQuery2['CodSIMP']) <> '') then
+          begin
+
+           cProdANP := StrToIntDef(VarToStr(DMFD.FDQuery2['CodSIMP']), 0);
+
+           if (vCfop = '5667') then
+            UFcons     := DMFD.FDQuery4['uf']
+           else
+            UFcons   := DMFD.FDQuery1['des_uf'];
+
+          end
+          else
+          begin
+
+           cProdANP := 999999999;
+           UFcons   := DMFD.FDQuery1['des_uf'];
+
+          end;
+
+         end;
+
+         3 :                                                                    // ve3140
+         if ( gModelo = 65 ) then                                               // ve40
+         begin
+
+          if (VarToStr(DMFD.FDQuery2['CodSIMP']) = '') then
+          begin
+
+           Application.Messagebox(PWideChar('Para o CFOP '                    +
+                       VarToStr(DMFD.FDQuery2['cfop'])                        +
+                       ', O código SIMP é necessário!' + chr(13) + 'No ítem ' +
+                       VarToStr(DMFD.FDQuery2['codigo_item']) + '-'           +
+                       VarToStr(DMFD.FDQuery2['descricao']) + '.'),
+                       PWideChar('Atenção!'), mb_iconstop+mb_ok);
+
+           gSimpObg := true;
+           exit;
+
+          end
+          else
+           cProdANP := StrToIntDef(VarToStr(DMFD.FDQuery2['CodSIMP']), 0); // E LA01 N 1-1 9 Utilizar a codificação de produtos do Sistema de Informações de Movimentação de Produtos - SIMP (http://www.anp.gov.br/simp/). (NT 2012/003)
+
+          if ( (     DMFD.FDQuery2['descANP']  = null)   or
+               (trim(DMFD.FDQuery2['descANP']) = ''  ) ) then
+           descANP  := VarToStr(DMFD.FDQuery2['descricao'])                     // E LA01 N 1-1 2-95 Utilizar a descrição de produtos do Sistema de Informações de Movimentação de Produtos - SIMP (http://www.anp.gov.br/simp/).
+          else
+           descANP  := VarToStr(DMFD.FDQuery2['descANP']);                      // E LA01 N 1-1 2-95 Utilizar a descrição de produtos do Sistema de Informações de Movimentação de Produtos - SIMP (http://www.anp.gov.br/simp/).
+
+          if ( DMFD.FDQuery2['pGLP'] <> null ) then
+           pGLP     := DMFD.FDQuery2['pGLP'];                                   // E LA01 N 0-1 3v4 Percentual do GLP derivado do petróleo no produto GLP (cProdANP=210203001) - Informar em número decimal o percentual do GLP derivado de petróleo no produto GLP. Valores de 0 a 1.
+
+          if ( DMFD.FDQuery2['pGNn'] <> null ) then
+           pGNn     := DMFD.FDQuery2['pGNn'];                                   // E LA01 N 0-1 3v4 Percentual de Gás Natural Nacional – GLGNn para o produto GLP (cProdANP=210203001) - Informar em número decimal o percentual do Gás Natural Nacional – GLGNn para o produto GLP. Valores de 0 a 1.
+
+          if ( DMFD.FDQuery2['pGNi'] <> null ) then
+           pGNi     := DMFD.FDQuery2['pGNi'];                                   // E LA01 N 0-1 3v4 Percentual de Gás Natural Importado – GLGNi para o produto GLP (cProdANP=210203001) - Informar em número decimal o percentual do Gás Natural Importado – GLGNi para o produto GLP. Valores de 0 a 1.
+
+          if ( DMFD.FDQuery2['vPart'] <> null ) then
+           vPart    := DMFD.FDQuery2['vPart'];                                  // E LA01 N 0-1 13v2 Valor de partida (cProdANP=210203001) - Deve ser informado neste campo o valor por quilograma sem ICMS.
+
+          if ( DMFD.FDQuery2['CODIF'] <> null ) then
+           CODIF    := DMFD.FDQuery2['CODIF'];                                  // E LA01 N 0-1 1-21 Código de autorização / registro do CODIF - Informar apenas quando a UF utilizar o CODIF (Sistema de Controle do Diferimento do Imposto nas Operações com AEAC
+
+          if ( DMFD.FDQuery2['qTemp'] <> null ) then
+           CODIF    := DMFD.FDQuery2['qTemp'];                                  // E LA01 N 0-1 1-21 Informar apenas quando a UF utilizar o CODIF (Sistema de Controle do Diferimento do Imposto nas Operações com AEAC - Álcool Etílico Anidro Combustível).
+
+          if (vCfop = '5667') then
+           UFcons   := DMFD.FDQuery4['uf']
+          else
+           UFcons   := DMFD.FDQuery1['des_uf'];
+
+         end
+         else                                                                   // ve31
+         begin
+
+          if (VarToStr(DMFD.FDQuery2['CodSIMP']) <> '') then
+          begin
+
+           cProdANP := StrToIntDef(VarToStr(DMFD.FDQuery2['CodSIMP']), 0);
+           if (vCfop = '5667') then
+            UFcons     := DMFD.FDQuery4['uf']
+           else
+            UFcons   := DMFD.FDQuery1['des_uf'];
+
+          end
+          else
+          begin
+
+           cProdANP := 999999999;
+           UFcons   := DMFD.FDQuery1['des_uf'];
+
+          end;
+
+         end;
+
+        end;
+
+       end;
+
+      end;
+
+      Prod.cProd    := DMFD.FDQuery2['codigo_item'];
+      Prod.xProd    := DMFD.FDQuery2['descricao'];
+      Prod.uCom     := DMFD.FDQuery2['unidade'];
+      Prod.qCom     := strtofloat(DMFD.FDQuery2['qtd']);
+      Prod.vUnCom   := DMFD.FDQuery2['pr_unitario'];
+
+      if ( DMFD.FDQuery2['CEST'] <> null ) then
+       Prod.CEST    := DMFD.FDQuery2['CEST'];
+
+      Prod.vProd    := DMFD.FDQuery2['pr_total'];
+
+      //------------------------------------------------------------------------
+
+      if ( (DMFD.FDQuery2['uTrib'] = null) or
+           (trim(DMFD.FDQuery2['uTrib']) = '') ) then
+       Prod.uTrib   := DMFD.FDQuery2['unidade']
+      else
+       Prod.uTrib   := DMFD.FDQuery2['uTrib'];                                  // E 101 C 1-6 1-6 Unidade Tributável
+
+      if ( (DMFD.FDQuery2['qTrib'] = null) or
+           (DMFD.FDQuery2['qTrib'] = 0)  ) then
+       Prod.qTrib   := DMFD.FDQuery2['qtd']
+      else
+       Prod.qTrib   := DMFD.FDQuery2['qTrib'];                                  // E I01 N 1-1 11v0-4 Informar a quantidade de tributação do produto (v2.0)
+
+      if ( (DMFD.FDQuery2['vUnTrib'] = null) or
+           (DMFD.FDQuery2['vUnTrib'] = 0)  )  then
+       Prod.vUnTrib := DMFD.FDQuery2['pr_unitario']
+      else
+       Prod.vUnTrib := DMFD.FDQuery2['vUnTrib'];                                // E I01 N 1-1 11v0-10 Informar o valor unitário de tributação do produto, campo meramente informativo, o contribuinte pode utilizar a precisão desejada (0-10 decimais). Para efeitos de cálculo, o valor unitário será obtido pela divisão do valor do produto pela quantidade tributável (NT 2013/003)
+
+      //------------------------------------------------------------------------
+
+      Prod.NCM      := DMFD.FDQuery2['ncm'];
+
+      // if (DMFD.FDQuery2['CodNVE'] <> null ) then                               // Codificação opcional que detalha alguns NCM. Formato: duas letras maiúsculas e 4 algarismos. Se a mercadoria se enquadrar em mais de uma codificação, informar até 8 codificações principais. Vide: Anexo XII.03 – Identificador NVE
+      //  Prod.NVE  := DMFD.FDQuery2['CodNVE'];
+
+      Prod.vDesc    := DMFD.FDQuery2['vl_desconto'];
+
+      // by Edson Lima ; 2013/03/15 ; 10:36 ; condição incluida
+      // "o tipo desta classe deve ter sido modificada de ACBr"
+      if (VarToStr(DMFD.FDQuery2['ind_total']) <> '') then
+       Prod.IndTot   := DMFD.FDQuery2['ind_total'];
+
+      Prod.vFrete   := DMFD.FDQuery2['vl_frete'];
+      Prod.vSeg     := DMFD.FDQuery2['vl_seguro'];
+      Prod.vOutro   := DMFD.FDQuery2['vl_outros'];
+
+      //itens de notas-DI
+      DMFD.FDQuery8.Close;
+      DMFD.FDQuery8.SQL.Clear;
+      DMFD.FDQuery8.SQL.Add( 'SET DATEFORMAT dmy                                             ' );
+      DMFD.FDQuery8.SQL.Add( 'Select                                                         ' );
+      DMFD.FDQuery8.SQL.Add( '                                                               ' );
+      DMFD.FDQuery8.SQL.Add( 't1.*                                                           ' );
+      DMFD.FDQuery8.SQL.Add( '                                                               ' );
+      DMFD.FDQuery8.SQL.Add( 'from nfe_itens_DI t1                                           ' );
+      DMFD.FDQuery8.SQL.Add( '                                                               ' );
+      DMFD.FDQuery8.SQL.Add( 'inner join nfe_itens t2 on t1.codigo_loja = t2.codigo_loja and ' );
+      DMFD.FDQuery8.SQL.Add( '                           t1.nnf         = t2.nnf         and ' );
+      DMFD.FDQuery8.SQL.Add( '                           t1.demi        = t2.demi        and ' );
+      DMFD.FDQuery8.SQL.Add( '                           t1.sequencia   = t2.sequencia   and ' );
+      DMFD.FDQuery8.SQL.Add( '                           t1.modelo      = t2.modelo          ' );
+      DMFD.FDQuery8.SQL.Add( '                                                               ' );
+      DMFD.FDQuery8.SQL.Add( 'where t2.codigo_loja = :parm1                                  ' );
+      DMFD.FDQuery8.SQL.Add( 'and   t2.demi        = :parm2                                  ' );
+      DMFD.FDQuery8.SQL.Add( 'and   t2.nnf         = :parm3                                  ' );
+      DMFD.FDQuery8.SQL.Add( 'and   t2.sequencia   = :parm4                                  ' );
+      DMFD.FDQuery8.SQL.Add( 'and   t2.modelo      = :parm5                                  ' );
+      DMFD.FDQuery8.SQL.Add( 'and   t2.serie       = :parm6                                  ' );
+      DMFD.FDQuery8.SQL.Add( '                                                               ' );
+      DMFD.FDQuery8.SQL.Add( 'Order by t1.sequencia                                          ' );
+      DMFD.FDQuery8.SQL.Add( '                                                               ' );
+      DMFD.FDQuery8.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
+      DMFD.FDQuery8.Params[1].Value     := StrToDateTime( FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']) );
+      DMFD.FDQuery8.Params[2].AsString  := DMFD.FDQuery1['nfe_nnf'];
+      DMFD.FDQuery8.Params[3].AsInteger := DMFD.FDQuery2['sequencia'];
+      DMFD.FDQuery8.Params[4].AsString  := DMFD.FDQuery1['nfe_modelo'];
+      DMFD.FDQuery8.Params[5].AsString  := DMFD.FDQuery1['nfe_serie'];
+      DMFD.FDQuery8.Open;
+
+      While not DMFD.FDQuery8.eof do
+      begin
+
+       with Prod.DI.Add do
+       begin
+
+        nDi           := DMFD.FDQuery8['numero_di'];
+        dDi           := DMFD.FDQuery8['data_DI'];
+        xLocDesemb    := DMFD.FDQuery8['local_desembaraco'];
+        UFDesemb      := DMFD.FDQuery8['uf_desembaraco'];
+        dDesemb       := DMFD.FDQuery8['data_desembaraco'];
+
+        cExportador   := DMFD.FDQuery8['codigo_exportador'];
+
+        if (DMFD.FDQuery8['tpViaTransp'] <> null ) then
+         tpViaTransp   := DMFD.FDQuery8['tpViaTransp']
         else
-         gCodPed := 0;
-        //----------------------------------------------------------------------
+         tpViaTransp   := tvRodoviaria;
 
-        // by Edson ; 2013-10-8T1031 ; Variável Global Chave criada para contestar gravação;
-        gChave_Consiste  := Aux;
+        //itens de notas-ADI
+        DMFD.FDQuery9.Close;
+        DMFD.FDQuery9.SQL.Clear;
+        DMFD.FDQuery9.SQL.Add( 'SET DATEFORMAT dmy                                                       ' );
+        DMFD.FDQuery9.SQL.Add( 'Select                                                                   ' );
+        DMFD.FDQuery9.SQL.Add( '                                                                         ' );
+        DMFD.FDQuery9.SQL.Add( 't1.*                                                                     ' );
+        DMFD.FDQuery9.SQL.Add( '                                                                         ' );
+        DMFD.FDQuery9.SQL.Add( 'from nfe_itens_DI_ADI t1                                                 ' );
+        DMFD.FDQuery9.SQL.Add( '                                                                         ' );
+        DMFD.FDQuery9.SQL.Add( 'inner join nfe_itens_DI t2 on t1.codigo_loja = t2.codigo_loja and        ' );
+        DMFD.FDQuery9.SQL.Add( '                              t1.nnf         = t2.nnf         and        ' );
+        DMFD.FDQuery9.SQL.Add( '                              t1.demi        = t2.demi        and        ' );
+        DMFD.FDQuery9.SQL.Add( '                              t1.sequencia   = t2.sequencia   and        ' );
+        DMFD.FDQuery9.SQL.Add( '                              t1.numero_di   = t2.numero_di   and        ' );
+        DMFD.FDQuery9.SQL.Add( '                              t1.modelo      = t2.modelo                 ' );
+        DMFD.FDQuery9.SQL.Add( '                                                                         ' );
+        DMFD.FDQuery9.SQL.Add( 'where       t2.codigo_loja = :parm1                                      ' );
+        DMFD.FDQuery9.SQL.Add( '      and   t2.demi        = :parm2                                      ' );
+        DMFD.FDQuery9.SQL.Add( '      and   t2.nnf         = :parm3                                      ' );
+        DMFD.FDQuery9.SQL.Add( '      and   t2.sequencia   = :parm4                                      ' );
+        DMFD.FDQuery9.SQL.Add( '      and   t2.numero_di   = :parm5                                      ' );
+        DMFD.FDQuery9.SQL.Add( '      and   t2.modelo      = :parm6                                      ' );
+        DMFD.FDQuery9.SQL.Add( '      and   t2.serie       = :parm7                                      ' );
+        DMFD.FDQuery9.SQL.Add( '                                                                         ' );
+        DMFD.FDQuery9.SQL.Add( 'Order by t1.sequencia                                                    ' );
+        DMFD.FDQuery9.SQL.Add( '                                                                         ' );
+        DMFD.FDQuery9.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
+        DMFD.FDQuery9.Params[1].Value     := StrToDateTime( FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']) );
+        DMFD.FDQuery9.Params[2].AsString  := DMFD.FDQuery1['nfe_nnf'];
+        DMFD.FDQuery9.Params[3].AsInteger := DMFD.FDQuery2['sequencia'];
+        DMFD.FDQuery9.Params[4].AsString  := DMFD.FDQuery8['numero_di'];
+        DMFD.FDQuery9.Params[5].AsString  := DMFD.FDQuery1['nfe_modelo'];
+        DMFD.FDQuery9.Params[6].AsString  := DMFD.FDQuery1['nfe_serie'];
+        DMFD.FDQuery9.Open;
 
-        if (gModelo = 65) then
-         gTN              := '\NFCe\'                                           // by Edson Lima 2015-10-14T1107 - trunk2 novo ; Global utilizado para setar o nome da pasta
-        else
-         gTN              := '\NFe\';                                           // by Edson Lima 2015-10-14T1107 - trunk2 novo ; Global utilizado para setar o nome da pasta
+        While not DMFD.FDQuery9.eof do
+        begin
 
-        pGAV();
+         with adi.Add do
+         begin
 
-        try
-         Copia_Xml_PathLog(Aux, gTN);                                           // by Edson Lima 2015-10-14T1107 - trunk2 novo
+          vDescDI       := DMFD.FDQuery9['valor_desconto'];
+          cFabricante   := DMFD.FDQuery9['codigo_fabricante'];
+          nSeqAdi       := DMFD.FDQuery9['sequencia_ADI'];
+          nAdicao       := DMFD.FDQuery9['numero_ADI'];
 
-         if ( gCpt = 1 ) then
-          pDefineRel()                                                          // Define o tipo de Relatório FortesReport
+         end;
+
+         DMFD.FDQuery9.next;
+
+        end;
+
+       end;
+
+       DMFD.FDQuery8.next;
+
+      end;
+
+      if (   (FrPar.cbb2.ItemIndex = 1)                      or
+           ( (FrPar.cbb2.ItemIndex = 2) and (gModelo=55) )   or
+           ( (FrPar.cbb2.ItemIndex = 3) and (gModelo=65) ) ) then               // ve400
+      begin
+
+       // by Edson Lima ; 2018-5-8 ; itens do lote
+       DMFD.FDQuery19.Close;
+       DMFD.FDQuery19.SQL.Clear;
+       DMFD.FDQuery19.SQL.Add( 'SET DATEFORMAT dmy                        ' );
+       DMFD.FDQuery19.SQL.Add( 'Select                                    ' );
+       DMFD.FDQuery19.SQL.Add( 't1.*                                      ' );
+       DMFD.FDQuery19.SQL.Add( 'from nfe_Lotes t1                         ' );
+       DMFD.FDQuery19.SQL.Add( 'inner join nfe_itens t2 on                ' );
+       DMFD.FDQuery19.SQL.Add( '      t1.codigo_loja = t2.codigo_loja and ' );
+       DMFD.FDQuery19.SQL.Add( '      t1.demi        = t2.demi        and ' );
+       DMFD.FDQuery19.SQL.Add( '      t1.nnf         = t2.nnf         and ' );
+       DMFD.FDQuery19.SQL.Add( '      t1.modelo      = t2.modelo      and ' );
+       DMFD.FDQuery19.SQL.Add( '      t1.serie       = t2.serie       and ' );
+       DMFD.FDQuery19.SQL.Add( '      t1.codigo_item = t2.codigo_item     ' );
+       DMFD.FDQuery19.SQL.Add( '                                          ' );
+       DMFD.FDQuery19.SQL.Add( 'where t2.codigo_loja = :parm0         and ' );
+       DMFD.FDQuery19.SQL.Add( '      t2.demi        = :parm1         and ' );
+       DMFD.FDQuery19.SQL.Add( '      t2.nnf         = :parm2         and ' );
+       DMFD.FDQuery19.SQL.Add( '      t2.modelo      = :parm3         and ' );
+       DMFD.FDQuery19.SQL.Add( '      t2.serie       = :parm4         and ' );
+       DMFD.FDQuery19.SQL.Add( '      t2.codigo_item = :parm5             ' );
+       DMFD.FDQuery19.SQL.Add( '                                          ' );
+       DMFD.FDQuery19.SQL.Add( 'Order by t1.codigo_item                   ' );
+       DMFD.FDQuery19.SQL.Add( '                                          ' );
+       DMFD.FDQuery19.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
+       DMFD.FDQuery19.Params[1].Value     := StrToDateTime( FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']) );
+       DMFD.FDQuery19.Params[2].AsString  := DMFD.FDQuery1['nfe_nnf'];
+       DMFD.FDQuery19.Params[3].AsString  := DMFD.FDQuery1['nfe_modelo'];
+       DMFD.FDQuery19.Params[4].AsString  := DMFD.FDQuery1['nfe_serie'];
+       DMFD.FDQuery19.Params[5].AsString  := DMFD.FDQuery2['codigo_item'];;
+       DMFD.FDQuery19.Open;
+
+       //-----------------------------------------------------------------
+
+       nPri     := 0;
+       gDescRej := '';
+       gTemRej  := false;
+       gNNF     := VarToStr(DMFD.FDQuery1['nfe_nnf']);
+
+       While not DMFD.FDQuery19.eof do
+       begin
+
+        if ( DMFD.FDQuery19['dFab'] > gDataEmi ) then
+        begin
+
+         if ( nPri > 0 ) then
+          gDescRej := gDescRej + ', '
          else
-          pDefineRelFR();                                                       // Define o tipo de Relatório FastReport
+         begin
 
-         pImpr();
+          gTemRej  := true;
+          nPri := (nPri + 1);
 
-         ACBrNFe1.NotasFiscais.GravarXML();
+         end;
 
-         _chave := aux;
+         gDescRej := gDescRej + VarToStr(DMFD.FDQuery19['codigo_item']);
 
-         // by Edson Lima ; 2013/03/12 ; 14:23 ; Atualiza a nfe no update centralizado
-         pGravaNFe('003', 'data_hora_recebimento',
+        end;
+
+        DMFD.FDQuery19.next;
+
+       end;
+
+       // Rejeição 877 ---------------------------------------------------------
+
+       if gTemRej then
+        gAbortar := fTrataRejeicao( 877, gModelo, gNNF, gDescRej );
+
+       if gAbortar then exit;
+
+       //-----------------------------------------------------------------------
+
+       nPri     := 0;
+       gDescRej := '';
+       gTemRej  := false;
+       DMFD.FDQuery19.First;
+
+       While not DMFD.FDQuery19.eof do                                          // Enquanto não for o fim do lote
+       begin
+
+        if ( DMFD.FDQuery19['dVal'] < DMFD.FDQuery19['dFab'] ) then
+        begin
+
+         if ( nPri > 0 ) then
+          gDescRej := gDescRej + ', '
+         else
+         begin
+
+          gTemRej  := true;
+          nPri := (nPri + 1);
+
+         end;
+
+         gDescRej := gDescRej + VarToStr(DMFD.FDQuery19['codigo_item']);
+
+        end;
+
+        with Prod.rastro.Add do
+        begin
+
+         nLote         := DMFD.FDQuery19['nLote'];
+         qLote         := DMFD.FDQuery19['qLote'];
+         dFab          := DMFD.FDQuery19['dFab'];
+         dVal          := DMFD.FDQuery19['dVal'];
+
+         if ( DMFD.FDQuery19['cAgreg'] <> null ) then
+          cAgreg       := VarToStr(DMFD.FDQuery19['cAgreg']);
+
+        end;
+
+        DMFD.FDQuery19.next;
+
+       end;
+
+       // Rejeição 870----------------------------------------------------------
+
+       if gTemRej then
+        gAbortar := fTrataRejeicao( 870, gModelo, gNNF, gDescRej );
+
+       if gAbortar then exit;
+
+       //-----------------------------------------------------------------------
+
+      end;
+
+      if gAbortar then exit;
+
+      // by Edson Lima ; lei da transparencia de impostos
+      if DMFD.FDQuery2['vTotTrib'] = null then
+       Imposto.vTotTrib := 0
+      else
+       Imposto.vTotTrib := DMFD.FDQuery2['vTotTrib'];                           // Produtos
+
+      // by Edson Lima ; 2016-10-11 ; Valor do ICMS desonerado
+      with Imposto.ICMS do
+      begin
+
+       if (DMFD.FDQuery2['vICMSDeson'] <> null) then
+       begin
+
+        vICMSDeson     := DMFD.FDQuery2['vICMSDeson'];
+        motDesICMS     := DMFD.FDQuery2['motDesICMS'];
+
+       end;
+
+       if (DMFD.FDQuery2['vICMSSTDeson'] <> null) then
+       begin
+
+        vICMSSTDeson     := DMFD.FDQuery2['vICMSSTDeson'];
+        motDesICMSST     := DMFD.FDQuery2['motDesICMSST'];
+
+       end;
+
+      end;
+
+      // by Edson Lima ; 2016-10-11 ; partilha do ICMS e fundo de probreza
+      with Imposto.ICMSUFDest do
+      begin
+
+       if (DMFD.FDQuery2['vBCUFDest'] = null) then
+        vBCUFDest      := 0
+       else
+        vBCUFDest      := DMFD.FDQuery2['vBCUFDest'];
+
+       if (   (FrPar.cbb2.ItemIndex = 1)                      or
+            ( (FrPar.cbb2.ItemIndex = 2) and (gModelo=55) )   or
+            ( (FrPar.cbb2.ItemIndex = 3) and (gModelo=65) ) ) then              // ve400
+       begin
+
+        if ( (DMFD.FDQuery2['vBCUFDest']  > 0)   and
+             (DMFD.FDQuery2['pFCPUFDest'] > 0) ) then                           // 09-01-2019 (Renildo) foi mudado de vBCFCPUFDest para vBCUFDeste
+         vBCFCPUFDest         := DMFD.FDQuery2['vBCUFDest'];
+
+       end;
+
+       if ( DMFD.FDQuery2['pFCPUFDest'] > 0 ) then
+        pFCPUFDest           := DMFD.FDQuery2['pFCPUFDest'];
+
+       if ( DMFD.FDQuery2['pICMSUFDest'] = null ) then
+        pICMSUFDest    := 0
+       else
+        pICMSUFDest    := DMFD.FDQuery2['pICMSUFDest'];
+
+       if ( DMFD.FDQuery2['pICMSInter'] = null ) then
+        pICMSInter     := 0
+       else
+        pICMSInter     := DMFD.FDQuery2['pICMSInter'];
+
+       if ( DMFD.FDQuery2['pICMSInterPart'] = null ) then
+        pICMSInterPart := 0
+       else
+        pICMSInterPart := DMFD.FDQuery2['pICMSInterPart'];
+
+       if ( DMFD.FDQuery2['vFCPUFDest'] > 0 ) then
+        if ( (DMFD.FDQuery1['nfe_idDest']    = '2')   and
+             (DMFD.FDQuery1['nfe_indFinal']  = '1')   and
+             (DMFD.FDQuery1['des_indIEDest'] = '9') ) then
+         vFCPUFDest     := DMFD.FDQuery2['vFCPUFDest'];
+
+       if ( DMFD.FDQuery2['vICMSUFDest'] = null ) then
+        vICMSUFDest    := 0
+       else
+        vICMSUFDest    := DMFD.FDQuery2['vICMSUFDest'];
+
+       if ( DMFD.FDQuery2['vICMSUFRemet'] = null ) then
+        vICMSUFRemet   := 0
+       else
+        vICMSUFRemet   := DMFD.FDQuery2['vICMSUFRemet'];
+
+      end;
+
+      with Imposto.ICMS do
+      begin
+
+       // Fundo de combate a pobresa (FCP)
+       if (   (FrPar.cbb2.ItemIndex = 1)                      or
+            ( (FrPar.cbb2.ItemIndex = 2) and (gModelo=55) )   or
+            ( (FrPar.cbb2.ItemIndex = 3) and (gModelo=65) ) ) then              // ve400
+       begin
+
+        if ( Imposto.ICMSUFDest.pFCPUFDest > 0 ) then
+        begin
+
+         pFCPST      := Imposto.ICMSUFDest.pFCPUFDest;                          // Percentual relativo ao Fundo de Combate à Pobreza (FCP). Nota: Percentual máximo de 2%, conforme a legislação.
+         pFCPSTRet   := Imposto.ICMSUFDest.pFCPUFDest;                          // Percentual relativo ao Fundo de Combate à Pobreza (FCP). Nota: Percentual máximo de 2%, conforme a legislação.
+         vFCPST      := Imposto.ICMSUFDest.vFCPUFDest;                          // Valor do ICMS relativo ao Fundo de Combate à Pobreza (FCP) retido por substituição tributária.
+         vFCPSTRet   := Imposto.ICMSUFDest.vFCPUFDest;                          // Valor do ICMS relativo ao Fundo de Combate à Pobreza (FCP) retido por substituição tributária.
+
+        end;
+
+        if ( Imposto.ICMSUFDest.vBCFCPUFDest > 0 ) then
+        begin
+
+         if not ( (DMFD.FDQuery1['nfe_idDest']    = '2')     and
+                  (DMFD.FDQuery1['nfe_indFinal']  = '1')   and
+                  (DMFD.FDQuery1['des_indIEDest'] = '9') ) then
+          vBCFCP	 := Imposto.ICMSUFDest.vBCFCPUFDest;
+
+         vBCFCPST	   := Imposto.ICMSUFDest.vBCFCPUFDest;                        // Informar o valor da Base de Cálculo do FCP
+         vBCFCPSTRet := Imposto.ICMSUFDest.vBCFCPUFDest;                        // Informar o valor da Base de Cálculo do FCP retido anteriormente por ST
+
+        end;
+
+        if ( DMFD.FDQuery2['pFCPUFDest'] > 0 ) then
+         if not ( (DMFD.FDQuery1['nfe_idDest']    = '2')   and
+                  (DMFD.FDQuery1['nfe_indFinal']  = '1')   and
+                  (DMFD.FDQuery1['des_indIEDest'] = '9') ) then
+          pFCP := Imposto.ICMSUFDest.pFCPUFDest;
+
+        if ( DMFD.FDQuery2['vFCPUFDest'] > 0 ) then
+         if not ( (DMFD.FDQuery1['nfe_idDest']    = '2')   and
+                  (DMFD.FDQuery1['nfe_indFinal']  = '1')   and
+                  (DMFD.FDQuery1['des_indIEDest'] = '9') ) then
+          vFCP := Imposto.ICMSUFDest.vFCPUFDest;
+
+        pST	        := ( DMFD.FDQuery2['pc_icms_st'] +
+                         Imposto.ICMSUFDest.pFCPUFDest );                       // Deve ser informada a alíquota do cálculo do ICMS-ST, já incluso o FCP. Exemplo: alíquota da mercadoria na venda ao consumidor final = 18% e 2% de FCP. A alíquota a ser informada no campo pST deve ser 20%.
+
+       end;
+
+       orig   := oeNacional;
+
+       if DMFD.FDQuery4['regime_tributario'] <> 1 then
+       begin
+
+        if length(trim(DMFD.FDQuery2['cst'])) = 3 then
+        begin
+
+         if copy(vartostr(DMFD.FDQuery2['cst']),1,1) = '1' then orig   := oeEstrangeiraImportacaoDireta;
+         if copy(vartostr(DMFD.FDQuery2['cst']),1,1) = '2' then orig   := oeEstrangeiraAdquiridaBrasil;
+         // linhas inseridas by Edson Lima ; 2015-2-26T1046
+         if copy(vartostr(DMFD.FDQuery2['cst']),1,1) = '3' then orig   := oeNacionalConteudoImportacaoSuperior40;
+         if copy(vartostr(DMFD.FDQuery2['cst']),1,1) = '4' then orig   := oeNacionalProcessosBasicos;
+         if copy(vartostr(DMFD.FDQuery2['cst']),1,1) = '5' then orig   := oeNacionalConteudoImportacaoInferiorIgual40;
+         if copy(vartostr(DMFD.FDQuery2['cst']),1,1) = '6' then orig   := oeEstrangeiraImportacaoDiretaSemSimilar;
+         if copy(vartostr(DMFD.FDQuery2['cst']),1,1) = '7' then orig   := oeEstrangeiraAdquiridaBrasilSemSimilar;
+         if copy(vartostr(DMFD.FDQuery2['cst']),1,1) = '8' then orig   := oeNacionalConteudoImportacaoSuperior70;
+         //------------------------------------------------
+
+        end;
+
+        CST    := cst00;
+
+        if length(trim(DMFD.FDQuery2['cst'])) = 3 then
+        begin
+
+         if copy(vartostr(DMFD.FDQuery2['cst']),2,2) = '10' then CST    := cst10;
+         if copy(vartostr(DMFD.FDQuery2['cst']),2,2) = '20' then CST    := cst20;
+         if copy(vartostr(DMFD.FDQuery2['cst']),2,2) = '30' then CST    := cst30;
+         if copy(vartostr(DMFD.FDQuery2['cst']),2,2) = '40' then CST    := cst40;
+         if copy(vartostr(DMFD.FDQuery2['cst']),2,2) = '41' then CST    := cst41;
+         if copy(vartostr(DMFD.FDQuery2['cst']),2,2) = '50' then CST    := cst50;
+         if copy(vartostr(DMFD.FDQuery2['cst']),2,2) = '51' then CST    := cst51;
+
+         if (   (FrPar.cbb2.ItemIndex = 1)                      or
+              ( (FrPar.cbb2.ItemIndex = 2) and (gModelo=55) )   or
+              ( (FrPar.cbb2.ItemIndex = 3) and (gModelo=65) ) ) then    // ve400
+         begin
+
+          if copy(vartostr(DMFD.FDQuery2['cst']),2,2) = '60' then
+          begin
+
+           case Prod.comb.cProdANP of
+
+            210203001, 320101001, 320101002, 320102002, 320102001,
+            320102003, 820101032, 820101027, 820101004, 820101005,
+            820101022, 820101031, 820101030, 820101018, 820101020,
+            820101021, 420105001, 420101005, 420101004, 420102005,
+            820101003, 820101012, 420106002, 830101001, 420301004,
+            420202001, 420301001, 510101002, 510102002, 510201001,
+            510201003, 510301003, 510103001, 510301001, 820101026,
+            320102005, 320201001, 320103001, 220102001, 320301001,
+            320103002, 820101019, 820101014, 820101006, 820101016,
+            820101015, 820101025, 820101017, 820101013, 420102004,
+            420104001, 820101033, 820101034, 420106001, 820101011,
+            510102001, 420301002, 410103001, 410101001, 410102001,
+            430101004, 510101001
+            : CST    := cstRep60
+
+            else
+              CST    := cst60;
+
+           end;
+
+          end;
+
+         end
+         else                                                                   // Ve310
+          if copy(vartostr(DMFD.FDQuery2['cst']),2,2) = '60' then CST   := cst60;
+
+         if copy(vartostr(DMFD.FDQuery2['cst']),2,2) = '70' then CST    := cst70;
+         if copy(vartostr(DMFD.FDQuery2['cst']),2,2) = '80' then CST    := cst80;
+         if copy(vartostr(DMFD.FDQuery2['cst']),2,2) = '81' then CST    := cst81;
+         if copy(vartostr(DMFD.FDQuery2['cst']),2,2) = '90' then CST    := cst90;
+         if copy(vartostr(DMFD.FDQuery2['cst']),2,2) = '91' then CST    := cstICMSOutraUF;
+         if copy(vartostr(DMFD.FDQuery2['cst']),2,2) = '92' then CST    := cstICMSSN;
+
+        end;
+
+       end
+       else
+       begin
+
+        CST    := cst41;
+
+        if DMFD.FDQuery2['cst'] = '101' then CSOSN    := csosn101;
+        if DMFD.FDQuery2['cst'] = '102' then CSOSN    := csosn102;
+        if DMFD.FDQuery2['cst'] = '103' then CSOSN    := csosn103;
+        if DMFD.FDQuery2['cst'] = '201' then CSOSN    := csosn201;
+        if DMFD.FDQuery2['cst'] = '202' then CSOSN    := csosn202;
+        if DMFD.FDQuery2['cst'] = '203' then CSOSN    := csosn203;
+        if DMFD.FDQuery2['cst'] = '300' then CSOSN    := csosn300;
+        if DMFD.FDQuery2['cst'] = '400' then CSOSN    := csosn400;
+        if DMFD.FDQuery2['cst'] = '500' then CSOSN    := csosn500;
+        if DMFD.FDQuery2['cst'] = '900' then CSOSN    := csosn900;
+
+       end;
+
+       modBC    := dbiValorOperacao;
+       pICMS    := DMFD.FDQuery2['pc_icms'];
+       vICMS    := DMFD.FDQuery2['vl_icms'];
+       vBC      := DMFD.FDQuery2['base_calculo_icms'];
+       pRedBC   := DMFD.FDQuery2['reducao_icms'];
+       vBCST    := DMFD.FDQuery2['base_icms_st'];
+       vICMSST  := DMFD.FDQuery2['vl_icms_st'];
+       pICMSST  := DMFD.FDQuery2['pc_icms_st'];
+       if ( ( DMFD.FDQuery2['modBCST'] <> null ) AND
+            ( DMFD.FDQuery2['modBCST'] <> '' ) ) then
+        modBCST  :=  DMFD.FDQuery2['modBCST'];
+       if ( DMFD.FDQuery2['pMVAST'] <> null ) then
+        pMVAST   := DMFD.FDQuery2['pMVAST'];
+       if ( DMFD.FDQuery2['pRedBCST'] <> null ) then
+        pRedBCST := DMFD.FDQuery2['pRedBCST'];
+
+       if (   (FrPar.cbb2.ItemIndex = 1)                      or
+            ( (FrPar.cbb2.ItemIndex = 2) and (gModelo=55) )   or
+            ( (FrPar.cbb2.ItemIndex = 3) and (gModelo=65) ) ) then              // ve400
+       begin
+
+        // Quando o CST = CST60
+        if ( CST = cstRep60 ) then
+        begin
+
+         if ( DMFD.FDQuery2['vBCSTRet'] <> null ) then
+          vBCSTRet    := DMFD.FDQuery2['vBCSTRet']
+         else
+          vBCSTRet    := 0;
+
+         if ( DMFD.FDQuery2['vICMSSTRet'] <> null ) then
+          vICMSSTRet  := DMFD.FDQuery2['vICMSSTRet']
+         else
+          vICMSSTRet  := 0;
+
+         if ( DMFD.FDQuery2['vBCSTDest'] <> null ) then
+          vBCSTDest  := DMFD.FDQuery2['vBCSTDest']
+         else
+          vBCSTDest  := 0;
+
+         if ( DMFD.FDQuery2['vICMSSTDest'] <> null ) then
+          vICMSSTDest  := DMFD.FDQuery2['vICMSSTDest']
+         else
+          vICMSSTDest  := 0;
+
+        end;
+
+        // Quando o CSOSN = csosn101
+        if ( CSOSN = csosn101 ) then
+        begin
+
+         if ( DMFD.FDQuery2['pCredSN'] <> null ) then
+          pCredSN     := DMFD.FDQuery2['pCredSN'];
+
+         if ( DMFD.FDQuery2['vCredICMSSN'] <> null ) then
+          vCredICMSSN := DMFD.FDQuery2['vCredICMSSN'];
+
+        end;
+
+       end;
+
+       //showmessage(vartostr(query2['base_calculo_icms']));
+
+      end;
+
+      with Imposto.IPI do
+      begin
+
+       CST   := ipi00;
+
+       // Incluido by Edson Lima ; 18/12/2012 ; 15:05 --------------------------
+
+       if DMFD.FDQuery2['ipi_cst'] = '00' then CST    := ipi00;
+       if DMFD.FDQuery2['ipi_cst'] = '01' then CST    := ipi01;
+       if DMFD.FDQuery2['ipi_cst'] = '02' then CST    := ipi02;
+       if DMFD.FDQuery2['ipi_cst'] = '03' then CST    := ipi03;
+       if DMFD.FDQuery2['ipi_cst'] = '04' then CST    := ipi04;
+       if DMFD.FDQuery2['ipi_cst'] = '05' then CST    := ipi05;
+       if DMFD.FDQuery2['ipi_cst'] = '49' then CST    := ipi49;
+       if DMFD.FDQuery2['ipi_cst'] = '50' then CST    := ipi50;
+       if DMFD.FDQuery2['ipi_cst'] = '51' then CST    := ipi51;
+       if DMFD.FDQuery2['ipi_cst'] = '52' then CST    := ipi52;
+       if DMFD.FDQuery2['ipi_cst'] = '53' then CST    := ipi53;
+       if DMFD.FDQuery2['ipi_cst'] = '54' then CST    := ipi54;
+       if DMFD.FDQuery2['ipi_cst'] = '55' then CST    := ipi55;
+       if DMFD.FDQuery2['ipi_cst'] = '99' then CST    := ipi99;
+
+       //-----------------------------------------------------------------------
+
+       pIPI  := DMFD.FDQuery2['pc_ipi'];
+       vIPI  := DMFD.FDQuery2['vl_ipi'];
+       vBC   := DMFD.FDQuery2['base_calculo_ipi'];
+       cEnq  := DMFD.FDQuery2['cEnq'];                                          // Novo by El - 2020-12-15
+
+      end;
+
+      with Imposto.PIS do
+      begin
+
+       // posicionado by Edson Lima ; 20/11/2012 ; 14:44 -----------------------
+       CST    := pis01;
+       if DMFD.FDQuery2['pis_cst'] = '01' then CST    := pis01;
+       if DMFD.FDQuery2['pis_cst'] = '02' then CST    := pis02;
+       if DMFD.FDQuery2['pis_cst'] = '03' then CST    := pis03;
+       if DMFD.FDQuery2['pis_cst'] = '04' then CST    := pis04;
+       if DMFD.FDQuery2['pis_cst'] = '05' then CST    := pis05;
+       if DMFD.FDQuery2['pis_cst'] = '06' then CST    := pis06;
+       if DMFD.FDQuery2['pis_cst'] = '07' then CST    := pis07;
+       if DMFD.FDQuery2['pis_cst'] = '08' then CST    := pis08;
+       if DMFD.FDQuery2['pis_cst'] = '09' then CST    := pis09;
+       if DMFD.FDQuery2['pis_cst'] = '49' then CST    := pis49;
+       if DMFD.FDQuery2['pis_cst'] = '50' then CST    := pis50;
+       if DMFD.FDQuery2['pis_cst'] = '51' then CST    := pis51;
+       if DMFD.FDQuery2['pis_cst'] = '52' then CST    := pis52;
+       if DMFD.FDQuery2['pis_cst'] = '53' then CST    := pis53;
+       if DMFD.FDQuery2['pis_cst'] = '54' then CST    := pis54;
+       if DMFD.FDQuery2['pis_cst'] = '55' then CST    := pis55;
+       if DMFD.FDQuery2['pis_cst'] = '56' then CST    := pis56;
+       if DMFD.FDQuery2['pis_cst'] = '60' then CST    := pis60;
+       if DMFD.FDQuery2['pis_cst'] = '61' then CST    := pis61;
+       if DMFD.FDQuery2['pis_cst'] = '62' then CST    := pis62;
+       if DMFD.FDQuery2['pis_cst'] = '63' then CST    := pis63;
+       if DMFD.FDQuery2['pis_cst'] = '64' then CST    := pis64;
+       if DMFD.FDQuery2['pis_cst'] = '65' then CST    := pis65;
+       if DMFD.FDQuery2['pis_cst'] = '66' then CST    := pis66;
+       if DMFD.FDQuery2['pis_cst'] = '67' then CST    := pis67;
+       if DMFD.FDQuery2['pis_cst'] = '70' then CST    := pis70;
+       if DMFD.FDQuery2['pis_cst'] = '71' then CST    := pis71;
+       if DMFD.FDQuery2['pis_cst'] = '72' then CST    := pis72;
+       if DMFD.FDQuery2['pis_cst'] = '73' then CST    := pis73;
+       if DMFD.FDQuery2['pis_cst'] = '74' then CST    := pis74;
+       if DMFD.FDQuery2['pis_cst'] = '75' then CST    := pis75;
+       if DMFD.FDQuery2['pis_cst'] = '98' then CST    := pis98;
+       if DMFD.FDQuery2['pis_cst'] = '99' then CST    := pis99;
+
+       vBC    := DMFD.FDQuery2['pis_base_calculo'];
+       pPis   := DMFD.FDQuery2['pis_percentual'];
+       vPis   := DMFD.FDQuery2['pis_valor'];
+
+      end;
+
+      with Imposto.COFINS do
+      begin
+
+       // posicionado by Edson Lima ; 20/11/2012 ; 14:44
+       CST    := cof01;
+       if DMFD.FDQuery2['cofins_cst'] = '01' then CST    := cof01;
+       if DMFD.FDQuery2['cofins_cst'] = '02' then CST    := cof02;
+       if DMFD.FDQuery2['cofins_cst'] = '03' then CST    := cof03;
+       if DMFD.FDQuery2['cofins_cst'] = '04' then CST    := cof04;
+       if DMFD.FDQuery2['cofins_cst'] = '05' then CST    := cof05;
+       if DMFD.FDQuery2['cofins_cst'] = '06' then CST    := cof06;
+       if DMFD.FDQuery2['cofins_cst'] = '07' then CST    := cof07;
+       if DMFD.FDQuery2['cofins_cst'] = '08' then CST    := cof08;
+       if DMFD.FDQuery2['cofins_cst'] = '09' then CST    := cof09;
+       if DMFD.FDQuery2['cofins_cst'] = '49' then CST    := cof49;
+       if DMFD.FDQuery2['cofins_cst'] = '50' then CST    := cof50;
+       if DMFD.FDQuery2['cofins_cst'] = '51' then CST    := cof51;
+       if DMFD.FDQuery2['cofins_cst'] = '52' then CST    := cof52;
+       if DMFD.FDQuery2['cofins_cst'] = '53' then CST    := cof53;
+       if DMFD.FDQuery2['cofins_cst'] = '54' then CST    := cof54;
+       if DMFD.FDQuery2['cofins_cst'] = '55' then CST    := cof55;
+       if DMFD.FDQuery2['cofins_cst'] = '56' then CST    := cof56;
+       if DMFD.FDQuery2['cofins_cst'] = '60' then CST    := cof60;
+       if DMFD.FDQuery2['cofins_cst'] = '61' then CST    := cof61;
+       if DMFD.FDQuery2['cofins_cst'] = '62' then CST    := cof62;
+       if DMFD.FDQuery2['cofins_cst'] = '63' then CST    := cof63;
+       if DMFD.FDQuery2['cofins_cst'] = '64' then CST    := cof64;
+       if DMFD.FDQuery2['cofins_cst'] = '65' then CST    := cof65;
+       if DMFD.FDQuery2['cofins_cst'] = '66' then CST    := cof66;
+       if DMFD.FDQuery2['cofins_cst'] = '67' then CST    := cof67;
+       if DMFD.FDQuery2['cofins_cst'] = '70' then CST    := cof70;
+       if DMFD.FDQuery2['cofins_cst'] = '71' then CST    := cof71;
+       if DMFD.FDQuery2['cofins_cst'] = '72' then CST    := cof72;
+       if DMFD.FDQuery2['cofins_cst'] = '73' then CST    := cof73;
+       if DMFD.FDQuery2['cofins_cst'] = '74' then CST    := cof74;
+       if DMFD.FDQuery2['cofins_cst'] = '75' then CST    := cof75;
+       if DMFD.FDQuery2['cofins_cst'] = '98' then CST    := cof98;
+       if DMFD.FDQuery2['cofins_cst'] = '99' then CST    := cof99;
+
+       vBC       := DMFD.FDQuery2['cofins_base_calculo'];
+       pCofins   := DMFD.FDQuery2['cofins_percentual'];
+       vCofins   := DMFD.FDQuery2['cofins_valor'];
+
+      end;
+
+     end;
+
+     DMFD.FDQuery2.next;
+
+    end;
+
+    if gAbortar then exit;
+
+    // ACBrNFe1.NotasFiscais.Add.NFe.Det.Add.imposto.pis.CST -------------------
+
+    Total.ICMSTot.vBC        := DMFD.FDQuery1['nfe_base_calculo_icms'];
+    Total.ICMSTot.vICMS      := DMFD.FDQuery1['nfe_vl_icms'];
+    Total.ICMSTot.vNF        := DMFD.FDQuery1['nfe_total_nf'];
+    Total.ICMSTot.vProd      := DMFD.FDQuery1['nfe_total_produtos'];
+    total.icmstot.vBCST      := DMFD.FDQuery1['nfe_base_calculo_st'];
+    total.icmstot.vST        := DMFD.FDQuery1['nfe_vl_st'];
+    total.icmstot.vFrete     := DMFD.FDQuery1['nfe_vl_frete'];
+    total.icmstot.vSeg       := DMFD.FDQuery1['nfe_vl_seguro'];
+    total.icmstot.vDesc      := DMFD.FDQuery1['nfe_vl_desconto'];
+    total.icmstot.vIpi       := DMFD.FDQuery1['nfe_vl_ipi'];
+    total.icmstot.vPis       := DMFD.FDQuery1['nfe_vl_pis'];
+    total.icmstot.vCofins    := DMFD.FDQuery1['nfe_vl_cofins'];
+    total.icmstot.vOutro     := DMFD.FDQuery1['nfe_vl_outros'];
+
+    // by Edson Lima
+    if vartostr(DMFD.FDQuery1['nfe_vl_ii']) <> '' then                          // Nota
+     total.ICMSTot.vII      := DMFD.FDQuery1['nfe_vl_ii'];
+
+    // by Edson Lima ; 2016-3-22 ; lei da transparencia de impostos
+    if DMFD.FDQuery1['vTotTrib'] = null then
+     Total.ICMSTot.vTotTrib := 0
+    else
+     Total.ICMSTot.vTotTrib := DMFD.FDQuery1['vTotTrib'];                       // Nota
+
+    // by Edson Lima ; 2016-10-11 ; valor do ICMS Desonerado
+    if (DMFD.FDQuery1['nfe_vICMSDeson'] <> null) then
+     Total.ICMSTot.vICMSDeson   := DMFD.FDQuery1['nfe_vICMSDeson'];             // by Edson Lima ; 11/10/2016
+
+    // by Edson Lima ; 2020-7-14 ; partilha do icms e fundo de probreza
+    if DMFD.FDQuery1['nfe_vFCPUFDest'] > 0 then
+    begin
+
+     if ( (DMFD.FDQuery1['nfe_idDest']    = '2')   and
+          (DMFD.FDQuery1['nfe_indFinal']  = '1')   and
+          (DMFD.FDQuery1['des_indIEDest'] = '9') ) then
+      Total.ICMSTot.vFCPUFDest   := DMFD.FDQuery1['nfe_vFCPUFDest']
+
+     else
+      Total.ICMSTot.vFCP         := DMFD.FDQuery1['nfe_vFCPUFDest'];
+
+    end;
+
+    if DMFD.FDQuery1['nfe_vICMSUFDest'] = null then
+     Total.ICMSTot.vICMSUFDest  := 0
+    else
+     Total.ICMSTot.vICMSUFDest  := DMFD.FDQuery1['nfe_vICMSUFDest'];
+
+    if DMFD.FDQuery1['nfe_vICMSUFRemet'] = null then
+     Total.ICMSTot.vICMSUFRemet := 0
+    else
+     Total.ICMSTot.vICMSUFRemet := DMFD.FDQuery1['nfe_vICMSUFRemet'];
+
+   end;
+
+   //---------------------------------------------------------------------------
+   // CONTINGÊNCIA
+   //---------------------------------------------------------------------------
+   if ((_tipo_emissao = 'fsda') or (_tipo_emissao = 'OffL')) then               //1- Normal, 2-Contingência FS, 3-Contingência SCAN, 4-EPEC e 5-Contingência FSDA. 9-OFFL
+   begin
+
+    if (gModelo = 55) then
+     _tpemissao := '5'
+    else if (gModelo = 65) then
+     _tpemissao := '9';
+
+    // by Edson Lima ; 2017-6-9T0949 ; Define quem será usado como cNF
+    gCdPed := VarToStr(DMFD.FDQuery1['nfe_CodPed']);
+
+    aux := '';
+    aux := edt_CodEmp.Text + ',' + '''' + VarToStr(DMFD.FDQuery1['nfe_nnf']) + '''' + ',' + '''' + _tpemissao + '''' + ',' + '''';
+    aux := aux + FormatDateTime('dd/mm/yyyy', VarToDateTime(DMFD.FDQuery1['nfe_demi'])) + '''' + ',' + '''';
+    Aux := Aux + IntToStr(gModelo) + '''' + ',' + '''';
+    Aux := Aux + VarToStr(DMFD.FDQuery1['nfe_Serie']) + '''' + ',' + '''';
+    Aux := Aux + gCdPed + '''';
+
+    DMFD.FDQuery7.Close;
+    DMFD.FDQuery7.SQL.Clear;
+    DMFD.FDQuery7.SQL.Add( 'exec sp_calcula_digito_chave ' + aux );
+    DMFD.FDQuery7.open;
+
+    Aux := '';
+    if not DMFD.FDQuery7.IsEmpty then
+     Aux := vartostr(DMFD.FDQuery7['chave']);
+
+    //--------------------------------------------------------------------------
+    // by Edson Lima ; 2017-1-5T1027 ; Atribuição de dados nas variáveis do
+    //                                 gerente
+    //--------------------------------------------------------------------------
+
+    gChvNFe := aux;
+    gCd_Emp := DMFD.FDQuery1['nfe_codigo_loja'];
+    if ( DMFD.FDQuery1['nfe_CodPed'] <> null ) then
+     gCodPed := DMFD.FDQuery1['nfe_CodPed']
+    else
+     gCodPed := 0;
+
+    //--------------------------------------------------------------------------
+
+    // by Edson ; 2013-10-8T1031 ; Variável Global Chave criada para contestar gravação;
+    gChave_Consiste  := Aux;
+
+    if (gModelo = 65) then
+     gTN              := '\NFCe\'                                               // by Edson Lima 2015-10-14T1107 - trunk2 novo ; Global utilizado para setar o nome da pasta
+    else
+     gTN              := '\NFe\';                                               // by Edson Lima 2015-10-14T1107 - trunk2 novo ; Global utilizado para setar o nome da pasta
+
+    pGAV();
+
+    try
+
+     Copia_Xml_PathLog(Aux, gTN);                                               // by Edson Lima 2015-10-14T1107 - trunk2 novo
+
+     if ( gCpt = 1 ) then
+      pDefineRel()                                                              // Define o tipo de Relatório FortesReport
+     else
+      pDefineRelFR();                                                           // Define o tipo de Relatório FastReport
+
+     pImpr();
+
+     ACBrNFe1.NotasFiscais.GravarXML();
+
+     _chave := aux;
+
+     // by Edson Lima ; 2013/03/12 ; 14:23 ; Atualiza a nfe no update centralizado
+     pGravaNFe('003', 'data_hora_recebimento',
+                      'chave_nfe',
+                      'situacao',
+                      'motivo',
+                      'CalcHoraNFCe',
+                      'UsuTrs',
+                      '',
+                      '',
+                      '',
+                      '',
+                      '',
+                      '',
+                      '',
+                      'codigo_loja',
+                      'demi',
+                      'nnf',
+                      'serie',
+                      'chave_nfe',
+                      'modelo',                                                 // Nome dos campos
+                      FormatDateTime('dd/mm/yyyy hh:nn:ss', now()),
+                      Aux,
+                      AnsiUpperCase(_tipo_emissao),
+                      ACBrNFe1.WebServices.EnvEvento.xMotivo,
+                      'N',
+                      gUsu,
+                      '',
+                      '',
+                      '',
+                      '',
+                      '',
+                      '',
+                      '',
+                      edt_CodEmp.Text,
+                      FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']),
+                      DMFD.FDQuery1['nfe_nnf'],
+                      DMFD.FDQuery1['nfe_serie'],
+                      Aux,
+                      DMFD.FDQuery1['nfe_modelo'],                              // Conteúdo dos campos
+                      true);                                                    // Consiste [true/false]
+
+    except on e:exception do
+     begin
+
+      MemoResp.Lines.Text   := UTF8Encode(ACBrNFe1.WebServices.Retorno.RetWS) + chr(13) + e.Message;
+      MemoLog.Lines.Text    := UTF8Encode(ACBrNFe1.WebServices.Retorno.Msg);
+      memoRespWS.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.Retorno.RetornoWS);
+
+      LoadXML(MemoResp, WBResposta);
+
+     end;
+
+    end;
+
+   end;
+
+   //---------------------------------------------------------------------------
+   // NORMAL
+   //---------------------------------------------------------------------------
+   if _tipo_emissao = 'normal' then
+   begin
+
+    // By Edson ; 2013-10-9T1024 ; rotina incluida para calc.e verif.da chave
+    _tpemissao := '1';
+
+    // by Edson Lima ; 2017-6-9T0949 ; Define quem será usado como cNF
+    gCdPed := VarToStr(DMFD.FDQuery1['nfe_CodPed']);
+
+    aux := '';
+    aux := edt_CodEmp.Text + ',' + '''' + VarToStr(DMFD.FDQuery1['nfe_nnf']) + '''' + ',' + '''' + _tpemissao + '''' + ',' + '''';
+    aux := aux + FormatDateTime('dd/mm/yyyy', VarToDateTime(DMFD.FDQuery1['nfe_demi'])) + '''' + ',' + '''';
+    aux := aux + IntToStr(gModelo) + '''' + ',' + '''';
+    aux := aux + VarToStr(DMFD.FDQuery1['nfe_Serie']) + '''' + ',' + '''';
+    aux := aux + gCdPed + '''';
+
+    DMFD.FDQuery7.Close;
+    DMFD.FDQuery7.SQL.Clear;
+    DMFD.FDQuery7.SQL.Add( 'exec sp_calcula_digito_chave ' + aux );
+    DMFD.FDQuery7.open;
+
+    Aux := '';
+
+    if not DMFD.FDQuery7.IsEmpty then
+     Aux := vartostr(DMFD.FDQuery7['chave']);
+
+    //--------------------------------------------------------------------------
+    // by Edson Lima ; 2017-1-5T1027 ; Atribuição de dados nas variáveis do
+    //                                 gerente
+    //--------------------------------------------------------------------------
+    gChvNFe := Aux;
+    gCd_Emp := DMFD.FDQuery1['nfe_codigo_loja'];
+    if ( DMFD.FDQuery1['nfe_CodPed'] <> null ) then
+     gCodPed := DMFD.FDQuery1['nfe_CodPed']
+    else
+     gCodPed := 0;
+    //--------------------------------------------------------------------------
+
+    // by Edson ; 2013-10-8T1031 ; Variável Global Chave criada para contestar gravação;
+    gChave_Consiste  := Aux;
+
+    if (StrToIntDef(DMFD.FDQuery1['nfe_modelo'], 0) = 65) then
+     gTN              := '\NFCe\'
+    else
+     gTN              := '\NFe\';
+
+    // Este processo segue exatamente essa sequancia
+    // 1º Gera, 2º Assina e 3º Valida
+
+    pGAV();
+
+    //--------------------------------------------------------------------------
+
+    Copia_Xml_PathLog(Aux, gTN);
+
+    if ( gCpt = 1 ) then
+     pDefineRel()                                                               // Define o tipo de Relatório FortesReport
+    else
+     pDefineRelFR();                                                            // Define o tipo de Relatório FastReport
+
+    // grava o numero do protocolo e o numero do recibo
+    if not gGeraXml then
+    begin
+
+     try // by Edson Lima ; 2013/02/26 ; 08:26 ; try inserido para obter retorno de erros abortado no ACBR
+
+      if gModelo = 65 then
+       gSincrona_Assincrona := true
+      else
+       gSincrona_Assincrona := false;
+
+      // Sempre enviamos lotes com somente uma nota tanto NFe como NFCe
+
+      if (ACBrNFe1.Enviar('0', true, gSincrona_Assincrona)) then
+      begin
+
+       if gSincrona_Assincrona then
+       begin
+
+        ACBrNFe1.WebServices.Consulta.NFeChave := Aux;
+
+        if ACBrNFe1.WebServices.Consulta.Executar then
+        begin
+
+         //---------------------------------------------------------------------
+         // by Edson Lima ; 2013/03/12 ; 14:23
+         // Atualiza a nfe no update centralizado para nfe
+         //---------------------------------------------------------------------
+         pGravaNFe('004',
+                   'protocolo',
+                   'recibo',
+                   'chave_nfe',
+                   'situacao',
+                   'motivo',
+                   'data_hora_recebimento',
+                   'CalcHoraNFCe',
+                   'UsuTrs',
+                   '',
+                   '',
+                   '',
+                   '',
+                   '',
+                   'codigo_loja',
+                   'demi',
+                   'nnf',
+                   'serie',
+                   'chave_nfe',
+                   'modelo',                                                    // Nome dos campos
+                   ACBrNFe1.WebServices.Consulta.Protocolo,
+                   '',
+                   Aux,
+                   IntToStr(ACBrNFe1.WebServices.Consulta.cStat),
+                   ACBrNFe1.WebServices.Consulta.xMotivo,
+                   FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.Consulta.DhRecbto),
+                   'N',
+                   gUsu,
+                   '',
+                   '',
+                   '',
+                   '',
+                   '',
+                   edt_CodEmp.Text,
+                   FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']),
+                   DMFD.FDQuery1['nfe_nnf'],
+                   DMFD.FDQuery1['nfe_serie'],
+                   Aux,
+                   DMFD.FDQuery1['nfe_modelo'],                                 // Conteúdo dos campos
+                   true);                                                       // Consiste [true/false]
+
+        end;
+
+        //----------------------------------------------------------------------
+        // by Edson Lima ; 2017-1-5 ; Grava a chave no pedido do gerente
+        //----------------------------------------------------------------------
+
+        if ( (VarToStr(ACBrNFe1.WebServices.Consulta.cStat) = '100') or
+             (VarToStr(ACBrNFe1.WebServices.Consulta.cStat) = '150') ) then
+         fGraGer( gChvNFe, gCd_Emp, gCodPed );
+
+        //----------------------------------------------------------------------
+        // by Edson Lima ; 2017-9-27
+        // Caso a exceção seja por denegação
+        //----------------------------------------------------------------------
+
+        if (ACBrNFe1.WebServices.Consulta.xMotivo =
+           'Rejeicao: NF-e esta denegada na base de dados da Secretaria de Fazenda Estadual')  or
+           (ACBrNFe1.WebServices.Consulta.xMotivo =
+           'Uso Denegado : Irregularidade fiscal do destinatario')                             or
+           (VarToStr(ACBrNFe1.WebServices.Consulta.cStat) = '301')  or
+           (VarToStr(ACBrNFe1.WebServices.Consulta.cStat) = '302')  or
+           (vartostr(ACBrNFe1.WebServices.Consulta.cStat) = '303')  or
+           (vartostr(ACBrNFe1.WebServices.Consulta.cStat) = '110')  or
+           (vartostr(ACBrNFe1.WebServices.Consulta.cStat) = '205')  then
+        begin
+
+         //---------------------------------------------------------------------
+         // by Edson Lima ; 2017-1-5 ; Grava a chave no pedido do gerente
+         //---------------------------------------------------------------------
+
+         fGraGer( gChvNFe, gCd_Emp, gCodPed );
+
+         //---------------------------------------------------------------------
+
+         gSoUmaConsulta  := True;
+         gConsiste       := false;                                              // Depende da consistência
+         BitBtn8Click(Sender);                                                  // Força um click na consulta
+         gSoUmaConsulta  := False;                                              // Seta variável global para ler vários registros
+         iCodPed         := gCodPed;
+
+         //---------------------------------------------------------------------
+         // by Edson Lima ; 2017-1-13T1358
+         // Cancelamento do pedido no gerente da nota denegada
+         //---------------------------------------------------------------------
+         // Verifica a precisão administrativa do gerente para
+         // cancelamento de nota denegada
+         //---------------------------------------------------------------------
+         if iCodPed <> 0 then
+         begin
+
+          if ( fVerPAG(StrToIntDef(gNNF_Consiste, 0),
+               StrToIntDef(edt_CodEmp.Text, 0), iCodPed) ) then
+          begin
+
+           //-------------------------------------------------------------------
+           // Efetua o Cancelamento Administrativo do PEDIDO
+           // da nota Denegada
+           //-------------------------------------------------------------------
+
+           if (iCodPed <> 6) then
+           begin
+
+            if not ( fCanCAP(StrToIntDef(gNNF_Consiste, 0),
+                     StrToIntDef(edt_CodEmp.Text, 0),
+                     iCodPed, gCodMtD) ) then
+             Application.MessageBox(PWideChar('Nota denegada, mas o pedido não foi cancelado!'), 'Atenção', MB_ICONINFORMATION );
+
+           end
+           else
+            Application.MessageBox(PWideChar('Número do pedido não informado! Nota cancelada, mas Pedido não!'), 'Atenção', MB_ICONINFORMATION );
+
+           //-------------------------------------------------------------------
+
+          end
+          else
+           Application.MessageBox(PWideChar('Nota denegada, mas o pedido não foi cancelado!'), 'Atenção', MB_ICONINFORMATION );
+
+         end
+         else
+          Application.MessageBox(PWideChar('Número do pedido não informado!'), 'Atenção', MB_ICONINFORMATION );
+
+         //---------------------------------------------------------------------
+
+        end;
+
+       end
+       else
+       begin
+
+        //----------------------------------------------------------------------
+        // by Edson Lima ; 2013/03/12 ; 14:23 ; Atualiza a nfe no update
+        //                                      centralizado para nfe
+        //----------------------------------------------------------------------
+
+        pGravaNFe('004',
+                  'protocolo',
+                  'recibo',
+                  'chave_nfe',
+                  'situacao',
+                  'motivo',
+                  'data_hora_recebimento',
+                  'CalcHoraNFCe',
+                  'UsuTrs',
+                  '',
+                  '',
+                  '',
+                  '',
+                  '',
+                  'codigo_loja',
+                  'demi',
+                  'nnf',
+                  'serie',
+                  'chave_nfe',
+                  'modelo',                                                     // Nome dos campos
+                  ACBrNFe1.WebServices.Retorno.Protocolo,
+                  ACBrNFe1.WebServices.Retorno.Recibo,
+                  ACBrNFe1.WebServices.Retorno.ChaveNFe,
+                  IntToStr(ACBrNFe1.WebServices.Retorno.cStat),
+                  ACBrNFe1.WebServices.Retorno.xMotivo,
+                  FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.StatusServico.dhRetorno),         // Antes -> FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].dhRecbto),
+                  'N',
+                  gUsu,
+                  '',
+                  '',
+                  '',
+                  '',
+                  '',
+                  edt_CodEmp.Text,
+                  FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']),
+                  DMFD.FDQuery1['nfe_nnf'],
+                  DMFD.FDQuery1['nfe_serie'],
+                  ACBrNFe1.WebServices.Retorno.ChaveNFe,
+                  DMFD.FDQuery1['nfe_modelo'],                                  // Conteúdo dos campos
+                  true);                                                        // Consiste [true/false]
+
+        //----------------------------------------------------------------------
+        // by Edson Lima ; 2017-1-5 ; Grava a chave no pedido do gerente
+        //----------------------------------------------------------------------
+
+        if ( (VarToStr(ACBrNFe1.WebServices.Retorno.cStat) = '100') or
+             (VarToStr(ACBrNFe1.WebServices.Retorno.cStat) = '150') ) then
+         fGraGer( gChvNFe, gCd_Emp, gCodPed );
+
+        //----------------------------------------------------------------------
+        // by Edson Lima ; 2017-9-27
+        // Caso a exceção seja por denegação
+        //----------------------------------------------------------------------
+        if (ACBrNFe1.WebServices.Retorno.xMotivo =
+           'Rejeicao: NF-e esta denegada na base de dados da Secretaria de Fazenda Estadual')  or
+           (ACBrNFe1.WebServices.Retorno.xMotivo =
+           'Uso Denegado : Irregularidade fiscal do destinatario')                             or
+           (VarToStr(ACBrNFe1.WebServices.Retorno.cStat) = '301')  or
+           (VarToStr(ACBrNFe1.WebServices.Retorno.cStat) = '302')  or
+           (vartostr(ACBrNFe1.WebServices.Retorno.cStat) = '303')  or
+           (vartostr(ACBrNFe1.WebServices.Retorno.cStat) = '110')  or
+           (vartostr(ACBrNFe1.WebServices.Retorno.cStat) = '205')  then
+        begin
+
+         //---------------------------------------------------------------------
+         // by Edson Lima ; 2017-1-5 ; Grava a chave no pedido do gerente
+         //---------------------------------------------------------------------
+
+         fGraGer( gChvNFe, gCd_Emp, gCodPed );
+
+         //---------------------------------------------------------------------
+
+         gSoUmaConsulta  := True;
+         gConsiste       := false;                                              // Depende da consistência
+         BitBtn8Click(Sender);                                                  // Força um click na consulta
+         gSoUmaConsulta  := False;                                              // Seta variável global para ler vários registros
+         iCodPed         := gCodPed;
+
+         //---------------------------------------------------------------------
+         // by Edson Lima ; 2017-1-13T1358
+         // Cancelamento do pedido no gerente da nota denegada
+         //---------------------------------------------------------------------
+         // Verifica a precisão administrativa do gerente para
+         // cancelamento de nota denegada
+         //---------------------------------------------------------------------
+         if iCodPed <> 0 then
+         begin
+
+          if ( fVerPAG(StrToIntDef(gNNF_Consiste, 0),
+               StrToIntDef(edt_CodEmp.Text, 0), iCodPed) ) then
+          begin
+
+           //-------------------------------------------------------------------
+           // Efetua o Cancelamento Administrativo do PEDIDO
+           // da nota Denegada
+           //-------------------------------------------------------------------
+           if (iCodPed <> 6) then
+           begin
+
+            if not ( fCanCAP(StrToIntDef(gNNF_Consiste, 0),
+                     StrToIntDef(edt_CodEmp.Text, 0),
+                     iCodPed, gCodMtD) ) then
+             Application.MessageBox(PWideChar('Nota denegada, mas o pedido não foi cancelado!'), 'Atenção', MB_ICONINFORMATION );
+
+           end
+           else
+            Application.MessageBox(PWideChar('Número do pedido não informado! Nota cancelada, mas Pedido não!'), 'Atenção', MB_ICONINFORMATION );
+
+           //-------------------------------------------------------------------
+
+          end
+          else
+           Application.MessageBox(PWideChar('Nota denegada, mas o pedido não foi cancelado!'), 'Atenção', MB_ICONINFORMATION );
+
+         end
+         else
+          Application.MessageBox(PWideChar('Número do pedido não informado!'), 'Atenção', MB_ICONINFORMATION );
+
+         //---------------------------------------------------------------------
+
+        end;
+
+       end;
+
+       if gSincrona_Assincrona then
+       begin
+
+        memoLog.Clear;
+        MemoResp.Lines.Text   := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetWS);
+        MemoLog.Lines.Text    := UTF8Encode(ACBrNFe1.WebServices.Consulta.Msg);
+        memoRespWS.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetornoWS);
+        LoadXML(MemoResp, WBResposta);
+
+       end
+       else
+       begin
+
+        memoLog.Clear;
+        MemoResp.Lines.Text   := UTF8Encode(ACBrNFe1.WebServices.Retorno.RetWS);
+        MemoLog.Lines.Text    := UTF8Encode(ACBrNFe1.WebServices.Retorno.Msg);
+        memoRespWS.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.Retorno.RetornoWS);
+        LoadXML(MemoResp, WBResposta);
+
+       end
+
+      end
+      else
+      begin
+
+       if not gSincrona_Assincrona then
+       begin
+
+        ACBrNFe1.WebServices.Retorno.Recibo := ACBrNFe1.WebServices.Enviar.Recibo;
+        ACBrNFe1.WebServices.Retorno.Executar;
+
+        for i := 0 to ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Count-1 do
+        begin
+
+         //---------------------------------------------------------------------
+         // by Edson Lima ; 2013/03/12 ; 14:23 ; Atualiza a nfe no
+         //                                      update centralizado
+         //---------------------------------------------------------------------
+         pGravaNFe('005', 'protocolo',
+                          'recibo',
                           'chave_nfe',
                           'situacao',
                           'motivo',
+                          'data_hora_recebimento',
                           'CalcHoraNFCe',
                           'UsuTrs',
-                          '',
-                          '',
                           '',
                           '',
                           '',
@@ -3645,14 +4173,14 @@ begin
                           'serie',
                           'chave_nfe',
                           'modelo',                                             // Nome dos campos
-                          FormatDateTime('dd/mm/yyyy hh:nn:ss', now()),
-                          Aux,
-                          AnsiUpperCase(_tipo_emissao),
-                          ACBrNFe1.WebServices.EnvEvento.xMotivo,
+                          ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].nProt,
+                          ACBrNFe1.WebServices.Retorno.NFeRetorno.nRec,
+                          ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].chDFe,
+                          ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].cStat,
+                          ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].xMotivo,
+                          FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].dhRecbto),
                           'N',
                           gUsu,
-                          '',
-                          '',
                           '',
                           '',
                           '',
@@ -3662,677 +4190,226 @@ begin
                           FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']),
                           DMFD.FDQuery1['nfe_nnf'],
                           DMFD.FDQuery1['nfe_serie'],
-                          Aux,
+                          ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].chDFe,
                           DMFD.FDQuery1['nfe_modelo'],                          // Conteúdo dos campos
                           true);                                                // Consiste [true/false]
 
-        except on e:exception do
+        end;
+
+        memoLog.Clear;
+        MemoResp.Lines.Text   := UTF8Encode(ACBrNFe1.WebServices.Retorno.RetWS);
+        MemoLog.Lines.Text    := UTF8Encode(ACBrNFe1.WebServices.Retorno.Msg);
+        memoRespWS.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.Retorno.RetornoWS);
+        LoadXML(MemoResp, WBResposta);
+
+       end;
+
+      end;
+
+     Except on e:exception do
+
+      begin
+
+       if gSincrona_Assincrona then
+       begin
+
+        //----------------------------------------------------------------------
+        // Caso a exceção seja por denegação
+        //----------------------------------------------------------------------
+        if (vartostr(ACBrNFe1.WebServices.Consulta.XMotivo) =
+           'Rejeicao: NF-e esta denegada na base de dados da Secretaria de Fazenda Estadual')  or
+           (vartostr(ACBrNFe1.WebServices.Consulta.XMotivo) =
+           'Uso Denegado : Irregularidade fiscal do destinatario')                             or
+           (vartostr(ACBrNFe1.WebServices.Consulta.cStat) = '301')  or
+           (vartostr(ACBrNFe1.WebServices.Consulta.cStat) = '302')  or
+           (vartostr(ACBrNFe1.WebServices.Consulta.cStat) = '303')  or
+           (vartostr(ACBrNFe1.WebServices.Consulta.cStat) = '110')  or
+           (vartostr(ACBrNFe1.WebServices.Consulta.cStat) = '205')  then
+        begin
+
+        //----------------------------------------------------------------------
+         // by Edson Lima ; 2017-1-5 ; Grava a chave no pedido do gerente
+         fGraGer( gChvNFe, gCd_Emp, gCodPed );
+         //---------------------------------------------------------------------
+
+         gSoUmaConsulta := True;                                                // Seta variável global para ler somente um registro
+         gConsiste      := false;                                               // Depende da consistência
+         BitBtn8Click(Sender);                                                  // Força um click na consulta
+         gSoUmaConsulta := False;                                               // Seta variável global para ler vários registros
+         iCodPed        := gCodPed;
+
+         //---------------------------------------------------------------------
+         // by Edson Lima ; 2017-1-13T1358
+         // Cancelamento do pedido no gerente da nota denegada
+         //---------------------------------------------------------------------
+         // Verifica a precisão administrativa do gerente para cancelamento
+         // de nota denegada
+         // --------------------------------------------------------------------
+         if iCodPed <> 0 then
          begin
 
-          MemoResp.Lines.Text   := UTF8Encode(ACBrNFe1.WebServices.Retorno.RetWS) + chr(13) + e.Message;
-          MemoLog.Lines.Text    := UTF8Encode(ACBrNFe1.WebServices.Retorno.Msg);
-          memoRespWS.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.Retorno.RetornoWS);
+          if ( fVerPAG(StrToIntDef(gNNF_Consiste, 0), StrToIntDef(edt_CodEmp.Text, 0), iCodPed) ) then
+          begin
 
-          LoadXML(MemoResp, WBResposta);
+           //-------------------------------------------------------------------
+           // Efetua o Cancelamento Administrativo do PEDIDO da nota Denegada
+           //-------------------------------------------------------------------
+           if (iCodPed <> 0) then
+           begin
 
-         end;
+            if not ( fCanCAP(StrToIntDef(gNNF_Consiste, 0), StrToIntDef(edt_CodEmp.Text, 0), iCodPed, gCodMtD) ) then
+             Application.MessageBox(PWideChar('Nota denegada, mas o pedido não foi cancelado!'), 'Atenção', MB_ICONINFORMATION );
+
+           end
+           else
+            Application.MessageBox(PWideChar('Número do pedido não informado! Nota cancelada, mas Pedido não!'), 'Atenção', MB_ICONINFORMATION );
+
+           //-------------------------------------------------------------------
+
+          end
+          else
+           Application.MessageBox(PWideChar('Nota denegada, mas o pedido não foi cancelado!'), 'Atenção', MB_ICONINFORMATION );
+
+         end
+         else
+          Application.MessageBox(PWideChar('Número do pedido não informado!'), 'Atenção', MB_ICONINFORMATION );
 
         end;
 
-       end;
+        memoLog.Clear;
+        MemoResp.Lines.Text   := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetWS);
+        MemoLog.Lines.Text    := UTF8Encode(ACBrNFe1.WebServices.Consulta.Msg);
+        memoRespWS.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetornoWS);
+        LoadXML(MemoResp, WBResposta);
 
-      //------------------------------------------------------------------------
-      // NORMAL
-      //------------------------------------------------------------------------
-      if _tipo_emissao = 'normal' then
+        Application.Messagebox( PWideChar( 'Inconsistência interna no envio: ' +
+                                vartostr(DMFD.FDQryGeral2['nfe_nnf']) + chr(13) +
+                                e.Message ), PWideChar( 'Envio de NFe & NFCe' ),
+                                MB_ICONINFORMATION + mb_ok );
+
+        pAtuNFe();
+
+       end
+       else
        begin
 
-        // By Edson ; 2013-10-9T1024 ; rotina incluida para calc.e verif.da chave
-        _tpemissao := '1';
-
-        // by Edson Lima ; 2017-6-9T0949 ; Define quem será usado como cNF
-        gCdPed := VarToStr(DMFD.FDQuery1['nfe_CodPed']);
-
-        aux := '';
-        aux := edt_CodEmp.Text + ',' + '''' + VarToStr(DMFD.FDQuery1['nfe_nnf']) + '''' + ',' + '''' + _tpemissao + '''' + ',' + '''';
-        aux := aux + FormatDateTime('dd/mm/yyyy', VarToDateTime(DMFD.FDQuery1['nfe_demi'])) + '''' + ',' + '''';
-        aux := aux + IntToStr(gModelo) + '''' + ',' + '''';
-        aux := aux + VarToStr(DMFD.FDQuery1['nfe_Serie']) + '''' + ',' + '''';
-        aux := aux + gCdPed + '''';
-
-        DMFD.FDQuery7.Close;
-        DMFD.FDQuery7.SQL.Clear;
-        DMFD.FDQuery7.SQL.Add( 'exec sp_calcula_digito_chave ' + aux );
-        DMFD.FDQuery7.open;
-
-        Aux := '';
-        if not DMFD.FDQuery7.IsEmpty then
-          Aux := vartostr(DMFD.FDQuery7['chave']);
-
         //----------------------------------------------------------------------
-        // by Edson Lima ; 2017-1-5T1027 ; Atribuição de dados nas variáveis do
-        //                                 gerente
+        // Caso a exceção seja por denegação
         //----------------------------------------------------------------------
-        gChvNFe := Aux;
-        gCd_Emp := DMFD.FDQuery1['nfe_codigo_loja'];
-        if ( DMFD.FDQuery1['nfe_CodPed'] <> null ) then
-         gCodPed := DMFD.FDQuery1['nfe_CodPed']
-        else
-         gCodPed := 0;
-        //----------------------------------------------------------------------
+        if (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].xMotivo) =
+           'Rejeicao: NF-e esta denegada na base de dados da Secretaria de Fazenda Estadual')  or
+           (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].xMotivo) =
+           'Uso Denegado : Irregularidade fiscal do destinatario')                             or
+           (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].cStat) = '301')  or
+           (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].cStat) = '302')  or
+           (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].cStat) = '303')  or
+           (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].cStat) = '110')  or
+           (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].cStat) = '205')  then
+        begin
 
-        // by Edson ; 2013-10-8T1031 ; Variável Global Chave criada para contestar gravação;
-        gChave_Consiste  := Aux;
+         //---------------------------------------------------------------------
+         // by Edson Lima ; 2017-1-5 ; Grava a chave no pedido do gerente
 
-        if (StrToIntDef(DMFD.FDQuery1['nfe_modelo'], 0) = 65) then
-         gTN              := '\NFCe\'
-        else
-         gTN              := '\NFe\';
+         fGraGer( gChvNFe, gCd_Emp, gCodPed );
 
-        // Este processo segue exatamente essa sequancia
-        // 1º Gera, 2º Assina e 3º Valida
+         //---------------------------------------------------------------------
 
-        pGAV();
+         gSoUmaConsulta := True;                                                // Seta variável global para ler somente um registro
+         gConsiste      := false;                                               // Depende da consistência
+         BitBtn8Click(Sender);                                                  // Força um click na consulta
+         gSoUmaConsulta := False;                                               // Seta variável global para ler vários registros
+         iCodPed        := gCodPed;
 
-        //----------------------------------------------
-
-        Copia_Xml_PathLog(Aux, gTN);
-
-        if ( gCpt = 1 ) then
-         pDefineRel()                                                           // Define o tipo de Relatório FortesReport
-        else
-         pDefineRelFR();                                                        // Define o tipo de Relatório FastReport
-
-        // grava o numero do protocolo e o numero do recibo
-        if not gGeraXml then
+         //---------------------------------------------------------------------
+         // by Edson Lima ; 2017-1-13T1358
+         // Cancelamento do pedido no gerente da nota denegada
+         //---------------------------------------------------------------------
+         // Verifica a precisão administrativa do gerente para cancelamento
+         // de nota denegada
+         // --------------------------------------------------------------------
+         if iCodPed <> 0 then
          begin
 
-          try // by Edson Lima ; 2013/02/26 ; 08:26 ; try inserido para obter retorno de erros abortado no ACBR
-
-           if gModelo = 65 then
-            gSincrona_Assincrona := true
-           else
-            gSincrona_Assincrona := false;
-
-           // Sempre enviamos lotes com somente uma nota tanto NFe como NFCe
-
-           if (ACBrNFe1.Enviar('0', true, gSincrona_Assincrona)) then
-            begin
-
-             if gSincrona_Assincrona then
-              begin
-
-               ACBrNFe1.WebServices.Consulta.NFeChave := Aux;
-
-               if ACBrNFe1.WebServices.Consulta.Executar then
-                begin
-
-                 //-------------------------------------------------------------
-                 // by Edson Lima ; 2013/03/12 ; 14:23
-                 // Atualiza a nfe no update centralizado para nfe
-                 //-------------------------------------------------------------
-
-                 pGravaNFe('004',
-                 'protocolo',
-                 'recibo',
-                 'chave_nfe',
-                 'situacao',
-                 'motivo',
-                 'data_hora_recebimento',
-                 'CalcHoraNFCe',
-                 'UsuTrs',
-                 '',
-                 '',
-                 '',
-                 '',
-                 '',
-                 'codigo_loja',
-                 'demi',
-                 'nnf',
-                 'serie',
-                 'chave_nfe',
-                 'modelo',                                                      // Nome dos campos
-                 ACBrNFe1.WebServices.Consulta.Protocolo,
-                 '',
-                 Aux,
-                 IntToStr(ACBrNFe1.WebServices.Consulta.cStat),
-                 ACBrNFe1.WebServices.Consulta.xMotivo,
-                 FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.Consulta.DhRecbto),
-                 'N',
-                 gUsu,
-                 '',
-                 '',
-                 '',
-                 '',
-                 '',
-                 edt_CodEmp.Text,
-                 FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']),
-                 DMFD.FDQuery1['nfe_nnf'],
-                 DMFD.FDQuery1['nfe_serie'],
-                 Aux,
-                 DMFD.FDQuery1['nfe_modelo'],                                   // Conteúdo dos campos
-                 true);                                                         // Consiste [true/false]
-
-                end;
-
-               //-----------------------------------------------------------------
-               // by Edson Lima ; 2017-1-5 ; Grava a chave no pedido do gerente
-               //-----------------------------------------------------------------
-
-               if ( (VarToStr(ACBrNFe1.WebServices.Consulta.cStat) = '100') or
-                    (VarToStr(ACBrNFe1.WebServices.Consulta.cStat) = '150') ) then
-                fGraGer( gChvNFe, gCd_Emp, gCodPed );
-
-               //-----------------------------------------------------------------
-               // by Edson Lima ; 2017-9-27
-               // Caso a exceção seja por denegação
-               //-----------------------------------------------------------------
-               if (ACBrNFe1.WebServices.Consulta.xMotivo =
-                  'Rejeicao: NF-e esta denegada na base de dados da Secretaria de Fazenda Estadual')  or
-                  (ACBrNFe1.WebServices.Consulta.xMotivo =
-                  'Uso Denegado : Irregularidade fiscal do destinatario')                             or
-                  (VarToStr(ACBrNFe1.WebServices.Consulta.cStat) = '301')  or
-                  (VarToStr(ACBrNFe1.WebServices.Consulta.cStat) = '302')  or
-                  (vartostr(ACBrNFe1.WebServices.Consulta.cStat) = '303')  or
-                  (vartostr(ACBrNFe1.WebServices.Consulta.cStat) = '110')  or
-                  (vartostr(ACBrNFe1.WebServices.Consulta.cStat) = '205')  then
-                begin
-
-                 //---------------------------------------------------------------
-                 // by Edson Lima ; 2017-1-5 ; Grava a chave no pedido do gerente
-                 //---------------------------------------------------------------
-
-                 fGraGer( gChvNFe, gCd_Emp, gCodPed );
-
-                 //---------------------------------------------------------------
-
-                 gSoUmaConsulta  := True;
-                 gConsiste       := false;                                      // Depende da consistência
-                 BitBtn8Click(Sender);                                          // Força um click na consulta
-                 gSoUmaConsulta  := False;                                      // Seta variável global para ler vários registros
-                 iCodPed         := gCodPed;
-
-                 //---------------------------------------------------------------
-                 // by Edson Lima ; 2017-1-13T1358
-                 // Cancelamento do pedido no gerente da nota denegada
-                 //---------------------------------------------------------------
-                 // Verifica a precisão administrativa do gerente para
-                 // cancelamento de nota denegada
-                 //---------------------------------------------------------------
-                 if iCodPed <> 0 then
-                  begin
-
-                   if ( fVerPAG(StrToIntDef(gNNF_Consiste, 0),
-                        StrToIntDef(edt_CodEmp.Text, 0), iCodPed) ) then
-                    begin
-
-                     //-----------------------------------------------------------
-                     // Efetua o Cancelamento Administrativo do PEDIDO
-                     // da nota Denegada
-                     //-----------------------------------------------------------
-
-                     if (iCodPed <> 6) then
-                      begin
-
-                       if not ( fCanCAP(StrToIntDef(gNNF_Consiste, 0),
-                                StrToIntDef(edt_CodEmp.Text, 0),
-                                iCodPed, gCodMtD) ) then
-                        Application.MessageBox(PWideChar('Nota denegada, mas o pedido não foi cancelado!'), 'Atenção', MB_ICONINFORMATION );
-
-                      end
-                     else
-
-                      Application.MessageBox(PWideChar('Número do pedido não informado! Nota cancelada, mas Pedido não!'), 'Atenção', MB_ICONINFORMATION );
-
-                     //-----------------------------------------------------------
-
-                    end
-                   else
-                    Application.MessageBox(PWideChar('Nota denegada, mas o pedido não foi cancelado!'), 'Atenção', MB_ICONINFORMATION );
-
-                  end
-                 else
-
-                  Application.MessageBox(PWideChar('Número do pedido não informado!'), 'Atenção', MB_ICONINFORMATION );
-
-                 //---------------------------------------------------------------
-
-                end;
-
-              end
-             else
-              begin
-
-               //---------------------------------------------------------------
-               // by Edson Lima ; 2013/03/12 ; 14:23 ; Atualiza a nfe no update
-               //                                      centralizado para nfe
-               //---------------------------------------------------------------
-
-               pGravaNFe('004',
-               'protocolo',
-               'recibo',
-               'chave_nfe',
-               'situacao',
-               'motivo',
-               'data_hora_recebimento',
-               'CalcHoraNFCe',
-               'UsuTrs',
-               '',
-               '',
-               '',
-               '',
-               '',
-               'codigo_loja',
-               'demi',
-               'nnf',
-               'serie',
-               'chave_nfe',
-               'modelo',                                                        // Nome dos campos
-               ACBrNFe1.WebServices.Retorno.Protocolo,
-               ACBrNFe1.WebServices.Retorno.Recibo,
-               ACBrNFe1.WebServices.Retorno.ChaveNFe,
-               IntToStr(ACBrNFe1.WebServices.Retorno.cStat),
-               ACBrNFe1.WebServices.Retorno.xMotivo,
-               FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.StatusServico.dhRetorno),         // Antes -> FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].dhRecbto),
-               'N',
-               gUsu,
-               '',
-               '',
-               '',
-               '',
-               '',
-               edt_CodEmp.Text,
-               FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']),
-               DMFD.FDQuery1['nfe_nnf'],
-               DMFD.FDQuery1['nfe_serie'],
-               ACBrNFe1.WebServices.Retorno.ChaveNFe,
-               DMFD.FDQuery1['nfe_modelo'],                                     // Conteúdo dos campos
-               true);                                                           // Consiste [true/false]
-
-               //---------------------------------------------------------------
-               // by Edson Lima ; 2017-1-5 ; Grava a chave no pedido do gerente
-               //---------------------------------------------------------------
-
-               if ( (VarToStr(ACBrNFe1.WebServices.Retorno.cStat) = '100') or
-                    (VarToStr(ACBrNFe1.WebServices.Retorno.cStat) = '150') ) then
-                fGraGer( gChvNFe, gCd_Emp, gCodPed );
-
-               //---------------------------------------------------------------
-               // by Edson Lima ; 2017-9-27
-               // Caso a exceção seja por denegação
-               //---------------------------------------------------------------
-               if (ACBrNFe1.WebServices.Retorno.xMotivo =
-                  'Rejeicao: NF-e esta denegada na base de dados da Secretaria de Fazenda Estadual')  or
-                  (ACBrNFe1.WebServices.Retorno.xMotivo =
-                  'Uso Denegado : Irregularidade fiscal do destinatario')                             or
-                  (VarToStr(ACBrNFe1.WebServices.Retorno.cStat) = '301')  or
-                  (VarToStr(ACBrNFe1.WebServices.Retorno.cStat) = '302')  or
-                  (vartostr(ACBrNFe1.WebServices.Retorno.cStat) = '303')  or
-                  (vartostr(ACBrNFe1.WebServices.Retorno.cStat) = '110')  or
-                  (vartostr(ACBrNFe1.WebServices.Retorno.cStat) = '205')  then
-                begin
-
-                 //-------------------------------------------------------------
-                 // by Edson Lima ; 2017-1-5 ; Grava a chave no pedido do gerente
-                 //-------------------------------------------------------------
-
-                 fGraGer( gChvNFe, gCd_Emp, gCodPed );
-
-                 //-------------------------------------------------------------
-
-                 gSoUmaConsulta  := True;
-                 gConsiste       := false;                                      // Depende da consistência
-                 BitBtn8Click(Sender);                                          // Força um click na consulta
-                 gSoUmaConsulta  := False;                                      // Seta variável global para ler vários registros
-                 iCodPed         := gCodPed;
-
-                 //-------------------------------------------------------------
-                 // by Edson Lima ; 2017-1-13T1358
-                 // Cancelamento do pedido no gerente da nota denegada
-                 //-------------------------------------------------------------
-                 // Verifica a precisão administrativa do gerente para
-                 // cancelamento de nota denegada
-                 //-------------------------------------------------------------
-                 if iCodPed <> 0 then
-                  begin
-
-                   if ( fVerPAG(StrToIntDef(gNNF_Consiste, 0),
-                        StrToIntDef(edt_CodEmp.Text, 0), iCodPed) ) then
-                    begin
-
-                     //-----------------------------------------------------------
-                     // Efetua o Cancelamento Administrativo do PEDIDO
-                     // da nota Denegada
-                     //-----------------------------------------------------------
-
-                     if (iCodPed <> 6) then
-                      begin
-
-                       if not ( fCanCAP(StrToIntDef(gNNF_Consiste, 0),
-                                StrToIntDef(edt_CodEmp.Text, 0),
-                                iCodPed, gCodMtD) ) then
-                        Application.MessageBox(PWideChar('Nota denegada, mas o pedido não foi cancelado!'), 'Atenção', MB_ICONINFORMATION );
-
-                      end
-                     else
-
-                      Application.MessageBox(PWideChar('Número do pedido não informado! Nota cancelada, mas Pedido não!'), 'Atenção', MB_ICONINFORMATION );
-
-                     //-----------------------------------------------------------
-
-                    end
-                   else
-                    Application.MessageBox(PWideChar('Nota denegada, mas o pedido não foi cancelado!'), 'Atenção', MB_ICONINFORMATION );
-
-                  end
-                 else
-
-                  Application.MessageBox(PWideChar('Número do pedido não informado!'), 'Atenção', MB_ICONINFORMATION );
-
-                 //---------------------------------------------------------------
-
-                end;
-
-              end;
-
-             if gSincrona_Assincrona then
-              begin
-
-               memoLog.Clear;
-               MemoResp.Lines.Text   := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetWS);
-               MemoLog.Lines.Text    := UTF8Encode(ACBrNFe1.WebServices.Consulta.Msg);
-               memoRespWS.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetornoWS);
-               LoadXML(MemoResp, WBResposta);
-
-              end
-             else
-              begin
-
-               memoLog.Clear;
-               MemoResp.Lines.Text   := UTF8Encode(ACBrNFe1.WebServices.Retorno.RetWS);
-               MemoLog.Lines.Text    := UTF8Encode(ACBrNFe1.WebServices.Retorno.Msg);
-               memoRespWS.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.Retorno.RetornoWS);
-               LoadXML(MemoResp, WBResposta);
-
-              end
-
-            end
-
-           else
-
-            begin
-
-             if not gSincrona_Assincrona then
-              begin
-
-               ACBrNFe1.WebServices.Retorno.Recibo := ACBrNFe1.WebServices.Enviar.Recibo;
-               ACBrNFe1.WebServices.Retorno.Executar;
-
-               for i := 0 to ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Count-1 do
-                begin
-
-                 //---------------------------------------------------------------
-                 // by Edson Lima ; 2013/03/12 ; 14:23 ; Atualiza a nfe no
-                 //                                      update centralizado
-                 //---------------------------------------------------------------
-                 pGravaNFe('005', 'protocolo',
-                                  'recibo',
-                                  'chave_nfe',
-                                  'situacao',
-                                  'motivo',
-                                  'data_hora_recebimento',
-                                  'CalcHoraNFCe',
-                                  'UsuTrs',
-                                  '',
-                                  '',
-                                  '',
-                                  '',
-                                  '',
-                                  'codigo_loja',
-                                  'demi',
-                                  'nnf',
-                                  'serie',
-                                  'chave_nfe',
-                                  'modelo',                                       // Nome dos campos
-                                  ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].nProt,
-                                  ACBrNFe1.WebServices.Retorno.NFeRetorno.nRec,
-                                  ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].chDFe,
-                                  ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].cStat,
-                                  ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].xMotivo,
-                                  FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].dhRecbto),
-                                  'N',
-                                  gUsu,
-                                  '',
-                                  '',
-                                  '',
-                                  '',
-                                  '',
-                                  edt_CodEmp.Text,
-                                  FormatDateTime('dd/mm/yyyy', DMFD.FDQuery1['nfe_demi']),
-                                  DMFD.FDQuery1['nfe_nnf'],
-                                  DMFD.FDQuery1['nfe_serie'],
-                                  ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].chDFe,
-                                  DMFD.FDQuery1['nfe_modelo'],                    // Conteúdo dos campos
-                                  true);                                          // Consiste [true/false]
-
-                end;
-
-               memoLog.Clear;
-               MemoResp.Lines.Text   := UTF8Encode(ACBrNFe1.WebServices.Retorno.RetWS);
-               MemoLog.Lines.Text    := UTF8Encode(ACBrNFe1.WebServices.Retorno.Msg);
-               memoRespWS.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.Retorno.RetornoWS);
-               LoadXML(MemoResp, WBResposta);
-
-              end;
-
-            end;
-
-          Except on e:exception do
-
+          if ( fVerPAG(StrToIntDef(gNNF_Consiste, 0), StrToIntDef(edt_CodEmp.Text, 0), iCodPed) ) then
+          begin
+
+           //-------------------------------------------------------------------
+           // Efetua o Cancelamento Administrativo do PEDIDO da nota Denegada
+           //-------------------------------------------------------------------
+           if (iCodPed <> 0) then
            begin
 
-            if gSincrona_Assincrona then
-             begin
-
-              //-------------------------------------------------------------------
-              // Caso a exceção seja por denegação
-              //-------------------------------------------------------------------
-              if (vartostr(ACBrNFe1.WebServices.Consulta.XMotivo) =
-                 'Rejeicao: NF-e esta denegada na base de dados da Secretaria de Fazenda Estadual')  or
-                 (vartostr(ACBrNFe1.WebServices.Consulta.XMotivo) =
-                 'Uso Denegado : Irregularidade fiscal do destinatario')                             or
-                 (vartostr(ACBrNFe1.WebServices.Consulta.cStat) = '301')  or
-                 (vartostr(ACBrNFe1.WebServices.Consulta.cStat) = '302')  or
-                 (vartostr(ACBrNFe1.WebServices.Consulta.cStat) = '303')  or
-                 (vartostr(ACBrNFe1.WebServices.Consulta.cStat) = '110')  or
-                 (vartostr(ACBrNFe1.WebServices.Consulta.cStat) = '205')  then
-               begin
-
-                //----------------------------------------------------------------
-                // by Edson Lima ; 2017-1-5 ; Grava a chave no pedido do gerente
-                fGraGer( gChvNFe, gCd_Emp, gCodPed );
-                //----------------------------------------------------------------
-
-                gSoUmaConsulta := True;                                           // Seta variável global para ler somente um registro
-                gConsiste      := false;                                          // Depende da consistência
-                BitBtn8Click(Sender);                                             // Força um click na consulta
-                gSoUmaConsulta := False;                                          // Seta variável global para ler vários registros
-                iCodPed        := gCodPed;
-
-                //-----------------------------------------------------------------
-                // by Edson Lima ; 2017-1-13T1358
-                // Cancelamento do pedido no gerente da nota denegada
-                //-----------------------------------------------------------------
-                // Verifica a precisão administrativa do gerente para cancelamento
-                // de nota denegada
-                // -----------------------------------------------------------------
-                if iCodPed <> 0 then
-                 begin
-
-                  if ( fVerPAG(StrToIntDef(gNNF_Consiste, 0), StrToIntDef(edt_CodEmp.Text, 0), iCodPed) ) then
-                   begin
-
-                    //-------------------------------------------------------------
-                    // Efetua o Cancelamento Administrativo do PEDIDO da nota Denegada
-                    //-------------------------------------------------------------
-                    if (iCodPed <> 0) then
-                     begin
-                      if not ( fCanCAP(StrToIntDef(gNNF_Consiste, 0), StrToIntDef(edt_CodEmp.Text, 0), iCodPed, gCodMtD) ) then
-                       Application.MessageBox(PWideChar('Nota denegada, mas o pedido não foi cancelado!'), 'Atenção', MB_ICONINFORMATION );
-                     end
-                    else
-                     Application.MessageBox(PWideChar('Número do pedido não informado! Nota cancelada, mas Pedido não!'), 'Atenção', MB_ICONINFORMATION );
-                    //-------------------------------------------------------------
-
-                   end
-
-                 else
-
-                  Application.MessageBox(PWideChar('Nota denegada, mas o pedido não foi cancelado!'), 'Atenção', MB_ICONINFORMATION );
-
-                 end
-
-               else
-
-                Application.MessageBox(PWideChar('Número do pedido não informado!'), 'Atenção', MB_ICONINFORMATION );
-
-               end;
-
-              memoLog.Clear;
-              MemoResp.Lines.Text   := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetWS);
-              MemoLog.Lines.Text    := UTF8Encode(ACBrNFe1.WebServices.Consulta.Msg);
-              memoRespWS.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetornoWS);
-              LoadXML(MemoResp, WBResposta);
-
-
-              Application.Messagebox( PWideChar( 'Inconsistência interna no envio: ' +
-                                      vartostr(DMFD.FDQryGeral2['nfe_nnf']) + chr(13) +
-                                      e.Message ), PWideChar( 'Envio de NFe & NFCe' ),
-                                      MB_ICONINFORMATION + mb_ok );
-
-              pAtuNFe();
-
-             end
-            else
-             begin
-
-              //-------------------------------------------------------------------
-              // Caso a exceção seja por denegação
-              //-------------------------------------------------------------------
-              if (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].xMotivo) =
-                 'Rejeicao: NF-e esta denegada na base de dados da Secretaria de Fazenda Estadual')  or
-                 (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].xMotivo) =
-                 'Uso Denegado : Irregularidade fiscal do destinatario')                             or
-                 (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].cStat) = '301')  or
-                 (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].cStat) = '302')  or
-                 (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].cStat) = '303')  or
-                 (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].cStat) = '110')  or
-                 (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[i].cStat) = '205')  then
-               begin
-
-                //----------------------------------------------------------------
-                // by Edson Lima ; 2017-1-5 ; Grava a chave no pedido do gerente
-                fGraGer( gChvNFe, gCd_Emp, gCodPed );
-                //----------------------------------------------------------------
-
-                gSoUmaConsulta := True;                                           // Seta variável global para ler somente um registro
-                gConsiste      := false;                                          // Depende da consistência
-                BitBtn8Click(Sender);                                             // Força um click na consulta
-                gSoUmaConsulta := False;                                          // Seta variável global para ler vários registros
-                iCodPed        := gCodPed;
-
-                //-----------------------------------------------------------------
-                // by Edson Lima ; 2017-1-13T1358
-                // Cancelamento do pedido no gerente da nota denegada
-                //-----------------------------------------------------------------
-                // Verifica a precisão administrativa do gerente para cancelamento
-                // de nota denegada
-                // -----------------------------------------------------------------
-                if iCodPed <> 0 then
-                 begin
-
-                  if ( fVerPAG(StrToIntDef(gNNF_Consiste, 0), StrToIntDef(edt_CodEmp.Text, 0), iCodPed) ) then
-                   begin
-
-                    //-------------------------------------------------------------
-                    // Efetua o Cancelamento Administrativo do PEDIDO da nota Denegada
-                    //-------------------------------------------------------------
-                    if (iCodPed <> 0) then
-                     begin
-                      if not ( fCanCAP(StrToIntDef(gNNF_Consiste, 0), StrToIntDef(edt_CodEmp.Text, 0), iCodPed, gCodMtD) ) then
-                       Application.MessageBox(PWideChar('Nota denegada, mas o pedido não foi cancelado!'), 'Atenção', MB_ICONINFORMATION );
-                     end
-                    else
-                     Application.MessageBox(PWideChar('Número do pedido não informado! Nota cancelada, mas Pedido não!'), 'Atenção', MB_ICONINFORMATION );
-                    //-------------------------------------------------------------
-
-                   end
-
-                 else
-
-                  Application.MessageBox(PWideChar('Nota denegada, mas o pedido não foi cancelado!'), 'Atenção', MB_ICONINFORMATION );
-
-                 end
-
-               else
-
-                Application.MessageBox(PWideChar('Número do pedido não informado!'), 'Atenção', MB_ICONINFORMATION );
-
-               end;
-
-              memoLog.Clear;
-              MemoResp.Lines.Text   := UTF8Encode(ACBrNFe1.WebServices.Retorno.RetWS);
-              MemoLog.Lines.Text    := UTF8Encode(ACBrNFe1.WebServices.Retorno.Msg);
-              memoRespWS.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.Retorno.RetornoWS);
-              LoadXML(MemoResp, WBResposta);
-
-
-              Application.Messagebox( PWideChar( 'Inconsistência interna no envio: ' +
-                                      vartostr(DMFD.FDQryGeral2['nfe_nnf']) + chr(13) +
-                                      e.Message ), PWideChar( 'Envio de NFe & NFCe' ),
-                                      MB_ICONINFORMATION + mb_ok );
-
-              pAtuNFe();
-
-             end;
-
-           end;
-
-          end;
-
-          if gSincrona_Assincrona then
-           begin
-
-            memoLog.Clear;
-            MemoResp.Lines.Text   := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetWS);
-            MemoLog.Lines.Text    := UTF8Encode(ACBrNFe1.WebServices.Consulta.Msg);
-            memoRespWS.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetornoWS);
-            LoadXML(MemoResp, WBResposta);
+            if not ( fCanCAP(StrToIntDef(gNNF_Consiste, 0), StrToIntDef(edt_CodEmp.Text, 0), iCodPed, gCodMtD) ) then
+             Application.MessageBox(PWideChar('Nota denegada, mas o pedido não foi cancelado!'), 'Atenção', MB_ICONINFORMATION );
 
            end
+           else
+            Application.MessageBox(PWideChar('Número do pedido não informado! Nota cancelada, mas Pedido não!'), 'Atenção', MB_ICONINFORMATION );
+
+           //-------------------------------------------------------------------
+
+          end
           else
-           begin
+           Application.MessageBox(PWideChar('Nota denegada, mas o pedido não foi cancelado!'), 'Atenção', MB_ICONINFORMATION );
 
-            memoLog.Clear;
-            MemoResp.Lines.Text   := UTF8Encode(ACBrNFe1.WebServices.Retorno.RetWS);
-            MemoLog.Lines.Text    := UTF8Encode(ACBrNFe1.WebServices.Retorno.Msg);
-            memoRespWS.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.Retorno.RetornoWS);
-            LoadXML(MemoResp, WBResposta);
+         end
+         else
+          Application.MessageBox(PWideChar('Número do pedido não informado!'), 'Atenção', MB_ICONINFORMATION );
 
-           end;
+        end;
 
-         end;                                                                   // fim do envio normal
+        memoLog.Clear;
+        MemoResp.Lines.Text   := UTF8Encode(ACBrNFe1.WebServices.Retorno.RetWS);
+        MemoLog.Lines.Text    := UTF8Encode(ACBrNFe1.WebServices.Retorno.Msg);
+        memoRespWS.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.Retorno.RetornoWS);
+        LoadXML(MemoResp, WBResposta);
+
+        Application.Messagebox( PWideChar( 'Inconsistência interna no envio: ' +
+                                vartostr(DMFD.FDQryGeral2['nfe_nnf']) + chr(13) +
+                                e.Message ), PWideChar( 'Envio de NFe & NFCe' ),
+                                MB_ICONINFORMATION + mb_ok );
+
+        pAtuNFe();
 
        end;
 
-     Copia_Xml_PathLog(Aux, gTN);                                               // by Edson Lima 2015-10-14T1107 - trunk2 novo
+      end;
 
-     ACBrNFe1.NotasFiscais.Clear;
-     DMFD.FDQuery1.next;
+     end;
 
-    end;
+     if gSincrona_Assincrona then
+     begin
+
+      memoLog.Clear;
+      MemoResp.Lines.Text   := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetWS);
+      MemoLog.Lines.Text    := UTF8Encode(ACBrNFe1.WebServices.Consulta.Msg);
+      memoRespWS.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetornoWS);
+      LoadXML(MemoResp, WBResposta);
+
+     end
+     else
+     begin
+
+      memoLog.Clear;
+      MemoResp.Lines.Text   := UTF8Encode(ACBrNFe1.WebServices.Retorno.RetWS);
+      MemoLog.Lines.Text    := UTF8Encode(ACBrNFe1.WebServices.Retorno.Msg);
+      memoRespWS.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.Retorno.RetornoWS);
+      LoadXML(MemoResp, WBResposta);
+
+     end;
+
+    end;                                                                        // fim do envio normal
+
+   end;
+
+   Copia_Xml_PathLog(Aux, gTN);                                                 // by Edson Lima 2015-10-14T1107 - trunk2 novo
+
+   ACBrNFe1.NotasFiscais.Clear;
+   DMFD.FDQuery1.next;
 
   end;
+
+ end;
 
 end;
 
@@ -4353,846 +4430,1171 @@ var
  z                                      : real;
 
 begin
+
  with ACBrNFe1.NotasFiscais.Items[0].NFe do
-  begin
+ begin
 
-   //grava xml da nfe
-   try
-    vXml1 := '';
-    vXml2 := '';
-    vXml3 := '';
-    vXml4 := '';
-    vXml5 := '';
-    vXml6 := '';
-    vXml7 := '';
-    vXml8 := '';
-    vXml9 := '';
-    vXml10 := '';
-    vXml11 := '';
-    vXml12 := '';
-    vXml13 := '';
-    vXml14 := '';
-    vXml15 := '';
-    vXml16 := '';
-    vXml17 := '';
-    vXml18 := '';
-    vXml19 := '';
-    vXml20 := '';
-    vXml21 := '';
-    vXml22 := '';
-    vXml23 := '';
-    vXml24 := '';
-    vXml25 := '';
-    vXml26 := '';
-    vXml27 := '';
-    vXml28 := '';
-    vXml29 := '';
-    vXml30 := '';
-    vXml31 := '';
-    vXml32 := '';
-    vXml33 := '';
-    vXml34 := '';
-    vXml35 := '';
-    vXml36 := '';
-    vXml37 := '';
-    vXml38 := '';
-    vXml39 := '';
-    vXml40 := '';
-    vXml41 := '';
+  //grava xml da nfe
+  try
 
-    pXml := Trim(ACBrNFe1.NotasFiscais.Items[0].XML);
+   vXml1 := '';
+   vXml2 := '';
+   vXml3 := '';
+   vXml4 := '';
+   vXml5 := '';
+   vXml6 := '';
+   vXml7 := '';
+   vXml8 := '';
+   vXml9 := '';
+   vXml10 := '';
+   vXml11 := '';
+   vXml12 := '';
+   vXml13 := '';
+   vXml14 := '';
+   vXml15 := '';
+   vXml16 := '';
+   vXml17 := '';
+   vXml18 := '';
+   vXml19 := '';
+   vXml20 := '';
+   vXml21 := '';
+   vXml22 := '';
+   vXml23 := '';
+   vXml24 := '';
+   vXml25 := '';
+   vXml26 := '';
+   vXml27 := '';
+   vXml28 := '';
+   vXml29 := '';
+   vXml30 := '';
+   vXml31 := '';
+   vXml32 := '';
+   vXml33 := '';
+   vXml34 := '';
+   vXml35 := '';
+   vXml36 := '';
+   vXml37 := '';
+   vXml38 := '';
+   vXml39 := '';
+   vXml40 := '';
+   vXml41 := '';
 
-    z := (Int(Length(pXml) / 8000));
-    if z < 9 then
-     y := StrToIntDef(copy(FloatToStr(z), 1, 1), 0)
-    else if ( (z > 9) and (z < 100) ) then
-     y := StrToIntDef(copy(FloatToStr(z), 1, 2), 0)
-    else
-     y := StrToIntDef(copy(FloatToStr(z), 1, 3), 0);
+   pXml := Trim(ACBrNFe1.NotasFiscais.Items[0].XML);
 
-    while ( y >= 0 ) do
+   z := (Int(Length(pXml) / 8000));
+   if z < 9 then
+    y := StrToIntDef(copy(FloatToStr(z), 1, 1), 0)
+   else if ( (z > 9) and (z < 100) ) then
+    y := StrToIntDef(copy(FloatToStr(z), 1, 2), 0)
+   else
+    y := StrToIntDef(copy(FloatToStr(z), 1, 3), 0);
+
+   while ( y >= 0 ) do
+   begin
+
+    if ( (y > 0) and (Length(pXml) > 8000) ) then
+    begin
+
+     for i := 1 to 8000 do
      begin
 
-      if ( (y > 0) and (Length(pXml) > 8000) ) then
-       begin
-        for i := 1 to 8000 do
-         begin
-          vXml1 := (vXml1 + pXml[i]);
-         end;
-       end
-      else if ( y = 0) then
-       begin
-        for i := 1 to (Length(pXml)) do
-         begin
-          vXml1 := (vXml1 + pXml[i]);
-         end;
-       end;
-
-      if ( (y > 1) and (Length(pXml) > 16000) ) then
-       begin
-        for i := 8001 to 16000 do
-         begin
-          vXml2 := (vXml2 + pXml[i]);
-         end;
-       end
-      else if ( y = 1 ) then
-       begin
-        for i := 8001 to (Length(pXml)) do
-         begin
-          vXml2 := (vXml2 + pXml[i]);
-         end;
-       end;
-
-      if ( (y > 2) and (Length(pXml) > 24000) ) then
-       begin
-        for i := 16001 to 24000 do
-         begin
-          vXml3 := (vXml3 + pXml[i]);
-         end;
-       end
-      else if ( y = 2 ) then
-       begin
-        for i := 16001 to (Length(pXml)) do
-         begin
-          vXml3 := (vXml3 + pXml[i]);
-         end;
-       end;
-
-      if ( (y > 3) and (Length(pXml) > 32000) ) then
-       begin
-        for i := 24001 to 32000 do
-         begin
-          vXml4 := (vXml4 + pXml[i]);
-         end;
-       end
-      else if ( y = 3 ) then
-       begin
-        for i := 24001 to (Length(pXml)) do
-         begin
-          vXml4 := (vXml4 + pXml[i]);
-         end;
-       end;
-
-      if ( (y > 4) and (Length(pXml) > 40000) ) then
-       begin
-        for i := 32001 to 40000 do
-         begin
-          vXml5 := (vXml5 + pXml[i]);
-         end;
-       end
-      else if ( y = 4 ) then
-       begin
-        for i := 32001 to (Length(pXml)) do
-         begin
-          vXml5 := (vXml5 + pXml[i]);
-         end;
-       end;
-
-      if ( (y > 5) and (Length(pXml) > 48000) ) then
-       begin
-        for i := 40001 to 48000 do
-         begin
-          vXml6 := (vXml6 + pXml[i]);
-         end;
-       end
-      else if ( y = 5 ) then
-       begin
-        for i := 40001 to (Length(pXml)) do
-         begin
-          vXml6 := (vXml6 + pXml[i]);
-         end;
-       end;
-
-      if ( (y > 6) and (Length(pXml) > 56000) ) then
-       begin
-        for i := 48001 to 56000 do
-         begin
-          vXml7 := (vXml7 + pXml[i]);
-         end;
-       end
-      else if ( y = 6 ) then
-       begin
-        for i := 48001 to (Length(pXml)) do
-         begin
-          vXml7 := (vXml7 + pXml[i]);
-         end;
-       end;
-
-      if ( (y > 7) and (Length(pXml) > 64000) ) then
-       begin
-        for i := 56001 to 64000 do
-         begin
-          vXml8 := (vXml8 + pXml[i]);
-         end;
-       end
-      else if ( y = 7 ) then
-       begin
-        for i := 56001 to (Length(pXml)) do
-         begin
-          vXml8 := (vXml8 + pXml[i]);
-         end;
-       end;
-
-      if ( (y > 8) and (Length(pXml) > 72000) ) then
-       begin
-        for i := 64001 to 72000 do
-         begin
-          vXml9 := (vXml9 + pXml[i]);
-         end;
-       end
-      else if ( y = 8 ) then
-       begin
-        for i := 64001 to (Length(pXml)) do
-         begin
-          vXml9 := (vXml9 + pXml[i]);
-         end;
-       end;
-
-      if ( (y > 9) and (Length(pXml) > 80000) ) then
-       begin
-        for i := 72001 to 80000 do
-         begin
-          vXml10 := (vXml10 + pXml[i]);
-         end;
-       end
-      else if ( y = 9 ) then
-       begin
-        for i := 72001 to (Length(pXml)) do
-         begin
-          vXml10 := (vXml10 + pXml[i]);
-         end;
-       end;
-
-      if ( (y > 10) and (Length(pXml) > 88000) ) then
-       begin
-        for i := 80001 to 88000 do
-         begin
-          vXml11 := (vXml11 + pXml[i]);
-         end;
-       end
-      else if ( y = 10 ) then
-       begin
-        for i := 80001 to (Length(pXml)) do
-         begin
-          vXml11 := (vXml11 + pXml[i]);
-         end;
-       end;
-
-      if ( (y > 11) and (Length(pXml) > 96000) ) then
-       begin
-        for i := 88001 to 96000 do
-         begin
-          vXml12 := (vXml12 + pXml[i]);
-         end;
-       end
-      else if ( y = 11 ) then
-       begin
-        for i := 88001 to (Length(pXml)) do
-         begin
-          vXml12 := (vXml12 + pXml[i]);
-         end;
-       end;
-
-      if ( (y > 12) and (Length(pXml) > 104000) ) then
-       begin
-        for i := 96001 to 104000 do
-         begin
-          vXml13 := (vXml13 + pXml[i]);
-         end;
-       end
-      else if ( y = 12 ) then
-       begin
-        for i := 96001 to (Length(pXml)) do
-         begin
-          vXml13 := (vXml13 + pXml[i]);
-         end;
-       end;
-
-      if ( (y > 13) and (Length(pXml) > 112000) ) then
-       begin
-        for i := 104001 to 112000 do
-         begin
-          vXml14 := (vXml14 + pXml[i]);
-         end;
-       end
-      else if ( y = 13 ) then
-       begin
-        for i := 104001 to (Length(pXml)) do
-         begin
-          vXml14 := (vXml14 + pXml[i]);
-         end;
-       end;
-
-      if ( (y > 14) and (Length(pXml) > 120000) ) then
-       begin
-        for i := 112001 to 120000 do
-         begin
-          vXml15 := (vXml15 + pXml[i]);
-         end;
-       end
-      else if ( y = 14 ) then
-       begin
-        for i := 112001 to (Length(pXml)) do
-         begin
-          vXml15 := (vXml15 + pXml[i]);
-         end;
-       end;
-
-      if ( (y > 15) and (Length(pXml) > 128000) ) then
-       begin
-        for i := 120001 to 128000 do
-         begin
-          vXml16 := (vXml16 + pXml[i]);
-         end;
-       end
-      else if ( y = 15 ) then
-       begin
-        for i := 120001 to (Length(pXml)) do
-         begin
-          vXml16 := (vXml16 + pXml[i]);
-         end;
-       end;
-
-      if ( (y > 16) and (Length(pXml) > 136000) ) then
-       begin
-        for i := 128001 to 136000 do
-         begin
-          vXml17 := (vXml17 + pXml[i]);
-         end;
-       end
-      else if ( y = 16 ) then
-       begin
-        for i := 128001 to (Length(pXml)) do
-         begin
-          vXml17 := (vXml17 + pXml[i]);
-         end;
-       end;
-
-      if ( (y > 17) and (Length(pXml) > 144000) ) then
-       begin
-        for i := 136001 to 144000 do
-         begin
-          vXml18 := (vXml18 + pXml[i]);
-         end;
-       end
-      else if ( y = 17 ) then
-       begin
-        for i := 136001 to (Length(pXml)) do
-         begin
-          vXml18 := (vXml18 + pXml[i]);
-         end;
-       end;
-
-      if ( (y > 18) and (Length(pXml) > 152000) ) then
-       begin
-        for i := 144001 to 152000 do
-         begin
-          vXml19 := (vXml19 + pXml[i]);
-         end;
-       end
-      else if ( y = 18 ) then
-       begin
-        for i := 144001 to (Length(pXml)) do
-         begin
-          vXml19 := (vXml19 + pXml[i]);
-         end;
-       end;
-
-      if ( (y > 19) and (Length(pXml) > 160000) ) then
-       begin
-        for i := 152001 to 160000 do
-         begin
-          vXml20 := (vXml20 + pXml[i]);
-         end;
-       end
-      else if ( y = 19 ) then
-       begin
-        for i := 152001 to (Length(pXml)) do
-         begin
-          vXml20 := (vXml20 + pXml[i]);
-         end;
-       end;
-
-      if ( (y > 20) and (Length(pXml) > 168000) ) then
-       begin
-        for i := 160001 to 168000 do
-         begin
-          vXml21 := (vXml21 + pXml[i]);
-         end;
-       end
-      else if ( y = 20 ) then
-       begin
-        for i := 160001 to (Length(pXml)) do
-         begin
-          vXml21 := (vXml21 + pXml[i]);
-         end;
-       end;
-
-      if ( (y > 21) and (Length(pXml) > 176000) ) then
-       begin
-        for i := 168001 to 176000 do
-         begin
-          vXml22 := (vXml22 + pXml[i]);
-         end;
-       end
-      else if ( y = 21 ) then
-       begin
-        for i := 168001 to (Length(pXml)) do
-         begin
-          vXml22 := (vXml22 + pXml[i]);
-         end;
-       end;
-
-      if ( (y > 22) and (Length(pXml) > 184000) ) then
-       begin
-        for i := 176001 to 184000 do
-         begin
-          vXml23 := (vXml23 + pXml[i]);
-         end;
-       end
-      else if ( y = 22 ) then
-       begin
-        for i := 176001 to (Length(pXml)) do
-         begin
-          vXml23 := (vXml23 + pXml[i]);
-         end;
-       end;
-
-      if ( (y > 23) and (Length(pXml) > 192000) ) then
-       begin
-        for i := 184001 to 192000 do
-         begin
-          vXml24 := (vXml24 + pXml[i]);
-         end;
-       end
-      else if ( y = 23 ) then
-       begin
-        for i := 184001 to (Length(pXml)) do
-         begin
-          vXml24 := (vXml24 + pXml[i]);
-         end;
-       end;
-
-      if ( (y > 24) and (Length(pXml) > 200000) ) then
-       begin
-        for i := 192001 to 200000 do
-         begin
-          vXml25 := (vXml25 + pXml[i]);
-         end;
-       end
-      else if ( y = 24 ) then
-       begin
-        for i := 192001 to (Length(pXml)) do
-         begin
-          vXml25 := (vXml25 + pXml[i]);
-         end;
-       end;
-
-      if ( (y > 25) and (Length(pXml) > 208000) ) then
-       begin
-        for i := 200001 to 208000 do
-         begin
-          vXml26 := (vXml26 + pXml[i]);
-         end;
-       end
-      else if ( y = 25 ) then
-       begin
-        for i := 200001 to (Length(pXml)) do
-         begin
-          vXml26 := (vXml26 + pXml[i]);
-         end;
-       end;
-
-      if ( (y > 26) and (Length(pXml) > 216000) ) then
-       begin
-        for i := 208001 to 216000 do
-         begin
-          vXml27 := (vXml27 + pXml[i]);
-         end;
-       end
-      else if ( y = 26 ) then
-       begin
-        for i := 208001 to (Length(pXml)) do
-         begin
-          vXml27 := (vXml27 + pXml[i]);
-         end;
-       end;
-
-      if ( (y > 27) and (Length(pXml) > 224000) ) then
-       begin
-        for i := 216001 to 224000 do
-         begin
-          vXml28 := (vXml28 + pXml[i]);
-         end;
-       end
-      else if ( y = 27 ) then
-       begin
-        for i := 216001 to (Length(pXml)) do
-         begin
-          vXml28 := (vXml28 + pXml[i]);
-         end;
-       end;
-
-      if ( (y > 28) and (Length(pXml) > 232000) ) then
-       begin
-        for i := 224001 to 232000 do
-         begin
-          vXml29 := (vXml29 + pXml[i]);
-         end;
-       end
-      else if ( y = 28 ) then
-       begin
-        for i := 224001 to (Length(pXml)) do
-         begin
-          vXml29 := (vXml29 + pXml[i]);
-         end;
-       end;
-
-      if ( (y > 29) and (Length(pXml) > 240000) ) then
-       begin
-        for i := 232001 to 2400000 do
-         begin
-          vXml30 := (vXml30 + pXml[i]);
-         end;
-       end
-      else if ( y = 29 ) then
-       begin
-        for i := 232001 to (Length(pXml)) do
-         begin
-          vXml30 := (vXml30 + pXml[i]);
-         end;
-       end;
-
-      if ( (y > 30) and (Length(pXml) > 248000) ) then
-       begin
-        for i := 240001 to 248000 do
-         begin
-          vXml31 := (vXml31 + pXml[i]);
-         end;
-       end
-      else if ( y = 30 ) then
-       begin
-        for i := 240001 to (Length(pXml)) do
-         begin
-          vXml31 := (vXml31 + pXml[i]);
-         end;
-       end;
-
-      if ( (y > 31) and (Length(pXml) > 256000) ) then
-       begin
-        for i := 248001 to 256000 do
-         begin
-          vXml32 := (vXml32 + pXml[i]);
-         end;
-       end
-      else if ( y = 31 ) then
-       begin
-        for i := 248001 to (Length(pXml)) do
-         begin
-          vXml32 := (vXml32 + pXml[i]);
-         end;
-       end;
-
-      if ( (y > 32) and (Length(pXml) > 264000) ) then
-       begin
-        for i := 256001 to 264000 do
-         begin
-          vXml33 := (vXml33 + pXml[i]);
-         end;
-       end
-      else if ( y = 32 ) then
-       begin
-        for i := 256001 to (Length(pXml)) do
-         begin
-          vXml33 := (vXml33 + pXml[i]);
-         end;
-       end;
-
-      if ( (y > 33) and (Length(pXml) > 272000) ) then
-       begin
-        for i := 264001 to 272000 do
-         begin
-          vXml34 := (vXml34 + pXml[i]);
-         end;
-       end
-      else if ( y = 33 ) then
-       begin
-        for i := 264001 to (Length(pXml)) do
-         begin
-          vXml34 := (vXml34 + pXml[i]);
-         end;
-       end;
-
-      if ( (y > 34) and (Length(pXml) > 280000) ) then
-       begin
-        for i := 272001 to 280000 do
-         begin
-          vXml35 := (vXml35 + pXml[i]);
-         end;
-       end
-      else if ( y = 34 ) then
-       begin
-        for i := 272001 to (Length(pXml)) do
-         begin
-          vXml35 := (vXml35 + pXml[i]);
-         end;
-       end;
-
-      if ( (y > 35) and (Length(pXml) > 288000) ) then
-       begin
-        for i := 280001 to 288000 do
-         begin
-          vXml36 := (vXml36 + pXml[i]);
-         end;
-       end
-      else if ( y = 35 ) then
-       begin
-        for i := 280001 to (Length(pXml)) do
-         begin
-          vXml36 := (vXml36 + pXml[i]);
-         end;
-       end;
-
-      if ( (y > 36) and (Length(pXml) > 296000) ) then
-       begin
-        for i := 288001 to 296000 do
-         begin
-          vXml37 := (vXml37 + pXml[i]);
-         end;
-       end
-      else if ( y = 36 ) then
-       begin
-        for i := 288001 to (Length(pXml)) do
-         begin
-          vXml37 := (vXml37 + pXml[i]);
-         end;
-       end;
-
-      if ( (y > 37) and (Length(pXml) > 304000) ) then
-       begin
-        for i := 296001 to 304000 do
-         begin
-          vXml38 := (vXml38 + pXml[i]);
-         end;
-       end
-      else if ( y = 37 ) then
-       begin
-        for i := 296001 to (Length(pXml)) do
-         begin
-          vXml38 := (vXml38 + pXml[i]);
-         end;
-       end;
-
-      if ( (y > 38) and (Length(pXml) > 312000) ) then
-       begin
-        for i := 304001 to 312000 do
-         begin
-          vXml39 := (vXml39 + pXml[i]);
-         end;
-       end
-      else if ( y = 38 ) then
-       begin
-        for i := 304001 to (Length(pXml)) do
-         begin
-          vXml39 := (vXml39 + pXml[i]);
-         end;
-       end;
-
-      if ( (y > 39) and (Length(pXml) > 320000) ) then
-       begin
-        for i := 312001 to 320000 do
-         begin
-          vXml40 := (vXml40 + pXml[i]);
-         end;
-       end
-      else if ( y = 39 ) then
-       begin
-        for i := 312001 to (Length(pXml)) do
-         begin
-          vXml40 := (vXml40 + pXml[i]);
-         end;
-       end;
-
-      if ( y = 40 ) then
-       begin
-        for i := 320001 to (Length(pXml)) do
-         begin
-          vXml41 := (vXml41 + pXml[i]);
-         end;
-       end;
-
-      y := -1;
+      vXml1 := (vXml1 + pXml[i]);
 
      end;
 
-    DMFD.FDQuery2.DisableControls;
-    DMFD.FDQuery2.Close;
-    DMFD.FDQuery2.SQL.Clear;
-    DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                                          ' );
-    DMFD.FDQuery2.SQL.Add( 'insert into nfe_xml (                                       ' );
-    DMFD.FDQuery2.SQL.Add( 'origem,                                                     ' );
-    DMFD.FDQuery2.SQL.Add( 'codigo_loja,                                                ' );
-    DMFD.FDQuery2.SQL.Add( 'dEmi,                                                       ' );
-    DMFD.FDQuery2.SQL.Add( 'nNF,                                                        ' );
-    DMFD.FDQuery2.SQL.Add( 'xml_nota,                                                   ' );
-    DMFD.FDQuery2.SQL.Add( 'xml_nota1,                                                  ' );
-    DMFD.FDQuery2.SQL.Add( 'xml_nota2,                                                  ' );
-    DMFD.FDQuery2.SQL.Add( 'xml_nota3,                                                  ' );
-    DMFD.FDQuery2.SQL.Add( 'xml_nota4,                                                  ' );
-    DMFD.FDQuery2.SQL.Add( 'xml_nota5,                                                  ' );
-    DMFD.FDQuery2.SQL.Add( 'xml_nota6,                                                  ' );
-    DMFD.FDQuery2.SQL.Add( 'xml_nota7,                                                  ' );
-    DMFD.FDQuery2.SQL.Add( 'xml_nota8,                                                  ' );
-    DMFD.FDQuery2.SQL.Add( 'xml_nota9,                                                  ' );
-    DMFD.FDQuery2.SQL.Add( 'xml_nota10,                                                 ' );
-    DMFD.FDQuery2.SQL.Add( 'xml_nota11,                                                 ' );
-    DMFD.FDQuery2.SQL.Add( 'xml_nota12,                                                 ' );
-    DMFD.FDQuery2.SQL.Add( 'xml_nota13,                                                 ' );
-    DMFD.FDQuery2.SQL.Add( 'xml_nota14,                                                 ' );
-    DMFD.FDQuery2.SQL.Add( 'xml_nota15,                                                 ' );
-    DMFD.FDQuery2.SQL.Add( 'xml_nota16,                                                 ' );
-    DMFD.FDQuery2.SQL.Add( 'xml_nota17,                                                 ' );
-    DMFD.FDQuery2.SQL.Add( 'xml_nota18,                                                 ' );
-    DMFD.FDQuery2.SQL.Add( 'xml_nota19,                                                 ' );
-    DMFD.FDQuery2.SQL.Add( 'xml_nota20,                                                 ' );
-    DMFD.FDQuery2.SQL.Add( 'xml_nota21,                                                 ' );
-    DMFD.FDQuery2.SQL.Add( 'xml_nota22,                                                 ' );
-    DMFD.FDQuery2.SQL.Add( 'xml_nota23,                                                 ' );
-    DMFD.FDQuery2.SQL.Add( 'xml_nota24,                                                 ' );
-    DMFD.FDQuery2.SQL.Add( 'xml_nota25,                                                 ' );
-    DMFD.FDQuery2.SQL.Add( 'xml_nota26,                                                 ' );
-    DMFD.FDQuery2.SQL.Add( 'xml_nota27,                                                 ' );
-    DMFD.FDQuery2.SQL.Add( 'xml_nota28,                                                 ' );
-    DMFD.FDQuery2.SQL.Add( 'xml_nota29,                                                 ' );
-    DMFD.FDQuery2.SQL.Add( 'xml_nota30,                                                 ' );
-    DMFD.FDQuery2.SQL.Add( 'xml_nota31,                                                 ' );
-    DMFD.FDQuery2.SQL.Add( 'xml_nota32,                                                 ' );
-    DMFD.FDQuery2.SQL.Add( 'xml_nota33,                                                 ' );
-    DMFD.FDQuery2.SQL.Add( 'xml_nota34,                                                 ' );
-    DMFD.FDQuery2.SQL.Add( 'xml_nota35,                                                 ' );
-    DMFD.FDQuery2.SQL.Add( 'xml_nota36,                                                 ' );
-    DMFD.FDQuery2.SQL.Add( 'xml_nota37,                                                 ' );
-    DMFD.FDQuery2.SQL.Add( 'xml_nota38,                                                 ' );
-    DMFD.FDQuery2.SQL.Add( 'xml_nota39,                                                 ' );
-    DMFD.FDQuery2.SQL.Add( 'xml_nota40)                                                 ' );
-    DMFD.FDQuery2.SQL.Add( 'values (                                                    ' );
-    DMFD.FDQuery2.SQL.Add( ':origem,                                                    ' );
-    DMFD.FDQuery2.SQL.Add( ':codigo_loja,                                               ' );
-    DMFD.FDQuery2.SQL.Add( ':dEmi,                                                      ' );
-    DMFD.FDQuery2.SQL.Add( ':nNF,                                                       ' );
-    DMFD.FDQuery2.SQL.Add( ':xml_nota,                                                  ' );
-    DMFD.FDQuery2.SQL.Add( ':xml_nota1,                                                 ' );
-    DMFD.FDQuery2.SQL.Add( ':xml_nota2,                                                 ' );
-    DMFD.FDQuery2.SQL.Add( ':xml_nota3,                                                 ' );
-    DMFD.FDQuery2.SQL.Add( ':xml_nota4,                                                 ' );
-    DMFD.FDQuery2.SQL.Add( ':xml_nota5,                                                 ' );
-    DMFD.FDQuery2.SQL.Add( ':xml_nota6,                                                 ' );
-    DMFD.FDQuery2.SQL.Add( ':xml_nota7,                                                 ' );
-    DMFD.FDQuery2.SQL.Add( ':xml_nota8,                                                 ' );
-    DMFD.FDQuery2.SQL.Add( ':xml_nota9,                                                 ' );
-    DMFD.FDQuery2.SQL.Add( ':xml_nota10,                                                ' );
-    DMFD.FDQuery2.SQL.Add( ':xml_nota11,                                                ' );
-    DMFD.FDQuery2.SQL.Add( ':xml_nota12,                                                ' );
-    DMFD.FDQuery2.SQL.Add( ':xml_nota13,                                                ' );
-    DMFD.FDQuery2.SQL.Add( ':xml_nota14,                                                ' );
-    DMFD.FDQuery2.SQL.Add( ':xml_nota15,                                                ' );
-    DMFD.FDQuery2.SQL.Add( ':xml_nota16,                                                ' );
-    DMFD.FDQuery2.SQL.Add( ':xml_nota17,                                                ' );
-    DMFD.FDQuery2.SQL.Add( ':xml_nota18,                                                ' );
-    DMFD.FDQuery2.SQL.Add( ':xml_nota19,                                                ' );
-    DMFD.FDQuery2.SQL.Add( ':xml_nota20,                                                ' );
-    DMFD.FDQuery2.SQL.Add( ':xml_nota21,                                                ' );
-    DMFD.FDQuery2.SQL.Add( ':xml_nota22,                                                ' );
-    DMFD.FDQuery2.SQL.Add( ':xml_nota23,                                                ' );
-    DMFD.FDQuery2.SQL.Add( ':xml_nota24,                                                ' );
-    DMFD.FDQuery2.SQL.Add( ':xml_nota25,                                                ' );
-    DMFD.FDQuery2.SQL.Add( ':xml_nota26,                                                ' );
-    DMFD.FDQuery2.SQL.Add( ':xml_nota27,                                                ' );
-    DMFD.FDQuery2.SQL.Add( ':xml_nota28,                                                ' );
-    DMFD.FDQuery2.SQL.Add( ':xml_nota29,                                                ' );
-    DMFD.FDQuery2.SQL.Add( ':xml_nota30,                                                ' );
-    DMFD.FDQuery2.SQL.Add( ':xml_nota31,                                                ' );
-    DMFD.FDQuery2.SQL.Add( ':xml_nota32,                                                ' );
-    DMFD.FDQuery2.SQL.Add( ':xml_nota33,                                                ' );
-    DMFD.FDQuery2.SQL.Add( ':xml_nota34,                                                ' );
-    DMFD.FDQuery2.SQL.Add( ':xml_nota35,                                                ' );
-    DMFD.FDQuery2.SQL.Add( ':xml_nota36,                                                ' );
-    DMFD.FDQuery2.SQL.Add( ':xml_nota37,                                                ' );
-    DMFD.FDQuery2.SQL.Add( ':xml_nota38,                                                ' );
-    DMFD.FDQuery2.SQL.Add( ':xml_nota39,                                                ' );
-    DMFD.FDQuery2.SQL.Add( ':xml_nota40)                                                ' );
-    DMFD.FDQuery2.Params[0].AsString    := 'IMPORTA';
-    DMFD.FDQuery2.Params[1].AsInteger   := StrToIntDef(edt_CodEmp.Text, 0);
-    DMFD.FDQuery2.Params[2].Value       := StrToDateTime( FormatDateTime('dd/mm/yyyy', Ide.dEmi) );
-    DMFD.FDQuery2.Params[3].AsString    := vartostr(Ide.nNF);
-    DMFD.FDQuery2.Params[4].AsMemo      := vXml1;
-    DMFD.FDQuery2.Params[5].AsMemo      := vXml2;
-    DMFD.FDQuery2.Params[6].AsMemo      := vXml3;
-    DMFD.FDQuery2.Params[7].AsMemo      := vXml4;
-    DMFD.FDQuery2.Params[8].AsMemo      := vXml5;
-    DMFD.FDQuery2.Params[9].AsMemo      := vXml6;
-    DMFD.FDQuery2.Params[10].AsMemo     := vXml7;
-    DMFD.FDQuery2.Params[11].AsMemo     := vXml8;
-    DMFD.FDQuery2.Params[12].AsMemo     := vXml9;
-    DMFD.FDQuery2.Params[13].AsMemo     := vXml10;
-    DMFD.FDQuery2.Params[14].AsMemo     := vXml11;
-    DMFD.FDQuery2.Params[15].AsMemo     := vXml12;
-    DMFD.FDQuery2.Params[16].AsMemo     := vXml13;
-    DMFD.FDQuery2.Params[17].AsMemo     := vXml14;
-    DMFD.FDQuery2.Params[18].AsMemo     := vXml15;
-    DMFD.FDQuery2.Params[19].AsMemo     := vXml16;
-    DMFD.FDQuery2.Params[20].AsMemo     := vXml17;
-    DMFD.FDQuery2.Params[21].AsMemo     := vXml18;
-    DMFD.FDQuery2.Params[22].AsMemo     := vXml19;
-    DMFD.FDQuery2.Params[23].AsMemo     := vXml20;
-    DMFD.FDQuery2.Params[24].AsMemo     := vXml21;
-    DMFD.FDQuery2.Params[25].AsMemo     := vXml22;
-    DMFD.FDQuery2.Params[26].AsMemo     := vXml23;
-    DMFD.FDQuery2.Params[27].AsMemo     := vXml24;
-    DMFD.FDQuery2.Params[28].AsMemo     := vXml25;
-    DMFD.FDQuery2.Params[29].AsMemo     := vXml26;
-    DMFD.FDQuery2.Params[30].AsMemo     := vXml27;
-    DMFD.FDQuery2.Params[31].AsMemo     := vXml28;
-    DMFD.FDQuery2.Params[32].AsMemo     := vXml29;
-    DMFD.FDQuery2.Params[33].AsMemo     := vXml30;
-    DMFD.FDQuery2.Params[34].AsMemo     := vXml31;
-    DMFD.FDQuery2.Params[35].AsMemo     := vXml32;
-    DMFD.FDQuery2.Params[36].AsMemo     := vXml33;
-    DMFD.FDQuery2.Params[37].AsMemo     := vXml34;
-    DMFD.FDQuery2.Params[38].AsMemo     := vXml35;
-    DMFD.FDQuery2.Params[39].AsMemo     := vXml36;
-    DMFD.FDQuery2.Params[40].AsMemo     := vXml37;
-    DMFD.FDQuery2.Params[41].AsMemo     := vXml38;
-    DMFD.FDQuery2.Params[42].AsMemo     := vXml39;
-    DMFD.FDQuery2.Params[43].AsMemo     := vXml40;
-    DMFD.FDQuery2.Params[44].AsMemo     := vXml41;
+    end
+    else if ( y = 0) then
+    begin
 
-    try
-
-     DMFD.FDQuery2.ExecSQL;
-
-    except on e:Exception do
+     for i := 1 to (Length(pXml)) do
      begin
 
-      Application.Messagebox(PWideChar('ERRO: Não inseriu o XML da nfe no banco de dados!' + Char(13) +
-                              e.Message),'Atenção!',mb_iconstop+mb_ok);
-      exit;
+      vXml1 := (vXml1 + pXml[i]);
 
      end;
 
     end;
 
-    DMFD.FDQuery2.Close;
+    if ( (y > 1) and (Length(pXml) > 16000) ) then
+    begin
 
-   finally
+     for i := 8001 to 16000 do
+     begin
 
-    DMFD.FDQuery2.EnableControls;
+      vXml2 := (vXml2 + pXml[i]);
+
+     end;
+
+    end
+    else if ( y = 1 ) then
+    begin
+
+     for i := 8001 to (Length(pXml)) do
+     begin
+
+      vXml2 := (vXml2 + pXml[i]);
+
+     end;
+
+    end;
+
+    if ( (y > 2) and (Length(pXml) > 24000) ) then
+    begin
+
+     for i := 16001 to 24000 do
+     begin
+
+      vXml3 := (vXml3 + pXml[i]);
+
+     end;
+
+    end
+    else if ( y = 2 ) then
+    begin
+
+     for i := 16001 to (Length(pXml)) do
+     begin
+
+      vXml3 := (vXml3 + pXml[i]);
+
+     end;
+
+    end;
+
+    if ( (y > 3) and (Length(pXml) > 32000) ) then
+    begin
+
+     for i := 24001 to 32000 do
+     begin
+
+      vXml4 := (vXml4 + pXml[i]);
+
+     end;
+
+    end
+    else if ( y = 3 ) then
+    begin
+
+     for i := 24001 to (Length(pXml)) do
+     begin
+
+      vXml4 := (vXml4 + pXml[i]);
+
+     end;
+
+    end;
+
+    if ( (y > 4) and (Length(pXml) > 40000) ) then
+    begin
+
+     for i := 32001 to 40000 do
+     begin
+
+      vXml5 := (vXml5 + pXml[i]);
+
+     end;
+
+    end
+    else if ( y = 4 ) then
+    begin
+
+     for i := 32001 to (Length(pXml)) do
+     begin
+
+      vXml5 := (vXml5 + pXml[i]);
+
+     end;
+
+    end;
+
+    if ( (y > 5) and (Length(pXml) > 48000) ) then
+    begin
+
+     for i := 40001 to 48000 do
+     begin
+
+      vXml6 := (vXml6 + pXml[i]);
+
+     end;
+
+    end
+    else if ( y = 5 ) then
+    begin
+
+     for i := 40001 to (Length(pXml)) do
+     begin
+
+      vXml6 := (vXml6 + pXml[i]);
+
+     end;
+
+    end;
+
+    if ( (y > 6) and (Length(pXml) > 56000) ) then
+    begin
+
+     for i := 48001 to 56000 do
+     begin
+
+      vXml7 := (vXml7 + pXml[i]);
+
+     end;
+
+    end
+    else if ( y = 6 ) then
+    begin
+
+     for i := 48001 to (Length(pXml)) do
+     begin
+
+      vXml7 := (vXml7 + pXml[i]);
+
+     end;
+
+    end;
+
+    if ( (y > 7) and (Length(pXml) > 64000) ) then
+    begin
+
+     for i := 56001 to 64000 do
+     begin
+
+      vXml8 := (vXml8 + pXml[i]);
+
+     end;
+
+    end
+    else if ( y = 7 ) then
+    begin
+
+     for i := 56001 to (Length(pXml)) do
+     begin
+
+      vXml8 := (vXml8 + pXml[i]);
+
+     end;
+
+    end;
+
+    if ( (y > 8) and (Length(pXml) > 72000) ) then
+    begin
+
+     for i := 64001 to 72000 do
+     begin
+
+      vXml9 := (vXml9 + pXml[i]);
+
+     end;
+
+    end
+    else if ( y = 8 ) then
+    begin
+
+     for i := 64001 to (Length(pXml)) do
+     begin
+
+      vXml9 := (vXml9 + pXml[i]);
+
+     end;
+
+    end;
+
+    if ( (y > 9) and (Length(pXml) > 80000) ) then
+    begin
+
+     for i := 72001 to 80000 do
+     begin
+
+      vXml10 := (vXml10 + pXml[i]);
+
+     end;
+
+    end
+    else if ( y = 9 ) then
+    begin
+
+     for i := 72001 to (Length(pXml)) do
+     begin
+
+      vXml10 := (vXml10 + pXml[i]);
+
+     end;
+
+    end;
+
+    if ( (y > 10) and (Length(pXml) > 88000) ) then
+    begin
+
+     for i := 80001 to 88000 do
+     begin
+
+      vXml11 := (vXml11 + pXml[i]);
+
+     end;
+
+    end
+    else if ( y = 10 ) then
+    begin
+
+     for i := 80001 to (Length(pXml)) do
+     begin
+
+      vXml11 := (vXml11 + pXml[i]);
+
+     end;
+
+    end;
+
+    if ( (y > 11) and (Length(pXml) > 96000) ) then
+    begin
+
+     for i := 88001 to 96000 do
+     begin
+
+      vXml12 := (vXml12 + pXml[i]);
+
+     end;
+
+    end
+    else if ( y = 11 ) then
+    begin
+
+     for i := 88001 to (Length(pXml)) do
+     begin
+
+      vXml12 := (vXml12 + pXml[i]);
+
+     end;
+
+    end;
+
+    if ( (y > 12) and (Length(pXml) > 104000) ) then
+    begin
+
+     for i := 96001 to 104000 do
+     begin
+
+      vXml13 := (vXml13 + pXml[i]);
+
+     end;
+
+    end
+    else if ( y = 12 ) then
+    begin
+
+     for i := 96001 to (Length(pXml)) do
+     begin
+
+      vXml13 := (vXml13 + pXml[i]);
+
+     end;
+
+    end;
+
+    if ( (y > 13) and (Length(pXml) > 112000) ) then
+    begin
+
+     for i := 104001 to 112000 do
+     begin
+
+      vXml14 := (vXml14 + pXml[i]);
+
+     end;
+
+    end
+    else if ( y = 13 ) then
+    begin
+
+     for i := 104001 to (Length(pXml)) do
+     begin
+
+      vXml14 := (vXml14 + pXml[i]);
+
+     end;
+
+    end;
+
+    if ( (y > 14) and (Length(pXml) > 120000) ) then
+    begin
+
+     for i := 112001 to 120000 do
+     begin
+
+      vXml15 := (vXml15 + pXml[i]);
+
+     end;
+
+    end
+    else if ( y = 14 ) then
+    begin
+
+     for i := 112001 to (Length(pXml)) do
+     begin
+
+      vXml15 := (vXml15 + pXml[i]);
+
+     end;
+
+    end;
+
+    if ( (y > 15) and (Length(pXml) > 128000) ) then
+    begin
+
+     for i := 120001 to 128000 do
+     begin
+
+      vXml16 := (vXml16 + pXml[i]);
+
+     end;
+
+    end
+    else if ( y = 15 ) then
+    begin
+
+     for i := 120001 to (Length(pXml)) do
+     begin
+
+      vXml16 := (vXml16 + pXml[i]);
+
+     end;
+
+    end;
+
+    if ( (y > 16) and (Length(pXml) > 136000) ) then
+    begin
+
+     for i := 128001 to 136000 do
+     begin
+
+      vXml17 := (vXml17 + pXml[i]);
+
+     end;
+
+    end
+    else if ( y = 16 ) then
+    begin
+
+     for i := 128001 to (Length(pXml)) do
+     begin
+
+      vXml17 := (vXml17 + pXml[i]);
+
+     end;
+
+    end;
+
+    if ( (y > 17) and (Length(pXml) > 144000) ) then
+    begin
+
+     for i := 136001 to 144000 do
+     begin
+
+      vXml18 := (vXml18 + pXml[i]);
+
+     end;
+
+    end
+    else if ( y = 17 ) then
+    begin
+
+     for i := 136001 to (Length(pXml)) do
+     begin
+
+      vXml18 := (vXml18 + pXml[i]);
+
+     end;
+
+    end;
+
+    if ( (y > 18) and (Length(pXml) > 152000) ) then
+    begin
+
+     for i := 144001 to 152000 do
+     begin
+
+      vXml19 := (vXml19 + pXml[i]);
+
+     end;
+
+    end
+    else if ( y = 18 ) then
+    begin
+
+     for i := 144001 to (Length(pXml)) do
+     begin
+
+      vXml19 := (vXml19 + pXml[i]);
+
+     end;
+
+    end;
+
+    if ( (y > 19) and (Length(pXml) > 160000) ) then
+    begin
+
+     for i := 152001 to 160000 do
+     begin
+
+      vXml20 := (vXml20 + pXml[i]);
+
+     end;
+
+    end
+    else if ( y = 19 ) then
+    begin
+
+     for i := 152001 to (Length(pXml)) do
+     begin
+
+      vXml20 := (vXml20 + pXml[i]);
+
+     end;
+
+    end;
+
+    if ( (y > 20) and (Length(pXml) > 168000) ) then
+    begin
+
+     for i := 160001 to 168000 do
+     begin
+
+      vXml21 := (vXml21 + pXml[i]);
+
+     end;
+
+    end
+    else if ( y = 20 ) then
+    begin
+
+     for i := 160001 to (Length(pXml)) do
+     begin
+
+      vXml21 := (vXml21 + pXml[i]);
+
+     end;
+
+    end;
+
+    if ( (y > 21) and (Length(pXml) > 176000) ) then
+    begin
+
+     for i := 168001 to 176000 do
+     begin
+
+      vXml22 := (vXml22 + pXml[i]);
+     end;
+
+    end
+    else if ( y = 21 ) then
+    begin
+
+     for i := 168001 to (Length(pXml)) do
+     begin
+
+      vXml22 := (vXml22 + pXml[i]);
+
+     end;
+
+    end;
+
+    if ( (y > 22) and (Length(pXml) > 184000) ) then
+    begin
+
+     for i := 176001 to 184000 do
+     begin
+
+      vXml23 := (vXml23 + pXml[i]);
+
+     end;
+
+    end
+    else if ( y = 22 ) then
+    begin
+
+     for i := 176001 to (Length(pXml)) do
+     begin
+
+      vXml23 := (vXml23 + pXml[i]);
+
+     end;
+
+    end;
+
+    if ( (y > 23) and (Length(pXml) > 192000) ) then
+    begin
+
+     for i := 184001 to 192000 do
+     begin
+
+      vXml24 := (vXml24 + pXml[i]);
+
+     end;
+
+    end
+    else if ( y = 23 ) then
+    begin
+
+     for i := 184001 to (Length(pXml)) do
+     begin
+
+      vXml24 := (vXml24 + pXml[i]);
+
+     end;
+
+    end;
+
+    if ( (y > 24) and (Length(pXml) > 200000) ) then
+    begin
+
+     for i := 192001 to 200000 do
+     begin
+
+      vXml25 := (vXml25 + pXml[i]);
+
+     end;
+
+    end
+    else if ( y = 24 ) then
+    begin
+
+     for i := 192001 to (Length(pXml)) do
+     begin
+
+      vXml25 := (vXml25 + pXml[i]);
+
+     end;
+
+    end;
+
+    if ( (y > 25) and (Length(pXml) > 208000) ) then
+    begin
+
+     for i := 200001 to 208000 do
+     begin
+
+      vXml26 := (vXml26 + pXml[i]);
+
+     end;
+
+    end
+    else if ( y = 25 ) then
+    begin
+
+     for i := 200001 to (Length(pXml)) do
+     begin
+
+      vXml26 := (vXml26 + pXml[i]);
+
+     end;
+
+    end;
+
+    if ( (y > 26) and (Length(pXml) > 216000) ) then
+    begin
+
+     for i := 208001 to 216000 do
+     begin
+
+      vXml27 := (vXml27 + pXml[i]);
+
+     end;
+
+    end
+    else if ( y = 26 ) then
+    begin
+
+     for i := 208001 to (Length(pXml)) do
+     begin
+
+      vXml27 := (vXml27 + pXml[i]);
+
+     end;
+
+    end;
+
+    if ( (y > 27) and (Length(pXml) > 224000) ) then
+    begin
+
+     for i := 216001 to 224000 do
+     begin
+
+      vXml28 := (vXml28 + pXml[i]);
+
+     end;
+
+    end
+    else if ( y = 27 ) then
+    begin
+
+     for i := 216001 to (Length(pXml)) do
+     begin
+
+      vXml28 := (vXml28 + pXml[i]);
+
+     end;
+
+    end;
+
+    if ( (y > 28) and (Length(pXml) > 232000) ) then
+    begin
+
+     for i := 224001 to 232000 do
+     begin
+
+      vXml29 := (vXml29 + pXml[i]);
+
+     end;
+
+    end
+    else if ( y = 28 ) then
+    begin
+
+     for i := 224001 to (Length(pXml)) do
+     begin
+
+      vXml29 := (vXml29 + pXml[i]);
+
+     end;
+
+    end;
+
+    if ( (y > 29) and (Length(pXml) > 240000) ) then
+    begin
+
+     for i := 232001 to 2400000 do
+     begin
+
+      vXml30 := (vXml30 + pXml[i]);
+
+     end;
+
+    end
+    else if ( y = 29 ) then
+    begin
+
+     for i := 232001 to (Length(pXml)) do
+     begin
+
+      vXml30 := (vXml30 + pXml[i]);
+
+     end;
+
+    end;
+
+    if ( (y > 30) and (Length(pXml) > 248000) ) then
+    begin
+
+     for i := 240001 to 248000 do
+     begin
+
+      vXml31 := (vXml31 + pXml[i]);
+
+     end;
+
+    end
+    else if ( y = 30 ) then
+    begin
+
+     for i := 240001 to (Length(pXml)) do
+     begin
+
+      vXml31 := (vXml31 + pXml[i]);
+
+     end;
+
+    end;
+
+    if ( (y > 31) and (Length(pXml) > 256000) ) then
+    begin
+
+     for i := 248001 to 256000 do
+     begin
+
+      vXml32 := (vXml32 + pXml[i]);
+
+     end;
+
+    end
+    else if ( y = 31 ) then
+    begin
+
+     for i := 248001 to (Length(pXml)) do
+     begin
+
+      vXml32 := (vXml32 + pXml[i]);
+
+     end;
+
+    end;
+
+    if ( (y > 32) and (Length(pXml) > 264000) ) then
+    begin
+
+     for i := 256001 to 264000 do
+     begin
+
+      vXml33 := (vXml33 + pXml[i]);
+
+     end;
+
+    end
+    else if ( y = 32 ) then
+    begin
+
+     for i := 256001 to (Length(pXml)) do
+     begin
+
+      vXml33 := (vXml33 + pXml[i]);
+
+     end;
+
+    end;
+
+    if ( (y > 33) and (Length(pXml) > 272000) ) then
+    begin
+
+     for i := 264001 to 272000 do
+     begin
+
+        vXml34 := (vXml34 + pXml[i]);
+
+     end;
+
+    end
+    else if ( y = 33 ) then
+    begin
+
+     for i := 264001 to (Length(pXml)) do
+     begin
+
+      vXml34 := (vXml34 + pXml[i]);
+
+     end;
+
+    end;
+
+    if ( (y > 34) and (Length(pXml) > 280000) ) then
+    begin
+
+     for i := 272001 to 280000 do
+     begin
+
+      vXml35 := (vXml35 + pXml[i]);
+
+     end;
+
+    end
+    else if ( y = 34 ) then
+    begin
+
+     for i := 272001 to (Length(pXml)) do
+     begin
+
+      vXml35 := (vXml35 + pXml[i]);
+
+     end;
+
+    end;
+
+    if ( (y > 35) and (Length(pXml) > 288000) ) then
+    begin
+
+     for i := 280001 to 288000 do
+     begin
+
+      vXml36 := (vXml36 + pXml[i]);
+
+     end;
+
+    end
+    else if ( y = 35 ) then
+    begin
+
+     for i := 280001 to (Length(pXml)) do
+     begin
+
+      vXml36 := (vXml36 + pXml[i]);
+
+     end;
+
+    end;
+
+    if ( (y > 36) and (Length(pXml) > 296000) ) then
+    begin
+
+     for i := 288001 to 296000 do
+     begin
+
+      vXml37 := (vXml37 + pXml[i]);
+
+     end;
+
+    end
+    else if ( y = 36 ) then
+    begin
+
+     for i := 288001 to (Length(pXml)) do
+     begin
+
+      vXml37 := (vXml37 + pXml[i]);
+
+     end;
+
+    end;
+
+    if ( (y > 37) and (Length(pXml) > 304000) ) then
+    begin
+
+     for i := 296001 to 304000 do
+     begin
+
+      vXml38 := (vXml38 + pXml[i]);
+
+     end;
+
+    end
+    else if ( y = 37 ) then
+    begin
+
+     for i := 296001 to (Length(pXml)) do
+     begin
+
+      vXml38 := (vXml38 + pXml[i]);
+
+     end;
+
+    end;
+
+    if ( (y > 38) and (Length(pXml) > 312000) ) then
+    begin
+
+     for i := 304001 to 312000 do
+     begin
+
+      vXml39 := (vXml39 + pXml[i]);
+
+     end;
+
+    end
+    else if ( y = 38 ) then
+    begin
+
+     for i := 304001 to (Length(pXml)) do
+     begin
+
+      vXml39 := (vXml39 + pXml[i]);
+
+     end;
+
+    end;
+
+    if ( (y > 39) and (Length(pXml) > 320000) ) then
+    begin
+
+     for i := 312001 to 320000 do
+     begin
+
+      vXml40 := (vXml40 + pXml[i]);
+
+     end;
+
+    end
+    else if ( y = 39 ) then
+    begin
+
+     for i := 312001 to (Length(pXml)) do
+     begin
+
+      vXml40 := (vXml40 + pXml[i]);
+
+     end;
+
+    end;
+
+    if ( y = 40 ) then
+    begin
+
+     for i := 320001 to (Length(pXml)) do
+     begin
+
+      vXml41 := (vXml41 + pXml[i]);
+
+     end;
+
+    end;
+
+    y := -1;
 
    end;
 
-   //final - grava xml da nfe
+   DMFD.FDQuery2.DisableControls;
+   DMFD.FDQuery2.Close;
+   DMFD.FDQuery2.SQL.Clear;
+   DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                                          ' );
+   DMFD.FDQuery2.SQL.Add( 'insert into nfe_xml (                                       ' );
+   DMFD.FDQuery2.SQL.Add( 'origem,                                                     ' );
+   DMFD.FDQuery2.SQL.Add( 'codigo_loja,                                                ' );
+   DMFD.FDQuery2.SQL.Add( 'dEmi,                                                       ' );
+   DMFD.FDQuery2.SQL.Add( 'nNF,                                                        ' );
+   DMFD.FDQuery2.SQL.Add( 'xml_nota,                                                   ' );
+   DMFD.FDQuery2.SQL.Add( 'xml_nota1,                                                  ' );
+   DMFD.FDQuery2.SQL.Add( 'xml_nota2,                                                  ' );
+   DMFD.FDQuery2.SQL.Add( 'xml_nota3,                                                  ' );
+   DMFD.FDQuery2.SQL.Add( 'xml_nota4,                                                  ' );
+   DMFD.FDQuery2.SQL.Add( 'xml_nota5,                                                  ' );
+   DMFD.FDQuery2.SQL.Add( 'xml_nota6,                                                  ' );
+   DMFD.FDQuery2.SQL.Add( 'xml_nota7,                                                  ' );
+   DMFD.FDQuery2.SQL.Add( 'xml_nota8,                                                  ' );
+   DMFD.FDQuery2.SQL.Add( 'xml_nota9,                                                  ' );
+   DMFD.FDQuery2.SQL.Add( 'xml_nota10,                                                 ' );
+   DMFD.FDQuery2.SQL.Add( 'xml_nota11,                                                 ' );
+   DMFD.FDQuery2.SQL.Add( 'xml_nota12,                                                 ' );
+   DMFD.FDQuery2.SQL.Add( 'xml_nota13,                                                 ' );
+   DMFD.FDQuery2.SQL.Add( 'xml_nota14,                                                 ' );
+   DMFD.FDQuery2.SQL.Add( 'xml_nota15,                                                 ' );
+   DMFD.FDQuery2.SQL.Add( 'xml_nota16,                                                 ' );
+   DMFD.FDQuery2.SQL.Add( 'xml_nota17,                                                 ' );
+   DMFD.FDQuery2.SQL.Add( 'xml_nota18,                                                 ' );
+   DMFD.FDQuery2.SQL.Add( 'xml_nota19,                                                 ' );
+   DMFD.FDQuery2.SQL.Add( 'xml_nota20,                                                 ' );
+   DMFD.FDQuery2.SQL.Add( 'xml_nota21,                                                 ' );
+   DMFD.FDQuery2.SQL.Add( 'xml_nota22,                                                 ' );
+   DMFD.FDQuery2.SQL.Add( 'xml_nota23,                                                 ' );
+   DMFD.FDQuery2.SQL.Add( 'xml_nota24,                                                 ' );
+   DMFD.FDQuery2.SQL.Add( 'xml_nota25,                                                 ' );
+   DMFD.FDQuery2.SQL.Add( 'xml_nota26,                                                 ' );
+   DMFD.FDQuery2.SQL.Add( 'xml_nota27,                                                 ' );
+   DMFD.FDQuery2.SQL.Add( 'xml_nota28,                                                 ' );
+   DMFD.FDQuery2.SQL.Add( 'xml_nota29,                                                 ' );
+   DMFD.FDQuery2.SQL.Add( 'xml_nota30,                                                 ' );
+   DMFD.FDQuery2.SQL.Add( 'xml_nota31,                                                 ' );
+   DMFD.FDQuery2.SQL.Add( 'xml_nota32,                                                 ' );
+   DMFD.FDQuery2.SQL.Add( 'xml_nota33,                                                 ' );
+   DMFD.FDQuery2.SQL.Add( 'xml_nota34,                                                 ' );
+   DMFD.FDQuery2.SQL.Add( 'xml_nota35,                                                 ' );
+   DMFD.FDQuery2.SQL.Add( 'xml_nota36,                                                 ' );
+   DMFD.FDQuery2.SQL.Add( 'xml_nota37,                                                 ' );
+   DMFD.FDQuery2.SQL.Add( 'xml_nota38,                                                 ' );
+   DMFD.FDQuery2.SQL.Add( 'xml_nota39,                                                 ' );
+   DMFD.FDQuery2.SQL.Add( 'xml_nota40)                                                 ' );
+   DMFD.FDQuery2.SQL.Add( 'values (                                                    ' );
+   DMFD.FDQuery2.SQL.Add( ':origem,                                                    ' );
+   DMFD.FDQuery2.SQL.Add( ':codigo_loja,                                               ' );
+   DMFD.FDQuery2.SQL.Add( ':dEmi,                                                      ' );
+   DMFD.FDQuery2.SQL.Add( ':nNF,                                                       ' );
+   DMFD.FDQuery2.SQL.Add( ':xml_nota,                                                  ' );
+   DMFD.FDQuery2.SQL.Add( ':xml_nota1,                                                 ' );
+   DMFD.FDQuery2.SQL.Add( ':xml_nota2,                                                 ' );
+   DMFD.FDQuery2.SQL.Add( ':xml_nota3,                                                 ' );
+   DMFD.FDQuery2.SQL.Add( ':xml_nota4,                                                 ' );
+   DMFD.FDQuery2.SQL.Add( ':xml_nota5,                                                 ' );
+   DMFD.FDQuery2.SQL.Add( ':xml_nota6,                                                 ' );
+   DMFD.FDQuery2.SQL.Add( ':xml_nota7,                                                 ' );
+   DMFD.FDQuery2.SQL.Add( ':xml_nota8,                                                 ' );
+   DMFD.FDQuery2.SQL.Add( ':xml_nota9,                                                 ' );
+   DMFD.FDQuery2.SQL.Add( ':xml_nota10,                                                ' );
+   DMFD.FDQuery2.SQL.Add( ':xml_nota11,                                                ' );
+   DMFD.FDQuery2.SQL.Add( ':xml_nota12,                                                ' );
+   DMFD.FDQuery2.SQL.Add( ':xml_nota13,                                                ' );
+   DMFD.FDQuery2.SQL.Add( ':xml_nota14,                                                ' );
+   DMFD.FDQuery2.SQL.Add( ':xml_nota15,                                                ' );
+   DMFD.FDQuery2.SQL.Add( ':xml_nota16,                                                ' );
+   DMFD.FDQuery2.SQL.Add( ':xml_nota17,                                                ' );
+   DMFD.FDQuery2.SQL.Add( ':xml_nota18,                                                ' );
+   DMFD.FDQuery2.SQL.Add( ':xml_nota19,                                                ' );
+   DMFD.FDQuery2.SQL.Add( ':xml_nota20,                                                ' );
+   DMFD.FDQuery2.SQL.Add( ':xml_nota21,                                                ' );
+   DMFD.FDQuery2.SQL.Add( ':xml_nota22,                                                ' );
+   DMFD.FDQuery2.SQL.Add( ':xml_nota23,                                                ' );
+   DMFD.FDQuery2.SQL.Add( ':xml_nota24,                                                ' );
+   DMFD.FDQuery2.SQL.Add( ':xml_nota25,                                                ' );
+   DMFD.FDQuery2.SQL.Add( ':xml_nota26,                                                ' );
+   DMFD.FDQuery2.SQL.Add( ':xml_nota27,                                                ' );
+   DMFD.FDQuery2.SQL.Add( ':xml_nota28,                                                ' );
+   DMFD.FDQuery2.SQL.Add( ':xml_nota29,                                                ' );
+   DMFD.FDQuery2.SQL.Add( ':xml_nota30,                                                ' );
+   DMFD.FDQuery2.SQL.Add( ':xml_nota31,                                                ' );
+   DMFD.FDQuery2.SQL.Add( ':xml_nota32,                                                ' );
+   DMFD.FDQuery2.SQL.Add( ':xml_nota33,                                                ' );
+   DMFD.FDQuery2.SQL.Add( ':xml_nota34,                                                ' );
+   DMFD.FDQuery2.SQL.Add( ':xml_nota35,                                                ' );
+   DMFD.FDQuery2.SQL.Add( ':xml_nota36,                                                ' );
+   DMFD.FDQuery2.SQL.Add( ':xml_nota37,                                                ' );
+   DMFD.FDQuery2.SQL.Add( ':xml_nota38,                                                ' );
+   DMFD.FDQuery2.SQL.Add( ':xml_nota39,                                                ' );
+   DMFD.FDQuery2.SQL.Add( ':xml_nota40)                                                ' );
+   DMFD.FDQuery2.Params[0].AsString    := 'IMPORTA';
+   DMFD.FDQuery2.Params[1].AsInteger   := StrToIntDef(edt_CodEmp.Text, 0);
+   DMFD.FDQuery2.Params[2].Value       := StrToDateTime( FormatDateTime('dd/mm/yyyy', Ide.dEmi) );
+   DMFD.FDQuery2.Params[3].AsString    := vartostr(Ide.nNF);
+   DMFD.FDQuery2.Params[4].AsMemo      := vXml1;
+   DMFD.FDQuery2.Params[5].AsMemo      := vXml2;
+   DMFD.FDQuery2.Params[6].AsMemo      := vXml3;
+   DMFD.FDQuery2.Params[7].AsMemo      := vXml4;
+   DMFD.FDQuery2.Params[8].AsMemo      := vXml5;
+   DMFD.FDQuery2.Params[9].AsMemo      := vXml6;
+   DMFD.FDQuery2.Params[10].AsMemo     := vXml7;
+   DMFD.FDQuery2.Params[11].AsMemo     := vXml8;
+   DMFD.FDQuery2.Params[12].AsMemo     := vXml9;
+   DMFD.FDQuery2.Params[13].AsMemo     := vXml10;
+   DMFD.FDQuery2.Params[14].AsMemo     := vXml11;
+   DMFD.FDQuery2.Params[15].AsMemo     := vXml12;
+   DMFD.FDQuery2.Params[16].AsMemo     := vXml13;
+   DMFD.FDQuery2.Params[17].AsMemo     := vXml14;
+   DMFD.FDQuery2.Params[18].AsMemo     := vXml15;
+   DMFD.FDQuery2.Params[19].AsMemo     := vXml16;
+   DMFD.FDQuery2.Params[20].AsMemo     := vXml17;
+   DMFD.FDQuery2.Params[21].AsMemo     := vXml18;
+   DMFD.FDQuery2.Params[22].AsMemo     := vXml19;
+   DMFD.FDQuery2.Params[23].AsMemo     := vXml20;
+   DMFD.FDQuery2.Params[24].AsMemo     := vXml21;
+   DMFD.FDQuery2.Params[25].AsMemo     := vXml22;
+   DMFD.FDQuery2.Params[26].AsMemo     := vXml23;
+   DMFD.FDQuery2.Params[27].AsMemo     := vXml24;
+   DMFD.FDQuery2.Params[28].AsMemo     := vXml25;
+   DMFD.FDQuery2.Params[29].AsMemo     := vXml26;
+   DMFD.FDQuery2.Params[30].AsMemo     := vXml27;
+   DMFD.FDQuery2.Params[31].AsMemo     := vXml28;
+   DMFD.FDQuery2.Params[32].AsMemo     := vXml29;
+   DMFD.FDQuery2.Params[33].AsMemo     := vXml30;
+   DMFD.FDQuery2.Params[34].AsMemo     := vXml31;
+   DMFD.FDQuery2.Params[35].AsMemo     := vXml32;
+   DMFD.FDQuery2.Params[36].AsMemo     := vXml33;
+   DMFD.FDQuery2.Params[37].AsMemo     := vXml34;
+   DMFD.FDQuery2.Params[38].AsMemo     := vXml35;
+   DMFD.FDQuery2.Params[39].AsMemo     := vXml36;
+   DMFD.FDQuery2.Params[40].AsMemo     := vXml37;
+   DMFD.FDQuery2.Params[41].AsMemo     := vXml38;
+   DMFD.FDQuery2.Params[42].AsMemo     := vXml39;
+   DMFD.FDQuery2.Params[43].AsMemo     := vXml40;
+   DMFD.FDQuery2.Params[44].AsMemo     := vXml41;
+
+   try
+
+    DMFD.FDQuery2.ExecSQL;
+
+   except on e:Exception do
+   begin
+
+    Application.Messagebox(PWideChar('ERRO: Não inseriu o XML da nfe no banco de dados!' + Char(13) +
+                             e.Message),'Atenção!',mb_iconstop+mb_ok);
+     exit;
+
+   end;
+
+   end;
+
+   DMFD.FDQuery2.Close;
+
+  finally
+
+   DMFD.FDQuery2.EnableControls;
 
   end;
+
+  //final - grava xml da nfe
+
+ end;
 
 end;
 
@@ -5200,25 +5602,33 @@ end;
 
 procedure TFrGBNFe.BitBtn10Click(Sender: TObject);
 begin
+
  if ( FrPar = nil ) then
-   FrPar := TFrPar.Create(Application);
+  FrPar := TFrPar.Create(Application);
+
  FrPar.BringToFront;
  FrPar.ShowModal;
+
 end;
 
 procedure TFrGBNFe.BitBtn14Click(Sender: TObject);
 begin
+
  // by Edson Lima ; 8.5.2012 ; 10:07 ; Chama a retina de backup
  if ( FrBackup = nil ) then
-   FrBackup := TFrBackup.Create(Application);
+  FrBackup := TFrBackup.Create(Application);
+
  FrBackup.BringToFront;
  FrBackup.ShowModal;
+
 end;
 
 procedure TFrGBNFe.BitBtn13Click(Sender: TObject);
 begin
+
  if ( FrInut = nil ) then
-   FrInut := TFrInut.Create(Application);
+  FrInut := TFrInut.Create(Application);
+
  FrInut.BringToFront;
  FrInut.ShowModal;
 
@@ -5229,7 +5639,8 @@ end;
 
 procedure TFrGBNFe.RadioGroup1Click(Sender: TObject);
 var
-  aux : string;
+ aux : string;
+
 begin
 
  if not fIniPen() then exit;                                                    // função de coleta de dados
@@ -5246,8 +5657,10 @@ begin
  cxTL.BringToFront;
 
  Case RadioGroup1.ItemIndex of
- 0:                                                                             // PENDENTES
+
+  0:                                                                            // PENDENTES
   begin
+
    // Desabilita os botõesde envio
    GroupBox9.Enabled    := True;
    RadioButton1.Enabled := True;
@@ -5270,11 +5683,12 @@ begin
    cxdtp2.Enabled       := False;
    Panel10.Caption      := 'P E N D E N T E S  -  N O R M A L';
    cxTL.PopupMenu       := PopupMenu2;
+
   end;
 
- 1:                                                                             // PENDENTES EM CONTINGÊNCIA
-
+  1:                                                                            // PENDENTES EM CONTINGÊNCIA
   begin
+
    // Desabilita os botõesde envio
    GroupBox9.Enabled    := False;
    RadioButton1.Enabled := True;
@@ -5298,11 +5712,12 @@ begin
    Panel10.Caption      := 'P E N D E N T E S  -  C O N T I N G Ê N C I A S';
    cxTL.PopupMenu       := PopupMenu4;
    cxTL.BringToFront;
+
   end;
 
- 2:                                                                             // TRANSMITIDAS
-
+  2:                                                                            // TRANSMITIDAS
   begin
+
    // Desabilita os botõesde envio
    GroupBox9.Enabled    := False;
    RadioButton1.Enabled := False;
@@ -5324,11 +5739,12 @@ begin
    Panel10.Caption      := 'T R A N S M I T I D A S';
    cxTL.PopupMenu       := PopupMenu1;
    cxTL.BringToFront;
+
   end;
 
- 3:                                                                             // DENEGADAS
-
+  3:                                                                            // DENEGADAS
   begin
+
    // Desabilita os botõesde envio
    GroupBox9.Enabled    := False;
    RadioButton1.Enabled := False;
@@ -5350,11 +5766,12 @@ begin
    Panel10.Caption      := 'D E N E G A D A S';
    cxTL.PopupMenu       := PopupMenu3;
    cxTL.BringToFront;
+
   end;
 
- 4:                                                                             // CANCELADAS
-
+  4:                                                                            // CANCELADAS
   begin
+
    // Desabilita os botõesde envio
    GroupBox9.Enabled    := False;
    RadioButton1.Enabled := False;
@@ -5376,11 +5793,12 @@ begin
    Panel10.Caption := 'C A N C E L A D A S';
    cxTL.PopupMenu       := PopupMenu5;
    cxTL.BringToFront;
+
   end;
 
- 5:                                                                             // INUTILIZADAS
-
+  5:                                                                            // INUTILIZADAS
   begin
+
    // Desabilita os botõesde envio
    GroupBox9.Enabled    := False;
    RadioButton1.Enabled := False;
@@ -5401,74 +5819,86 @@ begin
    cxdtp2.Enabled       := False;
    Panel10.Caption      := 'I N U T I L I Z A D A S';
    cxTLInut.BringToFront;
+
   end;
+
  end;
 
  // Tratamento do nível de acesso, passado pelo ERP
  case StrToIntDef(gNivel, 0) of
+
   0:
-   begin
-    { Esse nível deixa liberado tudo no GBNFe - Acesso Total                   }
-   end;
+  begin
+
+   { Esse nível deixa liberado tudo no GBNFe - Acesso Total                   }
+
+  end;
 
   1:
-   begin
-    { Este nível inibe (deixa invisível) o botão do MDe                        }
+  begin
 
-    BitBtn16.Visible                        := False;
-   end;
+   { Este nível inibe (deixa invisível) o botão do MDe                        }
+   BitBtn16.Visible                        := False;
+
+  end;
 
   2:
-   begin
-   end;
+  begin
+
+  end;
 
   3:
-   begin
-   end;
+  begin
+
+  end;
 
   4:
-   begin
-    { Este Libera somente o MDe - Quando informado entra direto na janela do
-      MDe maximizada                                                           }
+  begin
 
-    PopupMenu2.Items[1].Enabled             := False;
-    BitBtn1.Enabled                         := False;
-    BitBtn2.Enabled                         := False;
-    BitBtn3.Enabled                         := False;
-    BitBtn4.Enabled                         := False;
-    BitBtn5.Enabled                         := False;
-    BitBtn6.Enabled                         := False;
-    BitBtn7.Enabled                         := False;
-    BitBtn8.Enabled                         := False;
-    BitBtn9.Enabled                         := False;
-    BitBtn10.Enabled                        := False;
-    BitBtn11.Enabled                        := False;
-    BitBtn13.Enabled                        := False;
-    BitBtn14.Enabled                        := False;
-    BitBtn15.Enabled                        := False;
-    BitBtn16.Enabled                        := True;
-    RadioButton1.Enabled                    := False;
-    GroupBox9.Enabled                       := False;
-   end;
+   { Este Libera somente o MDe - Quando informado entra direto na janela do
+     MDe maximizada                                                           }
+
+   PopupMenu2.Items[1].Enabled             := False;
+   BitBtn1.Enabled                         := False;
+   BitBtn2.Enabled                         := False;
+   BitBtn3.Enabled                         := False;
+   BitBtn4.Enabled                         := False;
+   BitBtn5.Enabled                         := False;
+   BitBtn6.Enabled                         := False;
+   BitBtn7.Enabled                         := False;
+   BitBtn8.Enabled                         := False;
+   BitBtn9.Enabled                         := False;
+   BitBtn10.Enabled                        := False;
+   BitBtn11.Enabled                        := False;
+   BitBtn13.Enabled                        := False;
+   BitBtn14.Enabled                        := False;
+   BitBtn15.Enabled                        := False;
+   BitBtn16.Enabled                        := True;
+   RadioButton1.Enabled                    := False;
+   GroupBox9.Enabled                       := False;
+  end;
 
   5:
-   begin
-    { Quando expecificado, não verifica as NFe selecionadas que estão em
-      contigência e as já enviadas ha mais de um dia para seleciona            }
+  begin
+   { Quando expecificado, não verifica as NFe selecionadas que estão em
+     contigência e as já enviadas ha mais de um dia para seleciona            }
 
-   end;
+  end;
 
   6..9:
-   begin
+  begin
+
     { Livre }
 
-   end;
+  end;
 
  else
-   begin
+  begin
+
     { Livre }
 
-   end;
+  end;
+
  end;
 
 end;
@@ -5509,91 +5939,97 @@ begin
  //-----------------------------------------------------------------------------
 
  if ( gAtualiza ) then
+ begin
+
+  if ( InternetCheckConnection('http://www.google.com.br/', 1, 0) ) then
   begin
-   if ( InternetCheckConnection('http://www.google.com.br/', 1, 0) ) then
+
+   arq_servidor := ExtractFileName(Application.ExeName);                        // nome do arquivo e extensão atualizado no servidor
+   path         := ExtractFilePath(Application.ExeName);                        // variável com o caminho do exe.
+   path_local   := ExtractFilePath(Application.ExeName) + arq_servidor;         // colocar na variavel o caminho do exe da applicação
+
+   //---------------------------------------------------------------------------
+   //fazer conexão com o seu servidor ftp onde se encontra o exe atualizado
+
+   IdFTP1.Host     := 'ftp.casadarocaagrop.com.br';                             // host do servidor
+   IdFTP1.Username := 'casadaroca1';                                            // login da conta ftp
+   IdFTP1.Password := 'nybhg+ne20';                                             // senha da conta ftp
+   IdFTP1.Port     := 21;                                                       // porta
+   IdFTP1.Passive  := false;                                                    // 'True' se usar proxy
+   try
+    IdFTP1.Connect;                                                             // conectar ao servidot ftp
+    IdFTP1.ChangeDir('/GB/AtualizacaoSoftware/AtualizacaoGeral/AtuNFe');        // apontar para o diretorio do ftp
+   except
+    IdFtp1.Disconnect;
+   end;
+
+   if ( IdFTP1.Connected = true ) then                                          // verifica se esta conectado ao servidor ftp
+   begin
+
+    lista         := TStringList.Create;
+    lista.Add('ok');
+    lista.Clear;
+    IdFTP1.List( lista, arq_servidor, true );                                   // cria a lista do arquivo do diretorio apontado
+    IdFTP1.List(nil);
+
+    for x := 0 to IdFTP1.DirectoryListing.Count -1 do
     begin
 
-     arq_servidor := ExtractFileName(Application.ExeName);                      // nome do arquivo e extensão atualizado no servidor
-     path         := ExtractFilePath(Application.ExeName);                      // variável com o caminho do exe.
-     path_local   := ExtractFilePath(Application.ExeName) + arq_servidor;       // colocar na variavel o caminho do exe da applicação
+     if ( UpperCase(arq_servidor) = UpperCase(IdFTP1.DirectoryListing.Items[x].FileName) ) then
+     begin
 
-     //-------------------------------------------------------------------------
-     //fazer conexão com o seu servidor ftp onde se encontra o exe atualizado
+        data_web      := FormatDateTime( 'dd/mm/yyyy HH:mm:ss',
+                         IdFTP1.DirectoryListing.Items[x].ModifiedDate );       // adiciona data do arquivo do servidor ftp a variavel
 
-     IdFTP1.Host     := 'ftp.casadarocaagrop.com.br';                           // host do servidor
-     IdFTP1.Username := 'casadaroca1';                                          // login da conta ftp
-     IdFTP1.Password := 'nybhg+ne20';                                           // senha da conta ftp
-     IdFTP1.Port     := 21;                                                     // porta
-     IdFTP1.Passive  := false;                                                  // 'True' se usar proxy
-     try
-      IdFTP1.Connect;                                                           // conectar ao servidot ftp
-      IdFTP1.ChangeDir('/GB/AtualizacaoSoftware/AtualizacaoGeral/AtuNFe');      // apontar para o diretorio do ftp
-     except
-      IdFtp1.Disconnect;
      end;
 
-     if ( IdFTP1.Connected = true ) then                                        // verifica se esta conectado ao servidor ftp
+    end;
+
+    data_local    := FormatDateTime( 'dd/mm/yyyy HH:mm:ss',
+                     FileDateToDateTime(FileAge(path_local)));                  // adiciona data do arquivo local a variavel
+    FreeAndNil(Lista);                                                          // finaliza o stringlist
+    IdFTP1.Disconnect;                                                          // disconecta do servidor ftp
+
+    if ( Trim(data_web) = '' ) then
+     data_web := data_local;
+
+    if ( (StrToDateTime(data_web)) > (StrToDateTime(data_local)) ) then         // Aqui se compara os valores das datas dos arquivos
+    begin
+
+     // Verifica se o atualizador existe
+     if ( FilesExists(PWideChar(ExtractFilePath(Application.ExeName) + 'AtuNFe.exe')) ) then
+     begin
+
+      if Application.MessageBox( 'Existe nova versão deste aplicativo para atualizar!' + chr(13) +
+                                 'Gostaria de executar esse procedimento agora?',
+                                 'Atualização: - GB -', MB_ICONQUESTION + MB_YESNO ) = IdYes then
       begin
 
-       lista         := TStringList.Create;
-       lista.Add('ok');
-       lista.Clear;
-       IdFTP1.List( lista, arq_servidor, true );                                // cria a lista do arquivo do diretorio apontado
-       IdFTP1.List(nil);
-
-       for x := 0 to IdFTP1.DirectoryListing.Count -1 do
-        begin
-         if ( UpperCase(arq_servidor) = UpperCase(IdFTP1.DirectoryListing.Items[x].FileName) ) then
-          begin
-           data_web      := FormatDateTime( 'dd/mm/yyyy HH:mm:ss',
-                            IdFTP1.DirectoryListing.Items[x].ModifiedDate );    // adiciona data do arquivo do servidor ftp a variavel
-          end;
-        end;
-
-       data_local    := FormatDateTime( 'dd/mm/yyyy HH:mm:ss',
-                        FileDateToDateTime(FileAge(path_local)));               // adiciona data do arquivo local a variavel
-       FreeAndNil(Lista);                                                       // finaliza o stringlist
-       IdFTP1.Disconnect;                                                       // disconecta do servidor ftp
-
-       if ( Trim(data_web) = '' ) then
-        data_web := data_local;
-
-       if ( (StrToDateTime(data_web)) > (StrToDateTime(data_local)) ) then      // Aqui se compara os valores das datas dos arquivos
-        begin
-
-         // Verifica se o atualizador existe
-         if ( FilesExists(PWideChar(ExtractFilePath(Application.ExeName) + 'AtuNFe.exe')) ) then
-          begin
-
-           if Application.MessageBox( 'Existe nova versão deste aplicativo para atualizar!' + chr(13) +
-                                      'Gostaria de executar esse procedimento agora?',
-                                      'Atualização: - GB -', MB_ICONQUESTION + MB_YESNO ) = IdYes then
-            begin
-
-             // Chama o AtuNFe.Exe e envia os parêmetros recebidos do ERP
-             WinExec(PAnsiChar(AnsiString(ExtractFilePath(Application.ExeName) + 'AtuNFe.exe' +
-                            ' /developed_gb_informática_ltda' +
-                            ' /' + gCodEmp +
-                            ' /' + gUsu +
-                            ' /' + gNivel +
-                            ' /' + gInstancias +
-                            ' /' + gExpress +
-                            ' /' + gNNF +
-                            ' /' + gOpcao + chr(0) +
-                            ' /' + arq_servidor +
-                            ' /' + path)),SW_SHOWNORMAL );                      // executa o aplicativo que fara o download
-             Application.Terminate;                                             //finalza applicaçao para que seja feita a substituicao do aplicativo
-
-            end;
-
-          end;
-
-        end;
+       // Chama o AtuNFe.Exe e envia os parêmetros recebidos do ERP
+       WinExec(PAnsiChar(AnsiString(ExtractFilePath(Application.ExeName) + 'AtuNFe.exe' +
+                      ' /developed_gb_informática_ltda' +
+                      ' /' + gCodEmp +
+                      ' /' + gUsu +
+                      ' /' + gNivel +
+                      ' /' + gInstancias +
+                      ' /' + gExpress +
+                      ' /' + gNNF +
+                      ' /' + gOpcao + chr(0) +
+                      ' /' + arq_servidor +
+                      ' /' + path)),SW_SHOWNORMAL );                            // executa o aplicativo que fara o download
+       Application.Terminate;                                                   //finalza applicaçao para que seja feita a substituicao do aplicativo
 
       end;
 
+     end;
+
     end;
+
+   end;
+
   end;
+
+ end;
 
  //-----------------------------------------------------------------------------
 
@@ -5603,14 +6039,19 @@ begin
  // Seta caminho padão
  gCamPad := gCamExe;
  x       := 0;
+
  for i := Length(gCamPad) - 1 downto 0 do
-  if gCamPad[i] = '\' then
-   begin
-    x := (x + 1);
-    gCamPad := Copy(gCamPad, 1, (i-1));
-    if x > 0 then
-     Break;
-   end;
+ if gCamPad[i] = '\' then
+ begin
+
+  x := (x + 1);
+  gCamPad := Copy(gCamPad, 1, (i-1));
+
+  if x > 0 then
+   Break;
+
+ end;
+
  gCamPad := gCamPad + '\';
 
  // Atribui cor para WBResposta...
@@ -5629,154 +6070,220 @@ end;
 
 procedure TFrGBNFe.ACBrNFe1GerarLog(const Mensagem: String);
 begin
+
  memoLog.Lines.Add(Mensagem);
+
 end;
 
 procedure TFrGBNFe.ACBrNFe1StatusChange(Sender: TObject);
 begin
+
  case ACBrNFe1.Status of
+
   stIdle :
-   begin
-    if ( frmStatus <> nil ) then
-      frmStatus.Hide;
-   end;
+  begin
+
+   if ( frmStatus <> nil ) then
+    frmStatus.Hide;
+
+  end;
+
   stNFeStatusServico :
-   begin
-    if ( frmStatus = nil ) then
-      frmStatus := TfrmStatus.Create(Application);
-    frmStatus.lblStatus.Caption := 'Verificando Status do servico...';
-    frmStatus.BringToFront;
-    frmStatus.Show;
-    Application.ProcessMessages;
-   end;
+  begin
+
+   if ( frmStatus = nil ) then
+    frmStatus := TfrmStatus.Create(Application);
+
+   frmStatus.lblStatus.Caption := 'Verificando Status do servico...';
+   frmStatus.BringToFront;
+   frmStatus.Show;
+   Application.ProcessMessages;
+
+  end;
+
   stNFeRecepcao :
-   begin
-    if ( frmStatus = nil ) then
-      frmStatus := TfrmStatus.Create(Application);
-    frmStatus.lblStatus.Caption := 'Enviando dados da NFe...';
-    frmStatus.BringToFront;
-    frmStatus.Show;
-    Application.ProcessMessages;
-   end;
+  begin
+   if ( frmStatus = nil ) then
+    frmStatus := TfrmStatus.Create(Application);
+
+   frmStatus.lblStatus.Caption := 'Enviando dados da NFe...';
+   frmStatus.BringToFront;
+   frmStatus.Show;
+   Application.ProcessMessages;
+
+  end;
+
   stNfeRetRecepcao :
-   begin
-    if ( frmStatus = nil ) then
-      frmStatus := TfrmStatus.Create(Application);
-    frmStatus.lblStatus.Caption := 'Recebendo dados da NFe...';
-    frmStatus.BringToFront;
-    frmStatus.Show;
-    Application.ProcessMessages;
-   end;
+  begin
+
+   if ( frmStatus = nil ) then
+    frmStatus := TfrmStatus.Create(Application);
+
+   frmStatus.lblStatus.Caption := 'Recebendo dados da NFe...';
+   frmStatus.BringToFront;
+   frmStatus.Show;
+   Application.ProcessMessages;
+
+  end;
+
   stNfeConsulta :
-   begin
-    if ( frmStatus = nil ) then
-      frmStatus := TfrmStatus.Create(Application);
-    frmStatus.lblStatus.Caption := 'Consultando NFe...';
-    frmStatus.BringToFront;
-    frmStatus.Show;
-    Application.ProcessMessages;
-   end;
+  begin
+
+   if ( frmStatus = nil ) then
+    frmStatus := TfrmStatus.Create(Application);
+
+   frmStatus.lblStatus.Caption := 'Consultando NFe...';
+   frmStatus.BringToFront;
+   frmStatus.Show;
+   Application.ProcessMessages;
+
+  end;
+
   stNfeCancelamento :
-   begin
-    if ( frmStatus = nil ) then
-      frmStatus := TfrmStatus.Create(Application);
-    frmStatus.lblStatus.Caption := 'Enviando cancelamento de NFe...';
-    frmStatus.BringToFront;
-    frmStatus.Show;
-    Application.ProcessMessages;
-   end;
+  begin
+
+   if ( frmStatus = nil ) then
+    frmStatus := TfrmStatus.Create(Application);
+
+   frmStatus.lblStatus.Caption := 'Enviando cancelamento de NFe...';
+   frmStatus.BringToFront;
+   frmStatus.Show;
+   Application.ProcessMessages;
+
+  end;
+
   stNfeInutilizacao :
-   begin
-    if ( frmStatus = nil ) then
-      frmStatus := TfrmStatus.Create(Application);
-    frmStatus.lblStatus.Caption := 'Enviando pedido de Inutilização...';
-    frmStatus.BringToFront;
-    frmStatus.Show;
-    Application.ProcessMessages;
-   end;
+  begin
+
+   if ( frmStatus = nil ) then
+    frmStatus := TfrmStatus.Create(Application);
+
+   frmStatus.lblStatus.Caption := 'Enviando pedido de Inutilização...';
+   frmStatus.BringToFront;
+   frmStatus.Show;
+   Application.ProcessMessages;
+
+  end;
+
   stNFeRecibo :
-   begin
-    if ( frmStatus = nil ) then
-      frmStatus := TfrmStatus.Create(Application);
-    frmStatus.lblStatus.Caption := 'Consultando Recibo de Lote...';
-    frmStatus.BringToFront;
-    frmStatus.Show;
-    Application.ProcessMessages;
-   end;
+  begin
+
+   if ( frmStatus = nil ) then
+    frmStatus := TfrmStatus.Create(Application);
+
+   frmStatus.lblStatus.Caption := 'Consultando Recibo de Lote...';
+   frmStatus.BringToFront;
+   frmStatus.Show;
+   Application.ProcessMessages;
+
+  end;
+
   stNFeCadastro :
-   begin
-    if ( frmStatus = nil ) then
-      frmStatus := TfrmStatus.Create(Application);
-    frmStatus.lblStatus.Caption := 'Consultando Cadastro...';
-    frmStatus.BringToFront;
-    frmStatus.Show;
-    Application.ProcessMessages;
-   end;
+  begin
+
+   if ( frmStatus = nil ) then
+    frmStatus := TfrmStatus.Create(Application);
+
+   frmStatus.lblStatus.Caption := 'Consultando Cadastro...';
+   frmStatus.BringToFront;
+   frmStatus.Show;
+   Application.ProcessMessages;
+
+  end;
+
   stNFeEmail :
-   begin
-    if ( frmStatus = nil ) then
-      frmStatus := TfrmStatus.Create(Application);
-    frmStatus.lblStatus.Caption := 'Enviando Email...';
-    frmStatus.BringToFront;
-    frmStatus.Show;
-    Application.ProcessMessages;
-   end;
+  begin
+
+   if ( frmStatus = nil ) then
+    frmStatus := TfrmStatus.Create(Application);
+
+   frmStatus.lblStatus.Caption := 'Enviando Email...';
+   frmStatus.BringToFront;
+   frmStatus.Show;
+   Application.ProcessMessages;
+
+  end;
+
   stNFeCCe :
-   begin
-    if ( frmStatus = nil ) then
-      frmStatus := TfrmStatus.Create(Application);
-    frmStatus.lblStatus.Caption := 'Enviando CCe...';
-    frmStatus.BringToFront;
-    frmStatus.Show;
-    Application.ProcessMessages;
-   end;
+  begin
+
+   if ( frmStatus = nil ) then
+    frmStatus := TfrmStatus.Create(Application);
+
+   frmStatus.lblStatus.Caption := 'Enviando CCe...';
+   frmStatus.BringToFront;
+   frmStatus.Show;
+   Application.ProcessMessages;
+  end;
+
   stNFeEvento :
-   begin
-    if ( frmStatus = nil ) then
-      frmStatus := TfrmStatus.Create(Application);
-    frmStatus.lblStatus.Caption := 'Enviando Eventos...';
-    frmStatus.BringToFront;
-    frmStatus.Show;
-    Application.ProcessMessages;
-   end;
+  begin
+
+   if ( frmStatus = nil ) then
+    frmStatus := TfrmStatus.Create(Application);
+
+   frmStatus.lblStatus.Caption := 'Enviando Eventos...';
+   frmStatus.BringToFront;
+   frmStatus.Show;
+   Application.ProcessMessages;
+
+  end;
+
   stConsNFeDest :
-   begin
-    if ( frmStatus = nil ) then
-      frmStatus := TfrmStatus.Create(Application);
-    frmStatus.lblStatus.Caption := 'Consulta NFe Destinada...';
-    frmStatus.BringToFront;
-    frmStatus.Show;
-    Application.ProcessMessages;
-   end;
+  begin
+
+   if ( frmStatus = nil ) then
+    frmStatus := TfrmStatus.Create(Application);
+
+   frmStatus.lblStatus.Caption := 'Consulta NFe Destinada...';
+   frmStatus.BringToFront;
+   frmStatus.Show;
+   Application.ProcessMessages;
+
+  end;
+
   stDownloadNFe :
-   begin
-    if ( frmStatus = nil ) then
-      frmStatus := TfrmStatus.Create(Application);
-    frmStatus.lblStatus.Caption := 'Download da NFe...';
-    frmStatus.BringToFront;
-    frmStatus.Show;
-    Application.ProcessMessages;
-   end;
+  begin
+
+   if ( frmStatus = nil ) then
+    frmStatus := TfrmStatus.Create(Application);
+
+   frmStatus.lblStatus.Caption := 'Download da NFe...';
+   frmStatus.BringToFront;
+   frmStatus.Show;
+   Application.ProcessMessages;
+
+  end;
+
   stAdmCSCNFCe :
-   begin
-    if ( frmStatus = nil ) then
-      frmStatus := TfrmStatus.Create(Application);
-    frmStatus.lblStatus.Caption := 'Administrando CSC NFCe...'; // ?
-    frmStatus.BringToFront;
-    frmStatus.Show;
-    Application.ProcessMessages;
-   end;
+  begin
+
+   if ( frmStatus = nil ) then
+    frmStatus := TfrmStatus.Create(Application);
+
+   frmStatus.lblStatus.Caption := 'Administrando CSC NFCe...'; // ?
+   frmStatus.BringToFront;
+   frmStatus.Show;
+   Application.ProcessMessages;
+  end;
+
   stDistDFeInt :
-   begin
-    if ( frmStatus = nil ) then
-      frmStatus := TfrmStatus.Create(Application);
-    frmStatus.lblStatus.Caption := 'Destinando DFe Int...'; // ?
-    frmStatus.BringToFront;
-    frmStatus.Show;
-    Application.ProcessMessages;
-   end;
+  begin
+
+   if ( frmStatus = nil ) then
+    frmStatus := TfrmStatus.Create(Application);
+
+   frmStatus.lblStatus.Caption := 'Destinando DFe Int...'; // ?
+   frmStatus.BringToFront;
+   frmStatus.Show;
+   Application.ProcessMessages;
+
+  end;
+
  end;
+
  Application.ProcessMessages;
+
 end;
 
 procedure TFrGBNFe.BitBtn1Click(Sender: TObject);
@@ -5822,17 +6329,17 @@ begin
  MemoLog.Lines.Add('Descrição: '+ ACBrNFe1.WebServices.StatusServico.xMotivo);
 
  if ( not(FrGBNFe.Panel7.Visible) ) then
-  begin
+ begin
 
-   Application.Messagebox( PWideChar('* -- STATUS - NFe & NFCe -- *' + chr(13) +
-                                     'Tipo de Ambiente: '     + TpAmbToStr(ACBrNFe1.WebServices.StatusServico.TpAmb) + chr(13) +
-                                     'Versão do Aplicativo: ' + ACBrNFe1.WebServices.StatusServico.verAplic          + chr(13) +
-                                     'Código do Status: '     + IntToStr(ACBrNFe1.WebServices.StatusServico.cStat)   + chr(13) +
-                                     'Código da UF: '         + IntToStr(ACBrNFe1.WebServices.StatusServico.cUF)     + chr(13) +
-                                     'Descrição: '            + ACBrNFe1.WebServices.StatusServico.xMotivo),
-                                     'Atenção!'               , MB_ICONINFORMATION );
+  Application.Messagebox( PWideChar('* -- STATUS - NFe & NFCe -- *' + chr(13) +
+                                    'Tipo de Ambiente: '     + TpAmbToStr(ACBrNFe1.WebServices.StatusServico.TpAmb) + chr(13) +
+                                    'Versão do Aplicativo: ' + ACBrNFe1.WebServices.StatusServico.verAplic          + chr(13) +
+                                    'Código do Status: '     + IntToStr(ACBrNFe1.WebServices.StatusServico.cStat)   + chr(13) +
+                                    'Código da UF: '         + IntToStr(ACBrNFe1.WebServices.StatusServico.cUF)     + chr(13) +
+                                    'Descrição: '            + ACBrNFe1.WebServices.StatusServico.xMotivo),
+                                    'Atenção!'               , MB_ICONINFORMATION );
 
-  end;
+ end;
 
  /// By Edson Lima 14.9.2012 ; 10:10 - Atualiza grade
  pAtuNFeT();
@@ -5845,7 +6352,6 @@ begin
  try
 
   MyMemo.Lines.SaveToFile(gCamLog + 'temp.xml');
-
   MyWebBrowser.Navigate(gCamLog + 'temp.xml');
 
  except
@@ -5862,117 +6368,113 @@ var
 begin
 
  if FileExists(gCamLog + gNomXML) then
+ begin
+
+  if (gAnoMes = '') then
   begin
 
-   if (gAnoMes = '') then
+   if ( FrXML.PageControl1.TabIndex = 0 ) then
+   begin
+
+    if MessageDlg('Arquivo XML [' + gNomXML + '] já existe ! Deseja Salvar? ', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
     begin
 
-     if ( FrXML.PageControl1.TabIndex = 0 ) then
-      begin
-
-       if MessageDlg('Arquivo XML [' + gNomXML + '] já existe ! Deseja Salvar? ', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
-        begin
-
-         // Salva os arquivos no log
-         MyMemo.Lines.SaveToFile(gCamLog + gNomXML);
-         MyWebBrowser.Navigate(gCamLog + gNomXML);
-
-        end;
-
-      end
-
-     else
-
-      begin
-
-       try
-
-        // Salva os arquivos no log
-        AssignFile(vArq, gCamLog + gNomXML);
-        if ( FileIsReadOnly( gCamLog + gNomXML ) ) then
-         CloseFile( vArq );
-        MyMemo.Lines.SaveToFile(gCamLog + gNomXML);
-        MyWebBrowser.Navigate(gCamLog + gNomXML);
-
-       except on e:Exception do
-
-        //ShowMessage(e.Message);
-
-       end;
-
-      end;
-
-    end
-
-   else
-
-    begin
-
-     // Diretórios e arquivos no seu ano e mês correto
-     xAux := trim(gCamXml) +                                                    // Caminho do arquivo log (gCamXml contém o caminho padrão) ex: c:\Sistemas\GBNFe\Arq\Emp001\Xml\
-             gAnoMes +                                                          // Ano, mês
-             '\';
-
-     if not DirectoryExists(xAux) then
-      CreateDir(xAux);
-
-     xAux := xAux + 'NFe\';                                                     // NFe
-
-     if not DirectoryExists(xAux) then
-      CreateDir(xAux);
-
-     try
-
-      // Salva os arquivos no xml correto
-      AssignFile(vArq, gCamLog + gNomXML);
-      if ( FileIsReadOnly( gCamLog + gNomXML ) ) then
-       CloseFile( vArq );
-      MyMemo.Lines.SaveToFile(xAux + gNomXML);
-      MyWebBrowser.Navigate(xAux + gNomXML);
-
-     except on e:Exception do
-
-      //howMessage(e.Message);
-
-     end;
-
-    end;
-  end
-
- else
-
-  begin
-
-   if (gAnoMes = '') then
-    begin
-
+     // Salva os arquivos no log
      MyMemo.Lines.SaveToFile(gCamLog + gNomXML);
      MyWebBrowser.Navigate(gCamLog + gNomXML);
 
+    end;
 
-    end
+   end
    else
-    begin
+   begin
 
-     // Diretórios e arquivos no seu ano e mês correto
-     xAux := trim(gCamXml) +                                                    // Caminho do arquivo log (gCamXml contém o caminho padrão) ex: c:\Sistemas\GBNFe\Arq\Emp001\Xml\
-             gAnoMes +                                                          // Ano, mês
-             '\';
+    try
 
-     if not DirectoryExists(xAux) then
-      CreateDir(xAux);
+     // Salva os arquivos no log
+     AssignFile(vArq, gCamLog + gNomXML);
+     if ( FileIsReadOnly( gCamLog + gNomXML ) ) then
+      CloseFile( vArq );
+     MyMemo.Lines.SaveToFile(gCamLog + gNomXML);
+     MyWebBrowser.Navigate(gCamLog + gNomXML);
 
-     xAux := xAux + 'NFe\';                                                     // NFe
+    except on e:Exception do
 
-     if not DirectoryExists(xAux) then
-      CreateDir(xAux);
-
-     // Salva os arquivos no xml correto
-     MyMemo.Lines.SaveToFile(xAux + gNomXML);
-     MyWebBrowser.Navigate(xAux + gNomXML);
+     //ShowMessage(e.Message);
 
     end;
+
+   end;
+
+  end
+  else
+  begin
+
+   // Diretórios e arquivos no seu ano e mês correto
+   xAux := trim(gCamXml) +                                                      // Caminho do arquivo log (gCamXml contém o caminho padrão) ex: c:\Sistemas\GBNFe\Arq\Emp001\Xml\
+           gAnoMes +                                                            // Ano, mês
+           '\';
+
+   if not DirectoryExists(xAux) then
+    CreateDir(xAux);
+
+   xAux := xAux + 'NFe\';                                                       // NFe
+
+   if not DirectoryExists(xAux) then
+    CreateDir(xAux);
+
+   try
+
+    // Salva os arquivos no xml correto
+    AssignFile(vArq, gCamLog + gNomXML);
+    if ( FileIsReadOnly( gCamLog + gNomXML ) ) then
+     CloseFile( vArq );
+    MyMemo.Lines.SaveToFile(xAux + gNomXML);
+    MyWebBrowser.Navigate(xAux + gNomXML);
+
+   except on e:Exception do
+
+    //howMessage(e.Message);
+
+   end;
+
   end;
+
+ end
+ else
+ begin
+
+  if (gAnoMes = '') then
+  begin
+
+   MyMemo.Lines.SaveToFile(gCamLog + gNomXML);
+   MyWebBrowser.Navigate(gCamLog + gNomXML);
+
+  end
+  else
+  begin
+
+   // Diretórios e arquivos no seu ano e mês correto
+   xAux := trim(gCamXml) +                                                      // Caminho do arquivo log (gCamXml contém o caminho padrão) ex: c:\Sistemas\GBNFe\Arq\Emp001\Xml\
+           gAnoMes +                                                            // Ano, mês
+           '\';
+
+   if not DirectoryExists(xAux) then
+    CreateDir(xAux);
+
+   xAux := xAux + 'NFe\';                                                       // NFe
+
+   if not DirectoryExists(xAux) then
+    CreateDir(xAux);
+
+   // Salva os arquivos no xml correto
+   MyMemo.Lines.SaveToFile(xAux + gNomXML);
+   MyWebBrowser.Navigate(xAux + gNomXML);
+
+  end;
+
+ end;
+
 end;
 
 procedure TFrGBNFe.LoadXML2(MyMemo: TMemo; MyWebBrowser: TWebBrowser);
@@ -5998,195 +6500,196 @@ begin
 
  // Altere a propriedade do KeyPreview do Form pra true
  if not (ActiveControl is  TDbGrid) then
+ begin
+
+  Direction := -1;
+
+  if ( (Shift = [ssCtrl, ssAlt]) and (Key = VK_F1) ) then
   begin
 
-   Direction := -1;
+   if ( FrGBNFe.BitBtn1.Enabled ) then                                          // Status
+    FrGBNFe.BitBtn1Click(Sender);
 
-   if ( (Shift = [ssCtrl, ssAlt]) and (Key = VK_F1) ) then
-    begin
-     if ( FrGBNFe.BitBtn1.Enabled ) then                                        // Status
-      FrGBNFe.BitBtn1Click(Sender);
-    end
+  end
+  else if ( (Shift = [ssCtrl, ssAlt]) and (Key = VK_F2) ) then
+  begin
 
-   else if ( (Shift = [ssCtrl, ssAlt]) and (Key = VK_F2) ) then
+   if ( FrGBNFe.BitBtn2.Enabled ) then                                          // Enviar NFe
+   begin
 
-    begin
-     if ( FrGBNFe.BitBtn2.Enabled ) then                                        // Enviar NFe
-      begin
-       gGeraXML := False;
-       FrGBNFe.BitBtn2Click(Sender);
-      end;
-    end
+    gGeraXML := False;
+    FrGBNFe.BitBtn2Click(Sender);
 
-   else if ( (Shift = [ssCtrl, ssAlt]) and (Key = VK_F3) ) then
+   end;
 
-    begin
-     if ( FrGBNFe.BitBtn5.Enabled ) then                                        // Mostra XML
-      FrGBNFe.BitBtn5Click(Sender);
-    end
+  end
+  else if ( (Shift = [ssCtrl, ssAlt]) and (Key = VK_F3) ) then
+  begin
 
-   else if ( (Shift = [ssCtrl, ssAlt]) and (Key = VK_F4) ) then
+   if ( FrGBNFe.BitBtn5.Enabled ) then                                          // Mostra XML
+    FrGBNFe.BitBtn5Click(Sender);
 
-    begin
-     if ( FrGBNFe.BitBtn6.Enabled ) then                                        // Envia eMail
-      FrGBNFe.BitBtn6Click(Sender);
-    end
+  end
+  else if ( (Shift = [ssCtrl, ssAlt]) and (Key = VK_F4) ) then
+  begin
 
-   else if ( (Shift = [ssCtrl, ssAlt]) and (Key = VK_F5) ) then
+   if ( FrGBNFe.BitBtn6.Enabled ) then                                          // Envia eMail
+    FrGBNFe.BitBtn6Click(Sender);
 
-    begin
-     if ( FrGBNFe.BitBtn7.Enabled ) then                                        // Gera PDF
-      FrGBNFe.BitBtn7Click(Sender);
-    end
+  end
+  else if ( (Shift = [ssCtrl, ssAlt]) and (Key = VK_F5) ) then
+  begin
 
-   else if ( (Shift = [ssCtrl, ssAlt]) and (Key = VK_F6) ) then
+   if ( FrGBNFe.BitBtn7.Enabled ) then                                          // Gera PDF
+    FrGBNFe.BitBtn7Click(Sender);
 
-    begin
+  end
+  else if ( (Shift = [ssCtrl, ssAlt]) and (Key = VK_F6) ) then
+  begin
 
-    end
+  end
+  else if ( (Shift = [ssCtrl, ssAlt]) and (Key = VK_F7) ) then
+  begin
 
-   else if ( (Shift = [ssCtrl, ssAlt]) and (Key = VK_F7) ) then
+   if ( FrGBNFe.BitBtn8.Enabled ) then                                          // Consulta
+    FrGBNFe.BitBtn8Click(Sender);
 
-    begin
-     if ( FrGBNFe.BitBtn8.Enabled ) then                                        // Consulta
-      FrGBNFe.BitBtn8Click(Sender);
-    end
+  end
+  else if ( (Shift = [ssCtrl, ssAlt]) and (Key = VK_F8) ) then
+  begin
 
-   else if ( (Shift = [ssCtrl, ssAlt]) and (Key = VK_F8) ) then
+   if ( FrGBNFe.BitBtn9.Enabled ) then                                          // Imprime
+    FrGBNFe.BitBtn9Click(Sender);
 
-    begin
-     if ( FrGBNFe.BitBtn9.Enabled ) then                                        // Imprime
-      FrGBNFe.BitBtn9Click(Sender);
-    end
+  end
+  else if ( (Shift = [ssCtrl, ssAlt]) and (Key = VK_F9) ) then
+  begin
 
-   else if ( (Shift = [ssCtrl, ssAlt]) and (Key = VK_F9) ) then
+   if ( FrGBNFe.BitBtn11.Enabled ) then                                         // Cancela
+    FrGBNFe.BitBtn11Click(Sender);
 
-    begin
-     if ( FrGBNFe.BitBtn11.Enabled ) then                                       // Cancela
-      FrGBNFe.BitBtn11Click(Sender);
-    end
+  end
+  else if ( (Shift = [ssCtrl, ssAlt]) and (Key = VK_F10) ) then
+  begin
 
-   else if ( (Shift = [ssCtrl, ssAlt]) and (Key = VK_F10) ) then
+   if ( FrGBNFe.BitBtn13.Enabled ) then                                         // Inutiliza
+    FrGBNFe.BitBtn13Click(Sender);
 
-    begin
-     if ( FrGBNFe.BitBtn13.Enabled ) then                                       // Inutiliza
-      FrGBNFe.BitBtn13Click(Sender);
-    end
+  end
+  else if ( (Shift = [ssCtrl, ssAlt]) and (Key = VK_F11) ) then
+  begin
 
-   else if ( (Shift = [ssCtrl, ssAlt]) and (Key = VK_F11) ) then
+   if ( FrGBNFe.BitBtn4.Enabled ) then                                          // Gera XML-BD
+    FrGBNFe.BitBtn4Click(Sender);
 
-    begin
-     if ( FrGBNFe.BitBtn4.Enabled ) then                                        // Gera XML-BD
-      FrGBNFe.BitBtn4Click(Sender);
-    end
+  end
+  else if ( (Shift = [ssCtrl, ssAlt]) and (Key = VK_F12) ) then
+  begin
 
-   else if ( (Shift = [ssCtrl, ssAlt]) and (Key = VK_F12) ) then
+   if ( FrGBNFe.BitBtn15.Enabled ) then                                         // XML NFe_XML
+    FrGBNFe.BitBtn15Click(Sender);
 
-    begin
-     if ( FrGBNFe.BitBtn15.Enabled ) then                                       // XML NFe_XML
-      FrGBNFe.BitBtn15Click(Sender);
-    end
+  end
+  else if ( (Shift = [ssCtrl, ssShift]) and (Key = Ord('D')) ) then
+  begin
 
-   else if ( (Shift = [ssCtrl, ssShift]) and (Key = Ord('D')) ) then
+   MarcaBloco( cxTL, False, True );                                             // Desmarca todos ítens
 
-    begin
-     MarcaBloco( cxTL, False, True );                                           // Desmarca todos ítens
-    end
+  end
+  else if ( (Shift = [ssCtrl, ssShift]) and (Key = Ord('E')) ) then
+  begin
 
-   else if ( (Shift = [ssCtrl, ssShift]) and (Key = Ord('E')) ) then
+   ConsultaWeb5inuClick(Sender);                                                // D&eleta xml's Temp
 
-    begin
-     ConsultaWeb5inuClick(Sender);                                              // D&eleta xml's Temp
-    end
+  end
+  else if ( (Shift = [ssCtrl, ssShift]) and (Key = Ord('M')) ) then
+  begin
 
-   else if ( (Shift = [ssCtrl, ssShift]) and (Key = Ord('M')) ) then
+   MarcaBloco( cxTL, True, True );                                              // Marca todos ítens
 
-    begin
-     MarcaBloco( cxTL, True, True );                                            // Marca todos ítens
-    end
+  end
+  else if ( (Shift = [ssCtrl, ssShift]) and (Key = Ord('C')) ) then
+  begin
 
-   else if ( (Shift = [ssCtrl, ssShift]) and (Key = Ord('C')) ) then
+   CopiaNChaveClipBoard1Click(Sender);                                          // Copia chave para área de transfer�ncia
 
-    begin
-     CopiaNChaveClipBoard1Click(Sender);                                        // Copia chave para área de transfer�ncia
-    end
+  end
+  else if ( (Shift = [ssCtrl, ssShift]) and (Key = Ord('P')) ) then
+  begin
 
-   else if ( (Shift = [ssCtrl, ssShift]) and (Key = Ord('P')) ) then
+   MovepPendentes1Click(Sender);                                                // Move nota(s) para pendente
 
-    begin
-     MovepPendentes1Click(Sender);                                              // Move nota(s) para pendente
-    end
+  end
+  else if ( (Shift = [ssCtrl, ssShift]) and (Key = Ord('S')) ) then
+  begin
 
-   else if ( (Shift = [ssCtrl, ssShift]) and (Key = Ord('S')) ) then
+   ConsultaWeb5EnviaEmailParaDestinatrios6Click(Sender);                        // Abre o envio de email
 
-    begin
-     ConsultaWeb5EnviaEmailParaDestinatrios6Click(Sender);                      // Abre o envio de email
-    end
+  end
+  else if ( (Shift = [ssCtrl, ssShift]) and (Key = Ord('W')) ) then
+  begin
 
-   else if ( (Shift = [ssCtrl, ssShift]) and (Key = Ord('W')) ) then
+   ConsultaWeb2Click(Sender);                                                   // Consulta nota na website serfaz
 
-    begin
-     ConsultaWeb2Click(Sender);                                                 // Consulta nota na website serfaz
-    end
+  end
+  else if ( (Shift = [ssCtrl, ssShift]) and (Key = Ord('X')) ) then
+  begin
 
-   else if ( (Shift = [ssCtrl, ssShift]) and (Key = Ord('X')) ) then
+   Excluinota1Click(Sender);                                                    // Exclui nota(s)
 
-    begin
-     Excluinota1Click(Sender);                                                  // Exclui nota(s)
-    end
+  end
 
-   //---------------------------------------------------------------------------
+  //----------------------------------------------------------------------------
 
-   else if ( (Shift = [ssAlt]) and (Key = VK_F1) ) then
+  else if ( (Shift = [ssAlt]) and (Key = VK_F1) ) then
+  begin
 
-    begin
-     if ( FrGBNFe.BitBtn3.Enabled ) then                                        // Carta de Correção
-      FrGBNFe.BitBtn3Click(Sender);
-    end
+   if ( FrGBNFe.BitBtn3.Enabled ) then                                          // Carta de Correção
+    FrGBNFe.BitBtn3Click(Sender);
 
-   else if ( (Shift = [ssAlt]) and (Key = VK_F2) ) then
+  end
+  else if ( (Shift = [ssAlt]) and (Key = VK_F2) ) then
+  begin
 
-    begin
-     if ( FrGBNFe.BitBtn16.Enabled ) then                                       // Manifesto MDe
-      FrGBNFe.BitBtn16Click(Sender);
-    end
+   if ( FrGBNFe.BitBtn16.Enabled ) then                                         // Manifesto MDe
+    FrGBNFe.BitBtn16Click(Sender);
 
-   else if ( (Shift = [ssAlt]) and (Key = VK_F11) ) then
+  end
+  else if ( (Shift = [ssAlt]) and (Key = VK_F11) ) then
+  begin
 
-    begin
-     if ( FrGBNFe.BitBtn10.Enabled ) then                                       // Parâmetros
-      FrGBNFe.BitBtn10Click(Sender);
-    end
+   if ( FrGBNFe.BitBtn10.Enabled ) then                                         // Parâmetros
+    FrGBNFe.BitBtn10Click(Sender);
 
-   else if ( (Shift = [ssAlt]) and (Key = VK_F12) ) then
+  end
+  else if ( (Shift = [ssAlt]) and (Key = VK_F12) ) then
+  begin
 
-    begin
-     if ( FrGBNFe.BitBtn14.Enabled ) then                                       // Backup
-      FrGBNFe.BitBtn14Click(Sender);
-    end
+   if ( FrGBNFe.BitBtn14.Enabled ) then                                         // Backup
+    FrGBNFe.BitBtn14Click(Sender);
 
-   else
+  end
+  else
+  Case Key of
 
-    Case Key of
-
-     VK_NEXT, VK_RETURN     : Direction := 0;
-     VK_PRIOR	              : Direction := 1;
-     VK_ESCAPE              : Close;
-     VK_F11                 : FrGBNFe.Panel3.Visible := (not (FrGBNFe.Panel3.Visible));
-     VK_F12                 : FrGBNFe.Panel7.Visible := (not (FrGBNFe.Panel7.Visible));
-     VK_F1                  : FrGBNFe.SpeedButton2Click(Sender);
-
-    end;
-
-   if Direction <> -1 then
-    begin
-
-    Perform(WM_NEXTDLGCTL, Direction, 0);
-    key := 0;
-
-    end;
+   VK_NEXT, VK_RETURN     : Direction := 0;
+   VK_PRIOR	              : Direction := 1;
+   VK_ESCAPE              : Close;
+   VK_F11                 : FrGBNFe.Panel3.Visible := (not (FrGBNFe.Panel3.Visible));
+   VK_F12                 : FrGBNFe.Panel7.Visible := (not (FrGBNFe.Panel7.Visible));
+   VK_F1                  : FrGBNFe.SpeedButton2Click(Sender);
 
   end;
+
+  if Direction <> -1 then
+  begin
+
+   Perform(WM_NEXTDLGCTL, Direction, 0);
+   key := 0;
+
+  end;
+
+ end;
 
 end;
 
@@ -6201,17 +6704,19 @@ procedure TFrGBNFe.Timer1Timer(Sender: TObject);
 begin
 
  if ((not gVerCon) and (not gVerEpe) and (gNivel = '0') ) then
-  begin
-   Timer1.Enabled := False;
-   VerifCert();                                                                 // by Edson Lima ; 2014-11-11T1632 ; Verifica o vencimento do certificado digital
+ begin
 
-   // Verifica o caminho do arquivo da logomarca e da base de dados
-   //if not FileExists(PWideChar(FrPar.edtLogoMarca.Text)) then
-   // Application.Messagebox('Logomarca não encontrada, verifique o caminho da logomarca' + Chr(13) +
-   //                        'e do servidor da base de dados em parâmetros!','Informação',MB_ICONINFORMATION+mb_ok);
+  Timer1.Enabled := False;
+  VerifCert();                                                                  // by Edson Lima ; 2014-11-11T1632 ; Verifica o vencimento do certificado digital
 
-   Timer1.Enabled := True;
-  end;
+  // Verifica o caminho do arquivo da logomarca e da base de dados
+  //if not FileExists(PWideChar(FrPar.edtLogoMarca.Text)) then
+  // Application.Messagebox('Logomarca não encontrada, verifique o caminho da logomarca' + Chr(13) +
+  //                        'e do servidor da base de dados em parâmetros!','Informação',MB_ICONINFORMATION+mb_ok);
+
+  Timer1.Enabled := True;
+
+ end;
 
  // By EL 9.2.2012 - Display de mensagens na barra de status
  StatusBar1.Panels[3].Text := ' ' + gUsu;                                       // By EL 9.2.2012 - Mostra usuário no status bar
@@ -6219,118 +6724,140 @@ begin
  gCntTmp := (gCntTmp + Timer1.Interval);
 
  if ((gNivel <> '4') and (gNivel <> '5')) then
+ begin
+
+  //****************************************************************************
+  // Rotina que verifica notas de contingência em fsda
+  // by Edson ; 21/6/2012 ; 14:12
+  //****************************************************************************
+  if gExpress <> '1' then
   begin
-   //*****************************************************************************
-   // Rotina que verifica notas de contingência em fsda
-   // by Edson ; 21/6/2012 ; 14:12
-   //*****************************************************************************
-   if gExpress <> '1' then
+
+   if not gVerCon then
+   begin
+
+    Timer1.Enabled := False;
+    gDatConA := now();
+    gDatConB := now();
+
+    // Filtra os registro por data ; by Edson Lima ;  2015-5-25T0857
+    DMFD.FDQuery15.Close;
+     DMFD.FDQuery15.ParamByName('DatCon').Value     := StrToDateTime( FormatDateTime('dd/mm/yyyy', gDatConB) );
+     DMFD.FDQuery15.ParamByName('CodEmp').AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
+     DMFD.FDQuery15.ParamByName('Situac').AsString  := 'FSDA';
+    DMFD.FDQuery15.Open;
+
+    if not DMFD.FDQuery15.IsEmpty then
     begin
-     if not gVerCon then
-      begin
-       Timer1.Enabled := False;
-       gDatConA := now();
-       gDatConB := now();
 
-       // Filtra os registro por data ; by Edson Lima ;  2015-5-25T0857
-       DMFD.FDQuery15.Close;
-        DMFD.FDQuery15.ParamByName('DatCon').Value     := StrToDateTime( FormatDateTime('dd/mm/yyyy', gDatConB) );
-        DMFD.FDQuery15.ParamByName('CodEmp').AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
-        DMFD.FDQuery15.ParamByName('Situac').AsString  := 'FSDA';
-       DMFD.FDQuery15.Open;
+     if MessageDlg('Atenção, pendências para envio em contingência ' + 'FSDA,' + chr(13) +
+                   'Lembre-se que pela legislação temos 7 dias p/transmitir !' + chr(13) + chr(13) +
+                   'GOSTARIA DE IR PARA O ENVIO DESSA PENDÊNCIA AGORA ?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+     begin
 
-       if not DMFD.FDQuery15.IsEmpty then
-        begin
-         if MessageDlg('Atenção, pendências para envio em contingência ' + 'FSDA,' + chr(13) +
-                       'Lembre-se que pela legislação temos 7 dias p/transmitir !' + chr(13) + chr(13) +
-                       'GOSTARIA DE IR PARA O ENVIO DESSA PENDÊNCIA AGORA ?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
-          begin
-           gVerCon := True;
-           RadioGroup1.ItemIndex := 1;                                          // Contigência (FSDA ou OFF-LINE)
-           BitBtn2Click(Sender);
-           MarcaDesmarcaTodos1Click(Sender);
-           Timer1.Enabled := True;
-           gVerCon := True;
-           gVerEpe := True;
-           exit;
-          end
-         else
-          gVerCon := True;
-        end;
-       Timer1.Enabled := True;
-      end;
-     if not gVerEpe then
-      begin
-       Timer1.Enabled := False;
-       gDatConA := now();
-       gDatConB := now();
+      gVerCon := True;
+      RadioGroup1.ItemIndex := 1;                                               // Contigência (FSDA ou OFF-LINE)
+      BitBtn2Click(Sender);
+      MarcaDesmarcaTodos1Click(Sender);
+      Timer1.Enabled := True;
+      gVerCon := True;
+      gVerEpe := True;
+      exit;
 
-       // Filtra os registro por data ; by Edson Lima ;  2015-5-25T0857
-       DMFD.FDQuery15.Close;
-        DMFD.FDQuery15.ParamByName('DatCon').Value     := StrToDateTime( FormatDateTime('dd/mm/yyyy', gDatConB) );
-        DMFD.FDQuery15.ParamByName('CodEmp').AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
-        DMFD.FDQuery15.ParamByName('Situac').AsString  := 'OFFL';
-       DMFD.FDQuery15.Open;
+     end
+     else
+      gVerCon := True;
 
-       if not DMFD.FDQuery15.IsEmpty then
-        begin
-         if MessageDlg('Atenção, pendências para envio em contingência ' + 'OFF-LINE,' + chr(13) +
-                       'Lembre-se que pela legislação temos 24 hoas p/transmitir !' + chr(13) + chr(13) +
-                       'GOSTARIA DE IR PARA O ENVIO DESSA PENDÊNCIA AGORA ?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
-          begin
-           gVerEpe := True;
-           RadioGroup1.ItemIndex := 1;  // Contigência (FSDA ou OFF-LINE)
-           BitBtn2Click(Sender);
-           MarcaDesmarcaTodos1Click(Sender);
-           Timer1.Enabled := True;
-           gVerEpe := True;
-           gVerCon := True;
-           exit;
-          end;
-        end;
-       gVerEpe := True;
-       Timer1.Enabled := True;
-      end;
     end;
-   //*****************************************************************************
 
-   //*****************************************************************************
-   // Rotina que verifica notas de ENVI pendentes pra serem atualizadas
-   // by Edson ; 22/6/2012 ; 10:23
-   //*****************************************************************************
-   if gExpress <> '1' then
+    Timer1.Enabled := True;
+
+   end;
+
+   if not gVerEpe then
+   begin
+
+    Timer1.Enabled := False;
+    gDatConA := now();
+    gDatConB := now();
+
+    // Filtra os registro por data ; by Edson Lima ;  2015-5-25T0857
+    DMFD.FDQuery15.Close;
+     DMFD.FDQuery15.ParamByName('DatCon').Value     := StrToDateTime( FormatDateTime('dd/mm/yyyy', gDatConB) );
+     DMFD.FDQuery15.ParamByName('CodEmp').AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
+     DMFD.FDQuery15.ParamByName('Situac').AsString  := 'OFFL';
+    DMFD.FDQuery15.Open;
+
+    if not DMFD.FDQuery15.IsEmpty then
     begin
-     if not gVerCon then
-      begin
-       Timer1.Enabled := False;
-       gDatConA := now();
-       gDatConB := now();
 
-       // Filtra os registro por data ; by Edson Lima ;  2015-5-25T0857
-       DMFD.FDQuery15.Close;
-        DMFD.FDQuery15.ParamByName('DatCon').Value     := StrToDateTime( FormatDateTime('dd/mm/yyyy', gDatConB) );
-        DMFD.FDQuery15.ParamByName('CodEmp').AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
-        DMFD.FDQuery15.ParamByName('Situac').AsString  := '';
-       DMFD.FDQuery15.Open;
+     if MessageDlg('Atenção, pendências para envio em contingência ' + 'OFF-LINE,' + chr(13) +
+                   'Lembre-se que pela legislação temos 24 hoas p/transmitir !' + chr(13) + chr(13) +
+                   'GOSTARIA DE IR PARA O ENVIO DESSA PENDÊNCIA AGORA ?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+     begin
 
-       if not DMFD.FDQuery15.IsEmpty then
-        begin
+      gVerEpe := True;
+      RadioGroup1.ItemIndex := 1;  // Contigência (FSDA ou OFF-LINE)
+      BitBtn2Click(Sender);
+      MarcaDesmarcaTodos1Click(Sender);
+      Timer1.Enabled := True;
+      gVerEpe := True;
+      gVerCon := True;
+      exit;
 
-         if MessageDlg('Atenção, existe pendência de nota emitidas com mais' + chr(13) +
-                       'de um dia, envie assim possível, caso de duplicidade de' + chr(13) +
-                       'nota, é só CONSULTAR! Lembre-se temos 10 dias p/enviar !' + chr(13) + chr(13) +
-                       'GOSTARIA DE IR PARA O ENVIO DESSA PENDENCIA AGORA ?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
-          SelecionarTudo1Click(Sender);
+     end;
 
-        end;
-
-       gVerCon := True;
-       Timer1.Enabled := True;
-      end;
     end;
-   //***************************************************************************
+
+    gVerEpe := True;
+    Timer1.Enabled := True;
+
+   end;
 
   end;
+
+  //****************************************************************************
+  // Rotina que verifica notas de ENVI pendentes pra serem atualizadas
+  // by Edson ; 22/6/2012 ; 10:23
+  //****************************************************************************
+  if gExpress <> '1' then
+  begin
+
+   if not gVerCon then
+   begin
+
+    Timer1.Enabled := False;
+    gDatConA := now();
+    gDatConB := now();
+
+    // Filtra os registro por data ; by Edson Lima ;  2015-5-25T0857
+    DMFD.FDQuery15.Close;
+     DMFD.FDQuery15.ParamByName('DatCon').Value     := StrToDateTime( FormatDateTime('dd/mm/yyyy', gDatConB) );
+     DMFD.FDQuery15.ParamByName('CodEmp').AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
+     DMFD.FDQuery15.ParamByName('Situac').AsString  := '';
+    DMFD.FDQuery15.Open;
+
+    if not DMFD.FDQuery15.IsEmpty then
+    begin
+
+     if MessageDlg('Atenção, existe pendência de nota emitidas com mais' + chr(13) +
+                   'de um dia, envie assim possível, caso de duplicidade de' + chr(13) +
+                   'nota, é só CONSULTAR! Lembre-se temos 10 dias p/enviar !' + chr(13) + chr(13) +
+                   'GOSTARIA DE IR PARA O ENVIO DESSA PENDENCIA AGORA ?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+      SelecionarTudo1Click(Sender);
+
+    end;
+
+    gVerCon := True;
+    Timer1.Enabled := True;
+
+   end;
+
+  end;
+
+  //****************************************************************************
+
+ end;
 
 end;
 
@@ -6418,50 +6945,50 @@ begin
 
   // Mosta qual certificado o usuário está usando
   if FileExists(gCamCert + 'GBNFe.ini') then
+  begin
+
+   LerIni();
+
+   if ((gPSCert = 1) and (StrToIntDef(gCodEmp, 0) = gCEIni)) then
    begin
 
-    LerIni();
-
-    if ((gPSCert = 1) and (StrToIntDef(gCodEmp, 0) = gCEIni)) then
-     begin
-
-      FrPar.CheckBox6.Checked := true;
-      FrPar.CheckBox7.Checked := false;
-
-     end;
-
-    if ((gPSCert = 2) and (StrToIntDef(gCodEmp, 0) = gCEIni)) then
-     begin
-
-      FrPar.CheckBox6.Checked := false;
-      FrPar.CheckBox7.Checked := true;
-
-     end;
+    FrPar.CheckBox6.Checked := true;
+    FrPar.CheckBox7.Checked := false;
 
    end;
+
+   if ((gPSCert = 2) and (StrToIntDef(gCodEmp, 0) = gCEIni)) then
+   begin
+
+    FrPar.CheckBox6.Checked := false;
+    FrPar.CheckBox7.Checked := true;
+
+   end;
+
+  end;
 
   //----------------------------------------------------------------------------
   // Efetua a conecção com os bancos de dados
   // by Edson Lima ; 2017-6-30T1043
   //----------------------------------------------------------------------------
   if FileExists(gCamCert + 'GBNFe.ini') then
+  begin
+
+   LerBDFD();
+
+   if not FrPar.chk_Connected_Ger.Checked then
    begin
 
-    LerBDFD();
+    if ( FrPar = nil ) then
+     FrPar := TFrPar.Create(Application);
 
-    if not FrPar.chk_Connected_Ger.Checked then
-     begin
-
-      if ( FrPar = nil ) then
-       FrPar := TFrPar.Create(Application);
-
-      FrPar.PageControl1.TabIndex := 4;
-      FrPar.BringToFront;
-      FrPar.ShowModal;
-
-     end;
+    FrPar.PageControl1.TabIndex := 4;
+    FrPar.BringToFront;
+    FrPar.ShowModal;
 
    end;
+
+  end;
 
   DMFD.FDQuery4.ParamByName('Certificado_NumSerie').AsString     := FrPar.edtNumSerie.Text;
   DMFD.FDQuery4.ParamByName('Certificado_NumSerie2').AsString    := FrPar.edtNumSerie2.Text;
@@ -6513,19 +7040,19 @@ begin
   DMFD.FDQuery4.ParamByName('DANFE_LogoMarca').AsString          := FrPar.edtLogoMarca.Text;
 
   if FrPar.ragLocSrv.ItemIndex = 0 then
-   begin
+  begin
 
-    DMFD.FDQuery4.ParamByName('DANFE_LocSRV').AsString           := 'L';
-    DMFD.FDQuery4.ParamByName('DANFE_CAMSRV').AsString           := FrPar.edtCamSrv.Text;
+   DMFD.FDQuery4.ParamByName('DANFE_LocSRV').AsString           := 'L';
+   DMFD.FDQuery4.ParamByName('DANFE_CAMSRV').AsString           := FrPar.edtCamSrv.Text;
 
-   end
+  end
   else
-   begin
+  begin
 
-    DMFD.FDQuery4.ParamByName('DANFE_LocSRV').AsString           := 'S';
-    DMFD.FDQuery4.ParamByName('DANFE_CAMSRV').AsString           := '';
+   DMFD.FDQuery4.ParamByName('DANFE_LocSRV').AsString           := 'S';
+   DMFD.FDQuery4.ParamByName('DANFE_CAMSRV').AsString           := '';
 
-   end;
+  end;
 
   DMFD.FDQuery4.ParamByName('DANFE_CAMSRV').AsString             := FrPar.edtCamSrv.Text;
   DMFD.FDQuery4.ParamByName('DANFE_ImpNFe').AsString             := FrPar.edtImpNFe.Text;
@@ -6631,13 +7158,13 @@ begin
    pAtuNFe();
 
   except on e:Exception do
-   begin
+  begin
 
-    Application.Messagebox(PWideChar('ERRO: Parâmetros não gravado !' + Char(13) +
-                            e.Message), 'Atenção!',MB_ICONERROR+mb_ok);
-    pAtuNFe();
+   Application.Messagebox(PWideChar('ERRO: Parâmetros não gravado !' + Char(13) +
+                          e.Message), 'Atenção!',MB_ICONERROR+mb_ok);
+   pAtuNFe();
 
-   end;
+  end;
 
   end;
 
@@ -6677,6 +7204,7 @@ end;
 //------------------------------------------------------------------------------
 procedure TFrGBNFe.LerConf1;
 begin
+
  //-----------------------------------------------------------------------------
  // Nova forma de ler e gravar os dados, foi modificado o local dos dados de
  // configuração o GBNFe.ini que passa apartir da versão 3.12.9.25 a ser gravado
@@ -6699,39 +7227,46 @@ begin
   // by Edson Lima ; 2017-6-30T1043
   //----------------------------------------------------------------------------
   if FileExists(gCamExe + 'GBNFe.ini') then
+  begin
+
+   LerBDFD();
+
+   if not FrPar.chk_Connected_Ger.Checked then
    begin
 
-    LerBDFD();
-
-    if not FrPar.chk_Connected_Ger.Checked then
-     begin
-
-      if ( FrPar = nil ) then
-       FrPar := TFrPar.Create(Application);
-      FrPar.PageControl1.TabIndex := 4;
-      FrPar.BringToFront;
-      FrPar.ShowModal;
-
-     end;
+    if ( FrPar = nil ) then
+     FrPar := TFrPar.Create(Application);
+    FrPar.PageControl1.TabIndex := 4;
+    FrPar.BringToFront;
+    FrPar.ShowModal;
 
    end;
-  //----------------------------------------------------------------------------
 
+  end;
+
+  //----------------------------------------------------------------------------
   // Mosta qual certificado o usuário está usando
   if FileExists(gCamExe + 'GBNFe.ini') then
+  begin
+
+   LerIni();
+   if ((gPSCert = 1) and (StrToIntDef(gCodEmp, 0) = gCEIni)) then
    begin
-    LerIni();
-    if ((gPSCert = 1) and (StrToIntDef(gCodEmp, 0) = gCEIni)) then
-     begin
-      FrPar.CheckBox6.Checked := true;
-      FrPar.CheckBox7.Checked := false;
-     end;
-    if ((gPSCert = 2) and (StrToIntDef(gCodEmp, 0) = gCEIni)) then
-     begin
-      FrPar.CheckBox6.Checked := false;
-      FrPar.CheckBox7.Checked := true;
-     end;
+
+    FrPar.CheckBox6.Checked := true;
+    FrPar.CheckBox7.Checked := false;
+
    end;
+
+   if ((gPSCert = 2) and (StrToIntDef(gCodEmp, 0) = gCEIni)) then
+   begin
+
+    FrPar.CheckBox6.Checked := false;
+    FrPar.CheckBox7.Checked := true;
+
+   end;
+
+  end;
 
   if (DMFD.FDQuery4['Certificado_NumSerie'] <> Null) then
    FrPar.edtNumSerie.Text       := DMFD.FDQuery4['Certificado_NumSerie']
@@ -6755,25 +7290,24 @@ begin
 
   //----------------------------------------------------------------------------
   if (DMFD.FDQuery4['Versao'] <> Null) then
-   begin
+  begin
 
-    if (DMFD.FDQuery4['Versao']           = 've3131') then
-     FrPar.cbb2.ItemIndex        := 0
+   if (DMFD.FDQuery4['Versao']           = 've3131') then
+    FrPar.cbb2.ItemIndex        := 0
 
-    else if (DMFD.FDQuery4['Versao']      = 've4040') then
-     FrPar.cbb2.ItemIndex        := 1
+   else if (DMFD.FDQuery4['Versao']      = 've4040') then
+    FrPar.cbb2.ItemIndex        := 1
 
-    else if (DMFD.FDQuery4['Versao']      = 've4031') then
-     FrPar.cbb2.ItemIndex        := 2
+   else if (DMFD.FDQuery4['Versao']      = 've4031') then
+    FrPar.cbb2.ItemIndex        := 2
 
-    else if (DMFD.FDQuery4['Versao']      = 've3140') then
-     FrPar.cbb2.ItemIndex        := 3
+   else if (DMFD.FDQuery4['Versao']      = 've3140') then
+    FrPar.cbb2.ItemIndex        := 3
 
-   end
-
+  end
   else
-
    FrPar.cbb2.ItemIndex          := 0;
+
   //----------------------------------------------------------------------------
 
   if (DMFD.FDQuery4['razao_social'] <> null) then
@@ -6808,52 +7342,62 @@ begin
    FrPar.ed_QtdCopNFCe.Text             := '0';
 
   if (DMFD.FDQuery4['DANFE_Visualiza'] <> Null) then
-   begin
-    if (DMFD.FDQuery4['DANFE_Visualiza'] = 'S') then
-     FrPar.CheckBox2.Checked     := True
-    else
-     FrPar.CheckBox2.Checked     := False;
-   end
+  begin
+
+   if (DMFD.FDQuery4['DANFE_Visualiza'] = 'S') then
+    FrPar.CheckBox2.Checked     := True
+   else
+    FrPar.CheckBox2.Checked     := False;
+
+  end
   else
    FrPar.CheckBox2.Checked       := True;
 
   if (DMFD.FDQuery4['DANFE_HorariodeVerao'] <> Null) then
-   begin
-    if (DMFD.FDQuery4['DANFE_HorariodeVerao'] = 'S') then
-     FrPar.CheckBox1.Checked     := True
-    else
-     FrPar.CheckBox1.Checked     := False;
-   end
+  begin
+
+   if (DMFD.FDQuery4['DANFE_HorariodeVerao'] = 'S') then
+    FrPar.CheckBox1.Checked     := True
+   else
+    FrPar.CheckBox1.Checked     := False;
+
+  end
   else
    FrPar.CheckBox1.Checked       := False;
 
   if (DMFD.FDQuery4['DANFE_FusoHorario'] <> Null) then
-   begin
-    if (DMFD.FDQuery4['DANFE_FusoHorario'] = 'S') then
-     FrPar.CheckBox3.Checked     := True
-    else
-     FrPar.CheckBox3.Checked     := False;
-   end
+  begin
+
+   if (DMFD.FDQuery4['DANFE_FusoHorario'] = 'S') then
+    FrPar.CheckBox3.Checked     := True
+   else
+    FrPar.CheckBox3.Checked     := False;
+
+  end
   else
    FrPar.CheckBox3.Checked       := False;
 
   if (DMFD.FDQuery4['DANFE_UsaHorarioDF'] <> Null) then
-   begin
-    if (DMFD.FDQuery4['DANFE_UsaHorarioDF'] = 'S') then
-     FrPar.CheckBox4.Checked     := True
-    else
-     FrPar.CheckBox4.Checked     := False;
-   end
+  begin
+
+   if (DMFD.FDQuery4['DANFE_UsaHorarioDF'] = 'S') then
+    FrPar.CheckBox4.Checked     := True
+   else
+    FrPar.CheckBox4.Checked     := False;
+
+  end
   else
    FrPar.CheckBox4.Checked       := False;
 
   if (DMFD.FDQuery4['DANFE_ImportaTxt'] <> Null) then
-   begin
-    if (DMFD.FDQuery4['DANFE_ImportaTxt'] = 'S') then
-     FrPar.CheckBox5.Checked     := True
-    else
-     FrPar.CheckBox5.Checked     := False;
-   end
+  begin
+
+   if (DMFD.FDQuery4['DANFE_ImportaTxt'] = 'S') then
+    FrPar.CheckBox5.Checked     := True
+   else
+    FrPar.CheckBox5.Checked     := False;
+
+  end
   else
    FrPar.CheckBox5.Checked       := False;
 
@@ -6863,12 +7407,14 @@ begin
    FrPar.edtLogoMarca.Text       := '';
 
   if (DMFD.FDQuery4['DANFE_LocSRV'] <> Null) then
-   begin
-    if (DMFD.FDQuery4['DANFE_LocSRV'] = 'S') then
-     FrPar.ragLocSrv.ItemIndex   := 1
-    else
-     FrPar.ragLocSrv.ItemIndex   := 0;
-   end
+  begin
+
+   if (DMFD.FDQuery4['DANFE_LocSRV'] = 'S') then
+    FrPar.ragLocSrv.ItemIndex   := 1
+   else
+    FrPar.ragLocSrv.ItemIndex   := 0;
+
+  end
   else
    FrPar.ragLocSrv.ItemIndex     := 1;
 
@@ -6888,25 +7434,29 @@ begin
    FrPar.edtImpNFCe.Text          := '';
 
   if (DMFD.FDQuery4['DANFE_ExibeFatura'] <> Null) then
-   begin
-    if (DMFD.FDQuery4['DANFE_ExibeFatura'] = 'S') then
-     FrPar.CheckBox8.Checked     := True
-    else
-     FrPar.CheckBox8.Checked     := False;
-   end
+  begin
+
+   if (DMFD.FDQuery4['DANFE_ExibeFatura'] = 'S') then
+    FrPar.CheckBox8.Checked     := True
+   else
+    FrPar.CheckBox8.Checked     := False;
+
+  end
   else
    FrPar.CheckBox8.Checked       := False;
 
   if (DMFD.FDQuery4['DANFE_ExpandiLogo'] <> Null) then
-   begin
-    if (DMFD.FDQuery4['DANFE_ExpandiLogo']      = 'C') then
-     FrPar.cbb1.ItemIndex        := 0
-    else if ( (DMFD.FDQuery4['DANFE_ExpandiLogo'] = 'E')  or
-              (DMFD.FDQuery4['DANFE_ExpandiLogo'] = 'S')) then
-     FrPar.cbb1.ItemIndex        := 1
-    else
-     FrPar.cbb1.ItemIndex        := 2
-   end
+  begin
+
+   if (DMFD.FDQuery4['DANFE_ExpandiLogo']      = 'C') then
+    FrPar.cbb1.ItemIndex         := 0
+   else if ( (DMFD.FDQuery4['DANFE_ExpandiLogo'] = 'E')  or
+             (DMFD.FDQuery4['DANFE_ExpandiLogo'] = 'S')) then
+    FrPar.cbb1.ItemIndex         := 1
+   else
+    FrPar.cbb1.ItemIndex         := 2
+
+  end
   else
    FrPar.cbb1.ItemIndex          := 2;
 
@@ -6921,72 +7471,89 @@ begin
    FrPar.cbbTipoDANFCE.ItemIndex := 2;
 
   if (DMFD.FDQuery4['DANFE_EdEmail'] <> Null) then
-   begin
-    if (DMFD.FDQuery4['DANFE_EdEmail'] = 'S') then
-     FrPar.CheckBox10.Checked     := True
-    else
-     FrPar.CheckBox10.Checked     := False;
-   end
+  begin
+
+   if (DMFD.FDQuery4['DANFE_EdEmail'] = 'S') then
+    FrPar.CheckBox10.Checked     := True
+   else
+    FrPar.CheckBox10.Checked     := False;
+
+  end
   else
    FrPar.CheckBox10.Checked       := False;
 
   if (DMFD.FDQuery4['DANFE_ForSai'] <> Null) then
-   begin
-    if (DMFD.FDQuery4['DANFE_ForSai'] = 'S') then
-     FrPar.CkB_ForSai.Checked     := True
-    else
-     FrPar.CkB_ForSai.Checked     := False;
-   end
+  begin
+
+   if (DMFD.FDQuery4['DANFE_ForSai'] = 'S') then
+    FrPar.CkB_ForSai.Checked     := True
+   else
+    FrPar.CkB_ForSai.Checked     := False;
+
+  end
   else
    FrPar.CkB_ForSai.Checked       := False;
 
   if (DMFD.FDQuery4['Web_Ambiente'] <> Null) then
-   begin
-    if (DMFD.FDQuery4['Web_Ambiente'] = 'H') then
-     FrPar.rgTipoAmb.ItemIndex   := 1
-    else
-     FrPar.rgTipoAmb.ItemIndex   := 0;
-   end
+  begin
+
+   if (DMFD.FDQuery4['Web_Ambiente'] = 'H') then
+    FrPar.rgTipoAmb.ItemIndex   := 1
+   else
+    FrPar.rgTipoAmb.ItemIndex   := 0;
+
+  end
   else
    FrPar.rgTipoAmb.ItemIndex     := 1;
+
   if (DMFD.FDQuery4['Web_Visualizar'] <> Null) then
-   begin
-    if (DMFD.FDQuery4['Web_Visualizar'] = 'S') then
-     FrPar.ckVisualizar.Checked  := True
-    else
-     FrPar.ckVisualizar.Checked  := False;
-   end
+  begin
+
+   if (DMFD.FDQuery4['Web_Visualizar'] = 'S') then
+    FrPar.ckVisualizar.Checked  := True
+   else
+    FrPar.ckVisualizar.Checked  := False;
+
+  end
   else
    FrPar.ckVisualizar.Checked    := False;
+
   if (DMFD.FDQuery4['Proxy_Host'] <> Null) then
    FrPar.edtProxyHost.Text       := DMFD.FDQuery4['Proxy_Host']
   else
    FrPar.edtProxyHost.Text       := '';
+
   if (DMFD.FDQuery4['Proxy_Porta'] <> Null) then
    FrPar.edtProxyPorta.Text      := IntToStr(DMFD.FDQuery4['Proxy_Porta'])
   else
    FrPar.edtProxyPorta.Text      := '0';
+
   if (DMFD.FDQuery4['Proxy_User'] <> Null) then
    FrPar.edtProxyUser.Text       := DMFD.FDQuery4['Proxy_User']
   else
    FrPar.edtProxyUser.Text       := '';
+
   if ( (DMFD.FDQuery4['Proxy_Pass'] <> Null) and
        (DMFD.FDQuery4['Proxy_Pass'] <> '') ) then
    FrPar.edtProxySenha.Text      := Crypt( 'D',(VarToStr(DMFD.FDQuery4['Proxy_Pass'])) )
   else
    FrPar.edtProxySenha.Text      := '';
+
   if (DMFD.FDQuery4['Email_NEeMAIL'] <> Null) then
    FrPar.edtNEeMail.Text         := DMFD.FDQuery4['Email_NEeMAIL']
   else
    FrPar.edtNEeMail.Text         := '';
+
   if (DMFD.FDQuery4['Email_Host'] <> Null) then
    FrPar.edtSmtpHost.Text        := DMFD.FDQuery4['Email_Host']
   else
    FrPar.edtSmtpHost.Text        := '';
+
   if (DMFD.FDQuery4['Email_Port'] <> Null) then
    FrPar.edtSmtpPort.Text        := IntToStr(DMFD.FDQuery4['Email_Port'])
   else
    FrPar.edtSmtpPort.Text        := '0';
+
   if (DMFD.FDQuery4['Email_User'] <> Null) then
    FrPar.edtSmtpUser.Text        := DMFD.FDQuery4['Email_User']
   else
@@ -6994,75 +7561,92 @@ begin
 
   if ( (DMFD.FDQuery4['Email_Pass'] <> Null) and
        (DMFD.FDQuery4['Email_Pass'] <> '') ) then
-   begin
+  begin
 
-    try
+   try
+
      FrPar.edtSmtpPass.Text      := Crypt( 'D',(VarToStr(DMFD.FDQuery4['Email_Pass'])) );
-    except
-    end;
 
-   end
+   except
+
+   end;
+
+  end
   else
    FrPar.edtSmtpPass.Text        := '';
 
   if (DMFD.FDQuery4['Email_SSL'] <> Null) then
-   begin
-    if (DMFD.FDQuery4['Email_SSL'] = 'S') then
-     FrPar.cbEmailSSL.Checked    := True
-    else
-     FrPar.cbEmailSSL.Checked    := False;
-   end
+  begin
+
+   if (DMFD.FDQuery4['Email_SSL'] = 'S') then
+    FrPar.cbEmailSSL.Checked    := True
+   else
+    FrPar.cbEmailSSL.Checked    := False;
+
+  end
   else
    FrPar.cbEmailSSL.Checked      := False;
+
   if (DMFD.FDQuery4['Email_TLS'] <> Null) then
-   begin
-    if (DMFD.FDQuery4['Email_TLS'] = 'S') then
-     FrPar.cbEmailTLS.Checked    := True
-    else
-     FrPar.cbEmailTLS.Checked    := False;
-   end
+  begin
+
+   if (DMFD.FDQuery4['Email_TLS'] = 'S') then
+    FrPar.cbEmailTLS.Checked    := True
+   else
+    FrPar.cbEmailTLS.Checked    := False;
+
+  end
   else
    FrPar.cbEmailTLS.Checked      := False;
+
   if (DMFD.FDQuery4['Email_Assunto'] <> Null) then
    FrPar.edtEmailAssunto.Text    := DMFD.FDQuery4['Email_Assunto']
   else
    FrPar.edtEmailAssunto.Text    := 'NFe - Nota Fiscal eLetrônica - Transmitida';
+
   if (DMFD.FDQuery4['Email_Assunto_Canc'] <> Null) then
    FrPar.edtEmailCancAssunto.Text:= DMFD.FDQuery4['Email_Assunto_Canc']
   else
    FrPar.edtEmailCancAssunto.Text:= 'NFe - Nota Fiscal eLetrônica - Cancelada';
+
   if (DMFD.FDQuery4['Email_Assunto_CCe'] <> Null) then
    FrPar.edtEmailCCeAssunto.Text:= DMFD.FDQuery4['Email_Assunto_CCe']
   else
    FrPar.edtEmailCCeAssunto.Text:= 'CCe - Carta de Correção';
+
   if (DMFD.FDQuery4['Email_CC'] <> Null) then
    FrPar.edtEnvCC.Text           := DMFD.FDQuery4['Email_CC']
   else
    FrPar.edtEnvCC.Text           := '';
+
   if (DMFD.FDQuery4['Email_Mensagem'] <> Null) then
    FrPar.mmEmailMsg.Text         := DMFD.FDQuery4['Email_Mensagem']
   else
    FrPar.mmEmailMsg.Text         := 'Segue anexo os arquivos XML e PDF da' + Chr(13) + 'NFe - (Nota Fiscal eLetrônica)';
 
   if (DMFD.FDQuery4['OUTROS_ExcTmp'] <> Null) then
-   begin
-    if (DMFD.FDQuery4['OUTROS_ExcTmp'] = 'S') then
-     FrPar.CheckBox.Checked      := True
-    else
-     FrPar.CheckBox.Checked      := False;
-   end
+  begin
+
+   if (DMFD.FDQuery4['OUTROS_ExcTmp'] = 'S') then
+    FrPar.CheckBox.Checked      := True
+   else
+    FrPar.CheckBox.Checked      := False;
+
+  end
   else
    FrPar.CheckBox.Checked        := False;
 
   //----------------------------------------------------------------------------
 
   if (DMFD.FDQuery4['RT_UFExige'] <> Null) then
-   begin
-    if (DMFD.FDQuery4['RT_UFExige'] = 'S') then
-     FrPar.chk_RespTec.Checked   := True
-    else
-     FrPar.chk_RespTec.Checked   := False;
-   end
+  begin
+
+   if (DMFD.FDQuery4['RT_UFExige'] = 'S') then
+    FrPar.chk_RespTec.Checked   := True
+   else
+    FrPar.chk_RespTec.Checked   := False;
+
+  end
   else
    FrPar.chk_RespTec.Checked     := False;
 
@@ -7116,6 +7700,7 @@ begin
    gCodMtI                       := DMFD.FDQuery4['CodMtI'];
 
   gERP                           := UpperCase(FrPar.edt_TpERP_Ger.Text);
+
   //----------------------------------------------------------------------------
 
   // by Edson Lima ; 2015-10-16T0900 ; trunk2 novo - Prenchimento do componente acbrmail
@@ -7156,6 +7741,7 @@ Var
 begin
 
  try
+
   {$IFDEF ACBrNFeOpenSSL}
 
    ACBrNFe1.Configuracoes.Certificados.Certificado  := '';                      // FrPar.edtCaminho.Text;  // by Edson Lima ; 3-4-2012 ; 16:32 ; foi retida apartir dessa data
@@ -7165,27 +7751,37 @@ begin
 
   //Grava e Ler o arquivo ini - by EL - 2014-11-19T1552
   if not FileExists(gCamCert + 'GBNFe.ini') then
-   begin
-    gCEIni := StrToIntDef(gCodEmp, 0);
-    gPSCert := 1;
-    GravarIni();
-   end;
+  begin
+
+   gCEIni := StrToIntDef(gCodEmp, 0);
+   gPSCert := 1;
+   GravarIni();
+
+  end;
 
   // Mosta qual certificado o usuário está usando
   if FileExists(gCamCert + 'GBNFe.ini') then
+  begin
+
+   LerIni();
+
+   if ((gPSCert = 1) and (StrToIntDef(gCodEmp, 0) = gCEIni)) then
    begin
-    LerIni();
-    if ((gPSCert = 1) and (StrToIntDef(gCodEmp, 0) = gCEIni)) then
-    begin
-     ACBrNFe1.Configuracoes.Certificados.NumeroSerie := FrPar.edtNumSerie.Text;
-     FrPar.edtNumSerie.Text := ACBrNFe1.Configuracoes.Certificados.NumeroSerie;
-    end;
-   if ((gPSCert = 2) and (StrToIntDef(gCodEmp, 0) = gCEIni)) then
-    begin
-     ACBrNFe1.Configuracoes.Certificados.NumeroSerie := FrPar.edtNumSerie2.Text;
-     FrPar.edtNumSerie2.Text := ACBrNFe1.Configuracoes.Certificados.NumeroSerie;
-    end;
+
+    ACBrNFe1.Configuracoes.Certificados.NumeroSerie := FrPar.edtNumSerie.Text;
+    FrPar.edtNumSerie.Text := ACBrNFe1.Configuracoes.Certificados.NumeroSerie;
+
    end;
+
+   if ((gPSCert = 2) and (StrToIntDef(gCodEmp, 0) = gCEIni)) then
+   begin
+
+    ACBrNFe1.Configuracoes.Certificados.NumeroSerie := FrPar.edtNumSerie2.Text;
+    FrPar.edtNumSerie2.Text := ACBrNFe1.Configuracoes.Certificados.NumeroSerie;
+
+   end;
+
+  end;
 
   {$ENDIF}
 
@@ -7194,37 +7790,42 @@ begin
   if FrGBNFe.RadioButton3.Checked then
    ACBrNFe1.Configuracoes.Geral.FormaEmissao := StrToTpEmis(OK, '2');
 
-   // By Edson Lima ; 18/06/2012 ; 09:00
-   ACBrNFe1.Configuracoes.WebServices.UF                         := DMFD.FDQuery4['uf'];      // trunk2 ; by Edson Lima ; 2015-10-29T1611 - novo
-   ACBrNFe1.Configuracoes.Geral.CSC                              := FrPar.edtCSC.Text;        // trunk2 ; by Edson Lima ; 2015-10-29T1611 - novo
-   ACBrNFe1.Configuracoes.Geral.IdCSC                            := FrPar.edtIdCSC.Text;      // trunk2 ; by Edson Lima ; 2015-10-29T1611 - novo
-   ACBrNFe1.Configuracoes.Arquivos.Salvar                        := true;
-   ACBrNFe1.Configuracoes.Arquivos.EmissaoPathNFe                := true;
-   ACBrNFe1.Configuracoes.Arquivos.PathNFe                       := gCamXml;
-   ACBrNFe1.Configuracoes.Arquivos.DownloadDFe.PathDownload      := gCamXml;                  // Edson Lima ; 2019-07-29
-   ACBrNFe1.Configuracoes.Arquivos.PathInu                       := gCamXml;
-   ACBrNFe1.Configuracoes.Arquivos.PathEvento                    := gCamXml;
-   ACBrNFe1.Configuracoes.Geral.Salvar                           := true;                     // ckSalvar.Checked;
-   ACBrNFe1.Configuracoes.Arquivos.PathSalvar                    := gCamLog;                  // trunk2 - Antes => ACBrNFe1.Configuracoes.Geral.PathSalvar         := gCamLog;
-   ACBrNFe1.Configuracoes.Arquivos.PathSchemas                   := gCamSch;                  // trunk2 - Antes => ACBrNFe1.Configuracoes.Geral.PathSchemas        := gCamSch;
-   ACBrNFe1.Configuracoes.Arquivos.SepararPorMes                 := true;
+  // By Edson Lima ; 18/06/2012 ; 09:00
+  ACBrNFe1.Configuracoes.WebServices.UF                         := DMFD.FDQuery4['uf'];      // trunk2 ; by Edson Lima ; 2015-10-29T1611 - novo
+  ACBrNFe1.Configuracoes.Geral.CSC                              := FrPar.edtCSC.Text;        // trunk2 ; by Edson Lima ; 2015-10-29T1611 - novo
+  ACBrNFe1.Configuracoes.Geral.IdCSC                            := FrPar.edtIdCSC.Text;      // trunk2 ; by Edson Lima ; 2015-10-29T1611 - novo
+  ACBrNFe1.Configuracoes.Arquivos.Salvar                        := true;
+  ACBrNFe1.Configuracoes.Arquivos.EmissaoPathNFe                := true;
+  ACBrNFe1.Configuracoes.Arquivos.PathNFe                       := gCamXml;
+  ACBrNFe1.Configuracoes.Arquivos.DownloadDFe.PathDownload      := gCamXml;                  // Edson Lima ; 2019-07-29
+  ACBrNFe1.Configuracoes.Arquivos.PathInu                       := gCamXml;
+  ACBrNFe1.Configuracoes.Arquivos.PathEvento                    := gCamXml;
+  ACBrNFe1.Configuracoes.Geral.Salvar                           := true;                     // ckSalvar.Checked;
+  ACBrNFe1.Configuracoes.Arquivos.PathSalvar                    := gCamLog;                  // trunk2 - Antes => ACBrNFe1.Configuracoes.Geral.PathSalvar         := gCamLog;
+  ACBrNFe1.Configuracoes.Arquivos.PathSchemas                   := gCamSch;                  // trunk2 - Antes => ACBrNFe1.Configuracoes.Geral.PathSchemas        := gCamSch;
+  ACBrNFe1.Configuracoes.Arquivos.SepararPorMes                 := true;
 
-   // Definição do Ambiente de Transmissão ; by Edson Lima ; 19/10/2012 ; 10:30
-   If FrPar.rgTipoAmb.ItemIndex = 0 then
-    begin
-     ACBrNFe1.NotasFiscais.Add.NFe.Ide.tpAmb       := taProducao;
-     ACBrNFe1.Configuracoes.WebServices.Ambiente   := taProducao;
-    end
-   else
-    begin
-     ACBrNFe1.NotasFiscais.Add.NFe.Ide.tpAmb       := taHomologacao;
-     ACBrNFe1.Configuracoes.WebServices.Ambiente   := taHomologacao;
-    end;
-   ACBrNFe1.Configuracoes.WebServices.Visualizar := FrPar.ckVisualizar.Checked;
-   ACBrNFe1.Configuracoes.WebServices.ProxyHost  := FrPar.edtProxyHost.Text;
-   ACBrNFe1.Configuracoes.WebServices.ProxyPort  := FrPar.edtProxyPorta.Text;
-   ACBrNFe1.Configuracoes.WebServices.ProxyUser  := FrPar.edtProxyUser.Text;
-   ACBrNFe1.Configuracoes.WebServices.ProxyPass  := FrPar.edtProxySenha.Text;
+  // Definição do Ambiente de Transmissão ; by Edson Lima ; 19/10/2012 ; 10:30
+  If FrPar.rgTipoAmb.ItemIndex = 0 then
+  begin
+
+   ACBrNFe1.NotasFiscais.Add.NFe.Ide.tpAmb       := taProducao;
+   ACBrNFe1.Configuracoes.WebServices.Ambiente   := taProducao;
+
+  end
+  else
+  begin
+
+   ACBrNFe1.NotasFiscais.Add.NFe.Ide.tpAmb       := taHomologacao;
+   ACBrNFe1.Configuracoes.WebServices.Ambiente   := taHomologacao;
+
+  end;
+
+  ACBrNFe1.Configuracoes.WebServices.Visualizar := FrPar.ckVisualizar.Checked;
+  ACBrNFe1.Configuracoes.WebServices.ProxyHost  := FrPar.edtProxyHost.Text;
+  ACBrNFe1.Configuracoes.WebServices.ProxyPort  := FrPar.edtProxyPorta.Text;
+  ACBrNFe1.Configuracoes.WebServices.ProxyUser  := FrPar.edtProxyUser.Text;
+  ACBrNFe1.Configuracoes.WebServices.ProxyPass  := FrPar.edtProxySenha.Text;
 
  except
 
@@ -7246,41 +7847,41 @@ var
 
 begin
 
-  Bitbtn4.Visible := true;
+ Bitbtn4.Visible := true;
 
  //---------------- executa procedure que le os arquivos txt se tiver setado no parâmetros
 
  if FrPar.CheckBox5.Checked then
-  begin
+ begin
+
+  try
+
+   DMFD.FDQuery2.DisableControls;
+   DMFD.FDQuery2.Close;
+   DMFD.FDQuery2.SQL.Clear;
+   DMFD.FDQuery2.SQL.Add( 'exec sp_ler_nfe_textos :gCamTxt ' );
+   DMFD.FDQuery2.Params[0].AsString := gCamTxt;
 
    try
 
-    DMFD.FDQuery2.DisableControls;
-    DMFD.FDQuery2.Close;
-    DMFD.FDQuery2.SQL.Clear;
-    DMFD.FDQuery2.SQL.Add( 'exec sp_ler_nfe_textos :gCamTxt ' );
-    DMFD.FDQuery2.Params[0].AsString := gCamTxt;
+    DMFD.FDQuery2.ExecSQL;
 
-    try
+   except on e:Exception do
 
-     DMFD.FDQuery2.ExecSQL;
-
-    except on e:Exception do
-
-     Application.Messagebox(PWideChar('ERRO: sp_ler_nfe_textos' + Char(13) +
-                             e.Message), 'Atenção!',MB_ICONERROR+mb_ok);
-
-    end;
-
-    DMFD.FDQuery2.Close;
-
-   finally
-
-    DMFD.FDQuery2.EnableControls;
+    Application.Messagebox(PWideChar('ERRO: sp_ler_nfe_textos' + Char(13) +
+                            e.Message), 'Atenção!',MB_ICONERROR+mb_ok);
 
    end;
 
+   DMFD.FDQuery2.Close;
+
+  finally
+
+   DMFD.FDQuery2.EnableControls;
+
   end;
+
+ end;
 
  //ler o retorno da critica da importação
  DMFD.FDQuery2.Close;
@@ -7350,9 +7951,13 @@ begin
  vSerie := '';
 
  case RadioGroup2.ItemIndex of
+
   0 : vModelo := '';
+
   1 : vModelo := '55';
+
   2 : vModelo := '65';
+
  end;
 
  aux := '';
@@ -7369,131 +7974,147 @@ begin
  case RadioGroup1.ItemIndex of
 
   1 :
-      begin
+  begin
 
-       // Ler e execulta a query de contingência
-       aux := '';
-       aux := edt_CodEmp.Text + ',' + '''' + vModelo + '''' + ',' + '''';
-       aux := aux + vSerie + '''';
+   // Ler e execulta a query de contingência
+   aux := '';
+   aux := edt_CodEmp.Text + ',' + '''' + vModelo + '''' + ',' + '''';
+   aux := aux + vSerie + '''';
 
-       DMFD.FDQuery10.Close;
-       DMFD.FDQuery10.SQL.Clear;
-       DMFD.FDQuery10.SQL.Add( 'exec sp_nfe_em_contingencia ' + aux );
-       DMFD.FDQuery10.Open;
+   DMFD.FDQuery10.Close;
+   DMFD.FDQuery10.SQL.Clear;
+   DMFD.FDQuery10.SQL.Add( 'exec sp_nfe_em_contingencia ' + aux );
+   DMFD.FDQuery10.Open;
 
-       // by Edson Lima ; 2013-7-26T1609 ; Atualiza dados das TreeLest das contingências
-       pAtuTL(cxTL, cxTLbSel, cxTLsDes, cxTLsCpf, cxTLsCod, cxTLsMod, cxTLsSer,
-                    cxTLdDem, cxTLlNot, cxTLcVal, cxTLsTrs, cxTLsCnc, cxTLsSit,
-                    cxTLsPro, cxTLsRec, cxTLsCha, DMFD.FDQuery10);
+   // by Edson Lima ; 2013-7-26T1609 ; Atualiza dados das TreeLest das contingências
+   pAtuTL(cxTL, cxTLbSel, cxTLsDes, cxTLsCpf, cxTLsCod, cxTLsMod, cxTLsSer,
+                cxTLdDem, cxTLlNot, cxTLcVal, cxTLsTrs, cxTLsCnc, cxTLsSit,
+                cxTLsPro, cxTLsRec, cxTLsCha, DMFD.FDQuery10);
 
-      end;
+  end;
+
   2 :
-      begin
+  begin
 
-       DMFD.FDQuery5.Close;
-       DMFD.FDQuery5.SQL.Clear;
-       DMFD.FDQuery5.SQL.Add( 'exec sp_nfe_transmitidas ' + aux );
-       DMFD.FDQuery5.Open;
+   DMFD.FDQuery5.Close;
+   DMFD.FDQuery5.SQL.Clear;
+   DMFD.FDQuery5.SQL.Add( 'exec sp_nfe_transmitidas ' + aux );
+   DMFD.FDQuery5.Open;
 
-       // by Edson Lima ; 2013-7-26T1609 ; Atualiza dados das TreeLest - TRANSMITIDAS
-       pAtuTL(cxTL, cxTLbSel, cxTLsDes, cxTLsCpf, cxTLsCod, cxTLsMod, cxTLsSer,
-                    cxTLdDem, cxTLlNot, cxTLcVal, cxTLsTrs, cxTLsCnc, cxTLsSit,
-                    cxTLsPro, cxTLsRec, cxTLsCha, DMFD.FDQuery5);
+   // by Edson Lima ; 2013-7-26T1609 ; Atualiza dados das TreeLest - TRANSMITIDAS
+   pAtuTL(cxTL, cxTLbSel, cxTLsDes, cxTLsCpf, cxTLsCod, cxTLsMod, cxTLsSer,
+                cxTLdDem, cxTLlNot, cxTLcVal, cxTLsTrs, cxTLsCnc, cxTLsSit,
+                cxTLsPro, cxTLsRec, cxTLsCha, DMFD.FDQuery5);
 
-      end;
+  end;
+
   3 :
-      begin
+  begin
 
-       // Ler e execulta a query de denegadas
-       DMFD.FDQryGeral1.Close;
-       DMFD.FDQryGeral1.SQL.Clear;
-       DMFD.FDQryGeral1.SQL.Add( 'exec sp_nfe_denegadas ' + aux );
-       DMFD.FDQryGeral1.Open;
+   // Ler e execulta a query de denegadas
+   DMFD.FDQryGeral1.Close;
+   DMFD.FDQryGeral1.SQL.Clear;
+   DMFD.FDQryGeral1.SQL.Add( 'exec sp_nfe_denegadas ' + aux );
+   DMFD.FDQryGeral1.Open;
 
-       // by Edson Lima ; 2013-7-26T1609 ; Atualiza dados das TreeLest denegadas
-       pAtuTL(cxTL, cxTLbSel, cxTLsDes, cxTLsCpf, cxTLsCod, cxTLsMod, cxTLsSer,
-                    cxTLdDem, cxTLlNot, cxTLcVal, cxTLsTrs, cxTLsCnc, cxTLsSit,
-                    cxTLsPro, cxTLsRec, cxTLsCha, DMFD.FDQryGeral1);
+   // by Edson Lima ; 2013-7-26T1609 ; Atualiza dados das TreeLest denegadas
+   pAtuTL(cxTL, cxTLbSel, cxTLsDes, cxTLsCpf, cxTLsCod, cxTLsMod, cxTLsSer,
+                cxTLdDem, cxTLlNot, cxTLcVal, cxTLsTrs, cxTLsCnc, cxTLsSit,
+                cxTLsPro, cxTLsRec, cxTLsCha, DMFD.FDQryGeral1);
 
-      end;
+  end;
+
   4 :
-      begin
+  begin
 
-       // Ler e execulta a query de canceladas
-       DMFD.FDQuery6.Close;
-       DMFD.FDQuery6.SQL.Clear;
-       DMFD.FDQuery6.SQL.Add( 'exec sp_nfe_canceladas ' + aux );
-       DMFD.FDQuery6.Open;
+   // Ler e execulta a query de canceladas
+   DMFD.FDQuery6.Close;
+   DMFD.FDQuery6.SQL.Clear;
+   DMFD.FDQuery6.SQL.Add( 'exec sp_nfe_canceladas ' + aux );
+   DMFD.FDQuery6.Open;
 
-       // by Edson Lima ; 2013-7-26T1609 ; Atualiza dados das TreeLest das Canceladas
-       pAtuTL(cxTL, cxTLbSel, cxTLsDes, cxTLsCpf, cxTLsCod, cxTLsMod, cxTLsSer,
-                    cxTLdDem, cxTLlNot, cxTLcVal, cxTLsTrs, cxTLsCnc, cxTLsSit,
-                    cxTLsPro, cxTLsRec, cxTLsCha, DMFD.FDQuery6);
+   // by Edson Lima ; 2013-7-26T1609 ; Atualiza dados das TreeLest das Canceladas
+   pAtuTL(cxTL, cxTLbSel, cxTLsDes, cxTLsCpf, cxTLsCod, cxTLsMod, cxTLsSer,
+                cxTLdDem, cxTLlNot, cxTLcVal, cxTLsTrs, cxTLsCnc, cxTLsSit,
+                cxTLsPro, cxTLsRec, cxTLsCha, DMFD.FDQuery6);
 
-      end;
+  end;
+
   5 :
-      begin
+  begin
 
-       // Ler e execulta a query de inutilizadas
-       vSer := 0;
+   // Ler e execulta a query de inutilizadas
+   vSer := 0;
 
-       case RadioGroup2.ItemIndex of
-        0 : vMod := 0;
-        1 : vMod := 55;
-        2 : vMod := 65;
-       end;
+   case RadioGroup2.ItemIndex of
 
-       aux := '';
-       aux := edt_CodEmp.Text + ',' + '''' + IntToStr(vMod) + '''' + ',' + '''';
-       aux := aux + IntToStr(vSer) + '''';
+    0 : vMod := 0;
 
-       DMFD.FDQuery7.Close;
-       DMFD.FDQuery7.SQL.Clear;
-       DMFD.FDQuery7.SQL.Add( 'exec sp_nfe_inutilizadas ' + aux );
-       DMFD.FDQuery7.Open;
+    1 : vMod := 55;
 
-       //----------------------------------------------------------------------------
-       // Atribui dados na treelist
-       // Monta a grade inutilizadas
-       cxTLInut.AdjustColumnsWidth;
-       cxTLInut.Clear;
+    2 : vMod := 65;
 
-       if DMFD.FDQuery7.RecordCount > 0 Then
-        Begin
-         cxTLInut.BeginUpdate;
+   end;
 
-         Try
-          DMFD.FDQuery7.First;
+   aux := '';
+   aux := edt_CodEmp.Text + ',' + '''' + IntToStr(vMod) + '''' + ',' + '''';
+   aux := aux + IntToStr(vSer) + '''';
 
-          // Laço para montar grade
+   DMFD.FDQuery7.Close;
+   DMFD.FDQuery7.SQL.Clear;
+   DMFD.FDQuery7.SQL.Add( 'exec sp_nfe_inutilizadas ' + aux );
+   DMFD.FDQuery7.Open;
 
-          While Not DMFD.FDQuery7.Eof Do
-           begin
-            nodInu := cxTLInut.Add;
+   //----------------------------------------------------------------------------
+   // Atribui dados na treelist
+   // Monta a grade inutilizadas
+   cxTLInut.AdjustColumnsWidth;
+   cxTLInut.Clear;
 
-            nodInu.Values[cxTLdIDem.ItemIndex]  := DMFD.FDQuery7.fieldByName('nfe_demi').AsDateTime;
-            nodInu.Values[cxTLsIAno.ItemIndex]  := DMFD.FDQuery7.fieldByName('ano').AsString;
-            nodInu.Values[cxTLsIMod.ItemIndex]  := DMFD.FDQuery7.fieldByName('modelo').AsString;
-            nodInu.Values[cxTLsISer.ItemIndex]  := DMFD.FDQuery7.fieldByName('serie').AsString;
-            nodInu.Values[cxTLlINot.ItemIndex]  := DMFD.FDQuery7.fieldByName('nfe_nnf').AsInteger;
-            nodInu.Values[cxTLsIJus.ItemIndex]  := DMFD.FDQuery7.fieldByName('justificativa').AsString;
-            nodInu.Values[cxTLsTpAm.ItemIndex]  := DMFD.FDQuery7.fieldByName('tpAmb').AsString;
-            nodInu.Values[cxTLsvApl.ItemIndex]  := DMFD.FDQuery7.fieldByName('verAplic').AsString;
-            nodInu.Values[cxTLicdUF.ItemIndex]  := DMFD.FDQuery7.fieldByName('cUF').AsInteger;
-            nodInu.Values[cxTLsCnpj.ItemIndex]  := DMFD.FDQuery7.fieldByName('CNPJ').AsString;
-            nodInu.Values[cxTLsnPro.ItemIndex]  := DMFD.FDQuery7.fieldByName('nProt').AsString;
-            nodInu.Values[cxTLicSta.ItemIndex]  := DMFD.FDQuery7.fieldByName('cStat').AsInteger;
-            nodInu.Values[cxTLsxMot.ItemIndex]  := DMFD.FDQuery7.fieldByName('xMotivo').AsString;
-            nodInu.Values[cxTLsxInu.ItemIndex]  := DMFD.FDQuery7.fieldByName('UsuInu').AsString;
+   if DMFD.FDQuery7.RecordCount > 0 Then
+   Begin
 
-            DMFD.FDQuery7.Next;
-           end;
-        Finally
-         cxTLInut.EndUpdate;
-        end;
-       end;
+    cxTLInut.BeginUpdate;
 
-      end;
+    Try
+
+     DMFD.FDQuery7.First;
+
+     // Laço para montar grade
+
+     While Not DMFD.FDQuery7.Eof Do
+     begin
+
+      nodInu := cxTLInut.Add;
+
+      nodInu.Values[cxTLdIDem.ItemIndex]  := DMFD.FDQuery7.fieldByName('nfe_demi').AsDateTime;
+      nodInu.Values[cxTLsIAno.ItemIndex]  := DMFD.FDQuery7.fieldByName('ano').AsString;
+      nodInu.Values[cxTLsIMod.ItemIndex]  := DMFD.FDQuery7.fieldByName('modelo').AsString;
+      nodInu.Values[cxTLsISer.ItemIndex]  := DMFD.FDQuery7.fieldByName('serie').AsString;
+      nodInu.Values[cxTLlINot.ItemIndex]  := DMFD.FDQuery7.fieldByName('nfe_nnf').AsInteger;
+      nodInu.Values[cxTLsIJus.ItemIndex]  := DMFD.FDQuery7.fieldByName('justificativa').AsString;
+      nodInu.Values[cxTLsTpAm.ItemIndex]  := DMFD.FDQuery7.fieldByName('tpAmb').AsString;
+      nodInu.Values[cxTLsvApl.ItemIndex]  := DMFD.FDQuery7.fieldByName('verAplic').AsString;
+      nodInu.Values[cxTLicdUF.ItemIndex]  := DMFD.FDQuery7.fieldByName('cUF').AsInteger;
+      nodInu.Values[cxTLsCnpj.ItemIndex]  := DMFD.FDQuery7.fieldByName('CNPJ').AsString;
+      nodInu.Values[cxTLsnPro.ItemIndex]  := DMFD.FDQuery7.fieldByName('nProt').AsString;
+      nodInu.Values[cxTLicSta.ItemIndex]  := DMFD.FDQuery7.fieldByName('cStat').AsInteger;
+      nodInu.Values[cxTLsxMot.ItemIndex]  := DMFD.FDQuery7.fieldByName('xMotivo').AsString;
+      nodInu.Values[cxTLsxInu.ItemIndex]  := DMFD.FDQuery7.fieldByName('UsuInu').AsString;
+
+      DMFD.FDQuery7.Next;
+
+     end;
+
+    Finally
+
+     cxTLInut.EndUpdate;
+
+    end;
+
+   end;
+
+  end;
 
  end;
 
@@ -7521,28 +8142,27 @@ begin
  DMFD.FDQuery4.Active := True;
 
  if DMFD.FDQuery4.isempty then
+ begin
+
+  Application.Messagebox(' Emitente não encontrado!','Atenção!',MB_ICONINFORMATION+mb_ok);
   begin
 
-   Application.Messagebox(' Emitente não encontrado!','Atenção!',MB_ICONINFORMATION+mb_ok);
-    begin
-     PostMessage(FindWindow('tfrgbnfe', nil), WM_CLOSE,0,0);
-     Exit;
-    end;
+   PostMessage(FindWindow('tfrgbnfe', nil), WM_CLOSE,0,0);
+   Exit;
 
-   end
+  end;
 
-  else
+ end
+ else
+ begin
 
-   begin
+  Label1.Caption := ' ' + vartostr(DMFD.FDQuery4['razao_social']) + ' - ' + vartostr(DMFD.FDQuery4['nome_fantasia']);
+  gCnpj          := VarToStr(DMFD.FDQuery4['cnpj']);
 
-    Label1.Caption := ' ' + vartostr(DMFD.FDQuery4['razao_social']) + ' - ' + vartostr(DMFD.FDQuery4['nome_fantasia']);
+  if ( Length(Trim(gCnpj)) = 11 ) then
+   gCnpj         := StrZero(gCnpj, 14);
 
-    gCnpj          := VarToStr(DMFD.FDQuery4['cnpj']);
-
-    if ( Length(Trim(gCnpj)) = 11 ) then
-     gCnpj         := StrZero(gCnpj, 14);
-
-   end;
+ end;
 
 end;
 
@@ -7567,375 +8187,420 @@ begin
  // Conectar o banco de dados
 
  while not ( DMFD.FDConNFe.Connected ) do
+ begin
+
+  DMFD.FDConNFe.LoginPrompt                := FrPar.chk_LoginPrompt_NFe.Checked;
+
+  if ( FrPar.OSAuthent_NFe.Checked ) then
+   DMFD.FDConNFe.Params.Values['OSAuthent']:= 'Yes'
+  else
+   DMFD.FDConNFe.Params.Values['OSAuthent']:= 'No';
+
+  DMFD.FDConNFe.Params.Values['MARS']      := 'Yes';
+  DMFD.FDConNFe.Params.Values['DriverID']  := FrPar.cbb_DriverID_NFe.Text;
+  DMFD.FDConNFe.Params.Values['Database']  := FrPar.edt_Database_NFe.Text;
+  DMFD.FDConNFe.Params.Values['Server'  ]  := FrPar.edt_Server_NFe.Text;
+
+  if not ( FrPar.OSAuthent_NFe.Checked ) then
   begin
 
-   DMFD.FDConNFe.LoginPrompt                := FrPar.chk_LoginPrompt_NFe.Checked;
-   if ( FrPar.OSAuthent_NFe.Checked ) then
-    DMFD.FDConNFe.Params.Values['OSAuthent']:= 'Yes'
-   else
-    DMFD.FDConNFe.Params.Values['OSAuthent']:= 'No';
-   DMFD.FDConNFe.Params.Values['MARS']      := 'Yes';
-   DMFD.FDConNFe.Params.Values['DriverID']  := FrPar.cbb_DriverID_NFe.Text;
-   DMFD.FDConNFe.Params.Values['Database']  := FrPar.edt_Database_NFe.Text;
-   DMFD.FDConNFe.Params.Values['Server'  ]  := FrPar.edt_Server_NFe.Text;
-   if not ( FrPar.OSAuthent_NFe.Checked ) then
+   DMFD.FDConNFe.Params.Values['UserName']:= FrPar.edt_UserName_NFe.Text;
+   DMFD.FDConNFe.Params.Values['Password']:= FrPar.edt_Password_NFe.Text;
+
+  end;
+
+  try
+
+   DMFD.FDConNFe.Connected                  := FrPar.chk_Connected_NFe.Checked;
+
+   DMFD.FDQuery4.Close;
+   DMFD.FDQuery4.SQL.Clear;
+   DMFD.FDQuery4.SQL.Add( 'SET DATEFORMAT dmy                ' );
+   DMFD.FDQuery4.SQL.Add( 'select * from emitente            ' );
+   DMFD.FDQuery4.SQL.Add( ' where codigo_loja =:codigo_loja  ' );
+   DMFD.FDQuery4.ParamByName('codigo_loja').AsInteger := StrToIntDef(gCodEmp, 0);
+   DMFD.FDQuery4.Open;
+
+   DMFD.FDQuery4.Active := True;
+
+   if (DMFD.FDQuery4.IsEmpty) then
+   begin
+
+    if Application.MessageBox(PWideChar( 'A empresa: ' + gCodEmp +
+                              ', não foi encontrada na tabela de emitentes!'  + Char(13) +
+                              'Gostaria de corrigir os dados de conecção?'),
+                              PWideChar('Parâmetros FireDAC'),
+                              MB_ICONQUESTION + MB_YESNO ) = IdYes then
     begin
-     DMFD.FDConNFe.Params.Values['UserName']:= FrPar.edt_UserName_NFe.Text;
-     DMFD.FDConNFe.Params.Values['Password']:= FrPar.edt_Password_NFe.Text;
-    end;
-
-   try
-
-    DMFD.FDConNFe.Connected                  := FrPar.chk_Connected_NFe.Checked;
-
-    DMFD.FDQuery4.Close;
-    DMFD.FDQuery4.SQL.Clear;
-    DMFD.FDQuery4.SQL.Add( 'SET DATEFORMAT dmy                ' );
-    DMFD.FDQuery4.SQL.Add( 'select * from emitente            ' );
-    DMFD.FDQuery4.SQL.Add( ' where codigo_loja =:codigo_loja  ' );
-    DMFD.FDQuery4.ParamByName('codigo_loja').AsInteger := StrToIntDef(gCodEmp, 0);
-    DMFD.FDQuery4.Open;
-
-    DMFD.FDQuery4.Active := True;
-
-    if (DMFD.FDQuery4.IsEmpty) then
-     begin
-
-      if Application.MessageBox(PWideChar( 'A empresa: ' + gCodEmp +
-                                           ', não foi encontrada na tabela de emitentes!'  + Char(13) +
-                          'Gostaria de corrigir os dados de conecção?'),
-                          PWideChar('Parâmetros FireDAC'),
-                          MB_ICONQUESTION + MB_YESNO ) = IdYes then
-       begin
-
-        if ( FrBDFD = nil ) then
-         FrBDFD := TFrBDFD.Create(Application);
-        FrBDFD.BringToFront;
-        FrBDFD.ShowModal;
-
-       end
-      else
-       Halt;
-
-     end;
-
-   except
 
      if ( FrBDFD = nil ) then
       FrBDFD := TFrBDFD.Create(Application);
      FrBDFD.BringToFront;
      FrBDFD.ShowModal;
 
+    end
+    else
+     Halt;
+
    end;
 
+  except
+
+   if ( FrBDFD = nil ) then
+    FrBDFD := TFrBDFD.Create(Application);
+   FrBDFD.BringToFront;
+   FrBDFD.ShowModal;
+
   end;
+
+ end;
 
  if ( DMFD.FDQuery4.IsEmpty ) then
+ begin
+
+  Halt;
+
+ end
+ else
+ begin
+
+  FrGBNFe.BringToFront;
+  pLerEmp();                                                                    // By EL 8.2.2012 - Ler e atualiza os dados do emissor
+  LerConf1();                                                                   // Ler a tabela emitente e pega os parâmetros
+
+  //----------------------------------------------------------------------------
+  // Verifica o caminho do arquivo da logomarca e da base de dados
+
+  if not FileExists(PWideChar(PAnsiChar(FrPar.edtLogoMarca.Text))) then
   begin
 
-   Halt;
+   gTemLogo  := False;
 
   end
- else
+  else
+   gTemLogo  := True;
+
+  //----------------------------------------------------------------------------
+
+  edt_CodEmp.Text := gCodEmp;                                                   // Atualiza o edt_CodEmp com o gCodEmp passado por parâmetro pelo ERP
+  ilCodEmp := StrToIntDef(gCodEmp, 0);
+
+  pAtrCam();                                                                    // Atribui os caminho
+  LerConf2();                                                                   // Atribui dados nos parâmetros acbr
+
+  pAtuNFe();                                                                    // Procedure de atualização
+
+  PageControl1.TabIndex := 2;                                                   // Janela de mensagens de retorno
+
+  /// by EL - 14.2.2012 --> Inicia a com as notas pendentes
+  RadioGroup1.ItemIndex := 0;   // Pendentes
+
+  // by EL 14.2.2012 -> função de coleta de dados
+  fIniPen();
+
+  DMFD.FDQuery3.CachedUpdates  := True;
+  DMFD.FDQuery5.CachedUpdates  := True;
+  DMFD.FDQuery6.CachedUpdates  := True;
+  DMFD.FDQuery10.CachedUpdates := True;
+
+  // Pega a versão e atribui no panel da janela principal
+  Panel11.Caption := 'NFe && NFCe v(FD): Berlin - ' + GetBuildInfo('GbNFe.exe');
+
+  // Pega a versão e atribui no panel da janela de Manifesto
+  if gNivel = '4' then
   begin
 
-   FrGBNFe.BringToFront;
-   pLerEmp();                                                                   // By EL 8.2.2012 - Ler e atualiza os dados do emissor
-   LerConf1();                                                                  // Ler a tabela emitente e pega os parâmetros
-
-   //---------------------------------------------------------------------------
-   // Verifica o caminho do arquivo da logomarca e da base de dados
-   if not FileExists(PWideChar(PAnsiChar(FrPar.edtLogoMarca.Text))) then
-    begin
-     gTemLogo  := False;
-    end
-   else
-    gTemLogo  := True;
-   //---------------------------------------------------------------------------
-
-   edt_CodEmp.Text := gCodEmp;                                                  // Atualiza o edt_CodEmp com o gCodEmp passado por parâmetro pelo ERP
-   ilCodEmp := StrToIntDef(gCodEmp, 0);
-
-   pAtrCam();                                                                   // Atribui os caminho
-   LerConf2();                                                                  // Atribui dados nos parâmetros acbr
-
-   pAtuNFe();                                                                   // Procedure de atualização
-
-   PageControl1.TabIndex := 2;                                                  // Janela de mensagens de retorno
-
-   /// by EL - 14.2.2012 --> Inicia a com as notas pendentes
-   RadioGroup1.ItemIndex := 0;   // Pendentes
-
-   // by EL 14.2.2012 -> função de coleta de dados
-   fIniPen();
-
-   DMFD.FDQuery3.CachedUpdates  := True;
-   DMFD.FDQuery5.CachedUpdates  := True;
-   DMFD.FDQuery6.CachedUpdates  := True;
-   DMFD.FDQuery10.CachedUpdates := True;
-
-   // Pega a versão e atribui no panel da janela principal
-   Panel11.Caption := 'NFe && NFCe v(FD): Berlin - ' + GetBuildInfo('GbNFe.exe');
-
-   // Pega a versão e atribui no panel da janela de Manifesto
-   if gNivel = '4' then
-    begin
-     FrBuscaChave.Panel11.Caption := 'NFe && NFCe v(FD): Berlin - ' + GetBuildInfo('GbNFe.exe');
-     FrBuscaChave.SpeedButton2.Visible  := True;
-     FrBuscaChave.SpeedButton51.Visible := True;
-     FrBuscaChave.img1.Visible          := True;
-     FrBuscaChave.Align                 := alBottom;
-     FrBuscaChave.WindowState           := wsMaximized;
-     FrBuscaChave.HeaderControl1.Visible:= true;
-    end;
-
-   //***************************************************************************
-   //** ROTINAS DAS CHAMADAS EXPRESS PELO ERP
-   //***************************************************************************
-
-   vNNFenc := false;
-
-   if gExpress = '1' then
-    begin
-     case StrToIntDef(gOpcao, 0) of
-      1 : //** ENVIA NOTA FISCAL
-       begin
-        RadioGroup1.ItemIndex := 0;                                             // seta parâmetro inicial para visualizar nfe a transmitir
-        RadioGroup1Click(Sender);                                               // força um clic no evento radiogroup1
-
-        DMFD.FDQuery3.First;                                                    // vai pro inicio da tabela nfe
-        while (not DMFD.FDQuery3.eof) do                                        // fica no loop até que encontre o fim
-         begin
-          if (DMFD.FDQuery3['nfe_nnf'] = StrToIntDef(gNNF, 0)) then             // se a nota for igual a variavel gNNF marca registro
-           begin
-            DMFD.FDQuery3.FieldByName('Checado').ReadOnly := False;
-            DMFD.FDQuery3.Edit;                                                 // edita registro
-            DMFD.FDQuery3['Checado'] := 'Y';                                    // marca registro para processamento
-            vNNFenc := true;                                                    // especifica que a nota fiscal foi encontrada
-           end;
-           DMFD.FDQuery3.Next;                                                  // vai para o próximo registro e retorna para o loop
-         end;
-
-        try
-
-         BitBtn2Click(Sender);                                                  // força um clic no botão "enviar nota fiscal"
-
-        except on e:Exception do
-         begin
-
-          fMensOnShow( 2, 'ERRO NÃO CATALOGADO: Nota Fiscal eletrônica não enviada!' + Chr(13) +
-                           e.Message);
-
-          pAtuNFe();
-          close;                                                                // se der erro sai do sistema
-
-         end;
-
-        end;
-
-        if not vNNFenc then
-
-         Application.Messagebox('OBS: Nota Fiscal eletrônica não encontrada !',
-                                'Atenção!',MB_ICONASTERISK+mb_ok);
-
-        close;                                                                  // se terminar sem problema sai do sistema
-
-       end;
-
-      2 : //** CANCELA NOTA FISCAL
-       begin
-        RadioGroup1.ItemIndex := 2;                                             // seta parâmetro inicial para visualizar nfe a transmitir
-        RadioGroup1Click(Sender);                                               // força um clic no evento radiogroup1
-        FrGBNFe.cxdtp1.Date := date() - 2;                                      // seta data da nota para o edt_CodEmp
-        btn2Click(Sender);
-
-        DMFD.FDQuery5.First;                                                    // vai pro inicio da tabela nfe
-        while (not DMFD.FDQuery5.eof) do                                        // fica no loop até que encontre o fim
-         begin
-          if (DMFD.FDQuery5['nfe_nnf'] = StrToIntDef(gNNF, 0)) then             // se a nota for igual a variavel gNNF marca registro
-           begin
-            DMFD.FDQuery5.FieldByName('Checado').ReadOnly := False;
-            DMFD.FDQuery5.Edit;                                                 // edita registro
-            DMFD.FDQuery5['Checado'] := 'Y';                                    // marca registro para processamento
-            vNNFenc := true;                                                    // especifica que a nota fiscal foi encontrada
-           end;
-           DMFD.FDQuery5.Next;                                                  // vai para o próximo registro e retorna para o loop
-         end;
-
-        try
-
-         BitBtn11Click(Sender);                                                 // força um clic no botão "cancelar nota fiscal"
-
-        except on e:Exception do
-         begin
-
-          Application.Messagebox(PWideChar('ERRO NÃO CATALOGADO: Nota Fiscal eletrônica não cancelada!' +
-                                  e.Message), 'Atenção!',MB_ICONERROR+mb_ok);
-          pAtuNFe();
-          close;                                                                // se der erro sai do sistema
-
-         end;
-
-        end;
-
-        if not vNNFenc then
-         Application.Messagebox('OBS: Nota Fiscal eletrônica não encontrada !',
-                                'Atenção!',MB_ICONASTERISK+mb_ok);
-        close;                                                                  // se terminar sem problema sai do sistema
-
-       end;
-
-      3 : //** INUTILIZA NOTA FISCAL
-       begin
-        RadioGroup1.ItemIndex := 0;                                             // seta parâmetro inicial para visualizar nfe a transmitir
-        RadioGroup1Click(Sender);                                               // força um clic no evento radiogroup1
-        FrInut.Edit4.Text := gNNF;                                              // atribui o valor da variável gNNF para edit da tela de inutilização
-
-        try
-
-         BitBtn13Click(Sender);                                                 // força um clic no botão "inutilizar nota fiscal"
-
-        except
-
-         pAtuNFe();
-         close;                                                                 // se der erro sai do sistema
-
-        end;
-
-        close;                                                                  // se terminar sem problema sai do sistema
-
-       end;
-
-      4 : //** CONSULTA NOTA FISCAL
-       begin
-        RadioGroup1.ItemIndex := 2;                                             // seta parâmetro inicial para visualizar nfe a transmitir
-        RadioGroup1Click(Sender);                                               // força um clic no evento radiogroup1
-        FrGBNFe.cxdtp1.Date := date() - 2;                                      // seta data da nota para o edt_CodEmp
-        btn2Click(Sender);                                                      // força um exit da data inicial
-
-        DMFD.FDQuery5.First;                                                    // vai pro inicio da tabela nfe
-        while (not DMFD.FDQuery5.eof) do                                        // fica no loop até que encontre o fim
-         begin
-          if (DMFD.FDQuery5['nfe_nnf'] = StrToIntDef(gNNF, 0)) then             // se a nota for igual a variavel gNNF marca registro
-           begin
-            DMFD.FDQuery5.FieldByName('Checado').ReadOnly := False;
-            DMFD.FDQuery5.Edit;                                                 // edita registro
-            DMFD.FDQuery5['Checado'] := 'Y';                                    // marca registro para processamento
-            vNNFenc := true;                                                    // especifica que a nota fiscal foi encontrada
-           end;
-           DMFD.FDQuery5.Next;                                                  // vai para o próximo registro e retorna para o loop
-         end;
-
-        try
-
-         gSoUmaConsulta := True;                                                // Seta variável global para ler somente um registro
-         BitBtn8Click(Sender);                                                  // força um clic no botão "consulta nota fiscal"
-         gSoUmaConsulta := False;                                               // Seta variável global para ler vários registros
-
-         if gDeuErrConsiste then Exit;                                          // Aborta no caso de erro
-
-        except on e:Exception do
-         begin
-
-          Application.Messagebox(PWideChar('ERRO NÃO CATALOGADO: Nota Fiscal eletrônica não consultada!' + Chr(13) +
-                                  e.Message),'Atenção!',MB_ICONERROR+mb_ok);
-          pAtuNFe();
-       close;                                                                   // se der erro sai do sistema
-
-         end;
-
-        end;
-
-        if not vNNFenc then
-         Application.Messagebox('OBS: Nota Fiscal eletrônica não encontrada !',
-                                'Atenção!',MB_ICONASTERISK+mb_ok);
-      close;                                                                    // se terminar sem problema sai do sistema
-
-       end;
-
-      5 : //** IMPRIMIR NOTA FISCAL
-       begin
-        RadioGroup1.ItemIndex := 2;                                             // seta parâmetro inicial para visualizar nfe transmitida
-        RadioGroup1Click(Sender);                                               // força um clic no evento radiogroup1
-        FrGBNFe.cxdtp1.Date := date() - 2;                                      // seta data da nota para o edt_CodEmp
-        btn2Click(Sender);                                                      // força um exit da data inicial
-
-        DMFD.FDQuery5.First;                                                    // vai pro inicio da tabela nfe
-        while (not DMFD.FDQuery5.eof) do                                        // fica no loop até que encontre o fim
-         begin
-          if (DMFD.FDQuery5['nfe_nnf'] = StrToIntDef(gNNF, 0)) then             // se a nota for igual a variavel gNNF marca registro
-           begin
-            DMFD.FDQuery5.FieldByName('Checado').ReadOnly := False;
-            DMFD.FDQuery5.Edit;                                                 // edita registro
-            DMFD.FDQuery5['Checado'] := 'Y';                                    // marca registro para processamento
-            vNNFenc := true;                                                    // especifica que a nota fiscal foi encontrada
-           end;
-           DMFD.FDQuery5.Next;                                                  // vai para o próximo registro e retorna para o loop
-         end;
-
-        try
-
-         BitBtn9Click(Sender);                                                  // força um clic no botão "imprime nota fiscal"
-
-        except on e:Exception do
-         begin
-
-          Application.Messagebox(PWideChar('ERRO NÃO CATALOGADO: Nota Fiscal eletrônica não impressa!' + Chr(13) +
-                                 e.Message),'Atenção!',MB_ICONERROR+mb_ok);
-          pAtuNFe();
-          close;                                                                // se der erro sai do sistema
-
-         end;
-
-        end;
-
-        if not vNNFenc then
-         Application.Messagebox('OBS: Nota Fiscal eletrônica não encontrada !','Atenção!',MB_ICONASTERISK+mb_ok);
-
-        close;                                                                  // se terminar sem problema sai do sistema
-
-       end;
-
-     end;  // **case
-    end;   // **if
-
-   // Ajusta o tamanho do Label1 (razão social) com o tamanho do groupbox3
-   Label1.Width := (Groupbox3.Width - 20);
-
-   gVerifCert := True;                                                          // Ativa as mensagens de verificação do certificado digital
-
-   // Inibe a edição do código da empresa
-   FrGBNFe.edt_CodEmp.ReadOnly := gEdtCodEmp;
-
-   // Abre direto a janela MDe - Obs não pode haver outros comandos depois deste
-   if gNivel = '4' then
-    begin
-     if ( FrBuscaChave = nil ) then
-      FrBuscaChave := TFrBuscaChave.Create(Application)
-     else
-      FrBuscaChave := TFrBuscaChave.Create(Application);
-     FrBuscaChave.BringToFront;
-     FrBuscaChave.ShowModal;
-
-     BitBtn12Click(Sender);
-    end;
-   //---------------------------------------------------------------------------
-
-   if (DMFD.FDQuery4['Versao']      = 've3131') then
-    ACBrNFe1.Configuracoes.Geral.VersaoDF := ve310
-   else if (DMFD.FDQuery4['Versao']      = 've4040') then
-    ACBrNFe1.Configuracoes.Geral.VersaoDF := ve400
-   else
-    ACBrNFe1.Configuracoes.Geral.VersaoDF := ve400;
-
-   //---------------------------------------------------------------------------
-
-   // Mostra se o sistema está em produção ou em homologação e a versão do sistema
-   pMostraTipoAmb();
-
-   //---------------------------------------------------------------------------
+   FrBuscaChave.Panel11.Caption := 'NFe && NFCe v(FD): Berlin - ' + GetBuildInfo('GbNFe.exe');
+   FrBuscaChave.SpeedButton2.Visible  := True;
+   FrBuscaChave.SpeedButton51.Visible := True;
+   FrBuscaChave.img1.Visible          := True;
+   FrBuscaChave.Align                 := alBottom;
+   FrBuscaChave.WindowState           := wsMaximized;
+   FrBuscaChave.HeaderControl1.Visible:= true;
 
   end;
+
+  //***************************************************************************
+  //** ROTINAS DAS CHAMADAS EXPRESS PELO ERP
+  //***************************************************************************
+
+  vNNFenc := false;
+
+  if gExpress = '1' then
+  begin
+
+   case StrToIntDef(gOpcao, 0) of
+
+    1 : //** ENVIA NOTA FISCAL
+    begin
+
+     RadioGroup1.ItemIndex := 0;                                                // seta parâmetro inicial para visualizar nfe a transmitir
+     RadioGroup1Click(Sender);                                                  // força um clic no evento radiogroup1
+
+     DMFD.FDQuery3.First;                                                       // vai pro inicio da tabela nfe
+     while (not DMFD.FDQuery3.eof) do                                           // fica no loop até que encontre o fim
+     begin
+
+      if (DMFD.FDQuery3['nfe_nnf'] = StrToIntDef(gNNF, 0)) then                 // se a nota for igual a variavel gNNF marca registro
+      begin
+
+       DMFD.FDQuery3.FieldByName('Checado').ReadOnly := False;
+       DMFD.FDQuery3.Edit;                                                      // edita registro
+       DMFD.FDQuery3['Checado'] := 'Y';                                         // marca registro para processamento
+       vNNFenc := true;                                                         // especifica que a nota fiscal foi encontrada
+
+      end;
+
+      DMFD.FDQuery3.Next;                                                       // vai para o próximo registro e retorna para o loop
+
+     end;
+
+     try
+
+      BitBtn2Click(Sender);                                                     // força um clic no botão "enviar nota fiscal"
+
+     except on e:Exception do
+      begin
+
+       fMensOnShow( 2, 'ERRO NÃO CATALOGADO: Nota Fiscal eletrônica não enviada!' + Chr(13) +
+                        e.Message);
+
+       pAtuNFe();
+       close;                                                                   // se der erro sai do sistema
+
+      end;
+
+     end;
+
+     if not vNNFenc then
+
+     Application.Messagebox('OBS: Nota Fiscal eletrônica não encontrada !',
+                            'Atenção!',MB_ICONASTERISK+mb_ok);
+
+     close;                                                                     // se terminar sem problema sai do sistema
+
+    end;
+
+    2 : //** CANCELA NOTA FISCAL
+    begin
+     RadioGroup1.ItemIndex := 2;                                                // seta parâmetro inicial para visualizar nfe a transmitir
+     RadioGroup1Click(Sender);                                                  // força um clic no evento radiogroup1
+     FrGBNFe.cxdtp1.Date := date() - 2;                                         // seta data da nota para o edt_CodEmp
+     btn2Click(Sender);
+
+     DMFD.FDQuery5.First;                                                       // vai pro inicio da tabela nfe
+
+     while (not DMFD.FDQuery5.eof) do                                           // fica no loop até que encontre o fim
+     begin
+
+      if (DMFD.FDQuery5['nfe_nnf'] = StrToIntDef(gNNF, 0)) then                 // se a nota for igual a variavel gNNF marca registro
+      begin
+
+       DMFD.FDQuery5.FieldByName('Checado').ReadOnly := False;
+       DMFD.FDQuery5.Edit;                                                      // edita registro
+       DMFD.FDQuery5['Checado'] := 'Y';                                         // marca registro para processamento
+       vNNFenc := true;                                                         // especifica que a nota fiscal foi encontrada
+
+      end;
+
+      DMFD.FDQuery5.Next;                                                       // vai para o próximo registro e retorna para o loop
+
+     end;
+
+     try
+
+      BitBtn11Click(Sender);                                                    // força um clic no botão "cancelar nota fiscal"
+
+     except on e:Exception do
+      begin
+
+       Application.Messagebox(PWideChar('ERRO NÃO CATALOGADO: Nota Fiscal eletrônica não cancelada!' +
+                               e.Message), 'Atenção!',MB_ICONERROR+mb_ok);
+       pAtuNFe();
+       close;                                                                   // se der erro sai do sistema
+
+      end;
+
+     end;
+
+     if not vNNFenc then
+      Application.Messagebox('OBS: Nota Fiscal eletrônica não encontrada !',
+                             'Atenção!',MB_ICONASTERISK+mb_ok);
+     close;                                                                     // se terminar sem problema sai do sistema
+
+    end;
+
+    3 : //** INUTILIZA NOTA FISCAL
+    begin
+
+     RadioGroup1.ItemIndex := 0;                                                // seta parâmetro inicial para visualizar nfe a transmitir
+     RadioGroup1Click(Sender);                                                  // força um clic no evento radiogroup1
+     FrInut.Edit4.Text := gNNF;                                                 // atribui o valor da variável gNNF para edit da tela de inutilização
+
+     try
+
+      BitBtn13Click(Sender);                                                    // força um clic no botão "inutilizar nota fiscal"
+
+     except
+
+      pAtuNFe();
+      close;                                                                    // se der erro sai do sistema
+
+     end;
+
+     close;                                                                     // se terminar sem problema sai do sistema
+
+    end;
+
+    4 : //** CONSULTA NOTA FISCAL
+    begin
+
+     RadioGroup1.ItemIndex := 2;                                                // seta parâmetro inicial para visualizar nfe a transmitir
+     RadioGroup1Click(Sender);                                                  // força um clic no evento radiogroup1
+     FrGBNFe.cxdtp1.Date := date() - 2;                                         // seta data da nota para o edt_CodEmp
+     btn2Click(Sender);                                                         // força um exit da data inicial
+
+     DMFD.FDQuery5.First;                                                       // vai pro inicio da tabela nfe
+
+     while (not DMFD.FDQuery5.eof) do                                           // fica no loop até que encontre o fim
+     begin
+
+      if (DMFD.FDQuery5['nfe_nnf'] = StrToIntDef(gNNF, 0)) then                 // se a nota for igual a variavel gNNF marca registro
+      begin
+
+       DMFD.FDQuery5.FieldByName('Checado').ReadOnly := False;
+       DMFD.FDQuery5.Edit;                                                      // edita registro
+       DMFD.FDQuery5['Checado'] := 'Y';                                         // marca registro para processamento
+       vNNFenc := true;                                                         // especifica que a nota fiscal foi encontrada
+
+      end;
+
+      DMFD.FDQuery5.Next;                                                       // vai para o próximo registro e retorna para o loop
+
+     end;
+
+     try
+
+      gSoUmaConsulta := True;                                                   // Seta variável global para ler somente um registro
+      BitBtn8Click(Sender);                                                     // força um clic no botão "consulta nota fiscal"
+      gSoUmaConsulta := False;                                                  // Seta variável global para ler vários registros
+
+      if gDeuErrConsiste then Exit;                                             // Aborta no caso de erro
+
+     except on e:Exception do
+      begin
+
+       Application.Messagebox(PWideChar('ERRO NÃO CATALOGADO: Nota Fiscal eletrônica não consultada!' + Chr(13) +
+                               e.Message),'Atenção!',MB_ICONERROR+mb_ok);
+       pAtuNFe();
+
+       close;                                                                   // se der erro sai do sistema
+
+      end;
+
+     end;
+
+     if not vNNFenc then
+      Application.Messagebox('OBS: Nota Fiscal eletrônica não encontrada !',
+                             'Atenção!',MB_ICONASTERISK+mb_ok);
+     close;                                                                     // se terminar sem problema sai do sistema
+
+    end;
+
+    5 : //** IMPRIMIR NOTA FISCAL
+    begin
+
+     RadioGroup1.ItemIndex := 2;                                                // seta parâmetro inicial para visualizar nfe transmitida
+     RadioGroup1Click(Sender);                                                  // força um clic no evento radiogroup1
+     FrGBNFe.cxdtp1.Date := date() - 2;                                         // seta data da nota para o edt_CodEmp
+     btn2Click(Sender);                                                         // força um exit da data inicial
+
+     DMFD.FDQuery5.First;                                                       // vai pro inicio da tabela nfe
+
+     while (not DMFD.FDQuery5.eof) do                                           // fica no loop até que encontre o fim
+     begin
+
+      if (DMFD.FDQuery5['nfe_nnf'] = StrToIntDef(gNNF, 0)) then                 // se a nota for igual a variavel gNNF marca registro
+      begin
+
+       DMFD.FDQuery5.FieldByName('Checado').ReadOnly := False;
+       DMFD.FDQuery5.Edit;                                                      // edita registro
+       DMFD.FDQuery5['Checado'] := 'Y';                                         // marca registro para processamento
+       vNNFenc := true;                                                         // especifica que a nota fiscal foi encontrada
+
+      end;
+
+      DMFD.FDQuery5.Next;                                                       // vai para o próximo registro e retorna para o loop
+
+     end;
+
+     try
+
+      BitBtn9Click(Sender);                                                     // força um clic no botão "imprime nota fiscal"
+
+     except on e:Exception do
+      begin
+
+       Application.Messagebox(PWideChar('ERRO NÃO CATALOGADO: Nota Fiscal eletrônica não impressa!' + Chr(13) +
+                              e.Message),'Atenção!',MB_ICONERROR+mb_ok);
+       pAtuNFe();
+       close;                                                                   // se der erro sai do sistema
+
+      end;
+
+     end;
+
+     if not vNNFenc then
+      Application.Messagebox('OBS: Nota Fiscal eletrônica não encontrada !','Atenção!',MB_ICONASTERISK+mb_ok);
+
+     close;                                                                     // se terminar sem problema sai do sistema
+
+    end;
+
+   end;  // **case
+
+  end;   // **if
+
+  // Ajusta o tamanho do Label1 (razão social) com o tamanho do groupbox3
+  Label1.Width := (Groupbox3.Width - 20);
+
+  gVerifCert := True;                                                           // Ativa as mensagens de verificação do certificado digital
+
+  // Inibe a edição do código da empresa
+  FrGBNFe.edt_CodEmp.ReadOnly := gEdtCodEmp;
+
+  // Abre direto a janela MDe - Obs não pode haver outros comandos depois deste
+  if gNivel = '4' then
+  begin
+
+   if ( FrBuscaChave = nil ) then
+    FrBuscaChave := TFrBuscaChave.Create(Application)
+   else
+    FrBuscaChave := TFrBuscaChave.Create(Application);
+
+   FrBuscaChave.BringToFront;
+   FrBuscaChave.ShowModal;
+
+   BitBtn12Click(Sender);
+  end;
+
+  //---------------------------------------------------------------------------
+
+  if (DMFD.FDQuery4['Versao']      = 've3131') then
+   ACBrNFe1.Configuracoes.Geral.VersaoDF := ve310
+  else if (DMFD.FDQuery4['Versao']      = 've4040') then
+   ACBrNFe1.Configuracoes.Geral.VersaoDF := ve400
+  else
+   ACBrNFe1.Configuracoes.Geral.VersaoDF := ve400;
+
+  //---------------------------------------------------------------------------
+
+  // Mostra se o sistema está em produção ou em homologação e a versão do sistema
+  pMostraTipoAmb();
+
+  //---------------------------------------------------------------------------
+
+ end;
 
 end;
 
@@ -7951,81 +8616,97 @@ function TFrGBNFe.fIniPen() : boolean;
 begin
 
  Case RadioGroup1.ItemIndex of
- 0:                                                                             // by EL 14.2.2012 -------->  PENDENTES
+
+  0:                                                                             // by EL 14.2.2012 -------->  PENDENTES
   begin
 
-  // By Edson Lima - 1-2-2012 - Ler Arquivos txt e Atualiza
-  pAtuNFe;
+   // By Edson Lima - 1-2-2012 - Ler Arquivos txt e Atualiza
+   pAtuNFe;
 
-  DMFD.FDQuery4.Close;
-  DMFD.FDQuery4.SQL.Clear;
-  DMFD.FDQuery4.SQL.Add( 'SET DATEFORMAT dmy                                           ' );
-  DMFD.FDQuery4.SQL.Add( 'select * from emitente where codigo_loja = ' + edt_CodEmp.Text );
-  DMFD.FDQuery4.Open;
+   DMFD.FDQuery4.Close;
+   DMFD.FDQuery4.SQL.Clear;
+   DMFD.FDQuery4.SQL.Add( 'SET DATEFORMAT dmy                                           ' );
+   DMFD.FDQuery4.SQL.Add( 'select * from emitente where codigo_loja = ' + edt_CodEmp.Text );
+   DMFD.FDQuery4.Open;
 
-  if DMFD.FDQuery4.isempty then
-  begin
-  DMFD.FDQuery4.Close;
-  DMFD.FDQuery4.SQL.Clear;
-  DMFD.FDQuery4.SQL.Add( 'SET DATEFORMAT dmy    ');
-  DMFD.FDQuery4.SQL.Add( 'select * from emitente');
-  DMFD.FDQuery4.Open;
-
-  if not DMFD.FDQuery4.IsEmpty then
+   if DMFD.FDQuery4.isempty then
    begin
-   if StrToIntDef(edt_CodEmp.Text, 0) < DMFD.FDQuery4['codigo_loja'] then
-    begin
-    DMFD.FDQuery4.Last;
-    edt_CodEmp.Text := IntToStr(DMFD.FDQuery4['codigo_loja']);
-    pAtuNFe;
     DMFD.FDQuery4.Close;
     DMFD.FDQuery4.SQL.Clear;
-    DMFD.FDQuery4.SQL.Add( 'SET DATEFORMAT dmy                                           ' );
-    DMFD.FDQuery4.SQL.Add( 'select * from emitente where codigo_loja = ' + edt_CodEmp.Text );
+    DMFD.FDQuery4.SQL.Add( 'SET DATEFORMAT dmy    ');
+    DMFD.FDQuery4.SQL.Add( 'select * from emitente');
     DMFD.FDQuery4.Open;
-    end
-   else
+
+    if not DMFD.FDQuery4.IsEmpty then
     begin
-    DMFD.FDQuery4.Last;
-    if StrToIntDef(edt_CodEmp.Text, 0) > DMFD.FDQuery4['codigo_loja'] then
+
+     if StrToIntDef(edt_CodEmp.Text, 0) < DMFD.FDQuery4['codigo_loja'] then
      begin
-     DMFD.FDQuery4.First;
-     edt_CodEmp.Text := IntToStr(DMFD.FDQuery4['codigo_loja']);
-     pAtuNFe;
-     DMFD.FDQuery4.Close;
-     DMFD.FDQuery4.SQL.Clear;
-     DMFD.FDQuery4.SQL.Add( 'SET DATEFORMAT dmy                                           ' );
-     DMFD.FDQuery4.SQL.Add( 'select * from emitente where codigo_loja = ' + edt_CodEmp.Text );
-     DMFD.FDQuery4.Open;
+
+      DMFD.FDQuery4.Last;
+      edt_CodEmp.Text := IntToStr(DMFD.FDQuery4['codigo_loja']);
+      pAtuNFe;
+      DMFD.FDQuery4.Close;
+      DMFD.FDQuery4.SQL.Clear;
+      DMFD.FDQuery4.SQL.Add( 'SET DATEFORMAT dmy                                           ' );
+      DMFD.FDQuery4.SQL.Add( 'select * from emitente where codigo_loja = ' + edt_CodEmp.Text );
+      DMFD.FDQuery4.Open;
+
      end
-    else
-     pAtuNFe;
-     DMFD.FDQuery4.Close;
-     DMFD.FDQuery4.SQL.Clear;
-     DMFD.FDQuery4.SQL.Add( 'SET DATEFORMAT dmy                                           ' );
-     DMFD.FDQuery4.SQL.Add( 'select * from emitente where codigo_loja = ' + edt_CodEmp.Text );
-     DMFD.FDQuery4.Open;
+     else
+     begin
+
+      DMFD.FDQuery4.Last;
+
+      if StrToIntDef(edt_CodEmp.Text, 0) > DMFD.FDQuery4['codigo_loja'] then
+      begin
+
+       DMFD.FDQuery4.First;
+       edt_CodEmp.Text := IntToStr(DMFD.FDQuery4['codigo_loja']);
+       pAtuNFe;
+       DMFD.FDQuery4.Close;
+       DMFD.FDQuery4.SQL.Clear;
+       DMFD.FDQuery4.SQL.Add( 'SET DATEFORMAT dmy                                           ' );
+       DMFD.FDQuery4.SQL.Add( 'select * from emitente where codigo_loja = ' + edt_CodEmp.Text );
+       DMFD.FDQuery4.Open;
+
+      end
+      else
+       pAtuNFe;
+
+      DMFD.FDQuery4.Close;
+      DMFD.FDQuery4.SQL.Clear;
+      DMFD.FDQuery4.SQL.Add( 'SET DATEFORMAT dmy                                           ' );
+      DMFD.FDQuery4.SQL.Add( 'select * from emitente where codigo_loja = ' + edt_CodEmp.Text );
+      DMFD.FDQuery4.Open;
+
+     end;
+
     end;
-   end;
-  end;
 
-  if DMFD.FDQuery4.IsEmpty then
+   end;
+
+   if DMFD.FDQuery4.IsEmpty then
    begin
-   Label1.Font.Color := clRed;
-   Label1.Caption := ' NÃO EXISTE EMPRESA CADASTRADA NESSE CÓDIGO !';
+
+    Label1.Font.Color := clRed;
+    Label1.Caption := ' NÃO EXISTE EMPRESA CADASTRADA NESSE CÓDIGO !';
+
    end
-  else
+   else
    begin
-   Label1.Font.Color := clBlue;
-   Label1.Caption := ' ' + vartostr(DMFD.FDQuery4['razao_social']) + ' - ' + vartostr(DMFD.FDQuery4['nome_fantasia']);
+
+    Label1.Font.Color := clBlue;
+    Label1.Caption := ' ' + vartostr(DMFD.FDQuery4['razao_social']) + ' - ' + vartostr(DMFD.FDQuery4['nome_fantasia']);
+
    end;
 
   end;
-
 
  end;
 
  result := true;
+
 end;
 
 //el------------------GB Informática Ltda------------------------
@@ -8041,73 +8722,88 @@ var
  vPath : string;
 
 begin
+
  // Cria os respectivos caminhos Emp000Xml, Emp000Pdf, Emp000Log, Emp000Bak, Emp000NFe e Emp000Doc dentro do ..\Arq
  vPath := ( gCamPad + 'Arq' );
+
  if not DirectoryExists(vPath) then
   CreateDir(vPath);
 
  vPath := ( gCamPad + 'Arq\Emp' + gCodEmp );
+
  if not DirectoryExists(vPath) then
-  begin
+ begin
 
-   CreateDir(vPath);
-   CreateDir(gCamPad + 'Arq\Emp' + gCodEmp + '\Xml');
-   CreateDir(gCamPad + 'Arq\Emp' + gCodEmp + '\XmlI');
-   CreateDir(gCamPad + 'Arq\Emp' + gCodEmp + '\Pdf');
-   CreateDir(gCamPad + 'Arq\Emp' + gCodEmp + '\Log');
-   CreateDir(gCamPad + 'Arq\Emp' + gCodEmp + '\Doc');
+  CreateDir(vPath);
+  CreateDir(gCamPad + 'Arq\Emp' + gCodEmp + '\Xml');
+  CreateDir(gCamPad + 'Arq\Emp' + gCodEmp + '\XmlI');
+  CreateDir(gCamPad + 'Arq\Emp' + gCodEmp + '\Pdf');
+  CreateDir(gCamPad + 'Arq\Emp' + gCodEmp + '\Log');
+  CreateDir(gCamPad + 'Arq\Emp' + gCodEmp + '\Doc');
 
-  end;
+ end;
 
  vPath := ( gCamPad + 'Arq\Emp' + gCodEmp + '\XmlE' );
+
  if DirectoryExists(vPath) then
   RemoveDir(vPath);
 
  vPath := ( gCamPad + 'Arq\Emp' + gCodEmp + '\XmlS' );
+
  if DirectoryExists(vPath) then
   RemoveDir(vPath);
 
  vPath := ( gCamPad + 'Arq\Emp' + gCodEmp + '\Xml' );
+
  if not DirectoryExists(vPath)  then
   CreateDir(vPath);
 
  vPath := ( gCamPad + 'Arq\Emp' + gCodEmp + '\XmlI' );
+
  if not DirectoryExists(vPath) then
   CreateDir(vPath);
 
  vPath := ( gCamPad + 'Arq\Emp' + gCodEmp + '\Pdf' );
+
  if ( not DirectoryExists(vPath) )  then
   CreateDir(vPath);
 
  vPath := ( gCamPad + 'Arq\Emp' + gCodEmp + '\Log' );
+
  if not DirectoryExists(vPath)  then
   CreateDir(vPath);
 
  vPath := ( gCamPad + 'Arq\Emp' + gCodEmp + '\Doc' );
+
  if not DirectoryExists(vPath)  then
   CreateDir(vPath);
 
  // Cria os respectivos caminhos de Textos
  vPath := ( gCamPad + 'Txt' );
+
  if not DirectoryExists(vPath) then
   CreateDir(vPath);
 
  vPath := ( gCamPad + 'Txt\' + gCodEmp );
+
  if not DirectoryExists(vPath) then
   CreateDir(vPath);
 
  // Cria os respectivos caminhos
  vPath := ( gCamPad + 'Arq\Bak' );
+
  if not DirectoryExists(vPath) then
   CreateDir(vPath);
 
  // Cria os caminhos Report a nível do execultável
  vPath := ( gCamExe + 'Report' );
+
  if not DirectoryExists(vPath) then
   CreateDir(gCamExe + 'Report');
 
  // Cria os caminhos Schemas dentro do Execultável
  vPath := ( gCamExe + 'Schemas\NFe' );
+
  if not DirectoryExists(vPath) then
   CreateDir(vPath);
 
@@ -8140,255 +8836,253 @@ begin
 
  // Verifica se a logo foi encontrada, caso contrário pergunta se procegue...
  if not gTemLogo then
-  begin
+ begin
 
-   case ( fMensOnShow( 2, 'Logomarca não encontrada, verifique o caminho da logomarca' + Chr(13) +
-                          'em parâmetros! Deseja proceguir sem a logomarca?' ) ) of
-    ID_NO     : Exit;
-
-   end;
+  case ( fMensOnShow( 2, 'Logomarca não encontrada, verifique o caminho da logomarca' + Chr(13) +
+                         'em parâmetros! Deseja proceguir sem a logomarca?' ) ) of
+   ID_NO     : Exit;
 
   end;
+
+ end;
 
  ACBrNFe1.Configuracoes.WebServices.AguardarConsultaRet      := 0;
 
  Case RadioGroup1.ItemIndex of
 
- 0:                                                                             // PENDENTES
-
+  0:                                                                            // PENDENTES
   begin
 
    if RadioButton3.Checked then                                                 // PENDENTES - CONTINGÊNCIA
+   begin
 
+    if not fTemSel( cxTL, cxTLbSel ) then exit;                                 // verifica se tem item selecionado na treelist
+
+    if MessageDlg('Confirma geração em contingência ' + _tipo_emissao + ':',
+                   mtConfirmation, [mbYes, mbNo], 0) = mrYes then
     begin
 
-     if not fTemSel( cxTL, cxTLbSel ) then exit;                                // verifica se tem item selecionado na treelist
+     if not(InputQuery('WebServices Contingência', 'Justificativa', xjustificativa)) then exit;
 
-     if MessageDlg('Confirma geração em contingência ' + _tipo_emissao + ':',
-                    mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+     if length(trim(xjustificativa)) < 15 then
+     begin
+
+      MessageDlg('Justificativa deve ter no mínimo 15 caracteres', mtConfirmation,[mbOK],0);
+      pAtuNFe;                                                                  // Procedure de atualização
+      exit;
+
+     end;
+
+     try
+
+      for X := 0 to cxTL.Count -1 do                                            // Percorre a treelist
       begin
 
-       if not(InputQuery('WebServices Contingência', 'Justificativa', xjustificativa)) then exit;
-        if length(trim(xjustificativa)) < 15 then
+       if ( cxTL.Items[X].Texts[cxTLbSel.ItemIndex] = 'True' ) then             // Verifica se o item está selecionado
+       begin
+
+        // Filtra a nfe selecionada com select
+        pSelNfe( DMFD.FDQryGeral2, StrToIntDef(FrGBNFe.edt_CodEmp.Text, 0),
+                                   StrToIntDef(cxTL.Items[X].Texts[cxTLlNot.ItemIndex], 0),
+                                   StrToDateTime(cxTL.Items[X].Texts[cxTLdDem.ItemIndex]),
+                                   cxTL.Items[X].Texts[cxTLsMod.ItemIndex],
+                                   cxTL.Items[X].Texts[cxTLsSer.ItemIndex] );
+
+        gModelo := DMFD.FDQryGeral2['nfe_Modelo'];
+        gSerie  := DMFD.FDQryGeral2['nfe_Serie'];
+
+        //----------------------------------------------------------------------
+        // by Edson Lima ; 2016-2-26T1021
+        // Aqui está sendo bloqueada a emissão da nfce sem a senha
+        //----------------------------------------------------------------------
+
+        if (gModelo = 65) then
+        begin
+
+         // No caso de suporte deve entrar com a senha
+         FrGBNFe.pSuporteSenha();
+
+        end;
+
+        if ( (gModelo = 55) or  ((gModelo = 65) and (gSenhaBD <> '')) ) then
+        begin
+
+         if gModelo = 65 then
          begin
-          MessageDlg('Justificativa deve ter no mínimo 15 caracteres', mtConfirmation,[mbOK],0);
-          pAtuNFe;                                                              // Procedure de atualização
-          exit;
+
+          ACBrNFe1.Configuracoes.Geral.ModeloDF := moNFCe;
+
+         end
+         else
+         begin
+
+          ACBrNFe1.Configuracoes.Geral.ModeloDF := moNFe;
          end;
 
-       try
+         if ( gCpt = 1 ) then
+          pDefineRel()                                                          // Define o tipo de Relatório FortesReport
+         else
+          pDefineRelFR();                                                       // Define o tipo de Relatório FastReport
 
-        for X := 0 to cxTL.Count -1 do                                          // Percorre a treelist
-
+         if (gModelo = 55) then
          begin
 
-          if ( cxTL.Items[X].Texts[cxTLbSel.ItemIndex] = 'True' ) then          // Verifica se o item está selecionado
+          _tipo_emissao := 'fsda';
+          _tpemissao := '5';
 
-           begin
+         end
+         else if (gModelo = 65) then
+         begin
 
-            // Filtra a nfe selecionada com select
-            pSelNfe( DMFD.FDQryGeral2, StrToIntDef(FrGBNFe.edt_CodEmp.Text, 0),
-                                       StrToIntDef(cxTL.Items[X].Texts[cxTLlNot.ItemIndex], 0),
-                                       StrToDateTime(cxTL.Items[X].Texts[cxTLdDem.ItemIndex]),
-                                       cxTL.Items[X].Texts[cxTLsMod.ItemIndex],
-                                       cxTL.Items[X].Texts[cxTLsSer.ItemIndex] );
-
-            gModelo := DMFD.FDQryGeral2['nfe_Modelo'];
-            gSerie  := DMFD.FDQryGeral2['nfe_Serie'];
-
-            //-------------------------------------------------------------------
-            // by Edson Lima ; 2016-2-26T1021
-            // Aqui está sendo bloqueada a emissão da nfce sem a senha
-            //-------------------------------------------------------------------
-
-            if (gModelo = 65) then
-             begin
-
-              // No caso de suporte deve entrar com a senha
-              FrGBNFe.pSuporteSenha();
-
-             end;
-
-            if ( (gModelo = 55) or  ((gModelo = 65) and (gSenhaBD <> '')) ) then
-             begin
-
-              if gModelo = 65 then
-               begin
-                ACBrNFe1.Configuracoes.Geral.ModeloDF := moNFCe;
-               end
-              else
-               begin
-                ACBrNFe1.Configuracoes.Geral.ModeloDF := moNFe;
-               end;
-
-              if ( gCpt = 1 ) then
-               pDefineRel()                                                     // Define o tipo de Relatório FortesReport
-              else
-               pDefineRelFR();                                                  // Define o tipo de Relatório FastReport
-
-              if (gModelo = 55) then
-               begin
-                _tipo_emissao := 'fsda';
-                _tpemissao := '5';
-               end
-              else if (gModelo = 65) then
-               begin
-                _tipo_emissao := 'OffL';
-                _tpemissao := '9';
-               end;
-
-               //*******************************************************************************
-               // by Edson ; 2013-03-04 ;08:41 ; Atribuição para consistir nnf na hora do update
-               gCdloja_Consiste := edt_CodEmp.Text;
-               gdEmi_Consiste   := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
-               gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
-               gNNF_Consiste    := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
-               gSerie_Consiste  := vartostr(DMFD.FDQryGeral2['nfe_serie']);
-               gChave_Consiste  := '';                                          // está sendo atribuida depois da sp_calcula_digito_chave
-               gModelo_Consiste := vartostr(DMFD.FDQryGeral2['nfe_modelo']);
-               gAnoMesGer       := Copy(gdEmi_Consiste, 7, 4) + Copy(gdEmi_Consiste, 4, 2);
-
-               gDataEmi := 0;
-
-               aux := VarToStr(DMFD.FDQryGeral2['nfe_chave_nfe']);
-
-               if (gModelo = 65) then
-
-                begin
-
-                 gTN                                   := '\NFCe\';
-
-                 if not (DMFD.FDQryGeral2['nfe_DatNFCe']   = null) then
-                  gDataEmi                             := (DMFD.FDQryGeral2['nfe_DatNFCe']);
-
-                end
-
-               else
-
-                begin
-
-                 gTN                                   := '\NFe\';
-
-                 if not (DMFD.FDQryGeral2['nfe_demi']   = null) then
-                  gDataEmi                             := (DMFD.FDQryGeral2['nfe_demi']);
-
-                end;
-
-               //---------------------------------------------------------------
-               // by Edson Lima - 2015-12-18T1559 ; verifica se a situação está null,
-               // se sim elimina qualquer xml do sistema, para evitar envio de xml
-               // depois de correção e exclusão---------------------------------
-
-               if ( aux <> '' ) then
-                if ( (trim(DMFD.FDQryGeral2['nfe_situacao']) =  null) and ( not (gDataEmi = null))   or
-                     (trim(DMFD.FDQryGeral2['nfe_situacao']) =  '')   and ( not (gDataEmi = null)) ) then
-                 pEliminaXml(aux, gTN);                                         // Elimina os xmls quando a situação for null
-
-               //---------------------------------------------------------------
-
-               //---------------------------------------------------------------
-               // by Edson ; 04/12/2012 ; 10:22 ; Testa se a NFe já foi enviada e
-               //                                 aguarda retorno da SEFAZ
-               //---------------------------------------------------------------
-               // 2016-1-20T1415 - Implementado para resolber mensagem de não
-               // envio para sefaz
-               //---------------------------------------------------------------
-               vCon := trim(gCamLog) + trim(Aux) + '-nfe.xml';
-               if ( (FileExists(vCon)) and ( DMFD.FDQryGeral2['nfe_situacao'] <>  null ) ) then
-
-                begin
-
-                 vMens := 'Verificando a existencia da NFe Nº' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) + ' na SEFAZ !';
-
-                 gSoUmaConsulta := True;                                        // Seta variável global para ler somente um registro
-                 gConsiste      := false;                                       // Depende da consistência
-                 BitBtn8Click(Sender);                                          // Força um click na consulta
-                 gSoUmaConsulta := False;                                       // Seta variável global para ler varios registros
-
-                 if gDeuErrConsiste then Exit;                                  // Aborta no caso de erro
-
-                 // Caso não exista na base sefaz permite excluir ; by Edson Lima ; 17-9-2012 ; 14:00
-                 if ( (ACBrNFe1.WebServices.Consulta.cStat > 0) and
-                      (vartostr(ACBrNFe1.WebServices.Consulta.cStat) <> '217') ) then
-
-                  begin
-
-                   MessageDlg('Esta nota: ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) + ' consta na base SEFAZ' + chr(13) + 'não pode ser gerada em contingência ' + AnsiUpperCase(_tipo_emissao) + '!', mtInformation,[mbOK],0);
-                   exit;
-
-                  end;
-
-                 vMens := '';
-
-                end;
-
-               //***************************************************************
-
-               if ((copy(vartostr(DMFD.FDQryGeral2['nfe_situacao']),1,4) = 'FSDA') or
-                   (copy(vartostr(DMFD.FDQryGeral2['nfe_situacao']),1,4) = 'OFFL')) then
-
-                begin
-
-                 MessageDlg('Esta nota: ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) + ' foi gerada em contingência, não será gerada novamente', mtInformation,[mbOK],0);
-
-                end
-
-               else
-
-                begin
-
-                 vAux         :=   DMFD.FDQryGeral2['nfe_nnf'];
-                 _nota        :=   DMFD.FDQryGeral2['nfe_nnf'];
-                 _demi        :=   DMFD.FDQryGeral2['nfe_demi'];
-
-                 gAbortar := False;
-                 geraenvianf(FrGBNFe);
-
-                 if gAbortar then exit;
-
-                 if gDeuErrConsiste then Exit;
-
-                 xAux := trim(gCamLog) + trim(gChave_Consiste) + '-nfe.xml';
-
-                 ACBrNFe1.NotasFiscais.Clear;
-                 ACBrNFe1.NotasFiscais.LoadFromFile(xAux);
-
-                 grava_xml_no_banco;
-
-                 fDelFileCnt(gCamXml + Copy(gdEmiConsiste, 7, 4) +
-                                       Copy(gdEmiConsiste, 4, 2) +
-                                       '\NFe\', gChave_Consiste + '-nfe.xml');  // Function que deleta o xml "Pedido da PQ"
-
-                end;
-
-             end
-
-            else
-
-             { Mostra mensagem de inconsistencia para tentativa de geração de
-               nfce (modelo 65) em contingência.                               }
-             begin
-              Application.Messagebox(PWideChar('O ENVIO DO MODELO NFCe EM CONTINGÊNCIA ESTÁ' + char(13) +
-                                               'INDISPONÍVEL, ENVIE A NOTA Nº ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) + ', NO MODO NORMAL!'), 'ENVIO DE NFCe - ATENÇÃO', mb_iconstop+mb_ok);
-             end;
-
-           end;
+          _tipo_emissao := 'OffL';
+          _tpemissao := '9';
 
          end;
 
-       except
+         //---------------------------------------------------------------------
+         // by Edson ; 2013-03-04 ;08:41 ; Atribuição para consistir nnf na hora do update
+         gCdloja_Consiste := edt_CodEmp.Text;
+         gdEmi_Consiste   := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
+         gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
+         gNNF_Consiste    := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
+         gSerie_Consiste  := vartostr(DMFD.FDQryGeral2['nfe_serie']);
+         gChave_Consiste  := '';                                                // está sendo atribuida depois da sp_calcula_digito_chave
+         gModelo_Consiste := vartostr(DMFD.FDQryGeral2['nfe_modelo']);
+         gAnoMesGer       := Copy(gdEmi_Consiste, 7, 4) + Copy(gdEmi_Consiste, 4, 2);
 
-        pGAV();
-        pAtuNFe;                                                                // Ler Arquivos txt e Atualiza
+         gDataEmi := 0;
+
+         aux := VarToStr(DMFD.FDQryGeral2['nfe_chave_nfe']);
+
+         if (gModelo = 65) then
+         begin
+
+          gTN        := '\NFCe\';
+
+          if not (DMFD.FDQryGeral2['nfe_DatNFCe']   = null) then
+           gDataEmi  := (DMFD.FDQryGeral2['nfe_DatNFCe']);
+
+         end
+         else
+         begin
+
+          gTN        := '\NFe\';
+
+          if not (DMFD.FDQryGeral2['nfe_demi']   = null) then
+           gDataEmi  := (DMFD.FDQryGeral2['nfe_demi']);
+
+         end;
+
+         //---------------------------------------------------------------------
+         // by Edson Lima - 2015-12-18T1559 ; verifica se a situação está null,
+         // se sim elimina qualquer xml do sistema, para evitar envio de xml
+         // depois de correção e exclusão---------------------------------------
+
+         if ( aux <> '' ) then
+          if ( (trim(DMFD.FDQryGeral2['nfe_situacao']) =  null) and ( not (gDataEmi = null))   or
+               (trim(DMFD.FDQryGeral2['nfe_situacao']) =  '')   and ( not (gDataEmi = null)) ) then
+           pEliminaXml(aux, gTN);                                               // Elimina os xmls quando a situação for null
+
+         //---------------------------------------------------------------------
+
+         //---------------------------------------------------------------------
+         // by Edson ; 04/12/2012 ; 10:22 ; Testa se a NFe já foi enviada e
+         //                                 aguarda retorno da SEFAZ
+         //---------------------------------------------------------------------
+         // 2016-1-20T1415 - Implementado para resolber mensagem de não
+         // envio para sefaz
+         //---------------------------------------------------------------------
+         vCon := trim(gCamLog) + trim(Aux) + '-nfe.xml';
+         if ( (FileExists(vCon)) and ( DMFD.FDQryGeral2['nfe_situacao'] <>  null ) ) then
+         begin
+
+          vMens := 'Verificando a existencia da NFe Nº' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) + ' na SEFAZ !';
+
+          gSoUmaConsulta := True;                                               // Seta variável global para ler somente um registro
+          gConsiste      := false;                                              // Depende da consistência
+          BitBtn8Click(Sender);                                                 // Força um click na consulta
+          gSoUmaConsulta := False;                                              // Seta variável global para ler varios registros
+
+          if gDeuErrConsiste then Exit;                                         // Aborta no caso de erro
+
+          // Caso não exista na base sefaz permite excluir ; by Edson Lima ; 17-9-2012 ; 14:00
+          if ( (ACBrNFe1.WebServices.Consulta.cStat > 0) and
+               (vartostr(ACBrNFe1.WebServices.Consulta.cStat) <> '217') ) then
+          begin
+
+           MessageDlg('Esta nota: ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) + ' consta na base SEFAZ' + chr(13) + 'não pode ser gerada em contingência ' + AnsiUpperCase(_tipo_emissao) + '!', mtInformation,[mbOK],0);
+           exit;
+
+          end;
+
+          vMens := '';
+
+         end;
+
+         //---------------------------------------------------------------------
+
+         if ((copy(vartostr(DMFD.FDQryGeral2['nfe_situacao']),1,4) = 'FSDA') or
+             (copy(vartostr(DMFD.FDQryGeral2['nfe_situacao']),1,4) = 'OFFL')) then
+         begin
+
+          MessageDlg('Esta nota: ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) + ' foi gerada em contingência, não será gerada novamente', mtInformation,[mbOK],0);
+
+         end
+         else
+         begin
+
+          vAux         :=   DMFD.FDQryGeral2['nfe_nnf'];
+          _nota        :=   DMFD.FDQryGeral2['nfe_nnf'];
+          _demi        :=   DMFD.FDQryGeral2['nfe_demi'];
+
+          gAbortar := False;
+          geraenvianf(FrGBNFe);
+
+          if gAbortar then exit;
+
+          if gDeuErrConsiste then Exit;
+
+          xAux := trim(gCamLog) + trim(gChave_Consiste) + '-nfe.xml';
+
+          ACBrNFe1.NotasFiscais.Clear;
+          ACBrNFe1.NotasFiscais.LoadFromFile(xAux);
+
+          grava_xml_no_banco;
+
+          fDelFileCnt(gCamXml + Copy(gdEmiConsiste, 7, 4) +
+                                Copy(gdEmiConsiste, 4, 2) +
+                                '\NFe\', gChave_Consiste + '-nfe.xml');         // Function que deleta o xml "Pedido da PQ"
+
+         end;
+
+        end
+        else
+        { Mostra mensagem de inconsistencia para tentativa de geração de
+          nfce (modelo 65) em contingência.                               }
+        begin
+
+         Application.Messagebox(PWideChar('O ENVIO DO MODELO NFCe EM CONTINGÊNCIA ESTÁ' + char(13) +
+                                          'INDISPONÍVEL, ENVIE A NOTA Nº ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) + ', NO MODO NORMAL!'), 'ENVIO DE NFCe - ATENÇÃO', mb_iconstop+mb_ok);
+
+        end;
 
        end;
 
       end;
 
-     pAtuNFe;                                                                   // Procedure de atualização
+     except
 
-     exit;
+      pGAV();
+      pAtuNFe;                                                                  // Ler Arquivos txt e Atualiza
+
+     end;
+
     end;
+
+    pAtuNFe;                                                                    // Procedure de atualização
+    exit;
+
+   end;
 
    //---------------------------------------------------------------------------
    // by Edson Lima ; 2017-8-17T1128
@@ -8412,307 +9106,323 @@ begin
     if MessageDlg(vDmsg, mtConfirmation, [mbYes, mbNo], 0) = mrNo then exit;
 
     for X := 0 to cxTL.Count -1 do                                              // Percorre a treelist
+    begin
 
+     if ( cxTL.Items[X].Texts[cxTLbSel.ItemIndex] = 'True' ) then               // Verifica se o item está selecionado
      begin
 
-      if ( cxTL.Items[X].Texts[cxTLbSel.ItemIndex] = 'True' ) then              // Verifica se o item está selecionado
+      // Filtra a nfe selecionada com select
+      pSelNfe( DMFD.FDQryGeral2, StrToIntDef(FrGBNFe.edt_CodEmp.Text, 0),
+                                 StrToIntDef(cxTL.Items[X].Texts[cxTLlNot.ItemIndex], 0),
+                                 StrToDateTime(cxTL.Items[X].Texts[cxTLdDem.ItemIndex]),
+                                 cxTL.Items[X].Texts[cxTLsMod.ItemIndex],
+                                 cxTL.Items[X].Texts[cxTLsSer.ItemIndex] );
 
+      if ( gCpt = 1 ) then
+       pDefineRel()                                                             // Define o tipo de Relatório FortesReport
+      else
+       pDefineRelFR();                                                          // Define o tipo de Relatório FastReport
+
+      //------------------------------------------------------------------------
+      // by Edson ; 2013-03-04 ;08:41 ; Atribuição para consistir nnf
+      // na hora do update
+      //------------------------------------------------------------------------
+      gCdloja_Consiste := edt_CodEmp.Text;
+      gdEmi_Consiste   := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
+      gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
+      gNNF_Consiste    := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
+      gSerie_Consiste  := vartostr(DMFD.FDQryGeral2['nfe_serie']);
+      gSerie           := StrToIntDef(gSerie_Consiste, 0);
+      gModelo          := DMFD.FDQryGeral2['nfe_modelo'];
+      gChave_Consiste  := '';                                                   // está sendo atribuida depois da sp_calcula_digito_chave
+      gModelo_Consiste := vartostr(DMFD.FDQryGeral2['nfe_modelo']);
+      gAnoMesGer       := Copy(gdEmi_Consiste, 7, 4) + Copy(gdEmi_Consiste, 4, 2);
+
+      gDataEmi := 0;
+      aux := VarToStr(DMFD.FDQryGeral2['nfe_chave_nfe']);
+
+      if (gModelo = 65) then
+      begin
+
+       ACBrNFe1.Configuracoes.Geral.ModeloDF := moNFCe;
+       gTN                                   := '\NFCe\';
+       if not (DMFD.FDQryGeral2['nfe_DatNFCe']   = null) then
+       gDataEmi                             := (DMFD.FDQryGeral2['nfe_DatNFCe']);
+
+      end
+      else
+      begin
+
+       ACBrNFe1.Configuracoes.Geral.ModeloDF := moNFe;
+       gTN                                   := '\NFe\';
+       if not (DMFD.FDQryGeral2['nfe_demi']      = null) then
+        gDataEmi                             := (DMFD.FDQryGeral2['nfe_demi']);
+
+      end;
+
+      //------------------------------------------------------------------------
+      // by Edson Lima - 2015-12-18T1559 ; verifica se a situação está null,
+      // se sim elimina qualquer xml do sistema, para evitar envio de xml
+      // depois de correção e exclusão
+      //------------------------------------------------------------------------
+
+      if ((copy(vartostr(DMFD.FDQryGeral2['nfe_situacao']),1,4) = 'FSDA') or
+          (copy(vartostr(DMFD.FDQryGeral2['nfe_situacao']),1,4) = 'OFFL')) then
+      begin
+
+       MessageDlg('Esta nota: ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) +
+                  ' foi gerada em contingência, não será gerada novamente',
+                  mtInformation,[mbOK],0);
+
+      end
+      else
+      begin
+
+       vAux         := DMFD.FDQryGeral2['nfe_nnf'];
+       _nota        := DMFD.FDQryGeral2['nfe_nnf'];
+       _demi        := DMFD.FDQryGeral2['nfe_demi'];
+
+       //-----------------------------------------------------------------------
+       // Gera e eFnvia a NF pra SEFAZ
+
+       gAbortar := False;
+       geraenvianf(FrGBNFe);
+
+       if gAbortar then exit;
+
+       //-----------------------------------------------------------------------
+
+       // Quando um simp for obrigatório e tiver vindo vazio
+       if ( gSimpObg ) then
        begin
 
-        // Filtra a nfe selecionada com select
-        pSelNfe( DMFD.FDQryGeral2, StrToIntDef(FrGBNFe.edt_CodEmp.Text, 0),
-                                   StrToIntDef(cxTL.Items[X].Texts[cxTLlNot.ItemIndex], 0),
-                                   StrToDateTime(cxTL.Items[X].Texts[cxTLdDem.ItemIndex]),
-                                   cxTL.Items[X].Texts[cxTLsMod.ItemIndex],
-                                   cxTL.Items[X].Texts[cxTLsSer.ItemIndex] );
-
-        if ( gCpt = 1 ) then
-         pDefineRel()                                                           // Define o tipo de Relatório FortesReport
-        else
-         pDefineRelFR();                                                        // Define o tipo de Relatório FastReport
-
-        //----------------------------------------------------------------------
-        // by Edson ; 2013-03-04 ;08:41 ; Atribuição para consistir nnf
-        // na hora do update
-        //----------------------------------------------------------------------
-        gCdloja_Consiste := edt_CodEmp.Text;
-        gdEmi_Consiste   := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
-        gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
-        gNNF_Consiste    := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
-        gSerie_Consiste  := vartostr(DMFD.FDQryGeral2['nfe_serie']);
-        gSerie           := StrToIntDef(gSerie_Consiste, 0);
-        gModelo          := DMFD.FDQryGeral2['nfe_modelo'];
-        gChave_Consiste  := '';                                                 // está sendo atribuida depois da sp_calcula_digito_chave
-        gModelo_Consiste := vartostr(DMFD.FDQryGeral2['nfe_modelo']);
-        gAnoMesGer       := Copy(gdEmi_Consiste, 7, 4) + Copy(gdEmi_Consiste, 4, 2);
-
-        gDataEmi := 0;
-        aux := VarToStr(DMFD.FDQryGeral2['nfe_chave_nfe']);
-
-        if (gModelo = 65) then
-         begin
-          ACBrNFe1.Configuracoes.Geral.ModeloDF := moNFCe;
-          gTN                                   := '\NFCe\';
-          if not (DMFD.FDQryGeral2['nfe_DatNFCe']   = null) then
-           gDataEmi                             := (DMFD.FDQryGeral2['nfe_DatNFCe']);
-         end
-        else
-         begin
-          ACBrNFe1.Configuracoes.Geral.ModeloDF := moNFe;
-          gTN                                   := '\NFe\';
-          if not (DMFD.FDQryGeral2['nfe_demi']      = null) then
-           gDataEmi                             := (DMFD.FDQryGeral2['nfe_demi']);
-         end;
-
-        //----------------------------------------------------------------------
-        // by Edson Lima - 2015-12-18T1559 ; verifica se a situação está null,
-        // se sim elimina qualquer xml do sistema, para evitar envio de xml
-        // depois de correção e exclusão
-        //----------------------------------------------------------------------
-
-        if ((copy(vartostr(DMFD.FDQryGeral2['nfe_situacao']),1,4) = 'FSDA') or
-            (copy(vartostr(DMFD.FDQryGeral2['nfe_situacao']),1,4) = 'OFFL')) then
-         begin
-
-          MessageDlg('Esta nota: ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) +
-                     ' foi gerada em contingência, não será gerada novamente',
-                     mtInformation,[mbOK],0);
-
-         end
-        else
-         begin
-
-          vAux         := DMFD.FDQryGeral2['nfe_nnf'];
-          _nota        := DMFD.FDQryGeral2['nfe_nnf'];
-          _demi        := DMFD.FDQryGeral2['nfe_demi'];
-
-          //----------------------------
-          // Gera e eFnvia a NF pra SEFAZ
-
-          gAbortar := False;
-          geraenvianf(FrGBNFe);
-
-          if gAbortar then exit;
-
-          //----------------------------
-
-          // Quando um simp for obrigatório e tiver vindo vazio
-          if ( gSimpObg ) then
-           begin
-
-            gSimpObg := false;
-
-            Application.Messagebox(PWideChar('SIMP obrigatório e vazio da nota: [' + gNNF_Consiste + ' ]'), 'Atenção!',MB_ICONINFORMATION+mb_ok);
-
-            exit;
-
-           end;
-
-          if gGeraXml then
-           Application.Messagebox(PWideChar('Pronto, já foi gerado o xml da nota: [' + gNNF_Consiste + ' ]'), 'Gerar XML:',MB_ICONINFORMATION+mb_ok)
-          else
-           begin
-            // by Edson Lima ; 2013/03/11 ; 06:57 ; com essa nova abordágem, é
-            // possível a continuação após uma rejeição e verificado seu codigo
-            // de retorno ;
-
-             if gSincrona_Assincrona then
-              begin
-
-               if (vartostr(ACBrNFe1.WebServices.Consulta.cStat) <> '100') and
-                  (vartostr(ACBrNFe1.WebServices.Consulta.cStat) <> '150') then exit;
-
-              end
-             else
-              begin
-
-               if (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].cStat) <> '100') and
-                  (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].cStat) <> '150') then exit;
-
-              end;
-
-            if gDeuErrConsiste then Exit;
-
-            if gSincrona_Assincrona then
-             begin
-
-              xAux := vartostr(ACBrNFe1.WebServices.Consulta.NFeChave);
-
-             end
-            else
-             begin
-
-              xAux := vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].chDFe);
-
-             end;
-
-            if xAux <> '' then
-             begin
-
-              xAux := trim(gCamLog) + trim(xAux) + '-nfe.xml';
-              ACBrNFe1.NotasFiscais.Clear;
-              ACBrNFe1.NotasFiscais.LoadFromFile(xAux);
-
-              grava_xml_no_banco;
-
-              //---------------------enviar email
-              if gSincrona_Assincrona then
-               begin
-
-                xAux := vartostr(ACBrNFe1.WebServices.Consulta.NFeChave);
-
-               end
-              else
-               begin
-
-                xAux := vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].chDFe);
-
-               end;
-
-              //pega os dados do destinatario
-              DMFD.FDQuery2.Close;
-              DMFD.FDQuery2.SQL.Clear;
-              DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                                         ' );
-              DMFD.FDQuery2.SQL.Add( 'Select                                                     ' );
-              DMFD.FDQuery2.SQL.Add( 't1.*                                                       ' );
-              DMFD.FDQuery2.SQL.Add( 'from destinatario t1                                       ' );
-              DMFD.FDQuery2.SQL.Add( 'inner join nfe t2 on t2.codigo_destinatario = t1.codigo    ' );
-              DMFD.FDQuery2.SQL.Add( 'where t2.codigo_loja = :parm1                              ' );
-              DMFD.FDQuery2.SQL.Add( 'and t2.chave_nfe = :parm2                                  ' );
-              DMFD.FDQuery2.SQL.Add( 'and t2.situacao <> :parm3                                  ' );
-              DMFD.FDQuery2.SQL.Add( 'and t2.situacao <> :parm4                                  ' );
-              DMFD.FDQuery2.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
-              DMFD.FDQuery2.Params[1].AsString  := (xAux);
-              DMFD.FDQuery2.Params[2].AsString  := '101';
-              DMFD.FDQuery2.Params[3].AsString  := '151';
-              DMFD.FDQuery2.Open;
-              if DMFD.FDQuery2.IsEmpty then
-               begin
-                exit;
-               end;
-
-              para := vartostr(DMFD.FDQuery2['email']);
-
-              if ( (trim(para) = '') or (FrPar.CheckBox10.Checked) ) then
-
-               begin
-
-                repeat
-
-                 begin
-
-                  if not InputQuery(vartostr(DMFD.FDQuery2['razao_social']), 'Email de destino:', Para) then
-                   begin
-                    pAtuNFe;                                                    // Procedure de atualização
-                    exit;
-                   end;
-
-                  para := LowerCase(para);
-
-                  if ( not fValidaEmail(para, 'N') ) then
-                   Application.Messagebox('Campo de email do destinatário inválido! ','Atenção!',mb_iconstop+mb_ok);
-
-                 end;
-
-                until ( fValidaEmail(para, 'N') );
-
-               end;
-
-              if (trim(para) <> '') then
-               begin
-
-                pAux := trim(gCamPdf) + trim(xAux) + '-nfe.pdf';
-
-                xAux := trim(gCamLog) + trim(xAux) + '-nfe.xml';
-
-                ACBrNFe1.NotasFiscais.Clear;
-                ACBrNFe1.NotasFiscais.LoadFromFile(xAux);
-
-                CC:=TstringList.Create;
-
-                //--------------------------------------------------------------
-                //-- Implementa o email da transp.- by Edson Lima 16-3-2021   --
-                //--------------------------------------------------------------
-
-                if not ( Trim(geMailTransp) = '' ) then
-                 FrPar.edtEnvCC.Text := FrPar.edtEnvCC.Text + ', ' + geMailTransp;
-
-                //--------------------------------------------------------------
-
-                if ( trim(FrPar.edtEnvCC.Text) <> '' ) then
-                 for I := 1 to (Length(FrPar.edtEnvCC.Text)+1) do
-                  begin
-                   if (FrPar.edtEnvCC.Text[I] = ',') or (FrPar.edtEnvCC.Text[I] = ';') or (I = Length(FrPar.edtEnvCC.Text)+1)then
-                    begin
-                     CC.Add(trim(vI));                                          //especifique um email válido
-                     vI := '';
-                    end
-                   else
-                    vI := (vI + FrPar.edtEnvCC.Text[I]);
-                  end;
-
-                vI := '';                                                       // Limpa variável
-                vC := 0;                                                        // zera contador
-
-                for I := 1 to (Length(Para)+1) do
-                 begin
-                  if (Para[I] = ',') or (Para[I] = ';') or (I = Length(Para)+1)then
-                   begin
-                    if vC > 0 then
-                     CC.Add(trim(vI))                                           // Especifique um email válido
-                    else
-                     vP := trim(vI);                                            // Atribui apenas o primeiro email
-
-                    vI := '';
-                    inc(vC);                                                    // Incrementa 1
-                   end
-                  else
-                   vI := (vI + Para[I]);
-                 end;
-
-                Para := vP;
-
-                if not FileExists(pAux) then
-                 ACBrNFe1.NotasFiscais.ImprimirPDF;
-
-                try
-                 try
-
-                  ACBrNFe1.NotasFiscais.Items[0].EnviarEmail(Para
-                                        , FrPar.edtEmailAssunto.Text + ' - Nº ' + VarToStr(DMFD.FDQryGeral2['nfe_nnf'])
-                                        , FrPar.mmEmailMsg.Lines
-                                        , True                                  //Enviar PDF junto
-                                        , CC                                    //com copia
-                                        , nil
-                                         );
-
-                  //Application.MessageBox(PWideChar('Email enviado com sucesso!'), 'Atenção', MB_ICONINFORMATION );
-
-                 except on e:exception do
-
-                  Application.Messagebox( pWideChar( 'Inconsistência no envio do email!' + chr(13) +
-                                         e.Message ), 'Atenção!', MB_ICONERROR+mb_ok);
-
-                 end;
-                finally
-
-                 CC.Free;
-
-                end;
-
-               end;
-
-              //---------------------final - enviar email
-
-             end;
-
-           end;
-
-         end;
+        gSimpObg := false;
+        Application.Messagebox(PWideChar('SIMP obrigatório e vazio da nota: [' + gNNF_Consiste + ' ]'), 'Atenção!',MB_ICONINFORMATION+mb_ok);
+        exit;
 
        end;
 
+       if gGeraXml then
+        Application.Messagebox(PWideChar('Pronto, já foi gerado o xml da nota: [' + gNNF_Consiste + ' ]'), 'Gerar XML:',MB_ICONINFORMATION+mb_ok)
+       else
+       begin
+
+        // by Edson Lima ; 2013/03/11 ; 06:57 ; com essa nova abordágem, é
+        // possível a continuação após uma rejeição e verificado seu codigo
+        // de retorno ;
+
+        if gSincrona_Assincrona then
+        begin
+
+         if (vartostr(ACBrNFe1.WebServices.Consulta.cStat) <> '100') and
+            (vartostr(ACBrNFe1.WebServices.Consulta.cStat) <> '150') then exit;
+
+        end
+        else
+        begin
+
+         if (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].cStat) <> '100') and
+            (vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].cStat) <> '150') then exit;
+
+        end;
+
+        if gDeuErrConsiste then Exit;
+
+        if gSincrona_Assincrona then
+        begin
+
+         xAux := vartostr(ACBrNFe1.WebServices.Consulta.NFeChave);
+
+        end
+        else
+        begin
+
+         xAux := vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].chDFe);
+
+        end;
+
+        if xAux <> '' then
+        begin
+
+         xAux := trim(gCamLog) + trim(xAux) + '-nfe.xml';
+         ACBrNFe1.NotasFiscais.Clear;
+         ACBrNFe1.NotasFiscais.LoadFromFile(xAux);
+
+         grava_xml_no_banco;
+
+         //---------------------enviar email
+         if gSincrona_Assincrona then
+         begin
+
+          xAux := vartostr(ACBrNFe1.WebServices.Consulta.NFeChave);
+
+         end
+         else
+         begin
+
+          xAux := vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].chDFe);
+
+         end;
+
+         //pega os dados do destinatario
+         DMFD.FDQuery2.Close;
+         DMFD.FDQuery2.SQL.Clear;
+         DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                                         ' );
+         DMFD.FDQuery2.SQL.Add( 'Select                                                     ' );
+         DMFD.FDQuery2.SQL.Add( 't1.*                                                       ' );
+         DMFD.FDQuery2.SQL.Add( 'from destinatario t1                                       ' );
+         DMFD.FDQuery2.SQL.Add( 'inner join nfe t2 on t2.codigo_destinatario = t1.codigo    ' );
+         DMFD.FDQuery2.SQL.Add( 'where t2.codigo_loja = :parm1                              ' );
+         DMFD.FDQuery2.SQL.Add( 'and t2.chave_nfe = :parm2                                  ' );
+         DMFD.FDQuery2.SQL.Add( 'and t2.situacao <> :parm3                                  ' );
+         DMFD.FDQuery2.SQL.Add( 'and t2.situacao <> :parm4                                  ' );
+         DMFD.FDQuery2.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
+         DMFD.FDQuery2.Params[1].AsString  := (xAux);
+         DMFD.FDQuery2.Params[2].AsString  := '101';
+         DMFD.FDQuery2.Params[3].AsString  := '151';
+         DMFD.FDQuery2.Open;
+
+         if DMFD.FDQuery2.IsEmpty then
+         begin
+          exit;
+         end;
+
+         para := vartostr(DMFD.FDQuery2['email']);
+
+         if ( (trim(para) = '') or (FrPar.CheckBox10.Checked) ) then
+         begin
+
+          repeat
+           begin
+
+            if not InputQuery(vartostr(DMFD.FDQuery2['razao_social']), 'Email de destino:', Para) then
+            begin
+
+             pAtuNFe;                                                           // Procedure de atualização
+             exit;
+
+            end;
+
+            para := LowerCase(para);
+
+            if ( not fValidaEmail(para, 'N') ) then
+             Application.Messagebox('Campo de email do destinatário inválido! ','Atenção!',mb_iconstop+mb_ok);
+
+           end;
+
+          until ( fValidaEmail(para, 'N') );
+
+         end;
+
+         if (trim(para) <> '') then
+         begin
+
+          pAux := trim(gCamPdf) + trim(xAux) + '-nfe.pdf';
+
+          xAux := trim(gCamLog) + trim(xAux) + '-nfe.xml';
+
+          ACBrNFe1.NotasFiscais.Clear;
+          ACBrNFe1.NotasFiscais.LoadFromFile(xAux);
+
+          CC:=TstringList.Create;
+
+          //--------------------------------------------------------------
+          //-- Implementa o email da transp.- by Edson Lima 16-3-2021   --
+          //--------------------------------------------------------------
+
+          if not ( Trim(geMailTransp) = '' ) then
+           FrPar.edtEnvCC.Text := FrPar.edtEnvCC.Text + ', ' + geMailTransp;
+
+          //--------------------------------------------------------------
+
+          if ( trim(FrPar.edtEnvCC.Text) <> '' ) then
+          begin
+
+           for I := 1 to (Length(FrPar.edtEnvCC.Text)+1) do
+           begin
+
+            if (FrPar.edtEnvCC.Text[I] = ',') or (FrPar.edtEnvCC.Text[I] = ';') or (I = Length(FrPar.edtEnvCC.Text)+1)then
+            begin
+
+              CC.Add(trim(vI));                                                 //especifique um email válido
+              vI := '';
+
+            end
+            else
+             vI := (vI + FrPar.edtEnvCC.Text[I]);
+
+           end;
+
+          end;
+
+          vI := '';                                                             // Limpa variável
+          vC := 0;                                                              // zera contador
+
+          for I := 1 to (Length(Para)+1) do
+          begin
+
+           if (Para[I] = ',') or (Para[I] = ';') or (I = Length(Para)+1)then
+           begin
+
+            if vC > 0 then
+             CC.Add(trim(vI))                                                   // Especifique um email válido
+            else
+             vP := trim(vI);                                                    // Atribui apenas o primeiro email
+
+            vI := '';
+            inc(vC);                                                            // Incrementa 1
+
+           end
+           else
+            vI := (vI + Para[I]);
+
+          end;
+
+          Para := vP;
+
+          if not FileExists(pAux) then
+           ACBrNFe1.NotasFiscais.ImprimirPDF;
+
+          try
+
+           try
+
+            ACBrNFe1.NotasFiscais.Items[0].EnviarEmail(Para
+                                  , FrPar.edtEmailAssunto.Text + ' - Nº ' + VarToStr(DMFD.FDQryGeral2['nfe_nnf'])
+                                  , FrPar.mmEmailMsg.Lines
+                                  , True                                  //Enviar PDF junto
+                                  , CC                                    //com copia
+                                  , nil
+                                   );
+
+            //Application.MessageBox(PWideChar('Email enviado com sucesso!'), 'Atenção', MB_ICONINFORMATION );
+
+           except on e:exception do
+
+            Application.Messagebox( pWideChar( 'Inconsistência no envio do email!' + chr(13) +
+                                  e.Message ), 'Atenção!', MB_ICONERROR+mb_ok);
+
+           end;
+
+          finally
+
+           CC.Free;
+
+          end;
+
+         end;
+
+         //---------------------final - enviar email
+
+        end;
+
+       end;
+
+      end;
+
      end;
+
+    end;
 
     pAtuNFe;                                                                    // Procedure de atualização
 
@@ -8725,17 +9435,17 @@ begin
 
   end;
 
- //-----------------------------------------------------------------------------
- // by Edson Lima ; 2017-8-17T1128
- // EM CONTINGÊNCIA
- //-----------------------------------------------------------------------------
+  //----------------------------------------------------------------------------
+  // by Edson Lima ; 2017-8-17T1128
+  // EM CONTINGÊNCIA
+  //----------------------------------------------------------------------------
 
- 1: MenuItem2Click(Sender);                                                     // EM CONTINGÊNCIA
+  1: MenuItem2Click(Sender);                                                    // EM CONTINGÊNCIA
 
  end;
 
  // By Edson Lima - 1-2-2012 - Ler Arquivos txt e Atualiza
- pAtuNFe;                          // Procedure de atualização
+ pAtuNFe;                                                                       // Procedure de atualização
 
 end;
 
@@ -8754,428 +9464,430 @@ begin
  if not fTemSel( cxTL, cxTLbSel ) then exit;                                    // Loop na TL, verifica se existe seleção
 
  for X := 0 to cxTL.Count -1 do                                                 // Loop na TL, Percorre a treelist
+ begin
+
+  if not gConsiste then
   begin
 
-   if not gConsiste then
-    begin
-
-     if ( (gCdloja_Consiste  = FrGBNFe.edt_CodEmp.Text) and
-          (gNNF_Consiste     = cxTL.Items[X].Texts[cxTLlNot.ItemIndex])   and
-          (gdEmiConsiste     = cxTL.Items[X].Texts[cxTLdDem.ItemIndex])   and
-          (IntToStr(gModelo) = cxTL.Items[X].Texts[cxTLsMod.ItemIndex])   and
-          (IntToStr(gSerie)  = cxTL.Items[X].Texts[cxTLsSer.ItemIndex]) ) then
-
-      gConsiste := True;
-
-    end;
-
-   if ( (cxTL.Items[X].Texts[cxTLbSel.ItemIndex] = 'True') and
-        (gConsiste) ) then                                                      // Verifica se o item está selecionado
-    begin
-
-     pSelNfe( DMFD.FDQryGeral2,
-              StrToIntDef(FrGBNFe.edt_CodEmp.Text, 0),
-              StrToIntDef(cxTL.Items[X].Texts[cxTLlNot.ItemIndex], 0),
-              StrToDateTime(cxTL.Items[X].Texts[cxTLdDem.ItemIndex]),
-              cxTL.Items[X].Texts[cxTLsMod.ItemIndex],
-              cxTL.Items[X].Texts[cxTLsSer.ItemIndex] );
-
-     // by Edson Lima ; 2017-1-5T1027 ; Atribui as vars globais
-     gModelo := DMFD.FDQryGeral2['nfe_Modelo'];
-     gSerie  := DMFD.FDQryGeral2['nfe_Serie'];
-
-     fMudaVersao( FrPar.cbb2.ItemIndex, gModelo );                              // Mudança de versão
-
-     // by Edson Lima ; 2017-1-5T1032 ; Define o tipo de relatório
-     if ( gCpt = 1 ) then
-      pDefineRel()                                                              // FortesReport
-     else
-      pDefineRelFR();                                                           // FastReport
-
-     // by Edson Lima ; 2017-1-5T1027 ; Atribui as vars globais de consistência
-     gCdloja_Consiste := edt_CodEmp.Text;
-     gdEmi_Consiste   := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
-     gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
-     gDataEmi         := DMFD.FDQryGeral2['nfe_demi'];
-     gNNF_Consiste    := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
-     gSerie_Consiste  := vartostr(DMFD.FDQryGeral2['nfe_serie']);
-     gModelo_Consiste := vartostr(DMFD.FDQryGeral2['nfe_modelo']);
-     gAnoMesGer       := Copy(gdEmi_Consiste, 7, 4) + Copy(gdEmi_Consiste, 4, 2);
-
-     // by Edson Lima ; 2017-1-5T1027 ; Atribuição de dados nas vars do ERP
-     gCd_Emp := StrToIntDef(edt_CodEmp.Text, 0);
-
-     if not ( DMFD.FDQryGeral2['nfe_CodPed'] = null ) then
-      begin
-
-       iCodPed := DMFD.FDQryGeral2['nfe_CodPed'];
-       gCodPed := DMFD.FDQryGeral2['nfe_CodPed'];
-
-      end
-     else
-      begin
-
-       iCodPed := 0;
-       gCodPed := 0;
-
-      end;
-
-     // Verifica o tipo da consulta, seta dados conforme o tipo de consulta
-     Case RadioGroup1.ItemIndex of
-
-      0  :                                                                      // Consulta de notas pendentes
-
-       begin
-
-        gChave_Consiste   := '';
-        _tpemissao        := '1';                                               // Tipo de envio normal para geração da chave
-        vAux              := '';
-
-       end;
-
-      1  :                                                                      // Consulta de notas em contingência
-
-       begin
-
-        gChave_Consiste   := '';
-        vAux              := '';
-
-        if ( gModelo = 55 ) then
-         _tpemissao        := '5'                                               // Tipo de envio em contingência fsda para geração da chave nfe
-        else
-         _tpemissao        := '9';                                              // Tipo de envio em contingência offline para geração da chave nfce
-
-        end;
-
-      2  :                                                                      // Consulta de notas transmitidas
-
-       begin
-
-        gChave_Consiste   := DMFD.FDQryGeral2['nfe_chave_nfe'];
-        vAux              := DMFD.FDQryGeral2['nfe_chave_nfe'];
-        gChvNFe           := vAux;
-
-       end;
-
-     end; // Fim do case
-
-     // by Edson Lima ; 2017-1-5T1027 ; Calcula a chave e o digito verificador
-     if ( vAux = '' ) then
-      begin
-
-       Aux :=
-       edt_CodEmp.Text + ',' + '''' +
-       VarToStr(DMFD.FDQryGeral2['nfe_nnf']) + '''' + ',' + '''' + _tpemissao + '''' + ',' + '''';
-       Aux := Aux + FormatDateTime('dd/mm/yyyy', VarToDateTime(DMFD.FDQryGeral2['nfe_demi'])) + '''' + ',' + '''';
-       Aux := Aux + IntToStr(gModelo) + '''' + ',' + '''';
-       Aux := Aux + VarToStr(DMFD.FDQryGeral2['nfe_Serie']) + '''' + ',' + '''';
-       Aux := Aux + IntToStr(gCodPed) + '''';
-
-       DMFD.FDQuery1.Close;
-       DMFD.FDQuery1.SQL.Clear;
-       DMFD.FDQuery1.SQL.Add( 'exec sp_calcula_digito_chave ' + Aux );
-       DMFD.FDQuery1.open;
-
-       if not DMFD.FDQuery1.IsEmpty then
-        begin
-
-         if ( Length(VarToStr(DMFD.FDQuery1['chave'])) = 44 ) then
-          begin
-
-           vAux              := vartostr(DMFD.FDQuery1['chave']);
-           gChave_Consiste   := DMFD.FDQuery1['chave'];
-
-          end
-         else
-          begin
-
-           Application.Messagebox( PWideChar( 'Retorno: ' +
-                                   VarToStr(DMFD.FDQuery1['chave'])),
-                                   PWideChar( 'Calcula digito da chave' ),
-                                   mb_iconstop+mb_ok );
-           exit;
-
-          end;
-
-        end
-       else Exit;
-
-      end;
-
-     if (StrToIntDef(DMFD.FDQryGeral2['nfe_modelo'], 0) = 65) then
-      gTN              := '\NFCe\'                                              // Global utilizado para setar o nome da pasta
-     else
-      gTN              := '\NFe\';
-
-     Copia_Xml_PathLog(vAux, gTN);                                              // Copia o arquivo xml pra pasta Log
-
-     // Se a data inicial for maior que a data de emissão, atribui a data de emissão na data inicial
-     if (cxdtp1.Date > DMFD.FDQryGeral2['nfe_demi']) then
-      cxdtp1.Date := DMFD.FDQryGeral2['nfe_demi'];
-
-     ACBrNFe1.WebServices.Consulta.NFeChave := vAux;
-
-     if ACBrNFe1.WebServices.Consulta.Executar then
-      begin
-
-       if gModelo = 55 then
-         ACBrNFe1.DistribuicaoDFe(ACBrNFe1.WebServices.Consulta.cUF,
-                                  Copy(vAux, 7, 14), '0', '0', vAux );
-
-       xRet := ACBrNFe1.WebServices.Consulta.RetWS;
-       xRet := xRet + ACBrNFe1.WebServices.Consulta.Protocolo;
-       xRet := xRet + ACBrNFe1.WebServices.Consulta.protNFe.nProt;
-
-       memoLog.Clear;
-       MemoResp.Lines.Text   := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetWS);
-       MemoLog.Lines.Add(vDescr);
-       MemoLog.Lines.Add('');
-       MemoLog.Lines.Add('Status');
-       MemoLog.Lines.Add('Tipo de Ambiente:'     + TpAmbToStr(ACBrNFe1.WebServices.Consulta.TpAmb));
-       MemoLog.Lines.Add('Versão do Aplicativo: '+ ACBrNFe1.WebServices.Consulta.verAplic);
-       MemoLog.Lines.Add('Código do Status: '    + IntToStr(ACBrNFe1.WebServices.Consulta.cStat));
-       MemoLog.Lines.Add('Código da UF: '        + IntToStr(ACBrNFe1.WebServices.Consulta.cUF));
-       MemoLog.Lines.Add('Descrição: '           + ACBrNFe1.WebServices.Consulta.xMotivo);
-       MemoLog.Lines.Add('Mensagem: '            + ACBrNFe1.WebServices.Consulta.Msg);
-       MemoLog.Lines.Add('Data do recebimento: ' + vartostr(ACBrNFe1.WebServices.Consulta.DhRecbto));
-       MemoLog.Lines.Add('Protocolo: '           + ACBrNFe1.WebServices.Consulta.Protocolo);
-       MemoLog.Lines.Add('Nome do DFe: '         + ACBrNFe1.WebServices.DistribuicaoDFe.NomeArq);
-
-       memoRespWS.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetornoWS);
-       LoadXML(MemoResp, WBResposta);
-
-      end;
-
-     // Caminho do xml na pasta log
-     vAux := trim(gCamLog) + trim(vAux) + '-nfe.xml';
-
-     // Verifica o xml, se o xml estiver sem defeito, consulta grava o xml no bd
-     if not ( FileExists(vAux) ) then
-      begin
-
-       Application.Messagebox( PWideChar( 'Não foi encontrado o arquivo xml da nota: ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) ),
-                               PWideChar( 'Consulta Nota' ),
-                               MB_ICONINFORMATION + mb_ok );
-
-      end
-     else
-      begin
-
-       // Inicia a consulta
-       ACBrNFe1.NotasFiscais.Clear;
-       ACBrNFe1.NotasFiscais.LoadFromFile(vAux);
-
-       try
-
-        ACBrNFe1.Consultar;
-
-        // Consulta efetuada sem inconsistência
-        if gModelo = 65 then
-         begin
-          vDescr := 'NFC-e:';
-          Application.Messagebox(PWideChar(
-           'DADOS DA NFC-e : ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) + char(13) +
-           'Status=' + vartostr(ACBrNFe1.WebServices.Consulta.cStat)  + '-' + vartostr(ACBrNFe1.WebServices.Consulta.xMotivo) + char(13) +
-           'Protocolo=' + ACBrNFe1.WebServices.Consulta.Protocolo + char(13) +
-           'Data do recebimento=' + vartostr(ACBrNFe1.WebServices.Consulta.DhRecbto) + char(13)), PWideChar(vDescr), MB_ICONINFORMATION+mb_ok);
-         end
-        else
-         begin
-          vDescr := 'NF-e:';
-          Application.Messagebox(PWideChar(
-           'DADOS DA NF-e  : ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) + char(13) +
-           'Status=' + vartostr(ACBrNFe1.WebServices.Consulta.cStat)  + '-' + vartostr(ACBrNFe1.WebServices.Consulta.xMotivo) + char(13) +
-           'Protocolo=' + ACBrNFe1.WebServices.Consulta.Protocolo + char(13) +
-           'Data do recebimento=' + vartostr(ACBrNFe1.WebServices.Consulta.DhRecbto) + char(13)), PWideChar(vDescr), MB_ICONINFORMATION+mb_ok);
-         end;
-
-        memoLog.Clear;
-        MemoResp.Lines.Text   := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetWS);
-        MemoLog.Lines.Add(vDescr);
-        MemoLog.Lines.Add('');
-        MemoLog.Lines.Add('Status');
-        MemoLog.Lines.Add('Tipo de Ambiente:'     + TpAmbToStr(ACBrNFe1.WebServices.Consulta.TpAmb));
-        MemoLog.Lines.Add('Versão do Aplicativo: '+ ACBrNFe1.WebServices.Consulta.verAplic);
-        MemoLog.Lines.Add('Código do Status: '    + IntToStr(ACBrNFe1.WebServices.Consulta.cStat));
-        MemoLog.Lines.Add('Código da UF: '        + IntToStr(ACBrNFe1.WebServices.Consulta.cUF));
-        MemoLog.Lines.Add('Descrição: '           + ACBrNFe1.WebServices.Consulta.xMotivo);
-        MemoLog.Lines.Add('Mensagem: '            + ACBrNFe1.WebServices.Consulta.Msg);
-        MemoLog.Lines.Add('Data do recebimento: ' + vartostr(ACBrNFe1.WebServices.Consulta.DhRecbto));
-        MemoLog.Lines.Add('Protocolo: '           + ACBrNFe1.WebServices.Consulta.Protocolo);
-        memoRespWS.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetornoWS);
-        LoadXML(MemoResp, WBResposta);
-
-        case ACBrNFe1.WebServices.Consulta.cStat of
-
-         100, 150, 613, 539,                                                    // Autorizado o uso da NF-e
-         101, 135, 136, 151, 218, 420,                                          // Cancelamento de NF-e homologado
-         102, 206, 256, 563,                                                    // Inutilização de número homologado
-         110, 205, 301, 302, 303 :                                              // Uso Denegado
-          begin
-
-           case ACBrNFe1.WebServices.Consulta.cStat of
-
-            100, 150, 613, 539 :             vNomeUsu := 'UsuTrs';              // Autorizado o uso da NF-e
-            101, 135, 136, 151, 218, 420 :   vNomeUsu := 'UsuCnc';              // Cancelamento de NF-e homologado
-            102, 206, 256, 563 :             vNomeUsu := 'UsuInu';              // Inutilização de número homologado
-            110, 205, 301, 302, 303 :        vNomeUsu := '';                    // Uso Denegado
-
-           end;
-
-           //-------------------------------------------------------------------
-           // Para não inconsistir a chave no hora de salvar a nota com chave
-           // que difere do retorno da sefaz
-           if ( (ACBrNFe1.WebServices.Consulta.cStat = 613) or
-                (ACBrNFe1.WebServices.Consulta.cStat = 539) ) then
-            gChave_Consiste := ACBrNFe1.WebServices.Consulta.NFeChave;
-           //-------------------------------------------------------------------
-
-           if ( (RadioGroup1.ItemIndex = 0)   or                                // Pendentes
-                (RadioGroup1.ItemIndex = 1) ) then                              // Contingência
-            grava_xml_no_banco;
-
-           gAtuCon := True;                                                     // seta True para gAtuCon
-
-           if (trim(vNomeUsu) <> '' ) then
-            begin
-
-             pGravaNFe('006', 'protocolo',
-                              'data_hora_recebimento',
-                              'chave_nfe',
-                              'situacao',
-                              'motivo',
-                              vNomeUsu,
-                              '',
-                              '',
-                              '',
-                              '',
-                              '',
-                              '',
-                              '',
-                              'codigo_loja',
-                              'demi',
-                              'nnf',
-                              'serie',
-                              'chave_nfe',
-                              'modelo',                                           // Nome dos campos
-                              ACBrNFe1.WebServices.Consulta.Protocolo,
-                              FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.consulta.DhRecbto),
-                              ACBrNFe1.WebServices.Consulta.NFeChave,
-                              ACBrNFe1.WebServices.Consulta.cStat,
-                              ACBrNFe1.WebServices.Consulta.xMotivo,
-                              gUsu,
-                              '',
-                              '',
-                              '',
-                              '',
-                              '',
-                              '',
-                              '',
-                              edt_CodEmp.Text,
-                              FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']),
-                              DMFD.FDQryGeral2['nfe_nnf'],
-                              DMFD.FDQryGeral2['nfe_serie'],
-                              ACBrNFe1.WebServices.Consulta.NFeChave,
-                              DMFD.FDQryGeral2['nfe_modelo'],                     // Conteúdo dos campos
-                              true);                                              // Consiste [true/false]
-
-            end
-           else
-            begin
-
-             pGravaNFe('006', 'protocolo',
-                              'data_hora_recebimento',
-                              'chave_nfe',
-                              'situacao',
-                              'motivo',
-                              '',
-                              '',
-                              '',
-                              '',
-                              '',
-                              '',
-                              '',
-                              '',
-                              'codigo_loja',
-                              'demi',
-                              'nnf',
-                              'serie',
-                              'chave_nfe',
-                              'modelo',                                           // Nome dos campos
-                              ACBrNFe1.WebServices.Consulta.Protocolo,
-                              FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.consulta.DhRecbto),
-                              ACBrNFe1.WebServices.Consulta.NFeChave,
-                              ACBrNFe1.WebServices.Consulta.cStat,
-                              ACBrNFe1.WebServices.Consulta.xMotivo,
-                              '',
-                              '',
-                              '',
-                              '',
-                              '',
-                              '',
-                              '',
-                              '',
-                              edt_CodEmp.Text,
-                              FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']),
-                              DMFD.FDQryGeral2['nfe_nnf'],
-                              DMFD.FDQryGeral2['nfe_serie'],
-                              ACBrNFe1.WebServices.Consulta.NFeChave,
-                              DMFD.FDQryGeral2['nfe_modelo'],                     // Conteúdo dos campos
-                              true);                                              // Consiste [true/false]
-
-            end;
-
-           //----------------------------------------------------------------------
-           // by Edson Lima ; 2017-1-5T1027 ; Atribuição de dados nas variáveis do
-           //                                 gerente
-           //----------------------------------------------------------------------
-           gChvNFe := ACBrNFe1.WebServices.Consulta.NFeChave;
-           gCd_Emp := DMFD.FDQryGeral2['nfe_codigo_loja'];
-           if ( DMFD.FDQryGeral2['nfe_CodPed'] <> null ) then
-            gCodPed := DMFD.FDQryGeral2['nfe_CodPed']
-           else
-            gCodPed := 0;
-           //----------------------------------------------------------------------
-
-           // Grava a chave no pedido do ERP
-           fGraGer( gChvNFe, gCd_Emp, gCodPed );
-
-          end;
-
-        end;
-
-       except on e:exception do
-
-        begin
-
-         Application.Messagebox( PWideChar( 'Inconsistência no arquivo xml da nota: ' +
-                                 vartostr(DMFD.FDQryGeral2['nfe_nnf']) + chr(13) +
-                                 e.Message ), 'Consulta Nota',
-                                 MB_ICONINFORMATION + mb_ok );
-         gDeuErrXml := True;
-
-        end;
-
-       end;
-
-      end;
-
-     //------------ Fim da consulta no item selecionado da TL ------------------
-
-     // pGAV();
-
-     if gSoUmaConsulta then Exit;
-
-    end;
+   if ( (gCdloja_Consiste  = FrGBNFe.edt_CodEmp.Text) and
+        (gNNF_Consiste     = cxTL.Items[X].Texts[cxTLlNot.ItemIndex])   and
+        (gdEmiConsiste     = cxTL.Items[X].Texts[cxTLdDem.ItemIndex])   and
+        (IntToStr(gModelo) = cxTL.Items[X].Texts[cxTLsMod.ItemIndex])   and
+        (IntToStr(gSerie)  = cxTL.Items[X].Texts[cxTLsSer.ItemIndex]) ) then
+
+   gConsiste := True;
 
   end;
-  //------------------------- Fim do loop da TL --------------------------------
+
+  if ( (cxTL.Items[X].Texts[cxTLbSel.ItemIndex] = 'True') and
+       (gConsiste) ) then                                                       // Verifica se o item está selecionado
+  begin
+
+   pSelNfe( DMFD.FDQryGeral2,
+            StrToIntDef(FrGBNFe.edt_CodEmp.Text, 0),
+            StrToIntDef(cxTL.Items[X].Texts[cxTLlNot.ItemIndex], 0),
+            StrToDateTime(cxTL.Items[X].Texts[cxTLdDem.ItemIndex]),
+            cxTL.Items[X].Texts[cxTLsMod.ItemIndex],
+            cxTL.Items[X].Texts[cxTLsSer.ItemIndex] );
+
+   // by Edson Lima ; 2017-1-5T1027 ; Atribui as vars globais
+   gModelo := DMFD.FDQryGeral2['nfe_Modelo'];
+   gSerie  := DMFD.FDQryGeral2['nfe_Serie'];
+
+   fMudaVersao( FrPar.cbb2.ItemIndex, gModelo );                                // Mudança de versão
+
+   // by Edson Lima ; 2017-1-5T1032 ; Define o tipo de relatório
+   if ( gCpt = 1 ) then
+    pDefineRel()                                                                // FortesReport
+   else
+    pDefineRelFR();                                                             // FastReport
+
+   // by Edson Lima ; 2017-1-5T1027 ; Atribui as vars globais de consistência
+   gCdloja_Consiste := edt_CodEmp.Text;
+   gdEmi_Consiste   := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
+   gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
+   gDataEmi         := DMFD.FDQryGeral2['nfe_demi'];
+   gNNF_Consiste    := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
+   gSerie_Consiste  := vartostr(DMFD.FDQryGeral2['nfe_serie']);
+   gModelo_Consiste := vartostr(DMFD.FDQryGeral2['nfe_modelo']);
+   gAnoMesGer       := Copy(gdEmi_Consiste, 7, 4) + Copy(gdEmi_Consiste, 4, 2);
+
+   // by Edson Lima ; 2017-1-5T1027 ; Atribuição de dados nas vars do ERP
+   gCd_Emp := StrToIntDef(edt_CodEmp.Text, 0);
+
+   if not ( DMFD.FDQryGeral2['nfe_CodPed'] = null ) then
+   begin
+
+    iCodPed := DMFD.FDQryGeral2['nfe_CodPed'];
+    gCodPed := DMFD.FDQryGeral2['nfe_CodPed'];
+
+   end
+   else
+   begin
+
+    iCodPed := 0;
+    gCodPed := 0;
+
+   end;
+
+   // Verifica o tipo da consulta, seta dados conforme o tipo de consulta
+   Case RadioGroup1.ItemIndex of
+
+    0  :                                                                        // Consulta de notas pendentes
+    begin
+
+     gChave_Consiste   := '';
+     _tpemissao        := '1';                                                  // Tipo de envio normal para geração da chave
+     vAux              := '';
+
+    end;
+
+    1  :                                                                        // Consulta de notas em contingência
+    begin
+
+     gChave_Consiste   := '';
+     vAux              := '';
+
+     if ( gModelo = 55 ) then
+      _tpemissao        := '5'                                                  // Tipo de envio em contingência fsda para geração da chave nfe
+     else
+      _tpemissao        := '9';                                                 // Tipo de envio em contingência offline para geração da chave nfce
+
+    end;
+
+    2  :                                                                        // Consulta de notas transmitidas
+    begin
+
+     gChave_Consiste   := DMFD.FDQryGeral2['nfe_chave_nfe'];
+     vAux              := DMFD.FDQryGeral2['nfe_chave_nfe'];
+     gChvNFe           := vAux;
+
+    end;
+
+   end; // Fim do case
+
+   // by Edson Lima ; 2017-1-5T1027 ; Calcula a chave e o digito verificador
+   if ( vAux = '' ) then
+   begin
+
+    Aux :=
+    edt_CodEmp.Text + ',' + '''' +
+    VarToStr(DMFD.FDQryGeral2['nfe_nnf']) + '''' + ',' + '''' + _tpemissao + '''' + ',' + '''';
+    Aux := Aux + FormatDateTime('dd/mm/yyyy', VarToDateTime(DMFD.FDQryGeral2['nfe_demi'])) + '''' + ',' + '''';
+    Aux := Aux + IntToStr(gModelo) + '''' + ',' + '''';
+    Aux := Aux + VarToStr(DMFD.FDQryGeral2['nfe_Serie']) + '''' + ',' + '''';
+    Aux := Aux + IntToStr(gCodPed) + '''';
+
+    DMFD.FDQuery1.Close;
+    DMFD.FDQuery1.SQL.Clear;
+    DMFD.FDQuery1.SQL.Add( 'exec sp_calcula_digito_chave ' + Aux );
+    DMFD.FDQuery1.open;
+
+    if not DMFD.FDQuery1.IsEmpty then
+    begin
+
+     if ( Length(VarToStr(DMFD.FDQuery1['chave'])) = 44 ) then
+     begin
+
+      vAux              := vartostr(DMFD.FDQuery1['chave']);
+      gChave_Consiste   := DMFD.FDQuery1['chave'];
+
+     end
+     else
+     begin
+
+      Application.Messagebox( PWideChar( 'Retorno: ' +
+                              VarToStr(DMFD.FDQuery1['chave'])),
+                              PWideChar( 'Calcula digito da chave' ),
+                              mb_iconstop+mb_ok );
+      exit;
+
+     end;
+
+    end
+    else Exit;
+
+   end;
+
+   if (StrToIntDef(DMFD.FDQryGeral2['nfe_modelo'], 0) = 65) then
+    gTN              := '\NFCe\'                                                // Global utilizado para setar o nome da pasta
+   else
+    gTN              := '\NFe\';
+
+   Copia_Xml_PathLog(vAux, gTN);                                                // Copia o arquivo xml pra pasta Log
+
+   // Se a data inicial for maior que a data de emissão, atribui a data de emissão na data inicial
+   if (cxdtp1.Date > DMFD.FDQryGeral2['nfe_demi']) then
+    cxdtp1.Date := DMFD.FDQryGeral2['nfe_demi'];
+
+   ACBrNFe1.WebServices.Consulta.NFeChave := vAux;
+
+   if ACBrNFe1.WebServices.Consulta.Executar then
+   begin
+
+    if gModelo = 55 then
+      ACBrNFe1.DistribuicaoDFe(ACBrNFe1.WebServices.Consulta.cUF,
+                               Copy(vAux, 7, 14), '0', '0', vAux );
+
+    xRet := ACBrNFe1.WebServices.Consulta.RetWS;
+    xRet := xRet + ACBrNFe1.WebServices.Consulta.Protocolo;
+    xRet := xRet + ACBrNFe1.WebServices.Consulta.protNFe.nProt;
+
+    memoLog.Clear;
+    MemoResp.Lines.Text   := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetWS);
+    MemoLog.Lines.Add(vDescr);
+    MemoLog.Lines.Add('');
+    MemoLog.Lines.Add('Status');
+    MemoLog.Lines.Add('Tipo de Ambiente:'     + TpAmbToStr(ACBrNFe1.WebServices.Consulta.TpAmb));
+    MemoLog.Lines.Add('Versão do Aplicativo: '+ ACBrNFe1.WebServices.Consulta.verAplic);
+    MemoLog.Lines.Add('Código do Status: '    + IntToStr(ACBrNFe1.WebServices.Consulta.cStat));
+    MemoLog.Lines.Add('Código da UF: '        + IntToStr(ACBrNFe1.WebServices.Consulta.cUF));
+    MemoLog.Lines.Add('Descrição: '           + ACBrNFe1.WebServices.Consulta.xMotivo);
+    MemoLog.Lines.Add('Mensagem: '            + ACBrNFe1.WebServices.Consulta.Msg);
+    MemoLog.Lines.Add('Data do recebimento: ' + vartostr(ACBrNFe1.WebServices.Consulta.DhRecbto));
+    MemoLog.Lines.Add('Protocolo: '           + ACBrNFe1.WebServices.Consulta.Protocolo);
+    MemoLog.Lines.Add('Nome do DFe: '         + ACBrNFe1.WebServices.DistribuicaoDFe.NomeArq);
+
+    memoRespWS.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetornoWS);
+    LoadXML(MemoResp, WBResposta);
+
+   end;
+
+   // Caminho do xml na pasta log
+   vAux := trim(gCamLog) + trim(vAux) + '-nfe.xml';
+
+   // Verifica o xml, se o xml estiver sem defeito, consulta grava o xml no bd
+   if not ( FileExists(vAux) ) then
+   begin
+
+    Application.Messagebox( PWideChar( 'Não foi encontrado o arquivo xml da nota: ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) ),
+                            PWideChar( 'Consulta Nota' ),
+                            MB_ICONINFORMATION + mb_ok );
+
+   end
+   else
+   begin
+
+    // Inicia a consulta
+    ACBrNFe1.NotasFiscais.Clear;
+    ACBrNFe1.NotasFiscais.LoadFromFile(vAux);
+
+    try
+
+     ACBrNFe1.Consultar;
+
+     // Consulta efetuada sem inconsistência
+     if gModelo = 65 then
+     begin
+
+      vDescr := 'NFC-e:';
+      Application.Messagebox(PWideChar(
+       'DADOS DA NFC-e : ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) + char(13) +
+       'Status=' + vartostr(ACBrNFe1.WebServices.Consulta.cStat)  + '-' + vartostr(ACBrNFe1.WebServices.Consulta.xMotivo) + char(13) +
+       'Protocolo=' + ACBrNFe1.WebServices.Consulta.Protocolo + char(13) +
+       'Data do recebimento=' + vartostr(ACBrNFe1.WebServices.Consulta.DhRecbto) + char(13)), PWideChar(vDescr), MB_ICONINFORMATION+mb_ok);
+
+     end
+     else
+     begin
+
+      vDescr := 'NF-e:';
+      Application.Messagebox(PWideChar(
+       'DADOS DA NF-e  : ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) + char(13) +
+       'Status=' + vartostr(ACBrNFe1.WebServices.Consulta.cStat)  + '-' + vartostr(ACBrNFe1.WebServices.Consulta.xMotivo) + char(13) +
+       'Protocolo=' + ACBrNFe1.WebServices.Consulta.Protocolo + char(13) +
+       'Data do recebimento=' + vartostr(ACBrNFe1.WebServices.Consulta.DhRecbto) + char(13)), PWideChar(vDescr), MB_ICONINFORMATION+mb_ok);
+
+     end;
+
+     memoLog.Clear;
+     MemoResp.Lines.Text   := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetWS);
+     MemoLog.Lines.Add(vDescr);
+     MemoLog.Lines.Add('');
+     MemoLog.Lines.Add('Status');
+     MemoLog.Lines.Add('Tipo de Ambiente:'     + TpAmbToStr(ACBrNFe1.WebServices.Consulta.TpAmb));
+     MemoLog.Lines.Add('Versão do Aplicativo: '+ ACBrNFe1.WebServices.Consulta.verAplic);
+     MemoLog.Lines.Add('Código do Status: '    + IntToStr(ACBrNFe1.WebServices.Consulta.cStat));
+     MemoLog.Lines.Add('Código da UF: '        + IntToStr(ACBrNFe1.WebServices.Consulta.cUF));
+     MemoLog.Lines.Add('Descrição: '           + ACBrNFe1.WebServices.Consulta.xMotivo);
+     MemoLog.Lines.Add('Mensagem: '            + ACBrNFe1.WebServices.Consulta.Msg);
+     MemoLog.Lines.Add('Data do recebimento: ' + vartostr(ACBrNFe1.WebServices.Consulta.DhRecbto));
+     MemoLog.Lines.Add('Protocolo: '           + ACBrNFe1.WebServices.Consulta.Protocolo);
+     memoRespWS.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetornoWS);
+     LoadXML(MemoResp, WBResposta);
+
+     case ACBrNFe1.WebServices.Consulta.cStat of
+
+      100, 150, 613, 539,                                                       // Autorizado o uso da NF-e
+      101, 135, 136, 151, 218, 420,                                             // Cancelamento de NF-e homologado
+      102, 206, 256, 563,                                                       // Inutilização de número homologado
+      110, 205, 301, 302, 303 :                                                 // Uso Denegado
+      begin
+
+       case ACBrNFe1.WebServices.Consulta.cStat of
+
+        100, 150, 613, 539 :             vNomeUsu := 'UsuTrs';                  // Autorizado o uso da NF-e
+        101, 135, 136, 151, 218, 420 :   vNomeUsu := 'UsuCnc';                  // Cancelamento de NF-e homologado
+        102, 206, 256, 563 :             vNomeUsu := 'UsuInu';                  // Inutilização de número homologado
+        110, 205, 301, 302, 303 :        vNomeUsu := '';                        // Uso Denegado
+
+       end;
+
+       //-----------------------------------------------------------------------
+       // Para não inconsistir a chave no hora de salvar a nota com chave
+       // que difere do retorno da sefaz
+       if ( (ACBrNFe1.WebServices.Consulta.cStat = 613) or
+            (ACBrNFe1.WebServices.Consulta.cStat = 539) ) then
+        gChave_Consiste := ACBrNFe1.WebServices.Consulta.NFeChave;
+
+       //-----------------------------------------------------------------------
+
+       if ( (RadioGroup1.ItemIndex = 0)   or                                    // Pendentes
+            (RadioGroup1.ItemIndex = 1) ) then                                  // Contingência
+        grava_xml_no_banco;
+
+       gAtuCon := True;                                                         // seta True para gAtuCon
+
+       if (trim(vNomeUsu) <> '' ) then
+       begin
+
+        pGravaNFe('006', 'protocolo',
+                         'data_hora_recebimento',
+                         'chave_nfe',
+                         'situacao',
+                         'motivo',
+                         vNomeUsu,
+                         '',
+                         '',
+                         '',
+                         '',
+                         '',
+                         '',
+                         '',
+                         'codigo_loja',
+                         'demi',
+                         'nnf',
+                         'serie',
+                         'chave_nfe',
+                         'modelo',                                           // Nome dos campos
+                         ACBrNFe1.WebServices.Consulta.Protocolo,
+                         FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.consulta.DhRecbto),
+                         ACBrNFe1.WebServices.Consulta.NFeChave,
+                         ACBrNFe1.WebServices.Consulta.cStat,
+                         ACBrNFe1.WebServices.Consulta.xMotivo,
+                         gUsu,
+                         '',
+                         '',
+                         '',
+                         '',
+                         '',
+                         '',
+                         '',
+                         edt_CodEmp.Text,
+                         FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']),
+                         DMFD.FDQryGeral2['nfe_nnf'],
+                         DMFD.FDQryGeral2['nfe_serie'],
+                         ACBrNFe1.WebServices.Consulta.NFeChave,
+                         DMFD.FDQryGeral2['nfe_modelo'],                     // Conteúdo dos campos
+                         true);                                              // Consiste [true/false]
+
+       end
+       else
+       begin
+
+        pGravaNFe('006', 'protocolo',
+                         'data_hora_recebimento',
+                         'chave_nfe',
+                         'situacao',
+                         'motivo',
+                         '',
+                         '',
+                         '',
+                         '',
+                         '',
+                         '',
+                         '',
+                         '',
+                         'codigo_loja',
+                         'demi',
+                         'nnf',
+                         'serie',
+                         'chave_nfe',
+                         'modelo',                                           // Nome dos campos
+                         ACBrNFe1.WebServices.Consulta.Protocolo,
+                         FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.consulta.DhRecbto),
+                         ACBrNFe1.WebServices.Consulta.NFeChave,
+                         ACBrNFe1.WebServices.Consulta.cStat,
+                         ACBrNFe1.WebServices.Consulta.xMotivo,
+                         '',
+                         '',
+                         '',
+                         '',
+                         '',
+                         '',
+                         '',
+                         '',
+                         edt_CodEmp.Text,
+                         FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']),
+                         DMFD.FDQryGeral2['nfe_nnf'],
+                         DMFD.FDQryGeral2['nfe_serie'],
+                         ACBrNFe1.WebServices.Consulta.NFeChave,
+                         DMFD.FDQryGeral2['nfe_modelo'],                     // Conteúdo dos campos
+                         true);                                              // Consiste [true/false]
+
+       end;
+
+       //----------------------------------------------------------------------
+       // by Edson Lima ; 2017-1-5T1027 ; Atribuição de dados nas variáveis do
+       //                                 gerente
+       //----------------------------------------------------------------------
+       gChvNFe := ACBrNFe1.WebServices.Consulta.NFeChave;
+       gCd_Emp := DMFD.FDQryGeral2['nfe_codigo_loja'];
+
+       if ( DMFD.FDQryGeral2['nfe_CodPed'] <> null ) then
+        gCodPed := DMFD.FDQryGeral2['nfe_CodPed']
+       else
+        gCodPed := 0;
+
+       //----------------------------------------------------------------------
+
+       // Grava a chave no pedido do ERP
+       fGraGer( gChvNFe, gCd_Emp, gCodPed );
+
+      end;
+
+     end;
+
+    except on e:exception do
+
+     begin
+
+      Application.Messagebox( PWideChar( 'Inconsistência no arquivo xml da nota: ' +
+                              vartostr(DMFD.FDQryGeral2['nfe_nnf']) + chr(13) +
+                              e.Message ), 'Consulta Nota',
+                              MB_ICONINFORMATION + mb_ok );
+      gDeuErrXml := True;
+
+     end;
+
+    end;
+
+   end;
+
+   //------------ Fim da consulta no item selecionado da TL --------------------
+
+   // pGAV();
+   if gSoUmaConsulta then Exit;
+
+  end;
+
+ end;
+
+ //------------------------- Fim do loop da TL --------------------------------
 
  pAtuNFe();
 
 end;
-
-
 
 procedure TFrGBNFe.Excluinota1Click(Sender: TObject);
 var
@@ -9185,505 +9897,527 @@ var
 
 begin
 
- //-----------------------------------------------------------------------------
-
  case RadioGroup1.ItemIndex of
   0 :
-      begin
-       vTN := 'pendentes';
-       pAtribSel(cxTL, cxTLdDem, cxTLlNot, cxTLsMod, cxTLsSer, DMFD.FDQuery3);  // Chama a procedure de atribuição de seleção da TreeList das pendentes ; by Edson Lima ; 2013-7-17T1024 ; 2017-5-22T1635
-      end;
+  begin
+   vTN := 'pendentes';
+   pAtribSel(cxTL, cxTLdDem, cxTLlNot, cxTLsMod, cxTLsSer, DMFD.FDQuery3);      // Chama a procedure de atribuição de seleção da TreeList das pendentes ; by Edson Lima ; 2013-7-17T1024 ; 2017-5-22T1635
+  end;
+
   1 :
-      begin
-       vTN := 'em contingência';
-       pAtribSel(cxTL, cxTLdDem, cxTLlNot, cxTLsMod, cxTLsSer, DMFD.FDQuery10); // Chama a procedure de atribuição de seleção da TreeList das contingências ; by Edson Lima ; 2013-7-17T1024 ; 2017-5-22T1635
-      end;
+  begin
+   vTN := 'em contingência';
+   pAtribSel(cxTL, cxTLdDem, cxTLlNot, cxTLsMod, cxTLsSer, DMFD.FDQuery10);     // Chama a procedure de atribuição de seleção da TreeList das contingências ; by Edson Lima ; 2013-7-17T1024 ; 2017-5-22T1635
+
+  end;
+
  end;
 
  if MessageDlg('Continua o processo da exclusão de notas ' + vTN + '?',
                 mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+ begin
+
+  //----------------------------------------------------------------------------
+  if ( RadioGroup1.ItemIndex = 0 ) then                                         // Pendentes
+  //----------------------------------------------------------------------------
   begin
 
-   //---------------------------------------------------------------------------
-   if ( RadioGroup1.ItemIndex = 0 ) then                                        // Pendentes
-   //---------------------------------------------------------------------------
+   if not fTemSel( cxTL, cxTLbSel ) then exit;                                  // verifica se tem item selecionado na treelist
 
+   for X := 0 to cxTL.Count -1 do                                               // Percorre a treelist
+   begin
+
+    if ( cxTL.Items[X].Texts[cxTLbSel.ItemIndex] = 'True' ) then                // Verifica se o item está selecionado
     begin
 
-     if not fTemSel( cxTL, cxTLbSel ) then exit;                                // verifica se tem item selecionado na treelist
+     // Filtra a nfe selecionada com select
+     pSelNfe( DMFD.FDQryGeral2, StrToIntDef(FrGBNFe.edt_CodEmp.Text, 0),
+                                StrToIntDef(cxTL.Items[X].Texts[cxTLlNot.ItemIndex], 0),
+                                StrToDateTime(cxTL.Items[X].Texts[cxTLdDem.ItemIndex]),
+                                cxTL.Items[X].Texts[cxTLsMod.ItemIndex],
+                                cxTL.Items[X].Texts[cxTLsSer.ItemIndex] );
 
-     for X := 0 to cxTL.Count -1 do                                             // Percorre a treelist
+     gDeuErrXml := False;
+     gModelo    := DMFD.FDQryGeral2['nfe_Modelo'];
+     gSerie     := DMFD.FDQryGeral2['nfe_Serie'];
 
+     if ( gCpt = 1 ) then
+      pDefineRel()                                                              // Define o tipo de Relatório FortesReport
+     else
+      pDefineRelFR();                                                           // Define o tipo de Relatório FastReport
+
+     dt       := DMFD.FDQryGeral2['nfe_demi'];
+     vAux     := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
+
+     _tpemissao := '1';
+
+     if ( (gModelo = 55) and (RadioButton3.Checked) ) then
+     begin
+
+      _tipo_emissao := 'fsda';
+      _tpemissao := '5';
+
+     end
+     else if ( (gModelo = 65) and (RadioButton3.Checked) ) then
+     begin
+
+      _tipo_emissao := 'OffL';
+      _tpemissao := '9';
+
+     end;
+
+     // by Edson Lima ; 2017-6-9T0949 ; Define quem será usado como cNF
+     gCdPed := VarToStr(DMFD.FDQryGeral2['nfe_CodPed']);
+
+     Aux := '';
+     Aux := edt_CodEmp.Text + ',' + '''' + VarToStr(DMFD.FDQryGeral2['nfe_nnf']) + '''' + ',' + '''' + _tpemissao + '''' + ',' + '''';
+     Aux := Aux + FormatDateTime('dd/mm/yyyy', VarToDateTime(DMFD.FDQryGeral2['nfe_demi'])) + '''' + ',' + '''';
+     Aux := Aux + IntToStr(gModelo) + '''' + ',' + '''';
+     Aux := Aux + VarToStr(DMFD.FDQryGeral2['nfe_Serie']) + '''' + ',' + '''';
+     Aux := Aux + gCdPed + '''';
+
+     DMFD.FDQuery1.Close;
+     DMFD.FDQuery1.SQL.Clear;
+     DMFD.FDQuery1.SQL.Add( 'exec sp_calcula_digito_chave ' + Aux );
+     DMFD.FDQuery1.open;
+
+     // by Edson Lima 2015-12-9T1007 - trunk2 novo
+     vAux := '';
+     if not DMFD.FDQuery1.IsEmpty then
+      vAux := vartostr(DMFD.FDQuery1['chave']);
+
+     // by Edson ; 2013-10-8T1031 ; Variável Global Chave criada para contestar gravação;
+     gChave_Consiste  := vAux;
+
+     if (gModelo = 65) then
+     begin
+
+      gTN                                      := '\NFCe\';
+      if not (DMFD.FDQryGeral2['nfe_DatNFCe']   = null) then
+       gDataEmi                                := (DMFD.FDQryGeral2['nfe_DatNFCe']);
+
+     end
+     else
+     begin
+
+      gTN                                      := '\NFe\';
+      if not (DMFD.FDQryGeral2['nfe_DatNFCe']   = null) then                          // Antes -> if not (DMFD.FDQryGeral2['nfe_demi'] = null) then
+       gDataEmi                                := (DMFD.FDQryGeral2['nfe_DatNFCe']);  // Antes -> gDataEmi := (DMFD.FDQryGeral2['nfe_demi']);
+
+     end;
+
+     if vAux <> '' then
+     begin
+
+      // Ajusta a data inicial para a data de emissão
+      if (cxdtp1.Date > DMFD.FDQryGeral2['nfe_demi']) then
+       cxdtp1.Date := DMFD.FDQryGeral2['nfe_demi'];
+
+      vAux := trim(gCamLog) + trim(vAux) + '-nfe.xml';
+
+      if FileExists(vAux) then
       begin
 
-       if ( cxTL.Items[X].Texts[cxTLbSel.ItemIndex] = 'True' ) then             // Verifica se o item está selecionado
+       gAtuCon := True;
 
+       Copia_Xml_PathLog(Aux, gTN);
+
+       ACBrNFe1.NotasFiscais.Clear;
+       ACBrNFe1.NotasFiscais.LoadFromFile(vAux);
+       ACBrNFe1.Consultar;
+
+       if gModelo = 65 then
+       begin
+        vDescr := 'NFC-e PENDENTE:';
+        Application.Messagebox(PWideChar(
+         'DADOS DA NFC-e : ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) + char(13) +
+         'Status=' + vartostr(ACBrNFe1.WebServices.Consulta.cStat)  + '-' + vartostr(ACBrNFe1.WebServices.Consulta.xMotivo) + char(13) +
+         'Protocolo=' + ACBrNFe1.WebServices.Consulta.Protocolo + char(13) +
+         'Data do recebimento=' + vartostr(ACBrNFe1.WebServices.Consulta.DhRecbto) + char(13)), PWideChar(vDescr), mb_iconstop+mb_ok);
+       end
+       else
+       begin
+        vDescr := 'NF-e PENDENTE:';
+        Application.Messagebox(PWideChar(
+         'DADOS DA NF-e  : ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) + char(13) +
+         'Status=' + vartostr(ACBrNFe1.WebServices.Consulta.cStat)  + '-' + vartostr(ACBrNFe1.WebServices.Consulta.xMotivo) + char(13) +
+         'Protocolo=' + ACBrNFe1.WebServices.Consulta.Protocolo + char(13) +
+         'Data do recebimento=' + vartostr(ACBrNFe1.WebServices.Consulta.DhRecbto) + char(13)), PWideChar(vDescr), mb_iconstop+mb_ok);
+       end;
+
+       memoLog.Clear;
+       MemoResp.Lines.Text   := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetWS);
+       MemoLog.Lines.Add(vDescr);
+       MemoLog.Lines.Add('Status');
+       MemoLog.Lines.Add('Tipo de Ambiente:'     + TpAmbToStr(ACBrNFe1.WebServices.Consulta.TpAmb));
+       MemoLog.Lines.Add('Versão do Aplicativo: '+ ACBrNFe1.WebServices.Consulta.verAplic);
+       MemoLog.Lines.Add('Código do Status: '    + IntToStr(ACBrNFe1.WebServices.Consulta.cStat));
+       MemoLog.Lines.Add('Código da UF: '        + IntToStr(ACBrNFe1.WebServices.Consulta.cUF));
+       MemoLog.Lines.Add('Descrição: '           + ACBrNFe1.WebServices.Consulta.xMotivo);
+       MemoLog.Lines.Add('Mensagem: '            + ACBrNFe1.WebServices.Consulta.Msg);
+       MemoLog.Lines.Add('Data do recebimento: ' + vartostr(ACBrNFe1.WebServices.Consulta.DhRecbto));
+       MemoLog.Lines.Add('Protocolo: '           + ACBrNFe1.WebServices.Consulta.Protocolo);
+       memoRespWS.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetornoWS);
+       LoadXML(MemoResp, WBResposta);
+
+       // Caso não exista na base sefaz permite excluir ; by Edson Lima ; 17-9-2012 ; 14:00
+       if ( (vartostr(ACBrNFe1.WebServices.Consulta.cStat) = '217') or
+            (vartostr(ACBrNFe1.WebServices.Consulta.cStat) = '613') or
+            (vartostr(ACBrNFe1.WebServices.Consulta.cStat) = '539')) then
+       begin
+        if MessageDlg('(Status 217) NF-e não consta na base de dados da SEFAZ ! ou ' + chr(13) +
+                      '(Status 613/539) Chave de Acesso difere da existente em BD !' + chr(13)      +
+                      'Confirme a exclusão da NFe nº ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']), mtConfirmation, [mbYes, mbNo], 0) = mrYes then
         begin
+         //excluir nota
+         try
 
-         // Filtra a nfe selecionada com select
-         pSelNfe( DMFD.FDQryGeral2, StrToIntDef(FrGBNFe.edt_CodEmp.Text, 0),
-                                    StrToIntDef(cxTL.Items[X].Texts[cxTLlNot.ItemIndex], 0),
-                                    StrToDateTime(cxTL.Items[X].Texts[cxTLdDem.ItemIndex]),
-                                    cxTL.Items[X].Texts[cxTLsMod.ItemIndex],
-                                    cxTL.Items[X].Texts[cxTLsSer.ItemIndex] );
+          DMFD.FDQuery1.DisableControls;
+          DMFD.FDQuery1.Close;
+          DMFD.FDQuery1.SQL.Clear;
+          DMFD.FDQuery1.SQL.Add( 'exec sp_exclui_nfe ' + aux );
 
-         gDeuErrXml := False;
-         gModelo    := DMFD.FDQryGeral2['nfe_Modelo'];
-         gSerie     := DMFD.FDQryGeral2['nfe_Serie'];
+          try
 
-         if ( gCpt = 1 ) then
-          pDefineRel()                                                          // Define o tipo de Relatório FortesReport
-         else
-          pDefineRelFR();                                                       // Define o tipo de Relatório FastReport
+           DMFD.FDQuery1.ExecSQL;
+           pExcluiXmlErro(VarToStr(DMFD.FDQryGeral2['nfe_modelo']),
+                          VarToStr(DMFD.FDQryGeral2['nfe_serie']),
+                          VarToStr(DMFD.FDQryGeral2['nfe_nnf']));
 
-         dt       := DMFD.FDQryGeral2['nfe_demi'];
-         vAux     := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
+          except on e:Exception do
 
-         _tpemissao := '1';
+           Application.Messagebox(PWideChar('ERRO: Não EXCLUIU este registro!' + Char(13) +
+                                   e.Message), 'Atenção!', mb_iconstop+mb_ok);
 
-         if ( (gModelo = 55) and (RadioButton3.Checked) ) then
-          begin
-           _tipo_emissao := 'fsda';
-           _tpemissao := '5';
-          end
-         else if ( (gModelo = 65) and (RadioButton3.Checked) ) then
-          begin
-           _tipo_emissao := 'OffL';
-           _tpemissao := '9';
           end;
 
-         // by Edson Lima ; 2017-6-9T0949 ; Define quem será usado como cNF
-         gCdPed := VarToStr(DMFD.FDQryGeral2['nfe_CodPed']);
+         finally
 
-         Aux := '';
-         Aux := edt_CodEmp.Text + ',' + '''' + VarToStr(DMFD.FDQryGeral2['nfe_nnf']) + '''' + ',' + '''' + _tpemissao + '''' + ',' + '''';
-         Aux := Aux + FormatDateTime('dd/mm/yyyy', VarToDateTime(DMFD.FDQryGeral2['nfe_demi'])) + '''' + ',' + '''';
-         Aux := Aux + IntToStr(gModelo) + '''' + ',' + '''';
-         Aux := Aux + VarToStr(DMFD.FDQryGeral2['nfe_Serie']) + '''' + ',' + '''';
-         Aux := Aux + gCdPed + '''';
+          DMFD.FDQuery1.EnableControls;
 
-         DMFD.FDQuery1.Close;
-         DMFD.FDQuery1.SQL.Clear;
-         DMFD.FDQuery1.SQL.Add( 'exec sp_calcula_digito_chave ' + Aux );
-         DMFD.FDQuery1.open;
-
-         // by Edson Lima 2015-12-9T1007 - trunk2 novo
-         vAux := '';
-         if not DMFD.FDQuery1.IsEmpty then
-          vAux := vartostr(DMFD.FDQuery1['chave']);
-
-         // by Edson ; 2013-10-8T1031 ; Variável Global Chave criada para contestar gravação;
-         gChave_Consiste  := vAux;
-
-         if (gModelo = 65) then
-          begin
-           gTN                                      := '\NFCe\';
-           if not (DMFD.FDQryGeral2['nfe_DatNFCe']   = null) then
-            gDataEmi                                := (DMFD.FDQryGeral2['nfe_DatNFCe']);
-          end
-         else
-          begin
-           gTN                                      := '\NFe\';
-           if not (DMFD.FDQryGeral2['nfe_DatNFCe']   = null) then                          // Antes -> if not (DMFD.FDQryGeral2['nfe_demi'] = null) then
-            gDataEmi                                := (DMFD.FDQryGeral2['nfe_DatNFCe']);  // Antes -> gDataEmi := (DMFD.FDQryGeral2['nfe_demi']);
-          end;
-
-          if vAux <> '' then
-           begin
-
-            // Ajusta a data inicial para a data de emissão
-            if (cxdtp1.Date > DMFD.FDQryGeral2['nfe_demi']) then
-             cxdtp1.Date := DMFD.FDQryGeral2['nfe_demi'];
-
-            vAux := trim(gCamLog) + trim(vAux) + '-nfe.xml';
-
-            if FileExists(vAux) then
-             begin
-
-              gAtuCon := True;
-
-              Copia_Xml_PathLog(Aux, gTN);
-
-              ACBrNFe1.NotasFiscais.Clear;
-              ACBrNFe1.NotasFiscais.LoadFromFile(vAux);
-              ACBrNFe1.Consultar;
-
-              if gModelo = 65 then
-               begin
-                vDescr := 'NFC-e PENDENTE:';
-                Application.Messagebox(PWideChar(
-                 'DADOS DA NFC-e : ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) + char(13) +
-                 'Status=' + vartostr(ACBrNFe1.WebServices.Consulta.cStat)  + '-' + vartostr(ACBrNFe1.WebServices.Consulta.xMotivo) + char(13) +
-                 'Protocolo=' + ACBrNFe1.WebServices.Consulta.Protocolo + char(13) +
-                 'Data do recebimento=' + vartostr(ACBrNFe1.WebServices.Consulta.DhRecbto) + char(13)), PWideChar(vDescr), mb_iconstop+mb_ok);
-               end
-              else
-               begin
-                vDescr := 'NF-e PENDENTE:';
-                Application.Messagebox(PWideChar(
-                 'DADOS DA NF-e  : ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) + char(13) +
-                 'Status=' + vartostr(ACBrNFe1.WebServices.Consulta.cStat)  + '-' + vartostr(ACBrNFe1.WebServices.Consulta.xMotivo) + char(13) +
-                 'Protocolo=' + ACBrNFe1.WebServices.Consulta.Protocolo + char(13) +
-                 'Data do recebimento=' + vartostr(ACBrNFe1.WebServices.Consulta.DhRecbto) + char(13)), PWideChar(vDescr), mb_iconstop+mb_ok);
-               end;
-
-              memoLog.Clear;
-              MemoResp.Lines.Text   := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetWS);
-              MemoLog.Lines.Add(vDescr);
-              MemoLog.Lines.Add('Status');
-              MemoLog.Lines.Add('Tipo de Ambiente:'     + TpAmbToStr(ACBrNFe1.WebServices.Consulta.TpAmb));
-              MemoLog.Lines.Add('Versão do Aplicativo: '+ ACBrNFe1.WebServices.Consulta.verAplic);
-              MemoLog.Lines.Add('Código do Status: '    + IntToStr(ACBrNFe1.WebServices.Consulta.cStat));
-              MemoLog.Lines.Add('Código da UF: '        + IntToStr(ACBrNFe1.WebServices.Consulta.cUF));
-              MemoLog.Lines.Add('Descrição: '           + ACBrNFe1.WebServices.Consulta.xMotivo);
-              MemoLog.Lines.Add('Mensagem: '            + ACBrNFe1.WebServices.Consulta.Msg);
-              MemoLog.Lines.Add('Data do recebimento: ' + vartostr(ACBrNFe1.WebServices.Consulta.DhRecbto));
-              MemoLog.Lines.Add('Protocolo: '           + ACBrNFe1.WebServices.Consulta.Protocolo);
-              memoRespWS.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetornoWS);
-              LoadXML(MemoResp, WBResposta);
-
-              // Caso não exista na base sefaz permite excluir ; by Edson Lima ; 17-9-2012 ; 14:00
-              if ( (vartostr(ACBrNFe1.WebServices.Consulta.cStat) = '217') or
-                   (vartostr(ACBrNFe1.WebServices.Consulta.cStat) = '613') or
-                   (vartostr(ACBrNFe1.WebServices.Consulta.cStat) = '539')) then
-               begin
-                if MessageDlg('(Status 217) NF-e não consta na base de dados da SEFAZ ! ou ' + chr(13) +
-                              '(Status 613/539) Chave de Acesso difere da existente em BD !' + chr(13)      +
-                              'Confirme a exclusão da NFe nº ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']), mtConfirmation, [mbYes, mbNo], 0) = mrYes then
-                 begin
-                  //excluir nota
-                  try
-
-                   DMFD.FDQuery1.DisableControls;
-                   DMFD.FDQuery1.Close;
-                   DMFD.FDQuery1.SQL.Clear;
-                   DMFD.FDQuery1.SQL.Add( 'exec sp_exclui_nfe ' + aux );
-
-                   try
-
-                    DMFD.FDQuery1.ExecSQL;
-                    pExcluiXmlErro(VarToStr(DMFD.FDQryGeral2['nfe_modelo']),
-                                   VarToStr(DMFD.FDQryGeral2['nfe_serie']),
-                                   VarToStr(DMFD.FDQryGeral2['nfe_nnf']));
-
-                   except on e:Exception do
-
-                    Application.Messagebox(PWideChar('ERRO: Não EXCLUIU este registro!' + Char(13) +
-                                            e.Message), 'Atenção!', mb_iconstop+mb_ok);
-
-                   end;
-
-                  finally
-
-                   DMFD.FDQuery1.EnableControls;
-
-                  end;
-
-                 end;
-
-               end;
-
-              gDeuErrXml := False;
-
-             end
-            else
-             begin
-
-              gAtuCon := False;
-
-              if MessageDlg('Confirme a exclusão da NFe nº ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']), mtConfirmation, [mbYes, mbNo], 0) = mrYes then
-               begin
-                //excluir nota
-                try
-
-                 DMFD.FDQuery1.DisableControls;
-                 DMFD.FDQuery1.Close;
-                 DMFD.FDQuery1.SQL.Clear;
-                 DMFD.FDQuery1.SQL.Add( 'exec sp_exclui_nfe ' + aux );
-
-                 try
-
-                  DMFD.FDQuery1.ExecSQL;
-                  pExcluiXmlErro(VarToStr(DMFD.FDQryGeral2['nfe_modelo']),
-                                 VarToStr(DMFD.FDQryGeral2['nfe_serie']),
-                                 VarToStr(DMFD.FDQryGeral2['nfe_nnf']));
-
-                 except on e:Exception do
-
-                  Application.Messagebox(PWideChar('ERRO: Não EXCLUIU este registro!' + Char(13) +
-                                          e.Message),'Atenção!',mb_iconstop+mb_ok);
-
-                 end;
-
-                finally
-
-                 DMFD.FDQuery1.EnableControls;
-
-                end;
-
-               end;
-
-             end;
-
-           end;
-        end;
-
-      end;
-
-     pAtuNFe;                                                                   // Procedure de atualização
-
-     // by Edson ; 20/6/2012 ; 09:20 ; Mostra as notas transmitidas no caso de atualização por consulta
-     if gAtuCon then
-      begin
-
-       vMens   := '';
-       gAtuCon := False
-
-      end;
-
-    end
-
-   //---------------------------------------------------------------------------
-   else if ( RadioGroup1.ItemIndex = 1 ) then                                   // Contingência
-   //---------------------------------------------------------------------------
-
-    begin
-
-     if not fTemSel( cxTL, cxTLbSel ) then exit;                                // verifica se tem item selecionado na treelist
-
-     for X := 0 to cxTL.Count -1 do                                             // Percorre a treelist
-
-      begin
-
-       if ( cxTL.Items[X].Texts[cxTLbSel.ItemIndex] = 'True' ) then             // Verifica se o item está selecionado
-
-        begin
-
-         // Filtra a nfe selecionada com select
-         pSelNfe( DMFD.FDQryGeral2, StrToIntDef(FrGBNFe.edt_CodEmp.Text, 0),
-                                    StrToIntDef(cxTL.Items[X].Texts[cxTLlNot.ItemIndex], 0),
-                                    StrToDateTime(cxTL.Items[X].Texts[cxTLdDem.ItemIndex]),
-                                    cxTL.Items[X].Texts[cxTLsMod.ItemIndex],
-                                    cxTL.Items[X].Texts[cxTLsSer.ItemIndex] );
-
-         gDeuErrXml := False;
-         gModelo    := DMFD.FDQryGeral2['nfe_Modelo'];
-         gSerie     := DMFD.FDQryGeral2['nfe_Serie'];
-
-         if ( gCpt = 1 ) then
-          pDefineRel()                                                          // Define o tipo de Relatório FortesReport
-         else
-          pDefineRelFR();                                                       // Define o tipo de Relatório FastReport
-
-         dt       := DMFD.FDQryGeral2['nfe_demi'];
-         vAux     := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
-
-         _tpemissao := '1';
-
-         if ( (gModelo = 55) and (RadioButton3.Checked) ) then
-          begin
-           _tipo_emissao := 'fsda';
-           _tpemissao := '5';
-          end
-         else if ( (gModelo = 65) and (RadioButton3.Checked) ) then
-          begin
-           _tipo_emissao := 'OffL';
-           _tpemissao := '9';
-          end;
-
-         // by Edson Lima ; 2017-6-9T0949 ; Define quem será usado como cNF
-         gCdPed := VarToStr(DMFD.FDQryGeral2['nfe_CodPed']);
-
-         Aux := '';
-         Aux := edt_CodEmp.Text + ',' + '''' + VarToStr(DMFD.FDQryGeral2['nfe_nnf']) + '''' + ',' + '''' + _tpemissao + '''' + ',' + '''';
-         Aux := Aux + FormatDateTime('dd/mm/yyyy', VarToDateTime(DMFD.FDQryGeral2['nfe_demi'])) + '''' + ',' + '''';
-         Aux := Aux + IntToStr(gModelo) + '''' + ',' + '''';
-         Aux := Aux + VarToStr(DMFD.FDQryGeral2['nfe_Serie']) + '''' + ',' + '''';
-         Aux := Aux + gCdPed + '''';
-
-         DMFD.FDQuery1.Close;
-         DMFD.FDQuery1.SQL.Clear;
-         DMFD.FDQuery1.SQL.Add( 'exec sp_calcula_digito_chave ' + Aux );
-         DMFD.FDQuery1.open;
-
-         // by Edson Lima 2015-12-9T1007 - trunk2 novo
-         vAux := '';
-         if not DMFD.FDQuery1.IsEmpty then
-          vAux := vartostr(DMFD.FDQuery1['chave']);
-
-         // by Edson ; 2013-10-8T1031 ; Variável Global Chave criada para contestar gravação;
-         gChave_Consiste  := vAux;
-
-         if (gModelo = 65) then
-          begin
-           gTN                                   := '\NFCe\';
-           if not (DMFD.FDQryGeral2['nfe_DatNFCe']   = null) then
-            gDataEmi                             := (DMFD.FDQryGeral2['nfe_DatNFCe']);
-          end
-         else
-          begin
-           gTN                                   := '\NFe\';
-           if not (DMFD.FDQryGeral2['nfe_demi']      = null) then
-            gDataEmi                             := (DMFD.FDQryGeral2['nfe_demi']);
-          end;
-
-          if vAux <> '' then
-           begin
-
-            // Ajusta a data inicial para a data de emissão
-            if (cxdtp1.Date > DMFD.FDQryGeral2['nfe_demi']) then
-             cxdtp1.Date := DMFD.FDQryGeral2['nfe_demi'];
-
-            vAux := trim(gCamLog) + trim(vAux) + '-nfe.xml';
-
-            if FileExists(vAux) then
-             begin
-
-              gAtuCon := True;
-
-              Copia_Xml_PathLog(Aux, gTN);
-
-              ACBrNFe1.NotasFiscais.Clear;
-              ACBrNFe1.NotasFiscais.LoadFromFile(vAux);
-              ACBrNFe1.Consultar;
-
-              if gModelo = 65 then
-               begin
-                vDescr := 'NFC-e PENDENTE:';
-                Application.Messagebox(PWideChar(
-                 'DADOS DA NFC-e : ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) + char(13) +
-                 'Status=' + vartostr(ACBrNFe1.WebServices.Consulta.cStat)  + '-' + vartostr(ACBrNFe1.WebServices.Consulta.xMotivo) + char(13) +
-                 'Protocolo=' + ACBrNFe1.WebServices.Consulta.Protocolo + char(13) +
-                 'Data do recebimento=' + vartostr(ACBrNFe1.WebServices.Consulta.DhRecbto) + char(13)), PWideChar(vDescr), mb_iconstop+mb_ok);
-               end
-              else
-               begin
-                vDescr := 'NF-e PENDENTE:';
-                Application.Messagebox(PWideChar(
-                 'DADOS DA NF-e  : ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) + char(13) +
-                 'Status=' + vartostr(ACBrNFe1.WebServices.Consulta.cStat)  + '-' + vartostr(ACBrNFe1.WebServices.Consulta.xMotivo) + char(13) +
-                 'Protocolo=' + ACBrNFe1.WebServices.Consulta.Protocolo + char(13) +
-                 'Data do recebimento=' + vartostr(ACBrNFe1.WebServices.Consulta.DhRecbto) + char(13)), PWideChar(vDescr), mb_iconstop+mb_ok);
-               end;
-
-              memoLog.Clear;
-              MemoResp.Lines.Text   := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetWS);
-              MemoLog.Lines.Add(vDescr);
-              MemoLog.Lines.Add('Status');
-              MemoLog.Lines.Add('Tipo de Ambiente:'     + TpAmbToStr(ACBrNFe1.WebServices.Consulta.TpAmb));
-              MemoLog.Lines.Add('Versão do Aplicativo: '+ ACBrNFe1.WebServices.Consulta.verAplic);
-              MemoLog.Lines.Add('Código do Status: '    + IntToStr(ACBrNFe1.WebServices.Consulta.cStat));
-              MemoLog.Lines.Add('Código da UF: '        + IntToStr(ACBrNFe1.WebServices.Consulta.cUF));
-              MemoLog.Lines.Add('Descrição: '           + ACBrNFe1.WebServices.Consulta.xMotivo);
-              MemoLog.Lines.Add('Mensagem: '            + ACBrNFe1.WebServices.Consulta.Msg);
-              MemoLog.Lines.Add('Data do recebimento: ' + vartostr(ACBrNFe1.WebServices.Consulta.DhRecbto));
-              MemoLog.Lines.Add('Protocolo: '           + ACBrNFe1.WebServices.Consulta.Protocolo);
-              memoRespWS.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetornoWS);
-              LoadXML(MemoResp, WBResposta);
-
-              // Caso não exista na base sefaz permite excluir ; by Edson Lima ; 17-9-2012 ; 14:00
-              if ( (vartostr(ACBrNFe1.WebServices.Consulta.cStat) = '217') or
-                   (vartostr(ACBrNFe1.WebServices.Consulta.cStat) = '613')or
-                   (vartostr(ACBrNFe1.WebServices.Consulta.cStat) = '539') ) then
-               begin
-                if MessageDlg('(Status 217) NF-e não consta na base de dados da SEFAZ ! ou ' + chr(13) +
-                              '(Status 613/539) Chave de Acesso difere da existente em BD !' + chr(13)      +
-                              'Confirme a exclusão da NFe nº ' + vartostr(DMFD.FDQuery3['nfe_nnf']), mtConfirmation, [mbYes, mbNo], 0) = mrYes then
-                 begin
-                  //excluir nota
-                  try
-
-                   DMFD.FDQuery1.DisableControls;
-                   DMFD.FDQuery1.Close;
-                   DMFD.FDQuery1.SQL.Clear;
-                   DMFD.FDQuery1.SQL.Add( 'exec sp_exclui_nfe ' + aux );
-
-                   try
-
-                    DMFD.FDQuery1.ExecSQL;
-                    pExcluiXmlErro(VarToStr(DMFD.FDQryGeral2['nfe_modelo']),
-                                   VarToStr(DMFD.FDQryGeral2['nfe_serie']),
-                                   VarToStr(DMFD.FDQryGeral2['nfe_nnf']));
-
-                   except on e:Exception do
-
-                    Application.Messagebox(PWideChar('ERRO: Não EXCLUIU este registro!' + Char(13) +
-                                            e.Message), 'Atenção!',mb_iconstop+mb_ok);
-
-                   end;
-
-                  finally
-
-                   DMFD.FDQuery1.EnableControls;
-
-                  end;
-
-                 end;
-
-               end;
-
-              gDeuErrXml := False;
-
-             end
-            else
-             begin
-
-              gAtuCon := False;
-
-              if MessageDlg('Confirme a exclusão da NFe nº ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']), mtConfirmation, [mbYes, mbNo], 0) = mrYes then
-               begin
-                //excluir nota
-                try
-
-                 DMFD.FDQuery1.DisableControls;
-                 DMFD.FDQuery1.Close;
-                 DMFD.FDQuery1.SQL.Clear;
-                 DMFD.FDQuery1.SQL.Add( 'exec sp_exclui_nfe ' + aux );
-
-                 try
-
-                  DMFD.FDQuery1.ExecSQL;
-                  pExcluiXmlErro(VarToStr(DMFD.FDQryGeral2['nfe_modelo']),
-                                 VarToStr(DMFD.FDQryGeral2['nfe_serie']),
-                                 VarToStr(DMFD.FDQryGeral2['nfe_nnf']));
-
-                 except on e:Exception do
-
-                  Application.Messagebox(PWideChar('ERRO: Não EXCLUIU este registro!' + Char(13) +
-                                         e.Message),'Atenção!',mb_iconstop+mb_ok);
-
-                 end;
-
-                finally
-
-                 DMFD.FDQuery1.EnableControls;
-
-                end;
-
-               end;
-
-             end;
-
-           end;
+         end;
 
         end;
 
-      end;
+       end;
 
-     pAtuNFe;                                                                   // Procedure de atualização
+       gDeuErrXml := False;
 
-     // by Edson ; 20/6/2012 ; 09:20 ; Mostra as notas transmitidas no caso de atualização por consulta
-     if gAtuCon then
+      end
+      else
       begin
 
-       vMens   := '';
-       gAtuCon := False
+       gAtuCon := False;
+
+       if MessageDlg('Confirme a exclusão da NFe nº ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']), mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+       begin
+
+        //excluir nota
+        try
+
+         DMFD.FDQuery1.DisableControls;
+         DMFD.FDQuery1.Close;
+         DMFD.FDQuery1.SQL.Clear;
+         DMFD.FDQuery1.SQL.Add( 'exec sp_exclui_nfe ' + aux );
+
+         try
+
+          DMFD.FDQuery1.ExecSQL;
+          pExcluiXmlErro(VarToStr(DMFD.FDQryGeral2['nfe_modelo']),
+                         VarToStr(DMFD.FDQryGeral2['nfe_serie']),
+                         VarToStr(DMFD.FDQryGeral2['nfe_nnf']));
+
+         except on e:Exception do
+
+          Application.Messagebox(PWideChar('ERRO: Não EXCLUIU este registro!' + Char(13) +
+                                  e.Message),'Atenção!',mb_iconstop+mb_ok);
+
+         end;
+
+        finally
+
+         DMFD.FDQuery1.EnableControls;
+
+        end;
+
+       end;
 
       end;
+
+     end;
 
     end;
 
+   end;
+
+   pAtuNFe;                                                                     // Procedure de atualização
+
+   // by Edson ; 20/6/2012 ; 09:20 ; Mostra as notas transmitidas no caso de atualização por consulta
+   if gAtuCon then
+   begin
+
+    vMens   := '';
+    gAtuCon := False
+
+   end;
+
+  end
+  //----------------------------------------------------------------------------
+  // Contingência
+  //----------------------------------------------------------------------------
+  else if ( RadioGroup1.ItemIndex = 1 ) then
+  begin
+
+   if not fTemSel( cxTL, cxTLbSel ) then exit;                                  // verifica se tem item selecionado na treelist
+
+   for X := 0 to cxTL.Count -1 do                                               // Percorre a treelist
+   begin
+
+    if ( cxTL.Items[X].Texts[cxTLbSel.ItemIndex] = 'True' ) then                // Verifica se o item está selecionado
+    begin
+
+     // Filtra a nfe selecionada com select
+     pSelNfe( DMFD.FDQryGeral2, StrToIntDef(FrGBNFe.edt_CodEmp.Text, 0),
+                                StrToIntDef(cxTL.Items[X].Texts[cxTLlNot.ItemIndex], 0),
+                                StrToDateTime(cxTL.Items[X].Texts[cxTLdDem.ItemIndex]),
+                                cxTL.Items[X].Texts[cxTLsMod.ItemIndex],
+                                cxTL.Items[X].Texts[cxTLsSer.ItemIndex] );
+
+     gDeuErrXml := False;
+     gModelo    := DMFD.FDQryGeral2['nfe_Modelo'];
+     gSerie     := DMFD.FDQryGeral2['nfe_Serie'];
+
+     if ( gCpt = 1 ) then
+      pDefineRel()                                                              // Define o tipo de Relatório FortesReport
+     else
+      pDefineRelFR();                                                           // Define o tipo de Relatório FastReport
+
+     dt       := DMFD.FDQryGeral2['nfe_demi'];
+     vAux     := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
+
+     _tpemissao := '1';
+
+     if ( (gModelo = 55) and (RadioButton3.Checked) ) then
+     begin
+
+      _tipo_emissao := 'fsda';
+      _tpemissao := '5';
+
+     end
+     else if ( (gModelo = 65) and (RadioButton3.Checked) ) then
+     begin
+
+      _tipo_emissao := 'OffL';
+      _tpemissao := '9';
+
+     end;
+
+     // by Edson Lima ; 2017-6-9T0949 ; Define quem será usado como cNF
+     gCdPed := VarToStr(DMFD.FDQryGeral2['nfe_CodPed']);
+
+     Aux := '';
+     Aux := edt_CodEmp.Text + ',' + '''' + VarToStr(DMFD.FDQryGeral2['nfe_nnf']) + '''' + ',' + '''' + _tpemissao + '''' + ',' + '''';
+     Aux := Aux + FormatDateTime('dd/mm/yyyy', VarToDateTime(DMFD.FDQryGeral2['nfe_demi'])) + '''' + ',' + '''';
+     Aux := Aux + IntToStr(gModelo) + '''' + ',' + '''';
+     Aux := Aux + VarToStr(DMFD.FDQryGeral2['nfe_Serie']) + '''' + ',' + '''';
+     Aux := Aux + gCdPed + '''';
+
+     DMFD.FDQuery1.Close;
+     DMFD.FDQuery1.SQL.Clear;
+     DMFD.FDQuery1.SQL.Add( 'exec sp_calcula_digito_chave ' + Aux );
+     DMFD.FDQuery1.open;
+
+     // by Edson Lima 2015-12-9T1007 - trunk2 novo
+     vAux := '';
+     if not DMFD.FDQuery1.IsEmpty then
+      vAux := vartostr(DMFD.FDQuery1['chave']);
+
+     // by Edson ; 2013-10-8T1031 ; Variável Global Chave criada para contestar gravação;
+     gChave_Consiste  := vAux;
+
+     if (gModelo = 65) then
+     begin
+
+      gTN                                   := '\NFCe\';
+
+      if not (DMFD.FDQryGeral2['nfe_DatNFCe']   = null) then
+       gDataEmi                             := (DMFD.FDQryGeral2['nfe_DatNFCe']);
+
+     end
+     else
+     begin
+
+      gTN                                   := '\NFe\';
+
+      if not (DMFD.FDQryGeral2['nfe_demi']      = null) then
+      gDataEmi                             := (DMFD.FDQryGeral2['nfe_demi']);
+
+     end;
+
+     if vAux <> '' then
+     begin
+
+      // Ajusta a data inicial para a data de emissão
+      if (cxdtp1.Date > DMFD.FDQryGeral2['nfe_demi']) then
+       cxdtp1.Date := DMFD.FDQryGeral2['nfe_demi'];
+
+      vAux := trim(gCamLog) + trim(vAux) + '-nfe.xml';
+
+      if FileExists(vAux) then
+      begin
+
+       gAtuCon := True;
+
+       Copia_Xml_PathLog(Aux, gTN);
+
+       ACBrNFe1.NotasFiscais.Clear;
+       ACBrNFe1.NotasFiscais.LoadFromFile(vAux);
+       ACBrNFe1.Consultar;
+
+       if gModelo = 65 then
+       begin
+
+        vDescr := 'NFC-e PENDENTE:';
+        Application.Messagebox(PWideChar(
+         'DADOS DA NFC-e : ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) + char(13) +
+         'Status=' + vartostr(ACBrNFe1.WebServices.Consulta.cStat)  + '-' + vartostr(ACBrNFe1.WebServices.Consulta.xMotivo) + char(13) +
+         'Protocolo=' + ACBrNFe1.WebServices.Consulta.Protocolo + char(13) +
+         'Data do recebimento=' + vartostr(ACBrNFe1.WebServices.Consulta.DhRecbto) + char(13)), PWideChar(vDescr), mb_iconstop+mb_ok);
+
+       end
+       else
+       begin
+
+        vDescr := 'NF-e PENDENTE:';
+        Application.Messagebox(PWideChar(
+         'DADOS DA NF-e  : ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) + char(13) +
+         'Status=' + vartostr(ACBrNFe1.WebServices.Consulta.cStat)  + '-' + vartostr(ACBrNFe1.WebServices.Consulta.xMotivo) + char(13) +
+         'Protocolo=' + ACBrNFe1.WebServices.Consulta.Protocolo + char(13) +
+         'Data do recebimento=' + vartostr(ACBrNFe1.WebServices.Consulta.DhRecbto) + char(13)), PWideChar(vDescr), mb_iconstop+mb_ok);
+
+       end;
+
+       memoLog.Clear;
+       MemoResp.Lines.Text   := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetWS);
+       MemoLog.Lines.Add(vDescr);
+       MemoLog.Lines.Add('Status');
+       MemoLog.Lines.Add('Tipo de Ambiente:'     + TpAmbToStr(ACBrNFe1.WebServices.Consulta.TpAmb));
+       MemoLog.Lines.Add('Versão do Aplicativo: '+ ACBrNFe1.WebServices.Consulta.verAplic);
+       MemoLog.Lines.Add('Código do Status: '    + IntToStr(ACBrNFe1.WebServices.Consulta.cStat));
+       MemoLog.Lines.Add('Código da UF: '        + IntToStr(ACBrNFe1.WebServices.Consulta.cUF));
+       MemoLog.Lines.Add('Descrição: '           + ACBrNFe1.WebServices.Consulta.xMotivo);
+       MemoLog.Lines.Add('Mensagem: '            + ACBrNFe1.WebServices.Consulta.Msg);
+       MemoLog.Lines.Add('Data do recebimento: ' + vartostr(ACBrNFe1.WebServices.Consulta.DhRecbto));
+       MemoLog.Lines.Add('Protocolo: '           + ACBrNFe1.WebServices.Consulta.Protocolo);
+       memoRespWS.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetornoWS);
+       LoadXML(MemoResp, WBResposta);
+
+       // Caso não exista na base sefaz permite excluir ; by Edson Lima ; 17-9-2012 ; 14:00
+       if ( (vartostr(ACBrNFe1.WebServices.Consulta.cStat) = '217') or
+            (vartostr(ACBrNFe1.WebServices.Consulta.cStat) = '613')or
+            (vartostr(ACBrNFe1.WebServices.Consulta.cStat) = '539') ) then
+       begin
+
+        if MessageDlg('(Status 217) NF-e não consta na base de dados da SEFAZ ! ou ' + chr(13) +
+                      '(Status 613/539) Chave de Acesso difere da existente em BD !' + chr(13)      +
+                      'Confirme a exclusão da NFe nº ' + vartostr(DMFD.FDQuery3['nfe_nnf']), mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+        begin
+
+         //excluir nota
+         try
+
+          DMFD.FDQuery1.DisableControls;
+          DMFD.FDQuery1.Close;
+          DMFD.FDQuery1.SQL.Clear;
+          DMFD.FDQuery1.SQL.Add( 'exec sp_exclui_nfe ' + aux );
+
+          try
+
+           DMFD.FDQuery1.ExecSQL;
+           pExcluiXmlErro(VarToStr(DMFD.FDQryGeral2['nfe_modelo']),
+                          VarToStr(DMFD.FDQryGeral2['nfe_serie']),
+                          VarToStr(DMFD.FDQryGeral2['nfe_nnf']));
+
+          except on e:Exception do
+
+           Application.Messagebox(PWideChar('ERRO: Não EXCLUIU este registro!' + Char(13) +
+                                   e.Message), 'Atenção!',mb_iconstop+mb_ok);
+
+          end;
+
+         finally
+
+          DMFD.FDQuery1.EnableControls;
+
+         end;
+
+        end;
+
+       end;
+
+       gDeuErrXml := False;
+
+      end
+      else
+      begin
+
+       gAtuCon := False;
+
+       if MessageDlg('Confirme a exclusão da NFe nº ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']), mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+       begin
+
+        //excluir nota
+        try
+
+         DMFD.FDQuery1.DisableControls;
+         DMFD.FDQuery1.Close;
+         DMFD.FDQuery1.SQL.Clear;
+         DMFD.FDQuery1.SQL.Add( 'exec sp_exclui_nfe ' + aux );
+
+         try
+
+          DMFD.FDQuery1.ExecSQL;
+          pExcluiXmlErro(VarToStr(DMFD.FDQryGeral2['nfe_modelo']),
+                         VarToStr(DMFD.FDQryGeral2['nfe_serie']),
+                         VarToStr(DMFD.FDQryGeral2['nfe_nnf']));
+
+         except on e:Exception do
+
+          Application.Messagebox(PWideChar('ERRO: Não EXCLUIU este registro!' + Char(13) +
+                                 e.Message),'Atenção!',mb_iconstop+mb_ok);
+
+         end;
+
+        finally
+
+         DMFD.FDQuery1.EnableControls;
+
+        end;
+
+       end;
+
+      end;
+
+     end;
+
+    end;
+
+   end;
+
+   pAtuNFe;                                                                     // Procedure de atualização
+
+   // by Edson ; 20/6/2012 ; 09:20 ; Mostra as notas transmitidas no caso de atualização por consulta
+   if gAtuCon then
+   begin
+
+    vMens   := '';
+    gAtuCon := False
+
+   end;
+
   end;
+
+ end;
 
  pAtuNFe;                                                                       // Procedure de atualização
 
@@ -9700,140 +10434,138 @@ begin
  CloseHandle(ProcInfo.hProcess);
 
  if RadioGroup1.ItemIndex = 1 then                                              // Contigência FSDA OU OFF-LINE
+ begin
+
+  if not fTemSel( cxTL, cxTLbSel ) then exit;                                   // verifica se tem item selecionado na treelist
+
+  for X := 0 to cxTL.Count -1 do                                                // Percorre a treelist
   begin
 
-   if not fTemSel( cxTL, cxTLbSel ) then exit;                                  // verifica se tem item selecionado na treelist
+   if ( cxTL.Items[X].Texts[cxTLbSel.ItemIndex] = 'True' ) then                 // Verifica se o item está selecionado
+   begin
 
-   for X := 0 to cxTL.Count -1 do                                               // Percorre a treelist
+    // Filtra a nfe selecionada com select
+    pSelNfe( DMFD.FDQryGeral2, StrToIntDef(FrGBNFe.edt_CodEmp.Text, 0),
+                               StrToIntDef(cxTL.Items[X].Texts[cxTLlNot.ItemIndex], 0),
+                               StrToDateTime(cxTL.Items[X].Texts[cxTLdDem.ItemIndex]),
+                               cxTL.Items[X].Texts[cxTLsMod.ItemIndex],
+                               cxTL.Items[X].Texts[cxTLsSer.ItemIndex] );
 
+    gModelo := DMFD.FDQryGeral2['nfe_Modelo'];
+    gSerie  := DMFD.FDQryGeral2['nfe_Serie'];
+
+    if ( gCpt = 1 ) then
+     pDefineRel()                                                               // Define o tipo de Relatório FortesReport
+    else
+     pDefineRelFR();                                                            // Define o tipo de Relatório FastReport
+
+    gCdloja_Consiste := edt_CodEmp.Text;
+    gdEmi_Consiste   := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
+    gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
+    gNNF_Consiste    := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
+    gSerie_Consiste  := vartostr(DMFD.FDQryGeral2['nfe_serie']);
+    gSerie           := StrToIntDef(gSerie_Consiste, 0);
+    gChave_Consiste  := '';                                                     // está sendo atribuida depois da sp_calcula_digito_chave
+    gModelo_Consiste := vartostr(DMFD.FDQryGeral2['nfe_modelo']);
+    gAnoMesGer       := Copy(gdEmi_Consiste, 7, 4) + Copy(gdEmi_Consiste, 4, 2);
+
+    xAux := trim(gCamLog) + trim(vartostr(DMFD.FDQryGeral2['nfe_chave_nfe'])) + '-nfe.xml';   /// by EL 23.2.2012 -> xAux := trim(FrPar.edtPathLogs.Text) + '\' + trim(vartostr(DMFD.FDQuery5['nfe_chave_nfe'])) + '-nfe.xml';
+    vPdf := trim(gCamPdf) + trim(vartostr(DMFD.FDQryGeral2['nfe_chave_nfe'])) + '-nfe.pdf';
+
+    if copy(trim(vartostr(DMFD.FDQryGeral2['nfe_chave_nfe'])),3,1) = '124' then
+     xAux := trim(gCamLog) + trim(vartostr(DMFD.FDQryGeral2['nfe_nr_dpec']));
+
+    if FileExists(vPdf) then
     begin
 
-     if ( cxTL.Items[X].Texts[cxTLbSel.ItemIndex] = 'True' ) then               // Verifica se o item está selecionado
+     ACBrNFe1.NotasFiscais.Clear;
+     ACBrNFe1.NotasFiscais.LoadFromFile(xAux);
+     ACBrNFe1.NotasFiscais.Imprimir;
 
-      begin
-
-       // Filtra a nfe selecionada com select
-       pSelNfe( DMFD.FDQryGeral2, StrToIntDef(FrGBNFe.edt_CodEmp.Text, 0),
-                                  StrToIntDef(cxTL.Items[X].Texts[cxTLlNot.ItemIndex], 0),
-                                  StrToDateTime(cxTL.Items[X].Texts[cxTLdDem.ItemIndex]),
-                                  cxTL.Items[X].Texts[cxTLsMod.ItemIndex],
-                                  cxTL.Items[X].Texts[cxTLsSer.ItemIndex] );
-
-       gModelo := DMFD.FDQryGeral2['nfe_Modelo'];
-       gSerie  := DMFD.FDQryGeral2['nfe_Serie'];
-
-       if ( gCpt = 1 ) then
-        pDefineRel()                                                            // Define o tipo de Relatório FortesReport
-       else
-        pDefineRelFR();                                                         // Define o tipo de Relatório FastReport
-
-       gCdloja_Consiste := edt_CodEmp.Text;
-       gdEmi_Consiste   := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
-       gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
-       gNNF_Consiste    := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
-       gSerie_Consiste  := vartostr(DMFD.FDQryGeral2['nfe_serie']);
-       gSerie           := StrToIntDef(gSerie_Consiste, 0);
-       gChave_Consiste  := '';                                                  // está sendo atribuida depois da sp_calcula_digito_chave
-       gModelo_Consiste := vartostr(DMFD.FDQryGeral2['nfe_modelo']);
-       gAnoMesGer       := Copy(gdEmi_Consiste, 7, 4) + Copy(gdEmi_Consiste, 4, 2);
-
-       xAux := trim(gCamLog) + trim(vartostr(DMFD.FDQryGeral2['nfe_chave_nfe'])) + '-nfe.xml';   /// by EL 23.2.2012 -> xAux := trim(FrPar.edtPathLogs.Text) + '\' + trim(vartostr(DMFD.FDQuery5['nfe_chave_nfe'])) + '-nfe.xml';
-       vPdf := trim(gCamPdf) + trim(vartostr(DMFD.FDQryGeral2['nfe_chave_nfe'])) + '-nfe.pdf';
-
-       if copy(trim(vartostr(DMFD.FDQryGeral2['nfe_chave_nfe'])),3,1) = '124' then
-        xAux := trim(gCamLog) + trim(vartostr(DMFD.FDQryGeral2['nfe_nr_dpec']));
-
-       if FileExists(vPdf) then
-        begin
-
-         ACBrNFe1.NotasFiscais.Clear;
-         ACBrNFe1.NotasFiscais.LoadFromFile(xAux);
-         ACBrNFe1.NotasFiscais.Imprimir;
-
-        end
-       else
-        begin
-
-         ACBrNFe1.NotasFiscais.Clear;
-         ACBrNFe1.NotasFiscais.LoadFromFile(xAux);
-         ACBrNFe1.NotasFiscais.ImprimirPDF;
-
-         pImpr();
-
-        end;
-
-     end;
-
-    end;
-  end
- else        // Transmitidas
-  begin
-
-   if not fTemSel( cxTL, cxTLbSel ) then exit;                                  // verifica se tem item selecionado na treelist
-
-   for X := 0 to cxTL.Count -1 do                                               // Percorre a treelist
-
+    end
+    else
     begin
 
-     if ( cxTL.Items[X].Texts[cxTLbSel.ItemIndex] = 'True' ) then               // Verifica se o item está selecionado
+     ACBrNFe1.NotasFiscais.Clear;
+     ACBrNFe1.NotasFiscais.LoadFromFile(xAux);
+     ACBrNFe1.NotasFiscais.ImprimirPDF;
 
-      begin
-
-       // Filtra a nfe selecionada com select
-       pSelNfe( DMFD.FDQryGeral2, StrToIntDef(FrGBNFe.edt_CodEmp.Text, 0),
-                                  StrToIntDef(cxTL.Items[X].Texts[cxTLlNot.ItemIndex], 0),
-                                  StrToDateTime(cxTL.Items[X].Texts[cxTLdDem.ItemIndex]),
-                                  cxTL.Items[X].Texts[cxTLsMod.ItemIndex],
-                                  cxTL.Items[X].Texts[cxTLsSer.ItemIndex] );
-
-       gModelo := DMFD.FDQryGeral2['nfe_Modelo'];
-       gSerie  := DMFD.FDQryGeral2['nfe_Serie'];
-
-       if ( gCpt = 1 ) then
-        pDefineRel()                                                            // Define o tipo de Relatório FortesReport
-       else
-        pDefineRelFR();                                                         // Define o tipo de Relatório FastReport
-
-       gCdloja_Consiste := edt_CodEmp.Text;
-       gdEmi_Consiste   := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
-       gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
-       gNNF_Consiste    := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
-       gSerie_Consiste  := vartostr(DMFD.FDQryGeral2['nfe_serie']);
-       gSerie           := StrToIntDef(gSerie_Consiste, 0);
-       gChave_Consiste  := '';                                                  // está sendo atribuida depois da sp_calcula_digito_chave
-       gModelo_Consiste := vartostr(DMFD.FDQryGeral2['nfe_modelo']);
-       gAnoMesGer       := Copy(gdEmi_Consiste, 7, 4) + Copy(gdEmi_Consiste, 4, 2);
-
-       xAux  := trim(gCamLog) + trim(vartostr(DMFD.FDQryGeral2['nfe_chave_nfe'])) + '-nfe.xml';
-       vPdf := trim(gCamPdf) + trim(vartostr(DMFD.FDQryGeral2['nfe_chave_nfe'])) + '-nfe.pdf';
-
-       if copy(trim(vartostr(DMFD.FDQryGeral2['nfe_chave_nfe'])),3,1) = '124' then
-        xAux := trim(gCamLog) + trim(vartostr(DMFD.FDQryGeral2['nfe_nr_dpec']));
-
-       if FileExists(vPdf) then
-        begin
-
-         ACBrNFe1.NotasFiscais.Clear;
-         ACBrNFe1.NotasFiscais.LoadFromFile(xAux);
-         //pDefineRelFR();
-         ACBrNFe1.NotasFiscais.Imprimir;
-
-        end
-       else
-        begin
-
-         ACBrNFe1.NotasFiscais.Clear;
-         ACBrNFe1.NotasFiscais.LoadFromFile(xAux);
-         ACBrNFe1.NotasFiscais.ImprimirPDF;
-
-         pImpr();
-
-        end;
-
-     end;
+     pImpr();
 
     end;
+
+   end;
+
   end;
+
+ end
+ else        // Transmitidas
+ begin
+
+  if not fTemSel( cxTL, cxTLbSel ) then exit;                                   // verifica se tem item selecionado na treelist
+
+  for X := 0 to cxTL.Count -1 do                                                // Percorre a treelist
+  begin
+
+   if ( cxTL.Items[X].Texts[cxTLbSel.ItemIndex] = 'True' ) then                 // Verifica se o item está selecionado
+   begin
+
+    // Filtra a nfe selecionada com select
+    pSelNfe( DMFD.FDQryGeral2, StrToIntDef(FrGBNFe.edt_CodEmp.Text, 0),
+                               StrToIntDef(cxTL.Items[X].Texts[cxTLlNot.ItemIndex], 0),
+                               StrToDateTime(cxTL.Items[X].Texts[cxTLdDem.ItemIndex]),
+                               cxTL.Items[X].Texts[cxTLsMod.ItemIndex],
+                               cxTL.Items[X].Texts[cxTLsSer.ItemIndex] );
+
+    gModelo := DMFD.FDQryGeral2['nfe_Modelo'];
+    gSerie  := DMFD.FDQryGeral2['nfe_Serie'];
+
+    if ( gCpt = 1 ) then
+     pDefineRel()                                                               // Define o tipo de Relatório FortesReport
+    else
+     pDefineRelFR();                                                            // Define o tipo de Relatório FastReport
+
+    gCdloja_Consiste := edt_CodEmp.Text;
+    gdEmi_Consiste   := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
+    gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
+    gNNF_Consiste    := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
+    gSerie_Consiste  := vartostr(DMFD.FDQryGeral2['nfe_serie']);
+    gSerie           := StrToIntDef(gSerie_Consiste, 0);
+    gChave_Consiste  := '';                                                     // está sendo atribuida depois da sp_calcula_digito_chave
+    gModelo_Consiste := vartostr(DMFD.FDQryGeral2['nfe_modelo']);
+    gAnoMesGer       := Copy(gdEmi_Consiste, 7, 4) + Copy(gdEmi_Consiste, 4, 2);
+
+    xAux  := trim(gCamLog) + trim(vartostr(DMFD.FDQryGeral2['nfe_chave_nfe'])) + '-nfe.xml';
+    vPdf := trim(gCamPdf) + trim(vartostr(DMFD.FDQryGeral2['nfe_chave_nfe'])) + '-nfe.pdf';
+
+    if copy(trim(vartostr(DMFD.FDQryGeral2['nfe_chave_nfe'])),3,1) = '124' then
+     xAux := trim(gCamLog) + trim(vartostr(DMFD.FDQryGeral2['nfe_nr_dpec']));
+
+    if FileExists(vPdf) then
+    begin
+
+     ACBrNFe1.NotasFiscais.Clear;
+     ACBrNFe1.NotasFiscais.LoadFromFile(xAux);
+     //pDefineRelFR();
+     ACBrNFe1.NotasFiscais.Imprimir;
+
+    end
+    else
+    begin
+
+     ACBrNFe1.NotasFiscais.Clear;
+     ACBrNFe1.NotasFiscais.LoadFromFile(xAux);
+     ACBrNFe1.NotasFiscais.ImprimirPDF;
+
+     pImpr();
+
+    end;
+
+   end;
+
+  end;
+
+ end;
 
  /// By Edson Lima 3.2.2012 - Antes -->  BitBtn5Click(FrImprimeVenda);
  pAtuNFeT();
@@ -9859,487 +10591,510 @@ begin
 
  if not fTemSel( cxTL, cxTLbSel ) then exit;                                    // verifica se tem item selecionado na treelist
 
- //----------------------------------------------------------------------
+ //-----------------------------------------------------------------------------
  ACBrNFe1.Configuracoes.WebServices.AguardarConsultaRet      := 15000;
  ACBrNFe1.Configuracoes.WebServices.AjustaAguardaConsultaRet := True;
  ACBrNFe1.Configuracoes.WebServices.IntervaloTentativas      := 1000;
  ACBrNFe1.Configuracoes.WebServices.Tentativas               := 10;
  ACBrNFe1.Configuracoes.WebServices.TimeOut                  := 15000;
- //----------------------------------------------------------------------
+ //-----------------------------------------------------------------------------
 
  try
 
   for X := 0 to cxTL.Count -1 do                                                // Percorre a treelist
+  begin
 
+   if ( cxTL.Items[X].Texts[cxTLbSel.ItemIndex] = 'True' ) then                 // Verifica se o item está selecionado
    begin
 
-    if ( cxTL.Items[X].Texts[cxTLbSel.ItemIndex] = 'True' ) then                // Verifica se o item está selecionado
+    // Filtra a nfe selecionada com select
+    pSelNfe( DMFD.FDQryGeral2, StrToIntDef(FrGBNFe.edt_CodEmp.Text, 0),
+                               StrToIntDef(cxTL.Items[X].Texts[cxTLlNot.ItemIndex], 0),
+                               StrToDateTime(cxTL.Items[X].Texts[cxTLdDem.ItemIndex]),
+                               cxTL.Items[X].Texts[cxTLsMod.ItemIndex],
+                               cxTL.Items[X].Texts[cxTLsSer.ItemIndex] );
 
+    gModelo := DMFD.FDQryGeral2['nfe_Modelo'];
+    gSerie  := DMFD.FDQryGeral2['nfe_Serie'];
+
+    fMudaVersao( FrPar.cbb2.ItemIndex, gModelo );                               // Mudança de versão
+
+    if gModelo = 65 then
+    begin
+
+      ACBrNFe1.Configuracoes.Geral.ModeloDF := moNFCe;
+
+    end
+    else
+    begin
+
+      ACBrNFe1.Configuracoes.Geral.ModeloDF := moNFe;
+
+    end;
+
+    if ( gCpt = 1 ) then
+     pDefineRel()                                                               // Define o tipo de Relatório FortesReport
+    else
+     pDefineRelFR();                                                            // Define o tipo de Relatório FastReport
+
+    gCdloja_Consiste := edt_CodEmp.Text;
+    gdEmi_Consiste   := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
+    gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
+    gNNF_Consiste    := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
+    gSerie_Consiste  := vartostr(DMFD.FDQryGeral2['nfe_serie']);
+    gSerie           := StrToIntDef(gSerie_Consiste, 0);
+    gChave_Consiste  := '';                                                   // está sendo atribuida depois da sp_calcula_digito_chave
+    gModelo_Consiste := vartostr(DMFD.FDQryGeral2['nfe_modelo']);
+    gAnoMesGer       := Copy(gdEmi_Consiste, 7, 4) + Copy(gdEmi_Consiste, 4, 2);
+
+    xAux    := DMFD.FDQryGeral2['nfe_chave_nfe'];
+    vChave  := xAux;
+
+    if not ( DMFD.FDQryGeral2['nfe_CodPed'] = null ) then
+     iCodPed := DMFD.FDQryGeral2['nfe_CodPed']
+    else
+     iCodPed := 0;
+
+    if MessageDlg('Confirma cancelamento da nota [ ' + VarToStr(DMFD.FDQryGeral2['nfe_nnf']) + ' ]?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+    begin
+
+     //-------------------------------------------------------------------------
+     // by Edson Lima ; 2017-1-9T1130 ; Verifica a precisão adm do ERP para
+     //                                 cancelamento
+     //-------------------------------------------------------------------------
+     if iCodPed <> 0 then
      begin
 
-      // Filtra a nfe selecionada com select
-      pSelNfe( DMFD.FDQryGeral2, StrToIntDef(FrGBNFe.edt_CodEmp.Text, 0),
-                                 StrToIntDef(cxTL.Items[X].Texts[cxTLlNot.ItemIndex], 0),
-                                 StrToDateTime(cxTL.Items[X].Texts[cxTLdDem.ItemIndex]),
-                                 cxTL.Items[X].Texts[cxTLsMod.ItemIndex],
-                                 cxTL.Items[X].Texts[cxTLsSer.ItemIndex] );
+      if not ( fVerPAG(StrToIntDef(gNNF_Consiste, 0), StrToIntDef(edt_CodEmp.Text, 0), iCodPed) ) then
+       Exit;
 
-      gModelo := DMFD.FDQryGeral2['nfe_Modelo'];
-      gSerie  := DMFD.FDQryGeral2['nfe_Serie'];
+     end
+     else
+      Application.MessageBox(PWideChar('Número do pedido não informado!'), 'Atenção', MB_ICONINFORMATION );
 
-      fMudaVersao( FrPar.cbb2.ItemIndex, gModelo );                             // Mudança de versão
+     //-------------------------------------------------------------------------
 
-      if gModelo = 65 then
-       begin
-        ACBrNFe1.Configuracoes.Geral.ModeloDF := moNFCe;
-       end
-      else
-       begin
-        ACBrNFe1.Configuracoes.Geral.ModeloDF := moNFe;
-       end;
+     xAux := trim(gCamLog) + trim(xAux) + '-nfe.xml';
 
-      if ( gCpt = 1 ) then
-       pDefineRel()                                                             // Define o tipo de Relatório FortesReport
-      else
-       pDefineRelFR();                                                          // Define o tipo de Relatório FastReport
+     ACBrNFe1.NotasFiscais.Clear;
+     ACBrNFe1.NotasFiscais.LoadFromFile(xAux);
+     ACBrNFe1.Consultar;
 
-      gCdloja_Consiste := edt_CodEmp.Text;
-      gdEmi_Consiste   := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
-      gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
-      gNNF_Consiste    := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
-      gSerie_Consiste  := vartostr(DMFD.FDQryGeral2['nfe_serie']);
-      gSerie           := StrToIntDef(gSerie_Consiste, 0);
-      gChave_Consiste  := '';                                                   // está sendo atribuida depois da sp_calcula_digito_chave
-      gModelo_Consiste := vartostr(DMFD.FDQryGeral2['nfe_modelo']);
-      gAnoMesGer       := Copy(gdEmi_Consiste, 7, 4) + Copy(gdEmi_Consiste, 4, 2);
+     gChave_Consiste  := ACBrNFe1.WebServices.Consulta.NFeChave;
 
-      xAux    := DMFD.FDQryGeral2['nfe_chave_nfe'];
-      vChave  := xAux;
+     idLote := ( VarToStr(DMFD.FDQryGeral2['nfe_Serie']) + VarToStr(DMFD.FDQryGeral2['nfe_codigo_loja']) + VarToStr(DMFD.FDQryGeral2['nfe_nnf']) );
 
-      if not ( DMFD.FDQryGeral2['nfe_CodPed'] = null ) then
-       iCodPed := DMFD.FDQryGeral2['nfe_CodPed']
-      else
-       iCodPed := 0;
+     vMens := 'A Justificativa deve ter pelo menos 15 caracteres';
+     vAux  := gNomMtC;
+     if not(InputQuery('WebServices Cancelamento', 'Justificativa', vAux)) then exit;
 
-      if MessageDlg('Confirma cancelamento da nota [ ' + VarToStr(DMFD.FDQryGeral2['nfe_nnf']) + ' ]?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
-       begin
+     if length(trim(vAux)) < 15 then
+     begin
 
-        //----------------------------------------------------------------------
-        // by Edson Lima ; 2017-1-9T1130 ; Verifica a precisão adm do ERP para
-        //                                 cancelamento
-        //----------------------------------------------------------------------
-        if iCodPed <> 0 then
-         begin
-          if not ( fVerPAG(StrToIntDef(gNNF_Consiste, 0), StrToIntDef(edt_CodEmp.Text, 0), iCodPed) ) then
-           Exit;
-         end
-        else
-         Application.MessageBox(PWideChar('Número do pedido não informado!'), 'Atenção', MB_ICONINFORMATION );
-
-        //----------------------------------------------------------------------
-
-        xAux := trim(gCamLog) + trim(xAux) + '-nfe.xml';
-
-        ACBrNFe1.NotasFiscais.Clear;
-        ACBrNFe1.NotasFiscais.LoadFromFile(xAux);
-        ACBrNFe1.Consultar;
-
-        gChave_Consiste  := ACBrNFe1.WebServices.Consulta.NFeChave;
-
-        idLote := ( VarToStr(DMFD.FDQryGeral2['nfe_Serie']) + VarToStr(DMFD.FDQryGeral2['nfe_codigo_loja']) + VarToStr(DMFD.FDQryGeral2['nfe_nnf']) );
-
-        vMens := 'A Justificativa deve ter pelo menos 15 caracteres';
-        vAux  := gNomMtC;
-        if not(InputQuery('WebServices Cancelamento', 'Justificativa', vAux)) then exit;
-
-         if length(trim(vAux)) < 15 then
-         begin
-
-          MessageDlg('Justificativa deve ter no mínimo 15 caracteres', mtInformation,[mbOK],0);
-          pAtuNFeT;                                                             // Procedure de atualização
-          exit;
-
-         end;
-
-        memoLog.Clear;
-        ACBrNFe1.EventoNFe.Evento.Clear;
-        ACBrNFe1.EventoNFe.idLote  := StrToIntDef(idLote, 0) ;
-
-        with ACBrNFe1.EventoNFe.Evento.Add do
-        begin
-         infEvento.tpAmb           := ACBrNFe1.NotasFiscais.Add.NFe.Ide.tpAmb;
-
-         //---------------------------------------------------------------------
-         // by Edson ; Verifica a data e hora do evento com UTC da UF
-         //---------------------------------------------------------------------
-         // Nova rotina
-         HorVer := False; Hor_DF := False; FusHor := False;
-
-         if (DMFD.FDQuery4['DANFE_HorariodeVerao'] = 'S') then
-          HorVer := True;
-
-         if (DMFD.FDQuery4['DANFE_UsaHorarioDF'] = 'S') then
-          Hor_DF := True;
-
-         if (DMFD.FDQuery4['DANFE_FusoHorario'] = 'S') then
-          FusHor := True;
-
-
-         CdUf := StrToIntDef(DMFD.FDQuery4['codigo_uf'], 0);
-         CdMun := DMFD.FDQuery4['codigo_municipio'];
-         vdhEve := '';
-         dhEve := Now();                                                        // Antes --> dhEve := VarToDateTime(ACBrNFe1.WebServices.Consulta.protNFe.dhRecbto);
-
-         infEvento.dhEvento := fFusHor(HorVer, Hor_DF, FusHor, CdUf, CdMun, vdhEve, dhEve );
-
-         infEvento.tpEvento         := teCancelamento;
-         infEvento.id               := 'ID' + VarToStr(infEvento.tpEvento) + vChave + '1';
-         infEvento.detEvento.xJust  := vAux;
-         infEvento.cOrgao           := strtointDef(DMFD.FDQuery4['codigo_uf'], 0);
-
-         //---------------------------------------------------------------------
-
-        end;
-
-        //----------------------------------------------------------------------
-
-        ACBrNFe1.EnviarEvento(StrToIntDef(idLote, 0));
-        //----------------------------------------------------------------------
-        ACBrNFe1.Configuracoes.WebServices.AguardarConsultaRet      := 0;
-        //----------------------------------------------------------------------
-
-        xAuxA := TstringList.Create;
-
-        with ACBrNFe1.EventoNFe do
-        begin
-
-         //---------------------------------------------------------------------
-         xAuxO :=   trim(gCamPdf) +                                             // Caminho do arquivo Pdf
-                    trim(vChave) +                                              // Chave da NFe
-                    '-cancelado-nfe.pdf';                                       // Final do nome + tipo (Pdf)
-
-         xAuxD :=   trim(gCamPdf) +                                             // Caminho do arquivo log (gCamlog contém o caminho padrão) ex: c:\Sistemas\GBNFe\Arq\Emp001\log\
-                    Evento.Items[0].InfEvento.TipoEvento +                      // Tipo de evento, neste caso (110111)
-                    trim(vChave) +                                              // Chave da NFe
-                    '01' +                                                      // Sequencia do Evento com duas casas decimais
-                    '-procEventoNFe.Pdf';                                       // Final do nome + tipo (Pdf)
-         //---------------------------------------------------------------------
-
-         xAuxC :=   trim(gCamXml) +                                             // Caminho do arquivo log (gCamlog contém o caminho padrão) ex: c:\Sistemas\GBNFe\Arq\Emp001\log\
-                    FormatDateTime('yyyymm', Evento.Items[0].InfEvento.dhEvento) + // Ano, mês
-                    '\Evento\Cancelamento\' +                                   // Evento e Cancelamento
-                    Evento.Items[0].InfEvento.TipoEvento +                      // Tipo de evento, neste caso (110111)
-                    trim(vChave) +                                              // Chave da NFe
-                    '01' +                                                      // Sequencia do Evento com duas casas decimais
-                    '-procEventoNFe.xml';                                       // Final do nome + tipo (xml)
-
-         xAuxA.Add( trim(gCamXml) +                                             // Caminho do arquivo log (gCamlog contém o caminho padrão) ex: c:\Sistemas\GBNFe\Arq\Emp001\log\
-                    FormatDateTime('yyyymm', Evento.Items[0].InfEvento.dhEvento) + // Ano, mês
-                    '\Evento\Cancelamento\' +                                   // Evento e Cancelamento
-                    Evento.Items[0].InfEvento.TipoEvento +                      // Tipo de evento, neste caso (110111)
-                    trim(vChave) +                                              // Chave da NFe
-                    '01' +                                                      // Sequencia do Evento com duas casas decimais
-                    '-procEventoNFe.xml' );                                     // Final do nome + tipo (xml)
-
-        end;
-
-        memoLog.Clear;
-        MemoResp.Lines.Text   :=  UTF8Encode(ACBrNFe1.WebServices.EnvEvento.RetWS);
-        MemoLog.Lines.Text    :=  UTF8Encode(ACBrNFe1.WebServices.EnvEvento.Msg);
-        memoRespWS.Lines.Text :=  UTF8Encode(ACBrNFe1.WebServices.EnvEvento.RetornoWS);
-        LoadXML(MemoResp, WBResposta);
-
-        vNnf := DMFD.FDQryGeral2['nfe_nnf'];
-
-        // by Edson Lima ; 2013/03/12 ; 14:23 ; Atualiza a nfe no update centralizado
-        // by Edson Lima ; 18.4.2012 ; 09:58 ; Implementa o email no cancelamento
-        if ((VarToStr(ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cStat) = '101')  or
-            (VarToStr(ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cStat) = '135')  or
-            (VarToStr(ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cStat) = '136')  or
-            (VarToStr(ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cStat) = '151')  or
-            (VarToStr(ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cStat) = '155')) then
-         begin
-          pGravaNFe('008', 'protocolo',
-                           'data_hora_recebimento',
-                           'situacao',
-                           'motivo',
-                           'cStat_CCe',
-                           'xMotivo_CCe',
-                           'UsuCnc',
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           'codigo_loja',
-                           'demi',
-                           'nnf',
-                           'serie',
-                           'chave_nfe',
-                           'modelo',                                            // Nome dos Campos
-                           ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.nProt,
-                           FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.dhRegEvento),
-                           ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cStat,
-                           ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.xMotivo,
-                           '',
-                           '',
-                           gUsu,
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           edt_CodEmp.Text,
-                           FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']),
-                           DMFD.FDQryGeral2['nfe_nnf'],
-                           DMFD.FDQryGeral2['nfe_serie'],
-                           ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.chNFe,
-                           DMFD.FDQryGeral2['nfe_modelo'],                      // Conteúdo dos campos
-                           true);                                               // Consiste [true/false]
-
-          // Verifia se tem carta de correção e se tiver modifica o status da carta para CCe COM NFE CANCELADA
-          if fGravaCCe( DMFD.FDQryGeral2['nfe_nnf'], '580', '(NFe Cancelada) - O evento exige uma NF-e autorizada' ) then
-           pGravaNFe('008', 'protocolo',
-                            'data_hora_recebimento',
-                            '',
-                            '',
-                            '',
-                            '',
-                            '',
-                            '',
-                            '',
-                            '',
-                            '',
-                            '',
-                            '',
-                            'codigo_loja',
-                            'demi',
-                            'nnf',
-                            'serie',
-                            'chave_nfe',
-                            'modelo',                                           // Nome dos campos
-                            ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.nProt,
-                            FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.dhRegEvento),
-                            '',
-                            '',
-                            '580',
-                            '(NFe Cancelada) - O evento exige uma NF-e autorizada',
-                            '',
-                            '',
-                            '',
-                            '',
-                            '',
-                            '',
-                            '',
-                            edt_CodEmp.Text,
-                            FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']),
-                            DMFD.FDQryGeral2['nfe_nnf'],
-                            DMFD.FDQryGeral2['nfe_serie'],
-                            ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.chNFe,
-                            DMFD.FDQryGeral2['nfe_modelo'],                     // Conteúdo dos campos
-                            true);                                              // Consiste [true/false]
-
-          //--------------------------------------------------------------------
-          // by Edson Lima ; 7/1/2014T1026 ; Cancela CCe caso tenha alt. na NFe
-          //--------------------------------------------------------------------
-
-          fCancelaCCe(gCdloja_Consiste, gNNF_Consiste, gdEmi_Consiste);
-
-          //--------------------------------------------------------------------
-
-          //--------------------------------------------------------------------
-          // by Edson Lima ; 2017-1-11T1031
-          // Efetua o Cancelamento Administrativo do PEDIDO
-          //--------------------------------------------------------------------
-          if iCodPed <> 0 then
-           begin
-            if not ( fCanCAP(StrToIntDef(gNNF_Consiste, 0), StrToIntDef(edt_CodEmp.Text, 0), iCodPed, gCodMtC) ) then
-             Application.MessageBox(PWideChar('Nota cancelada, mas o pedido não!'), 'Atenção', MB_ICONINFORMATION );
-           end
-          else
-           Application.MessageBox(PWideChar('Número do pedido não informado! Nota cancelada, mas Pedido não!'), 'Atenção', MB_ICONINFORMATION );
-          //--------------------------------------------------------------------
-
-         end
-        else
-         begin
-          MessageDlg('Nota:[ ' + vNnf + ' ]' + Chr(13) +
-                     'Status: ' + VarToStr(ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cStat) + Chr(13) +
-                     ' - Motivo:' + ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.xMotivo + Chr(13) +
-                     'REJEIÇÃO', mtInformation, [mbOK], 0);
-          exit;
-         end;
-
-        // by Edson Lima ; 18.4.2012 ; 09:58 ; Implementa o email no cancelamento
-        if ((VarToStr(ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cStat) = '101')  or
-            (VarToStr(ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cStat) = '135')  or
-            (VarToStr(ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cStat) = '136')  or
-            (VarToStr(ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cStat) = '151')  or
-            (VarToStr(ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cStat) = '155')) then
-         begin
-          //pega os dados do destinatario
-          DMFD.FDQuery2.Close;
-          DMFD.FDQuery2.SQL.Clear;
-          DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                                                   ' );
-          DMFD.FDQuery2.SQL.Add( 'Select                                                               ' );
-          DMFD.FDQuery2.SQL.Add( 't1.*                                                                 ' );
-          DMFD.FDQuery2.SQL.Add( 'from destinatario t1                                                 ' );
-          DMFD.FDQuery2.SQL.Add( 'inner join nfe t2 on t2.codigo_destinatario = t1.codigo              ' );
-          DMFD.FDQuery2.SQL.Add( 'where t2.codigo_loja = :parm1                                        ' );
-          DMFD.FDQuery2.SQL.Add( 'and t2.chave_nfe = :parm2                                            ' );
-          DMFD.FDQuery2.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
-          DMFD.FDQuery2.Params[1].AsString  := (vChave);
-          DMFD.FDQuery2.Open;
-          if DMFD.FDQuery2.IsEmpty then
-           begin
-            MessageDlg('Nfe cancelada não existe',mtInformation,[mbOK],0);
-            exit;
-           end;
-
-          para := vartostr(DMFD.FDQuery2['email']);
-
-          if ( (trim(para) = '') or (FrPar.CheckBox10.Checked) ) then
-           begin
-
-            repeat
-
-             begin
-
-              if not InputQuery(vartostr(DMFD.FDQuery2['razao_social']), 'Email de destino:', Para) then
-               begin
-                pAtuNFe;                                                        // Procedure de atualização
-                Exit;
-               end;
-
-              para := LowerCase(para);
-
-              if ( not fValidaEmail(para, 'N') ) then
-               Application.Messagebox('Campo de email do destinatário inválido! ','Atenção!',mb_iconstop+mb_ok);
-
-             end;
-
-            until ( fValidaEmail(para, 'N') );
-
-           end;
-
-          if vartostr(DMFD.FDQuery2['email']) <> '' then
-           begin
-            if FrPar.edtEnvCC.Text = '' then
-             IdMessage.CCList.EMailAddresses := 'nfe@gbinformatica.com.br'      //especifique um email válido
-            else
-             begin
-
-              CC:=TstringList.Create;
-
-              //----------------------------------------------------------------
-              //-- Implementa o email da transp.- by Edson Lima 16-3-2021     --
-              //----------------------------------------------------------------
-
-              if not ( Trim(geMailTransp) = '' ) then
-               FrPar.edtEnvCC.Text := FrPar.edtEnvCC.Text + ', ' + geMailTransp;
-
-              //----------------------------------------------------------------
-
-              if ( FrPar.edtEnvCC.Text <> '') then
-               for I := 1 to (Length(FrPar.edtEnvCC.Text)+1) do
-                begin
-                 if (FrPar.edtEnvCC.Text[I] = ',') or (FrPar.edtEnvCC.Text[I] = ';') or (I = Length(FrPar.edtEnvCC.Text)+1)then
-                  begin
-                   CC.Add(trim(vI));                                            //especifique um email válido
-                   vI := '';
-                  end
-                 else
-                  vI := (vI + FrPar.edtEnvCC.Text[I]);
-                end;
-
-              vI := '';                                                         // Limpa variável
-              vC := 0;                                                          // zera contador
-
-              for I := 1 to (Length(Para)+1) do
-               begin
-                if (Para[I] = ',') or (Para[I] = ';') or (I = Length(Para)+1)then
-                 begin
-                  if vC > 0 then
-                   CC.Add(trim(vI))                                             //especifique um email válido
-                  else
-                   vP := trim(vI);                                              // Atribui apenas o primeiro email
-
-                  vI := '';
-                  inc(vC);                                                      // Incrementa 1
-                 end
-                else
-                 vI := (vI + Para[I]);
-               end;
-
-              Para := vP;
-
-             end;
-
-
-             sReplyTo := TStringList.Create;
-             sReplyTo.Add('gbinfo.notafiscal@gmail.com');
-             vEmailCancAssunto := FrPar.edtEmailCancAssunto.Text + ' - Nº:' + vNnf + ' Cancelada!';
-
-             try
-
-              try
-
-               ACBrNFe1.EventoNFe.Evento.Clear;
-               ACBrNFe1.EventoNFe.LerXML(xAuxC);
-
-               if ( gModelo = 65 ) then
-                begin
-
-                 if not FileExists(xAuxO) then
-                  ACBrNFe1.ImprimirEventoPDF;                                   // Gera Pdf da NFCe
-
-                 CopyFile(PWideChar(xAuxO), PWideChar(xAuxD), False);
-
-                end;
-
-               ACBrNFe1.EnviarEmailEvento(
-                          Para                                                  // email do destinatário
-                        , vEmailCancAssunto                                     // Asunto
-                        , FrPar.mmEmailMsg.Lines                                // Mensagem
-                        , CC                                                    // Lista com emails que serÃ£o enviado cÃ³pias - TStrings
-                        , xAuxA                                                 // Anexos
-                        , nil            );            //sReplyTo       );      // ReplyTo - "Responder a"
-
-                Application.MessageBox(PWideChar('Email da nota:[ ' + vNnf + ' ]' + ' enviado com sucesso!'), 'Atenção', MB_ICONINFORMATION );
-
-               except on e:exception do
-
-                Application.Messagebox( pWideChar( 'Inconsistência no envio do email da nota:[ ' + vNnf + ' ]' + ' cancelada!' + chr(13) +
-                                        e.Message ), 'Atenção!', MB_ICONERROR+mb_ok);
-
-              end;
-
-             finally
-
-              CC.Free;
-              xAuxA.Free;
-              sReplyTo.Free;
-
-             end;
-
-           end
-          else
-           MessageDlg('eMail não definido para o destinatário!', mtInformation, [mbOK], 0);
-
-          MessageDlg('Nota:[ ' + vNnf + ' ]' + Chr(13) +
-                     'Status: ' + VarToStr(ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cStat) + ' - Protocolo:' +
-                     ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.nProt + Chr(13) +
-                     'CANCELADA', mtInformation, [mbOK], 0);
-
-         end;
-
-       end;
+      MessageDlg('Justificativa deve ter no mínimo 15 caracteres', mtInformation,[mbOK],0);
+      pAtuNFeT;                                                                 // Procedure de atualização
+      exit;
 
      end;
 
+     memoLog.Clear;
+     ACBrNFe1.EventoNFe.Evento.Clear;
+     ACBrNFe1.EventoNFe.idLote  := StrToIntDef(idLote, 0) ;
+
+     with ACBrNFe1.EventoNFe.Evento.Add do
+     begin
+      infEvento.tpAmb           := ACBrNFe1.NotasFiscais.Add.NFe.Ide.tpAmb;
+
+      //------------------------------------------------------------------------
+      // by Edson ; Verifica a data e hora do evento com UTC da UF
+      //------------------------------------------------------------------------
+      // Nova rotina
+      HorVer := False; Hor_DF := False; FusHor := False;
+
+      if (DMFD.FDQuery4['DANFE_HorariodeVerao'] = 'S') then
+       HorVer := True;
+
+      if (DMFD.FDQuery4['DANFE_UsaHorarioDF'] = 'S') then
+       Hor_DF := True;
+
+      if (DMFD.FDQuery4['DANFE_FusoHorario'] = 'S') then
+       FusHor := True;
+
+      CdUf := StrToIntDef(DMFD.FDQuery4['codigo_uf'], 0);
+      CdMun := DMFD.FDQuery4['codigo_municipio'];
+      vdhEve := '';
+      dhEve := Now();                                                           // Antes --> dhEve := VarToDateTime(ACBrNFe1.WebServices.Consulta.protNFe.dhRecbto);
+
+      infEvento.dhEvento := fFusHor(HorVer, Hor_DF, FusHor, CdUf, CdMun, vdhEve, dhEve );
+
+      infEvento.tpEvento         := teCancelamento;
+      infEvento.id               := 'ID' + VarToStr(infEvento.tpEvento) + vChave + '1';
+      infEvento.detEvento.xJust  := vAux;
+      infEvento.cOrgao           := strtointDef(DMFD.FDQuery4['codigo_uf'], 0);
+
+      //------------------------------------------------------------------------
+
+     end;
+
+     //-------------------------------------------------------------------------
+
+     ACBrNFe1.EnviarEvento(StrToIntDef(idLote, 0));
+     //-------------------------------------------------------------------------
+     ACBrNFe1.Configuracoes.WebServices.AguardarConsultaRet      := 0;
+     //-------------------------------------------------------------------------
+
+     xAuxA := TstringList.Create;
+
+     with ACBrNFe1.EventoNFe do
+     begin
+
+      //------------------------------------------------------------------------
+
+      xAuxO :=   trim(gCamPdf) +                                                // Caminho do arquivo Pdf
+                 trim(vChave) +                                                 // Chave da NFe
+                 '-cancelado-nfe.pdf';                                          // Final do nome + tipo (Pdf)
+
+      xAuxD :=   trim(gCamPdf) +                                                // Caminho do arquivo log (gCamlog contém o caminho padrão) ex: c:\Sistemas\GBNFe\Arq\Emp001\log\
+                 Evento.Items[0].InfEvento.TipoEvento +                         // Tipo de evento, neste caso (110111)
+                 trim(vChave) +                                                 // Chave da NFe
+                 '01' +                                                         // Sequencia do Evento com duas casas decimais
+                 '-procEventoNFe.Pdf';                                          // Final do nome + tipo (Pdf)
+
+      //------------------------------------------------------------------------
+
+      xAuxC :=   trim(gCamXml) +                                                // Caminho do arquivo log (gCamlog contém o caminho padrão) ex: c:\Sistemas\GBNFe\Arq\Emp001\log\
+                 FormatDateTime('yyyymm', Evento.Items[0].InfEvento.dhEvento) + // Ano, mês
+                 '\Evento\Cancelamento\' +                                      // Evento e Cancelamento
+                 Evento.Items[0].InfEvento.TipoEvento +                         // Tipo de evento, neste caso (110111)
+                 trim(vChave) +                                                 // Chave da NFe
+                 '01' +                                                         // Sequencia do Evento com duas casas decimais
+                 '-procEventoNFe.xml';                                          // Final do nome + tipo (xml)
+
+      xAuxA.Add( trim(gCamXml) +                                                // Caminho do arquivo log (gCamlog contém o caminho padrão) ex: c:\Sistemas\GBNFe\Arq\Emp001\log\
+                 FormatDateTime('yyyymm', Evento.Items[0].InfEvento.dhEvento) + // Ano, mês
+                 '\Evento\Cancelamento\' +                                      // Evento e Cancelamento
+                 Evento.Items[0].InfEvento.TipoEvento +                         // Tipo de evento, neste caso (110111)
+                 trim(vChave) +                                                 // Chave da NFe
+                 '01' +                                                         // Sequencia do Evento com duas casas decimais
+                 '-procEventoNFe.xml' );                                        // Final do nome + tipo (xml)
+
+     end;
+
+     memoLog.Clear;
+     MemoResp.Lines.Text   :=  UTF8Encode(ACBrNFe1.WebServices.EnvEvento.RetWS);
+     MemoLog.Lines.Text    :=  UTF8Encode(ACBrNFe1.WebServices.EnvEvento.Msg);
+     memoRespWS.Lines.Text :=  UTF8Encode(ACBrNFe1.WebServices.EnvEvento.RetornoWS);
+     LoadXML(MemoResp, WBResposta);
+
+     vNnf := DMFD.FDQryGeral2['nfe_nnf'];
+
+     // by Edson Lima ; 2013/03/12 ; 14:23 ; Atualiza a nfe no update centralizado
+     // by Edson Lima ; 18.4.2012 ; 09:58 ; Implementa o email no cancelamento
+     if ((VarToStr(ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cStat) = '101')  or
+         (VarToStr(ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cStat) = '135')  or
+         (VarToStr(ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cStat) = '136')  or
+         (VarToStr(ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cStat) = '151')  or
+         (VarToStr(ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cStat) = '155')) then
+     begin
+      pGravaNFe('008', 'protocolo',
+                       'data_hora_recebimento',
+                       'situacao',
+                       'motivo',
+                       'cStat_CCe',
+                       'xMotivo_CCe',
+                       'UsuCnc',
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       'codigo_loja',
+                       'demi',
+                       'nnf',
+                       'serie',
+                       'chave_nfe',
+                       'modelo',                                                // Nome dos Campos
+                       ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.nProt,
+                       FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.dhRegEvento),
+                       ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cStat,
+                       ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.xMotivo,
+                       '',
+                       '',
+                       gUsu,
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       edt_CodEmp.Text,
+                       FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']),
+                       DMFD.FDQryGeral2['nfe_nnf'],
+                       DMFD.FDQryGeral2['nfe_serie'],
+                       ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.chNFe,
+                       DMFD.FDQryGeral2['nfe_modelo'],                          // Conteúdo dos campos
+                       true);                                                   // Consiste [true/false]
+
+      // Verifia se tem carta de correção e se tiver modifica o status da carta para CCe COM NFE CANCELADA
+      if fGravaCCe( DMFD.FDQryGeral2['nfe_nnf'], '580', '(NFe Cancelada) - O evento exige uma NF-e autorizada' ) then
+       pGravaNFe('008', 'protocolo',
+                        'data_hora_recebimento',
+                        '',
+                        '',
+                        '',
+                        '',
+                        '',
+                        '',
+                        '',
+                        '',
+                        '',
+                        '',
+                        '',
+                        'codigo_loja',
+                        'demi',
+                        'nnf',
+                        'serie',
+                        'chave_nfe',
+                        'modelo',                                               // Nome dos campos
+                        ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.nProt,
+                        FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.dhRegEvento),
+                        '',
+                        '',
+                        '580',
+                        '(NFe Cancelada) - O evento exige uma NF-e autorizada',
+                        '',
+                        '',
+                        '',
+                        '',
+                        '',
+                        '',
+                        '',
+                        edt_CodEmp.Text,
+                        FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']),
+                        DMFD.FDQryGeral2['nfe_nnf'],
+                        DMFD.FDQryGeral2['nfe_serie'],
+                        ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.chNFe,
+                        DMFD.FDQryGeral2['nfe_modelo'],                         // Conteúdo dos campos
+                        true);                                                  // Consiste [true/false]
+
+      //------------------------------------------------------------------------
+      // by Edson Lima ; 7/1/2014T1026 ; Cancela CCe caso tenha alt. na NFe
+      //------------------------------------------------------------------------
+
+      fCancelaCCe(gCdloja_Consiste, gNNF_Consiste, gdEmi_Consiste);
+
+      //------------------------------------------------------------------------
+
+      //------------------------------------------------------------------------
+      // by Edson Lima ; 2017-1-11T1031
+      // Efetua o Cancelamento Administrativo do PEDIDO
+      //------------------------------------------------------------------------
+      if iCodPed <> 0 then
+      begin
+
+       if not ( fCanCAP(StrToIntDef(gNNF_Consiste, 0), StrToIntDef(edt_CodEmp.Text, 0), iCodPed, gCodMtC) ) then
+        Application.MessageBox(PWideChar('Nota cancelada, mas o pedido não!'), 'Atenção', MB_ICONINFORMATION );
+
+      end
+      else
+       Application.MessageBox(PWideChar('Número do pedido não informado! Nota cancelada, mas Pedido não!'), 'Atenção', MB_ICONINFORMATION );
+
+      //------------------------------------------------------------------------
+
+     end
+     else
+     begin
+
+      MessageDlg('Nota:[ ' + vNnf + ' ]' + Chr(13) +
+                 'Status: ' + VarToStr(ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cStat) + Chr(13) +
+                 ' - Motivo:' + ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.xMotivo + Chr(13) +
+                 'REJEIÇÃO', mtInformation, [mbOK], 0);
+      exit;
+
+     end;
+
+     // by Edson Lima ; 18.4.2012 ; 09:58 ; Implementa o email no cancelamento
+     if ((VarToStr(ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cStat) = '101')  or
+         (VarToStr(ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cStat) = '135')  or
+         (VarToStr(ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cStat) = '136')  or
+         (VarToStr(ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cStat) = '151')  or
+         (VarToStr(ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cStat) = '155')) then
+     begin
+
+      //pega os dados do destinatario
+      DMFD.FDQuery2.Close;
+      DMFD.FDQuery2.SQL.Clear;
+      DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                                                   ' );
+      DMFD.FDQuery2.SQL.Add( 'Select                                                               ' );
+      DMFD.FDQuery2.SQL.Add( 't1.*                                                                 ' );
+      DMFD.FDQuery2.SQL.Add( 'from destinatario t1                                                 ' );
+      DMFD.FDQuery2.SQL.Add( 'inner join nfe t2 on t2.codigo_destinatario = t1.codigo              ' );
+      DMFD.FDQuery2.SQL.Add( 'where t2.codigo_loja = :parm1                                        ' );
+      DMFD.FDQuery2.SQL.Add( 'and t2.chave_nfe = :parm2                                            ' );
+      DMFD.FDQuery2.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
+      DMFD.FDQuery2.Params[1].AsString  := (vChave);
+      DMFD.FDQuery2.Open;
+
+      if DMFD.FDQuery2.IsEmpty then
+      begin
+
+       MessageDlg('Nfe cancelada não existe',mtInformation,[mbOK],0);
+       exit;
+
+      end;
+
+      para := vartostr(DMFD.FDQuery2['email']);
+
+      if ( (trim(para) = '') or (FrPar.CheckBox10.Checked) ) then
+      begin
+
+       repeat
+       begin
+
+        if not InputQuery(vartostr(DMFD.FDQuery2['razao_social']), 'Email de destino:', Para) then
+        begin
+
+         pAtuNFe;                                                               // Procedure de atualização
+         Exit;
+
+        end;
+
+        para := LowerCase(para);
+
+        if ( not fValidaEmail(para, 'N') ) then
+         Application.Messagebox('Campo de email do destinatário inválido! ','Atenção!',mb_iconstop+mb_ok);
+
+       end;
+
+       until ( fValidaEmail(para, 'N') );
+
+      end;
+
+      if vartostr(DMFD.FDQuery2['email']) <> '' then
+      begin
+
+       if FrPar.edtEnvCC.Text = '' then
+        IdMessage.CCList.EMailAddresses := 'nfe@gbinformatica.com.br'           //especifique um email válido
+       else
+       begin
+
+        CC:=TstringList.Create;
+
+        //----------------------------------------------------------------------
+        //-- Implementa o email da transp.- by Edson Lima 16-3-2021           --
+        //----------------------------------------------------------------------
+
+        if not ( Trim(geMailTransp) = '' ) then
+         FrPar.edtEnvCC.Text := FrPar.edtEnvCC.Text + ', ' + geMailTransp;
+
+        //----------------------------------------------------------------------
+
+        if ( FrPar.edtEnvCC.Text <> '') then
+        for I := 1 to (Length(FrPar.edtEnvCC.Text)+1) do
+        begin
+
+         if (FrPar.edtEnvCC.Text[I] = ',') or (FrPar.edtEnvCC.Text[I] = ';') or (I = Length(FrPar.edtEnvCC.Text)+1)then
+         begin
+
+          CC.Add(trim(vI));                                                     //especifique um email válido
+          vI := '';
+
+         end
+         else
+          vI := (vI + FrPar.edtEnvCC.Text[I]);
+
+        end;
+
+        vI := '';                                                               // Limpa variável
+        vC := 0;                                                                // zera contador
+
+        for I := 1 to (Length(Para)+1) do
+        begin
+
+         if (Para[I] = ',') or (Para[I] = ';') or (I = Length(Para)+1)then
+          begin
+
+           if vC > 0 then
+            CC.Add(trim(vI))                                                    //especifique um email válido
+           else
+            vP := trim(vI);                                                     // Atribui apenas o primeiro email
+
+           vI := '';
+           inc(vC);                                                             // Incrementa 1
+
+          end
+         else
+          vI := (vI + Para[I]);
+
+        end;
+
+        Para := vP;
+
+       end;
+
+       sReplyTo := TStringList.Create;
+       sReplyTo.Add('gbinfo.notafiscal@gmail.com');
+       vEmailCancAssunto := FrPar.edtEmailCancAssunto.Text + ' - Nº:' + vNnf + ' Cancelada!';
+
+       try
+
+        try
+
+         ACBrNFe1.EventoNFe.Evento.Clear;
+         ACBrNFe1.EventoNFe.LerXML(xAuxC);
+
+         if ( gModelo = 65 ) then
+         begin
+
+          if not FileExists(xAuxO) then
+           ACBrNFe1.ImprimirEventoPDF;                                          // Gera Pdf da NFCe
+
+          CopyFile(PWideChar(xAuxO), PWideChar(xAuxD), False);
+
+         end;
+
+         ACBrNFe1.EnviarEmailEvento(
+                    Para                                                        // email do destinatário
+                  , vEmailCancAssunto                                           // Asunto
+                  , FrPar.mmEmailMsg.Lines                                      // Mensagem
+                  , CC                                                          // Lista com emails que serÃ£o enviado cÃ³pias - TStrings
+                  , xAuxA                                                       // Anexos
+                  , nil            );            //sReplyTo       );            // ReplyTo - "Responder a"
+
+         Application.MessageBox(PWideChar('Email da nota:[ ' + vNnf + ' ]' + ' enviado com sucesso!'), 'Atenção', MB_ICONINFORMATION );
+
+        except on e:exception do
+
+         Application.Messagebox( pWideChar( 'Inconsistência no envio do email da nota:[ ' + vNnf + ' ]' + ' cancelada!' + chr(13) +
+                                 e.Message ), 'Atenção!', MB_ICONERROR+mb_ok);
+
+        end;
+
+       finally
+
+        CC.Free;
+        xAuxA.Free;
+        sReplyTo.Free;
+
+       end;
+
+      end
+      else
+       MessageDlg('eMail não definido para o destinatário!', mtInformation, [mbOK], 0);
+
+      MessageDlg('Nota:[ ' + vNnf + ' ]' + Chr(13) +
+                 'Status: ' + VarToStr(ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.cStat) + ' - Protocolo:' +
+                 ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento.nProt + Chr(13) +
+                 'CANCELADA', mtInformation, [mbOK], 0);
+
+     end;
+
+    end;
+
    end;
+
+  end;
 
  except
 
@@ -10368,487 +11123,495 @@ begin
  if not fTemSel( cxTL, cxTLbSel ) then exit;                                    // verifica se tem item selecionado na treelist
 
  for X := 0 to cxTL.Count -1 do                                                 // Percorre a treelist
+ begin
 
+  if ( cxTL.Items[X].Texts[cxTLbSel.ItemIndex] = 'True' ) then                  // Verifica se o item está selecionado
   begin
 
-   if ( cxTL.Items[X].Texts[cxTLbSel.ItemIndex] = 'True' ) then                 // Verifica se o item está selecionado
+   // Filtra a nfe selecionada com select
+   pSelNfe( DMFD.FDQryGeral2, StrToIntDef(FrGBNFe.edt_CodEmp.Text, 0),
+                              StrToIntDef(cxTL.Items[X].Texts[cxTLlNot.ItemIndex], 0),
+                              StrToDateTime(cxTL.Items[X].Texts[cxTLdDem.ItemIndex]),
+                              cxTL.Items[X].Texts[cxTLsMod.ItemIndex],
+                              cxTL.Items[X].Texts[cxTLsSer.ItemIndex] );
 
+   if ( gCpt = 1 ) then
+    pDefineRel()                                                                // Define o tipo de Relatório FortesReport
+   else
+    pDefineRelFR();                                                             // Define o tipo de Relatório FastReport
+
+   //---------------------------------------------------------------------------
+   // by Edson ; 2013-03-04 ;08:41 ; Atribuição para consistir nnf na hora do update
+
+   gCdloja_Consiste := edt_CodEmp.Text;
+   gdEmi_Consiste   := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
+   gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
+   gNNF_Consiste    := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
+   gSerie_Consiste  := vartostr(DMFD.FDQryGeral2['nfe_serie']);
+   gSerie           := StrToIntDef(gSerie_Consiste, 0);
+   gModelo          := DMFD.FDQryGeral2['nfe_modelo'];
+   gChave_Consiste  := '';                                                      // está sendo atribuida depois da sp_calcula_digito_chave
+   gModelo_Consiste := vartostr(DMFD.FDQryGeral2['nfe_modelo']);
+   gAnoMesGer       := Copy(gdEmi_Consiste, 7, 4) + Copy(gdEmi_Consiste, 4, 2);
+
+   // by Edson Lima - 2015-12-18T1559 ; verifica se a situação está null,
+   // se sim elimina qualquer xml do sistema, para evitar envio de xml
+   // depois de correção e exclusão---------------------------------------------
+
+   gDataEmi := 0;
+   aux := VarToStr(DMFD.FDQryGeral2['nfe_chave_nfe']);
+
+   if (gModelo = 65) then
+   begin
+
+    ACBrNFe1.Configuracoes.Geral.ModeloDF := moNFCe;
+    gTN                                   := '\NFCe\';
+    if not (DMFD.FDQryGeral2['nfe_DatNFCe']  = null) then
+     gDataEmi                             := (DMFD.FDQryGeral2['nfe_DatNFCe']);
+
+   end
+   else
+   begin
+
+    ACBrNFe1.Configuracoes.Geral.ModeloDF := moNFe;
+    gTN                                   := '\NFe\';
+    if not (DMFD.FDQryGeral2['nfe_demi']     = null) then
+     gDataEmi                             := (DMFD.FDQryGeral2['nfe_demi']);
+
+   end;
+
+   if ( (DMFD.FDQryGeral2['nfe_situacao'] =  null) and ( not (gDataEmi = null))   or
+        (DMFD.FDQryGeral2['nfe_situacao'] =  '')   and ( not (gDataEmi = null)) ) then
+    pEliminaXml(aux, gTN);                                                      // Elimina os xmls quando a situação for null
+
+   //---------------------------------------------------------------------------
+
+   if (gModelo = 55) then
+   begin
+
+    _tipo_emissao := 'fsda';
+    _tpemissao := '5';
+
+   end
+   else if (gModelo = 65) then
+   begin
+
+    _tipo_emissao := 'OffL';
+    _tpemissao := '9';
+
+   end;
+
+   if ((copy(vartostr(DMFD.FDQryGeral2['nfe_situacao']),1,4) = 'FSDA') or
+       (copy(vartostr(DMFD.FDQryGeral2['nfe_situacao']),1,4) = 'OFFL')) then
+   begin
+
+    //caso não tenha gravado a nota, calcula a chave e a procura
+    if vartostr(DMFD.FDQryGeral2['nfe_chave_nfe']) = '' then
     begin
 
-     // Filtra a nfe selecionada com select
-     pSelNfe( DMFD.FDQryGeral2, StrToIntDef(FrGBNFe.edt_CodEmp.Text, 0),
-                                StrToIntDef(cxTL.Items[X].Texts[cxTLlNot.ItemIndex], 0),
-                                StrToDateTime(cxTL.Items[X].Texts[cxTLdDem.ItemIndex]),
-                                cxTL.Items[X].Texts[cxTLsMod.ItemIndex],
-                                cxTL.Items[X].Texts[cxTLsSer.ItemIndex] );
+     //procura pelo ano e mes da nota
+     //1- Normal, 2-Contingência FS, 3-Contingência SCAN, 4-EPEC, 5-FSDA 9-OFFL
+
+     if copy(vartostr(DMFD.FDQryGeral2['nfe_situacao']),1,4) = 'FSDA' then
+      _tpemissao := '5'
+     else if copy(vartostr(DMFD.FDQryGeral2['nfe_situacao']),1,4) = 'OFFL' then
+      _tpemissao := '9';
+
+     // by Edson Lima ; 2017-6-9T0949 ; Define quem será usado como cNF
+     gCdPed := VarToStr(DMFD.FDQryGeral2['nfe_CodPed']);
+
+     aux := '';
+     aux := edt_CodEmp.Text + ',' + '''' + VarToStr(DMFD.FDQryGeral2['nfe_nnf']) + '''' + ',' + '''' + _tpemissao + '''' + ',' + '''';
+     aux := aux + FormatDateTime('dd/mm/yyyy', VarToDateTime(DMFD.FDQryGeral2['nfe_demi'])) + '''' + ',' + '''';
+     aux := aux + IntToStr(gModelo) + '''' + ',' + '''';
+     aux := aux + IntToStr(gSerie) + '''' + ',' + '''';
+     aux := aux + gCdPed + '''';
+
+     DMFD.FDQuery1.Close;
+     DMFD.FDQuery1.SQL.Clear;
+     DMFD.FDQuery1.SQL.Add( 'exec sp_calcula_digito_chave ' + aux );
+     DMFD.FDQuery1.open;
+
+     if not DMFD.FDQuery1.IsEmpty then
+      vAux := vartostr(DMFD.FDQuery1['chave']);
+
+     // by Edson ; 2013-10-8T1031 ; Variável Global Chave criada para contestar gravação;
+     gChave_Consiste  := vAux;
+
+    end
+    else
+    begin
+     vAux         := DMFD.FDQryGeral2['nfe_chave_nfe'];
+
+     // by Edson ; 2013-10-8T1031 ; Variável Global Chave criada para contestar gravação;
+     gChave_Consiste  := vAux;
+
+    end;
+
+    if vAux <> '' then
+    begin
+
+     // By Edson Lima ; 2015-12-8T1702 - Serve para copiar a nota gerada em contingência
+     // by Edson ; 2013-10-8T1031 ; Variável Global Chave criada para contestar gravação;
+     gChave_Consiste  := vAux;
+
+     if (gModelo = 65) then
+      gTN              := '\NFCe\'                                              // by Edson Lima 2015-10-14T1107 - trunk2 novo ; Global utilizado para setar o nome da pasta
+     else
+      gTN              := '\NFe\';                                              // by Edson Lima 2015-10-14T1107 - trunk2 novo ; Global utilizado para setar o nome da pasta
+
+     Copia_Xml_PathLog(vAux, gTN);                                              // by Edson Lima 2015-10-14T1107 - trunk2 novo
+
+     vAux := trim(gCamLog) + trim(vAux) + '-nfe.xml';
+     ACBrNFe1.NotasFiscais.Clear;
+     ACBrNFe1.NotasFiscais.LoadFromFile(vAux);
 
      if ( gCpt = 1 ) then
       pDefineRel()                                                              // Define o tipo de Relatório FortesReport
      else
       pDefineRelFR();                                                           // Define o tipo de Relatório FastReport
 
-     //*******************************************************************************
-     // by Edson ; 2013-03-04 ;08:41 ; Atribuição para consistir nnf na hora do update
+     //-------------------------------------------------------------------------
+     // by Edson Lima ; 19/6/2012 ; 15:24 - Se dê erro de rejeição da chave
+     // em Contingência, vai para consulta
+     //-------------------------------------------------------------------------
+     try
 
-     gCdloja_Consiste := edt_CodEmp.Text;
-     gdEmi_Consiste   := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
-     gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
-     gNNF_Consiste    := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
-     gSerie_Consiste  := vartostr(DMFD.FDQryGeral2['nfe_serie']);
-     gSerie           := StrToIntDef(gSerie_Consiste, 0);
-     gModelo          := DMFD.FDQryGeral2['nfe_modelo'];
-     gChave_Consiste  := '';                                                    // está sendo atribuida depois da sp_calcula_digito_chave
-     gModelo_Consiste := vartostr(DMFD.FDQryGeral2['nfe_modelo']);
-     gAnoMesGer       := Copy(gdEmi_Consiste, 7, 4) + Copy(gdEmi_Consiste, 4, 2);
+      if gModelo = 65 then
+       gSincrona_Assincrona := true
+      else
+       gSincrona_Assincrona := false;
 
-     // by Edson Lima - 2015-12-18T1559 ; verifica se a situação está null,
-     // se sim elimina qualquer xml do sistema, para evitar envio de xml
-     // depois de correção e exclusão-------------------------------------
+      ACBrNFe1.Enviar('0', true, gSincrona_Assincrona);
 
-     gDataEmi := 0;
-     aux := VarToStr(DMFD.FDQryGeral2['nfe_chave_nfe']);
-
-     if (gModelo = 65) then
+     except on e:Exception do
       begin
-       ACBrNFe1.Configuracoes.Geral.ModeloDF := moNFCe;
-       gTN                                   := '\NFCe\';
-       if not (DMFD.FDQryGeral2['nfe_DatNFCe']  = null) then
-        gDataEmi                             := (DMFD.FDQryGeral2['nfe_DatNFCe']);
-      end
-     else
-      begin
-       ACBrNFe1.Configuracoes.Geral.ModeloDF := moNFe;
-       gTN                                   := '\NFe\';
-       if not (DMFD.FDQryGeral2['nfe_demi']     = null) then
-        gDataEmi                             := (DMFD.FDQryGeral2['nfe_demi']);
-      end;
 
-     if ( (DMFD.FDQryGeral2['nfe_situacao'] =  null) and ( not (gDataEmi = null))   or
-          (DMFD.FDQryGeral2['nfe_situacao'] =  '')   and ( not (gDataEmi = null)) ) then
-      pEliminaXml(aux, gTN);                                                    // Elimina os xmls quando a situação for null
+       fDelFileCnt(gCamXml + Copy(gdEmiConsiste, 7, 4) +
+                             Copy(gdEmiConsiste, 4, 2) +
+                             '\NFe\', gChave_Consiste + '-nfe.xml');            // Function que deleta o xml "Pedido da PQ"
 
-     //-------------------------------------------------------------------
+       //consultar a nota transmitida
+       ACBrNFe1.NotasFiscais.Clear;
+       ACBrNFe1.NotasFiscais.LoadFromFile(vAux);
+       ACBrNFe1.Consultar;
 
-     if (gModelo = 55) then
-      begin
-       _tipo_emissao := 'fsda';
-       _tpemissao := '5';
-      end
-     else if (gModelo = 65) then
-      begin
-       _tipo_emissao := 'OffL';
-       _tpemissao := '9';
-      end;
+       grava_xml_no_banco;
 
-     if ((copy(vartostr(DMFD.FDQryGeral2['nfe_situacao']),1,4) = 'FSDA') or
-         (copy(vartostr(DMFD.FDQryGeral2['nfe_situacao']),1,4) = 'OFFL')) then
-      begin
-       //caso não tenha gravado a nota, calcula a chave e a procura
-       if vartostr(DMFD.FDQryGeral2['nfe_chave_nfe']) = '' then
-        begin
-         //procura pelo ano e mes da nota
+       memoLog.Clear;
+       MemoResp.Lines.Text   := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetWS);
+       MemoLog.Lines.Text    := UTF8Encode(ACBrNFe1.WebServices.Consulta.Msg);
+       memoRespWS.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetornoWS);
+       LoadXML(MemoResp, WBResposta);
 
-         //1- Normal, 2-Contingência FS, 3-Contingência SCAN, 4-EPEC, 5-FSDA 9-OFFL
-
-         if copy(vartostr(DMFD.FDQryGeral2['nfe_situacao']),1,4) = 'FSDA' then
-          _tpemissao := '5'
-         else if copy(vartostr(DMFD.FDQryGeral2['nfe_situacao']),1,4) = 'OFFL' then
-          _tpemissao := '9';
-
-         // by Edson Lima ; 2017-6-9T0949 ; Define quem será usado como cNF
-         gCdPed := VarToStr(DMFD.FDQryGeral2['nfe_CodPed']);
-
-         aux := '';
-         aux := edt_CodEmp.Text + ',' + '''' + VarToStr(DMFD.FDQryGeral2['nfe_nnf']) + '''' + ',' + '''' + _tpemissao + '''' + ',' + '''';
-         aux := aux + FormatDateTime('dd/mm/yyyy', VarToDateTime(DMFD.FDQryGeral2['nfe_demi'])) + '''' + ',' + '''';
-         aux := aux + IntToStr(gModelo) + '''' + ',' + '''';
-         aux := aux + IntToStr(gSerie) + '''' + ',' + '''';
-         aux := aux + gCdPed + '''';
-
-         DMFD.FDQuery1.Close;
-         DMFD.FDQuery1.SQL.Clear;
-         DMFD.FDQuery1.SQL.Add( 'exec sp_calcula_digito_chave ' + aux );
-         DMFD.FDQuery1.open;
-
-         if not DMFD.FDQuery1.IsEmpty then
-          vAux := vartostr(DMFD.FDQuery1['chave']);
-
-         // by Edson ; 2013-10-8T1031 ; Variável Global Chave criada para contestar gravação;
-         gChave_Consiste  := vAux;
-
-        end
-       else
-        begin
-         vAux         := DMFD.FDQryGeral2['nfe_chave_nfe'];
-
-         // by Edson ; 2013-10-8T1031 ; Variável Global Chave criada para contestar gravação;
-         gChave_Consiste  := vAux;
-        end;
-
-       if vAux <> '' then
-        begin
-
-         // By Edson Lima ; 2015-12-8T1702 - Serve para copiar a nota gerada em contingência
-         // by Edson ; 2013-10-8T1031 ; Variável Global Chave criada para contestar gravação;
-         gChave_Consiste  := vAux;
-
-         if (gModelo = 65) then
-          gTN              := '\NFCe\'                                          // by Edson Lima 2015-10-14T1107 - trunk2 novo ; Global utilizado para setar o nome da pasta
-         else
-          gTN              := '\NFe\';                                          // by Edson Lima 2015-10-14T1107 - trunk2 novo ; Global utilizado para setar o nome da pasta
-
-         Copia_Xml_PathLog(vAux, gTN);                                          // by Edson Lima 2015-10-14T1107 - trunk2 novo
-
-         vAux := trim(gCamLog) + trim(vAux) + '-nfe.xml';
-         ACBrNFe1.NotasFiscais.Clear;
-         ACBrNFe1.NotasFiscais.LoadFromFile(vAux);
-
-         if ( gCpt = 1 ) then
-          pDefineRel()                                                          // Define o tipo de Relatório FortesReport
-         else
-          pDefineRelFR();                                                       // Define o tipo de Relatório FastReport
-
-         //---------------------------------------------------------------------
-         // by Edson Lima ; 19/6/2012 ; 15:24 - Se dê erro de rejeição da chave
-         // em Contingência, vai para consulta
-         //---------------------------------------------------------------------
-
-         try
-
-          if gModelo = 65 then
-           gSincrona_Assincrona := true
-          else
-           gSincrona_Assincrona := false;
-
-          ACBrNFe1.Enviar('0', true, gSincrona_Assincrona);
-
-         except on e:Exception do
-          begin
-
-           fDelFileCnt(gCamXml + Copy(gdEmiConsiste, 7, 4) +
-                                 Copy(gdEmiConsiste, 4, 2) +
-                                 '\NFe\', gChave_Consiste + '-nfe.xml');        // Function que deleta o xml "Pedido da PQ"
-
-           //consultar a nota transmitida
-           ACBrNFe1.NotasFiscais.Clear;
-           ACBrNFe1.NotasFiscais.LoadFromFile(vAux);
-           ACBrNFe1.Consultar;
-
-           grava_xml_no_banco;
-
-           memoLog.Clear;
-           MemoResp.Lines.Text   := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetWS);
-           MemoLog.Lines.Text    := UTF8Encode(ACBrNFe1.WebServices.Consulta.Msg);
-           memoRespWS.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetornoWS);
-           LoadXML(MemoResp, WBResposta);
-
-
-           if ( (trim(vartostr(ACBrNFe1.WebServices.Consulta.cStat)) = '613') or
-                (trim(vartostr(ACBrNFe1.WebServices.Consulta.cStat)) = '539') ) then
-            begin
-
-             MessageDlg('DADOS DA NOTA : ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) + char(13) +
-                        ' Status=' + vartostr(ACBrNFe1.WebServices.Consulta.cStat) + char(13) +
-                        ' ' + vartostr(ACBrNFe1.WebServices.Consulta.xMotivo) + char(13) +
-                        ' Protocolo=' + ACBrNFe1.WebServices.Consulta.Protocolo +
-                        ' Data do recebimento=' + vartostr(ACBrNFe1.WebServices.Consulta.DhRecbto) + char(13) +
-                        ' ESTA NOTA VAI SER MOVIDA PARA PENDENTES, ENVIE E CONSULTE PARA ATUALIZAR!' + char(13) +
-                          e.Message, mtInformation,[mbOK],0);
-             gAtuFSD := True;
-
-             if ( gSenhaBD <> '' ) then
-
-              vZerSen := False
-
-             else
-
-              begin
-
-               gSenhaBD := 'gb@1';
-
-              end;
-
-             MovepPendentes1Click(Sender);
-
-             if ( vZerSen ) then
-              gSenhaBD := '';
-
-             vZerSen := True;
-
-            end
-           else
-            begin
-
-             MessageDlg('DADOS DA NOTA : ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) + char(13) +
-                        ' Status=' + vartostr(ACBrNFe1.WebServices.Consulta.cStat) + char(13) +
-                        ' ' + vartostr(ACBrNFe1.WebServices.Consulta.xMotivo) + char(13) +
-                        ' Protocolo=' + ACBrNFe1.WebServices.Consulta.Protocolo +
-                        ' Data do recebimento=' + vartostr(ACBrNFe1.WebServices.Consulta.DhRecbto) + char(13) +
-                        ' PENDENCIA NÃO TRATADA CONTACTE O SUPORTE DA SOFT HOUSE RESPONSÁVEL!' + char(13) +
-                          e.Message, mtInformation,[mbOK],0);
-
-            end;
-
-           exit;
-
-          end;
-
-         end;
-
-         //consultar a nota transmitida
-         ACBrNFe1.NotasFiscais.Clear;
-         ACBrNFe1.NotasFiscais.LoadFromFile(vAux);
-         ACBrNFe1.Consultar;
-
-         grava_xml_no_banco;
-
-         memoLog.Clear;
-         MemoResp.Lines.Text   := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetWS);
-         MemoLog.Lines.Text    := UTF8Encode(ACBrNFe1.WebServices.Consulta.Msg);
-         memoRespWS.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetornoWS);
-         LoadXML(MemoResp, WBResposta);
-
-         Try
-          // by Edson Lima ; 2013/03/12 ; 14:23 ; Atualiza a nfe no update centralizado
-          pGravaNFe('009', 'chave_nfe',
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           'codigo_loja',
-                           'demi',
-                           'nnf',
-                           'serie',
-                           'chave_nfe',
-                           'modelo',                                            // Nome dos campos
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           edt_CodEmp.Text,
-                           FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']),
-                           DMFD.FDQryGeral2['nfe_nnf'],
-                           DMFD.FDQryGeral2['nfe_serie'],
-                           DMFD.FDQryGeral2['nfe_chave_nfe'],
-                           DMFD.FDQryGeral2['nfe_modelo'],                      // Conteúdo dos campos
-                           true)                                                // Consiste [true/false]
-
-         except on e:Exception do
-          begin
-
-           memoLog.Clear;
-           MemoResp.Lines.Text   := UTF8Encode(ACBrNFe1.WebServices.Retorno.RetWS) + e.Message;
-           MemoLog.Lines.Text    := UTF8Encode(ACBrNFe1.WebServices.Retorno.Msg);
-           memoRespWS.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.Retorno.RetornoWS);
-           LoadXML(MemoResp, WBResposta);
-           Exit;
-
-          end;
-
-         end;
-
-        if (trim(vartostr(ACBrNFe1.WebServices.Consulta.cStat)) = '100') or
-           (trim(vartostr(ACBrNFe1.WebServices.Consulta.cStat)) = '150') then
-         begin
-
-          // by Edson Lima ; 2013/03/12 ; 14:23 ; Atualiza a nfe no update centralizado
-          pGravaNFe('010', 'protocolo',
-                           'recibo',
-                           'data_hora_recebimento',
-                           'chave_nfe',
-                           'situacao',
-                           'motivo',
-                           'UsuTrs',
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           'codigo_loja',
-                           'demi',
-                           'nnf',
-                           'serie',
-                           'chave_nfe',
-                           'modelo',                                            // nome dos campos
-                           ACBrNFe1.WebServices.Consulta.Protocolo,
-                           ACBrNFe1.WebServices.Retorno.NFeRetorno.nRec,
-                           FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.consulta.DhRecbto),
-                           ACBrNFe1.WebServices.Consulta.NFeChave,
-                           ACBrNFe1.WebServices.Consulta.cStat,
-                           ACBrNFe1.WebServices.Consulta.xMotivo,
-                           gUsu,
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           '',
-                           edt_CodEmp.Text,
-                           FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']),
-                           DMFD.FDQryGeral2['nfe_nnf'],
-                           DMFD.FDQryGeral2['nfe_serie'],
-                           ACBrNFe1.WebServices.Consulta.NFeChave,
-                           DMFD.FDQryGeral2['nfe_modelo'],                      // Conteúdo dos campos
-                           true);                                               // Consiste [true/false]
-
-         end;
+       if ( (trim(vartostr(ACBrNFe1.WebServices.Consulta.cStat)) = '613') or
+            (trim(vartostr(ACBrNFe1.WebServices.Consulta.cStat)) = '539') ) then
+       begin
 
         MessageDlg('DADOS DA NOTA : ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) + char(13) +
-                          '  Status=' + vartostr(ACBrNFe1.WebServices.Consulta.cStat)  +
-                          '-'         + vartostr(ACBrNFe1.WebServices.Consulta.xMotivo) + char(13) +
-                       '  Protocolo=' + ACBrNFe1.WebServices.Consulta.Protocolo + char(13) +
-             '  Data do recebimento=' + vartostr(ACBrNFe1.WebServices.Consulta.DhRecbto) + char(13) ,mtInformation,[mbOK],0);
+                   ' Status=' + vartostr(ACBrNFe1.WebServices.Consulta.cStat) + char(13) +
+                   ' ' + vartostr(ACBrNFe1.WebServices.Consulta.xMotivo) + char(13) +
+                   ' Protocolo=' + ACBrNFe1.WebServices.Consulta.Protocolo +
+                   ' Data do recebimento=' + vartostr(ACBrNFe1.WebServices.Consulta.DhRecbto) + char(13) +
+                   ' ESTA NOTA VAI SER MOVIDA PARA PENDENTES, ENVIE E CONSULTE PARA ATUALIZAR!' + char(13) +
+                     e.Message, mtInformation,[mbOK],0);
+        gAtuFSD := True;
 
-        if not gDuplic then                                                     // by Edson ; 2013-11-22T1420 ; Só envia email se não der duplicidade de nota
-         begin
+        if ( gSenhaBD <> '' ) then
 
-          //---------------------enviar email
-          xAux := vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].chDFe);
-          //pega os dados do destinatario
-          DMFD.FDQuery2.Close;
-          DMFD.FDQuery2.SQL.Clear;
-          DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                                         ' );
-          DMFD.FDQuery2.SQL.Add( 'Select                                                     ' );
-          DMFD.FDQuery2.SQL.Add( 't1.*                                                       ' );
-          DMFD.FDQuery2.SQL.Add( 'from destinatario t1                                       ' );
-          DMFD.FDQuery2.SQL.Add( 'inner join nfe t2 on t2.codigo_destinatario = t1.codigo    ' );
-          DMFD.FDQuery2.SQL.Add( 'where t2.codigo_loja = :parm1                              ' );
-          DMFD.FDQuery2.SQL.Add( 'and t2.chave_nfe = :parm2                                  ' );
-          DMFD.FDQuery2.SQL.Add( 'and t2.situacao <> :parm3                                  ' );
-          DMFD.FDQuery2.SQL.Add( 'and t2.situacao <> :parm4                                  ' );
-          DMFD.FDQuery2.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
-          DMFD.FDQuery2.Params[1].AsString  := (xAux);
-          DMFD.FDQuery2.Params[2].AsString  := '101';
-          DMFD.FDQuery2.Params[3].AsString  := '151';
-          DMFD.FDQuery2.Open;
+         vZerSen := False
 
-          if DMFD.FDQuery2.IsEmpty then
-           begin
-            exit;
-           end;
+        else
+        begin
 
-          para := vartostr(DMFD.FDQuery2['email']);
+         gSenhaBD := 'gb@1';
 
-          if ( (trim(para) = '') or (FrPar.CheckBox10.Checked) ) then
+        end;
 
-           begin
+        MovepPendentes1Click(Sender);
 
-            repeat
+        if ( vZerSen ) then
+         gSenhaBD := '';
 
-             begin
+        vZerSen := True;
 
-              Para := '';
+       end
+       else
+       begin
 
-              if not InputQuery(vartostr(DMFD.FDQuery2['razao_social']), 'Email de destino:', Para) then
-               begin
-
-                pAtuNFe;                                                        // Procedure de atualização
-                Exit;
-
-               end;
-
-              para := LowerCase(para);
-
-              if ( not fValidaEmail(para, 'N') ) then
-               Application.Messagebox('Campo de email do destinatário inválido! ','Atenção!',mb_iconstop+mb_ok);
-
-             end;
-
-            until ( fValidaEmail(para, 'N') );
-
-           end;
-
-          if (trim(para) <> '') then
-           begin
-
-            xAux := trim(gCamLog) + trim(xAux) + '-nfe.xml';                    /// by EL - 23.2.2012 -> xAux := trim(FrPar.edtPathLogs.Text) + '\' + trim(xAux) + '-nfe.xml';
-            ACBrNFe1.NotasFiscais.Clear;
-            ACBrNFe1.NotasFiscais.LoadFromFile(xAux);
-            CC:=TstringList.Create;
-
-            //------------------------------------------------------------------
-            //-- Implementa o email da transp.- by Edson Lima 16-3-2021       --
-            //------------------------------------------------------------------
-
-            if not ( Trim(geMailTransp) = '' ) then
-             FrPar.edtEnvCC.Text := FrPar.edtEnvCC.Text + ', ' + geMailTransp;
-
-            //------------------------------------------------------------------
-
-            if ( Trim(FrPar.edtEnvCC.Text) <> '' ) then
-             for I := 1 to (Length(FrPar.edtEnvCC.Text)+1) do
-              begin
-               if (FrPar.edtEnvCC.Text[I] = ',') or (FrPar.edtEnvCC.Text[I] = ';') or (I = Length(FrPar.edtEnvCC.Text)+1)then
-                begin
-                 CC.Add(trim(vI));                                              //especifique um email válido
-                 vI := '';
-                end
-               else
-                vI := (vI + FrPar.edtEnvCC.Text[I]);
-              end;
-
-            vI := '';                                                           // Limpa variável
-            vC := 0;                                                            // zera contador
-
-            for I := 1 to (Length(Para)+1) do
-             begin
-              if (Para[I] = ',') or (Para[I] = ';') or (I = Length(Para)+1)then
-               begin
-                if vC > 0 then
-                 CC.Add(trim(vI))                                               // Especifique um email válido
-                else
-                 vP := trim(vI);                                                // Atribui apenas o primeiro email
-
-                vI := '';
-                inc(vC);                                                        // Incrementa 1
-               end
-              else
-               vI := (vI + Para[I]);
-             end;
-
-             Para := vP;
-
-            ACBrNFe1.NotasFiscais.Items[0].EnviarEmail(Para
-                                                     , FrPar.edtEmailAssunto.Text + ' - Nº ' + VarToStr(DMFD.FDQuery3['nfe_nnf'])
-                                                     , FrPar.mmEmailMsg.Lines
-                                                     , True                     //Enviar PDF junto
-                                                     , CC                       //com copia
-                                                     , nil
-                                                      );
-
-            CC.Free;
-
-           end; // final - enviar email
-
-         end;
-
-        gDuplic := False;
+        MessageDlg('DADOS DA NOTA : ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) + char(13) +
+                   ' Status=' + vartostr(ACBrNFe1.WebServices.Consulta.cStat) + char(13) +
+                   ' ' + vartostr(ACBrNFe1.WebServices.Consulta.xMotivo) + char(13) +
+                   ' Protocolo=' + ACBrNFe1.WebServices.Consulta.Protocolo +
+                   ' Data do recebimento=' + vartostr(ACBrNFe1.WebServices.Consulta.DhRecbto) + char(13) +
+                   ' PENDENCIA NÃO TRATADA CONTACTE O SUPORTE DA SOFT HOUSE RESPONSÁVEL!' + char(13) +
+                     e.Message, mtInformation,[mbOK],0);
 
        end;
 
+       exit;
+
       end;
+
+     end;
+
+     //consultar a nota transmitida
+     ACBrNFe1.NotasFiscais.Clear;
+     ACBrNFe1.NotasFiscais.LoadFromFile(vAux);
+     ACBrNFe1.Consultar;
+
+     grava_xml_no_banco;
+
+     memoLog.Clear;
+     MemoResp.Lines.Text   := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetWS);
+     MemoLog.Lines.Text    := UTF8Encode(ACBrNFe1.WebServices.Consulta.Msg);
+     memoRespWS.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetornoWS);
+     LoadXML(MemoResp, WBResposta);
+
+     Try
+      // by Edson Lima ; 2013/03/12 ; 14:23 ; Atualiza a nfe no update centralizado
+      pGravaNFe('009', 'chave_nfe',
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       'codigo_loja',
+                       'demi',
+                       'nnf',
+                       'serie',
+                       'chave_nfe',
+                       'modelo',                                            // Nome dos campos
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       edt_CodEmp.Text,
+                       FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']),
+                       DMFD.FDQryGeral2['nfe_nnf'],
+                       DMFD.FDQryGeral2['nfe_serie'],
+                       DMFD.FDQryGeral2['nfe_chave_nfe'],
+                       DMFD.FDQryGeral2['nfe_modelo'],                      // Conteúdo dos campos
+                       true)                                                // Consiste [true/false]
+
+     except on e:Exception do
+      begin
+
+       memoLog.Clear;
+       MemoResp.Lines.Text   := UTF8Encode(ACBrNFe1.WebServices.Retorno.RetWS) + e.Message;
+       MemoLog.Lines.Text    := UTF8Encode(ACBrNFe1.WebServices.Retorno.Msg);
+       memoRespWS.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.Retorno.RetornoWS);
+       LoadXML(MemoResp, WBResposta);
+       Exit;
+
+      end;
+
+     end;
+
+     if (trim(vartostr(ACBrNFe1.WebServices.Consulta.cStat)) = '100') or
+        (trim(vartostr(ACBrNFe1.WebServices.Consulta.cStat)) = '150') then
+     begin
+
+      // by Edson Lima ; 2013/03/12 ; 14:23 ; Atualiza a nfe no update centralizado
+      pGravaNFe('010', 'protocolo',
+                       'recibo',
+                       'data_hora_recebimento',
+                       'chave_nfe',
+                       'situacao',
+                       'motivo',
+                       'UsuTrs',
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       'codigo_loja',
+                       'demi',
+                       'nnf',
+                       'serie',
+                       'chave_nfe',
+                       'modelo',                                            // nome dos campos
+                       ACBrNFe1.WebServices.Consulta.Protocolo,
+                       ACBrNFe1.WebServices.Retorno.NFeRetorno.nRec,
+                       FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.consulta.DhRecbto),
+                       ACBrNFe1.WebServices.Consulta.NFeChave,
+                       ACBrNFe1.WebServices.Consulta.cStat,
+                       ACBrNFe1.WebServices.Consulta.xMotivo,
+                       gUsu,
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       '',
+                       edt_CodEmp.Text,
+                       FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']),
+                       DMFD.FDQryGeral2['nfe_nnf'],
+                       DMFD.FDQryGeral2['nfe_serie'],
+                       ACBrNFe1.WebServices.Consulta.NFeChave,
+                       DMFD.FDQryGeral2['nfe_modelo'],                          // Conteúdo dos campos
+                       true);                                                   // Consiste [true/false]
+
+     end;
+
+     MessageDlg('DADOS DA NOTA : ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) + char(13) +
+                '  Status=' + vartostr(ACBrNFe1.WebServices.Consulta.cStat)  +
+                '-'         + vartostr(ACBrNFe1.WebServices.Consulta.xMotivo) + char(13) +
+                '  Protocolo=' + ACBrNFe1.WebServices.Consulta.Protocolo + char(13) +
+                '  Data do recebimento=' + vartostr(ACBrNFe1.WebServices.Consulta.DhRecbto) + char(13) ,mtInformation,[mbOK],0);
+
+     if not gDuplic then                                                        // by Edson ; 2013-11-22T1420 ; Só envia email se não der duplicidade de nota
+     begin
+
+      //---------------------enviar email---------------------------------------
+
+      xAux := vartostr(ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtDFe.Items[0].chDFe);
+      //pega os dados do destinatario
+      DMFD.FDQuery2.Close;
+      DMFD.FDQuery2.SQL.Clear;
+      DMFD.FDQuery2.SQL.Add( 'SET DATEFORMAT dmy                                         ' );
+      DMFD.FDQuery2.SQL.Add( 'Select                                                     ' );
+      DMFD.FDQuery2.SQL.Add( 't1.*                                                       ' );
+      DMFD.FDQuery2.SQL.Add( 'from destinatario t1                                       ' );
+      DMFD.FDQuery2.SQL.Add( 'inner join nfe t2 on t2.codigo_destinatario = t1.codigo    ' );
+      DMFD.FDQuery2.SQL.Add( 'where t2.codigo_loja = :parm1                              ' );
+      DMFD.FDQuery2.SQL.Add( 'and t2.chave_nfe = :parm2                                  ' );
+      DMFD.FDQuery2.SQL.Add( 'and t2.situacao <> :parm3                                  ' );
+      DMFD.FDQuery2.SQL.Add( 'and t2.situacao <> :parm4                                  ' );
+      DMFD.FDQuery2.Params[0].AsInteger := StrToIntDef(edt_CodEmp.Text, 0);
+      DMFD.FDQuery2.Params[1].AsString  := (xAux);
+      DMFD.FDQuery2.Params[2].AsString  := '101';
+      DMFD.FDQuery2.Params[3].AsString  := '151';
+      DMFD.FDQuery2.Open;
+
+      if DMFD.FDQuery2.IsEmpty then exit;
+
+      para := vartostr(DMFD.FDQuery2['email']);
+
+      if ( (trim(para) = '') or (FrPar.CheckBox10.Checked) ) then
+      begin
+
+       repeat
+       begin
+
+        Para := '';
+
+        if not InputQuery(vartostr(DMFD.FDQuery2['razao_social']), 'Email de destino:', Para) then
+        begin
+
+         pAtuNFe;                                                               // Procedure de atualização
+         Exit;
+
+        end;
+
+        para := LowerCase(para);
+
+        if ( not fValidaEmail(para, 'N') ) then
+         Application.Messagebox('Campo de email do destinatário inválido! ','Atenção!',mb_iconstop+mb_ok);
+
+       end;
+       until ( fValidaEmail(para, 'N') );
+
+      end;
+
+      if (trim(para) <> '') then
+      begin
+
+       xAux := trim(gCamLog) + trim(xAux) + '-nfe.xml';                         /// by EL - 23.2.2012 -> xAux := trim(FrPar.edtPathLogs.Text) + '\' + trim(xAux) + '-nfe.xml';
+       ACBrNFe1.NotasFiscais.Clear;
+       ACBrNFe1.NotasFiscais.LoadFromFile(xAux);
+       CC:=TstringList.Create;
+
+       //-----------------------------------------------------------------------
+       //-- Implementa o email da transp.- by Edson Lima 16-3-2021            --
+       //-----------------------------------------------------------------------
+
+       if not ( Trim(geMailTransp) = '' ) then
+        FrPar.edtEnvCC.Text := FrPar.edtEnvCC.Text + ', ' + geMailTransp;
+
+       //-----------------------------------------------------------------------
+
+       if ( Trim(FrPar.edtEnvCC.Text) <> '' ) then
+       for I := 1 to (Length(FrPar.edtEnvCC.Text)+1) do
+       begin
+
+        if (FrPar.edtEnvCC.Text[I] = ',') or (FrPar.edtEnvCC.Text[I] = ';') or (I = Length(FrPar.edtEnvCC.Text)+1)then
+        begin
+
+         CC.Add(trim(vI));                                                      //especifique um email válido
+         vI := '';
+
+        end
+        else
+         vI := (vI + FrPar.edtEnvCC.Text[I]);
+
+       end;
+
+       vI := '';                                                                // Limpa variável
+       vC := 0;                                                                 // zera contador
+
+       for I := 1 to (Length(Para)+1) do
+       begin
+
+        if (Para[I] = ',') or (Para[I] = ';') or (I = Length(Para)+1)then
+        begin
+
+         if vC > 0 then
+          CC.Add(trim(vI))                                                      // Especifique um email válido
+         else
+          vP := trim(vI);                                                       // Atribui apenas o primeiro email
+
+         vI := '';
+         inc(vC);                                                               // Incrementa 1
+
+        end
+        else
+         vI := (vI + Para[I]);
+
+       end;
+
+       Para := vP;
+
+       ACBrNFe1.NotasFiscais.Items[0].EnviarEmail(Para
+                                                , FrPar.edtEmailAssunto.Text + ' - Nº ' + VarToStr(DMFD.FDQuery3['nfe_nnf'])
+                                                , FrPar.mmEmailMsg.Lines
+                                                , True                     //Enviar PDF junto
+                                                , CC                       //com copia
+                                                , nil
+                                                 );
+
+       CC.Free;
+
+      end; // final - enviar email
+
+     end;
+
+     gDuplic := False;
 
     end;
 
+   end;
+
   end;
+
+ end;
 
  RadioGroup1Click(FrGBNFe);
 
@@ -10866,191 +11629,192 @@ begin
   if not fTemSel( cxTL, cxTLbSel ) then exit;                                   // verifica se tem item selecionado na treelist
 
   for X := 0 to cxTL.Count -1 do                                                // Percorre a treelist
+  begin
 
+   if ( cxTL.Items[X].Texts[cxTLbSel.ItemIndex] = 'True' ) then                 // Verifica se o item está selecionado
    begin
 
-    if ( cxTL.Items[X].Texts[cxTLbSel.ItemIndex] = 'True' ) then                // Verifica se o item está selecionado
+    // Filtra a nfe selecionada com select
+    pSelNfe( DMFD.FDQryGeral2, StrToIntDef(FrGBNFe.edt_CodEmp.Text, 0),
+                               StrToIntDef(cxTL.Items[X].Texts[cxTLlNot.ItemIndex], 0),
+                               StrToDateTime(cxTL.Items[X].Texts[cxTLdDem.ItemIndex]),
+                               cxTL.Items[X].Texts[cxTLsMod.ItemIndex],
+                               cxTL.Items[X].Texts[cxTLsSer.ItemIndex] );
 
+    gModelo := DMFD.FDQryGeral2['nfe_Modelo'];
+    gSerie  := DMFD.FDQryGeral2['nfe_Serie'];
+
+    if ( gCpt = 1 ) then
+     pDefineRel()                                                               // Define o tipo de Relatório FortesReport
+    else
+     pDefineRelFR();                                                            // Define o tipo de Relatório FastReport
+
+    gCdloja_Consiste := edt_CodEmp.Text;
+    gdEmi_Consiste   := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
+    gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
+    gNNF_Consiste    := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
+    gSerie_Consiste  := vartostr(DMFD.FDQryGeral2['nfe_serie']);
+    gSerie           := StrToIntDef(gSerie_Consiste, 0);
+    gChave_Consiste  := '';                                                     // está sendo atribuida depois da sp_calcula_digito_chave
+    gModelo_Consiste := vartostr(DMFD.FDQryGeral2['nfe_modelo']);
+    gAnoMesGer       := Copy(gdEmi_Consiste, 7, 4) + Copy(gdEmi_Consiste, 4, 2);
+
+    //procura pelo ano e mes da nota
+    // ['1', '2', '3', '4', '5', '6', '7', '8', '9'], [teNormal, teContingencia, teSCAN, teDPEC, teFSDA, teSVCAN, teSVCRS, teSVCSP, teOffLine]);
+    if (gModelo = 55) then
+     _tpemissao := '5'
+    else if (gModelo = 65) then
+     _tpemissao := '9';
+
+    // by Edson Lima ; 2017-6-9T0949 ; Define quem será usado como cNF
+    gCdPed := VarToStr(DMFD.FDQryGeral2['nfe_CodPed']);
+
+    aux := '';
+    aux := edt_CodEmp.Text + ',' + '''' + VarToStr(DMFD.FDQryGeral2['nfe_nnf']) + '''' + ',' + '''' + _tpemissao + '''' + ',' + '''';
+    aux := aux + FormatDateTime('dd/mm/yyyy', VarToDateTime(DMFD.FDQryGeral2['nfe_demi'])) + '''' + ',' + '''';
+    aux := aux + IntToStr(gModelo) + '''' + ',' + '''';
+    aux := aux + IntToStr(gSerie) + '''' + ',' + '''';
+    aux := aux + gCdPed + '''';
+
+    DMFD.FDQuery1.Close;
+    DMFD.FDQuery1.SQL.Clear;
+    DMFD.FDQuery1.SQL.Add( 'exec sp_calcula_digito_chave ' + aux );
+    DMFD.FDQuery1.open;
+
+    if not DMFD.FDQuery1.IsEmpty then
+     vAux := vartostr(DMFD.FDQuery1['chave']);
+
+    // by Edson ; 2013-10-8T1031 ; Variável Global Chave criada para contestar gravação;
+    gChave_Consiste  := vAux;
+
+    if (VarToStr(DMFD.FDQryGeral2['nfe_chave_nfe']) <> '') and (trim(vAux) = '') then
+     vAux := DMFD.FDQryGeral2['nfe_chave_nfe'];
+
+    vAux := trim(gCamLog) + trim(vAux) + '-nfe.xml';                            /// by EL 24.2.2012 -> vAux := trim(FrPar.edtPathLogs.Text) + '\' + trim(vAux) + '-nfe.xml';
+
+    // by Edson Lima ; 2013/03/18 ; 08:45 ; Rotina para o caso de 613/539 = Chave de Acesso difere da existente em BD
+    if not FileExists(vAux) then
+    begin
+     _tpemissao := '1';
+
+     // by Edson Lima ; 2017-6-9T0949 ; Define quem será usado como cNF
+     gCdPed := VarToStr(DMFD.FDQuery3['nfe_CodPed']);
+
+     aux := '';
+     aux := edt_CodEmp.Text + ',' + '''' + VarToStr(DMFD.FDQuery3['nfe_nnf']) + '''' + ',' + '''' + _tpemissao + '''' + ',' + '''';
+     aux := aux + FormatDateTime('dd/mm/yyyy', VarToDateTime(DMFD.FDQuery3['nfe_demi'])) + '''' + ',' + '''';
+     aux := aux + IntToStr(gModelo) + '''' + ',' + '''';
+     aux := aux + IntToStr(gSerie) + '''' + ',' + '''';
+     aux := aux + gCdPed + '''';
+
+     DMFD.FDQuery1.Close;
+     DMFD.FDQuery1.SQL.Clear;
+     DMFD.FDQuery1.SQL.Add( 'exec sp_calcula_digito_chave ' + aux );
+     DMFD.FDQuery1.open;
+
+     if not DMFD.FDQuery1.IsEmpty then
+      vAux := vartostr(DMFD.FDQuery1['chave']);
+
+     // by Edson ; 2013-10-8T1031 ; Variável Global Chave criada para contestar gravação;
+     gChave_Consiste  := vAux;
+
+     if (VarToStr(DMFD.FDQuery3['nfe_chave_nfe']) <> '') and (trim(vAux) = '') then
+      vAux := DMFD.FDQuery3['nfe_chave_nfe'];
+
+     if vAux <> '' then
      begin
 
-      // Filtra a nfe selecionada com select
-      pSelNfe( DMFD.FDQryGeral2, StrToIntDef(FrGBNFe.edt_CodEmp.Text, 0),
-                                 StrToIntDef(cxTL.Items[X].Texts[cxTLlNot.ItemIndex], 0),
-                                 StrToDateTime(cxTL.Items[X].Texts[cxTLdDem.ItemIndex]),
-                                 cxTL.Items[X].Texts[cxTLsMod.ItemIndex],
-                                 cxTL.Items[X].Texts[cxTLsSer.ItemIndex] );
+      if (cxdtp1.Date > DMFD.FDQuery3['nfe_demi']) then
+       cxdtp1.Date := DMFD.FDQuery3['nfe_demi'];
 
-      gModelo := DMFD.FDQryGeral2['nfe_Modelo'];
-      gSerie  := DMFD.FDQryGeral2['nfe_Serie'];
-
-      if ( gCpt = 1 ) then
-       pDefineRel()                                                             // Define o tipo de Relatório FortesReport
-      else
-       pDefineRelFR();                                                          // Define o tipo de Relatório FastReport
-
-      gCdloja_Consiste := edt_CodEmp.Text;
-      gdEmi_Consiste   := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
-      gdEmiConsiste    := FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']);
-      gNNF_Consiste    := vartostr(DMFD.FDQryGeral2['nfe_nnf']);
-      gSerie_Consiste  := vartostr(DMFD.FDQryGeral2['nfe_serie']);
-      gSerie           := StrToIntDef(gSerie_Consiste, 0);
-      gChave_Consiste  := '';                                                   // está sendo atribuida depois da sp_calcula_digito_chave
-      gModelo_Consiste := vartostr(DMFD.FDQryGeral2['nfe_modelo']);
-      gAnoMesGer       := Copy(gdEmi_Consiste, 7, 4) + Copy(gdEmi_Consiste, 4, 2);
-
-      //procura pelo ano e mes da nota
-      // ['1', '2', '3', '4', '5', '6', '7', '8', '9'], [teNormal, teContingencia, teSCAN, teDPEC, teFSDA, teSVCAN, teSVCRS, teSVCSP, teOffLine]);
-      if (gModelo = 55) then
-       _tpemissao := '5'
-      else if (gModelo = 65) then
-       _tpemissao := '9';
-
-      // by Edson Lima ; 2017-6-9T0949 ; Define quem será usado como cNF
-      gCdPed := VarToStr(DMFD.FDQryGeral2['nfe_CodPed']);
-
-      aux := '';
-      aux := edt_CodEmp.Text + ',' + '''' + VarToStr(DMFD.FDQryGeral2['nfe_nnf']) + '''' + ',' + '''' + _tpemissao + '''' + ',' + '''';
-      aux := aux + FormatDateTime('dd/mm/yyyy', VarToDateTime(DMFD.FDQryGeral2['nfe_demi'])) + '''' + ',' + '''';
-      aux := aux + IntToStr(gModelo) + '''' + ',' + '''';
-      aux := aux + IntToStr(gSerie) + '''' + ',' + '''';
-      aux := aux + gCdPed + '''';
-
-      DMFD.FDQuery1.Close;
-      DMFD.FDQuery1.SQL.Clear;
-      DMFD.FDQuery1.SQL.Add( 'exec sp_calcula_digito_chave ' + aux );
-      DMFD.FDQuery1.open;
-
-      if not DMFD.FDQuery1.IsEmpty then
-       vAux := vartostr(DMFD.FDQuery1['chave']);
-
-      // by Edson ; 2013-10-8T1031 ; Variável Global Chave criada para contestar gravação;
-      gChave_Consiste  := vAux;
-
-      if (VarToStr(DMFD.FDQryGeral2['nfe_chave_nfe']) <> '') and (trim(vAux) = '') then
-       vAux := DMFD.FDQryGeral2['nfe_chave_nfe'];
-
-      vAux := trim(gCamLog) + trim(vAux) + '-nfe.xml';    /// by EL 24.2.2012 -> vAux := trim(FrPar.edtPathLogs.Text) + '\' + trim(vAux) + '-nfe.xml';
-
-      // by Edson Lima ; 2013/03/18 ; 08:45 ; Rotina para o caso de 613/539 = Chave de Acesso difere da existente em BD
-      if not FileExists(vAux) then
-       begin
-        _tpemissao := '1';
-
-        // by Edson Lima ; 2017-6-9T0949 ; Define quem será usado como cNF
-        gCdPed := VarToStr(DMFD.FDQuery3['nfe_CodPed']);
-
-        aux := '';
-        aux := edt_CodEmp.Text + ',' + '''' + VarToStr(DMFD.FDQuery3['nfe_nnf']) + '''' + ',' + '''' + _tpemissao + '''' + ',' + '''';
-        aux := aux + FormatDateTime('dd/mm/yyyy', VarToDateTime(DMFD.FDQuery3['nfe_demi'])) + '''' + ',' + '''';
-        aux := aux + IntToStr(gModelo) + '''' + ',' + '''';
-        aux := aux + IntToStr(gSerie) + '''' + ',' + '''';
-        aux := aux + gCdPed + '''';
-
-        DMFD.FDQuery1.Close;
-        DMFD.FDQuery1.SQL.Clear;
-        DMFD.FDQuery1.SQL.Add( 'exec sp_calcula_digito_chave ' + aux );
-        DMFD.FDQuery1.open;
-
-        if not DMFD.FDQuery1.IsEmpty then
-         vAux := vartostr(DMFD.FDQuery1['chave']);
-
-        // by Edson ; 2013-10-8T1031 ; Variável Global Chave criada para contestar gravação;
-        gChave_Consiste  := vAux;
-
-        if (VarToStr(DMFD.FDQuery3['nfe_chave_nfe']) <> '') and (trim(vAux) = '') then
-         vAux := DMFD.FDQuery3['nfe_chave_nfe'];
-
-        if vAux <> '' then
-         begin
-          if (cxdtp1.Date > DMFD.FDQuery3['nfe_demi']) then
-            cxdtp1.Date := DMFD.FDQuery3['nfe_demi'];
-
-          vAux := trim(gCamLog) + trim(vAux) + '-nfe.xml';
-         end;
-       end;
-      //********************************************************************
-
-      ACBrNFe1.NotasFiscais.Clear;
-      ACBrNFe1.NotasFiscais.LoadFromFile(vAux);
-      ACBrNFe1.Consultar;
-
-      if (trim(vartostr(ACBrNFe1.WebServices.Consulta.cStat)) = '100') or
-         (trim(vartostr(ACBrNFe1.WebServices.Consulta.cStat)) = '150') then
-       begin
-        grava_xml_no_banco;
-
-        // by Edson Lima ; 2013-11-25T1104 ; Rotina acrescina para o a efetiva
-        // consulta das notas movidas de transmitidas...
-        if gReConsulta then
-         vnRec := DMFD.FDQryGeral2['nfe_recibo']
-        else
-         vnRec := ACBrNFe1.WebServices.Retorno.NFeRetorno.nRec;
-        //----------------------------------------------------------------------
-
-        // by Edson Lima ; 2013/03/12 ; 14:23 ; Atualiza a nfe no update centralizado
-        pGravaNFe('011', 'protocolo',
-                         'recibo',
-                         'data_hora_recebimento',
-                         'chave_nfe',
-                         'situacao',
-                         'motivo',
-                         'UsuTrs',
-                         '',
-                         '',
-                         '',
-                         '',
-                         '',
-                         '',
-                         'codigo_loja',
-                         'demi',
-                         'nnf',
-                         'serie',
-                         'chave_nfe',
-                         'modelo',                                              // Nome dos campos
-                         ACBrNFe1.WebServices.Consulta.Protocolo,
-                         vnRec,
-                         FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.consulta.DhRecbto),
-                         ACBrNFe1.WebServices.Consulta.NFeChave,
-                         ACBrNFe1.WebServices.Consulta.cStat,
-                         ACBrNFe1.WebServices.Consulta.xMotivo,
-                         gUsu,
-                         '',
-                         '',
-                         '',
-                         '',
-                         '',
-                         '',
-                         edt_CodEmp.Text,
-                         FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']),
-                         DMFD.FDQryGeral2['nfe_nnf'],
-                         DMFD.FDQryGeral2['nfe_serie'],
-                         ACBrNFe1.WebServices.Consulta.NFeChave,
-                         DMFD.FDQryGeral2['nfe_modelo'],                        // Conteúdo dos campos
-                         true);                                                 // Consiste [true/false]
-       end
-      else if ( (trim(vartostr(ACBrNFe1.WebServices.Consulta.cStat)) = '613') or
-                (trim(vartostr(ACBrNFe1.WebServices.Consulta.cStat)) = '539') ) then
-       begin
-
-        gAtuFSD := True;
-
-       end;
-
-      MessageDlg('DADOS DA NOTA : ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) + char(13) +
-                        '  Status=' + vartostr(ACBrNFe1.WebServices.Consulta.cStat)  +
-                                '-' +  vartostr(ACBrNFe1.WebServices.Consulta.xMotivo) + char(13) +
-                     '  Protocolo=' + ACBrNFe1.WebServices.Consulta.Protocolo + char(13) +
-           '  Data do recebimento=' + vartostr(ACBrNFe1.WebServices.Consulta.DhRecbto) + char(13) ,mtInformation,[mbOK],0);
-
-      memoLog.Clear;
-      MemoResp.Lines.Text   := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetWS);
-      MemoLog.Lines.Text    := UTF8Encode(ACBrNFe1.WebServices.Consulta.Msg);
-      memoRespWS.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetornoWS);
-      LoadXML(MemoResp, WBResposta);
+      vAux := trim(gCamLog) + trim(vAux) + '-nfe.xml';
 
      end;
 
+    end;
+
+    ACBrNFe1.NotasFiscais.Clear;
+    ACBrNFe1.NotasFiscais.LoadFromFile(vAux);
+    ACBrNFe1.Consultar;
+
+    if (trim(vartostr(ACBrNFe1.WebServices.Consulta.cStat)) = '100') or
+       (trim(vartostr(ACBrNFe1.WebServices.Consulta.cStat)) = '150') then
+    begin
+
+     grava_xml_no_banco;
+
+     // by Edson Lima ; 2013-11-25T1104 ; Rotina acrescina para o a efetiva
+     // consulta das notas movidas de transmitidas...
+     if gReConsulta then
+      vnRec := DMFD.FDQryGeral2['nfe_recibo']
+     else
+      vnRec := ACBrNFe1.WebServices.Retorno.NFeRetorno.nRec;
+
+     //-------------------------------------------------------------------------
+     // by Edson Lima ; 2013/03/12 ; 14:23 ; Atualiza a nfe no update centralizado
+     pGravaNFe('011', 'protocolo',
+                      'recibo',
+                      'data_hora_recebimento',
+                      'chave_nfe',
+                      'situacao',
+                      'motivo',
+                      'UsuTrs',
+                      '',
+                      '',
+                      '',
+                      '',
+                      '',
+                      '',
+                      'codigo_loja',
+                      'demi',
+                      'nnf',
+                      'serie',
+                      'chave_nfe',
+                      'modelo',                                                 // Nome dos campos
+                      ACBrNFe1.WebServices.Consulta.Protocolo,
+                      vnRec,
+                      FormatDateTime('dd/mm/yyyy hh:nn:ss', ACBrNFe1.WebServices.consulta.DhRecbto),
+                      ACBrNFe1.WebServices.Consulta.NFeChave,
+                      ACBrNFe1.WebServices.Consulta.cStat,
+                      ACBrNFe1.WebServices.Consulta.xMotivo,
+                      gUsu,
+                      '',
+                      '',
+                      '',
+                      '',
+                      '',
+                      '',
+                      edt_CodEmp.Text,
+                      FormatDateTime('dd/mm/yyyy', DMFD.FDQryGeral2['nfe_demi']),
+                      DMFD.FDQryGeral2['nfe_nnf'],
+                      DMFD.FDQryGeral2['nfe_serie'],
+                      ACBrNFe1.WebServices.Consulta.NFeChave,
+                      DMFD.FDQryGeral2['nfe_modelo'],                           // Conteúdo dos campos
+                      true);                                                    // Consiste [true/false]
+    end
+    else if ( (trim(vartostr(ACBrNFe1.WebServices.Consulta.cStat)) = '613') or
+              (trim(vartostr(ACBrNFe1.WebServices.Consulta.cStat)) = '539') ) then
+    begin
+
+     gAtuFSD := True;
+
+    end;
+
+    MessageDlg('DADOS DA NOTA : ' + vartostr(DMFD.FDQryGeral2['nfe_nnf']) + char(13) +
+               '  Status=' + vartostr(ACBrNFe1.WebServices.Consulta.cStat)  +
+               '-' +  vartostr(ACBrNFe1.WebServices.Consulta.xMotivo) + char(13) +
+               '  Protocolo=' + ACBrNFe1.WebServices.Consulta.Protocolo + char(13) +
+               '  Data do recebimento=' + vartostr(ACBrNFe1.WebServices.Consulta.DhRecbto) + char(13) ,mtInformation,[mbOK],0);
+
+    memoLog.Clear;
+    MemoResp.Lines.Text   := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetWS);
+    MemoLog.Lines.Text    := UTF8Encode(ACBrNFe1.WebServices.Consulta.Msg);
+    memoRespWS.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.Consulta.RetornoWS);
+    LoadXML(MemoResp, WBResposta);
+
    end;
+
+  end;
 
  except
 
@@ -11067,20 +11831,21 @@ end;
 procedure TFrGBNFe.BitBtn4Click(Sender: TObject);
 begin
 
-  OpenDialog1.FileName  :=  '';
-  OpenDialog1.Title := 'Selecione a NFE';
-  OpenDialog1.DefaultExt := '*-nfe.XML';
-  OpenDialog1.Filter := 'Arquivos NFE (*-nfe.XML)|*-nfe.XML|Arquivos XML (*.XML)|*.XML|Todos os Arquivos (*.*)|*.*';
-  OpenDialog1.InitialDir := ACBrNFe1.Configuracoes.Arquivos.PathSalvar;
-  if OpenDialog1.Execute then begin
-    ACBrNFe1.NotasFiscais.Clear;
-    ACBrNFe1.NotasFiscais.LoadFromFile(OpenDialog1.FileName);
+ OpenDialog1.FileName  :=  '';
+ OpenDialog1.Title := 'Selecione a NFE';
+ OpenDialog1.DefaultExt := '*-nfe.XML';
+ OpenDialog1.Filter := 'Arquivos NFE (*-nfe.XML)|*-nfe.XML|Arquivos XML (*.XML)|*.XML|Todos os Arquivos (*.*)|*.*';
+ OpenDialog1.InitialDir := ACBrNFe1.Configuracoes.Arquivos.PathSalvar;
 
-    grava_xml_no_banco;
+ if OpenDialog1.Execute then
+ begin
 
-    MessageDlg('Gravado com sucesso',mtInformation,[mbOK],0);
+  ACBrNFe1.NotasFiscais.Clear;
+  ACBrNFe1.NotasFiscais.LoadFromFile(OpenDialog1.FileName);
+  grava_xml_no_banco;
+  MessageDlg('Gravado com sucesso',mtInformation,[mbOK],0);
 
-  end;
+ end;
 
  /// By Edson Lima 14.9.2012 ; 10:10 - Atualiza grade
  pAtuNFeT();
@@ -11103,1177 +11868,1223 @@ begin
  OpenDialog1.InitialDir := ACBrNFe1.Configuracoes.Arquivos.PathSalvar;
 
  if OpenDialog1.Execute then
+ begin
 
+  ACBrNFe1.NotasFiscais.Clear;
+  ACBrNFe1.NotasFiscais.LoadFromFile(OpenDialog1.FileName);
+  trvwNFe.Items.Clear;
+
+  for n:=0 to ACBrNFe1.NotasFiscais.Count-1 do
   begin
 
-   ACBrNFe1.NotasFiscais.Clear;
-   ACBrNFe1.NotasFiscais.LoadFromFile(OpenDialog1.FileName);
-   trvwNFe.Items.Clear;
+   with ACBrNFe1.NotasFiscais.Items[n].NFe do
+   begin
 
-   for n:=0 to ACBrNFe1.NotasFiscais.Count-1 do
+    Nota := trvwNFe.Items.Add(nil,infNFe.ID);
+    trvwNFe.Items.AddChild(Nota,'ID= '                            + infNFe.ID);
+    Node := trvwNFe.Items.AddChild(Nota,'procNFe');
+    trvwNFe.Items.AddChild(Node,'tpAmb= '                         + TpAmbToStr(procNFe.tpAmb));
+    trvwNFe.Items.AddChild(Node,'verAplic= '                      + procNFe.verAplic);
+    trvwNFe.Items.AddChild(Node,'chNFe= '                         + procNFe.chNFe);
+    trvwNFe.Items.AddChild(Node,'dhRecbto= '                      + DateTimeToStr(procNFe.dhRecbto));
+    trvwNFe.Items.AddChild(Node,'nProt= '                         + procNFe.nProt);
+    trvwNFe.Items.AddChild(Node,'digVal= '                        + procNFe.digVal);
+    trvwNFe.Items.AddChild(Node,'cStat= '                         + IntToStr(procNFe.cStat));
+    trvwNFe.Items.AddChild(Node,'xMotivo= '                       + procNFe.xMotivo);
+    trvwNFe.Items.AddChild(Node,'cMsg= '                          + IntToStr(procNFe.cMsg));
+    trvwNFe.Items.AddChild(Node,'xMsg= '                          + procNFe.xMsg);
+
+    Node := trvwNFe.Items.AddChild(Nota,'Ide');
+    trvwNFe.Items.AddChild(Node,'cNF= '                           + IntToStr(Ide.cNF));
+    trvwNFe.Items.AddChild(Node,'natOp= '                         + Ide.natOp );
+
+    case ( FrPar.cbb2.ItemIndex ) of
+
+     0 : trvwNFe.Items.AddChild(Node,'indPag= '                   + IndpagToStr(Ide.indPag)); // ve3131
+
+     1 : ;// Retirado a partir da ve400;                                                      // ve4040
+
+     2 :                                                                                      // ve4031
+       if ( gModelo = 55 ) then                                                               // ve40
+     begin
+
+      // Retirado a partir da ve400;
+
+     end
+     else                                                                                     // ve31
+     begin
+
+      trvwNFe.Items.AddChild(Node,'indPag= '                   + IndpagToStr(Ide.indPag));    // ve310
+
+     end;
+
+     3 :                                                                                      // ve3140
+     if ( gModelo = 65 ) then                                                                 // ve40
+     begin
+
+      // Retirado a partir da ve400;
+
+     end
+     else                                                                                    // ve31
+     begin
+
+      trvwNFe.Items.AddChild(Node,'indPag= '                   + IndpagToStr(Ide.indPag));   // ve310
+
+     end;
+
+    end;
+
+    trvwNFe.Items.AddChild(Node,'modelo= '                     + IntToStr(Ide.modelo));
+    trvwNFe.Items.AddChild(Node,'serie= '                      + IntToStr(Ide.serie));
+    trvwNFe.Items.AddChild(Node,'nNF= '                        + IntToStr(Ide.nNF));
+    trvwNFe.Items.AddChild(Node,'dEmi= '                       + DateToStr(Ide.dEmi));
+    trvwNFe.Items.AddChild(Node,'dSaiEnt= '                    + DateToStr(Ide.dSaiEnt));
+    //trvwNFe.Items.AddChild(Node,'hSaiEnt= '                    +DateToStr(Ide.hSaiEnt));
+    trvwNFe.Items.AddChild(Node,'tpNF= '                       + tpNFToStr(Ide.tpNF));
+    trvwNFe.Items.AddChild(Node,'finNFe= '                     + FinNFeToStr(Ide.finNFe));
+    trvwNFe.Items.AddChild(Node,'verProc= '                    + Ide.verProc);
+    trvwNFe.Items.AddChild(Node,'cUF= '                        + IntToStr(Ide.cUF));
+    trvwNFe.Items.AddChild(Node,'cMunFG= '                     + IntToStr(Ide.cMunFG));
+    trvwNFe.Items.AddChild(Node,'tpImp= '                      + TpImpToStr(Ide.tpImp));
+    trvwNFe.Items.AddChild(Node,'tpEmis= '                     + TpEmisToStr(Ide.tpEmis));
+    trvwNFe.Items.AddChild(Node,'cDV= '                        + IntToStr(Ide.cDV));
+    trvwNFe.Items.AddChild(Node,'tpAmb= '                      + TpAmbToStr(Ide.tpAmb));
+    trvwNFe.Items.AddChild(Node,'finNFe= '                     + FinNFeToStr(Ide.finNFe));
+    trvwNFe.Items.AddChild(Node,'procEmi= '                    + procEmiToStr(Ide.procEmi));
+    trvwNFe.Items.AddChild(Node,'verProc= '                    + Ide.verProc);
+    //trvwNFe.Items.AddChild(Node,'dhCont= '                     +DateTimeToStr(Ide.dhCont));
+    //trvwNFe.Items.AddChild(Node,'xJust= '                      +Ide.xJust);
+
+    for i:=0 to Ide.NFref.Count-1 do
     begin
 
-     with ACBrNFe1.NotasFiscais.Items[n].NFe do
+     if Ide.NFref.Items[i].refNFe <> '' then
+     begin
+
+      Node := trvwNFe.Items.AddChild(Node,'NFRef'               + IntToStrZero(i+1,3));
+      trvwNFe.Items.AddChild(Node,'refNFe= '                    + Ide.NFref.Items[i].refNFe);
+      trvwNFe.Items.AddChild(Node,'cUF= '                       + IntToStr(Ide.NFref.Items[i].RefNF.cUF));
+      trvwNFe.Items.AddChild(Node,'AAMM= '                      + Ide.NFref.Items[i].RefNF.AAMM);
+      trvwNFe.Items.AddChild(Node,'CNPJ= '                      + Ide.NFref.Items[i].RefNF.CNPJ);
+      trvwNFe.Items.AddChild(Node,'modelo= '                    + IntToStr(Ide.NFref.Items[i].RefNF.modelo));
+      trvwNFe.Items.AddChild(Node,'serie= '                     + IntToStr(Ide.NFref.Items[i].RefNF.serie));
+      trvwNFe.Items.AddChild(Node,'nNF= '                       + IntToStr(Ide.NFref.Items[i].RefNF.nNF));
+
+      end;
+
+    end;
+
+    Node := trvwNFe.Items.AddChild(Nota,'Emit');
+    trvwNFe.Items.AddChild(Node,'CNPJCPF= '                       + Emit.CNPJCPF);
+    trvwNFe.Items.AddChild(Node,'IE='                             + Emit.IE);
+    trvwNFe.Items.AddChild(Node,'xNome='                          + Emit.xNome);
+    trvwNFe.Items.AddChild(Node,'xFant='                          + Emit.xFant );
+    trvwNFe.Items.AddChild(Node,'IEST='                           + Emit.IEST);
+    trvwNFe.Items.AddChild(Node,'IM='                             + Emit.IM);
+    trvwNFe.Items.AddChild(Node,'CNAE='                           + Emit.CNAE);
+    trvwNFe.Items.AddChild(Node,'CRT='                            + CRTToStr(Emit.CRT));
+
+    Node := trvwNFe.Items.AddChild(Node,'EnderEmit');
+    trvwNFe.Items.AddChild(Node,'Fone='                           + Emit.EnderEmit.fone);
+    trvwNFe.Items.AddChild(Node,'CEP='                            + IntToStr(Emit.EnderEmit.CEP));
+    trvwNFe.Items.AddChild(Node,'xLgr='                           + Emit.EnderEmit.xLgr);
+    trvwNFe.Items.AddChild(Node,'nro='                            + Emit.EnderEmit.nro);
+    trvwNFe.Items.AddChild(Node,'xCpl='                           + Emit.EnderEmit.xCpl);
+    trvwNFe.Items.AddChild(Node,'xBairro='                        + Emit.EnderEmit.xBairro);
+    trvwNFe.Items.AddChild(Node,'cMun='                           + IntToStr(Emit.EnderEmit.cMun));
+    trvwNFe.Items.AddChild(Node,'xMun='                           + Emit.EnderEmit.xMun);
+    trvwNFe.Items.AddChild(Node,'UF'                              + Emit.EnderEmit.UF);
+    trvwNFe.Items.AddChild(Node,'cPais='                          + IntToStr(Emit.EnderEmit.cPais));
+    trvwNFe.Items.AddChild(Node,'xPais='                          + Emit.EnderEmit.xPais);
+
+    if Avulsa.CNPJ  <> '' then
+    begin
+
+     Node := trvwNFe.Items.AddChild(Nota,'Avulsa');
+     trvwNFe.Items.AddChild(Node,'CNPJ='                         + Avulsa.CNPJ);
+     trvwNFe.Items.AddChild(Node,'xOrgao='                       + Avulsa.xOrgao);
+     trvwNFe.Items.AddChild(Node,'matr='                         + Avulsa.matr );
+     trvwNFe.Items.AddChild(Node,'xAgente='                      + Avulsa.xAgente);
+     trvwNFe.Items.AddChild(Node,'fone='                         + Avulsa.fone);
+     trvwNFe.Items.AddChild(Node,'UF='                           + Avulsa.UF);
+     trvwNFe.Items.AddChild(Node,'nDAR='                         + Avulsa.nDAR);
+     trvwNFe.Items.AddChild(Node,'dEmi='                         + DateToStr(Avulsa.dEmi));
+     trvwNFe.Items.AddChild(Node,'vDAR='                         + FloatToStr(Avulsa.vDAR));
+     trvwNFe.Items.AddChild(Node,'repEmi='                       + Avulsa.repEmi);
+     trvwNFe.Items.AddChild(Node,'dPag='                         + DateToStr(Avulsa.dPag));
+
+    end;
+
+    Node := trvwNFe.Items.AddChild(Nota,'Dest');
+    trvwNFe.Items.AddChild(Node,'CNPJCPF= '                      + Dest.CNPJCPF);
+    trvwNFe.Items.AddChild(Node,'IE='                            + Dest.IE);
+    trvwNFe.Items.AddChild(Node,'ISUF='                          + Dest.ISUF);
+    trvwNFe.Items.AddChild(Node,'xNome='                         + Dest.xNome);
+    trvwNFe.Items.AddChild(Node,'email='                         + Dest.Email);
+
+    Node := trvwNFe.Items.AddChild(Node,'EnderDest');
+    trvwNFe.Items.AddChild(Node,'Fone='                          + Dest.EnderDest.Fone);
+    trvwNFe.Items.AddChild(Node,'CEP='                           + IntToStr(Dest.EnderDest.CEP));
+    trvwNFe.Items.AddChild(Node,'xLgr='                          + Dest.EnderDest.xLgr);
+    trvwNFe.Items.AddChild(Node,'nro='                           + Dest.EnderDest.nro);
+    trvwNFe.Items.AddChild(Node,'xCpl='                          + Dest.EnderDest.xCpl);
+    trvwNFe.Items.AddChild(Node,'xBairro='                       + Dest.EnderDest.xBairro);
+    trvwNFe.Items.AddChild(Node,'cMun='                          + IntToStr(Dest.EnderDest.cMun));
+    trvwNFe.Items.AddChild(Node,'xMun='                          + Dest.EnderDest.xMun);
+    trvwNFe.Items.AddChild(Node,'UF='                            + Dest.EnderDest.UF );
+    trvwNFe.Items.AddChild(Node,'cPais='                         + IntToStr(Dest.EnderDest.cPais));
+    trvwNFe.Items.AddChild(Node,'xPais='                         + Dest.EnderDest.xPais);
+
+    for I := 0 to Det.Count-1 do
+    begin
+
+     with Det.Items[I] do
+     begin
+
+      NodeItem := trvwNFe.Items.AddChild(Nota,'Produto'        + IntToStrZero(I+1,3));
+      trvwNFe.Items.AddChild(NodeItem,'nItem='                 + IntToStr(Prod.nItem) );
+      trvwNFe.Items.AddChild(NodeItem,'cProd='                 + Prod.cProd );
+      trvwNFe.Items.AddChild(NodeItem,'cEAN='                  + Prod.cEAN);
+      trvwNFe.Items.AddChild(NodeItem,'cBarra='                + Prod.cBarra);
+      trvwNFe.Items.AddChild(NodeItem,'cBarraTrib='            + Prod.cBarraTrib);
+      trvwNFe.Items.AddChild(NodeItem,'xProd='                 + Prod.xProd);
+      trvwNFe.Items.AddChild(NodeItem,'NCM='                   + Prod.NCM);
+      //trvwNFe.Items.AddChild(NodeItem,'NVE='                   + Prod.NVE);
+      trvwNFe.Items.AddChild(NodeItem,'EXTIPI='                + Prod.EXTIPI);
+      //trvwNFe.Items.AddChild(NodeItem,'genero='                +IntToStr(Prod.genero));
+      trvwNFe.Items.AddChild(NodeItem,'CFOP='                  + Prod.CFOP);
+      trvwNFe.Items.AddChild(NodeItem,'uCom='                  + Prod.uCom);
+      trvwNFe.Items.AddChild(NodeItem,'qCom='                  + FloatToStr(Prod.qCom)) ;
+      trvwNFe.Items.AddChild(NodeItem,'vUnCom='                + FloatToStr(Prod.vUnCom)) ;
+      trvwNFe.Items.AddChild(NodeItem,'CEST='                  + Prod.CEST) ;
+      trvwNFe.Items.AddChild(NodeItem,'vProd='                 + FloatToStr(Prod.vProd)) ;
+
+      trvwNFe.Items.AddChild(NodeItem,'cEANTrib='              + Prod.cEANTrib);
+      trvwNFe.Items.AddChild(NodeItem,'uTrib='                 + Prod.uTrib);
+      trvwNFe.Items.AddChild(NodeItem,'qTrib='                 + FloatToStr(Prod.qTrib));
+      trvwNFe.Items.AddChild(NodeItem,'vUnTrib='               + FloatToStr(Prod.vUnTrib)) ;
+
+      trvwNFe.Items.AddChild(NodeItem,'vFrete='                + FloatToStr(Prod.vFrete)) ;
+      trvwNFe.Items.AddChild(NodeItem,'vSeg='                  + FloatToStr(Prod.vSeg)) ;
+      trvwNFe.Items.AddChild(NodeItem,'vDesc='                 + FloatToStr(Prod.vDesc)) ;
+      trvwNFe.Items.AddChild(NodeItem,'vOutro='                + FloatToStr(Prod.vOutro)) ;
+      trvwNFe.Items.AddChild(NodeItem,'indTot='                + indTotToStr(Prod.IndTot)) ;
+      trvwNFe.Items.AddChild(NodeItem,'xPed='                  + Prod.xPed) ;
+      trvwNFe.Items.AddChild(NodeItem,'nItemPedido='           + Prod.nItemPed) ;
+
+      trvwNFe.Items.AddChild(NodeItem,'infAdProd='             + infAdProd);
+
+      for J:=0 to Prod.DI.Count-1 do
       begin
 
-       Nota := trvwNFe.Items.Add(nil,infNFe.ID);
-       trvwNFe.Items.AddChild(Nota,'ID= '                            + infNFe.ID);
-       Node := trvwNFe.Items.AddChild(Nota,'procNFe');
-       trvwNFe.Items.AddChild(Node,'tpAmb= '                         + TpAmbToStr(procNFe.tpAmb));
-       trvwNFe.Items.AddChild(Node,'verAplic= '                      + procNFe.verAplic);
-       trvwNFe.Items.AddChild(Node,'chNFe= '                         + procNFe.chNFe);
-       trvwNFe.Items.AddChild(Node,'dhRecbto= '                      + DateTimeToStr(procNFe.dhRecbto));
-       trvwNFe.Items.AddChild(Node,'nProt= '                         + procNFe.nProt);
-       trvwNFe.Items.AddChild(Node,'digVal= '                        + procNFe.digVal);
-       trvwNFe.Items.AddChild(Node,'cStat= '                         + IntToStr(procNFe.cStat));
-       trvwNFe.Items.AddChild(Node,'xMotivo= '                       + procNFe.xMotivo);
-       trvwNFe.Items.AddChild(Node,'cMsg= '                          + IntToStr(procNFe.cMsg));
-       trvwNFe.Items.AddChild(Node,'xMsg= '                          + procNFe.xMsg);
+       if Prod.DI.Items[j].nDi <> '' then
+       begin
 
-       Node := trvwNFe.Items.AddChild(Nota,'Ide');
-       trvwNFe.Items.AddChild(Node,'cNF= '                           + IntToStr(Ide.cNF));
-       trvwNFe.Items.AddChild(Node,'natOp= '                         + Ide.natOp );
-
-       case ( FrPar.cbb2.ItemIndex ) of
-
-        0 : trvwNFe.Items.AddChild(Node,'indPag= '                   + IndpagToStr(Ide.indPag)); // ve3131
-
-        1 : ;// Retirado a partir da ve400;                                                      // ve4040
-
-        2 :                                                                                      // ve4031
-
-         if ( gModelo = 55 ) then                                                                // ve40
-          begin
-
-           // Retirado a partir da ve400;
-
-          end
-
-         else                                                                                    // ve31
-
-          begin
-
-           trvwNFe.Items.AddChild(Node,'indPag= '                   + IndpagToStr(Ide.indPag));  // ve310
-
-          end;
-
-        3 :                                                                                      // ve3140
-
-         if ( gModelo = 65 ) then                                                                // ve40
-          begin
-
-           // Retirado a partir da ve400;
-
-          end
-
-         else                                                                                    // ve31
-
-          begin
-
-           trvwNFe.Items.AddChild(Node,'indPag= '                   + IndpagToStr(Ide.indPag)); // ve310
-
-          end;
-
-       end;
-
-       trvwNFe.Items.AddChild(Node,'modelo= '                        + IntToStr(Ide.modelo));
-       trvwNFe.Items.AddChild(Node,'serie= '                         + IntToStr(Ide.serie));
-       trvwNFe.Items.AddChild(Node,'nNF= '                           + IntToStr(Ide.nNF));
-       trvwNFe.Items.AddChild(Node,'dEmi= '                          + DateToStr(Ide.dEmi));
-       trvwNFe.Items.AddChild(Node,'dSaiEnt= '                       + DateToStr(Ide.dSaiEnt));
-       //trvwNFe.Items.AddChild(Node,'hSaiEnt= '                       +DateToStr(Ide.hSaiEnt));
-       trvwNFe.Items.AddChild(Node,'tpNF= '                          + tpNFToStr(Ide.tpNF));
-       trvwNFe.Items.AddChild(Node,'finNFe= '                        + FinNFeToStr(Ide.finNFe));
-       trvwNFe.Items.AddChild(Node,'verProc= '                       + Ide.verProc);
-       trvwNFe.Items.AddChild(Node,'cUF= '                           + IntToStr(Ide.cUF));
-       trvwNFe.Items.AddChild(Node,'cMunFG= '                        + IntToStr(Ide.cMunFG));
-       trvwNFe.Items.AddChild(Node,'tpImp= '                         + TpImpToStr(Ide.tpImp));
-       trvwNFe.Items.AddChild(Node,'tpEmis= '                        + TpEmisToStr(Ide.tpEmis));
-       trvwNFe.Items.AddChild(Node,'cDV= '                           + IntToStr(Ide.cDV));
-       trvwNFe.Items.AddChild(Node,'tpAmb= '                         + TpAmbToStr(Ide.tpAmb));
-       trvwNFe.Items.AddChild(Node,'finNFe= '                        + FinNFeToStr(Ide.finNFe));
-       trvwNFe.Items.AddChild(Node,'procEmi= '                       + procEmiToStr(Ide.procEmi));
-       trvwNFe.Items.AddChild(Node,'verProc= '                       + Ide.verProc);
-       //trvwNFe.Items.AddChild(Node,'dhCont= '                        +DateTimeToStr(Ide.dhCont));
-       //trvwNFe.Items.AddChild(Node,'xJust= '                         +Ide.xJust);
-
-       for i:=0 to Ide.NFref.Count-1 do
+        with Prod.DI.Items[j] do
         begin
 
-         if Ide.NFref.Items[i].refNFe <> '' then
+         NodePai := trvwNFe.Items.AddChild(NodeItem,'DI'    + IntToStrZero(J+1,3));
+         trvwNFe.Items.AddChild(NodePai,'nDi='              + nDi);
+         trvwNFe.Items.AddChild(NodePai,'dDi='              + DateToStr(dDi));
+         trvwNFe.Items.AddChild(NodePai,'xLocDesemb='       + xLocDesemb);
+         trvwNFe.Items.AddChild(NodePai,'UFDesemb='         + UFDesemb);
+         trvwNFe.Items.AddChild(NodePai,'dDesemb='          + DateToStr(dDesemb));
+         trvwNFe.Items.AddChild(NodePai,'cExportador='      + cExportador);;
+
+         for K:=0 to adi.Count-1 do
+         begin
+
+          with adi.Items[K] do
           begin
 
-           Node := trvwNFe.Items.AddChild(Node,'NFRef'               + IntToStrZero(i+1,3));
-           trvwNFe.Items.AddChild(Node,'refNFe= '                    + Ide.NFref.Items[i].refNFe);
-           trvwNFe.Items.AddChild(Node,'cUF= '                       + IntToStr(Ide.NFref.Items[i].RefNF.cUF));
-           trvwNFe.Items.AddChild(Node,'AAMM= '                      + Ide.NFref.Items[i].RefNF.AAMM);
-           trvwNFe.Items.AddChild(Node,'CNPJ= '                      + Ide.NFref.Items[i].RefNF.CNPJ);
-           trvwNFe.Items.AddChild(Node,'modelo= '                    + IntToStr(Ide.NFref.Items[i].RefNF.modelo));
-           trvwNFe.Items.AddChild(Node,'serie= '                     + IntToStr(Ide.NFref.Items[i].RefNF.serie));
-           trvwNFe.Items.AddChild(Node,'nNF= '                       + IntToStr(Ide.NFref.Items[i].RefNF.nNF));
+           Node := trvwNFe.Items.AddChild(NodePai,'LADI'  + IntToStrZero(K+1,3));
+           trvwNFe.Items.AddChild(Node,'nAdicao='         + IntToStr(nAdicao)) ;
+           trvwNFe.Items.AddChild(Node,'nSeqAdi='         + IntToStr(nSeqAdi)) ;
+           trvwNFe.Items.AddChild(Node,'cFabricante='     + cFabricante);
+           trvwNFe.Items.AddChild(Node,'vDescDI='         + FloatToStr(vDescDI));
 
           end;
+
+         end;
 
         end;
 
-       Node := trvwNFe.Items.AddChild(Nota,'Emit');
-       trvwNFe.Items.AddChild(Node,'CNPJCPF= '                       + Emit.CNPJCPF);
-       trvwNFe.Items.AddChild(Node,'IE='                             + Emit.IE);
-       trvwNFe.Items.AddChild(Node,'xNome='                          + Emit.xNome);
-       trvwNFe.Items.AddChild(Node,'xFant='                          + Emit.xFant );
-       trvwNFe.Items.AddChild(Node,'IEST='                           + Emit.IEST);
-       trvwNFe.Items.AddChild(Node,'IM='                             + Emit.IM);
-       trvwNFe.Items.AddChild(Node,'CNAE='                           + Emit.CNAE);
-       trvwNFe.Items.AddChild(Node,'CRT='                            + CRTToStr(Emit.CRT));
+       end
+       else
+        Break;
 
-       Node := trvwNFe.Items.AddChild(Node,'EnderEmit');
-       trvwNFe.Items.AddChild(Node,'Fone='                           + Emit.EnderEmit.fone);
-       trvwNFe.Items.AddChild(Node,'CEP='                            + IntToStr(Emit.EnderEmit.CEP));
-       trvwNFe.Items.AddChild(Node,'xLgr='                           + Emit.EnderEmit.xLgr);
-       trvwNFe.Items.AddChild(Node,'nro='                            + Emit.EnderEmit.nro);
-       trvwNFe.Items.AddChild(Node,'xCpl='                           + Emit.EnderEmit.xCpl);
-       trvwNFe.Items.AddChild(Node,'xBairro='                        + Emit.EnderEmit.xBairro);
-       trvwNFe.Items.AddChild(Node,'cMun='                           + IntToStr(Emit.EnderEmit.cMun));
-       trvwNFe.Items.AddChild(Node,'xMun='                           + Emit.EnderEmit.xMun);
-       trvwNFe.Items.AddChild(Node,'UF'                              + Emit.EnderEmit.UF);
-       trvwNFe.Items.AddChild(Node,'cPais='                          + IntToStr(Emit.EnderEmit.cPais));
-       trvwNFe.Items.AddChild(Node,'xPais='                          + Emit.EnderEmit.xPais);
+      end;
 
-       if Avulsa.CNPJ  <> '' then
+      if Prod.veicProd.chassi <> '' then
+      begin
+
+       Node := trvwNFe.Items.AddChild(NodeItem,'Veiculo');
+
+       with Prod.veicProd do
+       begin
+
+        trvwNFe.Items.AddChild(Node,'tpOP='                  + tpOPToStr(tpOP));
+        trvwNFe.Items.AddChild(Node,'chassi='                + chassi) ;
+        trvwNFe.Items.AddChild(Node,'cCor='                  + cCor);
+        trvwNFe.Items.AddChild(Node,'xCor='                  + xCor);
+        trvwNFe.Items.AddChild(Node,'pot='                   + pot);
+        trvwNFe.Items.AddChild(Node,'Cilin='                 + Cilin);
+        trvwNFe.Items.AddChild(Node,'pesoL='                 + pesoL);
+        trvwNFe.Items.AddChild(Node,'pesoB='                 + pesoB);
+        trvwNFe.Items.AddChild(Node,'nSerie='                + nSerie);
+        trvwNFe.Items.AddChild(Node,'tpComb='                + tpComb);
+        trvwNFe.Items.AddChild(Node,'nMotor='                + nMotor);
+        trvwNFe.Items.AddChild(Node,'CMT='                   + CMT);
+        trvwNFe.Items.AddChild(Node,'dist='                  + dist);
+        //trvwNFe.Items.AddChild(Node,'RENAVAM='               + RENAVAM);
+        trvwNFe.Items.AddChild(Node,'anoMod='                + IntToStr(anoMod));
+        trvwNFe.Items.AddChild(Node,'anoFab='                + IntToStr(anoFab));
+        trvwNFe.Items.AddChild(Node,'tpPint='                + tpPint);
+        trvwNFe.Items.AddChild(Node,'tpVeic='                + IntToStr(tpVeic));
+        trvwNFe.Items.AddChild(Node,'espVeic='               + IntToStr(espVeic));
+        trvwNFe.Items.AddChild(Node,'VIN='                   + VIN);
+        trvwNFe.Items.AddChild(Node,'condVeic='              + condVeicToStr(condVeic));
+        trvwNFe.Items.AddChild(Node,'cMod='                  + cMod);
+
+       end;
+
+      end;
+
+      case ( FrPar.cbb2.ItemIndex ) of                                          // ve400
+
+       0 :                                                                      // ve3131
+       begin
+
+        for J:=0 to Prod.med.Count-1 do
         begin
 
-         Node := trvwNFe.Items.AddChild(Nota,'Avulsa');
-         trvwNFe.Items.AddChild(Node,'CNPJ='                         + Avulsa.CNPJ);
-         trvwNFe.Items.AddChild(Node,'xOrgao='                       + Avulsa.xOrgao);
-         trvwNFe.Items.AddChild(Node,'matr='                         + Avulsa.matr );
-         trvwNFe.Items.AddChild(Node,'xAgente='                      + Avulsa.xAgente);
-         trvwNFe.Items.AddChild(Node,'fone='                         + Avulsa.fone);
-         trvwNFe.Items.AddChild(Node,'UF='                           + Avulsa.UF);
-         trvwNFe.Items.AddChild(Node,'nDAR='                         + Avulsa.nDAR);
-         trvwNFe.Items.AddChild(Node,'dEmi='                         + DateToStr(Avulsa.dEmi));
-         trvwNFe.Items.AddChild(Node,'vDAR='                         + FloatToStr(Avulsa.vDAR));
-         trvwNFe.Items.AddChild(Node,'repEmi='                       + Avulsa.repEmi);
-         trvwNFe.Items.AddChild(Node,'dPag='                         + DateToStr(Avulsa.dPag));
+         Node := trvwNFe.Items.AddChild(NodeItem,'Medicamento'+IntToStrZero(J+1,3) ) ;
+
+         with Prod.med.Items[J] do
+         begin
+
+          trvwNFe.Items.AddChild(Node,'nLote='              + nLote) ;
+          trvwNFe.Items.AddChild(Node,'qLote='              + FloatToStr(qLote)) ;
+          trvwNFe.Items.AddChild(Node,'dFab='               + DateToStr(dFab)) ;
+          trvwNFe.Items.AddChild(Node,'dVal='               + DateToStr(dVal)) ;
+          trvwNFe.Items.AddChild(Node,'vPMC='               + FloatToStr(vPMC)) ;
 
          end;
 
-        Node := trvwNFe.Items.AddChild(Nota,'Dest');
-        trvwNFe.Items.AddChild(Node,'CNPJCPF= '                      + Dest.CNPJCPF);
-        trvwNFe.Items.AddChild(Node,'IE='                            + Dest.IE);
-        trvwNFe.Items.AddChild(Node,'ISUF='                          + Dest.ISUF);
-        trvwNFe.Items.AddChild(Node,'xNome='                         + Dest.xNome);
-        trvwNFe.Items.AddChild(Node,'email='                         + Dest.Email);
+        end;
 
-        Node := trvwNFe.Items.AddChild(Node,'EnderDest');
-        trvwNFe.Items.AddChild(Node,'Fone='                          + Dest.EnderDest.Fone);
-        trvwNFe.Items.AddChild(Node,'CEP='                           + IntToStr(Dest.EnderDest.CEP));
-        trvwNFe.Items.AddChild(Node,'xLgr='                          + Dest.EnderDest.xLgr);
-        trvwNFe.Items.AddChild(Node,'nro='                           + Dest.EnderDest.nro);
-        trvwNFe.Items.AddChild(Node,'xCpl='                          + Dest.EnderDest.xCpl);
-        trvwNFe.Items.AddChild(Node,'xBairro='                       + Dest.EnderDest.xBairro);
-        trvwNFe.Items.AddChild(Node,'cMun='                          + IntToStr(Dest.EnderDest.cMun));
-        trvwNFe.Items.AddChild(Node,'xMun='                          + Dest.EnderDest.xMun);
-        trvwNFe.Items.AddChild(Node,'UF='                            + Dest.EnderDest.UF );
-        trvwNFe.Items.AddChild(Node,'cPais='                         + IntToStr(Dest.EnderDest.cPais));
-        trvwNFe.Items.AddChild(Node,'xPais='                         + Dest.EnderDest.xPais);
+       end;
 
-        for I := 0 to Det.Count-1 do
+       1 :                                                                      // ve4040
+       begin
+
+        for J:=0 to Prod.rastro.Count-1 do
+        begin
+
+         Node := trvwNFe.Items.AddChild(NodeItem,'Rastro'    + IntToStrZero(J+1,6) ) ;
+
+         with Prod.rastro.Items[J] do
          begin
-          with Det.Items[I] do
-           begin
 
-            NodeItem := trvwNFe.Items.AddChild(Nota,'Produto'        + IntToStrZero(I+1,3));
-            trvwNFe.Items.AddChild(NodeItem,'nItem='                 + IntToStr(Prod.nItem) );
-            trvwNFe.Items.AddChild(NodeItem,'cProd='                 + Prod.cProd );
-            trvwNFe.Items.AddChild(NodeItem,'cEAN='                  + Prod.cEAN);
-            trvwNFe.Items.AddChild(NodeItem,'cBarra='                + Prod.cBarra);
-            trvwNFe.Items.AddChild(NodeItem,'cBarraTrib='            + Prod.cBarraTrib);
-            trvwNFe.Items.AddChild(NodeItem,'xProd='                 + Prod.xProd);
-            trvwNFe.Items.AddChild(NodeItem,'NCM='                   + Prod.NCM);
-//            trvwNFe.Items.AddChild(NodeItem,'NVE='                   + Prod.NVE);
-            trvwNFe.Items.AddChild(NodeItem,'EXTIPI='                + Prod.EXTIPI);
-            //trvwNFe.Items.AddChild(NodeItem,'genero='                 +IntToStr(Prod.genero));
-            trvwNFe.Items.AddChild(NodeItem,'CFOP='                  + Prod.CFOP);
-            trvwNFe.Items.AddChild(NodeItem,'uCom='                  + Prod.uCom);
-            trvwNFe.Items.AddChild(NodeItem,'qCom='                  + FloatToStr(Prod.qCom)) ;
-            trvwNFe.Items.AddChild(NodeItem,'vUnCom='                + FloatToStr(Prod.vUnCom)) ;
-            trvwNFe.Items.AddChild(NodeItem,'CEST='                  + Prod.CEST) ;
-            trvwNFe.Items.AddChild(NodeItem,'vProd='                 + FloatToStr(Prod.vProd)) ;
+          trvwNFe.Items.AddChild(Node,'nLote='             + nLote) ;
+          trvwNFe.Items.AddChild(Node,'qLote='             + FloatToStr(qLote)) ;
+          trvwNFe.Items.AddChild(Node,'dFab='              + DateToStr(dFab)) ;
+          trvwNFe.Items.AddChild(Node,'dVal='              + DateToStr(dVal)) ;
+          trvwNFe.Items.AddChild(Node,'cAgreg='            + cAgreg) ;
 
-            trvwNFe.Items.AddChild(NodeItem,'cEANTrib='              + Prod.cEANTrib);
-            trvwNFe.Items.AddChild(NodeItem,'uTrib='                 + Prod.uTrib);
-            trvwNFe.Items.AddChild(NodeItem,'qTrib='                 + FloatToStr(Prod.qTrib));
-            trvwNFe.Items.AddChild(NodeItem,'vUnTrib='               + FloatToStr(Prod.vUnTrib)) ;
-
-            trvwNFe.Items.AddChild(NodeItem,'vFrete='                + FloatToStr(Prod.vFrete)) ;
-            trvwNFe.Items.AddChild(NodeItem,'vSeg='                  + FloatToStr(Prod.vSeg)) ;
-            trvwNFe.Items.AddChild(NodeItem,'vDesc='                 + FloatToStr(Prod.vDesc)) ;
-            trvwNFe.Items.AddChild(NodeItem,'vOutro='                + FloatToStr(Prod.vOutro)) ;
-            trvwNFe.Items.AddChild(NodeItem,'indTot='                + indTotToStr(Prod.IndTot)) ;
-            trvwNFe.Items.AddChild(NodeItem,'xPed='                  + Prod.xPed) ;
-            trvwNFe.Items.AddChild(NodeItem,'nItemPedido='           + Prod.nItemPed) ;
-
-            trvwNFe.Items.AddChild(NodeItem,'infAdProd='             + infAdProd);
-
-            for J:=0 to Prod.DI.Count-1 do
-             begin
-              if Prod.DI.Items[j].nDi <> '' then
-               begin
-                with Prod.DI.Items[j] do
-                 begin
-
-                  NodePai := trvwNFe.Items.AddChild(NodeItem,'DI'    + IntToStrZero(J+1,3));
-                  trvwNFe.Items.AddChild(NodePai,'nDi='              + nDi);
-                  trvwNFe.Items.AddChild(NodePai,'dDi='              + DateToStr(dDi));
-                  trvwNFe.Items.AddChild(NodePai,'xLocDesemb='       + xLocDesemb);
-                  trvwNFe.Items.AddChild(NodePai,'UFDesemb='         + UFDesemb);
-                  trvwNFe.Items.AddChild(NodePai,'dDesemb='          + DateToStr(dDesemb));
-                  trvwNFe.Items.AddChild(NodePai,'cExportador='      + cExportador);;
-
-                  for K:=0 to adi.Count-1 do
-                   begin
-
-                    with adi.Items[K] do
-                     begin
-
-                      Node := trvwNFe.Items.AddChild(NodePai,'LADI'  + IntToStrZero(K+1,3));
-                      trvwNFe.Items.AddChild(Node,'nAdicao='         + IntToStr(nAdicao)) ;
-                      trvwNFe.Items.AddChild(Node,'nSeqAdi='         + IntToStr(nSeqAdi)) ;
-                      trvwNFe.Items.AddChild(Node,'cFabricante='     + cFabricante);
-                      trvwNFe.Items.AddChild(Node,'vDescDI='         + FloatToStr(vDescDI));
-
-                     end;
-
-                   end;
-
-                 end;
-
-               end
-
-              else
-
-               Break;
-
-             end;
-
-            if Prod.veicProd.chassi <> '' then
-             begin
-
-              Node := trvwNFe.Items.AddChild(NodeItem,'Veiculo');
-
-              with Prod.veicProd do
-               begin
-
-                trvwNFe.Items.AddChild(Node,'tpOP='                  + tpOPToStr(tpOP));
-                trvwNFe.Items.AddChild(Node,'chassi='                + chassi) ;
-                trvwNFe.Items.AddChild(Node,'cCor='                  + cCor);
-                trvwNFe.Items.AddChild(Node,'xCor='                  + xCor);
-                trvwNFe.Items.AddChild(Node,'pot='                   + pot);
-                trvwNFe.Items.AddChild(Node,'Cilin='                 + Cilin);
-                trvwNFe.Items.AddChild(Node,'pesoL='                 + pesoL);
-                trvwNFe.Items.AddChild(Node,'pesoB='                 + pesoB);
-                trvwNFe.Items.AddChild(Node,'nSerie='                + nSerie);
-                trvwNFe.Items.AddChild(Node,'tpComb='                + tpComb);
-                trvwNFe.Items.AddChild(Node,'nMotor='                + nMotor);
-                trvwNFe.Items.AddChild(Node,'CMT='                   + CMT);
-                trvwNFe.Items.AddChild(Node,'dist='                  + dist);
-                //trvwNFe.Items.AddChild(Node,'RENAVAM='               + RENAVAM);
-                trvwNFe.Items.AddChild(Node,'anoMod='                + IntToStr(anoMod));
-                trvwNFe.Items.AddChild(Node,'anoFab='                + IntToStr(anoFab));
-                trvwNFe.Items.AddChild(Node,'tpPint='                + tpPint);
-                trvwNFe.Items.AddChild(Node,'tpVeic='                + IntToStr(tpVeic));
-                trvwNFe.Items.AddChild(Node,'espVeic='               + IntToStr(espVeic));
-                trvwNFe.Items.AddChild(Node,'VIN='                   + VIN);
-                trvwNFe.Items.AddChild(Node,'condVeic='              + condVeicToStr(condVeic));
-                trvwNFe.Items.AddChild(Node,'cMod='                  + cMod);
-
-               end;
-
-             end;
-
-            case ( FrPar.cbb2.ItemIndex ) of                                    // ve400
-
-             0 :                                                                // ve3131
-
-              begin
-
-               for J:=0 to Prod.med.Count-1 do
-                begin
-
-                 Node := trvwNFe.Items.AddChild(NodeItem,'Medicamento'+IntToStrZero(J+1,3) ) ;
-
-                 with Prod.med.Items[J] do
-                  begin
-
-                   trvwNFe.Items.AddChild(Node,'nLote='              + nLote) ;
-                   trvwNFe.Items.AddChild(Node,'qLote='              + FloatToStr(qLote)) ;
-                   trvwNFe.Items.AddChild(Node,'dFab='               + DateToStr(dFab)) ;
-                   trvwNFe.Items.AddChild(Node,'dVal='               + DateToStr(dVal)) ;
-                   trvwNFe.Items.AddChild(Node,'vPMC='               + FloatToStr(vPMC)) ;
-
-                  end;
-
-                end;
-
-              end;
-
-             1 :                                                                // ve4040
-
-              begin
-
-               for J:=0 to Prod.rastro.Count-1 do
-                begin
-
-                 Node := trvwNFe.Items.AddChild(NodeItem,'Rastro'    + IntToStrZero(J+1,6) ) ;
-
-                  with Prod.rastro.Items[J] do
-                   begin
-
-                    trvwNFe.Items.AddChild(Node,'nLote='             + nLote) ;
-                    trvwNFe.Items.AddChild(Node,'qLote='             + FloatToStr(qLote)) ;
-                    trvwNFe.Items.AddChild(Node,'dFab='              + DateToStr(dFab)) ;
-                    trvwNFe.Items.AddChild(Node,'dVal='              + DateToStr(dVal)) ;
-                    trvwNFe.Items.AddChild(Node,'cAgreg='            + cAgreg) ;
-
-                   end;
-
-                end;
-
-               for J:=0 to Prod.med.Count-1 do
-                begin
-
-                 Node := trvwNFe.Items.AddChild(NodeItem,'Medicamento' + IntToStrZero(J+1,3) );
-                 with Prod.med.Items[J] do
-                  begin
-
-                   trvwNFe.Items.AddChild(Node,'cProdANVISA='        + cProdANVISA) ;
-                   trvwNFe.Items.AddChild(Node,'xMotivoIsencao='     + xMotivoIsencao) ;
-                   trvwNFe.Items.AddChild(Node,'vPMC='               + FloatToStr(vPMC)) ;
-
-                  end;
-
-                end;
-
-              end;
-
-             2 :                                                                // ve4031
-
-              if ( gModelo = 55 ) then                                          // ve40
-
-               begin
-
-                for J:=0 to Prod.rastro.Count-1 do
-                 begin
-
-                  Node := trvwNFe.Items.AddChild(NodeItem,'Rastro'    + IntToStrZero(J+1,6) ) ;
-
-                   with Prod.rastro.Items[J] do
-                    begin
-
-                     trvwNFe.Items.AddChild(Node,'nLote='             + nLote) ;
-                     trvwNFe.Items.AddChild(Node,'qLote='             + FloatToStr(qLote)) ;
-                     trvwNFe.Items.AddChild(Node,'dFab='              + DateToStr(dFab)) ;
-                     trvwNFe.Items.AddChild(Node,'dVal='              + DateToStr(dVal)) ;
-                     trvwNFe.Items.AddChild(Node,'cAgreg='            + cAgreg) ;
-
-                    end;
-
-                 end;
-
-                for J:=0 to Prod.med.Count-1 do
-                 begin
-
-                  Node := trvwNFe.Items.AddChild(NodeItem,'Medicamento' + IntToStrZero(J+1,3) );
-                  with Prod.med.Items[J] do
-                   begin
-
-                    trvwNFe.Items.AddChild(Node,'cProdANVISA='        + cProdANVISA) ;
-                    trvwNFe.Items.AddChild(Node,'xMotivoIsencao='     + xMotivoIsencao) ;
-                    trvwNFe.Items.AddChild(Node,'vPMC='               + FloatToStr(vPMC)) ;
-
-                   end;
-
-                 end;
-
-               end
-
-              else                                                              // ve31
-
-               begin
-
-                for J:=0 to Prod.med.Count-1 do
-                 begin
-
-                  Node := trvwNFe.Items.AddChild(NodeItem,'Medicamento'+IntToStrZero(J+1,3) ) ;
-
-                  with Prod.med.Items[J] do
-                   begin
-
-                    trvwNFe.Items.AddChild(Node,'nLote='              + nLote) ;
-                    trvwNFe.Items.AddChild(Node,'qLote='              + FloatToStr(qLote)) ;
-                    trvwNFe.Items.AddChild(Node,'dFab='               + DateToStr(dFab)) ;
-                    trvwNFe.Items.AddChild(Node,'dVal='               + DateToStr(dVal)) ;
-                    trvwNFe.Items.AddChild(Node,'vPMC='               + FloatToStr(vPMC)) ;
-
-                   end;
-
-                 end;
-
-               end;
-
-             3 :                                                                // ve3140
-
-              if ( gModelo = 65 ) then                                          // ve40
-
-               begin
-
-                for J:=0 to Prod.rastro.Count-1 do
-                 begin
-
-                  Node := trvwNFe.Items.AddChild(NodeItem,'Rastro'    + IntToStrZero(J+1,6) ) ;
-
-                   with Prod.rastro.Items[J] do
-                    begin
-
-                     trvwNFe.Items.AddChild(Node,'nLote='             + nLote) ;
-                     trvwNFe.Items.AddChild(Node,'qLote='             + FloatToStr(qLote)) ;
-                     trvwNFe.Items.AddChild(Node,'dFab='              + DateToStr(dFab)) ;
-                     trvwNFe.Items.AddChild(Node,'dVal='              + DateToStr(dVal)) ;
-                     trvwNFe.Items.AddChild(Node,'cAgreg='            + cAgreg) ;
-
-                    end;
-
-                 end;
-
-                for J:=0 to Prod.med.Count-1 do
-                 begin
-
-                  Node := trvwNFe.Items.AddChild(NodeItem,'Medicamento' + IntToStrZero(J+1,3) );
-                  with Prod.med.Items[J] do
-                   begin
-
-                    trvwNFe.Items.AddChild(Node,'cProdANVISA='        + cProdANVISA) ;
-                    trvwNFe.Items.AddChild(Node,'xMotivoIsencao='     + xMotivoIsencao) ;
-                    trvwNFe.Items.AddChild(Node,'vPMC='               + FloatToStr(vPMC)) ;
-
-                   end;
-
-                 end;
-
-               end
-
-              else                                                              // ve31
-
-               begin
-
-                for J:=0 to Prod.med.Count-1 do
-                 begin
-
-                  Node := trvwNFe.Items.AddChild(NodeItem,'Medicamento'+IntToStrZero(J+1,3) ) ;
-
-                  with Prod.med.Items[J] do
-                   begin
-
-                    trvwNFe.Items.AddChild(Node,'nLote='              + nLote) ;
-                    trvwNFe.Items.AddChild(Node,'qLote='              + FloatToStr(qLote)) ;
-                    trvwNFe.Items.AddChild(Node,'dFab='               + DateToStr(dFab)) ;
-                    trvwNFe.Items.AddChild(Node,'dVal='               + DateToStr(dVal)) ;
-                    trvwNFe.Items.AddChild(Node,'vPMC='               + FloatToStr(vPMC)) ;
-
-                   end;
-
-                 end;
-
-               end;
-
-            end;
-
-            for J:=0 to Prod.arma.Count-1 do
-             begin
-
-              Node := trvwNFe.Items.AddChild(NodeItem,'Arma'         + IntToStrZero(J+1,3));
-
-              with Prod.arma.Items[J] do
-               begin
-
-                trvwNFe.Items.AddChild(Node,'nSerie='                + nSerie) ;
-                trvwNFe.Items.AddChild(Node,'tpArma='                + tpArmaToStr(tpArma)) ;
-                trvwNFe.Items.AddChild(Node,'nCano='                 + nCano) ;
-                trvwNFe.Items.AddChild(Node,'descr='                 + descr) ;
-
-                end;
-
-             end;
-
-            if (Prod.comb.cProdANP > 0) then
-             begin
-
-              NodePai := trvwNFe.Items.AddChild(NodeItem,'Combustivel');
-
-              with Prod.comb do
-               begin
-
-                trvwNFe.Items.AddChild(NodePai,'cProdANP='           + IntToStr(cProdANP)) ;
-                trvwNFe.Items.AddChild(NodePai,'descANP='            + descANP) ;
-                trvwNFe.Items.AddChild(NodePai,'pGLP='               + FloatToStr(pGLP)) ;
-                trvwNFe.Items.AddChild(NodePai,'pGNn='               + FloatToStr(pGNn)) ;
-                trvwNFe.Items.AddChild(NodePai,'pGNi='               + FloatToStr(pGNi)) ;
-                trvwNFe.Items.AddChild(NodePai,'vPart='              + FloatToStr(vPart)) ;
-                trvwNFe.Items.AddChild(NodePai,'CODIF='              + CODIF) ;
-
-                trvwNFe.Items.AddChild(NodePai,'qTemp='              + FloatToStr(qTemp)) ;
-                trvwNFe.Items.AddChild(NodePai,'UFcons='             + UFcons) ;
-
-                Node := trvwNFe.Items.AddChild(NodePai,'CIDE'        + IntToStrZero(I+1,3)) ;
-                trvwNFe.Items.AddChild(Node,'qBCprod='               + FloatToStr(CIDE.qBCprod)) ;
-                trvwNFe.Items.AddChild(Node,'vAliqProd='             + FloatToStr(CIDE.vAliqProd)) ;
-                trvwNFe.Items.AddChild(Node,'vCIDE='                 + FloatToStr(CIDE.vCIDE)) ;
-
-                Node := trvwNFe.Items.AddChild(NodePai,'encerrante'  + IntToStrZero(I+1,3)) ;            // G LA01 0-1 Informações do grupo de “encerrante” disponibilizado por hardware específico acoplado à bomba de Combustível, definido no controle da venda do Posto Revendedor de Combustível. (NT 2015.002)
-                trvwNFe.Items.AddChild(Node,'nBico='                 + FloatToStr(encerrante.nBico)) ;   // N 1-1 1-3 Informar o número do bico utilizado no abastecimento
-                trvwNFe.Items.AddChild(Node,'nBomba='                + FloatToStr(encerrante.nBomba)) ;  // N 0-1 1-3 Caso exista, informar o número da bomba utilizada.
-                trvwNFe.Items.AddChild(Node,'nTanque='               + FloatToStr(encerrante.nTanque)) ; // N 1-1 1-3 Informar o número do tanque utilizado.
-                trvwNFe.Items.AddChild(Node,'vEncIni='               + FloatToStr(encerrante.vEncIni)) ; // N 1-1 12v3 Informar o valor da leitura do contador (Encerrante) no Início do abastecimento.
-                trvwNFe.Items.AddChild(Node,'vEncFin='               + FloatToStr(encerrante.vEncFin)) ; // N 1-1 12v3 Informar o valor da leitura do contador (Encerrante) no Término do abastecimento.
-
-                Node := trvwNFe.Items.AddChild(NodePai,'ICMSComb'    +IntToStrZero(I+1,3)) ;
-                trvwNFe.Items.AddChild(Node,'vBCICMS='               + FloatToStr(ICMS.vBCICMS)) ;
-                trvwNFe.Items.AddChild(Node,'vICMS='                 + FloatToStr(ICMS.vICMS)) ;
-                trvwNFe.Items.AddChild(Node,'vBCICMSST='             + FloatToStr(ICMS.vBCICMSST)) ;
-                trvwNFe.Items.AddChild(Node,'vICMSST='               + FloatToStr(ICMS.vICMSST)) ;
-
-                if (ICMSInter.vBCICMSSTDest>0) then
-                 begin
-
-                  Node := trvwNFe.Items.AddChild(NodePai,'ICMSInter' + IntToStrZero(I+1,3)) ;
-                  trvwNFe.Items.AddChild(Node,'vBCICMSSTDest='       + FloatToStr(ICMSInter.vBCICMSSTDest)) ;
-                  trvwNFe.Items.AddChild(Node,'vICMSSTDest='         + FloatToStr(ICMSInter.vICMSSTDest)) ;
-
-                 end;
-
-                if (ICMSCons.vBCICMSSTCons>0) then
-                 begin
-
-                  Node := trvwNFe.Items.AddChild(NodePai,'ICMSCons'  + IntToStrZero(I+1,3));
-                  trvwNFe.Items.AddChild(Node,'vBCICMSSTCons='       + FloatToStr(ICMSCons.vBCICMSSTCons)) ;
-                  trvwNFe.Items.AddChild(Node,'vICMSSTCons='         + FloatToStr(ICMSCons.vICMSSTCons)) ;
-                  trvwNFe.Items.AddChild(Node,'UFCons='              + ICMSCons.UFcons) ;
-
-                 end;
-
-               end;
-
-             end;
-
-            with Imposto do
-             begin
-
-              NodePai := trvwNFe.Items.AddChild(NodeItem,'Imposto');
-
-              if ISSQN.cSitTrib = ISSQNcSitTribVazio then
-               begin
-
-                Node := trvwNFe.Items.AddChild(NodePai,'ICMS');
-
-                with ICMS do
-                 begin
-
-                  // Simples nacional
-                  if (   (FrPar.cbb2.ItemIndex = 1)                      or
-                       ( (FrPar.cbb2.ItemIndex = 2) and (gModelo=55) )   or
-                       ( (FrPar.cbb2.ItemIndex = 3) and (gModelo=65) ) ) then // ve400
-                   begin
-
-                    if ( (CSOSN = csosn201) and (CSOSN = csosn202) and
-                         (CSOSN = csosn203) and (CSOSN = csosn900) ) then
-                     begin
-
-                      if ( ICMS.vBCFCPST > 0 ) then
-                       trvwNFe.Items.AddChild(Node,'vBCFCPST='        + FloatToStr(ICMS.vBCFCPST));
-                      if ( ICMS.pFCPST > 0 ) then
-                       trvwNFe.Items.AddChild(Node,'pFCPST='          + FloatToStr(ICMS.pFCPST));
-                      if ( ICMS.vFCPST > 0 ) then
-                       trvwNFe.Items.AddChild(Node,'vFCPST='          + FloatToStr(ICMS.vFCPST));
-
-                     end;
-
-                    if ( CSOSN = csosn500 ) then
-                     begin
-
-                      trvwNFe.Items.AddChild(Node,'vBCFCPSTRet='        + FloatToStr(ICMS.vBCFCPSTRet));
-                      trvwNFe.Items.AddChild(Node,'pFCPSTRet='          + FloatToStr(ICMS.pFCPSTRet));
-                      trvwNFe.Items.AddChild(Node,'vFCPSTRet='          + FloatToStr(ICMS.vFCPSTRet));
-                      trvwNFe.Items.AddChild(Node,'pST='                + FloatToStr(ICMS.pST));
-
-                     end;
-
-                    if ( CSOSN = csosn101 ) then
-                     begin
-
-                      trvwNFe.Items.AddChild(Node,'pCredSN='            + FloatToStr(ICMS.pCredSN));
-                      trvwNFe.Items.AddChild(Node,'vCredICMSSN='        + FloatToStr(ICMS.vCredICMSSN));
-
-                     end;
-
-
-                   end;
-
-                  trvwNFe.Items.AddChild(Node,'CST='                 + CSTICMSToStr(CST));
-
-                  if CST = cst00 then
-                   begin
-
-                    trvwNFe.Items.AddChild(Node,'orig='              + OrigToStr(ICMS.orig));
-                    trvwNFe.Items.AddChild(Node,'modBC='             + modBCToStr(ICMS.modBC));
-                    trvwNFe.Items.AddChild(Node,'vBC='               + FloatToStr(ICMS.vBC));
-                    trvwNFe.Items.AddChild(Node,'pICMS='             + FloatToStr(ICMS.pICMS));
-                    trvwNFe.Items.AddChild(Node,'vICMS='             + FloatToStr(ICMS.vICMS));
-
-                    if (   (FrPar.cbb2.ItemIndex = 1)                      or
-                         ( (FrPar.cbb2.ItemIndex = 2) and (gModelo=55) )   or
-                         ( (FrPar.cbb2.ItemIndex = 3) and (gModelo=65) ) ) then // ve400
-                     begin
-
-                      trvwNFe.Items.AddChild(Node,'pFCP='            + FloatToStr(ICMS.pFCP));
-                      trvwNFe.Items.AddChild(Node,'vFCP='            + FloatToStr(ICMS.vFCP));
-
-                     end;
-
-                   end
-
-                  else if CST = cst10 then
-
-                   begin
-
-                    trvwNFe.Items.AddChild(Node,'orig='              + OrigToStr(ICMS.orig));
-                    trvwNFe.Items.AddChild(Node,'modBC='             + modBCToStr(ICMS.modBC));
-                    trvwNFe.Items.AddChild(Node,'vBC='               + FloatToStr(ICMS.vBC));
-                    trvwNFe.Items.AddChild(Node,'pICMS='             + FloatToStr(ICMS.pICMS));
-                    trvwNFe.Items.AddChild(Node,'vICMS='             + FloatToStr(ICMS.vICMS));
-                    trvwNFe.Items.AddChild(Node,'modBCST='           + modBCSTToStr(ICMS.modBCST));
-                    trvwNFe.Items.AddChild(Node,'pMVAST='            + FloatToStr(ICMS.pMVAST));
-                    trvwNFe.Items.AddChild(Node,'pRedBCST='          + FloatToStr(ICMS.pRedBCST));
-                    trvwNFe.Items.AddChild(Node,'vBCST='             + FloatToStr(ICMS.vBCST));
-                    trvwNFe.Items.AddChild(Node,'pICMSST='           + FloatToStr(ICMS.pICMSST));
-                    trvwNFe.Items.AddChild(Node,'vICMSST='           + FloatToStr(ICMS.vICMSST));
-
-                    if (   (FrPar.cbb2.ItemIndex = 1)                      or
-                         ( (FrPar.cbb2.ItemIndex = 2) and (gModelo=55) )   or
-                         ( (FrPar.cbb2.ItemIndex = 3) and (gModelo=65) ) ) then // ve400
-                     begin
-
-                      trvwNFe.Items.AddChild(Node,'vBCFCPST='        + FloatToStr(ICMS.vBCFCPST));
-                      trvwNFe.Items.AddChild(Node,'pFCPST='          + FloatToStr(ICMS.pFCPST));
-                      trvwNFe.Items.AddChild(Node,'vFCPST='          + FloatToStr(ICMS.vFCPST));
-
-                     end;
-
-                   end
-
-                  else if CST = cst20 then
-
-                   begin
-
-                    trvwNFe.Items.AddChild(Node,'orig='              + OrigToStr(ICMS.orig));
-                    trvwNFe.Items.AddChild(Node,'modBC='             + modBCToStr(ICMS.modBC));
-                    trvwNFe.Items.AddChild(Node,'pRedBC='            + FloatToStr(ICMS.pRedBC));
-                    trvwNFe.Items.AddChild(Node,'vBC='               + FloatToStr(ICMS.vBC));
-                    trvwNFe.Items.AddChild(Node,'pICMS='             + FloatToStr(ICMS.pICMS));
-                    trvwNFe.Items.AddChild(Node,'vICMS='             + FloatToStr(ICMS.vICMS));
-                    trvwNFe.Items.AddChild(Node,'vICMSDeson='        + FloatToStr(ICMS.vICMSDeson));
-                    trvwNFe.Items.AddChild(Node,'motDesICMS='        + VarToStr(motDesICMS));
-
-                    if (   (FrPar.cbb2.ItemIndex = 1)                      or
-                         ( (FrPar.cbb2.ItemIndex = 2) and (gModelo=55) )   or
-                         ( (FrPar.cbb2.ItemIndex = 3) and (gModelo=65) ) ) then // ve400
-                     begin
-
-                      trvwNFe.Items.AddChild(Node,'vBCFCP='          + FloatToStr(ICMS.vBCFCP));
-                      trvwNFe.Items.AddChild(Node,'pFCP='            + FloatToStr(ICMS.pFCP));
-                      trvwNFe.Items.AddChild(Node,'vFCP='            + FloatToStr(ICMS.vFCP));
-
-                     end;
-
-                   end
-
-                  else if CST = cst30 then
-
-                   begin
-
-                    trvwNFe.Items.AddChild(Node,'orig='              + OrigToStr(ICMS.orig));
-                    trvwNFe.Items.AddChild(Node,'modBCST='           + modBCSTToStr(ICMS.modBCST));
-                    trvwNFe.Items.AddChild(Node,'pMVAST='            + FloatToStr(ICMS.pMVAST));
-                    trvwNFe.Items.AddChild(Node,'pRedBCST='          + FloatToStr(ICMS.pRedBCST));
-                    trvwNFe.Items.AddChild(Node,'vBCST='             + FloatToStr(ICMS.vBCST));
-                    trvwNFe.Items.AddChild(Node,'pICMSST='           + FloatToStr(ICMS.pICMSST));
-                    trvwNFe.Items.AddChild(Node,'vICMSST='           + FloatToStr(ICMS.vICMSST));
-                    trvwNFe.Items.AddChild(Node,'vICMSDeson='        + FloatToStr(ICMS.vICMSDeson));
-                    trvwNFe.Items.AddChild(Node,'motDesICMS='        + VarToStr(motDesICMS));
-
-                    if (   (FrPar.cbb2.ItemIndex = 1)                      or
-                         ( (FrPar.cbb2.ItemIndex = 2) and (gModelo=55) )   or
-                         ( (FrPar.cbb2.ItemIndex = 3) and (gModelo=65) ) ) then // ve400
-                     begin
-
-                      trvwNFe.Items.AddChild(Node,'vBCFCPST='        + FloatToStr(ICMS.vBCFCPST));
-                      trvwNFe.Items.AddChild(Node,'pFCPST='          + FloatToStr(ICMS.pFCPST));
-                      trvwNFe.Items.AddChild(Node,'vFCPST='          + FloatToStr(ICMS.vFCPST));
-
-                     end;
-
-                   end
-
-                  else if (CST = cst40) or (CST = cst41) or (CST = cst50) then
-
-                   begin
-
-                    trvwNFe.Items.AddChild(Node,'orig='              + OrigToStr(ICMS.orig));
-                    trvwNFe.Items.AddChild(Node,'vICMSDeson='        + FloatToStr(ICMS.vICMSDeson));
-                    trvwNFe.Items.AddChild(Node,'motDesICMS='        + VarToStr(motDesICMS));
-
-                   end
-
-                  else if CST = cst51 then
-
-                   begin
-
-                    trvwNFe.Items.AddChild(Node,'orig='              + OrigToStr(ICMS.orig));
-                    trvwNFe.Items.AddChild(Node,'modBC='             + modBCToStr(ICMS.modBC));
-                    trvwNFe.Items.AddChild(Node,'pRedBC='            + FloatToStr(ICMS.pRedBC));
-                    trvwNFe.Items.AddChild(Node,'vBC='               + FloatToStr(ICMS.vBC));
-                    trvwNFe.Items.AddChild(Node,'pICMS='             + FloatToStr(ICMS.pICMS));
-                    trvwNFe.Items.AddChild(Node,'vICMS='             + FloatToStr(ICMS.vICMS));
-
-                    if (   (FrPar.cbb2.ItemIndex = 1)                      or
-                         ( (FrPar.cbb2.ItemIndex = 2) and (gModelo=55) )   or
-                         ( (FrPar.cbb2.ItemIndex = 3) and (gModelo=65) ) ) then // ve400
-                     begin
-
-                      trvwNFe.Items.AddChild(Node,'vBCFCP='          + FloatToStr(ICMS.vBCFCP));
-                      trvwNFe.Items.AddChild(Node,'pFCP='            + FloatToStr(ICMS.pFCP));
-                      trvwNFe.Items.AddChild(Node,'vFCP='            + FloatToStr(ICMS.vFCP));
-
-                     end;
-
-                   end
-
-                  else if CST = cst60 then
-
-                   begin
-
-                    trvwNFe.Items.AddChild(Node,'orig='              + OrigToStr(ICMS.orig));
-                    trvwNFe.Items.AddChild(Node,'vBCST='             + FloatToStr(ICMS.vBCST));
-                    trvwNFe.Items.AddChild(Node,'vICMSST='           + FloatToStr(ICMS.vICMSST));
-
-                    if (   (FrPar.cbb2.ItemIndex = 1)                      or
-                         ( (FrPar.cbb2.ItemIndex = 2) and (gModelo=55) )   or
-                         ( (FrPar.cbb2.ItemIndex = 3) and (gModelo=65) ) ) then // ve400
-                     begin
-
-                      trvwNFe.Items.AddChild(Node,'pST='             + FloatToStr(ICMS.pST));
-                      trvwNFe.Items.AddChild(Node,'vBCFCPSTRet='     + FloatToStr(ICMS.vBCFCPSTRet));
-                      trvwNFe.Items.AddChild(Node,'pFCPSTRet='       + FloatToStr(ICMS.pFCPSTRet));
-                      trvwNFe.Items.AddChild(Node,'vFCPSTRet='       + FloatToStr(ICMS.vFCPSTRet));
-
-                      trvwNFe.Items.AddChild(Node,'vBCSTRet='        + FloatToStr(ICMS.vBCSTRet));
-                      trvwNFe.Items.AddChild(Node,'vICMSSTRet='      + FloatToStr(ICMS.vICMSSTRet));
-                      trvwNFe.Items.AddChild(Node,'vBCSTDest='       + FloatToStr(ICMS.vBCSTDest));
-                      trvwNFe.Items.AddChild(Node,'vICMSSTDest='     + FloatToStr(ICMS.vICMSSTDest));
-
-                     end;
-
-                   end
-
-                  else if CST = cst70 then
-
-                   begin
-
-                    trvwNFe.Items.AddChild(Node,'orig='              + OrigToStr(ICMS.orig));
-                    trvwNFe.Items.AddChild(Node,'modBC='             + modBCToStr(ICMS.modBC));
-                    trvwNFe.Items.AddChild(Node,'pRedBC='            + FloatToStr(ICMS.pRedBC));
-                    trvwNFe.Items.AddChild(Node,'vBC='               + FloatToStr(ICMS.vBC));
-                    trvwNFe.Items.AddChild(Node,'pICMS='             + FloatToStr(ICMS.pICMS));
-                    trvwNFe.Items.AddChild(Node,'vICMS='             + FloatToStr(ICMS.vICMS));
-                    trvwNFe.Items.AddChild(Node,'modBCST='           + modBCSTToStr(ICMS.modBCST));
-                    trvwNFe.Items.AddChild(Node,'pMVAST='            + FloatToStr(ICMS.pMVAST));
-                    trvwNFe.Items.AddChild(Node,'pRedBCST='          + FloatToStr(ICMS.pRedBCST));
-                    trvwNFe.Items.AddChild(Node,'vBCST='             + FloatToStr(ICMS.vBCST));
-                    trvwNFe.Items.AddChild(Node,'pICMSST='           + FloatToStr(ICMS.pICMSST));
-                    trvwNFe.Items.AddChild(Node,'vICMSST='           + FloatToStr(ICMS.vICMSST));
-                    trvwNFe.Items.AddChild(Node,'vICMSDeson='        + FloatToStr(ICMS.vICMSDeson));
-                    trvwNFe.Items.AddChild(Node,'motDesICMS='        + VarToStr(motDesICMS));
-
-                    if (   (FrPar.cbb2.ItemIndex = 1)                      or
-                         ( (FrPar.cbb2.ItemIndex = 2) and (gModelo=55) )   or
-                         ( (FrPar.cbb2.ItemIndex = 3) and (gModelo=65) ) ) then // ve400
-                     begin
-
-                      trvwNFe.Items.AddChild(Node,'vBCFCPST='        + FloatToStr(ICMS.vBCFCPST));
-                      trvwNFe.Items.AddChild(Node,'pFCPST='          + FloatToStr(ICMS.pFCPST));
-                      trvwNFe.Items.AddChild(Node,'vFCPST='          + FloatToStr(ICMS.vFCPST));
-
-                     end;
-
-                   end
-
-                  else if CST = cst90 then
-
-                   begin
-
-                    trvwNFe.Items.AddChild(Node,'orig='              + OrigToStr(ICMS.orig));
-                    trvwNFe.Items.AddChild(Node,'modBC='             + modBCToStr(ICMS.modBC));
-                    trvwNFe.Items.AddChild(Node,'pRedBC='            + FloatToStr(ICMS.pRedBC));
-                    trvwNFe.Items.AddChild(Node,'vBC='               + FloatToStr(ICMS.vBC));
-                    trvwNFe.Items.AddChild(Node,'pICMS='             + FloatToStr(ICMS.pICMS));
-                    trvwNFe.Items.AddChild(Node,'vICMS='             + FloatToStr(ICMS.vICMS));
-
-                    if (   (FrPar.cbb2.ItemIndex = 1)                      or
-                         ( (FrPar.cbb2.ItemIndex = 2) and (gModelo=55) )   or
-                         ( (FrPar.cbb2.ItemIndex = 3) and (gModelo=65) ) ) then // ve400
-                     begin
-
-                      trvwNFe.Items.AddChild(Node,'vBCFCP='          + FloatToStr(ICMS.vBCFCP));
-                      trvwNFe.Items.AddChild(Node,'pFCP='            + FloatToStr(ICMS.pFCP));
-                      trvwNFe.Items.AddChild(Node,'vFCP='            + FloatToStr(ICMS.vFCP));
-
-                     end;
-
-                    trvwNFe.Items.AddChild(Node,'modBCST='           + modBCSTToStr(ICMS.modBCST));
-                    trvwNFe.Items.AddChild(Node,'pMVAST='            + FloatToStr(ICMS.pMVAST));
-                    trvwNFe.Items.AddChild(Node,'pRedBCST='          + FloatToStr(ICMS.pRedBCST));
-                    trvwNFe.Items.AddChild(Node,'vBCST='             + FloatToStr(ICMS.vBCST));
-                    trvwNFe.Items.AddChild(Node,'pICMSST='           + FloatToStr(ICMS.pICMSST));
-                    trvwNFe.Items.AddChild(Node,'vICMSST='           + FloatToStr(ICMS.vICMSST));
-                    trvwNFe.Items.AddChild(Node,'vICMSDeson='        + FloatToStr(ICMS.vICMSDeson));
-                    trvwNFe.Items.AddChild(Node,'motDesICMS='        + VarToStr(motDesICMS));
-
-                    if (   (FrPar.cbb2.ItemIndex = 1)                      or
-                         ( (FrPar.cbb2.ItemIndex = 2) and (gModelo=55) )   or
-                         ( (FrPar.cbb2.ItemIndex = 3) and (gModelo=65) ) ) then // ve400
-                     begin
-
-                      trvwNFe.Items.AddChild(Node,'vBCFCPST='        + FloatToStr(ICMS.vBCFCPST));
-                      trvwNFe.Items.AddChild(Node,'pFCPST='          + FloatToStr(ICMS.pFCPST));
-                      trvwNFe.Items.AddChild(Node,'vFCPST='          + FloatToStr(ICMS.vFCPST));
-
-                     end;
-
-                   end;
-
-                 end;
-
-                // by Edson Lima ; 2016-3-22 ; trata do ICMSUFDest
-                Node := trvwNFe.Items.AddChild(NodePai,'ICMSUFDest');
-
-                with ICMSUFDest do
-                 begin
-
-                  trvwNFe.Items.AddChild(Node,'vBCUFDest='           + FloatToStr(vBCUFDest));
-
-                  if (   (FrPar.cbb2.ItemIndex = 1)                      or
-                       ( (FrPar.cbb2.ItemIndex = 2) and (gModelo=55) )   or
-                       ( (FrPar.cbb2.ItemIndex = 3) and (gModelo=65) ) ) then   // ve400
-                   begin
-
-                    trvwNFe.Items.AddChild(Node,'vBCFCPUFDest='      + FloatToStr(vBCFCPUFDest));
-
-                   end;
-
-                  trvwNFe.Items.AddChild(Node,'pFCPUFDest='          + FloatToStr(pFCPUFDest));
-                  trvwNFe.Items.AddChild(Node,'pICMSUFDest='         + FloatToStr(pICMSUFDest));
-                  trvwNFe.Items.AddChild(Node,'pICMSInter='          + FloatToStr(pICMSInter));
-                  trvwNFe.Items.AddChild(Node,'pICMSInterPart='      + FloatToStr(pICMSInterPart));
-                  trvwNFe.Items.AddChild(Node,'vFCPUFDest='          + FloatToStr(vFCPUFDest));
-                  trvwNFe.Items.AddChild(Node,'vICMSUFDest='         + FloatToStr(vICMSUFDest));
-                  trvwNFe.Items.AddChild(Node,'vICMSUFRemet='        + FloatToStr(vICMSUFRemet));
-
-                 end;
-
-               end
-
-              else
-
-               begin
-
-                Node := trvwNFe.Items.AddChild(NodePai,'ISSQN');
-                with ISSQN do
-                 begin
-                   trvwNFe.Items.AddChild(Node,'vBC='                + FloatToStr(vBC));
-                   trvwNFe.Items.AddChild(Node,'vAliq='              + FloatToStr(vAliq));
-                   trvwNFe.Items.AddChild(Node,'vISSQN='             + FloatToStr(vISSQN));
-                   trvwNFe.Items.AddChild(Node,'cMunFG='             + IntToStr(cMunFG));
-                   trvwNFe.Items.AddChild(Node,'cListServ='          + cListServ);
-                 end;
-
-               end;
-
-              if (IPI.vBC > 0) then
-               begin
-
-                Node := trvwNFe.Items.AddChild(NodePai,'IPI');
-
-                with IPI do
-                 begin
-
-                  trvwNFe.Items.AddChild(Node,'CST='                 + CSTIPIToStr(CST)) ;
-                  trvwNFe.Items.AddChild(Node,'clEnq='               + clEnq);
-                  trvwNFe.Items.AddChild(Node,'CNPJProd='            + CNPJProd);
-                  trvwNFe.Items.AddChild(Node,'cSelo='               + cSelo);
-                  trvwNFe.Items.AddChild(Node,'qSelo='               + IntToStr(qSelo));
-                  trvwNFe.Items.AddChild(Node,'cEnq='                + cEnq);
-                  trvwNFe.Items.AddChild(Node,'vBC='                 + FloatToStr(vBC));
-                  trvwNFe.Items.AddChild(Node,'qUnid='               + FloatToStr(qUnid));
-                  trvwNFe.Items.AddChild(Node,'vUnid='               + FloatToStr(vUnid));
-                  trvwNFe.Items.AddChild(Node,'pIPI='                + FloatToStr(pIPI));
-                  trvwNFe.Items.AddChild(Node,'vIPI='                + FloatToStr(vIPI));
-
-                 end;
-
-               end;
-
-                if (II.vBc > 0) then
-                 begin
-                   Node := trvwNFe.Items.AddChild(NodePai,'II');
-                   with II do
-                    begin
-                      trvwNFe.Items.AddChild(Node,'vBc='             + FloatToStr(vBc));
-                      trvwNFe.Items.AddChild(Node,'vDespAdu='        + FloatToStr(vDespAdu));
-                      trvwNFe.Items.AddChild(Node,'vII='             + FloatToStr(vII));
-                      trvwNFe.Items.AddChild(Node,'vIOF='            + FloatToStr(vIOF));
-                    end;
-                 end;
-
-                Node := trvwNFe.Items.AddChild(NodePai,'PIS');
-                with PIS do
-                 begin
-                   trvwNFe.Items.AddChild(Node,'CST='                + CSTPISToStr(CST));
-
-                   if (CST = pis01) or (CST = pis02) then
-                    begin
-                      trvwNFe.Items.AddChild(Node,'vBC='             + FloatToStr(PIS.vBC));
-                      trvwNFe.Items.AddChild(Node,'pPIS='            + FloatToStr(PIS.pPIS));
-                      trvwNFe.Items.AddChild(Node,'vPIS='            + FloatToStr(PIS.vPIS));
-                    end
-                   else if CST = pis03 then
-                    begin
-                      trvwNFe.Items.AddChild(Node,'qBCProd='         + FloatToStr(PIS.qBCProd));
-                      trvwNFe.Items.AddChild(Node,'vAliqProd='       + FloatToStr(PIS.vAliqProd));
-                      trvwNFe.Items.AddChild(Node,'vPIS='            + FloatToStr(PIS.vPIS));
-                    end
-                   else if CST = pis99 then
-                    begin
-                      trvwNFe.Items.AddChild(Node,'vBC='             + FloatToStr(PIS.vBC));
-                      trvwNFe.Items.AddChild(Node,'pPIS='            + FloatToStr(PIS.pPIS));
-                      trvwNFe.Items.AddChild(Node,'qBCProd='         + FloatToStr(PIS.qBCProd));
-                      trvwNFe.Items.AddChild(Node,'vAliqProd='       + FloatToStr(PIS.vAliqProd));
-                      trvwNFe.Items.AddChild(Node,'vPIS='            + FloatToStr(PIS.vPIS));
-                    end;
-                 end;
-
-                if (PISST.vBc>0) then
-                 begin
-                   Node := trvwNFe.Items.AddChild(NodePai,'PISST');
-                   with PISST do
-                    begin
-                      trvwNFe.Items.AddChild(Node,'vBc='             + FloatToStr(vBc));
-                      trvwNFe.Items.AddChild(Node,'pPis='            + FloatToStr(pPis));
-                      trvwNFe.Items.AddChild(Node,'qBCProd='         + FloatToStr(qBCProd));
-                      trvwNFe.Items.AddChild(Node,'vAliqProd='       + FloatToStr(vAliqProd));
-                      trvwNFe.Items.AddChild(Node,'vPIS='            + FloatToStr(vPIS));
-                    end;
-                   end;
-
-                Node := trvwNFe.Items.AddChild(NodePai,'COFINS');
-                with COFINS do
-                 begin
-                   trvwNFe.Items.AddChild(Node,'CST='                + CSTCOFINSToStr(CST));
-
-                   if (CST = cof01) or (CST = cof02) then
-                    begin
-                      trvwNFe.Items.AddChild(Node,'vBC='             + FloatToStr(COFINS.vBC));
-                      trvwNFe.Items.AddChild(Node,'pCOFINS='         + FloatToStr(COFINS.pCOFINS));
-                      trvwNFe.Items.AddChild(Node,'vCOFINS='         + FloatToStr(COFINS.vCOFINS));
-                    end
-                   else if CST = cof03 then
-                    begin
-                      trvwNFe.Items.AddChild(Node,'qBCProd='         + FloatToStr(COFINS.qBCProd));
-                      trvwNFe.Items.AddChild(Node,'vAliqProd='       + FloatToStr(COFINS.vAliqProd));
-                      trvwNFe.Items.AddChild(Node,'vCOFINS='         + FloatToStr(COFINS.vCOFINS));
-                    end
-                   else if CST = cof99 then
-                    begin
-                      trvwNFe.Items.AddChild(Node,'vBC='             + FloatToStr(COFINS.vBC));
-                      trvwNFe.Items.AddChild(Node,'pCOFINS='         + FloatToStr(COFINS.pCOFINS));
-                      trvwNFe.Items.AddChild(Node,'qBCProd='         + FloatToStr(COFINS.qBCProd));
-                      trvwNFe.Items.AddChild(Node,'vAliqProd='       + FloatToStr(COFINS.vAliqProd));
-                      trvwNFe.Items.AddChild(Node,'vCOFINS='         + FloatToStr(COFINS.vCOFINS));
-                    end;
-                 end;
-
-                if (COFINSST.vBC > 0) then
-                 begin
-                   Node := trvwNFe.Items.AddChild(NodePai,'COFINSST');
-                   with COFINSST do
-                    begin
-                      trvwNFe.Items.AddChild(Node,'vBC='             + FloatToStr(vBC));
-                      trvwNFe.Items.AddChild(Node,'pCOFINS='         + FloatToStr(pCOFINS));
-                      trvwNFe.Items.AddChild(Node,'qBCProd='         + FloatToStr(qBCProd));
-                      trvwNFe.Items.AddChild(Node,'vAliqProd='       + FloatToStr(vAliqProd));
-                      trvwNFe.Items.AddChild(Node,'vCOFINS='         + FloatToStr(vCOFINS));
-                    end;
-                 end;
-             end;
-           end;
-         end ;
-
-        NodePai := trvwNFe.Items.AddChild(Nota,'Total');
-        Node := trvwNFe.Items.AddChild(NodePai,'ICMSTot');
-        trvwNFe.Items.AddChild(Node,'vBC='                           + FloatToStr(Total.ICMSTot.vBC));
-        trvwNFe.Items.AddChild(Node,'vICMS='                         + FloatToStr(Total.ICMSTot.vICMS)) ;
-        trvwNFe.Items.AddChild(Node,'vBCST='                         + FloatToStr(Total.ICMSTot.vBCST)) ;
-        trvwNFe.Items.AddChild(Node,'vST='                           + FloatToStr(Total.ICMSTot.vST)) ;
-        trvwNFe.Items.AddChild(Node,'vProd='                         + FloatToStr(Total.ICMSTot.vProd)) ;
-        trvwNFe.Items.AddChild(Node,'vFrete='                        + FloatToStr(Total.ICMSTot.vFrete)) ;
-        trvwNFe.Items.AddChild(Node,'vSeg='                          + FloatToStr(Total.ICMSTot.vSeg)) ;
-        trvwNFe.Items.AddChild(Node,'vDesc='                         + FloatToStr(Total.ICMSTot.vDesc)) ;
-        trvwNFe.Items.AddChild(Node,'vII='                           + FloatToStr(Total.ICMSTot.vII)) ;
-        trvwNFe.Items.AddChild(Node,'vIPI='                          + FloatToStr(Total.ICMSTot.vIPI)) ;
-        trvwNFe.Items.AddChild(Node,'vPIS='                          + FloatToStr(Total.ICMSTot.vPIS)) ;
-        trvwNFe.Items.AddChild(Node,'vCOFINS='                       + FloatToStr(Total.ICMSTot.vCOFINS)) ;
-        trvwNFe.Items.AddChild(Node,'vOutro='                        + FloatToStr(Total.ICMSTot.vOutro)) ;
-        trvwNFe.Items.AddChild(Node,'vNF='                           + FloatToStr(Total.ICMSTot.vNF)) ;
-        trvwNFe.Items.AddChild(Node,'vICMSDeson='                    + FloatToStr(Total.ICMSTot.vICMSDeson)) ;
-        trvwNFe.Items.AddChild(Node,'vFCPUFDest='                    + FloatToStr(Total.ICMSTot.vFCPUFDest)) ;
-        trvwNFe.Items.AddChild(Node,'vICMSUFDest='                   + FloatToStr(Total.ICMSTot.vICMSUFDest)) ;
-        trvwNFe.Items.AddChild(Node,'vICMSUFRemet='                  + FloatToStr(Total.ICMSTot.vICMSUFRemet)) ;
-
-        if Total.ISSQNtot.vServ > 0 then
-         begin
-           Node := trvwNFe.Items.AddChild(NodePai,'ISSQNtot');
-           trvwNFe.Items.AddChild(Node,'vServ='                      + FloatToStr(Total.ISSQNtot.vServ)) ;
-           trvwNFe.Items.AddChild(Node,'vBC='                        + FloatToStr(Total.ISSQNTot.vBC)) ;
-           trvwNFe.Items.AddChild(Node,'vISS='                       + FloatToStr(Total.ISSQNTot.vISS)) ;
-           trvwNFe.Items.AddChild(Node,'vPIS='                       + FloatToStr(Total.ISSQNTot.vPIS)) ;
-           trvwNFe.Items.AddChild(Node,'vCOFINS='                    + FloatToStr(Total.ISSQNTot.vCOFINS)) ;
          end;
 
-        Node := trvwNFe.Items.AddChild(NodePai,'retTrib');
-        trvwNFe.Items.AddChild(Node,'vRetPIS='                       + FloatToStr(Total.retTrib.vRetPIS)) ;
-        trvwNFe.Items.AddChild(Node,'vRetCOFINS='                    + FloatToStr(Total.retTrib.vRetCOFINS)) ;
-        trvwNFe.Items.AddChild(Node,'vRetCSLL='                      + FloatToStr(Total.retTrib.vRetCSLL)) ;
-        trvwNFe.Items.AddChild(Node,'vBCIRRF='                       + FloatToStr(Total.retTrib.vBCIRRF)) ;
-        trvwNFe.Items.AddChild(Node,'vIRRF='                         + FloatToStr(Total.retTrib.vIRRF)) ;
-        trvwNFe.Items.AddChild(Node,'vBCRetPrev='                    + FloatToStr(Total.retTrib.vBCRetPrev)) ;
-        trvwNFe.Items.AddChild(Node,'vRetPrev='                      + FloatToStr(Total.retTrib.vRetPrev)) ;
+        end;
 
-        NodePai := trvwNFe.Items.AddChild(Nota,'Transp');
-        Node := trvwNFe.Items.AddChild(NodePai,'Transporta');
-        trvwNFe.Items.AddChild(Node,'modFrete='                      + modFreteToStr(Transp.modFrete));
-        trvwNFe.Items.AddChild(Node,'CNPJCPF='                       + Transp.Transporta.CNPJCPF);
-        trvwNFe.Items.AddChild(Node,'xNome='                         + Transp.Transporta.xNome);
-        trvwNFe.Items.AddChild(Node,'IE='                            + Transp.Transporta.IE);
-        trvwNFe.Items.AddChild(Node,'xEnder='                        + Transp.Transporta.xEnder);
-        trvwNFe.Items.AddChild(Node,'xMun='                          + Transp.Transporta.xMun);
-        trvwNFe.Items.AddChild(Node,'UF='                            + Transp.Transporta.UF);
+        for J:=0 to Prod.med.Count-1 do
+        begin
 
-        Node := trvwNFe.Items.AddChild(NodePai,'retTransp');
-        trvwNFe.Items.AddChild(Node,'vServ='                         + FloatToStr(Transp.retTransp.vServ)) ;
-        trvwNFe.Items.AddChild(Node,'vBCRet='                        + FloatToStr(Transp.retTransp.vBCRet)) ;
-        trvwNFe.Items.AddChild(Node,'pICMSRet='                      + FloatToStr(Transp.retTransp.pICMSRet)) ;
-        trvwNFe.Items.AddChild(Node,'vICMSRet='                      + FloatToStr(Transp.retTransp.vICMSRet)) ;
-        trvwNFe.Items.AddChild(Node,'CFOP='                          + Transp.retTransp.CFOP);
-        trvwNFe.Items.AddChild(Node,'cMunFG='                        + FloatToStr(Transp.retTransp.cMunFG));
+         Node := trvwNFe.Items.AddChild(NodeItem,'Medicamento' + IntToStrZero(J+1,3) );
 
-        Node := trvwNFe.Items.AddChild(NodePai,'veicTransp');
-        trvwNFe.Items.AddChild(Node,'placa='                         + Transp.veicTransp.placa);
-        trvwNFe.Items.AddChild(Node,'UF='                            + Transp.veicTransp.UF);
-        trvwNFe.Items.AddChild(Node,'RNTC='                          + Transp.veicTransp.RNTC);
-
-        for I:=0 to Transp.Reboque.Count-1 do
+         with Prod.med.Items[J] do
          begin
-           Node := trvwNFe.Items.AddChild(NodePai,'Reboque'          + IntToStrZero(I+1,3));
-           with Transp.Reboque.Items[I] do
-            begin
-              trvwNFe.Items.AddChild(Node,'placa='                   + placa) ;
-              trvwNFe.Items.AddChild(Node,'UF='                      + UF) ;
-              trvwNFe.Items.AddChild(Node,'RNTC='                    + RNTC) ;
-            end;
+
+          trvwNFe.Items.AddChild(Node,'cProdANVISA='        + cProdANVISA) ;
+          trvwNFe.Items.AddChild(Node,'xMotivoIsencao='     + xMotivoIsencao) ;
+          trvwNFe.Items.AddChild(Node,'vPMC='               + FloatToStr(vPMC)) ;
+
          end;
 
-        for I:=0 to Transp.Vol.Count-1 do
-         begin
-           Node := trvwNFe.Items.AddChild(NodePai,'Volume'           + IntToStrZero(I+1,3));
-           with Transp.Vol.Items[I] do
-            begin
-              trvwNFe.Items.AddChild(Node,'qVol='                    + IntToStr(qVol)) ;
-              trvwNFe.Items.AddChild(Node,'esp='                     + esp);
-              trvwNFe.Items.AddChild(Node,'marca='                   + marca);
-              trvwNFe.Items.AddChild(Node,'nVol='                    + nVol);
-              trvwNFe.Items.AddChild(Node,'pesoL='                   + FloatToStr(pesoL)) ;
-              trvwNFe.Items.AddChild(Node,'pesoB'                    + FloatToStr(pesoB)) ;
+        end;
 
-              for J:=0 to Lacres.Count-1 do
-               begin
-                 Node := trvwNFe.Items.AddChild(Node,'Lacre'         + IntToStrZero(I+1,3)+IntToStrZero(J+1,3) );
-                 trvwNFe.Items.AddChild(Node,'nLacre='               + Lacres.Items[J].nLacre) ;
-               end;
-            end;
+       end;
+
+       2 :                                                                      // ve4031
+       if ( gModelo = 55 ) then                                                 // ve40
+       begin
+
+        for J:=0 to Prod.rastro.Count-1 do
+        begin
+
+         Node := trvwNFe.Items.AddChild(NodeItem,'Rastro'    + IntToStrZero(J+1,6) ) ;
+
+         with Prod.rastro.Items[J] do
+         begin
+
+          trvwNFe.Items.AddChild(Node,'nLote='             + nLote) ;
+          trvwNFe.Items.AddChild(Node,'qLote='             + FloatToStr(qLote)) ;
+          trvwNFe.Items.AddChild(Node,'dFab='              + DateToStr(dFab)) ;
+          trvwNFe.Items.AddChild(Node,'dVal='              + DateToStr(dVal)) ;
+          trvwNFe.Items.AddChild(Node,'cAgreg='            + cAgreg) ;
+
          end;
 
-        if (gModelo = 55) then
+        end;
+
+        for J:=0 to Prod.med.Count-1 do
+        begin
+
+         Node := trvwNFe.Items.AddChild(NodeItem,'Medicamento' + IntToStrZero(J+1,3) );
+
+         with Prod.med.Items[J] do
          begin
-          NodePai := trvwNFe.Items.AddChild(Nota,'Cobr');
-          Node    := trvwNFe.Items.AddChild(NodePai,'Fat');
-          trvwNFe.Items.AddChild(Node,'nFat='                        + Cobr.Fat.nFat);
-          trvwNFe.Items.AddChild(Node,'vOrig='                       + FloatToStr(Cobr.Fat.vOrig)) ;
-          trvwNFe.Items.AddChild(Node,'vDesc='                       + FloatToStr(Cobr.Fat.vDesc)) ;
-          trvwNFe.Items.AddChild(Node,'vLiq='                        + FloatToStr(Cobr.Fat.vLiq)) ;
+
+          trvwNFe.Items.AddChild(Node,'cProdANVISA='        + cProdANVISA) ;
+          trvwNFe.Items.AddChild(Node,'xMotivoIsencao='     + xMotivoIsencao) ;
+          trvwNFe.Items.AddChild(Node,'vPMC='               + FloatToStr(vPMC)) ;
+
          end;
 
-        for I:=0 to Cobr.Dup.Count-1 do
+        end;
+
+       end
+       else                                                                     // ve31
+       begin
+
+        for J:=0 to Prod.med.Count-1 do
+        begin
+
+         Node := trvwNFe.Items.AddChild(NodeItem,'Medicamento'+IntToStrZero(J+1,3) ) ;
+
+         with Prod.med.Items[J] do
          begin
-           Node    := trvwNFe.Items.AddChild(NodePai,'Duplicata'     + IntToStrZero(I+1,3));
-           with Cobr.Dup.Items[I] do
-            begin
-              trvwNFe.Items.AddChild(Node,'nDup='                    + nDup) ;
-              trvwNFe.Items.AddChild(Node,'dVenc='                   + DateToStr(dVenc));
-              trvwNFe.Items.AddChild(Node,'vDup='                    + FloatToStr(vDup)) ;
-            end;
+
+          trvwNFe.Items.AddChild(Node,'nLote='              + nLote) ;
+          trvwNFe.Items.AddChild(Node,'qLote='              + FloatToStr(qLote)) ;
+          trvwNFe.Items.AddChild(Node,'dFab='               + DateToStr(dFab)) ;
+          trvwNFe.Items.AddChild(Node,'dVal='               + DateToStr(dVal)) ;
+          trvwNFe.Items.AddChild(Node,'vPMC='               + FloatToStr(vPMC)) ;
+
          end;
 
-        NodePai := trvwNFe.Items.AddChild(Nota,'InfAdic');
-        trvwNFe.Items.AddChild(NodePai,'infCpl='                     + InfAdic.infCpl);
-        trvwNFe.Items.AddChild(NodePai,'infAdFisco='                 + InfAdic.infAdFisco);
+        end;
 
-        for I:=0 to InfAdic.obsCont.Count-1 do
+       end;
+
+       3 :                                                                      // ve3140
+       if ( gModelo = 65 ) then                                                 // ve40
+       begin
+
+        for J:=0 to Prod.rastro.Count-1 do
+        begin
+
+         Node := trvwNFe.Items.AddChild(NodeItem,'Rastro'    + IntToStrZero(J+1,6) ) ;
+
+         with Prod.rastro.Items[J] do
          begin
-           Node := trvwNFe.Items.AddChild(NodePai,'obsCont'          +IntToStrZero(I+1,3));
-           with InfAdic.obsCont.Items[I] do
-            begin
-              trvwNFe.Items.AddChild(Node,'xCampo='                  + xCampo) ;
-              trvwNFe.Items.AddChild(Node,'xTexto='                  + xTexto);
-            end;
+
+          trvwNFe.Items.AddChild(Node,'nLote='             + nLote) ;
+          trvwNFe.Items.AddChild(Node,'qLote='             + FloatToStr(qLote)) ;
+          trvwNFe.Items.AddChild(Node,'dFab='              + DateToStr(dFab)) ;
+          trvwNFe.Items.AddChild(Node,'dVal='              + DateToStr(dVal)) ;
+          trvwNFe.Items.AddChild(Node,'cAgreg='            + cAgreg) ;
+
          end;
 
-          for I:=0 to InfAdic.obsFisco.Count-1 do
-           begin
-             Node := trvwNFe.Items.AddChild(NodePai,'obsFisco'       + IntToStrZero(I+1,3));
-             with InfAdic.obsFisco.Items[I] do
-              begin
-                 trvwNFe.Items.AddChild(Node,'xCampo='               + xCampo) ;
-                 trvwNFe.Items.AddChild(Node,'xTexto='               + xTexto);
-              end;
-           end;
+        end;
 
-          for I:=0 to InfAdic.procRef.Count-1 do
-           begin
-             Node := trvwNFe.Items.AddChild(NodePai,'procRef'        +IntToStrZero(I+1,3));
-             with InfAdic.procRef.Items[I] do
-              begin
-                trvwNFe.Items.AddChild(Node,'nProc='                 + nProc) ;
-                trvwNFe.Items.AddChild(Node,'indProc='               + indProcToStr(indProc));
-              end;
-           end;
+        for J:=0 to Prod.med.Count-1 do
+        begin
+
+         Node := trvwNFe.Items.AddChild(NodeItem,'Medicamento' + IntToStrZero(J+1,3) );
+
+         with Prod.med.Items[J] do
+         begin
+
+          trvwNFe.Items.AddChild(Node,'cProdANVISA='        + cProdANVISA) ;
+          trvwNFe.Items.AddChild(Node,'xMotivoIsencao='     + xMotivoIsencao) ;
+          trvwNFe.Items.AddChild(Node,'vPMC='               + FloatToStr(vPMC)) ;
+
+         end;
+
+        end;
+
+       end
+       else                                                                     // ve31
+       begin
+
+        for J:=0 to Prod.med.Count-1 do
+        begin
+
+         Node := trvwNFe.Items.AddChild(NodeItem,'Medicamento'+IntToStrZero(J+1,3) ) ;
+
+         with Prod.med.Items[J] do
+         begin
+
+          trvwNFe.Items.AddChild(Node,'nLote='              + nLote) ;
+          trvwNFe.Items.AddChild(Node,'qLote='              + FloatToStr(qLote)) ;
+          trvwNFe.Items.AddChild(Node,'dFab='               + DateToStr(dFab)) ;
+          trvwNFe.Items.AddChild(Node,'dVal='               + DateToStr(dVal)) ;
+          trvwNFe.Items.AddChild(Node,'vPMC='               + FloatToStr(vPMC)) ;
+
+         end;
+
+        end;
+
+       end;
+
+      end;
+
+      for J:=0 to Prod.arma.Count-1 do
+      begin
+
+       Node := trvwNFe.Items.AddChild(NodeItem,'Arma'         + IntToStrZero(J+1,3));
+
+       with Prod.arma.Items[J] do
+       begin
+
+        trvwNFe.Items.AddChild(Node,'nSerie='                + nSerie) ;
+        trvwNFe.Items.AddChild(Node,'tpArma='                + tpArmaToStr(tpArma)) ;
+        trvwNFe.Items.AddChild(Node,'nCano='                 + nCano) ;
+        trvwNFe.Items.AddChild(Node,'descr='                 + descr) ;
+
+       end;
+
+      end;
+
+      if (Prod.comb.cProdANP > 0) then
+      begin
+
+       NodePai := trvwNFe.Items.AddChild(NodeItem,'Combustivel');
+
+       with Prod.comb do
+       begin
+
+        trvwNFe.Items.AddChild(NodePai,'cProdANP='           + IntToStr(cProdANP)) ;
+        trvwNFe.Items.AddChild(NodePai,'descANP='            + descANP) ;
+        trvwNFe.Items.AddChild(NodePai,'pGLP='               + FloatToStr(pGLP)) ;
+        trvwNFe.Items.AddChild(NodePai,'pGNn='               + FloatToStr(pGNn)) ;
+        trvwNFe.Items.AddChild(NodePai,'pGNi='               + FloatToStr(pGNi)) ;
+        trvwNFe.Items.AddChild(NodePai,'vPart='              + FloatToStr(vPart)) ;
+        trvwNFe.Items.AddChild(NodePai,'CODIF='              + CODIF) ;
+
+        trvwNFe.Items.AddChild(NodePai,'qTemp='              + FloatToStr(qTemp)) ;
+        trvwNFe.Items.AddChild(NodePai,'UFcons='             + UFcons) ;
+
+        Node := trvwNFe.Items.AddChild(NodePai,'CIDE'        + IntToStrZero(I+1,3)) ;
+        trvwNFe.Items.AddChild(Node,'qBCprod='               + FloatToStr(CIDE.qBCprod)) ;
+        trvwNFe.Items.AddChild(Node,'vAliqProd='             + FloatToStr(CIDE.vAliqProd)) ;
+        trvwNFe.Items.AddChild(Node,'vCIDE='                 + FloatToStr(CIDE.vCIDE)) ;
+
+        Node := trvwNFe.Items.AddChild(NodePai,'encerrante'  + IntToStrZero(I+1,3)) ;            // G LA01 0-1 Informações do grupo de “encerrante” disponibilizado por hardware específico acoplado à bomba de Combustível, definido no controle da venda do Posto Revendedor de Combustível. (NT 2015.002)
+        trvwNFe.Items.AddChild(Node,'nBico='                 + FloatToStr(encerrante.nBico)) ;   // N 1-1 1-3 Informar o número do bico utilizado no abastecimento
+        trvwNFe.Items.AddChild(Node,'nBomba='                + FloatToStr(encerrante.nBomba)) ;  // N 0-1 1-3 Caso exista, informar o número da bomba utilizada.
+        trvwNFe.Items.AddChild(Node,'nTanque='               + FloatToStr(encerrante.nTanque)) ; // N 1-1 1-3 Informar o número do tanque utilizado.
+        trvwNFe.Items.AddChild(Node,'vEncIni='               + FloatToStr(encerrante.vEncIni)) ; // N 1-1 12v3 Informar o valor da leitura do contador (Encerrante) no Início do abastecimento.
+        trvwNFe.Items.AddChild(Node,'vEncFin='               + FloatToStr(encerrante.vEncFin)) ; // N 1-1 12v3 Informar o valor da leitura do contador (Encerrante) no Término do abastecimento.
+
+        Node := trvwNFe.Items.AddChild(NodePai,'ICMSComb'    +IntToStrZero(I+1,3)) ;
+        trvwNFe.Items.AddChild(Node,'vBCICMS='               + FloatToStr(ICMS.vBCICMS)) ;
+        trvwNFe.Items.AddChild(Node,'vICMS='                 + FloatToStr(ICMS.vICMS)) ;
+        trvwNFe.Items.AddChild(Node,'vBCICMSST='             + FloatToStr(ICMS.vBCICMSST)) ;
+        trvwNFe.Items.AddChild(Node,'vICMSST='               + FloatToStr(ICMS.vICMSST)) ;
+
+        if (ICMSInter.vBCICMSSTDest>0) then
+        begin
+
+         Node := trvwNFe.Items.AddChild(NodePai,'ICMSInter' + IntToStrZero(I+1,3)) ;
+         trvwNFe.Items.AddChild(Node,'vBCICMSSTDest='       + FloatToStr(ICMSInter.vBCICMSSTDest)) ;
+         trvwNFe.Items.AddChild(Node,'vICMSSTDest='         + FloatToStr(ICMSInter.vICMSSTDest)) ;
+
+        end;
+        if (ICMSCons.vBCICMSSTCons>0) then
+        begin
+
+         Node := trvwNFe.Items.AddChild(NodePai,'ICMSCons'  + IntToStrZero(I+1,3));
+         trvwNFe.Items.AddChild(Node,'vBCICMSSTCons='       + FloatToStr(ICMSCons.vBCICMSSTCons)) ;
+         trvwNFe.Items.AddChild(Node,'vICMSSTCons='         + FloatToStr(ICMSCons.vICMSSTCons)) ;
+         trvwNFe.Items.AddChild(Node,'UFCons='              + ICMSCons.UFcons) ;
+
+        end;
+
+       end;
+
+      end;
+
+      with Imposto do
+      begin
+
+       NodePai := trvwNFe.Items.AddChild(NodeItem,'Imposto');
+
+       if ISSQN.cSitTrib = ISSQNcSitTribVazio then
+       begin
+
+        Node := trvwNFe.Items.AddChild(NodePai,'ICMS');
+
+        with ICMS do
+        begin
+
+         // Simples nacional
+         if (   (FrPar.cbb2.ItemIndex = 1)                      or
+              ( (FrPar.cbb2.ItemIndex = 2) and (gModelo=55) )   or
+              ( (FrPar.cbb2.ItemIndex = 3) and (gModelo=65) ) ) then            // ve400
+         begin
+
+          if ( (CSOSN = csosn201) and (CSOSN = csosn202) and
+               (CSOSN = csosn203) and (CSOSN = csosn900) ) then
+          begin
+
+           if ( ICMS.vBCFCPST > 0 ) then
+            trvwNFe.Items.AddChild(Node,'vBCFCPST='        + FloatToStr(ICMS.vBCFCPST));
+           if ( ICMS.pFCPST > 0 ) then
+            trvwNFe.Items.AddChild(Node,'pFCPST='          + FloatToStr(ICMS.pFCPST));
+           if ( ICMS.vFCPST > 0 ) then
+            trvwNFe.Items.AddChild(Node,'vFCPST='          + FloatToStr(ICMS.vFCPST));
+
+          end;
+
+          if ( CSOSN = csosn500 ) then
+          begin
+
+           trvwNFe.Items.AddChild(Node,'vBCFCPSTRet='        + FloatToStr(ICMS.vBCFCPSTRet));
+           trvwNFe.Items.AddChild(Node,'pFCPSTRet='          + FloatToStr(ICMS.pFCPSTRet));
+           trvwNFe.Items.AddChild(Node,'vFCPSTRet='          + FloatToStr(ICMS.vFCPSTRet));
+           trvwNFe.Items.AddChild(Node,'pST='                + FloatToStr(ICMS.pST));
+
+          end;
+
+          if ( CSOSN = csosn101 ) then
+          begin
+
+           trvwNFe.Items.AddChild(Node,'pCredSN='            + FloatToStr(ICMS.pCredSN));
+           trvwNFe.Items.AddChild(Node,'vCredICMSSN='        + FloatToStr(ICMS.vCredICMSSN));
+
+          end;
+
+         end;
+
+         trvwNFe.Items.AddChild(Node,'CST='                 + CSTICMSToStr(CST));
+
+         if CST = cst00 then
+         begin
+
+          trvwNFe.Items.AddChild(Node,'orig='              + OrigToStr(ICMS.orig));
+          trvwNFe.Items.AddChild(Node,'modBC='             + modBCToStr(ICMS.modBC));
+          trvwNFe.Items.AddChild(Node,'vBC='               + FloatToStr(ICMS.vBC));
+          trvwNFe.Items.AddChild(Node,'pICMS='             + FloatToStr(ICMS.pICMS));
+          trvwNFe.Items.AddChild(Node,'vICMS='             + FloatToStr(ICMS.vICMS));
+
+          if (   (FrPar.cbb2.ItemIndex = 1)                      or
+               ( (FrPar.cbb2.ItemIndex = 2) and (gModelo=55) )   or
+               ( (FrPar.cbb2.ItemIndex = 3) and (gModelo=65) ) ) then           // ve400
+          begin
+
+           trvwNFe.Items.AddChild(Node,'pFCP='            + FloatToStr(ICMS.pFCP));
+           trvwNFe.Items.AddChild(Node,'vFCP='            + FloatToStr(ICMS.vFCP));
+
+          end;
+
+         end
+         else if CST = cst10 then
+         begin
+
+          trvwNFe.Items.AddChild(Node,'orig='              + OrigToStr(ICMS.orig));
+          trvwNFe.Items.AddChild(Node,'modBC='             + modBCToStr(ICMS.modBC));
+          trvwNFe.Items.AddChild(Node,'vBC='               + FloatToStr(ICMS.vBC));
+          trvwNFe.Items.AddChild(Node,'pICMS='             + FloatToStr(ICMS.pICMS));
+          trvwNFe.Items.AddChild(Node,'vICMS='             + FloatToStr(ICMS.vICMS));
+          trvwNFe.Items.AddChild(Node,'modBCST='           + modBCSTToStr(ICMS.modBCST));
+          trvwNFe.Items.AddChild(Node,'pMVAST='            + FloatToStr(ICMS.pMVAST));
+          trvwNFe.Items.AddChild(Node,'pRedBCST='          + FloatToStr(ICMS.pRedBCST));
+          trvwNFe.Items.AddChild(Node,'vBCST='             + FloatToStr(ICMS.vBCST));
+          trvwNFe.Items.AddChild(Node,'pICMSST='           + FloatToStr(ICMS.pICMSST));
+          trvwNFe.Items.AddChild(Node,'vICMSST='           + FloatToStr(ICMS.vICMSST));
+
+          if (   (FrPar.cbb2.ItemIndex = 1)                      or
+               ( (FrPar.cbb2.ItemIndex = 2) and (gModelo=55) )   or
+               ( (FrPar.cbb2.ItemIndex = 3) and (gModelo=65) ) ) then           // ve400
+          begin
+
+           trvwNFe.Items.AddChild(Node,'vBCFCPST='        + FloatToStr(ICMS.vBCFCPST));
+           trvwNFe.Items.AddChild(Node,'pFCPST='          + FloatToStr(ICMS.pFCPST));
+           trvwNFe.Items.AddChild(Node,'vFCPST='          + FloatToStr(ICMS.vFCPST));
+
+          end;
+
+         end
+         else if CST = cst20 then
+         begin
+
+          trvwNFe.Items.AddChild(Node,'orig='              + OrigToStr(ICMS.orig));
+          trvwNFe.Items.AddChild(Node,'modBC='             + modBCToStr(ICMS.modBC));
+          trvwNFe.Items.AddChild(Node,'pRedBC='            + FloatToStr(ICMS.pRedBC));
+          trvwNFe.Items.AddChild(Node,'vBC='               + FloatToStr(ICMS.vBC));
+          trvwNFe.Items.AddChild(Node,'pICMS='             + FloatToStr(ICMS.pICMS));
+          trvwNFe.Items.AddChild(Node,'vICMS='             + FloatToStr(ICMS.vICMS));
+          trvwNFe.Items.AddChild(Node,'vICMSDeson='        + FloatToStr(ICMS.vICMSDeson));
+          trvwNFe.Items.AddChild(Node,'motDesICMS='        + VarToStr(motDesICMS));
+
+          if (   (FrPar.cbb2.ItemIndex = 1)                      or
+               ( (FrPar.cbb2.ItemIndex = 2) and (gModelo=55) )   or
+               ( (FrPar.cbb2.ItemIndex = 3) and (gModelo=65) ) ) then           // ve400
+          begin
+
+           trvwNFe.Items.AddChild(Node,'vBCFCP='          + FloatToStr(ICMS.vBCFCP));
+           trvwNFe.Items.AddChild(Node,'pFCP='            + FloatToStr(ICMS.pFCP));
+           trvwNFe.Items.AddChild(Node,'vFCP='            + FloatToStr(ICMS.vFCP));
+
+          end;
+
+         end
+         else if CST = cst30 then
+         begin
+
+          trvwNFe.Items.AddChild(Node,'orig='              + OrigToStr(ICMS.orig));
+          trvwNFe.Items.AddChild(Node,'modBCST='           + modBCSTToStr(ICMS.modBCST));
+          trvwNFe.Items.AddChild(Node,'pMVAST='            + FloatToStr(ICMS.pMVAST));
+          trvwNFe.Items.AddChild(Node,'pRedBCST='          + FloatToStr(ICMS.pRedBCST));
+          trvwNFe.Items.AddChild(Node,'vBCST='             + FloatToStr(ICMS.vBCST));
+          trvwNFe.Items.AddChild(Node,'pICMSST='           + FloatToStr(ICMS.pICMSST));
+          trvwNFe.Items.AddChild(Node,'vICMSST='           + FloatToStr(ICMS.vICMSST));
+          trvwNFe.Items.AddChild(Node,'vICMSDeson='        + FloatToStr(ICMS.vICMSDeson));
+          trvwNFe.Items.AddChild(Node,'motDesICMS='        + VarToStr(motDesICMS));
+
+          if (   (FrPar.cbb2.ItemIndex = 1)                      or
+               ( (FrPar.cbb2.ItemIndex = 2) and (gModelo=55) )   or
+                ( (FrPar.cbb2.ItemIndex = 3) and (gModelo=65) ) ) then          // ve400
+          begin
+
+           trvwNFe.Items.AddChild(Node,'vBCFCPST='        + FloatToStr(ICMS.vBCFCPST));
+           trvwNFe.Items.AddChild(Node,'pFCPST='          + FloatToStr(ICMS.pFCPST));
+           trvwNFe.Items.AddChild(Node,'vFCPST='          + FloatToStr(ICMS.vFCPST));
+
+          end;
+
+         end
+         else if (CST = cst40) or (CST = cst41) or (CST = cst50) then
+         begin
+
+          trvwNFe.Items.AddChild(Node,'orig='              + OrigToStr(ICMS.orig));
+          trvwNFe.Items.AddChild(Node,'vICMSDeson='        + FloatToStr(ICMS.vICMSDeson));
+          trvwNFe.Items.AddChild(Node,'motDesICMS='        + VarToStr(motDesICMS));
+
+         end
+         else if CST = cst51 then
+         begin
+
+          trvwNFe.Items.AddChild(Node,'orig='              + OrigToStr(ICMS.orig));
+          trvwNFe.Items.AddChild(Node,'modBC='             + modBCToStr(ICMS.modBC));
+          trvwNFe.Items.AddChild(Node,'pRedBC='            + FloatToStr(ICMS.pRedBC));
+          trvwNFe.Items.AddChild(Node,'vBC='               + FloatToStr(ICMS.vBC));
+          trvwNFe.Items.AddChild(Node,'pICMS='             + FloatToStr(ICMS.pICMS));
+          trvwNFe.Items.AddChild(Node,'vICMS='             + FloatToStr(ICMS.vICMS));
+
+          if (   (FrPar.cbb2.ItemIndex = 1)                      or
+               ( (FrPar.cbb2.ItemIndex = 2) and (gModelo=55) )   or
+               ( (FrPar.cbb2.ItemIndex = 3) and (gModelo=65) ) ) then // ve400
+          begin
+
+           trvwNFe.Items.AddChild(Node,'vBCFCP='          + FloatToStr(ICMS.vBCFCP));
+           trvwNFe.Items.AddChild(Node,'pFCP='            + FloatToStr(ICMS.pFCP));
+           trvwNFe.Items.AddChild(Node,'vFCP='            + FloatToStr(ICMS.vFCP));
+
+          end;
+
+         end
+         else if CST = cst60 then
+         begin
+
+          trvwNFe.Items.AddChild(Node,'orig='              + OrigToStr(ICMS.orig));
+          trvwNFe.Items.AddChild(Node,'vBCST='             + FloatToStr(ICMS.vBCST));
+          trvwNFe.Items.AddChild(Node,'vICMSST='           + FloatToStr(ICMS.vICMSST));
+
+          if (   (FrPar.cbb2.ItemIndex = 1)                      or
+               ( (FrPar.cbb2.ItemIndex = 2) and (gModelo=55) )   or
+               ( (FrPar.cbb2.ItemIndex = 3) and (gModelo=65) ) ) then // ve400
+          begin
+
+           trvwNFe.Items.AddChild(Node,'pST='             + FloatToStr(ICMS.pST));
+           trvwNFe.Items.AddChild(Node,'vBCFCPSTRet='     + FloatToStr(ICMS.vBCFCPSTRet));
+           trvwNFe.Items.AddChild(Node,'pFCPSTRet='       + FloatToStr(ICMS.pFCPSTRet));
+           trvwNFe.Items.AddChild(Node,'vFCPSTRet='       + FloatToStr(ICMS.vFCPSTRet));
+
+           trvwNFe.Items.AddChild(Node,'vBCSTRet='        + FloatToStr(ICMS.vBCSTRet));
+           trvwNFe.Items.AddChild(Node,'vICMSSTRet='      + FloatToStr(ICMS.vICMSSTRet));
+           trvwNFe.Items.AddChild(Node,'vBCSTDest='       + FloatToStr(ICMS.vBCSTDest));
+           trvwNFe.Items.AddChild(Node,'vICMSSTDest='     + FloatToStr(ICMS.vICMSSTDest));
+
+          end;
+
+         end
+         else if CST = cst70 then
+         begin
+
+          trvwNFe.Items.AddChild(Node,'orig='              + OrigToStr(ICMS.orig));
+          trvwNFe.Items.AddChild(Node,'modBC='             + modBCToStr(ICMS.modBC));
+          trvwNFe.Items.AddChild(Node,'pRedBC='            + FloatToStr(ICMS.pRedBC));
+          trvwNFe.Items.AddChild(Node,'vBC='               + FloatToStr(ICMS.vBC));
+          trvwNFe.Items.AddChild(Node,'pICMS='             + FloatToStr(ICMS.pICMS));
+          trvwNFe.Items.AddChild(Node,'vICMS='             + FloatToStr(ICMS.vICMS));
+          trvwNFe.Items.AddChild(Node,'modBCST='           + modBCSTToStr(ICMS.modBCST));
+          trvwNFe.Items.AddChild(Node,'pMVAST='            + FloatToStr(ICMS.pMVAST));
+          trvwNFe.Items.AddChild(Node,'pRedBCST='          + FloatToStr(ICMS.pRedBCST));
+          trvwNFe.Items.AddChild(Node,'vBCST='             + FloatToStr(ICMS.vBCST));
+          trvwNFe.Items.AddChild(Node,'pICMSST='           + FloatToStr(ICMS.pICMSST));
+          trvwNFe.Items.AddChild(Node,'vICMSST='           + FloatToStr(ICMS.vICMSST));
+          trvwNFe.Items.AddChild(Node,'vICMSDeson='        + FloatToStr(ICMS.vICMSDeson));
+          trvwNFe.Items.AddChild(Node,'motDesICMS='        + VarToStr(motDesICMS));
+
+          if (   (FrPar.cbb2.ItemIndex = 1)                      or
+               ( (FrPar.cbb2.ItemIndex = 2) and (gModelo=55) )   or
+               ( (FrPar.cbb2.ItemIndex = 3) and (gModelo=65) ) ) then           // ve400
+          begin
+
+           trvwNFe.Items.AddChild(Node,'vBCFCPST='        + FloatToStr(ICMS.vBCFCPST));
+           trvwNFe.Items.AddChild(Node,'pFCPST='          + FloatToStr(ICMS.pFCPST));
+           trvwNFe.Items.AddChild(Node,'vFCPST='          + FloatToStr(ICMS.vFCPST));
+
+          end;
+
+         end
+         else if CST = cst90 then
+         begin
+
+          trvwNFe.Items.AddChild(Node,'orig='              + OrigToStr(ICMS.orig));
+          trvwNFe.Items.AddChild(Node,'modBC='             + modBCToStr(ICMS.modBC));
+          trvwNFe.Items.AddChild(Node,'pRedBC='            + FloatToStr(ICMS.pRedBC));
+          trvwNFe.Items.AddChild(Node,'vBC='               + FloatToStr(ICMS.vBC));
+          trvwNFe.Items.AddChild(Node,'pICMS='             + FloatToStr(ICMS.pICMS));
+          trvwNFe.Items.AddChild(Node,'vICMS='             + FloatToStr(ICMS.vICMS));
+
+          if (   (FrPar.cbb2.ItemIndex = 1)                      or
+               ( (FrPar.cbb2.ItemIndex = 2) and (gModelo=55) )   or
+               ( (FrPar.cbb2.ItemIndex = 3) and (gModelo=65) ) ) then           // ve400
+          begin
+
+           trvwNFe.Items.AddChild(Node,'vBCFCP='          + FloatToStr(ICMS.vBCFCP));
+           trvwNFe.Items.AddChild(Node,'pFCP='            + FloatToStr(ICMS.pFCP));
+           trvwNFe.Items.AddChild(Node,'vFCP='            + FloatToStr(ICMS.vFCP));
+
+          end;
+
+          trvwNFe.Items.AddChild(Node,'modBCST='           + modBCSTToStr(ICMS.modBCST));
+          trvwNFe.Items.AddChild(Node,'pMVAST='            + FloatToStr(ICMS.pMVAST));
+          trvwNFe.Items.AddChild(Node,'pRedBCST='          + FloatToStr(ICMS.pRedBCST));
+          trvwNFe.Items.AddChild(Node,'vBCST='             + FloatToStr(ICMS.vBCST));
+          trvwNFe.Items.AddChild(Node,'pICMSST='           + FloatToStr(ICMS.pICMSST));
+          trvwNFe.Items.AddChild(Node,'vICMSST='           + FloatToStr(ICMS.vICMSST));
+          trvwNFe.Items.AddChild(Node,'vICMSDeson='        + FloatToStr(ICMS.vICMSDeson));
+          trvwNFe.Items.AddChild(Node,'motDesICMS='        + VarToStr(motDesICMS));
+
+          if (   (FrPar.cbb2.ItemIndex = 1)                      or
+               ( (FrPar.cbb2.ItemIndex = 2) and (gModelo=55) )   or
+               ( (FrPar.cbb2.ItemIndex = 3) and (gModelo=65) ) ) then           // ve400
+          begin
+
+           trvwNFe.Items.AddChild(Node,'vBCFCPST='        + FloatToStr(ICMS.vBCFCPST));
+           trvwNFe.Items.AddChild(Node,'pFCPST='          + FloatToStr(ICMS.pFCPST));
+           trvwNFe.Items.AddChild(Node,'vFCPST='          + FloatToStr(ICMS.vFCPST));
+
+          end;
+
+         end;
+
+        end;
+
+        // by Edson Lima ; 2016-3-22 ; trata do ICMSUFDest
+        Node := trvwNFe.Items.AddChild(NodePai,'ICMSUFDest');
+
+        with ICMSUFDest do
+        begin
+
+         trvwNFe.Items.AddChild(Node,'vBCUFDest='           + FloatToStr(vBCUFDest));
+
+         if (   (FrPar.cbb2.ItemIndex = 1)                      or
+              ( (FrPar.cbb2.ItemIndex = 2) and (gModelo=55) )   or
+              ( (FrPar.cbb2.ItemIndex = 3) and (gModelo=65) ) ) then            // ve400
+         begin
+
+          trvwNFe.Items.AddChild(Node,'vBCFCPUFDest='      + FloatToStr(vBCFCPUFDest));
+
+         end;
+
+         trvwNFe.Items.AddChild(Node,'pFCPUFDest='          + FloatToStr(pFCPUFDest));
+         trvwNFe.Items.AddChild(Node,'pICMSUFDest='         + FloatToStr(pICMSUFDest));
+         trvwNFe.Items.AddChild(Node,'pICMSInter='          + FloatToStr(pICMSInter));
+         trvwNFe.Items.AddChild(Node,'pICMSInterPart='      + FloatToStr(pICMSInterPart));
+         //*****
+         trvwNFe.Items.AddChild(Node,'vFCPUFDest='          + FloatToStr(vFCPUFDest));
+         trvwNFe.Items.AddChild(Node,'vICMSUFDest='         + FloatToStr(vICMSUFDest));
+         trvwNFe.Items.AddChild(Node,'vICMSUFRemet='        + FloatToStr(vICMSUFRemet));
+
+        end;
+
+       end
+       else
+       begin
+
+        Node := trvwNFe.Items.AddChild(NodePai,'ISSQN');
+
+        with ISSQN do
+        begin
+
+         trvwNFe.Items.AddChild(Node,'vBC='                + FloatToStr(vBC));
+         trvwNFe.Items.AddChild(Node,'vAliq='              + FloatToStr(vAliq));
+         trvwNFe.Items.AddChild(Node,'vISSQN='             + FloatToStr(vISSQN));
+         trvwNFe.Items.AddChild(Node,'cMunFG='             + IntToStr(cMunFG));
+         trvwNFe.Items.AddChild(Node,'cListServ='          + cListServ);
+
+        end;
+
+       end;
+
+       if (IPI.vBC > 0) then
+       begin
+
+        Node := trvwNFe.Items.AddChild(NodePai,'IPI');
+
+        with IPI do
+        begin
+
+         trvwNFe.Items.AddChild(Node,'CST='                 + CSTIPIToStr(CST)) ;
+         trvwNFe.Items.AddChild(Node,'clEnq='               + clEnq);
+         trvwNFe.Items.AddChild(Node,'CNPJProd='            + CNPJProd);
+         trvwNFe.Items.AddChild(Node,'cSelo='               + cSelo);
+         trvwNFe.Items.AddChild(Node,'qSelo='               + IntToStr(qSelo));
+         trvwNFe.Items.AddChild(Node,'cEnq='                + cEnq);
+         trvwNFe.Items.AddChild(Node,'vBC='                 + FloatToStr(vBC));
+         trvwNFe.Items.AddChild(Node,'qUnid='               + FloatToStr(qUnid));
+         trvwNFe.Items.AddChild(Node,'vUnid='               + FloatToStr(vUnid));
+         trvwNFe.Items.AddChild(Node,'pIPI='                + FloatToStr(pIPI));
+         trvwNFe.Items.AddChild(Node,'vIPI='                + FloatToStr(vIPI));
+
+        end;
+
+       end;
+
+       if (II.vBc > 0) then
+       begin
+
+        Node := trvwNFe.Items.AddChild(NodePai,'II');
+
+        with II do
+        begin
+
+         trvwNFe.Items.AddChild(Node,'vBc='             + FloatToStr(vBc));
+         trvwNFe.Items.AddChild(Node,'vDespAdu='        + FloatToStr(vDespAdu));
+         trvwNFe.Items.AddChild(Node,'vII='             + FloatToStr(vII));
+         trvwNFe.Items.AddChild(Node,'vIOF='            + FloatToStr(vIOF));
+
+        end;
+
+       end;
+
+       Node := trvwNFe.Items.AddChild(NodePai,'PIS');
+
+       with PIS do
+       begin
+
+        trvwNFe.Items.AddChild(Node,'CST='                + CSTPISToStr(CST));
+
+        if (CST = pis01) or (CST = pis02) then
+        begin
+
+         trvwNFe.Items.AddChild(Node,'vBC='             + FloatToStr(PIS.vBC));
+         trvwNFe.Items.AddChild(Node,'pPIS='            + FloatToStr(PIS.pPIS));
+         trvwNFe.Items.AddChild(Node,'vPIS='            + FloatToStr(PIS.vPIS));
+
+        end
+        else if CST = pis03 then
+        begin
+
+         trvwNFe.Items.AddChild(Node,'qBCProd='         + FloatToStr(PIS.qBCProd));
+         trvwNFe.Items.AddChild(Node,'vAliqProd='       + FloatToStr(PIS.vAliqProd));
+         trvwNFe.Items.AddChild(Node,'vPIS='            + FloatToStr(PIS.vPIS));
+
+        end
+        else if CST = pis99 then
+        begin
+
+         trvwNFe.Items.AddChild(Node,'vBC='             + FloatToStr(PIS.vBC));
+         trvwNFe.Items.AddChild(Node,'pPIS='            + FloatToStr(PIS.pPIS));
+         trvwNFe.Items.AddChild(Node,'qBCProd='         + FloatToStr(PIS.qBCProd));
+         trvwNFe.Items.AddChild(Node,'vAliqProd='       + FloatToStr(PIS.vAliqProd));
+         trvwNFe.Items.AddChild(Node,'vPIS='            + FloatToStr(PIS.vPIS));
+
+        end;
+
+       end;
+
+       if (PISST.vBc>0) then
+       begin
+
+        Node := trvwNFe.Items.AddChild(NodePai,'PISST');
+
+        with PISST do
+        begin
+
+         trvwNFe.Items.AddChild(Node,'vBc='             + FloatToStr(vBc));
+         trvwNFe.Items.AddChild(Node,'pPis='            + FloatToStr(pPis));
+         trvwNFe.Items.AddChild(Node,'qBCProd='         + FloatToStr(qBCProd));
+         trvwNFe.Items.AddChild(Node,'vAliqProd='       + FloatToStr(vAliqProd));
+         trvwNFe.Items.AddChild(Node,'vPIS='            + FloatToStr(vPIS));
+
+        end;
+
+       end;
+
+       Node := trvwNFe.Items.AddChild(NodePai,'COFINS');
+
+       with COFINS do
+       begin
+
+        trvwNFe.Items.AddChild(Node,'CST='                + CSTCOFINSToStr(CST));
+
+        if (CST = cof01) or (CST = cof02) then
+        begin
+
+         trvwNFe.Items.AddChild(Node,'vBC='             + FloatToStr(COFINS.vBC));
+         trvwNFe.Items.AddChild(Node,'pCOFINS='         + FloatToStr(COFINS.pCOFINS));
+         trvwNFe.Items.AddChild(Node,'vCOFINS='         + FloatToStr(COFINS.vCOFINS));
+
+        end
+        else if CST = cof03 then
+        begin
+
+         trvwNFe.Items.AddChild(Node,'qBCProd='         + FloatToStr(COFINS.qBCProd));
+         trvwNFe.Items.AddChild(Node,'vAliqProd='       + FloatToStr(COFINS.vAliqProd));
+         trvwNFe.Items.AddChild(Node,'vCOFINS='         + FloatToStr(COFINS.vCOFINS));
+
+        end
+        else if CST = cof99 then
+        begin
+
+         trvwNFe.Items.AddChild(Node,'vBC='             + FloatToStr(COFINS.vBC));
+         trvwNFe.Items.AddChild(Node,'pCOFINS='         + FloatToStr(COFINS.pCOFINS));
+         trvwNFe.Items.AddChild(Node,'qBCProd='         + FloatToStr(COFINS.qBCProd));
+         trvwNFe.Items.AddChild(Node,'vAliqProd='       + FloatToStr(COFINS.vAliqProd));
+         trvwNFe.Items.AddChild(Node,'vCOFINS='         + FloatToStr(COFINS.vCOFINS));
+
+        end;
+
+       end;
+
+       if (COFINSST.vBC > 0) then
+       begin
+
+        Node := trvwNFe.Items.AddChild(NodePai,'COFINSST');
+
+        with COFINSST do
+        begin
+
+                trvwNFe.Items.AddChild(Node,'vBC='             + FloatToStr(vBC));
+                trvwNFe.Items.AddChild(Node,'pCOFINS='         + FloatToStr(pCOFINS));
+                trvwNFe.Items.AddChild(Node,'qBCProd='         + FloatToStr(qBCProd));
+                trvwNFe.Items.AddChild(Node,'vAliqProd='       + FloatToStr(vAliqProd));
+                trvwNFe.Items.AddChild(Node,'vCOFINS='         + FloatToStr(vCOFINS));
+
+        end;
+
+       end;
+
+      end;
+
+     end;
+
+    end ;
+
+    NodePai := trvwNFe.Items.AddChild(Nota,'Total');
+    Node := trvwNFe.Items.AddChild(NodePai,'ICMSTot');
+    trvwNFe.Items.AddChild(Node,'vBC='                           + FloatToStr(Total.ICMSTot.vBC));
+    trvwNFe.Items.AddChild(Node,'vICMS='                         + FloatToStr(Total.ICMSTot.vICMS)) ;
+    trvwNFe.Items.AddChild(Node,'vBCST='                         + FloatToStr(Total.ICMSTot.vBCST)) ;
+    trvwNFe.Items.AddChild(Node,'vST='                           + FloatToStr(Total.ICMSTot.vST)) ;
+    trvwNFe.Items.AddChild(Node,'vProd='                         + FloatToStr(Total.ICMSTot.vProd)) ;
+    trvwNFe.Items.AddChild(Node,'vFrete='                        + FloatToStr(Total.ICMSTot.vFrete)) ;
+    trvwNFe.Items.AddChild(Node,'vSeg='                          + FloatToStr(Total.ICMSTot.vSeg)) ;
+    trvwNFe.Items.AddChild(Node,'vDesc='                         + FloatToStr(Total.ICMSTot.vDesc)) ;
+    trvwNFe.Items.AddChild(Node,'vII='                           + FloatToStr(Total.ICMSTot.vII)) ;
+    trvwNFe.Items.AddChild(Node,'vIPI='                          + FloatToStr(Total.ICMSTot.vIPI)) ;
+    trvwNFe.Items.AddChild(Node,'vPIS='                          + FloatToStr(Total.ICMSTot.vPIS)) ;
+    trvwNFe.Items.AddChild(Node,'vCOFINS='                       + FloatToStr(Total.ICMSTot.vCOFINS)) ;
+    trvwNFe.Items.AddChild(Node,'vOutro='                        + FloatToStr(Total.ICMSTot.vOutro)) ;
+    trvwNFe.Items.AddChild(Node,'vNF='                           + FloatToStr(Total.ICMSTot.vNF)) ;
+    trvwNFe.Items.AddChild(Node,'vICMSDeson='                    + FloatToStr(Total.ICMSTot.vICMSDeson)) ;
+    //*****
+    trvwNFe.Items.AddChild(Node,'vFCPUFDest='                    + FloatToStr(Total.ICMSTot.vFCPUFDest)) ;
+    trvwNFe.Items.AddChild(Node,'vICMSUFDest='                   + FloatToStr(Total.ICMSTot.vICMSUFDest)) ;
+    trvwNFe.Items.AddChild(Node,'vICMSUFRemet='                  + FloatToStr(Total.ICMSTot.vICMSUFRemet)) ;
+
+    if Total.ISSQNtot.vServ > 0 then
+    begin
+
+     Node := trvwNFe.Items.AddChild(NodePai,'ISSQNtot');
+     trvwNFe.Items.AddChild(Node,'vServ='                      + FloatToStr(Total.ISSQNtot.vServ)) ;
+     trvwNFe.Items.AddChild(Node,'vBC='                        + FloatToStr(Total.ISSQNTot.vBC)) ;
+     trvwNFe.Items.AddChild(Node,'vISS='                       + FloatToStr(Total.ISSQNTot.vISS)) ;
+     trvwNFe.Items.AddChild(Node,'vPIS='                       + FloatToStr(Total.ISSQNTot.vPIS)) ;
+     trvwNFe.Items.AddChild(Node,'vCOFINS='                    + FloatToStr(Total.ISSQNTot.vCOFINS)) ;
+
+    end;
+
+    Node := trvwNFe.Items.AddChild(NodePai,'retTrib');
+    trvwNFe.Items.AddChild(Node,'vRetPIS='                       + FloatToStr(Total.retTrib.vRetPIS)) ;
+    trvwNFe.Items.AddChild(Node,'vRetCOFINS='                    + FloatToStr(Total.retTrib.vRetCOFINS)) ;
+    trvwNFe.Items.AddChild(Node,'vRetCSLL='                      + FloatToStr(Total.retTrib.vRetCSLL)) ;
+    trvwNFe.Items.AddChild(Node,'vBCIRRF='                       + FloatToStr(Total.retTrib.vBCIRRF)) ;
+    trvwNFe.Items.AddChild(Node,'vIRRF='                         + FloatToStr(Total.retTrib.vIRRF)) ;
+    trvwNFe.Items.AddChild(Node,'vBCRetPrev='                    + FloatToStr(Total.retTrib.vBCRetPrev)) ;
+    trvwNFe.Items.AddChild(Node,'vRetPrev='                      + FloatToStr(Total.retTrib.vRetPrev)) ;
+
+    NodePai := trvwNFe.Items.AddChild(Nota,'Transp');
+    Node := trvwNFe.Items.AddChild(NodePai,'Transporta');
+    trvwNFe.Items.AddChild(Node,'modFrete='                      + modFreteToStr(Transp.modFrete));
+    trvwNFe.Items.AddChild(Node,'CNPJCPF='                       + Transp.Transporta.CNPJCPF);
+    trvwNFe.Items.AddChild(Node,'xNome='                         + Transp.Transporta.xNome);
+    trvwNFe.Items.AddChild(Node,'IE='                            + Transp.Transporta.IE);
+    trvwNFe.Items.AddChild(Node,'xEnder='                        + Transp.Transporta.xEnder);
+    trvwNFe.Items.AddChild(Node,'xMun='                          + Transp.Transporta.xMun);
+    trvwNFe.Items.AddChild(Node,'UF='                            + Transp.Transporta.UF);
+
+    Node := trvwNFe.Items.AddChild(NodePai,'retTransp');
+    trvwNFe.Items.AddChild(Node,'vServ='                         + FloatToStr(Transp.retTransp.vServ)) ;
+    trvwNFe.Items.AddChild(Node,'vBCRet='                        + FloatToStr(Transp.retTransp.vBCRet)) ;
+    trvwNFe.Items.AddChild(Node,'pICMSRet='                      + FloatToStr(Transp.retTransp.pICMSRet)) ;
+    trvwNFe.Items.AddChild(Node,'vICMSRet='                      + FloatToStr(Transp.retTransp.vICMSRet)) ;
+    trvwNFe.Items.AddChild(Node,'CFOP='                          + Transp.retTransp.CFOP);
+    trvwNFe.Items.AddChild(Node,'cMunFG='                        + FloatToStr(Transp.retTransp.cMunFG));
+
+    Node := trvwNFe.Items.AddChild(NodePai,'veicTransp');
+    trvwNFe.Items.AddChild(Node,'placa='                         + Transp.veicTransp.placa);
+    trvwNFe.Items.AddChild(Node,'UF='                            + Transp.veicTransp.UF);
+    trvwNFe.Items.AddChild(Node,'RNTC='                          + Transp.veicTransp.RNTC);
+
+    for I:=0 to Transp.Reboque.Count-1 do
+    begin
+
+     Node := trvwNFe.Items.AddChild(NodePai,'Reboque'          + IntToStrZero(I+1,3));
+
+     with Transp.Reboque.Items[I] do
+     begin
+
+      trvwNFe.Items.AddChild(Node,'placa='                   + placa) ;
+      trvwNFe.Items.AddChild(Node,'UF='                      + UF) ;
+      trvwNFe.Items.AddChild(Node,'RNTC='                    + RNTC) ;
+
+     end;
+
+    end;
+
+    for I:=0 to Transp.Vol.Count-1 do
+    begin
+
+     Node := trvwNFe.Items.AddChild(NodePai,'Volume'           + IntToStrZero(I+1,3));
+
+     with Transp.Vol.Items[I] do
+     begin
+
+      trvwNFe.Items.AddChild(Node,'qVol='                    + IntToStr(qVol)) ;
+      trvwNFe.Items.AddChild(Node,'esp='                     + esp);
+      trvwNFe.Items.AddChild(Node,'marca='                   + marca);
+      trvwNFe.Items.AddChild(Node,'nVol='                    + nVol);
+      trvwNFe.Items.AddChild(Node,'pesoL='                   + FloatToStr(pesoL)) ;
+      trvwNFe.Items.AddChild(Node,'pesoB'                    + FloatToStr(pesoB)) ;
+
+      for J:=0 to Lacres.Count-1 do
+      begin
+
+       Node := trvwNFe.Items.AddChild(Node,'Lacre'         + IntToStrZero(I+1,3)+IntToStrZero(J+1,3) );
+       trvwNFe.Items.AddChild(Node,'nLacre='               + Lacres.Items[J].nLacre) ;
+
+      end;
+
+     end;
+
+    end;
+
+    if (gModelo = 55) then
+    begin
+     NodePai := trvwNFe.Items.AddChild(Nota,'Cobr');
+     Node    := trvwNFe.Items.AddChild(NodePai,'Fat');
+     trvwNFe.Items.AddChild(Node,'nFat='                        + Cobr.Fat.nFat);
+     trvwNFe.Items.AddChild(Node,'vOrig='                       + FloatToStr(Cobr.Fat.vOrig)) ;
+     trvwNFe.Items.AddChild(Node,'vDesc='                       + FloatToStr(Cobr.Fat.vDesc)) ;
+     trvwNFe.Items.AddChild(Node,'vLiq='                        + FloatToStr(Cobr.Fat.vLiq)) ;
+    end;
+
+    for I:=0 to Cobr.Dup.Count-1 do
+    begin
+
+     Node    := trvwNFe.Items.AddChild(NodePai,'Duplicata'     + IntToStrZero(I+1,3));
+
+     with Cobr.Dup.Items[I] do
+     begin
+
+      trvwNFe.Items.AddChild(Node,'nDup='                    + nDup) ;
+      trvwNFe.Items.AddChild(Node,'dVenc='                   + DateToStr(dVenc));
+      trvwNFe.Items.AddChild(Node,'vDup='                    + FloatToStr(vDup)) ;
+
+     end;
+
+    end;
+
+    NodePai := trvwNFe.Items.AddChild(Nota,'InfAdic');
+    trvwNFe.Items.AddChild(NodePai,'infCpl='                     + InfAdic.infCpl);
+    trvwNFe.Items.AddChild(NodePai,'infAdFisco='                 + InfAdic.infAdFisco);
+
+    for I:=0 to InfAdic.obsCont.Count-1 do
+    begin
+
+     Node := trvwNFe.Items.AddChild(NodePai,'obsCont'          +IntToStrZero(I+1,3));
+
+     with InfAdic.obsCont.Items[I] do
+     begin
+
+      trvwNFe.Items.AddChild(Node,'xCampo='                  + xCampo) ;
+      trvwNFe.Items.AddChild(Node,'xTexto='                  + xTexto);
+
+     end;
+
+    end;
+
+    for I:=0 to InfAdic.obsFisco.Count-1 do
+    begin
+
+     Node := trvwNFe.Items.AddChild(NodePai,'obsFisco'       + IntToStrZero(I+1,3));
+     with InfAdic.obsFisco.Items[I] do
+     begin
+
+      trvwNFe.Items.AddChild(Node,'xCampo='               + xCampo) ;
+      trvwNFe.Items.AddChild(Node,'xTexto='               + xTexto);
+
+     end;
+
+    end;
+
+    for I:=0 to InfAdic.procRef.Count-1 do
+    begin
+
+     Node := trvwNFe.Items.AddChild(NodePai,'procRef'        +IntToStrZero(I+1,3));
+
+     with InfAdic.procRef.Items[I] do
+     begin
+
+      trvwNFe.Items.AddChild(Node,'nProc='                 + nProc) ;
+      trvwNFe.Items.AddChild(Node,'indProc='               + indProcToStr(indProc));
+
+     end;
+
+    end;
+
+
+    // parou aqui
+
+
 
           if (exporta.UFembarq <> '') then
            begin

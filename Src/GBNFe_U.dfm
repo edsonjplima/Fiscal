@@ -884,6 +884,7 @@ object FrGBNFe: TFrGBNFe
         Navigator.Visible = True
         OptionsView.Bands = True
         OptionsView.ShowRoot = False
+        ScrollbarAnnotations.CustomAnnotations = <>
         Styles.Content = cxContent2
         Styles.BandHeader = cxBandHeader
         Styles.ColumnHeader = cxColumnHeader
@@ -914,7 +915,6 @@ object FrGBNFe: TFrGBNFe
           Properties.Alignment.Horz = taCenter
           Caption.AlignHorz = taCenter
           Caption.Text = 'Ano'
-          DataBinding.ValueType = 'String'
           Options.VertSizing = False
           Options.Editing = False
           Options.Sorting = False
@@ -931,7 +931,6 @@ object FrGBNFe: TFrGBNFe
           Properties.EditMask = '!00;1;0'
           Caption.AlignHorz = taCenter
           Caption.Text = 'Modelo'
-          DataBinding.ValueType = 'String'
           Options.VertSizing = False
           Options.Editing = False
           Options.Sorting = False
@@ -948,7 +947,6 @@ object FrGBNFe: TFrGBNFe
           Properties.EditMask = '!000;1;0'
           Caption.AlignHorz = taCenter
           Caption.Text = 'S'#233'rie'
-          DataBinding.ValueType = 'String'
           Options.VertSizing = False
           Options.Editing = False
           Options.Sorting = False
@@ -980,7 +978,6 @@ object FrGBNFe: TFrGBNFe
           PropertiesClassName = 'TcxRichEditProperties'
           Caption.AlignHorz = taCenter
           Caption.Text = 'Justificativa'
-          DataBinding.ValueType = 'String'
           Options.VertSizing = False
           Options.Editing = False
           Options.Sorting = False
@@ -996,7 +993,6 @@ object FrGBNFe: TFrGBNFe
           Properties.Alignment.Horz = taCenter
           Caption.AlignHorz = taCenter
           Caption.Text = 'Tp. Amb.'
-          DataBinding.ValueType = 'String'
           Options.Editing = False
           Options.Sorting = False
           Width = 70
@@ -1011,7 +1007,6 @@ object FrGBNFe: TFrGBNFe
           Properties.Alignment.Horz = taCenter
           Caption.AlignHorz = taCenter
           Caption.Text = 'Ver. Aplic.'
-          DataBinding.ValueType = 'String'
           Options.Editing = False
           Options.Sorting = False
           Width = 100
@@ -1041,7 +1036,6 @@ object FrGBNFe: TFrGBNFe
           Properties.Alignment.Horz = taCenter
           Caption.AlignHorz = taCenter
           Caption.Text = 'CNPJ'
-          DataBinding.ValueType = 'String'
           Options.Editing = False
           Options.Sorting = False
           Width = 120
@@ -1056,7 +1050,6 @@ object FrGBNFe: TFrGBNFe
           Properties.Alignment.Horz = taCenter
           Caption.AlignHorz = taCenter
           Caption.Text = 'N'#250'mero do Protocolo'
-          DataBinding.ValueType = 'String'
           Options.Editing = False
           Options.Sorting = False
           Width = 150
@@ -1086,7 +1079,6 @@ object FrGBNFe: TFrGBNFe
           PropertiesClassName = 'TcxTextEditProperties'
           Caption.AlignHorz = taCenter
           Caption.Text = 'Motivo'
-          DataBinding.ValueType = 'String'
           Options.Editing = False
           Options.Sorting = False
           Width = 200
@@ -1101,7 +1093,6 @@ object FrGBNFe: TFrGBNFe
           Properties.Alignment.Horz = taCenter
           Caption.AlignHorz = taCenter
           Caption.Text = 'Usu'#225'rio'
-          DataBinding.ValueType = 'String'
           Options.Editing = False
           Options.Sorting = False
           Width = 150
@@ -1174,12 +1165,14 @@ object FrGBNFe: TFrGBNFe
         Navigator.InfoPanel.DisplayMask = 'navigator de notas'
         Navigator.InfoPanel.Visible = True
         Navigator.Visible = True
+        OptionsData.Appending = True
         OptionsData.Inserting = True
         OptionsView.Bands = True
         OptionsView.GridLines = tlglHorz
         OptionsView.ShowRoot = False
         ParentFont = False
         PopupMenu = PopupMenu2
+        ScrollbarAnnotations.CustomAnnotations = <>
         Styles.Content = cxContent2
         Styles.BandHeader = cxBandHeader
         Styles.ColumnHeader = cxColumnHeader
@@ -1191,8 +1184,6 @@ object FrGBNFe: TFrGBNFe
         object cxTLbSel: TcxTreeListColumn
           PropertiesClassName = 'TcxCheckBoxProperties'
           Properties.Alignment = taCenter
-          Properties.DisplayChecked = 'True'
-          Properties.DisplayUnchecked = 'False'
           Properties.FullFocusRect = True
           Properties.ImmediatePost = True
           Properties.NullStyle = nssUnchecked
@@ -1241,7 +1232,6 @@ object FrGBNFe: TFrGBNFe
           Properties.Alignment.Horz = taCenter
           Caption.AlignHorz = taCenter
           Caption.Text = 'C'#243'd. Dest.'
-          DataBinding.ValueType = 'String'
           Options.VertSizing = False
           Options.Editing = False
           Options.Sorting = False
@@ -1257,7 +1247,6 @@ object FrGBNFe: TFrGBNFe
           Styles.Content = cxContent
           Caption.AlignHorz = taCenter
           Caption.Text = 'Destinat'#225'rio'
-          DataBinding.ValueType = 'String'
           Options.VertSizing = False
           Options.Editing = False
           Options.Sorting = False
@@ -1273,7 +1262,6 @@ object FrGBNFe: TFrGBNFe
           Properties.Alignment.Horz = taCenter
           Caption.AlignHorz = taCenter
           Caption.Text = 'Cnpj / Cpf'
-          DataBinding.ValueType = 'String'
           Options.VertSizing = False
           Options.Editing = False
           Options.Sorting = False
@@ -1331,7 +1319,6 @@ object FrGBNFe: TFrGBNFe
           Styles.Content = cxContent
           Caption.AlignHorz = taCenter
           Caption.Text = 'Modelo'
-          DataBinding.ValueType = 'String'
           Options.VertSizing = False
           Options.Editing = False
           Width = 63
@@ -1349,7 +1336,6 @@ object FrGBNFe: TFrGBNFe
           Styles.Content = cxContent
           Caption.AlignHorz = taCenter
           Caption.Text = 'S'#233'rie'
-          DataBinding.ValueType = 'String'
           Options.VertSizing = False
           Options.Editing = False
           Width = 63
@@ -1384,7 +1370,6 @@ object FrGBNFe: TFrGBNFe
           Properties.Alignment.Horz = taCenter
           Caption.AlignHorz = taCenter
           Caption.Text = 'Chave'
-          DataBinding.ValueType = 'String'
           Options.VertSizing = False
           Options.Editing = False
           Options.Sorting = False
@@ -1400,7 +1385,6 @@ object FrGBNFe: TFrGBNFe
           Properties.Alignment.Horz = taLeftJustify
           Caption.AlignHorz = taCenter
           Caption.Text = 'Situa'#231#227'o'
-          DataBinding.ValueType = 'String'
           Options.VertSizing = False
           Options.Editing = False
           Options.Sorting = False
@@ -1416,7 +1400,6 @@ object FrGBNFe: TFrGBNFe
           Properties.Alignment.Horz = taCenter
           Caption.AlignHorz = taCenter
           Caption.Text = 'Protocolo'
-          DataBinding.ValueType = 'String'
           Options.VertSizing = False
           Options.Editing = False
           Options.Sorting = False
@@ -1432,7 +1415,6 @@ object FrGBNFe: TFrGBNFe
           Properties.Alignment.Horz = taCenter
           Caption.AlignHorz = taCenter
           Caption.Text = 'Recibo'
-          DataBinding.ValueType = 'String'
           Options.VertSizing = False
           Options.Editing = False
           Options.Sorting = False
@@ -1448,7 +1430,6 @@ object FrGBNFe: TFrGBNFe
           Properties.Alignment.Horz = taCenter
           Caption.AlignHorz = taCenter
           Caption.Text = 'Usu'#225'rio do Envio'
-          DataBinding.ValueType = 'String'
           Options.VertSizing = False
           Options.Editing = False
           Options.Sorting = False
@@ -1464,7 +1445,6 @@ object FrGBNFe: TFrGBNFe
           Properties.Alignment.Horz = taCenter
           Caption.AlignHorz = taCenter
           Caption.Text = 'Usu'#225'rio do Canc.'
-          DataBinding.ValueType = 'String'
           Options.VertSizing = False
           Options.Editing = False
           Options.Sorting = False
@@ -1547,10 +1527,6 @@ object FrGBNFe: TFrGBNFe
         object TabSheet2: TTabSheet
           Caption = 'XML Resposta'
           ImageIndex = 1
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object WBResposta: TWebBrowser
             Left = 0
             Top = 0
@@ -1600,10 +1576,6 @@ object FrGBNFe: TFrGBNFe
         object TabSheet5: TTabSheet
           Caption = 'Resposta WS'
           ImageIndex = 4
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object memoRespWS: TMemo
             Left = 0
             Top = 0
@@ -2402,7 +2374,7 @@ object FrGBNFe: TFrGBNFe
     Left = 312
     Top = 10
     Bitmap = {
-      494C0101CC0410066C0910001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C0101CC041006040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000004013000001002000000000000040
       1300000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -43506,7 +43478,6 @@ object FrGBNFe: TFrGBNFe
     end
   end
   object idftp1: TIdFTP
-    IPVersion = Id_IPv4
     ConnectTimeout = 0
     NATKeepAlive.UseKeepAlive = False
     NATKeepAlive.IdleTimeMS = 0
@@ -43546,7 +43517,6 @@ object FrGBNFe: TFrGBNFe
     end
   end
   object IdHttp1: TIdHTTP
-    AllowCookies = True
     ProxyParams.BasicAuthentication = False
     ProxyParams.ProxyPort = 0
     Request.ContentLength = -1
@@ -43677,8 +43647,8 @@ object FrGBNFe: TFrGBNFe
     IntervaloEntreMensagens = 0
     RecebeConfirmacao = False
     QuebraMensagens = False
-    Left = 46
-    Top = 51
+    Left = 94
+    Top = 43
   end
   object cxStyleRepository1: TcxStyleRepository
     Left = 612
@@ -43686,5 +43656,10 @@ object FrGBNFe: TFrGBNFe
     PixelsPerInch = 96
     object ContentOutros2: TcxStyle
     end
+  end
+  object IdEchoUDPServer1: TIdEchoUDPServer
+    Bindings = <>
+    Left = 168
+    Top = 48
   end
 end

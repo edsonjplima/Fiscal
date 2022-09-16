@@ -920,11 +920,10 @@ begin
     begin
 
      // Calcula a quantidade de dias desde que a NFe foi altorizada
-     v_Dias := Int(( now() - VarToDateTime(DMFD.FDQuery5['nfe_data_hora_recebimento']) ));
+     v_Dias := Int(( now() - VarToDateTime(DMFD.FDQuery5['nfe_demi']) ));
 
      // Cinco anos mais 1 dia bisexto = 1826 dias
-     //if ( ( now() - vDHR ) <= 1826) then
-     if ( v_Dias <= 1826) then
+     if ( ( v_Dias <= 1826) and (DMFD.FDQuery5['nfe_situacao'] = '100') ) then
       begin
 
        if (DMFD.FDQuery5['nfe_evento_CCe'] <> null) then
@@ -1019,7 +1018,7 @@ begin
 
          FrCCe.Edit_id.Text             := 'ID' + v_tpEvento + v_chNFe + v_nSeqEvento;
 
-         // by Edson ; 2013/08/12T09:36 ; Contulta a nota na base sefaz para obter dados, ex: a data do evento..
+         // by Edson ; 2013/08/12T09:36 ; Consulta a nota na base sefaz para obter dados, ex: a data do evento..
          xAux                          := DMFD.FDQuery5['nfe_chave_nfe'];
          xAux                          := trim(gCamLog) + trim(xAux) + '-nfe.xml';
          FrGBNFe.ACBrNFe1.NotasFiscais.Clear;
@@ -1043,9 +1042,11 @@ begin
       end
      else
       begin
-       ShowMessage('NF-e autorizada há mais de 1826 dias (43824) horas !' + chr(13) +
-                   'Data da Autorização ' + FormatDateTime('dd/mm/yyyy" "hh:mm:ss',
-                    DMFD.FDQuery5['nfe_data_hora_recebimento']) + ' - ' + FloatToStr(v_Dias) + ' dias');
+       ShowMessage('NF-e emitida há mais de 1826 dias (43824) horas !' + chr(13) +
+                   'Data da Emissão ' + FormatDateTime('dd/mm/yyyy', + DMFD.FDQuery5['nfe_demi']) +
+                   ' - ' + FloatToStr(v_Dias) + ' dias' + chr(13) +
+                   ' - Ou a nota não autorizada pela SEFAZ');
+
        FrCCe.Edit_Nota.Text := '';
        FrCCe.Edit_Nota.SetFocus;
       end;

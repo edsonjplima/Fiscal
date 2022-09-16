@@ -723,7 +723,7 @@ object FrCCe: TFrCCe
     Width = 547
     Height = 421
     Hint = 'Abas de edi'#231#227'o e consulta de CCe'
-    ActivePage = TabSheet2
+    ActivePage = TabSheet1
     Align = alClient
     Style = tsFlatButtons
     TabOrder = 3
@@ -731,6 +731,10 @@ object FrCCe: TFrCCe
     OnMouseMove = PageControl1MouseMove
     object TabSheet1: TTabSheet
       Caption = 'CCe'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object Panel3: TPanel
         Left = 0
         Top = 0
@@ -1392,6 +1396,10 @@ object FrCCe: TFrCCe
     object TabSheet2: TTabSheet
       Caption = 'Consulta'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object Panel5: TPanel
         Left = 0
         Top = 0
@@ -1407,7 +1415,6 @@ object FrCCe: TFrCCe
           Width = 98
           Height = 44
           Hint = 'Pesquisa pelo n'#250'mero da nota e filtra na grade'
-          Align = alCustom
           Caption = 'N'#186' da Nota'
           Color = 14544639
           ParentBackground = False

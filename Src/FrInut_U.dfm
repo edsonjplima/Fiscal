@@ -267,6 +267,7 @@ object FrInut: TFrInut
     ParentBackground = False
     ParentFont = False
     TabOrder = 0
+    ExplicitTop = -6
   end
   object Panel2: TPanel
     Left = 0
@@ -364,11 +365,12 @@ object FrInut: TFrInut
     Height = 125
     Align = alClient
     TabOrder = 2
+    ExplicitTop = 65
     DesignSize = (
       601
       125)
     object GroupBox1: TGroupBox
-      Left = 23
+      Left = 143
       Top = 19
       Width = 56
       Height = 46
@@ -380,7 +382,7 @@ object FrInut: TFrInut
       TabOrder = 0
       object Edit1: TEdit
         Left = 8
-        Top = 16
+        Top = 18
         Width = 39
         Height = 21
         Cursor = crIBeam
@@ -412,8 +414,8 @@ object FrInut: TFrInut
       ParentColor = False
       TabOrder = 4
       object Edit2: TEdit
-        Left = 6
-        Top = 16
+        Left = 8
+        Top = 18
         Width = 39
         Height = 21
         Cursor = crIBeam
@@ -434,7 +436,7 @@ object FrInut: TFrInut
       end
     end
     object GroupBox3: TGroupBox
-      Left = 94
+      Left = 208
       Top = 19
       Width = 51
       Height = 47
@@ -446,7 +448,7 @@ object FrInut: TFrInut
       TabOrder = 1
       object Edit3: TEdit
         Left = 8
-        Top = 16
+        Top = 18
         Width = 34
         Height = 21
         Cursor = crIBeam
@@ -467,9 +469,9 @@ object FrInut: TFrInut
       end
     end
     object GroupBox4: TGroupBox
-      Left = 161
+      Left = 268
       Top = 19
-      Width = 132
+      Width = 119
       Height = 46
       Align = alCustom
       Caption = ' Numero da Nota '
@@ -479,8 +481,8 @@ object FrInut: TFrInut
       TabOrder = 2
       object Edit4: TEdit
         Left = 8
-        Top = 16
-        Width = 111
+        Top = 18
+        Width = 101
         Height = 21
         Cursor = crIBeam
         Hint = 'N'#250'mero da NFe'
@@ -563,9 +565,9 @@ object FrInut: TFrInut
       end
     end
     object rg1: TRadioGroup
-      Left = 308
+      Left = 395
       Top = 19
-      Width = 211
+      Width = 130
       Height = 46
       Cursor = crHandPoint
       Anchors = [akLeft, akTop, akRight]
@@ -579,6 +581,24 @@ object FrInut: TFrInut
       ParentColor = False
       TabOrder = 3
       OnClick = rg1Click
+    end
+    object GroupBox6: TGroupBox
+      Left = 23
+      Top = 20
+      Width = 111
+      Height = 46
+      Align = alCustom
+      Caption = ' Data da Emiss'#227'o '
+      Color = 14544639
+      ParentBackground = False
+      ParentColor = False
+      TabOrder = 6
+      object cxDEmi: TcxDateEdit
+        Left = 10
+        Top = 17
+        TabOrder = 0
+        Width = 91
+      end
     end
   end
 end
